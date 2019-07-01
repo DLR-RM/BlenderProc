@@ -1,0 +1,202 @@
+124 1 material_3 0
+127 1 material_2 1 material_1
+175 1 material_1 0
+176 1 material_2 1 material_0
+178 1 material_1 0
+179 1 material_2 0
+180 1 material_1 0
+240 1 material_2 1 material_1
+256 1 material_3 0
+377 1 material_2 1 material_0
+378 1 material_2 1 material_0
+381 1 material_2 0
+394 1 material_2 1 material_0
+419 1 material_3 0
+421 1 material_4 1 material_3
+422 1 material_3 1 material_2
+423 1 material_3 0
+515 1 material_1 0
+517 1 material_3 1 material_1
+520 1 material_2 1 material_1
+521 1 material_2 1 material_0
+523 1 material_3 1 material_2
+524 1 material_3 1 material_2
+531 1 material_3 0
+626 1 material_2 1 material_0
+627 1 material_4 1 material_2
+628 1 material_4 1 material_2
+629 1 material_2 1 material_1
+630 1 material_2 1 material_1
+631 1 material_2 1 material_0
+632 1 material_2 1 material_1
+633 1 material_4 1 material_3
+636 1 material_4 1 material_2
+649 1 material_2 1 material_0
+683 1 material_3 1 material_2
+684 1 material_2 1 material_0
+685 1 material_2 1 material_1
+691 1 material_2 1 material_1
+s__1024 1 material_1 0
+s__1025 1 material_4 0
+s__1026 1 material_3 1 material_1
+s__1027 1 material_0 1 material_1
+s__1028 1 material_5 2 material_0 material_1
+s__1045 1 material_2 0
+s__1046 1 material_1 0
+s__1047 1 material_1 0
+s__1048 1 material_1 0
+s__1059 1 material_1 0
+s__1060 1 material_2 0
+s__1065 1 material_8 0
+s__1069 1 material_2 1 material_0
+s__1070 1 material_0 1 material_2
+s__1071 1 material_2 1 material_0
+s__1072 1 material_2 1 material_0
+s__1081 1 material_2 1 material_0
+s__1082 1 material_1 1 material_0
+s__1087 1 material_1 0
+s__1091 1 material_4 0
+s__1102 1 material_3 0
+s__1103 1 material_1 1 material_2
+s__1108 1 material_1 0
+s__1109 1 material_0 1 material_3
+s__1114 1 material_0 1 material_1
+s__1115 1 material_1 1 material_5
+s__1116 1 material_5 1 material_1
+s__1128 1 material_4 0
+s__1139 1 material_3 1 material_1
+s__1140 1 material_3 1 material_1
+s__1152 1 material_2 1 material_0
+s__1153 1 material_0 1 material_2
+s__1154 1 material_2 1 material_0
+s__1155 1 material_2 0
+s__1160 1 material_1 1 material_3
+s__1174 1 material_2 1 material_0
+s__1178 1 material_2 1 material_0
+s__1255 1 material_3 1 material_1
+s__1256 1 material_0 0
+s__1257 1 material_0 0
+s__1268 1 material_1 1 material_3
+s__1271 1 material_3 1 material_2
+s__1274 1 material_2 1 material_1
+s__1278 1 material_2 1 material_1
+s__1280 1 material_3 1 material_2
+s__1282 1 material_2 1 material_0
+s__1292 1 material_0 0
+s__1296 1 material_0 1 material_2
+s__1297 1 material_2 1 material_0
+s__1306 1 material_1 1 material_4
+s__1310 1 material_2 1 material_3
+s__1311 1 material_4 1 material_3
+s__1318 1 material_2 1 material_3
+s__1325 1 material_2 1 material_1
+s__1329 1 material_5 1 material_0
+s__1333 1 material_0 1 material_1
+s__1341 1 material_1 1 material_0
+s__1342 1 material_2 1 material_0
+s__1542 1 material_0 1 material_2
+s__1557 1 material_0 1 material_2
+s__1558 1 material_3 0
+s__1675 1 material_2 0
+s__1676 1 material_2 1 material_1
+s__1677 1 material_2 1 material_5
+s__1678 1 material_2 1 material_3
+s__1698 1 material_1 0
+s__1699 1 material_0 1 material_2
+s__1703 1 material_3 0
+s__1707 1 material_1 0
+s__1708 1 material_3 1 material_0
+s__1709 1 material_0 1 material_1
+s__1719 1 material_1 1 material_0
+s__1721 1 material_2 1 material_0
+s__1838 1 material_2 1 material_1
+s__1839 1 material_4 1 material_1
+s__1840 1 material_1 1 material_1
+s__1841 1 material_2 1 material_0
+s__1860 1 material_2 0
+s__1861 1 material_0 1 material_2
+s__1862 1 material_3 0
+s__1864 1 material_5 1 material_0
+s__1878 1 material_3 0
+s__1880 1 material_2 1 material_0
+s__1881 1 material_2 0
+s__1883 1 material_0 0
+s__1913 1 material_1 1 material_3
+s__1914 1 material_2 1 material_3
+s__1917 1 material_2 1 material_3
+s__1921 1 material_2 1 material_0
+s__1933 1 material_0 1 material_2
+s__1935 1 material_2 1 material_0
+s__1944 1 material_1 0
+s__1945 1 material_2 1 material_0
+s__1977 1 material_0 0
+s__1983 1 material_2 1 material_0
+s__1994 1 material_4 0
+s__1995 1 material_0 0
+s__2008 1 material_1 1 material_0
+s__2009 1 material_4 1 material_2
+s__2024 1 material_1 0
+s__2026 1 material_0 0
+s__2028 1 material_2 1 material_1
+s__2368 1 material_1 0
+s__2369 1 material_0 1 material_2
+s__2370 1 material_0 0
+s__2371 1 material_2 0
+s__2372 1 material_0 0
+s__2373 1 material_0 0
+s__2374 1 material_0 0
+s__433 1 material_2 1 material_1
+s__436 1 material_2 1 material_1
+s__451 1 material_2 1 material_1
+s__474 1 material_1 0
+s__478 1 material_3 1 material_1
+s__479 1 material_0 0
+s__486 1 material_3 1 material_1
+s__487 1 material_2 1 material_1
+s__488 1 material_0 1 material_1
+s__505 1 material_0 0
+s__506 1 material_0 0
+s__507 1 material_2 1 material_1
+s__508 1 material_3 1 material_0
+s__509 1 material_3 1 material_1
+s__580 1 material_5 1 material_0
+s__586 1 material_0 0
+s__677 1 material_4 1 material_3
+s__678 1 material_3 0
+s__679 1 material_3 1 material_0
+s__708 2 material_2 material_0 0
+s__709 1 material_2 1 material_1
+s__710 1 material_2 0
+s__711 1 material_2 1 material_1
+s__712 1 material_2 0
+s__713 1 material_2 1 material_0
+s__742 1 material_3 1 material_1
+s__743 1 material_3 0
+s__744 1 material_1 0
+s__745 1 material_2 0
+s__759 1 material_0 0
+s__760 1 material_0 0
+s__761 1 material_1 0
+s__762 1 material_3 1 material_1
+s__763 1 material_2 0
+s__764 1 material_2 0
+s__765 1 material_2 0
+s__766 1 material_2 0
+s__767 1 material_2 0
+s__768 1 material_2 0
+s__797 1 material_2 1 material_0
+s__798 1 material_2 1 material_1
+s__799 1 material_3 1 material_0
+s__800 1 material_2 0
+s__801 1 material_2 1 material_0
+s__868 1 material_3 0
+s__869 1 material_3 0
+s__870 1 material_0 0
+s__871 1 material_2 0
+s__872 1 material_1 0
+s__873 1 material_0 0
+s__874 1 material_3 0
+s__879 1 material_2 0
+s__880 1 material_3 0
+s__971 1 material_0 0
+s__973 1 material_1 0
