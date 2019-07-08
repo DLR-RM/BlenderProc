@@ -1,0 +1,38 @@
+// Args: <cam_file> <obj_file>
+{
+  "global": {
+    "renderer": {
+      "output_dir": "output"
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.ObjLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "name": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "name": "materials.SUNCGMaterials",
+      "config": {}
+    },
+    {
+      "name": "renderer.RGBRenderer",
+      "config": {}
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {}
+    }
+  ]
+}
