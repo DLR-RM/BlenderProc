@@ -1,4 +1,4 @@
-# blender --background --python renderRaytracingImage.py  -- <camfile> <house.obj> <output_dir> [<cam_ids>]
+# blender --background --python renderRaytracingImage.py  -- <camfile> <house.obj> <output_dir>
 import bpy, sys, os
 import mathutils
 from math import pi
@@ -13,17 +13,12 @@ if started_from_commandline:
     cam_file = argv[0]
     obj_file = argv[1]
     output_dir = argv[2]
-    if len(argv) > 3:
-        cam_ids = [int(x) for x in argv[3].split(",")]
-    else:
-        cam_ids = None
 else:
     # Just a few testing args in case the skript is started from inside blender
     folder = "/home_local/denn_ma/dataForSceneLearning/SUNCG/house/35c7af9c459e7c96920f81ae1b16f3aa/"
     cam_file = "/home_local/denn_ma/dataForSceneLearning/SUNCG/camera_positions/35c7af9c459e7c96920f81ae1b16f3aa/camera_positions" #"/home_local/wink_do/suncg/generated/presets/open/19676dd35f3bce853c76d1ef9c059486/outputCamerasFile"
     obj_file = folder + "house.obj" #"/home_local/wink_do/suncg/tmp/render/house.obj"
     output_dir = "/home/denn_ma/workspace/Blender-Pipeline" #"/home/wink_do/PycharmProjects/LearnedEncoding/render/"
-    cam_ids = None
 
 # read normal material
 normal_material_file = "/home/denn_ma/workspace/Blender-Pipeline/Normal_Material.blend"
@@ -243,17 +238,16 @@ for mat in bpy.data.materials:
 with open(cam_file) as f:
     camPoses = f.readlines()
     for i, camPos in enumerate(camPoses):
-        if cam_ids is None or i in cam_ids:
-            camArgs = [float(x) for x in camPos.strip().split()]
-            cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
+        camArgs = [float(x) for x in camPos.strip().split()]
+        cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
 
-            rot_quat = mathutils.Vector([camArgs[3], -camArgs[5], camArgs[4]]).to_track_quat('-Z', 'Y')
-            cam_ob.rotation_euler = rot_quat.to_euler()
-            cam.lens_unit = 'FOV'
-            cam.angle = camArgs[9] * 2
-            cam.clip_start = 1
-            cam_ob.keyframe_insert(data_path='location', frame=i+1)
-            cam_ob.keyframe_insert(data_path='rotation_euler', frame=i+1)
+        rot_quat = mathutils.Vector([camArgs[3], -camArgs[5], camArgs[4]]).to_track_quat('-Z', 'Y')
+        cam_ob.rotation_euler = rot_quat.to_euler()
+        cam.lens_unit = 'FOV'
+        cam.angle = camArgs[9] * 2
+        cam.clip_start = 1
+        cam_ob.keyframe_insert(data_path='location', frame=i+1)
+        cam_ob.keyframe_insert(data_path='rotation_euler', frame=i+1)
     bpy.data.scenes["Scene"].frame_end = len(camPoses)
 
 # render color images
