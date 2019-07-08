@@ -1,8 +1,9 @@
-#blender --background --python renderRaytracingImage.py  -- <camfile> <house.obj> <output_dir> [<cam_ids>]
+# blender --background --python renderRaytracingImage.py  -- <camfile> <house.obj> <output_dir>
 import bpy, sys, os
 import mathutils
 from math import pi
 import csv
+
 
 started_from_commandline = '--' in sys.argv
 
@@ -12,16 +13,17 @@ if started_from_commandline:
     cam_file = argv[0]
     obj_file = argv[1]
     output_dir = argv[2]
-    if len(argv) > 3:
-        cam_ids = [int(x) for x in argv[3].split(",")]
-    else:
-        cam_ids = None
 else:
     # Just a few testing args in case the skript is started from inside blender
-    cam_file = "/home_local/wink_do/suncg/generated/presets/open/19676dd35f3bce853c76d1ef9c059486/outputCamerasFile"
-    obj_file = "/home_local/wink_do/suncg/tmp/render/house.obj"
-    output_dir = "/home/wink_do/PycharmProjects/LearnedEncoding/render/"
-    cam_ids = None
+    folder = "/home_local/denn_ma/dataForSceneLearning/SUNCG/house/35c7af9c459e7c96920f81ae1b16f3aa/"
+    cam_file = "/home_local/denn_ma/dataForSceneLearning/SUNCG/camera_positions/35c7af9c459e7c96920f81ae1b16f3aa/camera_positions" #"/home_local/wink_do/suncg/generated/presets/open/19676dd35f3bce853c76d1ef9c059486/outputCamerasFile"
+    obj_file = folder + "house.obj" #"/home_local/wink_do/suncg/tmp/render/house.obj"
+    output_dir = "/home/denn_ma/workspace/Blender-Pipeline" #"/home/wink_do/PycharmProjects/LearnedEncoding/render/"
+
+# read normal material
+normal_material_file = "/home/denn_ma/workspace/Blender-Pipeline/Normal_Material.blend"
+with bpy.data.libraries.load(normal_material_file) as (data_from, data_to):
+    data_to.materials = data_from.materials
 
 # Read in lights
 lights = {}
@@ -77,6 +79,9 @@ scene.cycles.max_bounces = 3
 scene.cycles.min_bounces = 1
 scene.cycles.transmission_bounces = 0
 scene.cycles.volume_bounces = 0
+scene.cycles.debug_bvh_type = "STATIC_BVH"
+scene.cycles.debug_use_spatial_splits = True
+scene.render.use_persistent_data = True
 
 # Make sure to use the current GPU
 prefs = bpy.context.user_preferences.addons['cycles'].preferences
@@ -228,23 +233,41 @@ for mat in bpy.data.materials:
             links.remove(link)
             links.new(diff.outputs[0], output.inputs[0])
 
-# Open cam file, go through all poses and render from every view
+
+# Open cam file, go through all poses and create key points
 with open(cam_file) as f:
     camPoses = f.readlines()
-
     for i, camPos in enumerate(camPoses):
-        if cam_ids is None or i in cam_ids:
-            camArgs = [float(x) for x in camPos.strip().split()]
-            cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
+        camArgs = [float(x) for x in camPos.strip().split()]
+        cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
 
-            rot_quat = mathutils.Vector([camArgs[3], -camArgs[5], camArgs[4]]).to_track_quat('-Z', 'Y')
-            cam_ob.rotation_euler = rot_quat.to_euler()
-            cam.lens_unit = 'FOV'
-            cam.angle = camArgs[9] * 2
-            cam.clip_start = 1
+        rot_quat = mathutils.Vector([camArgs[3], -camArgs[5], camArgs[4]]).to_track_quat('-Z', 'Y')
+        cam_ob.rotation_euler = rot_quat.to_euler()
+        cam.lens_unit = 'FOV'
+        cam.angle = camArgs[9] * 2
+        cam.clip_start = 1
+        cam_ob.keyframe_insert(data_path='location', frame=i+1)
+        cam_ob.keyframe_insert(data_path='rotation_euler', frame=i+1)
+    bpy.data.scenes["Scene"].frame_end = len(camPoses)
 
-            if started_from_commandline:
-                scene.render.filepath = output_dir + "/" + str(i) + ".png"
-                bpy.ops.render.render(write_still=True)
-            else:
-                break
+# render color images
+if started_from_commandline:
+    scene.render.filepath = output_dir + "/"
+    bpy.ops.render.render(animation=True, write_still=True)
+
+
+# render normals
+scene.cycles.samples = 100 # to smooth the result
+scene.render.layers[0].cycles.use_denoising = False
+new_mat = bpy.data.materials["Normal"]
+for obj in bpy.context.scene.objects:
+    if len(obj.material_slots) > 0:
+        for i in range(len(obj.material_slots)):
+            obj.data.materials[i] = new_mat
+if started_from_commandline:
+    scene.render.filepath = output_dir + "/normal_"
+    bpy.ops.render.render(animation=True, write_still=True)
+
+
+
+
