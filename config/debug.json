@@ -1,8 +1,7 @@
-// Args: <cam_file> <obj_file>
 {
   "global": {
     "renderer": {
-      "output_dir": "output"
+      "output_dir": "debug"
     }
   },
   "modules": [
@@ -13,25 +12,17 @@
     {
       "name": "loader.SuncgLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "/home_local/wink_do/suncg/house/002fa647848abeff3c969cc0bc1bb8b6/house.json"
       }
     },
     {
       "name": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "/home_local/wink_do/suncg/generated/presets/open/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile"
       }
     },
     {
       "name": "materials.SUNCGMaterials",
-      "config": {}
-    },
-    {
-      "name": "renderer.RGBRenderer",
-      "config": {}
-    },
-    {
-      "name": "renderer.NormalRenderer",
       "config": {}
     }
   ]

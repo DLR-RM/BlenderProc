@@ -2,6 +2,9 @@ from src.main.Module import Module
 import mathutils
 import bpy
 
+from src.utility.Utility import Utility
+
+
 class CameraLoader(Module):
 
     def __init__(self, config):
@@ -12,7 +15,7 @@ class CameraLoader(Module):
         cam = cam_ob.data
 
         # Open cam file, go through all poses and create key points
-        with open(self.config.get_string("path")) as f:
+        with open(Utility.resolve_path(self.config.get_string("path"))) as f:
             camPoses = f.readlines()
             for i, camPos in enumerate(camPoses):
                 camArgs = [float(x) for x in camPos.strip().split()]

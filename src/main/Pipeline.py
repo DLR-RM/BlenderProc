@@ -10,7 +10,7 @@ class Pipeline:
     def __init__(self, config_path, args):
         self.modules = []
 
-        with open(config_path, "r") as f:
+        with open(Utility.resolve_path(config_path), "r") as f:
             json_text = f.read()
             # Remove comments
             json_text = re.sub(r'^//.*\n?', '', json_text, flags=re.MULTILINE)

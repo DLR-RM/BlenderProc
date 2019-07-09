@@ -2,6 +2,9 @@ from src.main.Module import Module
 import bpy
 import csv
 
+from src.utility.Utility import Utility
+
+
 class SUNCGMaterials(Module):
 
     def __init__(self, config):
@@ -9,7 +12,7 @@ class SUNCGMaterials(Module):
 
         # Read in lights
         self.lights = {}
-        with open("suncg/light_geometry_compact.txt") as f:
+        with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -33,7 +36,7 @@ class SUNCGMaterials(Module):
 
         # Read in windows
         self.windows = []
-        with open('suncg/ModelCategoryMapping.csv', 'r') as csvfile:
+        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":
@@ -111,6 +114,7 @@ class SUNCGMaterials(Module):
                                     transparent_node = nodes.new(type='ShaderNodeBsdfDiffuse')
                                     transparent_node.inputs[0].default_value[:3] = (0.285, 0.5, 0.48)
                                     lightPath_node = nodes.new(type='ShaderNodeLightPath')
+
 
                                     links.new(mix_node.outputs[0], output.inputs[0])
                                     links.new(lightPath_node.outputs[0], mix_node.inputs[0])

@@ -11,7 +11,11 @@ class Utility:
         if path.startswith("/"):
             return path
         else:
-            return os.path.join(os.path.dirname(bpy.data.filepath), path)
+            if bpy.context.space_data is None:
+                working_dir = bpy.data.filepath
+            else:
+                working_dir = bpy.context.space_data.text.filepath
+            return os.path.join(os.path.dirname(working_dir), path)
 
     @staticmethod
     def merge_dicts(source, destination):
@@ -24,6 +28,12 @@ class Utility:
                 destination[key] = value
 
         return destination
+
+
+
+    @staticmethod
+    def hex_to_rgba(hex):
+        return [x / 255 for x in bytes.fromhex(hex[-6:])] + [1.0]
 
     class BlockStopWatch:
         def __init__(self, block_name):
