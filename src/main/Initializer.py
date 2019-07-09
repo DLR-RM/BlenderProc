@@ -17,7 +17,7 @@ class Initializer(Module):
 
         # Set background color
         world = bpy.data.worlds['World']
-        world.horizon_color[:3] = (0.535, 0.633, 0.608)
+        world.horizon_color[:3] = self.config.get_list("horizon_color", [0.535, 0.633, 0.608])
 
         # Create the cam
         cam = bpy.data.cameras.new("Camera")

@@ -5,7 +5,7 @@ import bpy
 from src.utility.Utility import Utility
 
 
-class CameraLoader(Module):
+class SuncgCameraLoader(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -19,13 +19,15 @@ class CameraLoader(Module):
             camPoses = f.readlines()
             for i, camPos in enumerate(camPoses):
                 camArgs = [float(x) for x in camPos.strip().split()]
-                cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
 
+                # Fix coordinate frame (blender and suncg use different ones)
+                cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
                 rot_quat = mathutils.Vector([camArgs[3], -camArgs[5], camArgs[4]]).to_track_quat('-Z', 'Y')
                 cam_ob.rotation_euler = rot_quat.to_euler()
+
                 cam.lens_unit = 'FOV'
                 cam.angle = camArgs[9] * 2
-                cam.clip_start = 1
+                cam.clip_start = self.config.get_float("near_clipping", 1)
                 cam_ob.keyframe_insert(data_path='location', frame=i + 1)
                 cam_ob.keyframe_insert(data_path='rotation_euler', frame=i + 1)
             bpy.data.scenes["Scene"].frame_end = len(camPoses)

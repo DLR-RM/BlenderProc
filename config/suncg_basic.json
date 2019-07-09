@@ -2,7 +2,8 @@
 {
   "global": {
     "renderer": {
-      "output_dir": "output"
+      "output_dir": "output",
+      "pixel_aspect_x": 1.333333333
     }
   },
   "modules": [
@@ -17,17 +18,17 @@
       }
     },
     {
-      "name": "camera.CameraLoader",
+      "name": "camera.SuncgCameraLoader",
       "config": {
         "path": "<args:0>"
       }
     },
     {
-      "name": "materials.SUNCGMaterials",
+      "name": "materials.SuncgMaterials",
       "config": {}
     },
     {
-      "name": "renderer.RGBRenderer",
+      "name": "renderer.RgbRenderer",
       "config": {}
     },
     {

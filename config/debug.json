@@ -16,13 +16,13 @@
       }
     },
     {
-      "name": "camera.CameraLoader",
+      "name": "camera.SuncgCameraLoader",
       "config": {
         "path": "/home_local/wink_do/suncg/generated/presets/open/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile"
       }
     },
     {
-      "name": "materials.SUNCGMaterials",
+      "name": "materials.SuncgMaterials",
       "config": {}
     }
   ]

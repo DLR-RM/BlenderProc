@@ -6,6 +6,7 @@ class Utility:
 
     @staticmethod
     def resolve_path(path):
+        """ Returns absolute path. If given path is relative, current working directory is put in front. """
         path = path.strip()
 
         if path.startswith("/"):
@@ -19,6 +20,7 @@ class Utility:
 
     @staticmethod
     def merge_dicts(source, destination):
+        """ Recursively copies all key value pairs from src to dest (Overwrites existing) """
         for key, value in source.items():
             if isinstance(value, dict):
                 # get node or create one
@@ -29,13 +31,21 @@ class Utility:
 
         return destination
 
-
-
     @staticmethod
     def hex_to_rgba(hex):
         return [x / 255 for x in bytes.fromhex(hex[-6:])] + [1.0]
 
+    @staticmethod
+    def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
+        for l in links:
+            if l.from_socket == source_socket or l.to_socket == dest_socket:
+                links.remove(l)
+
+        links.new(source_socket, new_node_dest_socket)
+        links.new(new_node_src_socket, dest_socket)
+
     class BlockStopWatch:
+        """ Usage: with BlockStopWatch('text'): """
         def __init__(self, block_name):
             self.block_name = block_name
 

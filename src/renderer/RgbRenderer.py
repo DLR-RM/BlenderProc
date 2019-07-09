@@ -1,7 +1,7 @@
 from src.renderer.Renderer import Renderer
 
 
-class RGBRenderer(Renderer):
+class RgbRenderer(Renderer):
 
     def __init__(self, config):
         Renderer.__init__(self, config)
