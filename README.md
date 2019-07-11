@@ -13,5 +13,5 @@ scn2scn house.json /tmp/house.obj
 
 Call blender (>= v2.79b) script to render all views from given camera pose file into the given <output_dir>.
 ```
-blender --background --python renderRaytracingImage.py  -- <camfiles>/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile /tmp/house.obj <output_dir>
+blender --background --python run.py  -- config/suncg_basic.json <camfiles>/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile /tmp/house.obj
 ```

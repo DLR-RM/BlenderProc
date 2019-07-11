@@ -1,0 +1,39 @@
+// Args: <cam_file> <obj_file>
+{
+  "global": {
+    "renderer": {
+      "output_dir": "output",
+      "pixel_aspect_x": 1.333333333
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.SuncgLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "name": "camera.SuncgCameraLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "name": "materials.SuncgMaterials",
+      "config": {}
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {}
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {}
+    }
+  ]
+}

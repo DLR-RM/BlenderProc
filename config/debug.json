@@ -1,0 +1,29 @@
+{
+  "global": {
+    "renderer": {
+      "output_dir": "debug"
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.SuncgLoader",
+      "config": {
+        "path": "/home_local/wink_do/suncg/house/002fa647848abeff3c969cc0bc1bb8b6/house.json"
+      }
+    },
+    {
+      "name": "camera.SuncgCameraLoader",
+      "config": {
+        "path": "/home_local/wink_do/suncg/generated/presets/open/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile"
+      }
+    },
+    {
+      "name": "materials.SuncgMaterials",
+      "config": {}
+    }
+  ]
+}
