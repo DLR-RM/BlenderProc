@@ -12,6 +12,7 @@ class SuncgMaterials(Module):
 
         # Read in lights
         self.lights = {}
+        # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
         with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
             lines = f.readlines()
             for row in lines:
@@ -20,16 +21,16 @@ class SuncgMaterials(Module):
 
                 index = 1
 
+                # Read in lightbulb materials
                 number = int(row[index])
                 index += 1
-
                 for i in range(number):
                     self.lights[row[0]][0].append(row[index])
                     index += 1
 
+                # Read in lampshade materials
                 number = int(row[index])
                 index += 1
-
                 for i in range(number):
                     self.lights[row[0]][1].append(row[index])
                     index += 1
