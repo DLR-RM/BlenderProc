@@ -3,17 +3,25 @@ import bpy
 import os
 
 from src.utility.Utility import Utility
+import addon_utils
 
 
 class Renderer(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
+        addon_utils.enable("render_auto_tile_size")
 
     def _configure_renderer(self):
         self.scene.cycles.samples = self.config.get_int("samples", 256)
-        self.scene.render.tile_x = self.config.get_int("tile_x", 256)
-        self.scene.render.tile_y = self.config.get_int("tile_y", 256)
+
+        if self.config.get_bool("auto_tile_size", True):
+            self.scene.ats_settings.is_enabled = True
+        else:
+            self.scene.ats_settings.is_enabled = False
+            self.scene.render.tile_x = self.config.get_int("tile_x")
+            self.scene.render.tile_y = self.config.get_int("tile_y")
+
         self.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
         self.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         self.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)

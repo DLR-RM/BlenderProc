@@ -68,8 +68,8 @@ class SuncgLoader(Module):
                     object[key] = metadata[key]
 
                 if transform is not None:
-                    # Apply transformation and fix coordinate frame (blender and suncg use different ones)
-                    object.matrix_world = Matrix.Rotation(math.radians(90), 4, "X") * transform
+                    # Apply transformation
+                    object.matrix_world *= transform
 
                 for mat_slot in object.material_slots:
                     mat = mat_slot.material

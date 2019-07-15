@@ -12,6 +12,7 @@ class SuncgMaterials(Module):
 
         # Read in lights
         self.lights = {}
+        # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
         with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
             lines = f.readlines()
             for row in lines:
@@ -20,16 +21,16 @@ class SuncgMaterials(Module):
 
                 index = 1
 
+                # Read in lightbulb materials
                 number = int(row[index])
                 index += 1
-
                 for i in range(number):
                     self.lights[row[0]][0].append(row[index])
                     index += 1
 
+                # Read in lampshade materials
                 number = int(row[index])
                 index += 1
-
                 for i in range(number):
                     self.lights[row[0]][1].append(row[index])
                     index += 1
@@ -72,10 +73,10 @@ class SuncgMaterials(Module):
 
                         if mat_name in light[0]:
                             # If the material corresponds to light bulb
-                            emission_node.inputs[1].default_value = 15
+                            emission_node.inputs[1].default_value = self.config.get_float("lightbulb_emission_strength", 15)
                         else:
                             # If the material corresponds to a lampshade
-                            emission_node.inputs[1].default_value = 7
+                            emission_node.inputs[1].default_value = self.config.get_float("lampshade_emission_strength", 7)
 
                         links.new(emission_node.outputs[0], mix_node.inputs[1])
 
@@ -124,7 +125,7 @@ class SuncgMaterials(Module):
                     links.new(lightPath_node.outputs[0], mix_node.inputs[0])
 
                     emission_node = nodes.new(type='ShaderNodeEmission')
-                    emission_node.inputs[1].default_value = 1.5
+                    emission_node.inputs[1].default_value = self.config.get_float("ceiling_emission_strength", 1.5)
                     links.new(emission_node.outputs[0], mix_node.inputs[1])
 
     def run(self):
