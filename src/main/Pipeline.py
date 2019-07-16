@@ -55,4 +55,5 @@ class Pipeline:
 
                 if module.undo_after_run:
                     bpy.ops.ed.undo_push(message="after")
+                    # The current state points to "after", now by calling undo we go back to "before"
                     bpy.ops.ed.undo()
