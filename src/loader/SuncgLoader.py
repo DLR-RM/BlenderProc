@@ -22,11 +22,20 @@ class SuncgLoader(Module):
         house_id = config["id"]
 
         for level in config["levels"]:
+            # Build empty level object which acts as a parent for all rooms on the level
+            level_obj = bpy.data.objects.new("Level#" + level["id"], None)
+            level_obj["type"] = "Level"
+            level_obj["bbox"] = level["bbox"]
+            bpy.context.scene.objects.link(level_obj)
+
+            room_per_object = {}
+
             for node in level["nodes"]:
                 # Metadata is directly stored in the objects custom data
                 metadata = {
                     "type": node["type"],
-                    "modelId": node["modelId"]
+                    "modelId": node["modelId"],
+                    "bbox": node["bbox"]
                 }
 
                 if "transform" in node:
@@ -41,22 +50,44 @@ class SuncgLoader(Module):
                 else:
                     material_adjustments = []
 
+                # Lookup if the object belongs to a room
+                object_id = int(node["id"].split("_")[-1])
+                if object_id in room_per_object:
+                    parent = room_per_object[object_id]
+                else:
+                    parent = level_obj
+
                 if node["type"] == "Room":
+                    # Build empty room object which acts as a parent for all objects inside
+                    room_obj = bpy.data.objects.new("Room#" + node["id"], None)
+                    room_obj["type"] = "Room"
+                    room_obj["bbox"] = node["bbox"]
+                    room_obj["roomTypes"] = node["roomTypes"]
+                    room_obj.parent = level_obj
+                    bpy.context.scene.objects.link(room_obj)
+                    # Store indices of all contained objects in
+                    if "nodeIndices" in node:
+                        for child_id in node["nodeIndices"]:
+                            room_per_object[child_id] = room_obj
+
                     # Floor
-                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform)
+                    metadata["type"] = "Floor"
+                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, room_obj)
                     # Ceiling
-                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "c.obj"), metadata, material_adjustments, transform)
+                    metadata["type"] = "Ceiling"
+                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "c.obj"), metadata, material_adjustments, transform, room_obj)
                     # Walls
-                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform)
+                    metadata["type"] = "Wall"
+                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
                 elif node["type"] == "Ground":
-                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform)
+                    self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
                 elif node["type"] == "Object":
                     if "state" not in node or node["state"] == 0:
-                        self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + ".obj"), metadata, material_adjustments, transform)
+                        self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + ".obj"), metadata, material_adjustments, transform, parent)
                     else:
-                        self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + "_0.obj"), metadata, material_adjustments, transform)
+                        self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + "_0.obj"), metadata, material_adjustments, transform, parent)
 
-    def _load_obj(self, path, metadata, material_adjustments, transform=None):
+    def _load_obj(self, path, metadata, material_adjustments, transform=None, parent=None):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
@@ -66,6 +97,9 @@ class SuncgLoader(Module):
             for object in bpy.context.selected_objects:
                 for key in metadata.keys():
                     object[key] = metadata[key]
+
+                if parent is not None:
+                    object.parent = parent
 
                 if transform is not None:
                     # Apply transformation
