@@ -3,7 +3,8 @@
   "global": {
     "renderer": {
       "output_dir": "output",
-      "pixel_aspect_x": 1.333333333
+      "pixel_aspect_x": 1.333333333,
+      "samples": 32
     }
   },
   "modules": [
@@ -29,6 +30,10 @@
     },
     {
       "name": "renderer.RgbRenderer",
+      "config": {}
+    },
+    {
+      "name": "renderer.SegMapRenderer",
       "config": {}
     },
     {
