@@ -23,7 +23,7 @@ class Initializer(Module):
         cam = bpy.data.cameras.new("Camera")
         cam_ob = bpy.data.objects.new("Camera", cam)
         bpy.context.scene.objects.link(cam_ob)
-        self.scene.camera = cam_ob
+        bpy.context.scene.camera = cam_ob
 
         # Use cycles
-        self.scene.render.engine = 'CYCLES'
+        bpy.context.scene.render.engine = 'CYCLES'
