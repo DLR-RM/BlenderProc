@@ -28,11 +28,11 @@
       "config": {}
     },
     {
-      "name": "renderer.RgbRenderer",
+      "name": "renderer.NormalRenderer",
       "config": {}
     },
     {
-      "name": "renderer.NormalRenderer",
+      "name": "renderer.RgbRenderer",
       "config": {}
     }
   ]
