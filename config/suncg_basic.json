@@ -1,5 +1,8 @@
 // Args: <cam_file> <obj_file>
 {
+  "setup": {
+    "blender_version": "blender-2.79b-linux-glibc219-x86_64"
+  },
   "global": {
     "renderer": {
       "output_dir": "output",
