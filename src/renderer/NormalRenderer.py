@@ -25,4 +25,8 @@ class NormalRenderer(Renderer):
                 for i in range(len(obj.material_slots)):
                     obj.data.materials[i] = new_mat
 
+        # Set the color channel depth of the output to 32bit
+        bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
+        bpy.context.scene.render.image_settings.color_depth = "32"
+
         self._render("normal_")
