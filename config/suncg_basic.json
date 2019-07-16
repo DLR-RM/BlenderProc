@@ -4,7 +4,7 @@
     "renderer": {
       "output_dir": "output",
       "pixel_aspect_x": 1.333333333,
-      "samples": 32
+      "samples": 256
     }
   },
   "modules": [
