@@ -9,3 +9,4 @@ class RgbRenderer(Renderer):
     def run(self):
         self._configure_renderer()
         self._render("rgb_")
+        self._register_output("rgb_", "rgb", ".png")

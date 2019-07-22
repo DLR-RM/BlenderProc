@@ -52,3 +52,14 @@ class Utility:
 
         def __exit__(self, type, value, traceback):
             print("#### Finished - " + self.block_name + " (took " + ("%.3f" % (time.time() - self.start)) + " seconds) ####")
+
+    class UndoAfterExecution:
+        """ Usage: with UndoAfterExecution(): """
+
+        def __enter__(self):
+            bpy.ops.ed.undo_push(message="before")
+
+        def __exit__(self, type, value, traceback):
+            bpy.ops.ed.undo_push(message="after")
+            # The current state points to "after", now by calling undo we go back to "before"
+            bpy.ops.ed.undo()
