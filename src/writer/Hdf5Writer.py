@@ -32,6 +32,10 @@ class Hdf5Writer(Module):
 
                     f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
 
+                    if self.config.get_bool("delete_original_files_afterwards", True):
+                        os.remove(file_path)
+
+
     def _load_file(self, file_path):
         if not os.path.exists(file_path):
             raise Exception("File not found: " + file_path)
