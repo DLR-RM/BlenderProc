@@ -6,7 +6,7 @@ from src.materials.SuncgMaterials import SuncgMaterials
 class SegMapRenderer(Renderer):
 
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        Renderer.__init__(self, config, undo_after_run=True)
 
 
     def _get_spaced_colors(self, n):
@@ -58,13 +58,11 @@ class SegMapRenderer(Renderer):
 
     def run(self):
         self._configure_renderer()
-        # self.color_palette = self._get_spaced_colors(len(SuncgMaterials.get_labels()))
-        # print(len(SuncgMaterials.get_labels()))
 
-        self.scene.render.image_settings.color_mode = "BW"
+        bpy.context.scene.render.image_settings.color_mode = "BW"
         bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
         bpy.context.scene.render.image_settings.color_depth = "16"
-        self.scene.render.layers[0].cycles.use_denoising = False
+        bpy.context.scene.render.layers[0].cycles.use_denoising = False
         bpy.data.scenes["Scene"].cycles.filter_width = 0.0
 
         for obj in bpy.context.scene.objects:
@@ -72,8 +70,7 @@ class SegMapRenderer(Renderer):
                 obj_id = obj["modelId"]
                 if obj["type"] != "Room":
                     category_id = obj['category_id']
-                    fdg.add(category_id)
-                    self.color_obj(obj, [category_id, category_id, category_id])
+                    self.color_obj(obj, [category_id/255.0, category_id/255.0, category_id/255.0])
                 else:
                     self.color_obj(obj)
 

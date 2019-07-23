@@ -1,21 +1,16 @@
 from src.main.Module import Module
 import bpy
-import csv
 
 from src.utility.Utility import Utility
 
 
 class SuncgMaterials(Module):
-    labels = set()
-
+    
     def __init__(self, config):
         Module.__init__(self, config)
 
         # Read in lights
         self.lights = {}
-
-        SuncgMaterials.object_label_map = {}
-        SuncgMaterials.label_index_map = {}
 
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
         with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
@@ -39,17 +34,6 @@ class SuncgMaterials(Module):
                 for i in range(number):
                     self.lights[row[0]][1].append(row[index])
                     index += 1
-
-    @classmethod
-    def get_labels(cls):
-        return cls.labels
-
-    def _get_model_id(self, obj):
-        if "modelId" in obj:
-            return obj["modelId"]
-    @classmethod
-    def _get_label_id(cls, obj_id):
-        return cls.label_index_map[cls.object_label_map[obj_id]]
 
     def _make_lamp_emissive(self, obj, light):
         for m in obj.material_slots:
@@ -133,30 +117,6 @@ class SuncgMaterials(Module):
                     links.new(emission_node.outputs[0], mix_node.inputs[1])
 
     def run(self):
-
-
-        self.windows = []
-        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                if row["coarse_grained_class"] == "window":
-                    self.windows.append(row["model_id"])
-
-                SuncgMaterials.labels.add(row["nyuv2_40class"])
-                SuncgMaterials.object_label_map[row["model_id"]] = row["nyuv2_40class"]
-
-        SuncgMaterials.labels = sorted(list(SuncgMaterials.labels))
-        SuncgMaterials.label_index_map = {SuncgMaterials.labels[i]:i for i in range(len(SuncgMaterials.labels))}
-        
-        for obj in bpy.context.scene.objects:
-        # for obj in bpy.context.selected_objects:
-
-            if "modelId" in obj:
-                obj_id = obj["modelId"]
-                if obj["type"] != "Room":
-                    category_id = SuncgMaterials._get_label_id(obj_id)
-                    obj['category_id'] = category_id
-
         # Make some objects emit lights
 
         for obj in bpy.context.scene.objects:
@@ -169,7 +129,7 @@ class SuncgMaterials(Module):
                     self._make_lamp_emissive(obj, self.lights[obj_id])
 
                 # Make the windows emit light
-                if obj_id in self.windows:
+                if obj["fine_grained_class"] == "window":
                     self._make_window_emissive(obj)
 
                 # Also make ceilings slightly emit light
