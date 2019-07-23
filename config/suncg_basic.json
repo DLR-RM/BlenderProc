@@ -1,5 +1,11 @@
 // Args: <cam_file> <obj_file>
 {
+  "setup": {
+    "blender_version": "blender-2.79b-linux-glibc219-x86_64",
+    "pip": [
+      "h5py"
+    ]
+  },
   "global": {
     "renderer": {
       "output_dir": "output",
@@ -29,7 +35,7 @@
       "config": {}
     },
     {
-      "name": "renderer.RgbRenderer",
+      "name": "renderer.NormalRenderer",
       "config": {}
     },
     {
@@ -37,7 +43,7 @@
       "config": {}
     },
     {
-      "name": "renderer.NormalRenderer",
+      "name": "renderer.RgbRenderer",
       "config": {}
     }
   ]

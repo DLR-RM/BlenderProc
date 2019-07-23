@@ -3,6 +3,7 @@ import bpy
 import time
 
 class Utility:
+    working_dir = ""
 
     @staticmethod
     def resolve_path(path):
@@ -12,11 +13,7 @@ class Utility:
         if path.startswith("/"):
             return path
         else:
-            if bpy.context.space_data is None:
-                working_dir = bpy.data.filepath
-            else:
-                working_dir = bpy.context.space_data.text.filepath
-            return os.path.join(os.path.dirname(working_dir), path)
+            return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
     def merge_dicts(source, destination):

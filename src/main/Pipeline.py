@@ -4,10 +4,12 @@ import importlib
 from src.utility.Config import Config
 from src.utility.Utility import Utility
 import re
+import bpy
 
 class Pipeline:
 
-    def __init__(self, config_path, args):
+    def __init__(self, config_path, args, working_dir):
+        Utility.working_dir = working_dir
         self.modules = []
 
         config = self._read_config_dict(config_path, args)
@@ -45,4 +47,13 @@ class Pipeline:
     def run(self):
         for module in self.modules:
             with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
+
+                if module.undo_after_run:
+                    bpy.ops.ed.undo_push(message="before")
+
                 module.run()
+
+                if module.undo_after_run:
+                    bpy.ops.ed.undo_push(message="after")
+                    # The current state points to "after", now by calling undo we go back to "before"
+                    bpy.ops.ed.undo()

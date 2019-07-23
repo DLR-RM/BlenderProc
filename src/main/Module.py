@@ -2,6 +2,6 @@ import bpy
 
 class Module:
 
-    def __init__(self, config):
+    def __init__(self, config, undo_after_run=False):
         self.config = config
-        self.scene = bpy.data.scenes["Scene"]
+        self.undo_after_run = undo_after_run
