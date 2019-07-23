@@ -188,6 +188,7 @@ class SuncgLoader(Module):
                 self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]
 
         self.labels = sorted(list(self.labels))
+        SuncgLoader.num_labels = len(self.labels)
         self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
         
         # for obj in bpy.context.scene.objects:

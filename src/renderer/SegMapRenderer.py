@@ -1,7 +1,7 @@
 import bpy
 
 from src.renderer.Renderer import Renderer
-from src.materials.SuncgMaterials import SuncgMaterials
+from src.loader.SuncgLoader import SuncgLoader
 
 class SegMapRenderer(Renderer):
 
@@ -39,6 +39,9 @@ class SegMapRenderer(Renderer):
             s = 12.92 * lin
         return s
 
+
+    def scaleColor(self, color):
+        return ((float(color)/float(SuncgLoader.num_labels)) * 2**16) + float(2**15)/float(SuncgLoader.num_labels)
         
     def color_obj(self, obj, color=None):
         for m in obj.material_slots:
@@ -48,8 +51,7 @@ class SegMapRenderer(Renderer):
             output = nodes.get("Material Output")
 
             if color:
-                # emission_node.inputs[0].default_value[:3] = map(self.s2lin, color)
-                emission_node.inputs[0].default_value[:3] = color
+                emission_node.inputs[0].default_value[:3] = map(self.scaleColor, color)
             else:
                 emission_node.inputs[0].default_value[:3] = (0.0, 0.0, 0.0)
             links.new(emission_node.outputs[0], output.inputs[0])
@@ -64,14 +66,19 @@ class SegMapRenderer(Renderer):
         bpy.context.scene.render.image_settings.color_depth = "16"
         bpy.context.scene.render.layers[0].cycles.use_denoising = False
         bpy.data.scenes["Scene"].cycles.filter_width = 0.0
-
+        fdg = set()
         for obj in bpy.context.scene.objects:
             if "modelId" in obj:
                 obj_id = obj["modelId"]
                 if obj["type"] != "Room":
                     category_id = obj['category_id']
-                    self.color_obj(obj, [category_id/255.0, category_id/255.0, category_id/255.0])
+                    fdg.add(category_id)
+                    # self.color_obj(obj, [category_id/255.0, category_id/255.0, category_id/255.0])
+                    self.color_obj(obj, [category_id, category_id, category_id])
+
                 else:
                     self.color_obj(obj)
 
+        print(fdg)
+        print(SuncgLoader.num_labels)
         self._render("seg_")
