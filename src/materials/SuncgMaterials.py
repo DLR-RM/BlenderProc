@@ -40,29 +40,6 @@ class SuncgMaterials(Module):
                     self.lights[row[0]][1].append(row[index])
                     index += 1
 
-        # Read in windows
-        self.windows = []
-        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                if row["coarse_grained_class"] == "window":
-                    self.windows.append(row["model_id"])
-
-                SuncgMaterials.labels.add(row["nyuv2_40class"])
-                SuncgMaterials.object_label_map[row["model_id"]] = row["nyuv2_40class"]
-
-        SuncgMaterials.labels = sorted(list(SuncgMaterials.labels))
-        SuncgMaterials.label_index_map = {SuncgMaterials.labels[i]:i for i in range(len(SuncgMaterials.labels))}
-        
-        for obj in bpy.context.scene.objects:
-
-            if "modelId" in obj:
-                obj_id = obj["modelId"]
-                if obj["type"] != "Room":
-                    category_id = SuncgMaterials._get_label_id(obj_id)
-                    obj['category_id'] = category_id
-
-
     @classmethod
     def get_labels(cls):
         return cls.labels
@@ -156,7 +133,32 @@ class SuncgMaterials(Module):
                     links.new(emission_node.outputs[0], mix_node.inputs[1])
 
     def run(self):
+
+
+        self.windows = []
+        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if row["coarse_grained_class"] == "window":
+                    self.windows.append(row["model_id"])
+
+                SuncgMaterials.labels.add(row["nyuv2_40class"])
+                SuncgMaterials.object_label_map[row["model_id"]] = row["nyuv2_40class"]
+
+        SuncgMaterials.labels = sorted(list(SuncgMaterials.labels))
+        SuncgMaterials.label_index_map = {SuncgMaterials.labels[i]:i for i in range(len(SuncgMaterials.labels))}
+        
+        for obj in bpy.context.scene.objects:
+        # for obj in bpy.context.selected_objects:
+
+            if "modelId" in obj:
+                obj_id = obj["modelId"]
+                if obj["type"] != "Room":
+                    category_id = SuncgMaterials._get_label_id(obj_id)
+                    obj['category_id'] = category_id
+
         # Make some objects emit lights
+
         for obj in bpy.context.scene.objects:
 
             if "modelId" in obj:
