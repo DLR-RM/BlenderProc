@@ -93,6 +93,9 @@ class SuncgLoader(Module):
                     metadata["fine_grained_class"] = "wall"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
                 elif node["type"] == "Ground":
+                    metadata["type"] = "Wall"
+                    metadata["category_id"] = self.label_index_map["floor"]
+                    metadata["fine_grained_class"] = "ground"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
                 elif node["type"] == "Object":
                     if "state" not in node or node["state"] == 0:
@@ -188,7 +191,8 @@ class SuncgLoader(Module):
                 self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]
 
         self.labels = sorted(list(self.labels))
-        SuncgLoader.num_labels = len(self.labels)
+        # SuncgLoader.num_labels = len(self.labels)
+        bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
         self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
         
         # for obj in bpy.context.scene.objects:
