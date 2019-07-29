@@ -3,12 +3,15 @@
   "setup": {
     "blender_version": "blender-2.79b-linux-glibc219-x86_64",
     "pip": [
-      "h5py"
+      "h5py",
+      "imageio"
     ]
   },
   "global": {
+    "all": {
+      "output_dir": "output"
+    },
     "renderer": {
-      "output_dir": "output",
       "pixel_aspect_x": 1.333333333
     }
   },
@@ -35,10 +38,18 @@
     },
     {
       "name": "renderer.NormalRenderer",
-      "config": {}
+      "config": {
+        "output_key": "normals"
+      }
     },
     {
       "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors"
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
       "config": {}
     }
   ]
