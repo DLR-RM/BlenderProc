@@ -34,3 +34,5 @@ class RgbRenderer(Renderer):
     		self.render_depth()
 
     	self._render("rgb_")
+      self._register_output("rgb_", "rgb", ".png")
+      
