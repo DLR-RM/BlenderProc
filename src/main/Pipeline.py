@@ -14,12 +14,14 @@ class Pipeline:
 
         config = self._read_config_dict(config_path, args)
         global_config = config["global"]
+        all_base_config = global_config["all"] if "all" in global_config else {}
 
         for module_config in config["modules"]:
             # Merge global and local config (local overwrites global)
             model_type = module_config["name"].split(".")[0]
             base_config = global_config[model_type] if model_type in global_config else {}
             config = module_config["config"]
+            Utility.merge_dicts(all_base_config, base_config)
             Utility.merge_dicts(base_config, config)
 
             with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
@@ -47,13 +49,5 @@ class Pipeline:
     def run(self):
         for module in self.modules:
             with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
-
-                if module.undo_after_run:
-                    bpy.ops.ed.undo_push(message="before")
-
                 module.run()
 
-                if module.undo_after_run:
-                    bpy.ops.ed.undo_push(message="after")
-                    # The current state points to "after", now by calling undo we go back to "before"
-                    bpy.ops.ed.undo()

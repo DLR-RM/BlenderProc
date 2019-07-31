@@ -1,6 +1,7 @@
 import os
 import bpy
 import time
+import inspect
 
 class Utility:
     working_dir = ""
@@ -52,3 +53,18 @@ class Utility:
 
         def __exit__(self, type, value, traceback):
             print("#### Finished - " + self.block_name + " (took " + ("%.3f" % (time.time() - self.start)) + " seconds) ####")
+
+    class UndoAfterExecution:
+        """ Usage: with UndoAfterExecution(): """
+        def __init__(self, check_point_name=None):
+            if check_point_name is None:
+                check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
+            self.check_point_name = check_point_name
+
+        def __enter__(self):
+            bpy.ops.ed.undo_push(message="before " + self.check_point_name)
+
+        def __exit__(self, type, value, traceback):
+            bpy.ops.ed.undo_push(message="after " + self.check_point_name)
+            # The current state points to "after", now by calling undo we go back to "before"
+            bpy.ops.ed.undo()
