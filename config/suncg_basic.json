@@ -40,7 +40,9 @@
     },
     {
       "name": "renderer.SegMapRenderer",
-      "config": {}
+      "config": {
+        "render_depth": true
+      }
     },
     {
       "name": "renderer.RgbRenderer",

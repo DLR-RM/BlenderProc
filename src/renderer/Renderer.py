@@ -53,5 +53,5 @@ class Renderer(Module):
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        bpy.context.scene.render.filepath = os.path.join(output_dir, self.config.get_string("output_file_prefix", default_prefix))
+        bpy.context.scene.render.filepath = os.path.join(output_dir, self.config.get_string("output_file_prefix", default_prefix))        
         bpy.ops.render.render(animation=True, write_still=True)

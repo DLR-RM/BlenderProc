@@ -24,8 +24,6 @@ class SegMapRenderer(Renderer):
                 emission_node.inputs[0].default_value[:3] = (0.0, 0.0, 0.0)
             links.new(emission_node.outputs[0], output.inputs[0])
 
-
-
     def run(self):
         self._configure_renderer()
 
@@ -34,14 +32,10 @@ class SegMapRenderer(Renderer):
         bpy.context.scene.render.image_settings.color_depth = "16"
         bpy.context.scene.render.layers[0].cycles.use_denoising = False
         bpy.data.scenes["Scene"].cycles.filter_width = 0.0
-        fdg = set()
         for obj in bpy.context.scene.objects:
             if "modelId" in obj:
                     category_id = obj['category_id']
                     fdg.add(category_id)
                     self.color_obj(obj, [category_id, category_id, category_id])
 
-        print(sorted(list(fdg)))
-        print(len(list(fdg)))
-        print(bpy.data.scenes["Scene"]["num_labels"])
         self._render("seg_")
