@@ -38,3 +38,5 @@ class SegMapRenderer(Renderer):
                     self.color_obj(obj, [category_id, category_id, category_id])
 
         self._render("seg_")
+        self._register_output("seg_", "seg", ".exr")
+

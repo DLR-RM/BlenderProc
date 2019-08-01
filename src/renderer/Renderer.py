@@ -49,9 +49,33 @@ class Renderer(Module):
         bpy.context.scene.cycles.debug_use_spatial_splits = True
         bpy.context.scene.render.use_persistent_data = True
 
+
+    def _render_depth(self):
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+        bpy.data.scenes["Scene"].render.layers["RenderLayer"].use_pass_z = True
+        tree = bpy.context.scene.node_tree
+        links = tree.links
+
+        # Create a render layer
+        rl = tree.nodes.new('CompositorNodeRLayers')      
+
+        output_file = tree.nodes.new("CompositorNodeOutputFile")
+        output_file.base_path = self.output_dir
+        output_file.format.file_format = "OPEN_EXR"
+
+        # Feed the Z output of the render layer to the input of the file IO layer
+        links.new(rl.outputs[2], output_file.inputs['Image'])
+
     def _render(self, default_prefix):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
+
+
+        if self.config.get_bool("render_depth", False):
+                self._render_depth()
+                self._register_output("Image", "depth", ".exr")
+
 
         bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
         bpy.ops.render.render(animation=True, write_still=True)
