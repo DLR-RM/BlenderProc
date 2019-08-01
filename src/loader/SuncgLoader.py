@@ -4,7 +4,6 @@ import json
 import os
 from mathutils import Matrix, Vector, Euler
 import math
-import csv
 
 from src.utility.Utility import Utility
 
@@ -19,8 +18,6 @@ class SuncgLoader(Module):
     def run(self):
         with open(Utility.resolve_path(self.house_path), "r") as f:
             config = json.load(f)
-
-        self._read_model_category_mapping('suncg/ModelCategoryMapping.csv')
 
         house_id = config["id"]
 
@@ -40,10 +37,6 @@ class SuncgLoader(Module):
                     "modelId": node["modelId"],
                     "bbox": node["bbox"]
                 }
-
-                if node["modelId"] in self.object_fine_grained_label_map:
-                    metadata["fine_grained_class"] = self.object_fine_grained_label_map[node["modelId"]]
-                    metadata["category_id"] = self._get_label_id(node["modelId"])
 
                 if "transform" in node:
                     transform = Matrix([node["transform"][i*4:(i+1)*4] for i in range(4)])
@@ -79,23 +72,14 @@ class SuncgLoader(Module):
 
                     # Floor
                     metadata["type"] = "Floor"
-                    metadata["category_id"] = self.label_index_map["floor"]
-                    metadata["fine_grained_class"] = "floor"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, room_obj)
                     # Ceiling
                     metadata["type"] = "Ceiling"
-                    metadata["category_id"] = self.label_index_map["ceiling"]
-                    metadata["fine_grained_class"] = "ceiling"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "c.obj"), metadata, material_adjustments, transform, room_obj)
                     # Walls
                     metadata["type"] = "Wall"
-                    metadata["category_id"] = self.label_index_map["wall"]
-                    metadata["fine_grained_class"] = "wall"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
                 elif node["type"] == "Ground":
-                    metadata["type"] = "Wall"
-                    metadata["category_id"] = self.label_index_map["floor"]
-                    metadata["fine_grained_class"] = "ground"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
                 elif node["type"] == "Object":
                     if "state" not in node or node["state"] == 0:
@@ -174,33 +158,3 @@ class SuncgLoader(Module):
                 image_path += ".jpg"
 
             image_node.image = bpy.data.images.load(image_path, check_existing=True)
-
-
-    def _read_model_category_mapping(self, path):
-        self.labels = set()
-        self.windows = []
-        self.object_label_map = {}
-        self.object_fine_grained_label_map = {}
-        self.label_index_map = {}
-
-        with open(Utility.resolve_path(path), 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                self.labels.add(row["nyuv2_40class"])
-                self.object_label_map[row["model_id"]] = row["nyuv2_40class"]
-                self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]
-
-        self.labels = sorted(list(self.labels))
-        # SuncgLoader.num_labels = len(self.labels)
-        bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
-        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
-        
-        # for obj in bpy.context.scene.objects:
-        #     if "modelId" in obj:
-        #         obj_id = obj["modelId"]
-        #         if obj["type"] != "Room":
-        #             category_id = self._get_label_id(obj_id)
-        #             obj['category_id'] = category_id
-
-    def _get_label_id(self, obj_id):
-        return self.label_index_map[self.object_label_map[obj_id]]

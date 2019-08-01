@@ -1,17 +1,17 @@
 from src.main.Module import Module
 import bpy
+import csv
 
 from src.utility.Utility import Utility
 
 
 class SuncgMaterials(Module):
-    
+
     def __init__(self, config):
         Module.__init__(self, config)
 
         # Read in lights
         self.lights = {}
-
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
         with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
             lines = f.readlines()
@@ -34,6 +34,18 @@ class SuncgMaterials(Module):
                 for i in range(number):
                     self.lights[row[0]][1].append(row[index])
                     index += 1
+
+        # Read in windows
+        self.windows = []
+        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if row["coarse_grained_class"] == "window":
+                    self.windows.append(row["model_id"])
+
+    def _get_model_id(self, obj):
+        if "modelId" in obj:
+            return obj["modelId"]
 
     def _make_lamp_emissive(self, obj, light):
         for m in obj.material_slots:
@@ -118,18 +130,16 @@ class SuncgMaterials(Module):
 
     def run(self):
         # Make some objects emit lights
-
         for obj in bpy.context.scene.objects:
-
             if "modelId" in obj:
                 obj_id = obj["modelId"]
-               
+
                 # In the case of the lamp
                 if obj_id in self.lights:
                     self._make_lamp_emissive(obj, self.lights[obj_id])
 
                 # Make the windows emit light
-                if obj["fine_grained_class"] == "window":
+                if obj_id in self.windows:
                     self._make_window_emissive(obj)
 
                 # Also make ceilings slightly emit light

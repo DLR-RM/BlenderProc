@@ -43,10 +43,6 @@
       }
     },
     {
-      "name": "renderer.SegMapRenderer",
-      "config": {}
-    },
-    {
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors"
