@@ -2,6 +2,7 @@
 {
   "setup": {
     "blender_version": "blender-2.79b-linux-glibc219-x86_64",
+    "custom_blender_path": "/home_local/zida_yo/blender-2.79b-linux-glibc219-x86_64/",
     "pip": [
       "h5py",
       "imageio"
@@ -44,14 +45,13 @@
     },
     {
       "name": "renderer.SegMapRenderer",
-      "config": {
-        "render_depth": true
-      }
+      "config": {}
     },
     {
       "name": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors"
+        "output_key": "colors",
+        "render_depth": true
       }
     },
     {

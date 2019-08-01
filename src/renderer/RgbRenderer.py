@@ -34,6 +34,10 @@ class RgbRenderer(Renderer):
     	if self.config.get_bool("render_depth"):
     		self.render_depth()
 
+    	bpy.context.scene.render.image_settings.color_mode = "RGB"
+    	bpy.context.scene.render.image_settings.file_format = "PNG"
+    	bpy.context.scene.render.image_settings.color_depth = "8"
+
     	self._render("rgb_")
-      self._register_output("rgb_", "rgb", ".png")
+    	self._register_output("rgb_", "rgb", ".png")
       

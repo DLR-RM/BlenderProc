@@ -35,7 +35,6 @@ class SegMapRenderer(Renderer):
         for obj in bpy.context.scene.objects:
             if "modelId" in obj:
                     category_id = obj['category_id']
-                    fdg.add(category_id)
                     self.color_obj(obj, [category_id, category_id, category_id])
 
         self._render("seg_")
