@@ -6,7 +6,7 @@ from src.loader.SuncgLoader import SuncgLoader
 class SegMapRenderer(Renderer):
 
     def __init__(self, config):
-        Renderer.__init__(self, config, undo_after_run=True)
+        Renderer.__init__(self, config)
 
     def scaleColor(self, color):
         return ((color * 2**16) / (bpy.data.scenes["Scene"]["num_labels"])) + ((2**15)/(bpy.data.scenes["Scene"]["num_labels"]))

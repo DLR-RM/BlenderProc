@@ -93,7 +93,7 @@ class SuncgLoader(Module):
                     metadata["fine_grained_class"] = "wall"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
                 elif node["type"] == "Ground":
-                    metadata["type"] = "Wall"
+                    metadata["type"] = "Ground"
                     metadata["category_id"] = self.label_index_map["floor"]
                     metadata["fine_grained_class"] = "ground"
                     self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
