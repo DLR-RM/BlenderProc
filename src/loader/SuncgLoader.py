@@ -156,5 +156,5 @@ class SuncgLoader(Module):
                 image_path += ".png"
             else:
                 image_path += ".jpg"
-
+            image_path = Utility.resolve_path(image_path)
             image_node.image = bpy.data.images.load(image_path, check_existing=True)
