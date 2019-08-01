@@ -89,12 +89,12 @@ class Hdf5Writer(Module):
             frequencies lower than a threshold, e.g. 100.
             """
 
-            for row in noise_indices:
-                neighbors = get_neighbors(data, row[0], row[1]) # Extracting the indices surrounding 3x3 neighbors
-                curr_val = data[row[0]][row[1]][0] # Current value of the noisy pixel
+            for index in noise_indices:
+                neighbors = get_neighbors(data, index[0], index[1]) # Extracting the indices surrounding 3x3 neighbors
+                curr_val = data[index[0]][index[1]][0] # Current value of the noisy pixel
                 
-                neighbor_vals = [data[neighbor[0]][neighbor[1]] for neighbor in neighbors] # Getting the values of the neighbots
-                neighbor_vals = np.unique(np.array([np.array(row) for row in neighbor_vals])) # Getting the unique values only
+                neighbor_vals = [data[neighbor[0]][neighbor[1]] for neighbor in neighbors] # Getting the values of the neighbors
+                neighbor_vals = np.unique(np.array([np.array(index) for index in neighbor_vals])) # Getting the unique values only
                 
                 min = 10000000000
                 min_idx = 0
@@ -109,7 +109,7 @@ class Hdf5Writer(Module):
                 
                 # Now that we have found the closest value, assign it to the noisy value
                 new_val = neighbor_vals[min_idx]
-                data[row[0]][row[1]] = np.array([new_val, new_val, new_val])
+                data[index[0]][index[1]] = np.array([new_val, new_val, new_val])
 
             return data
 
