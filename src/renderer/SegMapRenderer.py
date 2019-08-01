@@ -11,7 +11,7 @@ class SegMapRenderer(Renderer):
     def scaleColor(self, color):
         return ((color * 2**16) / (bpy.data.scenes["Scene"]["num_labels"])) + ((2**15)/(bpy.data.scenes["Scene"]["num_labels"]))
         
-    def color_obj(self, obj, color=None):
+    def color_obj(self, obj, color):
         for m in obj.material_slots:
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
@@ -20,8 +20,7 @@ class SegMapRenderer(Renderer):
 
             if color:
                 emission_node.inputs[0].default_value[:3] = map(self.scaleColor, color)
-            else:
-                emission_node.inputs[0].default_value[:3] = (0.0, 0.0, 0.0)
+
             links.new(emission_node.outputs[0], output.inputs[0])
 
     def run(self):
@@ -39,4 +38,7 @@ class SegMapRenderer(Renderer):
 
         self._render("seg_")
         self._register_output("seg_", "seg", ".exr")
+
+        bpy.context.scene.render.layers[0].cycles.use_denoising = True
+        bpy.data.scenes["Scene"].cycles.filter_width = 1.5
 

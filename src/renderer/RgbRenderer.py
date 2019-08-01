@@ -1,5 +1,4 @@
 import bpy
-import os
 
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility

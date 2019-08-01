@@ -2,7 +2,6 @@
 {
   "setup": {
     "blender_version": "blender-2.79b-linux-glibc219-x86_64",
-    "custom_blender_path": "/home_local/zida_yo/blender-2.79b-linux-glibc219-x86_64/",
     "pip": [
       "h5py",
       "imageio"

@@ -50,7 +50,7 @@ class Renderer(Module):
         bpy.context.scene.render.use_persistent_data = True
 
 
-    def _render_depth(self):
+    def _write_depth_to_file(self):
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         bpy.data.scenes["Scene"].render.layers["RenderLayer"].use_pass_z = True
@@ -73,7 +73,7 @@ class Renderer(Module):
 
 
         if self.config.get_bool("render_depth", False):
-                self._render_depth()
+                self._write_depth_to_file()
                 self._register_output("Image", "depth", ".exr")
 
 

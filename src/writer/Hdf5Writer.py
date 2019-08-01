@@ -32,7 +32,7 @@ class Hdf5Writer(Module):
                     data = self._load_file(Utility.resolve_path(file_path))
 
                     if output_type["key"] == "seg": # This is so far mandatory for seg maps, and shouldn't be optional, i.e. an option in the config file
-                        self.refine_seg_map(data)
+                        data = self.refine_seg_map(data)
 
                     print("Key: " + output_type["key"] + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
 
@@ -58,28 +58,61 @@ class Hdf5Writer(Module):
 
     def refine_seg_map(self, data):
 
-        def get_neighbors(i, j):
-            neighbors = ([[i + 1, j], [i, j + 1], [i + 1, j + 1], [i - 1, j], [i, j - 1], [i - 1, j - 1], [i + 1, j - 1], [i - 1, j + 1]])
-            return np.array([np.array(n) for n in neighbors])
+        def get_neighbors(data, i, j):
+            # neighbors = ([[i + 1, j], [i, j + 1], [i + 1, j + 1], [i - 1, j], [i, j - 1], [i - 1, j - 1], [i + 1, j - 1], [i - 1, j + 1]])
+            # Boundary check
+            begin_i = -1 if i > 0 else i
+            end_i   = 2 if i < data.shape[0] - 1 else i
 
-        def remove_noise(a, noise_indices):
+            begjn_j = -1 if j > 0 else j
+            end_j   = 2 if j < data.shape[1] - 1 else j
+
+            neighbors = []
+            for p in range(-1, 2):
+                for q in range(-1, 2):
+                    if not (p == 0 and q == 0): # We don't want the current pixel, just the neighbors
+                        neighbors.append([i + p, j + q])
+
+            del neighbors[4] # Get neighbors only, not the element itself. The element will always be at position 4.
+            return np.array(neighbors)
+
+        def remove_noise(data, noise_indices):
+
+            """
+
+            A function that takes an image and a few 2D indices, where these indices correspond to pixel values in segmentation maps, where these values are not
+            real labels, but some deviations from the real labels, that were generated as a result of Blender doing some interpolation, smooting, or other numerical operations.
+
+            Parameters
+            ----------
+            data: ndarray of the .exr segmap
+            noise_indices: a list of 2D indices that correspond to the noisy pixels. One criteria of finding these pixels is to use a histogram and find the pixels with
+            frequencies lower than a threshold, e.g. 100.
+            """
+
             for row in noise_indices:
-                neighbors = get_neighbors(row[0], row[1])
-                curr_val = a[row[0]][row[1]][0]
+                neighbors = get_neighbors(data, row[0], row[1]) # Extracting the indices surrounding 3x3 neighbors
+                curr_val = data[row[0]][row[1]][0] # Current value of the noisy pixel
                 
-                neighbor_vals = [a[neighbor[0]][neighbor[1]] for neighbor in neighbors]
-                neighbor_vals = np.unique(np.array([np.array(row) for row in neighbor_vals]))
+                neighbor_vals = [data[neighbor[0]][neighbor[1]] for neighbor in neighbors] # Getting the values of the neighbots
+                neighbor_vals = np.unique(np.array([np.array(row) for row in neighbor_vals])) # Getting the unique values only
                 
                 min = 10000000000
                 min_idx = 0
 
+                # Here we iterate through the unique values of the neighbor and find the one closest to the current noisy value
                 for idx, n in enumerate(neighbor_vals):
+                    # Is this closer than the current closest value?
                     if n - curr_val <= min:
+                        # If so, update
                         min = n - curr_val
                         min_idx = idx
                 
+                # Now that we have found the closest value, assign it to the noisy value
                 new_val = neighbor_vals[min_idx]
-                a[row[0]][row[1]] = np.array([new_val, new_val, new_val])
+                data[row[0]][row[1]] = np.array([new_val, new_val, new_val])
+
+            return data
 
         # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation that should remove some noise or deviations
         data = ((data * 37) / (2**16)) # datassuming data 16 bit color depth
@@ -92,4 +125,4 @@ class Hdf5Writer(Module):
         noise_vals = [h[0] for h in hist if h[1] <= 100] # Assuming the stray pixels wouldn't have a count of more than 100
         noise_indices = np.argwhere(np.isin(data, noise_vals))
 
-        remove_noise(data, noise_indices)
+        return remove_noise(data, noise_indices)
