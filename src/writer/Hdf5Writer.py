@@ -73,7 +73,6 @@ class Hdf5Writer(Module):
                     if not (p == 0 and q == 0): # We don't want the current pixel, just the neighbors
                         neighbors.append([i + p, j + q])
 
-            del neighbors[4] # Get neighbors only, not the element itself. The element will always be at position 4.
             return np.array(neighbors)
 
         def remove_noise(data, noise_indices):
@@ -115,7 +114,7 @@ class Hdf5Writer(Module):
             return data
 
         # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation that should remove some noise or deviations
-        data = ((data * 37) / (2**16)) # datassuming data 16 bit color depth
+        data = ((data * 37) / (65536)) # datassuming data 16 bit color depth
         data = data.astype(np.int32)
         b, counts = np.unique(data.flatten(), return_counts=True)
 

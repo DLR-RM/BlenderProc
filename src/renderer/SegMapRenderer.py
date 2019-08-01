@@ -9,7 +9,8 @@ class SegMapRenderer(Renderer):
         Renderer.__init__(self, config)
 
     def scaleColor(self, color):
-        return ((color * 2**16) / (bpy.data.scenes["Scene"]["num_labels"])) + ((2**15)/(bpy.data.scenes["Scene"]["num_labels"]))
+        # 65536 = 2**16 the color depth, 32768 = 2**15 = 2**16/2
+        return ((color * 65536) / (bpy.data.scenes["Scene"]["num_labels"])) + ((32768)/(bpy.data.scenes["Scene"]["num_labels"]))
         
     def color_obj(self, obj, color):
         for m in obj.material_slots:
