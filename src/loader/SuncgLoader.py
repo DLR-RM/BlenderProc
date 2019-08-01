@@ -192,7 +192,8 @@ class SuncgLoader(Module):
         
         self.labels = sorted(list(self.labels))     
         # SuncgLoader.num_labels = len(self.labels)     
-        bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)       
+        bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
+        print(len(self.labels))
         self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}      
                 
         # for obj in bpy.context.scene.objects:     
