@@ -14,11 +14,12 @@ sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-pac
 # Read args
 argv = sys.argv
 argv = argv[argv.index("--") + 1:]
-working_dir = bpy.data.filepath
+working_dir = os.path.dirname(__file__)
 
 from src.main.Pipeline import Pipeline
 
 config_path = argv[0]
+print(config_path)
 
 pipeline = Pipeline(config_path, argv[1:], working_dir)
 pipeline.run()
