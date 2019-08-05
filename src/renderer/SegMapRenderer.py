@@ -2,6 +2,8 @@ import bpy
 
 from src.renderer.Renderer import Renderer
 from src.loader.SuncgLoader import SuncgLoader
+from src.utility.Utility import Utility
+
 
 class SegMapRenderer(Renderer):
 
@@ -25,25 +27,28 @@ class SegMapRenderer(Renderer):
             links.new(emission_node.outputs[0], output.inputs[0])
 
     def run(self):
-        self._configure_renderer()
+        with Utility.UndoAfterExecution():
+            self._configure_renderer()
 
-        bpy.context.scene.render.image_settings.color_mode = "BW"
-        bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
-        bpy.context.scene.render.image_settings.color_depth = "16"
+            bpy.context.scene.render.image_settings.color_mode = "BW"
+            bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
+            bpy.context.scene.render.image_settings.color_depth = "16"
 
-        use_denoising = bpy.context.scene.render.layers[0].cycles.use_denoising
-        filter_width = bpy.data.scenes["Scene"].cycles.filter_width
+            use_denoising = bpy.context.scene.render.layers[0].cycles.use_denoising
+            filter_width = bpy.data.scenes["Scene"].cycles.filter_width
 
-        bpy.context.scene.render.layers[0].cycles.use_denoising = False
-        bpy.data.scenes["Scene"].cycles.filter_width = 0.0
-        for obj in bpy.context.scene.objects:
-            if "modelId" in obj:
-                    category_id = obj['category_id']
-                    self.color_obj(obj, [category_id, category_id, category_id])
+            bpy.context.scene.render.layers[0].cycles.use_denoising = False
+            bpy.data.scenes["Scene"].cycles.filter_width = 0.0
+            for obj in bpy.context.scene.objects:
+                if "modelId" in obj:
+                        category_id = obj['category_id']
+                        self.color_obj(obj, [category_id, category_id, category_id])
 
-        self._render("seg_")
+            self._render("seg_")
+
+            bpy.context.scene.render.layers[0].cycles.use_denoising = use_denoising
+            bpy.data.scenes["Scene"].cycles.filter_width = filter_width
+
         self._register_output("seg_", "seg", ".exr")
 
-        bpy.context.scene.render.layers[0].cycles.use_denoising = use_denoising
-        bpy.data.scenes["Scene"].cycles.filter_width = filter_width
 
