@@ -56,7 +56,16 @@
     },
     {
       "name": "writer.Hdf5Writer",
-      "config": {}
+      "config": {
+        "postprocessing_modules": {
+          "seg": [
+            {
+              "name": "postprocessing.NoiseRemoval",
+              "config": {}
+            }
+          ]
+        }
+      }
     }
   ]
 }

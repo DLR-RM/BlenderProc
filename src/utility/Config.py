@@ -30,6 +30,9 @@ class Config:
             else:
                 raise
 
+    def get_raw_dict(self, name, fallback=None):
+        return self._get_value_with_fallback(name, fallback)
+
     def get_int(self, name, fallback=None):
         value = self._get_value_with_fallback(name, fallback)
         try:

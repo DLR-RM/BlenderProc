@@ -1,7 +1,5 @@
 import json
-import importlib
 
-from src.utility.Config import Config
 from src.utility.Utility import Utility
 import re
 import bpy
@@ -10,25 +8,10 @@ class Pipeline:
 
     def __init__(self, config_path, args, working_dir):
         Utility.working_dir = working_dir
-        self.modules = []
 
         config = self._read_config_dict(config_path, args)
-        global_config = config["global"]
-        all_base_config = global_config["all"] if "all" in global_config else {}
 
-        for module_config in config["modules"]:
-            # Merge global and local config (local overwrites global)
-            model_type = module_config["name"].split(".")[0]
-            base_config = global_config[model_type] if model_type in global_config else {}
-            config = module_config["config"]
-            Utility.merge_dicts(all_base_config, base_config)
-            Utility.merge_dicts(base_config, config)
-
-            with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
-                # Import file and extract class
-                module_class = getattr(importlib.import_module("src." + module_config["name"]), module_config["name"].split(".")[-1])
-                # Create module
-                self.modules.append(module_class(Config(config)))
+        self.modules = Utility.initialize_modules(config["modules"], config["global"])
 
     def _read_config_dict(self, config_path, args):
         with open(Utility.resolve_path(config_path), "r") as f:
