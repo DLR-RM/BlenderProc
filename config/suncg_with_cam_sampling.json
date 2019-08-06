@@ -1,0 +1,44 @@
+// Args: <cam_file> <obj_file>
+{
+  "setup": {
+    "blender_install_path": "/home_local/wink_do/blender/",
+    "blender_version": "blender-2.79b-linux-glibc219-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "output",
+      "pixel_aspect_x": 1.333333333
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.SuncgLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "name": "camera.SuncgCameraSampler",
+      "config": {
+      }
+    },
+    {
+      "name": "materials.SuncgMaterials",
+      "config": {}
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors"
+      }
+    }
+  ]
+}
