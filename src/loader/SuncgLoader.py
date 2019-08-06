@@ -34,6 +34,7 @@ class SuncgLoader(Module):
             room_per_object = {}
 
             for node in level["nodes"]:
+                # Skip invalid nodes (This is the same behavior as in the SUNCG Toolbox)
                 if "valid" in node and node["valid"] == 0:
                     continue
 
