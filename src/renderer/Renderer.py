@@ -63,6 +63,7 @@ class Renderer(Module):
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self.output_dir
         output_file.format.file_format = "OPEN_EXR"
+        output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
         # Feed the Z output of the render layer to the input of the file IO layer
         links.new(rl.outputs[2], output_file.inputs['Image'])
@@ -71,23 +72,29 @@ class Renderer(Module):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-
         if self.config.get_bool("render_depth", False):
-                self._write_depth_to_file()
-                self._register_output("Image", "depth", ".exr")
-
+            self._write_depth_to_file()
 
         bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
         bpy.ops.render.render(animation=True, write_still=True)
 
-    def _register_output(self, default_prefix, default_key, suffix):
-        # Store output path and configured key into the scene's custom properties
-        output = {
-            "key": self.config.get_string("output_key", default_key),
-            "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix
-        }
-
+    def _add_output_entry(self, output):
         if "output" in bpy.context.scene:
             bpy.context.scene["output"] += [output]
         else:
             bpy.context.scene["output"] = [output]
+
+    def _register_output(self, default_prefix, default_key, suffix):
+        # Store output path and configured key into the scene's custom properties
+        self._add_output_entry({
+            "key": self.config.get_string("output_key", default_key),
+            "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix
+        })
+
+        if self.config.get_bool("render_depth", False):
+            self._add_output_entry({
+                "key": self.config.get_string("depth_output_key", "depth"),
+                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + suffix
+            })
+
+

@@ -10,13 +10,13 @@ class RgbRenderer(Renderer):
         Renderer.__init__(self, config)
 
     def run(self):
-    	self._configure_renderer()
+        with Utility.UndoAfterExecution():
+            self._configure_renderer()
 
-    	# In case a previous renderer changed these settings
-    	bpy.context.scene.render.image_settings.color_mode = "RGB"
-    	bpy.context.scene.render.image_settings.file_format = "PNG"
-    	bpy.context.scene.render.image_settings.color_depth = "8"
+            # In case a previous renderer changed these settings
+            bpy.context.scene.render.image_settings.color_mode = "RGB"
+            bpy.context.scene.render.image_settings.file_format = "PNG"
+            bpy.context.scene.render.image_settings.color_depth = "8"
 
-    	self._render("rgb_")
-    	self._register_output("rgb_", "rgb", ".png")
-      
+            self._render("rgb_")
+        self._register_output("rgb_", "rgb", ".png")
