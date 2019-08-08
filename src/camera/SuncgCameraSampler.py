@@ -6,16 +6,15 @@ import mathutils
 import numpy as np
 import os
 
-from src.main.Module import Module
 import bmesh
 
-from src.utility.Utility import Utility
+from src.camera.CameraModule import CameraModule
 
 
-class SuncgCameraSampler(Module):
+class SuncgCameraSampler(CameraModule):
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        CameraModule.__init__(self, config)
         self.position_ranges = [
             self.config.get_list("positon_range_x", []),
             self.config.get_list("positon_range_y", []),
@@ -30,7 +29,6 @@ class SuncgCameraSampler(Module):
         self.min_dist_to_obstacle = self.config.get_float("min_dist_to_obstacle", 1)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
-        self.write_to_file = self.config.get_bool("write_to_file", False)
         self.bvh_tree = None
 
     def run(self):
@@ -44,7 +42,6 @@ class SuncgCameraSampler(Module):
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
 
-        cam_poses = []
         frame_id = 0
         room_id = 0
         for room_obj in bpy.context.scene.objects:
@@ -82,16 +79,7 @@ class SuncgCameraSampler(Module):
                     cam_ob.keyframe_insert(data_path='location', frame=frame_id + 1)
                     cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id + 1)
 
-                    if self.write_to_file:
-                        cam_poses.append([])
-                        # Eye vector
-                        cam_poses[-1].extend(position[:])
-                        # Look at vector
-                        cam_poses[-1].extend((world_matrix.to_quaternion() * mathutils.Vector((0.0, 0.0, -1.0)))[:])
-                        # Up vector
-                        cam_poses[-1].extend((world_matrix.to_quaternion() * mathutils.Vector((0.0, 1.0, 0.0)))[:])
-                        # FOV and Room
-                        cam_poses[-1].extend([cam.angle_x, cam.angle_y, room_id])
+                    self._write_cam_pose_to_file(frame_id + 1, cam, cam_ob, room_id)
 
                     frame_id += 1
                     successful_tries += 1
@@ -100,13 +88,7 @@ class SuncgCameraSampler(Module):
                 room_id += 1
 
         bpy.context.scene.frame_end = frame_id
-        if self.write_to_file:
-            self._write_cam_poses_to_file(cam_poses)
-            self._register_output("campose_", "campose", ".npy")
-
-    def _write_cam_poses_to_file(self, cam_poses):
-        for i, cam_pose in enumerate(cam_poses):
-            np.save(os.path.join(self.output_dir, "campose_" + ("%04d" % (i + 1))), cam_pose)
+        self._register_cam_pose_output()
 
     def _init_bvh_tree(self):
         # Create bmesh which will contain the meshes of all objects

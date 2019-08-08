@@ -7,7 +7,7 @@ class Module:
 
     def __init__(self, config):
         self.config = config
-        self.output_dir = Utility.resolve_path(self.config.get_string("output_dir"))
+        self.output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
         if not os.path.exists(self.output_dir):
             os.mkdir(self.output_dir)
 
