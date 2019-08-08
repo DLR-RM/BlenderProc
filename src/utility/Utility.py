@@ -30,6 +30,11 @@ class Utility:
         return modules
 
     @staticmethod
+    def convert_point_from_suncg_to_blender_frame(point):
+        """ Equivalent to the .obj import settings "Forward: -Z" and "Up: Y". """
+        return [point[0], -point[2], point[1]]
+
+    @staticmethod
     def resolve_path(path):
         """ Returns absolute path. If given path is relative, current working directory is put in front. """
         path = path.strip()
