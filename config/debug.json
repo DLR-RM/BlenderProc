@@ -12,7 +12,7 @@
     {
       "name": "loader.SuncgLoader",
       "config": {
-        "path": "/home_local/wink_do/suncg/house/0fe0f9ffee2cc9d267240f4a5dd459f2/house.json"
+        "path": "/volume/reconstruction_data/suncg/improved_data/version_1.0.0/house/002fa647848abeff3c969cc0bc1bb8b6/house.json"
       }
     },
     {
