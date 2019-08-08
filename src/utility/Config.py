@@ -84,7 +84,7 @@ class Config:
                 json_text = json_text.replace("<args:" + str(i) + ">", arg)
             # Replace env variables
             for key in os.environ.keys():
-                json_text = json_text.replace("$" + key, os.environ[key])
+                json_text = json_text.replace("${" + key + "}", os.environ[key])
 
             if "<args:" in json_text:
                 raise Exception("Too less arguments given")
