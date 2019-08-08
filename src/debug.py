@@ -5,18 +5,17 @@ import sys
 import importlib
 
 # Make sure the current script directory is in PATH, so we can load other python modules
-dir = os.path.dirname(bpy.context.space_data.text.filepath)
+working_dir = os.path.dirname(bpy.context.space_data.text.filepath) + "/../"
 
-if not dir in sys.path:
-    sys.path.append(dir)
+if not working_dir in sys.path:
+    sys.path.append(working_dir)
 
 # Reload all models inside src/, as they are cached inside blender
 for module in sys.modules.keys():
     if module.startswith("src"):
         print(module)
         importlib.reload(sys.modules[module])
-
-working_dir = bpy.context.space_data.text.filepath
+        
 
 from src.main.Pipeline import Pipeline
 
@@ -33,7 +32,7 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
-    pipeline = Pipeline(config_path, argv[1:], working_dir)
+    pipeline = Pipeline(config_path, [], working_dir)
     pipeline.run()
 finally:
     # Revert back to previous view

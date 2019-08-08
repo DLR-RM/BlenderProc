@@ -1,7 +1,6 @@
-// Args: <cam_file> <obj_file>
+// Args: <obj_file>
 {
   "setup": {
-    "blender_install_path": "/home_local/wink_do/blender/",
     "blender_version": "blender-2.79b-linux-glibc219-x86_64",
     "pip": [
       "h5py",
@@ -28,6 +27,7 @@
     {
       "name": "camera.SuncgCameraSampler",
       "config": {
+        "write_to_file": true
       }
     },
     {
@@ -38,6 +38,11 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors"
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
       }
     }
   ]

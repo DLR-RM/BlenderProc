@@ -4,7 +4,7 @@ import h5py
 import os
 from src.utility.Utility import Utility
 import imageio
-
+import numpy as np
 
 class Hdf5Writer(Module):
 
@@ -52,11 +52,16 @@ class Hdf5Writer(Module):
 
         if file_ending in ["exr", "png", "jpg"]:
             return self._load_image(file_path)
+        elif file_ending in ["npy", "npz"]:
+            return self._load_npy(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
     def _load_image(self, file_path):
         return imageio.imread(file_path)[:, :, :3]
+
+    def _load_npy(self, file_path):
+        return np.load(file_path)
 
     def _apply_postprocessing(self, output_key, data):
         if output_key in self.postprocessing_modules_per_output:
