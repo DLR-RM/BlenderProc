@@ -3,8 +3,9 @@ import argparse
 import os
 import urllib
 import tarfile
-import re
 import subprocess
+
+from src.utility.Config import Config
 
 parser = argparse.ArgumentParser()
 parser.add_argument('config')
@@ -12,12 +13,8 @@ parser.add_argument('args', metavar='N', nargs='*')
 parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true')
 args = parser.parse_args()
 
-# Load config
-with open(args.config, "r") as f:
-    json_text = f.read()
-    json_text = re.sub(r'^//.*\n?', '', json_text, flags=re.MULTILINE)
-    config = json.loads(json_text)
-    setup_config = config["setup"]
+config = Config.read_config_dict(args.config, args.args)
+setup_config = config["setup"]
 
 # If blender should be downloaded automatically
 if "custom_blender_path" not in setup_config:
