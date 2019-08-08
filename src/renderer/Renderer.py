@@ -2,7 +2,6 @@ from src.main.Module import Module
 import bpy
 import os
 
-from src.utility.Utility import Utility
 import addon_utils
 
 
@@ -11,7 +10,6 @@ class Renderer(Module):
     def __init__(self, config):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
-        self.output_dir = Utility.resolve_path(self.config.get_string("output_dir"))
 
     def _configure_renderer(self):
         bpy.context.scene.cycles.samples = self.config.get_int("samples", 256)
@@ -78,18 +76,8 @@ class Renderer(Module):
         bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
         bpy.ops.render.render(animation=True, write_still=True)
 
-    def _add_output_entry(self, output):
-        if "output" in bpy.context.scene:
-            bpy.context.scene["output"] += [output]
-        else:
-            bpy.context.scene["output"] = [output]
-
     def _register_output(self, default_prefix, default_key, suffix):
-        # Store output path and configured key into the scene's custom properties
-        self._add_output_entry({
-            "key": self.config.get_string("output_key", default_key),
-            "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix
-        })
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({

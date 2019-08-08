@@ -1,3 +1,4 @@
+from src.camera.CameraModule import CameraModule
 from src.main.Module import Module
 import mathutils
 import bpy
@@ -5,10 +6,10 @@ import bpy
 from src.utility.Utility import Utility
 
 
-class SuncgCameraLoader(Module):
+class SuncgCameraLoader(CameraModule):
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        CameraModule.__init__(self, config)
 
     def run(self):
         cam_ob = bpy.context.scene.camera
@@ -30,4 +31,8 @@ class SuncgCameraLoader(Module):
                 cam.clip_start = self.config.get_float("near_clipping", 1)
                 cam_ob.keyframe_insert(data_path='location', frame=i + 1)
                 cam_ob.keyframe_insert(data_path='rotation_euler', frame=i + 1)
+
+                self._write_cam_pose_to_file(i + 1, cam, cam_ob)
+
             bpy.context.scene.frame_end = len(camPoses)
+            self._register_cam_pose_output()

@@ -28,7 +28,7 @@ class SuncgLoader(Module):
             # Build empty level object which acts as a parent for all rooms on the level
             level_obj = bpy.data.objects.new("Level#" + level["id"], None)
             level_obj["type"] = "Level"
-            level_obj["bbox"] = level["bbox"]
+            level_obj["bbox"] = self._correct_bbox_frame(level["bbox"])
             bpy.context.scene.objects.link(level_obj)
 
             room_per_object = {}
@@ -51,7 +51,7 @@ class SuncgLoader(Module):
                         metadata["category_id"] = self._get_label_id(node["modelId"])
 
                 if "bbox" in node:
-                    metadata["bbox"] = node["bbox"]
+                    metadata["bbox"] = self._correct_bbox_frame(node["bbox"])
 
                 if "transform" in node:
                     transform = Matrix([node["transform"][i*4:(i+1)*4] for i in range(4)])
@@ -85,7 +85,7 @@ class SuncgLoader(Module):
         # Build empty room object which acts as a parent for all objects inside
         room_obj = bpy.data.objects.new("Room#" + node["id"], None)
         room_obj["type"] = "Room"
-        room_obj["bbox"] = node["bbox"]
+        room_obj["bbox"] = self._correct_bbox_frame(node["bbox"])
         room_obj["roomTypes"] = node["roomTypes"]
         room_obj.parent = parent
         bpy.context.scene.objects.link(room_obj)
@@ -123,6 +123,12 @@ class SuncgLoader(Module):
             self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + ".obj"), metadata, material_adjustments, transform, parent)
         else:
             self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + "_0.obj"), metadata, material_adjustments, transform, parent)
+
+    def _correct_bbox_frame(self, bbox):
+        return {
+            "min": Utility.convert_point_from_suncg_to_blender_frame(bbox["min"]),
+            "max": Utility.convert_point_from_suncg_to_blender_frame(bbox["max"])
+        }
 
     def _load_box(self, node, material_adjustments, transform, parent):
         bpy.ops.mesh.primitive_cube_add(location=(0, 0, 0))
