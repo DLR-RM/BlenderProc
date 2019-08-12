@@ -1,3 +1,7 @@
+import json
+import re
+import os
+
 
 class Config:
 
@@ -29,6 +33,9 @@ class Config:
                 return fallback
             else:
                 raise
+
+    def get_raw_dict(self, name, fallback=None):
+        return self._get_value_with_fallback(name, fallback)
 
     def get_int(self, name, fallback=None):
         value = self._get_value_with_fallback(name, fallback)
@@ -64,6 +71,26 @@ class Config:
             raise TypeError("Cannot convert '" + str(value) + "' to list!")
 
         return value
+
+    @staticmethod
+    def read_config_dict(config_path, args):
+        with open(config_path, "r") as f:
+            json_text = f.read()
+
+            # Remove comments
+            json_text = re.sub(r'^//.*\n?', '', json_text, flags=re.MULTILINE)
+            # Replace arguments
+            for i, arg in enumerate(args):
+                json_text = json_text.replace("<args:" + str(i) + ">", arg)
+            # Replace env variables
+            for key in os.environ.keys():
+                json_text = json_text.replace("${" + key + "}", os.environ[key])
+
+            if "<args:" in json_text:
+                raise Exception("Too less arguments given")
+
+            config = json.loads(json_text)
+        return config
 
 
 class NotFoundError(Exception):

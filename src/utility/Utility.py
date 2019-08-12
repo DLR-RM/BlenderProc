@@ -2,9 +2,37 @@ import os
 import bpy
 import time
 import inspect
+import importlib
+from src.utility.Config import Config
 
 class Utility:
     working_dir = ""
+
+    @staticmethod
+    def initialize_modules(module_configs, global_config):
+        modules = []
+        all_base_config = global_config["all"] if "all" in global_config else {}
+
+        for module_config in module_configs:
+            # Merge global and local config (local overwrites global)
+            model_type = module_config["name"].split(".")[0]
+            base_config = global_config[model_type] if model_type in global_config else {}
+            config = module_config["config"]
+            Utility.merge_dicts(all_base_config, base_config)
+            Utility.merge_dicts(base_config, config)
+
+            with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
+                # Import file and extract class
+                module_class = getattr(importlib.import_module("src." + module_config["name"]), module_config["name"].split(".")[-1])
+                # Create module
+                modules.append(module_class(Config(config)))
+
+        return modules
+
+    @staticmethod
+    def convert_point_from_suncg_to_blender_frame(point):
+        """ Equivalent to the .obj import settings "Forward: -Z" and "Up: Y". """
+        return [point[0], -point[2], point[1]]
 
     @staticmethod
     def resolve_path(path):
