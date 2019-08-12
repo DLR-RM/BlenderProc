@@ -21,6 +21,13 @@ class Renderer(Module):
             bpy.context.scene.render.tile_x = self.config.get_int("tile_x")
             bpy.context.scene.render.tile_y = self.config.get_int("tile_y")
 
+        # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1 cpu thread means GPU-only rendering)
+        number_of_threads = self.config.get_int("cpu_threads", 1)
+        # If set to 0, use number of cores (default)
+        if number_of_threads > 0:
+            bpy.context.scene.render.threads_mode = "FIXED"
+            bpy.context.scene.render.threads = number_of_threads
+
         bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
@@ -28,7 +35,7 @@ class Renderer(Module):
 
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
-        bpy.context.scene.render.layers[0].cycles.use_denoising = True
+        bpy.context.view_layer.cycles.use_denoising = True
 
         simplify_subdivision_render = self.config.get_int("simplify_subdivision_render", 3)
         if simplify_subdivision_render > 0:
@@ -51,7 +58,7 @@ class Renderer(Module):
     def _write_depth_to_file(self):
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.data.scenes["Scene"].render.layers["RenderLayer"].use_pass_z = True
+        bpy.context.view_layer.use_pass_z = True
         tree = bpy.context.scene.node_tree
         links = tree.links
 

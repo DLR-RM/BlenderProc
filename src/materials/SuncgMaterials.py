@@ -69,7 +69,7 @@ class SuncgMaterials(Module):
                         links.new(lightPath_node.outputs[0], mix_node.inputs[0])
 
                         emission_node = nodes.new(type='ShaderNodeEmission')
-                        emission_node.inputs[0].default_value = m.material.diffuse_color[:] + (1,)
+                        emission_node.inputs[0].default_value = m.material.diffuse_color
 
                         if mat_name in light[0]:
                             # If the material corresponds to light bulb
@@ -85,7 +85,10 @@ class SuncgMaterials(Module):
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
 
-            if m.material.translucency > 0 or m.material.alpha < 1:
+            principled_node = nodes.get("Principled BSDF")
+            alpha = principled_node.inputs[18].default_value
+
+            if alpha < 1:
                 emission = nodes.get("Emission")
                 if emission is None:
                     output = nodes.get("Material Output")

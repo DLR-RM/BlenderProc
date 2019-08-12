@@ -12,7 +12,8 @@ class Pipeline:
         self.modules = Utility.initialize_modules(config["modules"], config["global"])
 
     def run(self):
-        for module in self.modules:
-            with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
-                module.run()
+        with Utility.BlockStopWatch("Running blender pipeline"):
+            for module in self.modules:
+                with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
+                    module.run()
 

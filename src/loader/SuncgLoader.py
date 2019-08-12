@@ -29,7 +29,7 @@ class SuncgLoader(Module):
             level_obj = bpy.data.objects.new("Level#" + level["id"], None)
             level_obj["type"] = "Level"
             level_obj["bbox"] = self._correct_bbox_frame(level["bbox"])
-            bpy.context.scene.objects.link(level_obj)
+            bpy.context.scene.collection.objects.link(level_obj)
 
             room_per_object = {}
 
@@ -88,7 +88,7 @@ class SuncgLoader(Module):
         room_obj["bbox"] = self._correct_bbox_frame(node["bbox"])
         room_obj["roomTypes"] = node["roomTypes"]
         room_obj.parent = parent
-        bpy.context.scene.objects.link(room_obj)
+        bpy.context.scene.collection.objects.link(room_obj)
         # Store indices of all contained objects in
         if "nodeIndices" in node:
             for child_id in node["nodeIndices"]:
@@ -171,7 +171,7 @@ class SuncgLoader(Module):
 
         if transform is not None:
             # Apply transformation
-            object.matrix_world *= transform
+            object.matrix_world @= transform
 
         for mat_slot in object.material_slots:
             mat = mat_slot.material
@@ -189,26 +189,43 @@ class SuncgLoader(Module):
 
     def _recreate_material_nodes(self, mat, force_texture):
         """ Remove all nodes and recreate a diffuse node, optionally with texture. """
-        nodes = mat.node_tree.nodes
-        for node in nodes:
-            nodes.remove(node)
         links = mat.node_tree.links
-        has_texture = (len(mat.texture_slots) > 0 and mat.texture_slots[0] is not None)
+        nodes = mat.node_tree.nodes
 
-        output_node = nodes.new(type='ShaderNodeOutputMaterial')
-        diffuse_node = nodes.new(type='ShaderNodeBsdfDiffuse')
-        if has_texture or force_texture:
-            uv_node = nodes.new(type='ShaderNodeTexCoord')
-            image_node = nodes.new(type='ShaderNodeTexImage')
+        # Make sure we have not changed this material already (materials can be shared between objects)
+        if nodes.get("Diffuse BSDF") is None:
 
-        links.new(diffuse_node.outputs[0], output_node.inputs[0])
-        if has_texture or force_texture:
-            links.new(image_node.outputs[0], diffuse_node.inputs[0])
-            links.new(uv_node.outputs[2], image_node.inputs[0])
+            # The principled BSDF node contains all imported material properties
+            principled_node = nodes.get("Principled BSDF")
+            diffuse_color = principled_node.inputs[0].default_value
+            image_node = nodes.get("Image Texture")
+            if image_node is not None:
+                texture = image_node.image
+            else:
+                texture = None
 
-        diffuse_node.inputs[0].default_value[:3] = mat.diffuse_color
-        if has_texture:
-            image_node.image = mat.texture_slots[0].texture.image
+            # Remove all nodes except the principled bsdf node (useful to lookup imported material properties in other modules)
+            for node in nodes:
+                if node.name != "Principled BSDF":
+                    nodes.remove(node)
+
+            # Build output, diffuse and texture nodes
+            output_node = nodes.new(type='ShaderNodeOutputMaterial')
+            diffuse_node = nodes.new(type='ShaderNodeBsdfDiffuse')
+            if texture is not None or force_texture:
+                uv_node = nodes.new(type='ShaderNodeTexCoord')
+                image_node = nodes.new(type='ShaderNodeTexImage')
+
+            # Link them
+            links.new(diffuse_node.outputs[0], output_node.inputs[0])
+            if texture is not None or force_texture:
+                links.new(image_node.outputs[0], diffuse_node.inputs[0])
+                links.new(uv_node.outputs[2], image_node.inputs[0])
+
+            # Set values from imported material properties
+            diffuse_node.inputs[0].default_value = diffuse_color
+            if texture is not None:
+                image_node.image = texture
 
     def _adjust_material_nodes(self, mat, adjustments):
         nodes = mat.node_tree.nodes

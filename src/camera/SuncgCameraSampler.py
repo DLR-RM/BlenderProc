@@ -68,7 +68,7 @@ class SuncgCameraSampler(CameraModule):
                     orientation = self._sample_orientation()
 
                     # Compute the world matrix of a cam with the given pose
-                    world_matrix = mathutils.Matrix.Translation(mathutils.Vector(position)) * mathutils.Euler(orientation, 'XYZ').to_matrix().to_4x4()
+                    world_matrix = mathutils.Matrix.Translation(mathutils.Vector(position)) @ mathutils.Euler(orientation, 'XYZ').to_matrix().to_4x4()
 
                     if self._is_too_close_obstacle_in_view(cam, position, world_matrix):
                         continue
@@ -130,7 +130,7 @@ class SuncgCameraSampler(CameraModule):
 
     def _position_is_above_floor(self, position, floor_obj):
         # Send a ray straight down and check if the first hit object is the floor
-        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(position, mathutils.Vector([0, 0, -1]))
+        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, mathutils.Vector([0, 0, -1]))
         return hit and hit_object == floor_obj
 
     def _sample_orientation(self):
@@ -149,7 +149,7 @@ class SuncgCameraSampler(CameraModule):
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
-        frame = [world_matrix * v for v in frame]
+        frame = [world_matrix @ v for v in frame]
 
         # Compute vectors along both sides of the plane
         vec_x = frame[1] - frame[0]
