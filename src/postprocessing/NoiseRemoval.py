@@ -8,19 +8,12 @@ class NoiseRemoval(Module):
         Module.__init__(self, config)
 
     def _get_neighbors(self, data, i, j):
-        # neighbors = ([[i + 1, j], [i, j + 1], [i + 1, j + 1], [i - 1, j], [i, j - 1], [i - 1, j - 1], [i + 1, j - 1], [i - 1, j + 1]])
-        # Boundary check
-        begin_i = -1 if i > 0 else i
-        end_i = 2 if i < data.shape[0] - 1 else i
-
-        begjn_j = -1 if j > 0 else j
-        end_j = 2 if j < data.shape[1] - 1 else j
 
         neighbors = []
-        for p in range(-1, 2):
-            for q in range(-1, 2):
-                if not (p == 0 and q == 0):  # We don't want the current pixel, just the neighbors
-                    neighbors.append([i + p, j + q])
+        for p in range(max(0, i - 1), min(data.shape[0], i + 2)):
+            for q in range(max(0, j - 1), min(data.shape[1], j + 2)):
+                if not (p == i and q == j):  # We don't want the current pixel, just the neighbors
+                    neighbors.append([p, q])
 
         return np.array(neighbors)
 
