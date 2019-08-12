@@ -85,6 +85,7 @@ class SuncgMaterials(Module):
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
 
+            # All parameters imported from the .mtl file are stored inside the principled bsdf node (the alpha value is stored at index 18)
             principled_node = nodes.get("Principled BSDF")
             alpha = principled_node.inputs[18].default_value
 
