@@ -34,7 +34,7 @@ class SegMapRenderer(Renderer):
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
 
-            bpy.context.scene.render.layers[0].cycles.use_denoising = False
+            bpy.context.view_layer.cycles.use_denoising = False
             bpy.data.scenes["Scene"].cycles.filter_width = 0.0
             for obj in bpy.context.scene.objects:
                 if "modelId" in obj:

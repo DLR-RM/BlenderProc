@@ -2,7 +2,7 @@
 {
   "setup": {
     "blender_install_path": "/home_local/${USER}/blender/",
-    "blender_version": "blender-2.79b-linux-glibc219-x86_64",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
       "imageio"

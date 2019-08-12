@@ -19,7 +19,7 @@ class NormalRenderer(Renderer):
 
             # render normals
             bpy.context.scene.cycles.samples = self.config.get_int("samples", 100)  # to smooth the result
-            bpy.context.scene.render.layers[0].cycles.use_denoising = False
+            bpy.context.view_layer.cycles.use_denoising = False
             new_mat = bpy.data.materials["Normal"]
             for obj in bpy.context.scene.objects:
                 if len(obj.material_slots) > 0:

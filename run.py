@@ -59,7 +59,7 @@ print("Using blender in " + blender_path)
 # Install required packages
 if "pip" in setup_config:
     # Install pip    
-    subprocess.Popen(["./python3.5m", "-m", "ensurepip"], cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+    subprocess.Popen(["./python3.7m", "-m", "ensurepip"], cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
     
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
@@ -67,14 +67,14 @@ if "pip" in setup_config:
         os.mkdir(packages_path)
 
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
-    installed_packages = subprocess.check_output(["./python3.5m", "-m", "pip", "list", "--format=freeze"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=os.path.join(blender_path, major_version, "python", "bin"))
+    installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=os.path.join(blender_path, major_version, "python", "bin"))
     installed_packages = [line.split('==')[0] for line in installed_packages.splitlines()]
 
     # Install all packages
     for package in setup_config["pip"]:
         # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
         if package not in installed_packages or args.reinstall_packages:
-            subprocess.Popen(["./python3.5m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+            subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
 
 # Run script
 p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--", args.config] + args.args)
