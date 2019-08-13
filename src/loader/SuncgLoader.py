@@ -135,9 +135,9 @@ class SuncgLoader(Module):
         box = bpy.context.object
         box.name = "Box#" + node["id"]
         # Rotate cube to match objects loaded from .obj
-        box.matrix_world *= Matrix.Rotation(math.radians(90), 4, "X")
+        box.matrix_world @= Matrix.Rotation(math.radians(90), 4, "X")
         # Scale the cube to the required dimensions
-        box.matrix_world *= Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) * Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) * Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0))
+        box.matrix_world @= Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) @ Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) @ Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0))
 
         # Create UV mapping (beforehand we apply the scaling from the previous step, such that the resulting uv mapping has the correct aspect)
         bpy.ops.object.transform_apply(scale=True)
