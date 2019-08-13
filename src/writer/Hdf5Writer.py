@@ -17,6 +17,7 @@ class Hdf5Writer(Module):
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
 
     def run(self):
+        """ For each key frame merges all registered output files into one hdf5 file"""
         output_dir = Utility.resolve_path(self.config.get_string("output_dir"))
 
         # Go through all frames
@@ -45,6 +46,11 @@ class Hdf5Writer(Module):
                         os.remove(file_path)
 
     def _load_file(self, file_path):
+        """ Tries to read in the file with the given path into a numpy array.
+
+        :param file_path: The file path.
+        :return: A numpy array containing the data of the file.
+        """
         if not os.path.exists(file_path):
             raise Exception("File not found: " + file_path)
 
@@ -58,12 +64,30 @@ class Hdf5Writer(Module):
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
     def _load_image(self, file_path):
+        """ Load the image at the given path returns its pixels as a numpy array.
+
+        The alpha channel is neglected.
+
+        :param file_path: The path to the image.
+        :return: The numpy array
+        """
         return imageio.imread(file_path)[:, :, :3]
 
     def _load_npy(self, file_path):
+        """ Load the npy/npz file at the given path.
+
+        :param file_path: The path.
+        :return: The content of the file
+        """
         return np.load(file_path)
 
     def _apply_postprocessing(self, output_key, data):
+        """ Applies all postprocessing modules registered for this output type.
+
+        :param output_key: The key of the output type.
+        :param data: The numpy data
+        :return: The modified numpy data after doing the postprocessing
+        """
         if output_key in self.postprocessing_modules_per_output:
             for module in self.postprocessing_modules_per_output[output_key]:
                 data = module.run(data)

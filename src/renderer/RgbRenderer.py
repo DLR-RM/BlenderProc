@@ -10,6 +10,10 @@ class RgbRenderer(Renderer):
         Renderer.__init__(self, config)
 
     def run(self):
+        """ Renders rgb images for each registered keypoint.
+
+        Images are stored as PNG-files with 8bit color depth.
+        """
         with Utility.UndoAfterExecution():
             self._configure_renderer()
 

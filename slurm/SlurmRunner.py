@@ -10,6 +10,12 @@ import subprocess
 class SlurmRunner(object):
 
     def __init__(self, service_name, config_path, args_from_path):
+        """ Creates a slurm runner
+
+        :param service_name: The name of the service which provides new paths.
+        :param config_path: The path to the config json file.
+        :param args_from_path: A method which returns all command line arguments for the blender pipeline from a given path.
+        """
         self._slurm_path_getter = SlurmPathGetter(service_name, None)
         # Make sure the service is running
         if not self._slurm_path_getter.is_service_running():
@@ -28,6 +34,10 @@ class SlurmRunner(object):
         self._config_path = config_path
 
     def call(self, path):
+        """ Runs the blender pipeline for the given path.
+
+        :param path: The path which will be processed.
+        """
         current_blender_pipeline = os.path.join(self._main_folder, 'run.py')
 
         # Determine absolute path to config file
@@ -49,6 +59,7 @@ class SlurmRunner(object):
             raise Exception('Not found!')
 
     def run(self):
+        """ Runs the blender pipeline for paths retrieved from the service until there are no elements left in the queue. """
         # Do as long as there are still elements in the queue
         while self._slurm_path_getter.get_current_length() > 0:
             # Process next element

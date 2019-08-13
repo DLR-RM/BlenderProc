@@ -12,6 +12,11 @@ class SuncgCameraLoader(CameraModule):
         CameraModule.__init__(self, config)
 
     def run(self):
+        """ Loads camera poses from the configured suncg camera file and sets them as separate keypoints.
+
+        Layout of the camera pose file should be:
+        eyeX eyeY eyeZ forwardX forwardY forwardZ upX upY upZ fovX fovY
+        """
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
