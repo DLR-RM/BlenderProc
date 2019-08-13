@@ -1,7 +1,5 @@
-__pycache__/
-.pyc
-002fa647848abeff3c969cc0bc1bb8b6/
-suncg/.~lock.ModelCategoryMapping.csv#
+__pycache__
+*/__pycache__
+blender
+.idea/
 output/
-config.json
-debug_output.py

@@ -8,8 +8,7 @@ class Module:
     def __init__(self, config):
         self.config = config
         self.output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
-        if not os.path.exists(self.output_dir):
-            os.mkdir(self.output_dir)
+        os.makedirs(self.output_dir, exist_ok=True)
 
     def _add_output_entry(self, output):
         if "output" in bpy.context.scene:

@@ -1,4 +1,4 @@
-// Args: <obj_file>
+// Args: <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/${USER}/blender/",
@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "output",
+      "output_dir": "<args:1>",
       "pixel_aspect_x": 1.333333333
     }
   },

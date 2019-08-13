@@ -1,4 +1,4 @@
-// Args: <cam_file> <obj_file>
+// Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/${USER}/blender/",
@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "output"
+      "output_dir": "<args:2>"
     },
     "renderer": {
       "pixel_aspect_x": 1.333333333
