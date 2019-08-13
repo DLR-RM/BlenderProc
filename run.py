@@ -59,7 +59,7 @@ print("Using blender in " + blender_path)
 # Install required packages
 if "pip" in setup_config:
     # Install pip    
-    subprocess.Popen(["./python3.7m", "-m", "ensurepip"], cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+    subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
     
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
@@ -74,10 +74,10 @@ if "pip" in setup_config:
     for package in setup_config["pip"]:
         # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
         if package not in installed_packages or args.reinstall_packages:
-            subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+            subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
 
 # Run script
-p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--", args.config] + args.args)
+p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--", args.config] + args.args, env=dict(os.environ, PYTHONPATH=""))
 try:
     p.wait()
 except KeyboardInterrupt:
