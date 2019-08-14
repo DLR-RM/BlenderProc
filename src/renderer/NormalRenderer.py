@@ -9,6 +9,11 @@ class NormalRenderer(Renderer):
         Renderer.__init__(self, config)
 
     def run(self):
+        """ Renders normal images for each registered keypoint.
+
+        Every object's materials are replaced with an imported normal material to render normals.
+        The rendering is stored using the .exr filetype and a color depth of 32bit to achieve high precision.
+        """
         with Utility.UndoAfterExecution():
             self._configure_renderer()
 

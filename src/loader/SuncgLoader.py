@@ -17,6 +17,13 @@ class SuncgLoader(Module):
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
 
     def run(self):
+        """ Loads a house.json file into blender.
+
+         - Loads all objects files specified in the house.json file.
+         - Orders them hierarchically (level -> room -> object)
+         - Writes metadata into the custom properties of each object
+
+        """
         with open(Utility.resolve_path(self.house_path), "r") as f:
             config = json.load(f)
 
@@ -82,6 +89,16 @@ class SuncgLoader(Module):
                     self._load_box(node, material_adjustments, transform, parent)
 
     def _load_room(self, node, metadata, material_adjustments, transform, house_id, parent, room_per_object):
+        """ Load the room specified in the given node.
+
+        :param node: The node dict which contains information from house.json..
+        :param metadata: A dict of metadata which will be written into the object's custom data.
+        :param material_adjustments: Adjustments to the materials which were specified inside house.json.
+        :param transform: The transformation that should be applied to the loaded objects.
+        :param house_id: The id of the current house.
+        :param parent: The parent object to which the room should be linked
+        :param room_per_object: A dict for object -> room lookup (Will be written into)
+        """
         # Build empty room object which acts as a parent for all objects inside
         room_obj = bpy.data.objects.new("Room#" + node["id"], None)
         room_obj["type"] = "Room"
@@ -113,24 +130,53 @@ class SuncgLoader(Module):
             self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
 
     def _load_ground(self, node, metadata, material_adjustments, transform, house_id, parent):
+        """ Load the ground specified in the given node.
+
+        :param node: The node dict which contains information from house.json..
+        :param metadata: A dict of metadata which will be written into the object's custom data.
+        :param material_adjustments: Adjustments to the materials which were specified inside house.json.
+        :param transform: The transformation that should be applied to the loaded objects.
+        :param house_id: The id of the current house.
+        :param parent: The parent object to which the ground should be linked
+        """
         metadata["type"] = "Ground"
         metadata["category_id"] = self.label_index_map["floor"]
         metadata["fine_grained_class"] = "ground"
         self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
 
     def _load_object(self, node, metadata, material_adjustments, transform, parent):
+        """ Load the object specified in the given node.
+
+        :param node: The node dict which contains information from house.json..
+        :param metadata: A dict of metadata which will be written into the object's custom data.
+        :param material_adjustments: Adjustments to the materials which were specified inside house.json.
+        :param transform: The transformation that should be applied to the loaded objects.
+        :param parent: The parent object to which the ground should be linked
+        """
         if "state" not in node or node["state"] == 0:
             self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + ".obj"), metadata, material_adjustments, transform, parent)
         else:
             self._load_obj(os.path.join(self.suncg_dir, "object", node["modelId"], node["modelId"] + "_0.obj"), metadata, material_adjustments, transform, parent)
 
     def _correct_bbox_frame(self, bbox):
+        """ Corrects the coordinate frame of the given bbox.
+
+        :param bbox: The bbox.
+        :return: The corrected bbox.
+        """
         return {
             "min": Utility.convert_point_from_suncg_to_blender_frame(bbox["min"]),
             "max": Utility.convert_point_from_suncg_to_blender_frame(bbox["max"])
         }
 
     def _load_box(self, node, material_adjustments, transform, parent):
+        """ Creates a cube inside blender which follows the specifications of the given node.
+
+        :param node: The node dict which contains information from house.json..
+        :param material_adjustments: Adjustments to the materials which were specified inside house.json.
+        :param transform: The transformation that should be applied to the loaded objects.
+        :param parent: The parent object to which the ground should be linked
+        """
         bpy.ops.mesh.primitive_cube_add(location=(0, 0, 0))
         box = bpy.context.object
         box.name = "Box#" + node["id"]
@@ -153,6 +199,14 @@ class SuncgLoader(Module):
         self._transform_and_colorize_object(box, material_adjustments, transform, parent)
 
     def _load_obj(self, path, metadata, material_adjustments, transform=None, parent=None):
+        """ Load the wavefront object file from the given path and adjust according to the given arguments.
+
+        :param path: The path to the .obj file.
+        :param metadata: A dict of metadata which will be written into the object's custom data.
+        :param material_adjustments: Adjustments to the materials which were specified inside house.json.
+        :param transform: The transformation that should be applied to the loaded objects.
+        :param parent: The parent object to which the object should be linked
+        """
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
@@ -166,6 +220,16 @@ class SuncgLoader(Module):
                 self._transform_and_colorize_object(object, material_adjustments, transform, parent)
 
     def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None):
+        """ Applies the given transformation to the object and refactors its materials.
+
+        This will replace all material nodes with only a diffuse and a texturing node (to speedup rendering).
+        Also textures or diffuse colors will be changed according to the given material_adjustments.
+
+        :param object: The object to use.
+        :param material_adjustments: A list of adjustments to make. (Each element i corresponds to material_i)
+        :param transform: The transformation matrix to apply
+        :param parent: The parent object to which the object should be linked
+        """
         if parent is not None:
             object.parent = parent
 
@@ -188,7 +252,13 @@ class SuncgLoader(Module):
                 self._adjust_material_nodes(mat, material_adjustments[index])
 
     def _recreate_material_nodes(self, mat, force_texture):
-        """ Remove all nodes and recreate a diffuse node, optionally with texture. """
+        """ Remove all nodes and recreate a diffuse node, optionally with texture.
+
+        This will replace all material nodes with only a diffuse and a texturing node (to speedup rendering).
+
+        :param mat: The blender material
+        :param force_texture: True, if there always should be a texture node created even if the material has at the moment no texture
+        """
         links = mat.node_tree.links
         nodes = mat.node_tree.nodes
 
@@ -228,6 +298,13 @@ class SuncgLoader(Module):
                 image_node.image = texture
 
     def _adjust_material_nodes(self, mat, adjustments):
+        """ Adjust the material node of the given material according to the given adjustments.
+
+        Textures or diffuse colors will be changed according to the given material_adjustments.
+
+        :param mat: The blender material.
+        :param adjustments: A dict containing a new "diffuse" color or a new "texture" path
+        """
         nodes = mat.node_tree.nodes
         diffuse_node = nodes.get("Diffuse BSDF")
         image_node = nodes.get("Image Texture")
@@ -249,7 +326,11 @@ class SuncgLoader(Module):
             else:
                 print("Warning: Cannot load texture, path does not exist: " + image_path)
 
-    def _read_model_category_mapping(self, path):       
+    def _read_model_category_mapping(self, path):
+        """ Reads in the model category mapping csv.
+
+        :param path: The path to the csv file.
+        """
         self.labels = set()     
         self.windows = []       
         self.object_label_map = {}      
@@ -267,5 +348,10 @@ class SuncgLoader(Module):
         bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
         self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}      
 
-    def _get_label_id(self, obj_id):        
+    def _get_label_id(self, obj_id):
+        """ Returns the label id for an object with the given model_id.
+
+        :param obj_id: The model_id of the object.
+        :return: The corresponding label index.
+        """
         return self.label_index_map[self.object_label_map[obj_id]]

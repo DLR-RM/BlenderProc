@@ -32,6 +32,13 @@ class SuncgCameraSampler(CameraModule):
         self.bvh_tree = None
 
     def run(self):
+        """ Samples multiple cameras per suncg room.
+
+        Procedure per room:
+         - sample position inside bbox
+         - send ray from position straight down and make sure it hits the room's floor first
+         - send rays through the field of view to approximate a depth map and to make sure no obstacle is too close to the camera
+        """
         self._init_bvh_tree()
 
         cam_ob = bpy.context.scene.camera
@@ -91,6 +98,10 @@ class SuncgCameraSampler(CameraModule):
         self._register_cam_pose_output()
 
     def _init_bvh_tree(self):
+        """ Creates a bvh tree which contains all mesh objects in the scene.
+
+        Such a tree is later used for fast raycasting.
+        """
         # Create bmesh which will contain the meshes of all objects
         bm = bmesh.new()
         # Go through all mesh objects
@@ -108,16 +119,32 @@ class SuncgCameraSampler(CameraModule):
         self.bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
 
     def _calc_number_of_cams_in_room(self, room_obj):
-        """ Approximates the square meters of the room and then uses cams_per_square_meter to get total number of cams in room. """
+        """ Approximates the square meters of the room and then uses cams_per_square_meter to get total number of cams in room.
+
+        :param room_obj: The room object whose bbox will be used to approximate the size.
+        :return: The number of camera positions planned for this room.
+        """
         return math.floor(abs(room_obj["bbox"]["max"][0] - room_obj["bbox"]["min"][0]) * abs(room_obj["bbox"]["max"][1] - room_obj["bbox"]["min"][1]) * self.cams_per_square_meter)
 
     def _find_floor(self, room_obj):
+        """ Returns the floor object of the given room object.
+
+        Goes through all children and returns the first one with type "Floor".
+
+        :param room_obj: The room object.
+        :return: The found floor object or None if none has been found.
+        """
         for obj in bpy.context.scene.objects:
             if obj.parent == room_obj and "type" in obj and obj["type"] == "Floor":
                 return obj
         return None
 
     def _sample_position(self, room_obj):
+        """ Samples a random position inside the bbox of the given room object.
+
+        :param room_obj: The room object whose bbox is used.
+        :return: A vector describing the sampled position
+        """
         position = mathutils.Vector()
         for i in range(3):
             # Check if a interval for sampling has been configured, otherwise sample inside bbox
@@ -129,11 +156,21 @@ class SuncgCameraSampler(CameraModule):
         return position
 
     def _position_is_above_floor(self, position, floor_obj):
+        """ Make sure the given position is straight above the given floor object with no obstacles in between.
+
+        :param position: The position to check.
+        :param floor_obj: The floor object to use.
+        :return: True, if a ray sent into negative z-direction starting from the position hits the floor first.
+        """
         # Send a ray straight down and check if the first hit object is the floor
         hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, mathutils.Vector([0, 0, -1]))
         return hit and hit_object == floor_obj
 
     def _sample_orientation(self):
+        """ Samples an orientation.
+
+        :return: A vector which contains three euler angles describing the orientation.
+        """
         orientation = mathutils.Vector()
         for i in range(3):
             # Check if a interval for sampling has been configured, otherwise use [0, 360]
@@ -145,7 +182,13 @@ class SuncgCameraSampler(CameraModule):
         return orientation
 
     def _is_too_close_obstacle_in_view(self, cam, position, world_matrix):
+        """ Check if there is an obstacle in front of the camera which is less than the configured "min_dist_to_obstacle" away from it.
 
+        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
+        :param position: The camera position vector to check
+        :param world_matrix: The world matrix which describes the camera orientation to check.
+        :return: True, if there is an obstacle to close too the cam.
+        """
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space

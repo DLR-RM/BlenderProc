@@ -8,7 +8,13 @@ class NoiseRemoval(Module):
         Module.__init__(self, config)
 
     def _get_neighbors(self, data, i, j):
+        """ Returns the valid neighbor pixel indices of the given pixel.
 
+        :param data: The whole image data.
+        :param i: The row index of the pixel
+        :param j: The col index of the pixel.
+        :return: A list of neighbor point indices.
+        """
         neighbors = []
         for p in range(max(0, i - 1), min(data.shape[0], i + 2)):
             for q in range(max(0, j - 1), min(data.shape[1], j + 2)):
@@ -61,6 +67,13 @@ class NoiseRemoval(Module):
         return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
 
     def run(self, data):
+        """ Removes noise pixels.
+
+        Assumes that noise pixel values won't occur more than 100 times.
+
+        :param data: The image data.
+        :return: The cleaned image data.
+        """
         # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation that should remove some noise or deviations
         data = ((data * 37) / (65536))  # datassuming data 16 bit color depth
         data = data.astype(np.int32)

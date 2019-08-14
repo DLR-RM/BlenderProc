@@ -7,5 +7,8 @@ class ObjLoader(Module):
         Module.__init__(self, config)
 
     def run(self):
-        # Import obj (the import will convert all materials to cycle nodes
+        """Just imports the configured .obj file straight into blender
+
+        The import will load all materials into cycle nodes.
+        """
         bpy.ops.import_scene.obj(filepath=self.config.get_string("path"))

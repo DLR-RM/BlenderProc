@@ -43,11 +43,12 @@ class SuncgMaterials(Module):
                 if row["coarse_grained_class"] == "window":
                     self.windows.append(row["model_id"])
 
-    def _get_model_id(self, obj):
-        if "modelId" in obj:
-            return obj["modelId"]
-
     def _make_lamp_emissive(self, obj, light):
+        """ Adds an emission shader to the object materials which are specified in the light list
+
+        :param obj: The blender object.
+        :param light: A list of two lists. The first list specifies all materials which should act lightbulb, the second one lists all materials corresponding to lampshades.
+        """
         for m in obj.material_slots:
             mat_name = m.material.name
             if "." in mat_name:
@@ -81,6 +82,14 @@ class SuncgMaterials(Module):
                         links.new(emission_node.outputs[0], mix_node.inputs[1])
 
     def _make_window_emissive(self, obj):
+        """ Makes the given window object emissive.
+
+        For each material with alpha < 1.
+        Uses a light path node to make it emit light, but at the same time look like a diffuse material.
+        Otherwise windows would be completely white.
+
+        :param obj: A window object.
+        """
         for m in obj.material_slots:
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
@@ -112,6 +121,10 @@ class SuncgMaterials(Module):
                         emission_node.inputs[1].default_value = 10
 
     def _make_ceiling_emissive(self, obj):
+        """ Makes the given ceiling object emissive, s.t. there is always a little bit ambient light.
+
+        :param obj: The ceiling object.
+        """
         for m in obj.material_slots:
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
@@ -133,6 +146,7 @@ class SuncgMaterials(Module):
                     links.new(emission_node.outputs[0], mix_node.inputs[1])
 
     def run(self):
+        """ Adds emission shader to lamps, windows and ceilings. """
         # Make some objects emit lights
         for obj in bpy.context.scene.objects:
             if "modelId" in obj:

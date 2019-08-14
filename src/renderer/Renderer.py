@@ -12,6 +12,7 @@ class Renderer(Module):
         addon_utils.enable("render_auto_tile_size")
 
     def _configure_renderer(self):
+        """ Sets many different render parameters which can be adjusted via the config. """
         bpy.context.scene.cycles.samples = self.config.get_int("samples", 256)
 
         if self.config.get_bool("auto_tile_size", True):
@@ -54,8 +55,8 @@ class Renderer(Module):
         bpy.context.scene.cycles.debug_use_spatial_splits = True
         bpy.context.scene.render.use_persistent_data = True
 
-
     def _write_depth_to_file(self):
+        """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         bpy.context.view_layer.use_pass_z = True
@@ -74,6 +75,10 @@ class Renderer(Module):
         links.new(rl.outputs[2], output_file.inputs['Image'])
 
     def _render(self, default_prefix):
+        """ Renders each registered keypoint.
+
+        :param default_prefix: The default prefix of the output files.
+        """
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
@@ -84,12 +89,20 @@ class Renderer(Module):
         bpy.ops.render.render(animation=True, write_still=True)
 
     def _register_output(self, default_prefix, default_key, suffix):
+        """ Registers new output type using configured key and file prefix.
+
+        If depth rendering is enabled, this will also register the corresponding depth output type.
+
+        :param default_prefix: The default prefix of the generated files.
+        :param default_key: The default key which should be used for storing the output in merged file.
+        :param suffix: The suffix of the generated files.
+        """
         super(Renderer, self)._register_output(default_prefix, default_key, suffix)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
-                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + suffix
+                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr"
             })
 
 

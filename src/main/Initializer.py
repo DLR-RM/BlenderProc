@@ -7,6 +7,12 @@ class Initializer(Module):
         Module.__init__(self, config)
 
     def run(self):
+        """ Does some basic initialization of the blender project.
+
+         - Sets background color
+         - Configures computing device
+         - Creates camera
+        """
         # Make sure to use the current GPU
         prefs = bpy.context.preferences.addons['cycles'].preferences
         prefs.compute_device_type = 'CUDA'
