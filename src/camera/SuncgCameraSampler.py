@@ -124,7 +124,7 @@ class SuncgCameraSampler(CameraModule):
             if len(self.position_ranges[i]) != 2:
                 position[i] = random.uniform(room_obj["bbox"]["min"][i], room_obj["bbox"]["max"][i])
             else:
-                position[i] = random.uniform(self.position_ranges[i][0], self.position_ranges[i][1])
+                position[i] = random.uniform(room_obj["bbox"]["min"][i] + self.position_ranges[i][0], room_obj["bbox"]["min"][i] + self.position_ranges[i][1])
 
         return position
 
