@@ -53,7 +53,8 @@ class Renderer(Module):
 
         bpy.context.scene.cycles.debug_bvh_type = "STATIC_BVH"
         bpy.context.scene.cycles.debug_use_spatial_splits = True
-        bpy.context.scene.render.use_persistent_data = True
+        # Setting use_persistent_data to True makes the rendering getting slower and slower (probably a blender bug)
+        bpy.context.scene.render.use_persistent_data = False
 
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
