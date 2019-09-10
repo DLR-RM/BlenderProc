@@ -20,14 +20,16 @@ class Module:
         else:
             bpy.context.scene["output"] = [output]
 
-    def _register_output(self, default_prefix, default_key, suffix):
+    def _register_output(self, default_prefix, default_key, suffix, version):
         """ Registers new output type using configured key and file prefix.
 
         :param default_prefix: The default prefix of the generated files.
         :param default_key: The default key which should be used for storing the output in merged file.
         :param suffix: The suffix of the generated files.
+        :param version: The version number which will be stored at key_version in the final merged file.
         """
         self._add_output_entry({
             "key": self.config.get_string("output_key", default_key),
-            "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix
+            "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix,
+            "version": version
         })

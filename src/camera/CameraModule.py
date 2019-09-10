@@ -30,4 +30,4 @@ class CameraModule(Module):
 
     def _register_cam_pose_output(self):
         """ Registers the written cam pose files as an output """
-        self._register_output("campose_", "campose", ".npy")
+        self._register_output("campose_", "campose", ".npy", "1.0.0")
