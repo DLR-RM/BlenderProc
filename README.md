@@ -7,5 +7,5 @@ Here is how to render multiple views from the scene `002fa647848abeff3c969cc0bc1
 
 Call blender (>= v2.79b) script to render all views from given camera pose file into the given <output_dir>.
 ```
-python run.py config/suncg_basic.json <cams>/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile <houses>/002fa647848abeff3c969cc0bc1bb8b6/house.json
+python run.py config/suncg_basic.json <cams>/002fa647848abeff3c969cc0bc1bb8b6/outputCamerasFile <houses>/002fa647848abeff3c969cc0bc1bb8b6/house.json <output_dir>
 ```
