@@ -42,6 +42,9 @@ class Hdf5Writer(Module):
 
                     f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
 
+                    # Write version number of current output at key_version
+                    f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")
+
                     if self.config.get_bool("delete_original_files_afterwards", True):
                         os.remove(file_path)
 

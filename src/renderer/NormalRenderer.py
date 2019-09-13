@@ -65,4 +65,4 @@ class NormalRenderer(Renderer):
 
             self._render("normal_")
 
-        self._register_output("normal_", "normal", ".exr")
+        self._register_output("normal_", "normal", ".exr", "2.0.0")

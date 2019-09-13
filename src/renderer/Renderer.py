@@ -89,7 +89,7 @@ class Renderer(Module):
         bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
         bpy.ops.render.render(animation=True, write_still=True)
 
-    def _register_output(self, default_prefix, default_key, suffix):
+    def _register_output(self, default_prefix, default_key, suffix, version):
         """ Registers new output type using configured key and file prefix.
 
         If depth rendering is enabled, this will also register the corresponding depth output type.
@@ -97,13 +97,15 @@ class Renderer(Module):
         :param default_prefix: The default prefix of the generated files.
         :param default_key: The default key which should be used for storing the output in merged file.
         :param suffix: The suffix of the generated files.
+        :param version: The version number which will be stored at key_version in the final merged file.
         """
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix)
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
-                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr"
+                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
+                "version": "1.0.0"
             })
 
 
