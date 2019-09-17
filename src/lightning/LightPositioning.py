@@ -11,16 +11,28 @@ class LightPositioning(Module):
         Module.__init__(self, config)
 
     def run(self):
+        """ Inserts lights as specified inside the configuration:
+
+            e.q.:
+            "lights": [
+              {
+                "type": "POINT",
+                "location": [5, -5, 5],
+                "energy": 1000
+              }
+            ]
+        """
         for i, light in enumerate(self.config.get_list("lights")):
             if "type" not in light:
                 raise Exception("Type of light not specified")
 
+            # Create light data
             light_data = bpy.data.lights.new(name="light_" + str(i), type=light["type"])
             if "energy" in light:
                 light_data.energy = light["energy"]
 
+            # Link data with new object
             light_object = bpy.data.objects.new(name="light_" + str(i), object_data=light_data)
-
             bpy.context.collection.objects.link(light_object)
 
             if "location" in light:
