@@ -1,0 +1,59 @@
+// Args: <cam_file> <obj_file> <output_dir>
+{
+  "setup": {
+    "blender_install_path": "/home_local/${USER}/blender/",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:2>"
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.ObjLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "name": "lightning.LightPositioning",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "name": "camera.SuncgCameraLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 255
+      }
+    }
+  ]
+}
