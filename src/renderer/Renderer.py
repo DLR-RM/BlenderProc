@@ -105,7 +105,7 @@ class Renderer(Module):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
                 "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
-                "version": "1.0.0"
+                "version": "1.0.1"
             })
 
 
