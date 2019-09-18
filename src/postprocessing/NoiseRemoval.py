@@ -59,6 +59,7 @@ class NoiseRemoval(Module):
             new_val = neighbor_vals[min_idx]
             data[index[0]][index[1]] = np.array([new_val, new_val, new_val])
 
+        data = data[:,:,0] # Trim redundant channels
         return data
 
     def _isin(self, element, test_elements, assume_unique=False, invert=False):
