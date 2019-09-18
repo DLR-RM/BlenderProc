@@ -23,7 +23,7 @@ class NoiseRemoval(Module):
 
         return np.array(neighbors)
 
-    def _remove_noise(self, data, noise_indices):
+    def _remove_noise(self, image, noise_indices):
 
         """
 
@@ -32,16 +32,16 @@ class NoiseRemoval(Module):
 
         Parameters
         ----------
-        data: ndarray of the .exr segmap
+        image: ndarray of the .exr segmap
         noise_indices: a list of 2D indices that correspond to the noisy pixels. One criteria of finding these pixels is to use a histogram and find the pixels with
         frequencies lower than a threshold, e.g. 100.
         """
 
         for index in noise_indices:
-            neighbors = self._get_neighbors(data, index[0], index[1])  # Extracting the indices surrounding 3x3 neighbors
-            curr_val = data[index[0]][index[1]][0]  # Current value of the noisy pixel
+            neighbors = self._get_neighbors(image, index[0], index[1])  # Extracting the indices surrounding 3x3 neighbors
+            curr_val = image[index[0]][index[1]][0]  # Current value of the noisy pixel
 
-            neighbor_vals = [data[neighbor[0]][neighbor[1]] for neighbor in neighbors]  # Getting the values of the neighbors
+            neighbor_vals = [image[neighbor[0]][neighbor[1]] for neighbor in neighbors]  # Getting the values of the neighbors
             neighbor_vals = np.unique(np.array([np.array(index) for index in neighbor_vals]))  # Getting the unique values only
 
             min = 10000000000
@@ -57,32 +57,32 @@ class NoiseRemoval(Module):
 
             # Now that we have found the closest value, assign it to the noisy value
             new_val = neighbor_vals[min_idx]
-            data[index[0]][index[1]] = np.array([new_val, new_val, new_val])
+            image[index[0]][index[1]] = np.array([new_val, new_val, new_val])
 
-        return data
+        return image
 
     def _isin(self, element, test_elements, assume_unique=False, invert=False):
         """ As np.isin is only available after v1.13 and blender is using 1.10.1 we have to implement it manually. """
         element = np.asarray(element)
         return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
 
-    def run(self, data):
+    def run(self, image):
         """ Removes noise pixels.
 
         Assumes that noise pixel values won't occur more than 100 times.
 
-        :param data: The image data.
+        :param image: The image data.
         :return: The cleaned image data.
         """
         # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation that should remove some noise or deviations
-        data = ((data * 37) / (65536))  # datassuming data 16 bit color depth
-        data = data.astype(np.int32)
-        b, counts = np.unique(data.flatten(), return_counts=True)
+        image = ((image * 37) / (65536))  # assuming 16 bit color depth
+        image = image.astype(np.int32)
+        b, counts = np.unique(image.flatten(), return_counts=True)
 
         # Removing further noise where there are some stray pixel values with very small counts, by assigning them to their closest (numerically, since this deviation is a
         # result of some numerical operation) neighbor.
         hist = sorted((np.asarray((b, counts)).T), key=lambda x: x[1])
         noise_vals = [h[0] for h in hist if h[1] <= 100]  # Assuming the stray pixels wouldn't have a count of more than 100
-        noise_indices = np.argwhere(self._isin(data, noise_vals))
+        noise_indices = np.argwhere(self._isin(image, noise_vals))
 
-        return self._remove_noise(data, noise_indices)
+        return self._remove_noise(image, noise_indices)
