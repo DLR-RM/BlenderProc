@@ -4,6 +4,7 @@ import os
 import urllib
 import tarfile
 import subprocess
+import shutil
 
 from src.utility.Config import Config
 
@@ -11,6 +12,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('config')
 parser.add_argument('args', metavar='N', nargs='*')
 parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true')
+parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true')
 args = parser.parse_args()
 
 config = Config.read_config_dict(args.config, args.args)
@@ -28,7 +30,12 @@ if "custom_blender_path" not in setup_config:
     blender_version = setup_config["blender_version"]
     blender_path = os.path.join(blender_install_path, blender_version)
     major_version = blender_version[len("blender-"):len("blender-") + 4]
-        
+
+    # If forced reinstall is demanded, remove existing files
+    if os.path.exists(blender_path) and args.reinstall_blender:
+        print("Removing existing blender installation")
+        shutil.rmtree(blender_path)
+
     # Download blender if it not already exists
     if not os.path.exists(blender_path):
         url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.bz2"
