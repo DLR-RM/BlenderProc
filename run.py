@@ -5,15 +5,21 @@ import urllib
 import tarfile
 import subprocess
 
-from src.utility.Config import Config
+from src.utility.ConfigParser import ConfigParser
 
-parser = argparse.ArgumentParser()
-parser.add_argument('config')
-parser.add_argument('args', metavar='N', nargs='*')
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument('config', default=None, nargs='?')
+parser.add_argument('args', metavar='arguments', nargs='*')
 parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true')
+parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
 args = parser.parse_args()
 
-config = Config.read_config_dict(args.config, args.args)
+if args.config is None:
+    print(parser.format_help())
+    exit(0)
+
+config_parser = ConfigParser()
+config = config_parser.parse(args.config, args.args, args.help)
 setup_config = config["setup"]
 
 # If blender should be downloaded automatically

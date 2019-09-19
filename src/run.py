@@ -19,7 +19,6 @@ working_dir = os.path.dirname(os.path.abspath(__file__))
 from src.main.Pipeline import Pipeline
 
 config_path = argv[0]
-print(config_path)
 
 pipeline = Pipeline(config_path, argv[1:], working_dir)
 pipeline.run()

@@ -1,7 +1,3 @@
-import json
-import re
-import os
-
 
 class Config:
 
@@ -134,35 +130,6 @@ class Config:
             raise TypeError("Cannot convert '" + str(value) + "' to list!")
 
         return value
-
-    @staticmethod
-    def read_config_dict(config_path, args):
-        """ Reads the json file at the given path and returns it as a cleaned dict.
-
-        Removes all comments and replaces arguments and env variables with their corresponding values.
-
-        :param config_path: The path to the json file.
-        :param args: A list with the arguments which should be used for replacing <args:i> templates inside the config.
-        :return: The dict containing the configuration.
-        """
-        with open(config_path, "r") as f:
-            json_text = f.read()
-
-            # Remove comments
-            json_text = re.sub(r'^//.*\n?', '', json_text, flags=re.MULTILINE)
-            # Replace arguments
-            for i, arg in enumerate(args):
-                json_text = json_text.replace("<args:" + str(i) + ">", arg)
-            # Replace env variables
-            for key in os.environ.keys():
-                json_text = json_text.replace("${" + key + "}", os.environ[key])
-
-            if "<args:" in json_text:
-                raise Exception("Too less arguments given")
-
-            config = json.loads(json_text)
-        return config
-
 
 class NotFoundError(Exception):
     pass

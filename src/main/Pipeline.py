@@ -1,5 +1,5 @@
 
-from src.utility.Config import Config
+from src.utility.ConfigParser import ConfigParser
 from src.utility.Utility import Utility
 
 class Pipeline:
@@ -7,7 +7,8 @@ class Pipeline:
     def __init__(self, config_path, args, working_dir):
         Utility.working_dir = working_dir
 
-        config = Config.read_config_dict(Utility.resolve_path(config_path), args)
+        config_parser = ConfigParser(silent=True)
+        config = config_parser.parse(Utility.resolve_path(config_path), args)
 
         self.modules = Utility.initialize_modules(config["modules"], config["global"])
 
