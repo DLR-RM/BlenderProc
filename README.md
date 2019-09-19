@@ -1,6 +1,7 @@
 # Blender-Pipeline
 A blender pipeline to generate images for deep learning
 
+
 ## General
 
 The blender pipeline consists of different modules which can be selected, ordered and configured via a json file. 
@@ -11,6 +12,10 @@ python run.py config.json <additional arguments>
 ```
 
 This will now run all modules specified in the config file step-by-step in the configured order.
+
+## Examples
+
+* [Basic scene](examples/basic/README.md): A small example loading an .obj file and camera positions before rendering normal and color images.
 
 ## Config
 
@@ -184,3 +189,16 @@ def run(self):
 ```
 
 All changes inside the with-block are undone which could also be undone via `CTRL+Z` inside blender.
+
+
+## Between-module communication
+
+To exchange information between modules the blender's custom properties are used (Blender allows to assign arbitrary information to scenes and objects).
+So modules can read out custom properties set by earlier modules and change their behaviour accordingly.
+
+**Example**
+* The module `loader.SuncgLoader` adds the custom property `category_id` to every object 
+* The module `renderer.SegMapRenderer` reads out this property and sets the segmentation color of every object correspondingly
+
+In this way the `renderer.SegMapRenderer` can also be used without using the `loader.SuncgLoader`. 
+The loader used instead just has to also set the `category_id`.

@@ -52,7 +52,13 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 255
+        "samples": 350
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+        "delete_original_files_afterwards": false
       }
     }
   ]
