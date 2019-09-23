@@ -9,11 +9,11 @@ import shutil
 from src.utility.ConfigParser import ConfigParser
 
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument('config', default=None, nargs='?')
-parser.add_argument('args', metavar='arguments', nargs='*')
-parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true')
+parser.add_argument('config', default=None, nargs='?', help='The path to the configuration file which describes what the pipeline should do.')
+parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
+parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true', help='If given, all python packages configured inside the configuration file will be reinstalled.')
+parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
 parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
-parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true')
 args = parser.parse_args()
 
 if args.config is None:
