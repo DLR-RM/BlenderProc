@@ -4,7 +4,10 @@ A blender pipeline to generate images for deep learning
 
 ## General
 
-The blender pipeline consists of different modules which can be selected, ordered and configured via a json file. 
+In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and in the end renders different types of image (rgb, depth, normals etc.) for each of them.
+The blender pipeline consists of different modules, each of them performing one step in the described process.
+The modules are selected, ordered and configured via a json file.
+ 
 To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file.
 
 ```
@@ -12,6 +15,17 @@ python run.py config.json <additional arguments>
 ```
 
 This will now run all modules specified in the config file step-by-step in the configured order.
+
+The following modules are already implemented and ready to use:
+
+* Load *.obj files and SunCG scenes
+* Automatic lighting of SunCG scenes
+* Loading camera positions from file
+* Sampling camera positions inside SunCG rooms
+* Rendering of rgb, depth, normal and segmentation images
+* Merging data into .hdf5 files
+
+For advanced usage which is not covered by these modules, own modules can easily be implemented (see [Writing modules]())
 
 ## Examples
 
