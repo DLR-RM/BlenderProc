@@ -19,9 +19,10 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.BopLoader",
       "config": {
-        "path": "<args:1>"
+        "datasets_path": "<args:1>",
+        "scene_id": 1
       }
     },
     {
@@ -53,12 +54,6 @@
       "config": {
         "output_key": "colors",
         "samples": 350
-      }
-    },
-    {
-      "name": "writer.Hdf5Writer",
-      "config": {
-        "delete_original_files_afterwards": false
       }
     }
   ]

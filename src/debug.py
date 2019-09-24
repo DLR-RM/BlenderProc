@@ -2,7 +2,6 @@
 import os
 import bpy
 import sys
-import importlib
 
 # Make sure the current script directory is in PATH, so we can load other python modules
 working_dir = os.path.dirname(bpy.context.space_data.text.filepath) + "/../"
@@ -10,16 +9,19 @@ working_dir = os.path.dirname(bpy.context.space_data.text.filepath) + "/../"
 if not working_dir in sys.path:
     sys.path.append(working_dir)
 
-# Reload all models inside src/, as they are cached inside blender
-for module in sys.modules.keys():
+# Add path to custom packages inside the blender main directory
+sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
+sys.path.append('/home_local/sund_ma/src/foreign_packages/bop/bop_toolkit-1')
+# Delete all loaded models inside src/, as they are cached inside blender
+for module in list(sys.modules.keys()):
     if module.startswith("src"):
-        print(module)
-        importlib.reload(sys.modules[module])
+        del sys.modules[module]
         
 
 from src.main.Pipeline import Pipeline
 
-config_path = "config/debug.json"
+config_path = "examples/basic/config.json"
+bop_path = '/home_local/sund_ma/src/foreign_packages/bop/datasets/bop/tless'
 
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:
@@ -32,7 +34,7 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
-    pipeline = Pipeline(config_path, [], working_dir)
+    pipeline = Pipeline(config_path, ['examples/basic/camera_positions',bop_path,'examples/basic/output'], working_dir)
     pipeline.run()
 finally:
     # Revert back to previous view
