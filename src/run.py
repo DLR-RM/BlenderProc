@@ -28,7 +28,7 @@ if batch_index_file == None:
 	pipeline = Pipeline(config_path, argv[1:], working_dir)
 	pipeline.run()
 else:
-	with open(batch_index_file, "r") as f:
+	with open(Utility.resolve_path(batch_index_file), "r") as f:
 		lines = f.readlines()
 
 		for line in lines:

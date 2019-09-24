@@ -26,7 +26,7 @@ class ConfigParser:
         self.placeholders = None
         self.silent = silent
 
-    def parse(self, config_path, args, show_help=False, batch=False):
+    def parse(self, config_path, args, show_help=False, skip_placeholders=False):
         """ Reads the json file at the given path and returns it as a cleaned dict.
 
         Removes all comments and replaces arguments and env variables with their corresponding values.
@@ -34,7 +34,7 @@ class ConfigParser:
         :param config_path: The path to the json file.
         :param args: A list with the arguments which should be used for replacing <args:i> templates inside the config.
         :param show_help: If True, shows a help message which describes the placeholders that are used in the given config file. Exits the program afterwards.
-        :param batch: If true, disregards filling up non environment type arguments.
+        :param skip_placeholders: If true, disregards filling up non environment type arguments.
         :return: The dict containing the configuration.
         """
         if not show_help:
@@ -59,7 +59,7 @@ class ConfigParser:
                 exit(0)
 
             # Replace all placeholders with their corresponding value
-            self._fill_placeholders_in_config(batch)
+            self._fill_placeholders_in_config(skip_placeholders)
 
             self.log("Successfully finished parsing ", is_info=True)
         return self.config
@@ -177,14 +177,14 @@ class ConfigParser:
 
         return "/".join([str(path_segment) for path_segment in path])
 
-    def _fill_placeholders_in_config(self, batch):
+    def _fill_placeholders_in_config(self, skip_placeholders):
         """ Replaces all placeholders with their corresponding values """
         # Collect a list of all placeholders which could not be filled
         unfilled_placeholders = []
 
         # Go through all collected placeholders
         for placeholder in self.placeholders:
-            if placeholder["type"] == PlaceholderTypes.ARG and (not batch): # Don't parse placeholder args if in batch mode
+            if placeholder["type"] == PlaceholderTypes.ARG and (not skip_placeholders): 
                 arg_index = int(placeholder["match"])
 
                 # Check if the argument has been given
