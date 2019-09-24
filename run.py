@@ -13,6 +13,7 @@ parser.add_argument('config', default=None, nargs='?', help='The path to the con
 parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
 parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true', help='If given, all python packages configured inside the configuration file will be reinstalled.')
 parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
+parser.add_argument('--batch_process',help='Renders a batch of house-cam combinations, by reading a file containing the combinations on each line, where each line is the standard placeholder arguments for rendering a single scene separated by spaces. The value of this option is the path to the index file, no need to add placeholder arguments.')
 parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
 args = parser.parse_args()
 
@@ -21,7 +22,7 @@ if args.config is None:
     exit(0)
 
 config_parser = ConfigParser()
-config = config_parser.parse(args.config, args.args, args.help)
+config = config_parser.parse(args.config, args.args, args.help, batch=(args.batch_process != None)) # Don't parse placeholder args in batch mode.
 setup_config = config["setup"]
 
 # If blender should be downloaded automatically
@@ -90,7 +91,10 @@ if "pip" in setup_config:
             subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
 
 # Run script
-p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--", args.config] + args.args, env=dict(os.environ, PYTHONPATH=""))
+if not args.batch_process:
+    p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--", args.config] + args.args, env=dict(os.environ, PYTHONPATH=""))
+else: # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
+    p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--",  args.config, "--batch-process", args.batch_process], env=dict(os.environ, PYTHONPATH=""))    
 try:
     p.wait()
 except KeyboardInterrupt:
