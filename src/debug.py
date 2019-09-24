@@ -2,7 +2,6 @@
 import os
 import bpy
 import sys
-import importlib
 
 # Make sure the current script directory is in PATH, so we can load other python modules
 working_dir = os.path.dirname(bpy.context.space_data.text.filepath) + "/../"
@@ -10,13 +9,14 @@ working_dir = os.path.dirname(bpy.context.space_data.text.filepath) + "/../"
 if not working_dir in sys.path:
     sys.path.append(working_dir)
 
-# Reload all models inside src/, as they are cached inside blender
-for module in sys.modules.keys():
-    if module.startswith("src"):
-        print(module)
-        importlib.reload(sys.modules[module])
-        
+# Add path to custom packages inside the blender main directory
+sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
 
+# Delete all loaded models inside src/, as they are cached inside blender
+for module in list(sys.modules.keys()):
+    if module.startswith("src"):
+        del sys.modules[module]
+        
 from src.main.Pipeline import Pipeline
 
 config_path = "config/debug.json"
