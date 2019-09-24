@@ -64,6 +64,16 @@
             {
               "name": "postprocessing.NoiseRemoval",
               "config": {}
+            },
+            {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ],
+          "depth":[
+            {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
             }
           ]
         }

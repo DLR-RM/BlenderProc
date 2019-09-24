@@ -12,12 +12,12 @@ if not working_dir in sys.path:
 # Add path to custom packages inside the blender main directory
 sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
 sys.path.append('/home_local/sund_ma/src/foreign_packages/bop/bop_toolkit-1')
+
 # Delete all loaded models inside src/, as they are cached inside blender
 for module in list(sys.modules.keys()):
     if module.startswith("src"):
         del sys.modules[module]
         
-
 from src.main.Pipeline import Pipeline
 
 config_path = "examples/basic/config.json"
