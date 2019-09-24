@@ -25,7 +25,7 @@
       }
     },
     {
-      "name": "lightning.LightPositioning",
+      "name": "lighting.LightPositioning",
       "config": {
         "lights": [
           {

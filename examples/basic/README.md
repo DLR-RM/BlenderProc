@@ -88,7 +88,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```json
 {
-  "name": "lightning.LightPositioning",
+  "name": "lighting.LightPositioning",
   "config": {
     "lights": [
       {
