@@ -57,4 +57,4 @@ class SegMapRenderer(Renderer):
 
             self._render("seg_")
 
-        self._register_output("seg_", "seg", ".exr", "2.0.0")
+        self._register_output("seg_", "seg", ".exr", "2.0.1")
