@@ -22,7 +22,7 @@ if args.config is None:
     exit(0)
 
 config_parser = ConfigParser()
-config = config_parser.parse(args.config, args.args, args.help, batch=(args.batch_process != None)) # Don't parse placeholder args in batch mode.
+config = config_parser.parse(args.config, args.args, args.help, skip_arg_placeholders=(args.batch_process != None)) # Don't parse placeholder args in batch mode.
 setup_config = config["setup"]
 
 # If blender should be downloaded automatically
