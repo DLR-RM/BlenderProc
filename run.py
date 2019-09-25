@@ -6,16 +6,22 @@ import tarfile
 import subprocess
 import shutil
 
-from src.utility.Config import Config
+from src.utility.ConfigParser import ConfigParser
 
-parser = argparse.ArgumentParser()
-parser.add_argument('config')
-parser.add_argument('args', metavar='N', nargs='*')
-parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true')
-parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true')
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument('config', default=None, nargs='?', help='The path to the configuration file which describes what the pipeline should do.')
+parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
+parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true', help='If given, all python packages configured inside the configuration file will be reinstalled.')
+parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
+parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
 args = parser.parse_args()
 
-config = Config.read_config_dict(args.config, args.args)
+if args.config is None:
+    print(parser.format_help())
+    exit(0)
+
+config_parser = ConfigParser()
+config = config_parser.parse(args.config, args.args, args.help)
 setup_config = config["setup"]
 
 # If blender should be downloaded automatically
