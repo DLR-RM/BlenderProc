@@ -13,12 +13,25 @@ sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-pac
 
 # Read args
 argv = sys.argv
+batch_index_file = None
+
+if "--batch-process" in argv:
+	batch_index_file = argv[argv.index("--batch-process") + 1]
+
 argv = argv[argv.index("--") + 1:]
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
 from src.main.Pipeline import Pipeline
 
 config_path = argv[0]
+if batch_index_file == None:
+	pipeline = Pipeline(config_path, argv[1:], working_dir)
+	pipeline.run()
+else:
+	with open(Utility.resolve_path(batch_index_file), "r") as f:
+		lines = f.readlines()
 
-pipeline = Pipeline(config_path, argv[1:], working_dir)
-pipeline.run()
+		for line in lines:
+			args = line.split(" ")
+			pipeline = Pipeline(config_path, args, working_dir)
+			pipeline.run()
