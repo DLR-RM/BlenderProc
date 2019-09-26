@@ -58,6 +58,8 @@ class NormalRenderer(Renderer):
                 if len(obj.material_slots) > 0:
                     for i in range(len(obj.material_slots)):
                         obj.data.materials[i] = new_mat
+                elif hasattr(obj.data, 'materials'):
+                    obj.data.materials.append(new_mat)
 
             # Set the color channel depth of the output to 32bit
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
