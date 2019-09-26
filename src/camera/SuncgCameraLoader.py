@@ -23,6 +23,8 @@ class SuncgCameraLoader(CameraModule):
         # Open cam file, go through all poses and create key points
         with open(Utility.resolve_path(self.config.get_string("path"))) as f:
             camPoses = f.readlines()
+            # remove all empty lines
+            camPoses = [line for line in camPoses if len(line.strip()) > 3]
             for i, camPos in enumerate(camPoses):
                 camArgs = [float(x) for x in camPos.strip().split()]
 
