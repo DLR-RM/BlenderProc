@@ -25,11 +25,11 @@ The following modules are already implemented and ready to use:
 * Rendering of rgb, depth, normal and segmentation images
 * Merging data into .hdf5 files
 
-For advanced usage which is not covered by these modules, own modules can easily be implemented (see [Writing modules]())
+For advanced usage which is not covered by these modules, own modules can easily be implemented (see [Writing modules](#writing-modules))
 
 ## Examples
 
-* [Basic scene](examples/basic/README.md): A small example loading an .obj file and camera positions before rendering normal and color images.
+* [Basic scene](examples/basic/): A small example loading an .obj file and camera positions before rendering normal and color images.
 
 ## Config
 
@@ -38,7 +38,7 @@ A very small config file could look like this:
 ```json
 {
   "setup": {
-    "blender_install_path": "/home_local/${USER}/blender/",
+    "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py"
@@ -68,7 +68,7 @@ To prevent the hardcoding of e.q. paths, placeholder are allowed inside the conf
  placeholder | replacement
 ------------ | -------------
 `<args:i>` | Is replaced by the ith argument given to the `run.py` script (not including the path of the config file). The numbering starts from zero.
-`${ENV}` | Is replaced by the value of the environment variable with name `ENV` 
+`<env:NAME>` | Is replaced by the value of the environment variable with name `NAME` 
 
 
 ### Setup
