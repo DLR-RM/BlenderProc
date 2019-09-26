@@ -1,0 +1,55 @@
+// Args: <cam_file> <ply_file> <output_dir>
+{
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "/tmp/output_test_replica"
+    },
+    "renderer": {
+      "pixel_aspect_x": 1.333333333
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.PlyLoader",
+      "config": {
+        "path": "/volume/reconstruction_data/replica-dataset/data/apartment_1/mesh.ply"
+      }
+    },
+    {
+      "name": "camera.ReplicaCameraSampler",
+      "config": {
+        "near_clipping": 0.01
+      }
+    },
+//    {
+//      "name": "renderer.RgbRenderer",
+//      "config": {
+//        "output_key": "colors",
+//        "samples": 255
+//      }
+//    },
+//    {
+//      "name": "renderer.NormalRenderer",
+//      "config": {
+//        "output_key": "normals"
+//      }
+//    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}
