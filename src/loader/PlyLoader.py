@@ -14,7 +14,7 @@ class PlyLoader(Module):
         bpy.ops.import_mesh.ply(filepath=self.config.get_string("path"))
         if self.config.get_bool('use_ambient_occlusion', False):
             bpy.context.scene.world.light_settings.use_ambient_occlusion = True  # turn AO on
-            bpy.context.scene.world.light_settings.ao_factor = 0.5  # set it to 0.5
+            bpy.context.scene.world.light_settings.ao_factor = 0.9  # set it to 0.5
         if self.config.get_bool('use_smooth_shading', False):
             for poly in bpy.data.objects['mesh'].data.polygons:
                 poly.use_smooth = True

@@ -24,7 +24,9 @@
     {
       "name": "loader.PlyLoader",
       "config": {
-        "path": "/volume/reconstruction_data/replica-dataset/data/apartment_1/mesh.ply"
+        "path": "/volume/reconstruction_data/replica-dataset/data/apartment_1/mesh.ply",
+        "use_smooth_shading": "True",
+        "use_ambient_occlusion": "True"
       }
     },
     {
@@ -33,19 +35,19 @@
         "near_clipping": 0.01
       }
     },
-//    {
-//      "name": "renderer.RgbRenderer",
-//      "config": {
-//        "output_key": "colors",
-//        "samples": 255
-//      }
-//    },
-//    {
-//      "name": "renderer.NormalRenderer",
-//      "config": {
-//        "output_key": "normals"
-//      }
-//    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 255
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
+    },
     {
       "name": "writer.Hdf5Writer",
       "config": {
