@@ -27,10 +27,19 @@ class SuncgCameraLoader(CameraModule):
             camPoses = [line for line in camPoses if len(line.strip()) > 3]
             for i, camPos in enumerate(camPoses):
                 camArgs = [float(x) for x in camPos.strip().split()]
+                print('----------------')
+                print(", ".join(["{:1.4}".format(ele) for ele in camArgs]))
+                for i in range(3,6):
+                    import math
+                    camArgs[i] = camArgs[i] / math.sqrt(camArgs[3] * camArgs[3] + camArgs[4] * camArgs[4] + camArgs[5] * camArgs[5])
+                print(", ".join(["{:1.4}".format(ele) for ele in camArgs]))
 
                 # Fix coordinate frame (blender and suncg use different ones)
-                cam_ob.location = mathutils.Vector([camArgs[0], -camArgs[2], camArgs[1]])
-                rot_quat = mathutils.Vector([camArgs[3], -camArgs[5], camArgs[4]]).to_track_quat('-Z', 'Y')
+                def convertToBlender(vec):
+                    return mathutils.Vector([vec[0], -vec[2], vec[1]])
+
+                cam_ob.location = convertToBlender(camArgs[:3])
+                rot_quat = convertToBlender(camArgs[3:6]).to_track_quat('-Z', 'Y')
                 cam_ob.rotation_euler = rot_quat.to_euler()
 
                 cam.lens_unit = 'FOV'
@@ -39,7 +48,7 @@ class SuncgCameraLoader(CameraModule):
                 cam_ob.keyframe_insert(data_path='location', frame=i + 1)
                 cam_ob.keyframe_insert(data_path='rotation_euler', frame=i + 1)
 
-                self._write_cam_pose_to_file(i + 1, cam, cam_ob)
+                self._write_cam_pose_to_file(i + 1, cam, cam_ob, suncg_version=True)
 
             bpy.context.scene.frame_end = len(camPoses)
             self._register_cam_pose_output()

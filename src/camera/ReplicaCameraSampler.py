@@ -79,7 +79,7 @@ class ReplicaCameraSampler(CameraModule):
             cam_ob.keyframe_insert(data_path='location', frame=frame_id + 1)
             cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id + 1)
 
-            self._write_cam_pose_to_file(frame_id + 1, cam, cam_ob)
+            self._write_cam_pose_to_file(frame_id + 1, cam, cam_ob, suncg_version=True)
 
             frame_id += 1
             successful_tries += 1
