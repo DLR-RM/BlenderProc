@@ -32,7 +32,6 @@ class CameraModule(Module):
             cam_pose.extend(convertToSuncg(up))
             # FOV
             cam_pose.extend([cam.angle_x*0.5, cam.angle_y*0.5])
-
         else:
             # Location
             cam_pose.extend(cam_ob.location[:])
@@ -42,16 +41,6 @@ class CameraModule(Module):
             cam_pose.extend([cam.angle_x, cam.angle_y])
             # Room
             cam_pose.append(room_id)
-        # print(", ".join(["{:1.4}".format(float(ele)) for ele in cam_pose]))
-        # def convertToBlender(vec):
-        #     return mathutils.Vector([vec[0], -vec[2], vec[1]])
-        # towards = convertToBlender(cam_pose[3:6])
-        # up = convertToBlender(cam_pose[6:9])
-        # zaxis = towards * -1
-        # xaxis = up.cross(zaxis).normalized()
-        # yaxis = zaxis.cross(xaxis).normalized()
-        # print(", ".join(["{:1.4}".format(float(ele)) for ele in zaxis]) + ', ' + ", ".join(["{:1.4}".format(float(ele)) for ele in yaxis]))
-        # print(", ".join(["{:1.4}".format(float(ele)) for ele in cam_pose[3:6]]) + ', ' + ", ".join(["{:1.4}".format(float(ele)) for ele in cam_pose[6:9]]))
         np.save(os.path.join(self.output_dir, "campose_" + ("%04d" % frame)), cam_pose)
 
     def _register_cam_pose_output(self):

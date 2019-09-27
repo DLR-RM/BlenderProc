@@ -27,12 +27,6 @@ class SuncgCameraLoader(CameraModule):
             camPoses = [line for line in camPoses if len(line.strip()) > 3]
             for i, camPos in enumerate(camPoses):
                 camArgs = [float(x) for x in camPos.strip().split()]
-                print('----------------')
-                print(", ".join(["{:1.4}".format(ele) for ele in camArgs]))
-                for i in range(3,6):
-                    import math
-                    camArgs[i] = camArgs[i] / math.sqrt(camArgs[3] * camArgs[3] + camArgs[4] * camArgs[4] + camArgs[5] * camArgs[5])
-                print(", ".join(["{:1.4}".format(ele) for ele in camArgs]))
 
                 # Fix coordinate frame (blender and suncg use different ones)
                 def convertToBlender(vec):
