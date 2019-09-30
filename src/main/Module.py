@@ -16,7 +16,8 @@ class Module:
         :param output: A dict containing key and path of the new output type.
         """
         if "output" in bpy.context.scene:
-            bpy.context.scene["output"] += [output]
+            if not self._output_already_registered(output, bpy.context.scene["output"]): # E.g. multiple camera samplers
+                bpy.context.scene["output"] += [output]
         else:
             bpy.context.scene["output"] = [output]
 
@@ -33,3 +34,16 @@ class Module:
             "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix,
             "version": version
         })
+
+    def _output_already_registered(self, output, output_list):
+        """ Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
+
+        :param output: The output dict entry.
+        :param output_list: The list of output entries.
+        :return: bool indicating whether it already exists.
+        """
+        for _output in output_list:
+            if output["key"] == _output["key"] and output["path"] == _output["path"]:
+                return  True
+
+        return False
