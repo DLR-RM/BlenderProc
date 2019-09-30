@@ -37,6 +37,8 @@ class Module:
 
     def _output_already_registered(self, output, output_list):
         """ Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
+        Also throws an error if it detects an entry having the same key but not the same path and vice versa since this
+        is ambiguous.
 
         :param output: The output dict entry.
         :param output_list: The list of output entries.
@@ -44,6 +46,11 @@ class Module:
         """
         for _output in output_list:
             if output["key"] == _output["key"] and output["path"] == _output["path"]:
+                print("Warning! Detected output entries with duplicate keys and paths")
                 return  True
+            if output["key"] == _output["key"] or output["path"] == _output["path"]:
+                raise Exception("Can not have two output entries with the same key/path but not same path/key." +
+                                "Original entry's data: key:{} path:{}, Entry to be registered: key:{} path:{}"
+                                .format(_output["key"], _output["path"], output["key"], output["path"]))
 
         return False
