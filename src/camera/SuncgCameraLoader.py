@@ -19,6 +19,7 @@ class SuncgCameraLoader(CameraModule):
         """
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
+        frame_id = bpy.context.scene.frame_end + 1
 
         # Open cam file, go through all poses and create key points
         with open(Utility.resolve_path(self.config.get_string("path"))) as f:
@@ -36,10 +37,13 @@ class SuncgCameraLoader(CameraModule):
                 cam.lens_unit = 'FOV'
                 cam.angle = camArgs[9] * 2
                 cam.clip_start = self.config.get_float("near_clipping", 1)
-                cam_ob.keyframe_insert(data_path='location', frame=i + 1)
-                cam_ob.keyframe_insert(data_path='rotation_euler', frame=i + 1)
+                cam_ob.keyframe_insert(data_path='location', frame=frame_id)
+                cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-                self._write_cam_pose_to_file(i + 1, cam, cam_ob)
+                self._write_cam_pose_to_file(frame_id, cam, cam_ob)
 
-            bpy.context.scene.frame_end = len(camPoses)
+                frame_id += 1
+
+            bpy.context.scene.frame_end = frame_id - 1
+            bpy.context.scene.frame_start = 1
             self._register_cam_pose_output()

@@ -16,6 +16,7 @@ class Initializer(Module):
         # Make sure to use the current GPU
         prefs = bpy.context.preferences.addons['cycles'].preferences
         prefs.compute_device_type = 'CUDA'
+        bpy.context.scene.frame_end = 0
         print(prefs.compute_device_type, prefs.get_devices())
         for group in prefs.get_devices():
             for d in group:
