@@ -42,5 +42,7 @@ class SuncgCameraLoader(CameraModule):
 
                 self._write_cam_pose_to_file(frame_id, cam, cam_ob)
 
+                frame_id += 1
+
             bpy.context.scene.frame_end = frame_id
             self._register_cam_pose_output()
