@@ -94,7 +94,7 @@ class SuncgCameraSampler(CameraModule):
                 print(str(tries) + " tries were necessary")
                 room_id += 1
 
-        bpy.context.scene.frame_end = frame_id
+        bpy.context.scene.frame_end = frame_id - 1
         self._register_cam_pose_output()
 
     def _init_bvh_tree(self):
