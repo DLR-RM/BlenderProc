@@ -49,7 +49,7 @@ class SuncgCameraSampler(CameraModule):
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
 
-        frame_id = 0
+        frame_id = bpy.context.scene.frame_end
         room_id = 0
         for room_obj in bpy.context.scene.objects:
             # Find room objects
@@ -83,10 +83,10 @@ class SuncgCameraSampler(CameraModule):
                     # Set the camera pose at the next frame
                     cam_ob.location = position
                     cam_ob.rotation_euler = orientation
-                    cam_ob.keyframe_insert(data_path='location', frame=frame_id + 1)
-                    cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id + 1)
+                    cam_ob.keyframe_insert(data_path='location', frame=frame_id)
+                    cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-                    self._write_cam_pose_to_file(frame_id + 1, cam, cam_ob, room_id)
+                    self._write_cam_pose_to_file(frame_id, cam, cam_ob, room_id)
 
                     frame_id += 1
                     successful_tries += 1
