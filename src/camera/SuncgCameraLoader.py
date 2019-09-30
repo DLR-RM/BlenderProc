@@ -45,4 +45,5 @@ class SuncgCameraLoader(CameraModule):
                 frame_id += 1
 
             bpy.context.scene.frame_end = frame_id - 1
+            bpy.context.scene.frame_start = 1
             self._register_cam_pose_output()
