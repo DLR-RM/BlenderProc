@@ -49,7 +49,7 @@ class SuncgCameraSampler(CameraModule):
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
 
-        frame_id = bpy.context.scene.frame_end
+        frame_id = bpy.context.scene.frame_end + 1
         room_id = 0
         for room_obj in bpy.context.scene.objects:
             # Find room objects

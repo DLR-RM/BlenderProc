@@ -19,7 +19,7 @@ class SuncgCameraLoader(CameraModule):
         """
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
-        frame_id = bpy.context.scene.frame_end
+        frame_id = bpy.context.scene.frame_end + 1
 
         # Open cam file, go through all poses and create key points
         with open(Utility.resolve_path(self.config.get_string("path"))) as f:
