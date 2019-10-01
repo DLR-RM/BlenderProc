@@ -30,6 +30,10 @@ class LightPositioning(Module):
             light_data = bpy.data.lights.new(name="light_" + str(i), type=light["type"])
             if "energy" in light:
                 light_data.energy = light["energy"]
+            if "shape" in light:
+                light_data.shape = light["shape"]
+            if "size" in light:
+                light_data.size = light["size"]
 
             # Link data with new object
             light_object = bpy.data.objects.new(name="light_" + str(i), object_data=light_data)
@@ -37,6 +41,6 @@ class LightPositioning(Module):
 
             if "location" in light:
                 light_object.location = light["location"]
-
+            
             if "rotation" in light:
                 light_object.rotation_euler = light["rotation"]

@@ -26,13 +26,15 @@
       }
     },
     {
-      "name": "lightning.LightPositioning",
+      "name": "lighting.LightPositioning",
       "config": {
         "lights": [
           {
-            "type": "POINT",
-            "location": [5, -5, 5],
-            "energy": 1000
+            "type": "AREA",
+            "location": [0, 0, 5],
+            "energy": 10000,
+            "shape": "SQUARE",
+            "size": 30
           }
         ]
       }
