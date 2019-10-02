@@ -15,10 +15,12 @@ class SphereSampler(object):
         Guassian distributions the direction of the vector inside the sphere. Then sample from a uniform distribution
         a number from 0-1 to determine the magnitude, 1 means to lie on the surface and anything else inside.
 
-        :param center: Center of the sphere. Type: ndarray
+        :param center: Center of the sphere. Type: 3D mathutils vector
         :param radius: Length of the radius of the sphere. Type: float
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
+
+        center = np.array([center[0], center[1], center[2]])
 
         direction = np.random.normal(size=3)
         magnitude = radius * (np.cbrt(np.random.uniform(high=0.9)))
@@ -27,7 +29,7 @@ class SphereSampler(object):
             direction[0] = 1e-5
 
         # Normalize and add center
-        _position =  (magnitude * (direction / np.sqrt(direction.dot(direction)))) + center
+        _position = (magnitude * (direction / np.sqrt(direction.dot(direction)))) + center
         position = mathutils.Vector()
         for i in range(3):
             position[i] = _position[i]
