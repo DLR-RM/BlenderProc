@@ -69,8 +69,8 @@ class CameraLoader(CameraModule):
     def _initialize_cam_pose(self, cam, cam_ob):
         """ Sets the attributes of the given camera to the configured default parameters.
 
-        :param cam: The camera.
-        :param cam_ob: The camera object.
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         """
         # Default attribute values (same as default values in blender)
         base_config = {
@@ -89,8 +89,8 @@ class CameraLoader(CameraModule):
     def _set_cam_from_file_args(self, cam, cam_ob, cam_args):
         """ Sets the camera parameters based on the arguments specified in one line of the configured file.
 
-        :param cam: The camera
-        :param cam_ob: The camera object
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param cam_args: A list of arguments retrieved from one line out of the configured file.
         """
         # Go through all configured attributes
@@ -129,8 +129,8 @@ class CameraLoader(CameraModule):
     def _set_cam_from_config(self, cam, cam_ob, config):
         """ Sets cam attributes based on the given config dict.
 
-        :param cam: The camera.
-        :param cam_ob: The camera object.
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param config: A dict where the key is the attribute name and the value is the value to set this attribute to.
         """
         # Go through all key/value pairs of the given dict and set the corresponding attributes
@@ -152,13 +152,13 @@ class CameraLoader(CameraModule):
     def _set_attribute(self, cam, cam_ob, attribute_name, value):
         """ Sets the value of the given attribute.
 
-        :param cam: The camera.
-        :param cam_ob: The camera object.
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param attribute_name: The name of the attribute to change.
         :param value: The value to set.
         """
         # Make sure value is always a list
-        if type(value) != list:
+        if not isinstance(value, list):
             value = [value]
 
         if attribute_name == "fov":
@@ -193,8 +193,8 @@ class CameraLoader(CameraModule):
     def _insert_key_frames(self, cam, cam_ob, frame_id):
         """ Insert key frames for all relevant camera attributes.
 
-        :param cam: The camera.
-        :param cam_ob: The camera object.
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param frame_id: The frame number where key frames should be inserted.
         """
         cam.keyframe_insert(data_path='clip_start', frame=frame_id)

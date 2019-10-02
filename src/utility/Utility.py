@@ -4,6 +4,7 @@ import time
 import inspect
 import importlib
 from src.utility.Config import Config
+from mathutils import Vector
 
 class Utility:
     working_dir = ""
@@ -54,13 +55,15 @@ class Utility:
 
     @staticmethod
     def transform_point_to_blender_coord_frame(point, frame_of_point):
-        """ Equivalent to the .obj import settings "Forward: -Z" and "Up: Y".
+        """ Transforms the given point into the blender coordinate frame.
 
-        :param point: The point to convert in form of a list.
+        Example: [1, 2, 3] and ["X", "-Z", "Y"] => [1, -3, 2]
+
+        :param point: The point to convert in form of a list or mathutils.Vector.
         :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame the point is in. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
-        :return: The converted point also in form of a list.
+        :return: The converted point also in form of a list or mathutils.Vector.
         """
-        assert(len(frame_of_point) == 3)
+        assert(len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: " + str(frame_of_point))
 
         output = []
         for i, axis in enumerate(frame_of_point):
@@ -78,7 +81,11 @@ class Utility:
             if axis.startswith("-"):
                 output[-1] *= -1
 
-        return output
+        # Depending on the given type, return a vector or a list
+        if isinstance(point, Vector):
+            return Vector(output)
+        else:
+            return output
 
     @staticmethod
     def resolve_path(path):
