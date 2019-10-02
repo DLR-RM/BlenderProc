@@ -53,13 +53,32 @@ class Utility:
         return modules
 
     @staticmethod
-    def convert_point_from_suncg_to_blender_frame(point):
+    def transform_point_to_blender_coord_frame(point, frame_of_point):
         """ Equivalent to the .obj import settings "Forward: -Z" and "Up: Y".
 
         :param point: The point to convert in form of a list.
+        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame the point is in. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
         :return: The converted point also in form of a list.
         """
-        return [point[0], -point[2], point[1]]
+        assert(len(frame_of_point) == 3)
+
+        output = []
+        for i, axis in enumerate(frame_of_point):
+            axis = axis.upper()
+
+            if axis.endswith("X"):
+                output.append(point[0])
+            elif axis.endswith("Y"):
+                output.append(point[1])
+            elif axis.endswith("Z"):
+                output.append(point[2])
+            else:
+                raise Exception("Invalid axis: " + axis)
+
+            if axis.startswith("-"):
+                output[-1] *= -1
+
+        return output
 
     @staticmethod
     def resolve_path(path):

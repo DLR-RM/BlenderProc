@@ -165,8 +165,8 @@ class SuncgLoader(Module):
         :return: The corrected bbox.
         """
         return {
-            "min": Utility.convert_point_from_suncg_to_blender_frame(bbox["min"]),
-            "max": Utility.convert_point_from_suncg_to_blender_frame(bbox["max"])
+            "min": Utility.transform_point_to_blender_coord_frame(bbox["min"], ["X", "-Z", "Y"]),
+            "max": Utility.transform_point_to_blender_coord_frame(bbox["max"], ["X", "-Z", "Y"])
         }
 
     def _load_box(self, node, material_adjustments, transform, parent):
