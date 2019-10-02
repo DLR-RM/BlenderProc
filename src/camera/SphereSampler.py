@@ -30,6 +30,6 @@ class SphereSampler(object):
         _position =  (magnitude * (direction / np.sqrt(direction.dot(direction)))) + center
         position = mathutils.Vector()
         for i in range(3):
-            _position[i] = _position[i]
+            position[i] = _position[i]
 
         return position
