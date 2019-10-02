@@ -79,7 +79,7 @@ class CameraLoader(CameraModule):
             "clip_end": 1000
         }
         # Overwrite default attribute values with configured default parameters
-        config = Utility.merge_dicts(base_config, self.config.get_raw_dict("default_cam_param", {}))
+        config = Utility.merge_dicts(self.config.get_raw_dict("default_cam_param", {}), base_config)
 
         # Make sure we use FOV
         cam.lens_unit = 'FOV'
