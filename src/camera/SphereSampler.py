@@ -16,14 +16,14 @@ class SphereSampler(object):
         a number from 0-1 to determine the magnitude, 1 means to lie on the surface and anything else inside.
 
         :param center: Center of the sphere. Type: ndarray
-        :param radius: Length of the radius of the sphere.
+        :param radius: Length of the radius of the sphere. Type: float
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
 
         direction = np.random.normal(size=3)
-        magnitude = radius * (np.cbrt(np.random.uniform()))
+        magnitude = radius * (np.cbrt(np.random.uniform(high=0.9)))
 
-        if np.count_nonzero(direction) == 0:  # Check no division on zero
+        if np.count_nonzero(direction) == 0:  # Check no division by zero
             direction[0] = 1e-5
 
         # Normalize and add center

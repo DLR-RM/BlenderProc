@@ -25,8 +25,6 @@ class CameraSampler(CameraModule):
         ]
         self.sqrt_number_of_rays = self.config.get_int("sqrt_number_of_rays", 10)
         self.min_dist_to_obstacle = self.config.get_float("min_dist_to_obstacle", 1)
-        self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
-        self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
         self.bvh_tree = None
 
     def _init_bvh_tree(self):
@@ -53,38 +51,17 @@ class CameraSampler(CameraModule):
     def _sample_position(self, environment_object):
         raise NotImplementedError("Please Implement this method")
 
-    def _calc_number_of_cams_in_room(self, room_obj):
-        """ Approximates the square meters of the room and then uses cams_per_square_meter to get total number of cams in room.
 
-        :param room_obj: The room object whose bbox will be used to approximate the size.
-        :return: The number of camera positions planned for this room.
-        """
-        return math.floor(abs(room_obj["bbox"]["max"][0] - room_obj["bbox"]["min"][0]) * abs(room_obj["bbox"]["max"][1] - room_obj["bbox"]["min"][1]) * self.cams_per_square_meter)
-
-    def _find_floor(self, room_obj):
-        """ Returns the floor object of the given room object.
-
-        Goes through all children and returns the first one with type "Floor".
-
-        :param room_obj: The room object.
-        :return: The found floor object or None if none has been found.
-        """
-        for obj in bpy.context.scene.objects:
-            if obj.parent == room_obj and "type" in obj and obj["type"] == "Floor":
-                return obj
-        return None
-
-
-    def _position_is_above_floor(self, position, floor_obj):
-        """ Make sure the given position is straight above the given floor object with no obstacles in between.
+    def _position_is_above_object(self, position, object):
+        """ Make sure the given position is straight above the given object with no obstacles in between.
 
         :param position: The position to check.
-        :param floor_obj: The floor object to use.
+        :param object: The query object to use.
         :return: True, if a ray sent into negative z-direction starting from the position hits the floor first.
         """
-        # Send a ray straight down and check if the first hit object is the floor
+        # Send a ray straight down and check if the first hit object is the query object
         hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, mathutils.Vector([0, 0, -1]))
-        return hit and hit_object == floor_obj
+        return hit and hit_object == object
 
     def _sample_orientation(self):
         """ Samples an orientation.
