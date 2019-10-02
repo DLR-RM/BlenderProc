@@ -91,7 +91,20 @@ class SuncgCameraSampler(CameraSampler):
         :param room_obj: The room object whose bbox is used.
         :return: A vector describing the sampled position
         """
-        return BoundingBoxSampler.sample(room_obj["bbox"]["min"], room_obj["bbox"]["max"], self.position_ranges)
+
+        max = mathutils.Vector()
+        min = mathutils.Vector()
+        for i in range(3):
+            # Check if an interval for sampling has been configured, otherwise sample inside bbox
+            if len(self.position_ranges[i]) != 2:
+                min[i] = room_obj["bbox"]["min"][i]
+                max[i] = room_obj["bbox"]["max"][i]
+            else:
+                min[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][0]
+                max[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][1]
+
+        return BoundingBoxSampler.sample(min, max)
+
 
     def _calc_number_of_cams_in_room(self, room_obj):
         """ Approximates the square meters of the room and then uses cams_per_square_meter to get total number of cams in room.
