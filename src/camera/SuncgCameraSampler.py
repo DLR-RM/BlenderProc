@@ -1,15 +1,10 @@
 import math
-import random
 
 import bpy
 import mathutils
-import numpy as np
-import os
-
-import bmesh
 
 from src.camera.CameraSampler import CameraSampler
-from src.camera.BoundingBoxSampler import BoundingBoxSampler
+from src.utility.BoundingBoxSampler import BoundingBoxSampler
 
 class SuncgCameraSampler(CameraSampler):
 
