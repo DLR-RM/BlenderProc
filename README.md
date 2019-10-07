@@ -127,7 +127,7 @@ Nevertheless it should only be used for small preparation work, while most of th
 
 The module\`s configuration can be accessed via `self.config`. 
 This configuration object has the methods `get_int`, `get_float`, `get_bool`, `get_string`, `get_list`, `get_raw_dict`, each working in the same way.
- * The first parameter specifies the key/name of the parameter to get. By using `/` it is also possible access values nested inside additionally dicts (see example below).
+ * The first parameter specifies the key/name of the parameter to get. By using `/` it is also possible access values nested inside additional dicts (see example below).
  * The second parameter specifies the default value which is returned, if the requested parameter has not been specified inside the config file. If `None` is given, an error is thrown instead.
  
 **Example:**
