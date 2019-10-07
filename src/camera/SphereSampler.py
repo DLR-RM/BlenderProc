@@ -9,7 +9,8 @@ class SphereSampler(object):
 
     # https://math.stackexchange.com/a/87238
     # https://math.stackexchange.com/a/1585996
-    def sample(self, center, radius):
+    @staticmethod
+    def sample(center, radius):
         """
         Samples a point on and inside a solid sphere. Gaussian is spherically symmetric. Sample from three independent
         Guassian distributions the direction of the vector inside the sphere. Then sample from a uniform distribution

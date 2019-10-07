@@ -1,6 +1,9 @@
 from src.camera.CameraModule import CameraModule
 import mathutils
 import bpy
+import bmesh
+import math
+import random
 import numpy as np
 import os
 
