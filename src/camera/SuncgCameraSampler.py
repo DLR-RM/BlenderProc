@@ -7,7 +7,14 @@ from src.camera.CameraSampler import CameraSampler
 from src.utility.BoundingBoxSampler import BoundingBoxSampler
 
 class SuncgCameraSampler(CameraSampler):
+    """
+    **Configuration**:
 
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "cams_per_square_meter"
+    """
     def __init__(self, config):
         CameraSampler.__init__(self, config)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
@@ -48,6 +55,7 @@ class SuncgCameraSampler(CameraSampler):
                 successful_tries = 0
                 tries = 0
                 while successful_tries < number_of_cams and tries < self.max_tries_per_room:
+
                     tries += 1
                     position = self._sample_position(room_obj)
 

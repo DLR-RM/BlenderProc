@@ -7,6 +7,31 @@ from src.utility.Utility import Utility
 
 
 class CameraLoader(CameraModule):
+    """
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See the next table for which properties can be set."
+       "path", "Optionally, a path to a file which specifies one camera position per line. The lines has to be formatted as specified in 'file_format'."
+       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain the keywords of the corresponding properties separated by a space. See next table for allowed properties."
+       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the blender frame. Has to be a list of three strings (Allowed values: 'X', 'Y', 'Z', '-X', '-Y', '-Z'). Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed to (1, -3, 2)."
+       "default_cam_param", "A dict which can be used to specify properties across all cam poses. See the next table for which properties can be set."
+
+    **Properties per cam pose**:
+
+    .. csv-table::
+       :header: "Keyword", "Description"
+
+       "location", "The position of the camera, specified as a list of three values (xyz)."
+       "rotation_euler", "The rotation of the camera, specified as a list of three euler angles."
+       "rotation_forward_vector", "The rotation of the camera, specified with a forward vector (The z-Axis is assumed as Up-Vector). The forward vector has to be specified as a list of three values (xyz)."
+       "fov", "The full FOV (angle between both sides of the frustum)"
+       "fov_half", "Half of the FOV (the angle between forward vector and one side of the frustum)"
+       "clip_start", "Near clipping"
+       "clip_end", "Far clipping"
+    """
 
     def __init__(self, config):
         CameraModule.__init__(self, config)

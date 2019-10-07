@@ -2,6 +2,14 @@ from src.main.Module import Module
 import bpy
 
 class Initializer(Module):
+    """
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "horizon_color", A list of three elements specifying rgb of the world's horizon/background color.
+    """
 
     def __int__(self, config):
         Module.__init__(self, config)
