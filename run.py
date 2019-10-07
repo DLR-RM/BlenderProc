@@ -1,4 +1,3 @@
-import json
 import argparse
 import os
 import urllib
@@ -69,9 +68,14 @@ else:
 print("Using blender in " + blender_path)
 
 
+general_required_packages = ["pyyaml"]
+
+required_packages = general_required_packages
+if "pip" in setup_config:
+    required_packages += setup_config["pip"]
 
 # Install required packages
-if "pip" in setup_config:
+if len(required_packages) > 0:
     # Install pip    
     subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
     
@@ -85,7 +89,7 @@ if "pip" in setup_config:
     installed_packages = [line.split('==')[0] for line in installed_packages.splitlines()]
 
     # Install all packages
-    for package in setup_config["pip"]:
+    for package in required_packages:
         # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
         if package not in installed_packages or args.reinstall_packages:
             subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
