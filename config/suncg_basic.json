@@ -28,9 +28,14 @@
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
+      "name": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "<args:0>",
+        "file_format": "location rotation_forward_vector _ _ _ fov_half _ _",
+        "source_frame": ["X", "-Z", "Y"],
+        "default_cam_param": {
+          "clip_start": 1
+        }
       }
     },
     {

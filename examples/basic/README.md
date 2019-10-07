@@ -105,23 +105,28 @@ Every module has a name which specifies the python path to the corresponding cla
 * The properties of this light are configured via the parameter `lights`
 
 
-#### SuncgCameraLoader
+#### CameraLoader
 
 ```json
 {
-  "name": "camera.SuncgCameraLoader",
+  "name": "camera.CameraLoader",
   "config": {
-    "path": "<args:0>"
+    "path": "<args:0>",
+    "file_format": "location rotation_euler",
+    "default_cam_param": {
+      "fov": 1
+    }
   }
 }
 ```
 
 * This module imports the camera poses which defines from where the renderings should be taken
 * The camera positions are defined in a file whose path is again given via the command line (`examples/basic/camera_positions` - contains 2 cam poses)
-* The file uses the following format
+* The file uses the following format which is defined at `file_format`
 ```
-position_x position_y position_z  forward_x forward_y forward_z  up_x up_y up_z  xFOV yFOV
+location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
+* The FOV is the same for all cameras and is therefore set inside `default_cam_param`
 * This module also writes the cam poses into extra `.npy` files located inside the `output_dir`. This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0001.npy` and `campose_0002.npy` 
