@@ -60,7 +60,7 @@ class CameraSampler(CameraModule):
 
         :param position: The position to check.
         :param object: The query object to use.
-        :return: True, if a ray sent into negative z-direction starting from the position hits the floor first.
+        :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
         """
         # Send a ray straight down and check if the first hit object is the query object
         hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, mathutils.Vector([0, 0, -1]))
