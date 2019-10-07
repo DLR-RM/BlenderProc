@@ -20,8 +20,6 @@ class SphereSampler(object):
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
 
-        center = np.array([center[0], center[1], center[2]])
-
         direction = np.random.normal(size=3)
         magnitude = radius * (np.cbrt(np.random.uniform(high=0.9)))
 
@@ -29,9 +27,6 @@ class SphereSampler(object):
             direction[0] = 1e-5
 
         # Normalize and add center
-        _position = (magnitude * (direction / np.sqrt(direction.dot(direction)))) + center
-        position = mathutils.Vector()
-        for i in range(3):
-            position[i] = _position[i]
+        position = mathutils.Vector(list((magnitude * (direction / np.sqrt(direction.dot(direction)))))) + center
 
         return position

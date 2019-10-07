@@ -11,9 +11,9 @@ class BoundingBoxSampler(object):
     def sample(min, max):
         """ Samples a random position inside a bounding box
 
-        :param min: minimum point of the bounding box
-        :param max: maximum point of the bounding box
-        :return: position vector of the sampled point
+        :param min: minimum point of the bounding box. Type: Mathutils Vector
+        :param max: maximum point of the bounding box Type: Mathutils Vector
+        :return: position vector of the sampled point Type: Mathutils Vector
         """
         position = mathutils.Vector()
         for i in range(3):

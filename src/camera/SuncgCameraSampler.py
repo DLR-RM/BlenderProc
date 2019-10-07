@@ -8,8 +8,8 @@ import os
 
 import bmesh
 
-from src.camera import CameraSampler
-from src.camera import BoundingBoxSampler
+from src.camera.CameraSampler import CameraSampler
+from src.camera.BoundingBoxSampler import BoundingBoxSampler
 
 class SuncgCameraSampler(CameraSampler):
 
