@@ -12,7 +12,7 @@
     {
       "name": "loader.SuncgLoader",
       "config": {
-        "path": "/volume/reconstruction_data/suncg/improved_data/version_1.0.0/house/9727d1b4bfbdd74bf73cba29f2daa429/house.json"
+        "path": "/volume/reconstruction_data/suncg/improved_data/version_1.0.0/house/002fa647848abeff3c969cc0bc1bb8b6/house.json"
       }
     },
     {
@@ -23,11 +23,6 @@
     {
       "name": "materials.SuncgMaterials",
       "config": {}
-    },
-    {
-      "name": "renderer.RgbRendererPrepare",
-      "config": {
-      }
     }
   ]
 }
