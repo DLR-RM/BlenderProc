@@ -2,6 +2,7 @@ import bpy
 
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
+from random import uniform
 
 
 class SegMapRenderer(Renderer):
@@ -24,7 +25,7 @@ class SegMapRenderer(Renderer):
         This is done by replacing all nodes just with an emission node, which emits the color corresponding to the category of the object.
 
         :param obj: The object to use.
-        :param color: The color index of the object.
+        :param color: RGB array of a color.
         """
         for m in obj.material_slots:
             nodes = m.material.node_tree.nodes
@@ -32,8 +33,7 @@ class SegMapRenderer(Renderer):
             emission_node = nodes.new(type='ShaderNodeEmission')
             output = nodes.get("Material Output")
 
-            emission_node.inputs[0].default_value[:3] = map(self.scale_color, color)
-
+            emission_node.inputs[0].default_value[:3] = [c/256 for c in color]
             links.new(emission_node.outputs[0], output.inputs[0])
 
     def run(self):
@@ -43,7 +43,13 @@ class SegMapRenderer(Renderer):
         """
         with Utility.UndoAfterExecution():
             self._configure_renderer()
+            
+            # get current method for color mapping, instance or class
+            method = self.config.get_string("map_by", "instance") 
+            
 
+
+            
             bpy.context.scene.render.image_settings.color_mode = "BW"
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
@@ -51,9 +57,18 @@ class SegMapRenderer(Renderer):
             bpy.context.view_layer.cycles.use_denoising = False
             bpy.data.scenes["Scene"].cycles.filter_width = 0.0
             for obj in bpy.context.scene.objects:
-                if "modelId" in obj:
-                    category_id = obj['category_id']
-                    self.color_obj(obj, [category_id, category_id, category_id])
+                # find color according to method given in config
+                color = [0,0,0] # initialize color
+                if method == "class": # if the map_by is specifically set to "class" then map color by class
+                    # this scheme specifically works for suncg dataset only
+                    if "modelId" in obj:
+                        color = [category_id, category_id, category_id] # Assign class label to each channel
+                        color = map(self.scale_color, color) # Now scale each color from [0-C] to [0 - 255] while keeping uniform distance between two classes
+                else:
+                    color = [int(uniform(0,255)),int(uniform(0,255)),int(uniform(0,255))] # otherwise  use the default behavior and map color by instance
+                self.color_obj(obj, color)
+
+
 
             self._render("seg_")
 
