@@ -1,4 +1,4 @@
-import json
+import yaml
 import re
 import os
 from enum import Enum
@@ -27,11 +27,11 @@ class ConfigParser:
         self.silent = silent
 
     def parse(self, config_path, args, show_help=False, skip_arg_placeholders=False):
-        """ Reads the json file at the given path and returns it as a cleaned dict.
+        """ Reads the yaml file at the given path and returns it as a cleaned dict.
 
         Removes all comments and replaces arguments and env variables with their corresponding values.
 
-        :param config_path: The path to the json file.
+        :param config_path: The path to the yaml file.
         :param args: A list with the arguments which should be used for replacing <args:i> templates inside the config.
         :param show_help: If True, shows a help message which describes the placeholders that are used in the given config file. Exits the program afterwards.
         :param skip_arg_placeholders: If true, disregards filling up non environment type arguments.
@@ -40,13 +40,8 @@ class ConfigParser:
         if not show_help:
             self.log("Parsing config '" + config_path + "'", is_info=True)
         with open(config_path, "r") as f:
-            json_text = f.read()
-
-            # Remove comments
-            json_text = re.sub(r'^//.*\n?', '', json_text, flags=re.MULTILINE)
-
             # Read in dict
-            self.config = json.loads(json_text)
+            self.config = yaml.load(f)
             self.args = args
 
             # Collect all placeholders

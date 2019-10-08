@@ -5,10 +5,10 @@
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/basic/config.json examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
+python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
 ```
 
-Here `examples/basic/config.json` is the config file which defines the structure and properties of the pipeline.
+Here `examples/basic/config.yaml` is the config file which defines the structure and properties of the pipeline.
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file. 
 
 ## Steps
@@ -22,7 +22,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 ## Explanation of the config file
 
 ### Setup
-```json
+```yaml
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
@@ -39,7 +39,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 
 ### Global
 
-```json
+```yaml
   "global": {
     "all": {
       "output_dir": "<args:2>"
@@ -58,7 +58,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### Initalizer
 
-```json
+```yaml
  {
   "name": "main.Initializer",
   "config": {}
@@ -70,7 +70,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### ObjLoader
 
-```json
+```yaml
 {
   "name": "loader.ObjLoader",
   "config": {
@@ -86,7 +86,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### LightPositioning
 
-```json
+```yaml
 {
   "name": "lighting.LightPositioning",
   "config": {
@@ -107,7 +107,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### CameraLoader
 
-```json
+```yaml
 {
   "name": "camera.CameraLoader",
   "config": {
@@ -133,7 +133,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 #### NormalRenderer
 
-```json
+```yaml
 {
   "name": "renderer.NormalRenderer",
   "config": {
@@ -151,7 +151,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 #### RgbRenderer
 
-```json
+```yaml
 {
   "name": "renderer.RgbRenderer",
   "config": {
@@ -169,7 +169,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 #### Hdf5Writer
 
-```json
+```yaml
 {
   "name": "writer.Hdf5Writer",
   "config": {
@@ -182,11 +182,11 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before
 
 The file `1.h5py` would therefore look like the following:
-```json
+```yaml
 {
-  "normals": <numpy array with pixel values read in from normal_0001.exr>,
-  "colors": <numpy array with pixel values read in from rgb_0001.png>,
-  "campose": <numpy array with cam pose read in from campose_0001.npy>
+  "normals": #<numpy array with pixel values read in from normal_0001.exr>,
+  "colors": #<numpy array with pixel values read in from rgb_0001.png>,
+  "campose": #<numpy array with cam pose read in from campose_0001.npy>
 }
 ``` 
 
