@@ -3,6 +3,10 @@ import numpy as np
 from src.main.Module import Module
 
 class NoiseRemoval(Module):
+    """Removes noise pixels.
+
+    Assumes that noise pixel values won't occur more than 100 times.
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -67,10 +71,7 @@ class NoiseRemoval(Module):
         return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
 
     def run(self, image):
-        """ Removes noise pixels.
-
-        Assumes that noise pixel values won't occur more than 100 times.
-
+        """
         :param image: The image data.
         :return: The cleaned image data.
         """

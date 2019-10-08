@@ -3,13 +3,12 @@ import numpy as np
 from src.main.Module import Module
 
 class TrimRedundantChannels(Module):
-
+    """ Removes redundant channels, where the input has more than one channels that share exactly the same value """
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self, image):
-        """ Removes redundant channels, where the input has more than one channels that share exactly the same value
-        
+        """
         :param image: The image data.
         :return: The trimmed image data.
         """

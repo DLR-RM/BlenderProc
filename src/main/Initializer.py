@@ -2,7 +2,12 @@ from src.main.Module import Module
 import bpy
 
 class Initializer(Module):
-    """
+    """ Does some basic initialization of the blender project.
+
+     - Sets background color
+     - Configures computing device
+     - Creates camera
+
     **Configuration**:
 
     .. csv-table::
@@ -15,12 +20,6 @@ class Initializer(Module):
         Module.__init__(self, config)
 
     def run(self):
-        """ Does some basic initialization of the blender project.
-
-         - Sets background color
-         - Configures computing device
-         - Creates camera
-        """
         # Make sure to use the current GPU
         prefs = bpy.context.preferences.addons['cycles'].preferences
         prefs.compute_device_type = 'CUDA'

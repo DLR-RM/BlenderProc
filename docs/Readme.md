@@ -1,9 +1,7 @@
-Run apidoc to collect all classes:
-```
-sphinx-apidoc -f -o source/ ../src/ ../src/run.py ../src/debug.py
-```
+The scripts assume that blender is installed at `/home_local/${USER}/blender/blender-2.80-linux-glibc217-x86_64`
 
-Run make to actually create the documentation
-```
-make html
+Regenerate docs:
+
+```bash
+./generate.sh
 ```

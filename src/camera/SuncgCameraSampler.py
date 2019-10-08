@@ -7,13 +7,23 @@ from src.camera.CameraSampler import CameraSampler
 from src.utility.BoundingBoxSampler import BoundingBoxSampler
 
 class SuncgCameraSampler(CameraSampler):
-    """
+    """ Samples multiple cameras per suncg room.
+
+    Procedure per room:
+     - sample position inside bbox
+     - send ray from position straight down and make sure it hits the room's floor first
+     - send rays through the field of view to approximate a depth map and to make sure no obstacle is too close to the camera
+
     **Configuration**:
 
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "cams_per_square_meter"
+       "cams_per_square_meter", "Used to calculate the number of cams that should be sampled in a given room. total_cams = cams_per_square_meter * room_size"
+       "max_tries_per_room", "The maximum number of tries that should be made to sample the requested number of cam poses for a given room."
+       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera."
+       "resolution_y", "The resolution of the camera in y-direction.Necessary when checking, if there are obstacles in front of the camera."
+       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera."
     """
     def __init__(self, config):
         CameraSampler.__init__(self, config)
@@ -21,13 +31,6 @@ class SuncgCameraSampler(CameraSampler):
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
 
     def run(self):
-        """ Samples multiple cameras per suncg room.
-
-        Procedure per room:
-         - sample position inside bbox
-         - send ray from position straight down and make sure it hits the room's floor first
-         - send rays through the field of view to approximate a depth map and to make sure no obstacle is too close to the camera
-        """
         self._init_bvh_tree()
 
         cam_ob = bpy.context.scene.camera

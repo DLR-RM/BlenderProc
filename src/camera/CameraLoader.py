@@ -7,7 +7,10 @@ from src.utility.Utility import Utility
 
 
 class CameraLoader(CameraModule):
-    """
+    """ Loads camera poses from the configuration and sets them as separate keypoints.
+
+    Camera poses can be specified either directly inside a the config or in an extra file.
+
     **Configuration**:
 
     .. csv-table::
@@ -46,10 +49,6 @@ class CameraLoader(CameraModule):
         self.source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
 
     def run(self):
-        """ Loads camera poses from the configuration and sets them as separate keypoints.
-
-        Camera poses can be specified either directly inside a the config or in an extra file.
-        """
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
