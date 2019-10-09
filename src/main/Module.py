@@ -21,7 +21,7 @@ class Module:
         else:
             bpy.context.scene["output"] = [output]
 
-    def _register_output(self, default_prefix, default_key, suffix, version):
+    def _register_output(self, default_prefix, default_key, suffix, version, stereo=False):
         """ Registers new output type using configured key and file prefix.
 
         :param default_prefix: The default prefix of the generated files.
@@ -32,7 +32,8 @@ class Module:
         self._add_output_entry({
             "key": self.config.get_string("output_key", default_key),
             "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix,
-            "version": version
+            "version": version,
+            "stereo": stereo
         })
 
     def _output_already_registered(self, output, output_list):
@@ -47,7 +48,7 @@ class Module:
         for _output in output_list:
             if output["key"] == _output["key"] and output["path"] == _output["path"]:
                 print("Warning! Detected output entries with duplicate keys and paths")
-                return  True
+                return True
             if output["key"] == _output["key"] or output["path"] == _output["path"]:
                 raise Exception("Can not have two output entries with the same key/path but not same path/key." +
                                 "Original entry's data: key:{} path:{}, Entry to be registered: key:{} path:{}"

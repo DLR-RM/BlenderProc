@@ -10,7 +10,8 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>"
+      "output_dir": "<args:2>",
+      "samples": 32
     },
     "renderer": {
       "pixel_aspect_x": 1.333333333
@@ -58,7 +59,7 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-	    "samples": 255,
+	    "samples": 32,
         "stereo": true
       }
     },

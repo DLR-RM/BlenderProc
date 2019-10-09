@@ -31,14 +31,19 @@ class Hdf5Writer(Module):
                 print("Merging data for frame " + str(frame) + " into " + hdf5_path)
                 for output_type in bpy.context.scene["output"]:
 
+                    use_stereo = output_type["stereo"]
                     # Build path (path attribute is format string)
                     file_path = output_type["path"] % frame
 
-                    data = self._load_file(Utility.resolve_path(file_path))
+                    if use_stereo:
+                        path_l, path_r = self._get_stereo_path_pair(file_path)
 
-                    data = self._apply_postprocessing(output_type["key"], data)
+                        img_l = self._load_and_postprocess(path_l, output_type["key"])
+                        img_r = self._load_and_postprocess(path_r, output_type["key"])
 
-                    print("Key: " + output_type["key"] + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
+                        data = np.array([img_l, img_r])
+                    else:
+                        data = self._load_and_postprocess(file_path, output_type["key"])
 
                     f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
 
@@ -46,7 +51,11 @@ class Hdf5Writer(Module):
                     f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")
 
                     if self.config.get_bool("delete_original_files_afterwards", True):
-                        os.remove(file_path)
+                        if use_stereo:
+                            os.remove(path_l)
+                            os.remove(path_r)
+                        else:
+                            os.remove(file_path)
 
     def _load_file(self, file_path):
         """ Tries to read in the file with the given path into a numpy array.
@@ -97,3 +106,19 @@ class Hdf5Writer(Module):
 
         return data
 
+    def _load_and_postprocess(self, file_path, key):
+        data = self._load_file(Utility.resolve_path(file_path))
+
+        data = self._apply_postprocessing(key, data)
+
+        print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(
+            data.dtype) + " - path: " + file_path)
+
+        return data
+
+    def _get_stereo_path_pair(self, file_path):
+        path_split = file_path.split(".")
+        path_l = "{}_L.{}".format(path_split[0], path_split[1])
+        path_r = "{}_R.{}".format(path_split[0], path_split[1])
+
+        return path_l, path_r

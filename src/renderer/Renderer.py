@@ -104,13 +104,16 @@ class Renderer(Module):
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
         """
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version)
+        use_stereo = self.config.get_bool("stereo", False)
+
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, use_stereo)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
                 "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
-                "version": "2.0.0"
+                "version": "2.0.0",
+                "stereo": use_stereo
             })
 
 
