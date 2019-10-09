@@ -45,13 +45,20 @@ def hex_to_rgb(hex):
 def rgb_to_hex(rgb):
     return '#%02x%02x%02x' % tuple(rgb)
 
-def _get_colors(num_colors):
+def _get_colors(num_colors,exclude):
     colors=[]
+    hex_colors = set()
     for i in np.arange(0., 360., 360. / num_colors):
         hue = i/360.
-        lightness = (50 + np.random.rand() * 10)/100.
-        saturation = (90 + np.random.rand() * 10)/100.
-        colors.append([int(round(channel*255)) for channel in list(colorsys.hls_to_rgb(hue, lightness, saturation))])
+        while(true):
+            lightness = (50 + np.random.rand() * 10)/100.
+            saturation = (90 + np.random.rand() * 10)/100.
+            rgb = [int(round(channel*255)) for channel in list(colorsys.hls_to_rgb(hue, lightness, saturation))]
+            _hex = reg_to_hex(rgb)
+            if _hex not in hex_colors:
+                break
+        colors.append(rgb)
+        hex_colors.add(_hex)
     return colors
 
 def get_colors(n=5, randomize = False, try_precomputed = True):

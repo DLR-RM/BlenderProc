@@ -73,7 +73,7 @@ class SegMapRenderer(Renderer):
                     color_mapping[idx].append(obj['category_id'])
                 self.color_obj(obj, color)
             
-            outpath = os.path.join(self.output_dir, "segment_colo_map")
+            outpath = os.path.join(self.output_dir, "segment_color_map")
             with open(outpath, 'w') as f:
                for mapping in color_mapping:
                     f.write(','.join(mapping)+'\n')
