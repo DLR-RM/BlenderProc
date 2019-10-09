@@ -45,23 +45,11 @@
     {
       "name": "renderer.SegMapRenderer",
       "config": {
-        "output_key": "normals"
-      }
-    },
-    {
-      "name": "renderer.SegMapRenderer",
-      "config": {
         "map_by": "instance",
         "render_depth": true
       }
     },
-    {
-      "name": "renderer.RgbRenderer",
-      "config": {
-        "output_key": "colors",
-        "samples": 350
-      }
-    },
+
     {
       "name": "writer.Hdf5Writer",
       "config": {

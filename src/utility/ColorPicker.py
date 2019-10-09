@@ -38,9 +38,12 @@ colors_269 = ["#000000","#FFFF00","#1CE6FF","#FF34FF","#FF4A46","#008941","#006F
 
 
 def hex_to_rgb(hex):
-    hex = hex.lstrip('#')
-    hlen = len(hex)
-    return tuple(int(hex[i:i+hlen//3], 16) for i in range(0, hlen, hlen//3))
+    _hex = hex.lstrip('#')
+    hlen = len(_hex)
+    return tuple(int(_hex[i:i+hlen//3], 16) for i in range(0, hlen, hlen//3))
+
+def rgb_to_hex(rgb):
+    return '#%02x%02x%02x' % tuple(rgb)
 
 def _get_colors(num_colors):
     colors=[]
