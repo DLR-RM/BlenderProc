@@ -58,7 +58,6 @@ class CameraModule(Module):
         cam.lens_unit = 'FOV'
         # Set camera attributes
         self._set_cam_from_config(cam, cam_ob, config)
-        self._configure_stereo_params(cam, cam_ob)
 
     def _set_cam_from_config(self, cam, cam_ob, config):
         """ Sets cam attributes based on the given config dict.
@@ -117,11 +116,3 @@ class CameraModule(Module):
             pass
         else:
             raise Exception("No such attribute: " + attribute_name)
-
-    def _configure_stereo_params(self, cam, cam_obj):
-        self._set_attribute(cam, cam_obj, "stereo_convergence_mode", 
-                            self.config.get_string("stereo_convergence_mode", "OFFAXIS"))
-        self._set_attribute(cam, cam_obj, "stereo_convergence_dist",
-                            self.config.get_float("stereo_convergence_dist", 1.95))
-        self._set_attribute(cam, cam_obj, "stereo_interocular_dist",
-                            self.config.get_float("stereo_interocular_dist", 0.065))

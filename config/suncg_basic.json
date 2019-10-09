@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>",
+      "output_dir": "<args:2>"
     },
     "renderer": {
       "pixel_aspect_x": 1.333333333

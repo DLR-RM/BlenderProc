@@ -107,6 +107,12 @@ class Hdf5Writer(Module):
         return data
 
     def _load_and_postprocess(self, file_path, key):
+        """
+        Loads an image and post process it.
+        :param file_path: Image path.
+        :param key: The image's key with regards to the hdf5 file.
+        :return:
+        """
         data = self._load_file(Utility.resolve_path(file_path))
 
         data = self._apply_postprocessing(key, data)
@@ -117,6 +123,11 @@ class Hdf5Writer(Module):
         return data
 
     def _get_stereo_path_pair(self, file_path):
+        """
+        Returns stereoscopic file path pair for a given "normal" image file path.
+        :param file_path: The file path of a single image.
+        :return:
+        """
         path_split = file_path.split(".")
         path_l = "{}_L.{}".format(path_split[0], path_split[1])
         path_r = "{}_R.{}".format(path_split[0], path_split[1])
