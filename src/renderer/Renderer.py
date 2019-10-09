@@ -56,6 +56,11 @@ class Renderer(Module):
         # Setting use_persistent_data to True makes the rendering getting slower and slower (probably a blender bug)
         bpy.context.scene.render.use_persistent_data = False
 
+        # Enable Stereoscopy
+        bpy.context.scene.render.use_multiview = self.config.get_bool("stereo", False)
+        if bpy.context.scene.render.use_multiview:
+            bpy.context.scene.render.views_format = "STEREO_3D"
+
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
         bpy.context.scene.render.use_compositing = True

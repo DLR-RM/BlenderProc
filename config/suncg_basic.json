@@ -58,7 +58,8 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-	"samples": 255
+	    "samples": 255,
+        "stereo": true
       }
     },
     {
