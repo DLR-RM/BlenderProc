@@ -7,6 +7,17 @@ import imageio
 import numpy as np
 
 class Hdf5Writer(Module):
+    """ For each key frame merges all registered output files into one hdf5 file
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "compression", "The compression technique that should be used when storing data in a hdf5 file."
+       "delete_original_files_afterwards", "True, if the original files should be deleted after merging."
+       "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output to which the postprocessing modules should be applied. Every postprocessing module has to have a run function which takes in the raw data and returns the processed data."
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -17,7 +28,6 @@ class Hdf5Writer(Module):
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
 
     def run(self):
-        """ For each key frame merges all registered output files into one hdf5 file"""
         output_dir = Utility.resolve_path(self.config.get_string("output_dir"))
 
         # Go through all frames

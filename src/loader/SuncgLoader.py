@@ -10,6 +10,20 @@ from src.utility.Utility import Utility
 
 
 class SuncgLoader(Module):
+    """ Loads a house.json file into blender.
+
+     - Loads all objects files specified in the house.json file.
+     - Orders them hierarchically (level -> room -> object)
+     - Writes metadata into the custom properties of each object
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "path", "The path to the house.json file which should be loaded."
+       "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures etc."
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -17,13 +31,6 @@ class SuncgLoader(Module):
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
 
     def run(self):
-        """ Loads a house.json file into blender.
-
-         - Loads all objects files specified in the house.json file.
-         - Orders them hierarchically (level -> room -> object)
-         - Writes metadata into the custom properties of each object
-
-        """
         with open(Utility.resolve_path(self.house_path), "r") as f:
             config = json.load(f)
 

@@ -4,6 +4,14 @@ import os
 from src.utility.Utility import Utility
 
 class Module:
+    """
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "output_dir", "The path to a directory where all output files should be stored. If it doesn't exist, it is created automatically."
+    """
 
     def __init__(self, config):
         self.config = config
