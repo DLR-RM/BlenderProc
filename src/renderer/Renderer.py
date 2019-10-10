@@ -34,6 +34,8 @@ class Renderer(Module):
        "render_depth", "If true, the depth is also rendered to file."
        "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
+
+       "stereo", "If true, renders a pair of stereoscopic images for each camera position."
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -84,6 +86,11 @@ class Renderer(Module):
         # Setting use_persistent_data to True makes the rendering getting slower and slower (probably a blender bug)
         bpy.context.scene.render.use_persistent_data = False
 
+        # Enable Stereoscopy
+        bpy.context.scene.render.use_multiview = self.config.get_bool("stereo", False)
+        if bpy.context.scene.render.use_multiview:
+            bpy.context.scene.render.views_format = "STEREO_3D"
+
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
         bpy.context.scene.render.use_compositing = True
@@ -127,13 +134,16 @@ class Renderer(Module):
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
         """
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version)
+        use_stereo = self.config.get_bool("stereo", False)
+
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, use_stereo)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
                 "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
-                "version": "2.0.0"
+                "version": "2.0.0",
+                "stereo": use_stereo
             })
 
 
