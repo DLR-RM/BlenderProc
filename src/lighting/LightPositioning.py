@@ -27,8 +27,7 @@ class LightPositioning(Module):
 
        "location", "The position of the light source, specified as a list of three values."
        "rotation_euler", "The rotation of the light source, specified as a list of three euler angles."
-       "random_location:, "The uniformly randomized posotion of the light source, specified as the pairs of start=stop coordinate values for each, one pair per axis [x_start, x_stop, y_start, y_stop, z_start, z_stop]."
-       "color", "Light color, specified as a list of three values (each in [-inf, inf]) [R, G, B]"
+       "color", "Light color, specified as a list of three values (each in [0, inf]) [R, G, B]"
        "distance", "Falloff distance of the light = point where light is half the original intensity. Specified as one value in [0, inf]."
        "energy", "Intensity of the emission of a light source, specified as a value in [=inf, inf]."
        "type", "The type of a light source. Has to be one of ['POINT', 'SUN', 'SPOT', 'AREA']"
@@ -41,7 +40,6 @@ class LightPositioning(Module):
         self.light_source_attribute_length = {
             "location": 3,
             "rotation_euler": 3,
-            "random_location": 6,
             "color": 3,
             "distance": 1,
             "energy": 1,
@@ -50,7 +48,7 @@ class LightPositioning(Module):
         # Settings of a default llight source, can be partially rewrited by default_source_param section of the configuration file
         self.default_source_specs = {
             "location": [5, 5, 5],
-            "color": [0, 0, 0],
+            "color": [1.0, 1.0, 1.0],
             "distance": 0,
             "type": 'POINT',
             "energy": 0
@@ -179,9 +177,6 @@ class LightPositioning(Module):
         elif attribute_name == 'rotation_euler':
             # Rotation if the form of euler angles
             light_obj.rotation_euler == value
-        elif attribute_name == 'random_location':
-            # Randimized X, Y, Z location of a light source
-            light_obj.location = [random.uniform(value[0], value[1]), random.uniform(value[2], value[3]), random.uniform(value[4], value[5])]
         elif attribute_name == 'energy':
             # Intensity of the emission of a light source
             light_data.energy == value[0]
