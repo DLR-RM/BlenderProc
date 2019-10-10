@@ -6,7 +6,35 @@ import addon_utils
 
 
 class Renderer(Module):
+    """
+    **Configuration**:
 
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "output_file_prefix", "The file prefix that should be used when writing the rendering to file."
+       "output_key", "The key which should be used for storing the rendering in a merged file."
+
+       "auto_tile_size", "If true, then the number of render tiles is set automatically using the render_auto_tile_size addon."
+       "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true."
+       "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true."
+       "resolution_x", "The render image width."
+       "resolution_y", "The render image height."
+       "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution aspect ratio to distort the image."
+       "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
+
+       "samples", "Number of samples to render for each pixel."
+       "max_bounces", "Total maximum number of bounces."
+       "min_bounces", "Total minimum number of bounces."
+       "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
+       "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the specified bounce."
+       "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum."
+       "volume_bounces", "Maximum number of volumetric scattering events"
+
+       "render_depth", "If true, the depth is also rendered to file."
+       "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
+       "depth_output_key", "The key which should be used for storing the depth in a merged file."
+    """
     def __init__(self, config):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")

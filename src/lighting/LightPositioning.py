@@ -6,22 +6,41 @@ import os
 
 
 class LightPositioning(Module):
+    """ Inserts lights as specified inside the configuration
 
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "lights", "A list of dicts, where each entry describes one light. See next table for which properties can be used."
+
+    **Properties per light**:
+
+    .. csv-table::
+       :header: "Keyword", "Description"
+
+       "type", "The strength of the light type. Has to be one of ['POINT', 'SUN', 'SPOT', 'AREA']"
+       "location", "The position of the light, specified as a list of three values (xyz)."
+       "rotation", "The rotation of the light, specified as a list of three euler angles."
+       "energy", "The strength of the light."
+
+    **Example**:
+
+    The following example creates a simple point light:
+
+    >>> "lights": [
+    >>>   {
+    >>>     "type": "POINT",
+    >>>     "location": [5, -5, 5],
+    >>>     "energy": 1000
+    >>>   }
+    >>> ]
+    """
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
-        """ Inserts lights as specified inside the configuration:
-
-            e.q.:
-            "lights": [
-              {
-                "type": "POINT",
-                "location": [5, -5, 5],
-                "energy": 1000
-              }
-            ]
-        """
         for i, light in enumerate(self.config.get_list("lights")):
             if "type" not in light:
                 raise Exception("Type of light not specified")
