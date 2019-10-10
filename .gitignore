@@ -4,3 +4,4 @@ blender
 .idea/
 output/
 *.pyc
+docs/build/html/

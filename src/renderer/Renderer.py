@@ -35,7 +35,7 @@ class Renderer(Module):
        "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
 
-       "stereo", "If true, renders a pair of stereoscopic images for each camera position.
+       "stereo", "If true, renders a pair of stereoscopic images for each camera position."
     """
     def __init__(self, config):
         Module.__init__(self, config)

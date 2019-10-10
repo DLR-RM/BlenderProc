@@ -8,18 +8,11 @@ import os
 
 
 class CameraModule(Module):
+    """
+    **Configuration**:
 
-    def __init__(self, config):
-        Module.__init__(self, config)
-        self.source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
-
-    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1):
-        """ Determines the current pose of the given camera and writes it to a .npy file.
-
-        :param frame: The current frame number, used for naming the output file.
-        :param cam: The camera.
-        :param cam_ob: The camera object.
-        :param room_id: The id of the room which contains the camera (optional)
+    .. csv-table::
+       :header: "Parameter", "Description"
 
        "source_frame", "Can be used if the given positions and rotations are specified in frames different from the blender frame. Has to be a list of three strings (Allowed values: 'X', 'Y', 'Z', '-X', '-Y', '-Z'). Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed to (1, -3, 2)."
        "default_cam_param", "A dict which can be used to specify properties across all cam poses. See the next table for which properties can be set."
@@ -39,6 +32,19 @@ class CameraModule(Module):
        "stereo_convergence_mode", "How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the convergence plane, or parallel where they do not converge and are parallel)."
        "stereo_convergence_dist", "The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen)."
        "stereo_interocular_dist", "Distance between the camera pair."
+    """
+
+    def __init__(self, config):
+        Module.__init__(self, config)
+        self.source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
+
+    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1):
+        """ Determines the current pose of the given camera and writes it to a .npy file.
+
+        :param frame: The current frame number, used for naming the output file.
+        :param cam: The camera.
+        :param cam_ob: The camera object.
+        :param room_id: The id of the room which contains the camera (optional)
         """
         cam_pose = []
         # Location
