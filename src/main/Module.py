@@ -28,6 +28,7 @@ class Module:
         :param default_key: The default key which should be used for storing the output in merged file.
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
+        :param stereo: Boolean indicating whether the output of this rendering result will be stereo.
         """
         self._add_output_entry({
             "key": self.config.get_string("output_key", default_key),
