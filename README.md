@@ -1,5 +1,5 @@
-# Blender-Pipeline
-A blender pipeline to generate images for deep learning
+# Blender-Proc
+A procedural blender pipeline to generate images for deep learning
 
 
 ## General
