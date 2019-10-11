@@ -41,7 +41,7 @@ class SuncgCameraSampler(CameraSampler):
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
 
-        frame_id = bpy.context.scene.frame_end + 1
+        frame_id = bpy.context.scene.frame_end
         room_id = 0
         for room_obj in bpy.context.scene.objects:
             # Find room objects
@@ -87,8 +87,7 @@ class SuncgCameraSampler(CameraSampler):
                 print(str(tries) + " tries were necessary")
                 room_id += 1
 
-        bpy.context.scene.frame_end = frame_id - 1
-        bpy.context.scene.frame_start = 1
+        bpy.context.scene.frame_end = frame_id
         self._register_cam_pose_output()
 
 

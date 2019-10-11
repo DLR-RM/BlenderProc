@@ -31,7 +31,7 @@ class Hdf5Writer(Module):
         output_dir = Utility.resolve_path(self.config.get_string("output_dir"))
 
         # Go through all frames
-        for frame in range(1, bpy.context.scene.frame_end + 1):
+        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
 
             # Create output hdf5 file
             hdf5_path = os.path.join(output_dir, str(frame) + ".hdf5")

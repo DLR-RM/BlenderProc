@@ -122,7 +122,14 @@ class Renderer(Module):
             self._write_depth_to_file()
 
         bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
-        bpy.ops.render.render(animation=True, write_still=True)
+
+        # Skip if there is nothing to render
+        if bpy.context.scene.frame_end != bpy.context.scene.frame_start:
+            # As frame_end is pointing to the next frame, decrease it by one, as blender will render all frames in [frame_start, frame_ned]
+            bpy.context.scene.frame_end -= 1
+            bpy.ops.render.render(animation=True, write_still=True)
+            # Revert changes
+            bpy.context.scene.frame_end += 1
 
     def _register_output(self, default_prefix, default_key, suffix, version):
         """ Registers new output type using configured key and file prefix.
