@@ -36,8 +36,8 @@ class CameraLoader(CameraModule):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        # Start with next frame
-        frame_id = bpy.context.scene.frame_end + 1
+        # Start with frame_end which points to the next free frame
+        frame_id = bpy.context.scene.frame_end
 
         # Add cam poses configured in the config
         cam_poses = self.config.get_list("cam_poses", [])
@@ -67,10 +67,8 @@ class CameraLoader(CameraModule):
             self._write_cam_pose_to_file(frame_id, cam, cam_ob)
             frame_id += 1
 
-        # Set frame end to the last written frame
-        bpy.context.scene.frame_end = frame_id - 1
-        # Make sure frame_start is 1 (By setting frame_end to 0 in the Initializer module, blender also sets frame_start to 0)
-        bpy.context.scene.frame_start = 1
+        # Set frame end to the next free frame
+        bpy.context.scene.frame_end = frame_id
         self._register_cam_pose_output()
 
     def _set_cam_from_file_args(self, cam, cam_ob, cam_args):
