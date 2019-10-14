@@ -10,7 +10,9 @@ class Module:
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "output_dir", "The path to a directory where all output files should be stored. If it doesn't exist, it is created automatically."
+       "output_is_temp", "If True, all files created in this module will be written into the temp_dir. If False, the output_dir is used."
+       "output_dir", "The path to a directory where all persistent output files should be stored. If it doesn't exist, it is created automatically."
+       "temp_dir", "The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically."
     """
 
     def __init__(self, config):
