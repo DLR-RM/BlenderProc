@@ -5,6 +5,7 @@ import os
 from src.utility.Utility import Utility
 import imageio
 import numpy as np
+import shutil
 
 class Hdf5Writer(Module):
     """ For each key frame merges all registered output files into one hdf5 file
@@ -15,7 +16,7 @@ class Hdf5Writer(Module):
        :header: "Parameter", "Description"
 
        "compression", "The compression technique that should be used when storing data in a hdf5 file."
-       "delete_original_files_afterwards", "True, if the original files should be deleted after merging."
+       "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging."
        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output to which the postprocessing modules should be applied. Every postprocessing module has to have a run function which takes in the raw data and returns the processed data."
     """
 
@@ -28,13 +29,11 @@ class Hdf5Writer(Module):
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
 
     def run(self):
-        output_dir = Utility.resolve_path(self.config.get_string("output_dir"))
-
         # Go through all frames
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
 
             # Create output hdf5 file
-            hdf5_path = os.path.join(output_dir, str(frame) + ".hdf5")
+            hdf5_path = os.path.join(self._determine_output_dir(False), str(frame) + ".hdf5")
             with h5py.File(hdf5_path, "w") as f:
 
                 # Go through all the output types
@@ -60,12 +59,9 @@ class Hdf5Writer(Module):
                     # Write version number of current output at key_version
                     f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")
 
-                    if self.config.get_bool("delete_original_files_afterwards", True):
-                        if use_stereo:
-                            os.remove(path_l)
-                            os.remove(path_r)
-                        else:
-                            os.remove(file_path)
+        # Remove temp data
+        if self.config.get_bool("delete_temporary_files_afterwards", True):
+            shutil.rmtree(self._temp_dir)
 
     def _load_file(self, file_path):
         """ Tries to read in the file with the given path into a numpy array.

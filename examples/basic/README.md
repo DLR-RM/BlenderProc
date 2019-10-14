@@ -47,7 +47,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
   }
 ```
 
-* In the global section, we just specify the `output_dir` which defines where created files should be stored.
+* In the global section, we just specify the `output_dir` which defines where the final files should be stored.
 * As this configuration is defined in `global/all`, it is inherited by all modules. This is equivalent to just putting the `output_dir` configuration into the `config` block of each single module.
 * As we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
 
@@ -127,7 +127,7 @@ Every module has a name which specifies the python path to the corresponding cla
 location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
 * The FOV is the same for all cameras and is therefore set inside `default_cam_param`
-* This module also writes the cam poses into extra `.npy` files located inside the `output_dir`. This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
+* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /tmp/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0001.npy` and `campose_0002.npy` 
 
@@ -173,12 +173,11 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 {
   "name": "writer.Hdf5Writer",
   "config": {
-    "delete_original_files_afterwards": false
   }
 }
 ```
 
-* The last module now merges all the single files created by the two rendering modules into one `.hdf5` file per cam pose
+* The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before
 
 The file `1.h5py` would therefore look like the following:
@@ -190,6 +189,6 @@ The file `1.h5py` would therefore look like the following:
 }
 ``` 
 
-* Normally the original files like `normal_0001.exr` would be deleted after merging their content into the `.hdf5` files, but here in this example we prevent this by setting `delete_original_files_afterwards` to `false` for demonstration purposes
+* At the end of the hdf5 writer all temporary files are deleted
 
 => Creates the files `1.h5py` and `2.h5py`

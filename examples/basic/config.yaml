@@ -62,7 +62,6 @@
     {
       "name": "writer.Hdf5Writer",
       "config": {
-        "delete_original_files_afterwards": false
       }
     }
   ]

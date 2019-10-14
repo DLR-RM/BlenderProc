@@ -15,8 +15,21 @@ class Module:
 
     def __init__(self, config):
         self.config = config
-        self.output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
-        os.makedirs(self.output_dir, exist_ok=True)
+        self._output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
+        os.makedirs(self._output_dir, exist_ok=True)
+        self._temp_dir = Utility.resolve_path(os.path.join(self.config.get_string("temp_dir", "/tmp"),  "blender_proc_" + str(os.getpid())))
+        os.makedirs(self._temp_dir, exist_ok=True)
+
+    def _determine_output_dir(self, output_is_temp_default=True):
+        """ Returns the directory where to store output file created by this module.
+
+        :param output_is_temp_default: True, if the files created by this module should be temporary by default.
+        :return: The output directory to use
+        """
+        if self.config.get_bool("output_is_temp", output_is_temp_default):
+            return self._temp_dir
+        else:
+            return self._output_dir
 
     def _add_output_entry(self, output):
         """ Registers the given output in the scene's custom properties
@@ -40,7 +53,7 @@ class Module:
         """
         self._add_output_entry({
             "key": self.config.get_string("output_key", default_key),
-            "path": os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix,
+            "path": os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix,
             "version": version,
             "stereo": stereo
         })
