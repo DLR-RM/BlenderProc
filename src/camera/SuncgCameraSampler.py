@@ -19,6 +19,7 @@ class SuncgCameraSampler(CameraSampler):
     .. csv-table::
        :header: "Parameter", "Description"
 
+       "position_range_x, position_range_y, position_range_z", "The interval in which the camera positions should be sampled. The interval is specified as a list of two values (min and max value). The values are used relative to the bbox, so e.q. a z-interval of [1, 2] means between 1 and 2 meter above the floor."
        "cams_per_square_meter", "Used to calculate the number of cams that should be sampled in a given room. total_cams = cams_per_square_meter * room_size"
        "max_tries_per_room", "The maximum number of tries that should be made to sample the requested number of cam poses for a given room."
        "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera."
@@ -29,6 +30,11 @@ class SuncgCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
+        self.position_ranges = [
+            self.config.get_list("position_range_x", []),
+            self.config.get_list("position_range_y", []),
+            self.config.get_list("position_range_z", [1.4, 1.4])
+        ]
 
     def run(self):
         self._init_bvh_tree()
