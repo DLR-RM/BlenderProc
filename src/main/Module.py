@@ -19,7 +19,14 @@ class Module:
         self.config = config
         self._output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
         os.makedirs(self._output_dir, exist_ok=True)
-        self._temp_dir = Utility.resolve_path(os.path.join(self.config.get_string("temp_dir", "/tmp"),  "blender_proc_" + str(os.getpid())))
+
+        # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
+        if os.path.exists("/dev/shm"):
+            default_temp_dir = "/dev/shm"
+        else:
+            default_temp_dir = "/tmp"
+
+        self._temp_dir = Utility.resolve_path(os.path.join(self.config.get_string("temp_dir", default_temp_dir),  "blender_proc_" + str(os.getpid())))
         os.makedirs(self._temp_dir, exist_ok=True)
 
     def _determine_output_dir(self, output_is_temp_default=True):

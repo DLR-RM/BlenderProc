@@ -127,7 +127,7 @@ Every module has a name which specifies the python path to the corresponding cla
 location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
 * The FOV is the same for all cameras and is therefore set inside `default_cam_param`
-* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /tmp/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
+* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0001.npy` and `campose_0002.npy` 
 
