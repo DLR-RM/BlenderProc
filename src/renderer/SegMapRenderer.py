@@ -6,6 +6,7 @@ from src.utility.ColorPicker import get_colors, rgb_to_hex
 from src.postprocessing.NoiseRemoval import NoiseRemoval
 from src.utility.Config import Config
 import imageio
+import csv
 import numpy as np
 
 
@@ -129,7 +130,13 @@ class SegMapRenderer(Renderer):
             
             #np.save(os.path.join(self.output_dir,"rgbs"),rgbs)
 
-
+            # write color mappings to file
+            with open(os.path.join(self.output_dir,"class_inst_col_map.csv"), 'w', newline='') as csvfile:
+                fieldnames = list(color_map[0].keys())
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                for mapping in color_map:
+                    writer.writerow(mapping)
 
         self._register_output("seg_", "seg", ".exr", "2.0.1")
         self._register_output("segmap_", "segmap", ".npy", "0.0.1")
