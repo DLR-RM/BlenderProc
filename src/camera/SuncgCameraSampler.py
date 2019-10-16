@@ -26,12 +26,14 @@ class SuncgCameraSampler(CameraSampler):
        "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera."
        "resolution_y", "The resolution of the camera in y-direction.Necessary when checking, if there are obstacles in front of the camera."
        "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera."
+       "more_interesting_objects", "Objects with double the normal score, used in evaluating scene coverage."
     """
     def __init__(self, config):
         CameraSampler.__init__(self, config)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
         self.min_interest_score = self.config.get_float("min_interest_score", 0.3)
+        self.more_interesting_objects = self.config.get_list("more_interesting_objects", [])
         self.position_ranges = [
             self.config.get_list("position_range_x", []),
             self.config.get_list("position_range_y", []),
@@ -165,8 +167,6 @@ class SuncgCameraSampler(CameraSampler):
         :return: the scoring of the scene.
         """
 
-        # Objects with double the normal score
-        more_interesting_objects = ["bed", "chair", "desk", "kitchen_appliance", "table", "tv_stand"]
         num_of_rays = self.sqrt_number_of_rays * self.sqrt_number_of_rays
         score = 0.0
         scene_variance = 0.0
@@ -195,13 +195,13 @@ class SuncgCameraSampler(CameraSampler):
                     if "coarse_grained_class" in hit_object:
                         object_class = hit_object["coarse_grained_class"]
                         objects_hit[object_class] += 1
-                        score += int(object_class in more_interesting_objects)
+                        score += int(object_class in self.more_interesting_objects)
                     score += 1
 
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for each object more/less, excluding floor, ceiling and walls
         scene_variance = len(objects_hit.keys()) / 3
         for object_hit in objects_hit.keys():
-            # For an object taking '3/4' of the scene, the scene_variance drops by multiplied by '1/4'
+            # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even distribution of the objects in the scene
             scene_variance *= 1 - objects_hit[object_hit] / num_of_rays
 
         score = scene_variance * (score / num_of_rays)
