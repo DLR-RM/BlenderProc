@@ -28,6 +28,15 @@
     {
       "name": "camera.SuncgCameraSampler",
       "config": {
+        "min_interest_score": 0.4,
+        "more_interesting_objects": [
+          "bed",
+          "chair",
+          "desk",
+          "kitchen_appliance",
+          "table",
+          "tv_stand""
+          ]
       }
     },
     {
