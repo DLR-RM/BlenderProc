@@ -103,7 +103,7 @@ class Renderer(Module):
         rl = tree.nodes.new('CompositorNodeRLayers')      
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
-        output_file.base_path = self.output_dir
+        output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
@@ -115,13 +115,10 @@ class Renderer(Module):
 
         :param default_prefix: The default prefix of the output files.
         """
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
-
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
-        bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
+        bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
 
         # Skip if there is nothing to render
         if bpy.context.scene.frame_end != bpy.context.scene.frame_start:
@@ -148,7 +145,7 @@ class Renderer(Module):
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
-                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
+                "path": os.path.join(self._determine_output_dir(), self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
                 "version": "2.0.0",
                 "stereo": use_stereo
             })

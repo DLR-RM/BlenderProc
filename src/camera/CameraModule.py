@@ -55,7 +55,7 @@ class CameraModule(Module):
         cam_pose.extend([cam.angle_x, cam.angle_y])
         # Room
         cam_pose.append(room_id)
-        np.save(os.path.join(self.output_dir, "campose_" + ("%04d" % frame)), cam_pose)
+        np.save(os.path.join(self._determine_output_dir(), "campose_" + ("%04d" % frame)), cam_pose)
 
     def _register_cam_pose_output(self):
         """ Registers the written cam pose files as an output """
