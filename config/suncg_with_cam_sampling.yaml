@@ -28,6 +28,15 @@
     {
       "name": "camera.SuncgCameraSampler",
       "config": {
+        "proximity_checks": {
+          "min": {
+            "min": 1.0
+          },
+          "avg": {
+            "min": 1.0,
+            "max": 4.0
+          }
+        }
       }
     },
     {

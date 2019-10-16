@@ -4,6 +4,7 @@ import bpy
 import bmesh
 import math
 import random
+import sys
 
 class CameraSampler(CameraModule):
     """ General class for a camera sampler. All common methods, attributes and initializations should be put here.
@@ -33,7 +34,9 @@ class CameraSampler(CameraModule):
             self.config.get_list("rotation_range_z", [])
         ]
         self.sqrt_number_of_rays = self.config.get_int("sqrt_number_of_rays", 10)
-        self.min_dist_to_obstacle = self.config.get_float("min_dist_to_obstacle", 1)
+
+        self.proximity_checks = self.config.get_raw_dict("proximity_checks", [])
+
         self.bvh_tree = None
 
     def _init_bvh_tree(self):
@@ -104,16 +107,65 @@ class CameraSampler(CameraModule):
         vec_x = frame[1] - frame[0]
         vec_y = frame[3] - frame[0]
 
+        sum = 0.0
+        sum_sq = 0.0
+
+        # Determine the ray range distance
+        max_dist_thresh = -1.0
+        min_dist_thresh = -1.0
+
+        for operator in self.proximity_checks:
+            if "max" in operator:
+                max_dist_thresh = max(max_dist_thresh, self.proximity_checks[operator]["max"])
+            elif "min" in operator:
+                min_dist_thresh = max(min_dist_thresh, self.proximity_checks[operator]["min"])
+
+        # If no max threshold specified
+        if max_dist_thresh == -1:
+            # Choose the largest min threshold as the ray range distance
+            range_distance = min_dist_thresh
+        else:
+            # Range distance should be the highest max threshold
+            range_distance = max_dist_thresh
+
         # Go in discrete grid-like steps over plane
         for x in range(0, self.sqrt_number_of_rays):
             for y in range(0, self.sqrt_number_of_rays):
                 # Compute current point on plane
                 end = frame[0] + vec_x * x / (self.sqrt_number_of_rays - 1) + vec_y * y / (self.sqrt_number_of_rays - 1)
                 # Send ray from the camera position through the current point on the plane
-                _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, self.min_dist_to_obstacle)
+                _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
 
                 # Check if something was hit and how far it is away
-                if dist is not None and dist <= self.min_dist_to_obstacle:
-                    return True
+                if "min" in self.proximity_checks:
+                    if dist is not None and dist <= self.proximity_checks["min"]["min"]:
+                        return True
+                if "max" in self.proximity_checks:
+                    if dist is not None and dist >= self.proximity_checks["max"]["max"]:
+                        return True
+                if "avg" in self.proximity_checks and dist is not None:
+                    sum += dist
+                if "var" in self.proximity_checks and dist is not None:
+                    if not "avg" in self.proximity_checks:
+                        sum += dist
+                    sum_sq += dist ** 2.0
+
+        if "avg" in self.proximity_checks:
+            avg = sum / (self.sqrt_number_of_rays ** 2.0)
+            # Check that the average distance is not within the accepted interval
+            if avg >= self.proximity_checks["avg"]["max"] or avg <= self.proximity_checks["avg"]["min"]:
+                return True
+
+        if "var" in self.proximity_checks:
+            if not "avg" in self.proximity_checks:
+                avg = sum / (self.sqrt_number_of_rays ** 2.0)
+            sq_avg = avg ** 2.0
+
+            avg_sq = sum_sq / (self.sqrt_number_of_rays ** 2.0)
+
+            var = avg_sq - sq_avg
+            # Check that the variance value of the distance is not within the accepted interval
+            if var >= self.proximity_checks["var"]["max"] or var <= self.proximity_checks["var"]["min"]:
+                return True
 
         return False
