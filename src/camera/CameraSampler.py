@@ -5,6 +5,7 @@ import bmesh
 import math
 import random
 import sys
+import numbers
 
 class CameraSampler(CameraModule):
     """ General class for a camera sampler. All common methods, attributes and initializations should be put here.
@@ -110,6 +111,16 @@ class CameraSampler(CameraModule):
         sum_sq = 0.0
 
         range_distance = sys.float_info.max
+
+        for operator in self.proximity_checks:
+            if (operator == "min" or operator == "max") and not isinstance(self.proximity_checks[operator], numbers.Number):
+                raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
+            if operator == "avg" or operator == "var":
+                if "min" not in self.proximity_checks[operator] or "max" not in self.proximity_checks[operator]:
+                    raise Exception("please specify the accepted interval for the avg and var operators in perform_obstacle_in_view_check")
+                if not isinstance(self.proximity_checks[operator]["min"], numbers.Number) or not isinstance(self.proximity_checks[operator]["max"], numbers.Number):
+                    raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
+
 
         # If there are no average or variance operators, we can decrease the ray range distance for efficiency
         if "avg" not in self.proximity_checks and "var" not in self.proximity_checks:
