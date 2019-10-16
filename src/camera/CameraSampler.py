@@ -16,8 +16,7 @@ class CameraSampler(CameraModule):
 
        "rotation_range_x, rotation_range_y, rotation_range_z", "The interval in which the angles should be sampled. The interval is specified as a list of two values (min and max value). The values should be specified in degree."
        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
-       "min_dist_to_obstacle", "The maximum distance to an obstacle allowed such that a sampled camera pose is still accepted."
-       "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0}
+       "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min. The operators are combined in conjunction (i.e boolean and).
     """
 
     def __init__(self, config):
@@ -90,7 +89,7 @@ class CameraSampler(CameraModule):
 
         return orientation
 
-    def _is_too_close_obstacle_in_view(self, cam, position, world_matrix):
+    def _perform_obstacle_in_view_check(self, cam, position, world_matrix):
         """ Check if there is an obstacle in front of the camera which is less than the configured "min_dist_to_obstacle" away from it.
 
         :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
@@ -116,9 +115,9 @@ class CameraSampler(CameraModule):
         if "avg" not in self.proximity_checks and "var" not in self.proximity_checks:
             if "max" in self.proximity_checks:
                 # Cap distance values at a value slightly higher than the max threshold
-                range_distance = self.proximity_checks["max"]["max"] + 1.0
+                range_distance = self.proximity_checks["max"] + 1.0
             else:
-                range_distance = self.proximity_checks["min"]["min"]
+                range_distance = self.proximity_checks["min"]
 
         # Go in discrete grid-like steps over plane
         for x in range(0, self.sqrt_number_of_rays):
@@ -129,35 +128,37 @@ class CameraSampler(CameraModule):
                 _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
 
                 # Check if something was hit and how far it is away
-                if "min" in self.proximity_checks:
-                    if dist is not None and dist <= self.proximity_checks["min"]["min"]:
-                        return True
-                if "max" in self.proximity_checks:
-                    if dist is not None and dist >= self.proximity_checks["max"]["max"]:
-                        return True
-                if "avg" in self.proximity_checks and dist is not None:
-                    sum += dist
-                if "var" in self.proximity_checks and dist is not None:
-                    if not "avg" in self.proximity_checks:
+                if dist is not None:
+                    if "min" in self.proximity_checks:
+                        pass
+                    if dist <= self.proximity_checks["min"]:
+                        return False
+                    if "max" in self.proximity_checks:
+                        if dist >= self.proximity_checks["max"]:
+                            return False
+                    if "avg" in self.proximity_checks:
                         sum += dist
-                    sum_sq += dist ** 2.0
+                    if "var" in self.proximity_checks:
+                        if not "avg" in self.proximity_checks:
+                            sum += dist
+                        sum_sq += dist * dist
 
         if "avg" in self.proximity_checks:
-            avg = sum / (self.sqrt_number_of_rays ** 2.0)
+            avg = sum / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
             # Check that the average distance is not within the accepted interval
             if avg >= self.proximity_checks["avg"]["max"] or avg <= self.proximity_checks["avg"]["min"]:
-                return True
+                return False
 
         if "var" in self.proximity_checks:
             if not "avg" in self.proximity_checks:
-                avg = sum / (self.sqrt_number_of_rays ** 2.0)
-            sq_avg = avg ** 2.0
+                avg = sum / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
+            sq_avg = avg * avg
 
-            avg_sq = sum_sq / (self.sqrt_number_of_rays ** 2.0)
+            avg_sq = sum_sq / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
 
             var = avg_sq - sq_avg
             # Check that the variance value of the distance is not within the accepted interval
             if var >= self.proximity_checks["var"]["max"] or var <= self.proximity_checks["var"]["min"]:
-                return True
+                return False
 
-        return False
+        return True

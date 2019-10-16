@@ -70,7 +70,7 @@ class SuncgCameraSampler(CameraSampler):
                     # Compute the world matrix of a cam with the given pose
                     world_matrix = mathutils.Matrix.Translation(mathutils.Vector(position)) @ mathutils.Euler(orientation, 'XYZ').to_matrix().to_4x4()
 
-                    if self._is_too_close_obstacle_in_view(cam, position, world_matrix):
+                    if self._perform_obstacle_in_view_check(cam, position, world_matrix):
                         continue
 
                     # Set the camera pose at the next frame
