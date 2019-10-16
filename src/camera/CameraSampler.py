@@ -4,6 +4,7 @@ import bpy
 import bmesh
 import math
 import random
+from collections import defaultdict
 
 class CameraSampler(CameraModule):
     """ General class for a camera sampler. All common methods, attributes and initializations should be put here.
@@ -112,3 +113,57 @@ class CameraSampler(CameraModule):
                     return True
 
         return False
+
+    def _scene_coverage_score(self, cam, position, world_matrix):
+        """ Evaluate the interestingness/coverage of the scene.
+
+        Least interesting objects: walls, ceilings, floors.
+
+        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
+        :param position: The camera position vector to check
+        :param world_matrix: The world matrix which describes the camera orientation to check.
+        :return: the scoring of the scene.
+        """
+
+        # Objects with double the normal score
+        more_interesting_objects = ["bed", "chair", "desk", "kitchen_appliance", "table", "tv_stand"]
+        num_of_rays = self.sqrt_number_of_rays * self.sqrt_number_of_rays
+        score = 0.0
+        scene_variance = 0.0
+        objects_hit = defaultdict(int)
+
+        # Get position of the corners of the near plane
+        frame = cam.view_frame(scene=bpy.context.scene)
+        # Bring to world space
+        frame = [world_matrix @ v for v in frame]
+
+        # Compute vectors along both sides of the plane
+        vec_x = frame[1] - frame[0]
+        vec_y = frame[3] - frame[0]
+
+        # Go in discrete grid-like steps over plane
+        for x in range(0, self.sqrt_number_of_rays):
+            for y in range(0, self.sqrt_number_of_rays):
+                # Compute current point on plane
+                end = frame[0] + vec_x * x / (self.sqrt_number_of_rays - 1) + vec_y * y / (self.sqrt_number_of_rays - 1)
+                # Send ray from the camera position through the current point on the plane
+
+                hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, end - position)
+
+                # calculate the score based on the type of the object, wall, floor and ceiling objects have 0 score
+                if hit and "type" in hit_object and hit_object["type"] == "Object":
+                    if "coarse_grained_class" in hit_object:
+                        object_class = hit_object["coarse_grained_class"]
+                        objects_hit[object_class] += 1
+                        if object_class in more_interesting_objects:
+                            score += 1
+                    score += 1
+
+        # Huge penalty if the scene has less than three objects, excluding floor, ceiling and walls
+        scene_variance = len(objects_hit.keys()) / 3
+        for object_hit in objects_hit.keys():
+            # E.g. a an object is taking 3/4 of the scene, scene variance drops by multiplied by 1/4
+            scene_variance *= 1 - objects_hit[object_hit] / num_of_rays
+
+        score = scene_variance * (score / num_of_rays)
+        return score

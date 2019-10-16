@@ -30,6 +30,7 @@ class SuncgCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
+        self.min_interestingness = self.config.get_float("min_interestingness", 0.3)
         self.position_ranges = [
             self.config.get_list("position_range_x", []),
             self.config.get_list("position_range_y", []),
@@ -77,6 +78,9 @@ class SuncgCameraSampler(CameraSampler):
                     world_matrix = mathutils.Matrix.Translation(mathutils.Vector(position)) @ mathutils.Euler(orientation, 'XYZ').to_matrix().to_4x4()
 
                     if self._is_too_close_obstacle_in_view(cam, position, world_matrix):
+                        continue
+
+                    if self._scene_coverage_score(cam, position, world_matrix) < self.min_interestingness:
                         continue
 
                     # Set the camera pose at the next frame
