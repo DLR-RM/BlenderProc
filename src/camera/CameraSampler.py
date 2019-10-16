@@ -17,7 +17,7 @@ class CameraSampler(CameraModule):
        "rotation_range_x, rotation_range_y, rotation_range_z", "The interval in which the angles should be sampled. The interval is specified as a list of two values (min and max value). The values should be specified in degree."
        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
        "min_dist_to_obstacle", "The maximum distance to an obstacle allowed such that a sampled camera pose is still accepted."
-
+       "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0}
     """
 
     def __init__(self, config):
@@ -110,23 +110,15 @@ class CameraSampler(CameraModule):
         sum = 0.0
         sum_sq = 0.0
 
-        # Determine the ray range distance
-        max_dist_thresh = -1.0
-        min_dist_thresh = -1.0
+        range_distance = sys.float_info.max
 
-        for operator in self.proximity_checks:
-            if "max" in operator:
-                max_dist_thresh = max(max_dist_thresh, self.proximity_checks[operator]["max"])
-            elif "min" in operator:
-                min_dist_thresh = max(min_dist_thresh, self.proximity_checks[operator]["min"])
-
-        # If no max threshold specified
-        if max_dist_thresh == -1:
-            # Choose the largest min threshold as the ray range distance
-            range_distance = min_dist_thresh
-        else:
-            # Range distance should be the highest max threshold
-            range_distance = max_dist_thresh
+        # If there are no average or variance operators, we can decrease the ray range distance for efficiency
+        if "avg" not in self.proximity_checks and "var" not in self.proximity_checks:
+            if "max" in self.proximity_checks:
+                # Cap distance values at a value slightly higher than the max threshold
+                range_distance = self.proximity_checks["max"]["max"] + 1.0
+            else:
+                range_distance = self.proximity_checks["min"]["min"]
 
         # Go in discrete grid-like steps over plane
         for x in range(0, self.sqrt_number_of_rays):
