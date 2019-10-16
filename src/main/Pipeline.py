@@ -5,11 +5,12 @@ import bpy
 
 class Pipeline:
 
-    def __init__(self, config_path, args, working_dir):
+    def __init__(self, config_path, args, working_dir, should_perform_clean_up=True):
         Utility.working_dir = working_dir
 
         # Clean up example scene or scene created by last run when debugging pipeline inside blender
-        self._cleanup()
+        if should_perform_clean_up:
+            self._cleanup()
 
         config_parser = ConfigParser(silent=True)
         config = config_parser.parse(Utility.resolve_path(config_path), args)

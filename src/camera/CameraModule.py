@@ -26,7 +26,7 @@ class CameraModule(Module):
             cam_pose.extend(convertToSuncg(cam_ob.location[:]))
             # convert euler angle to a direction vector
             rot_mat = cam_ob.rotation_euler.to_matrix()
-            towards = rot_mat @ mathutils.Vector([0,0,1])
+            towards = rot_mat @ mathutils.Vector([0,0,-1])
             cam_pose.extend(convertToSuncg(towards))
             up = rot_mat @ mathutils.Vector([0,1,0])
             cam_pose.extend(convertToSuncg(up))

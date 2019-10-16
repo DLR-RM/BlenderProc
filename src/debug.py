@@ -32,7 +32,7 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
-    pipeline = Pipeline(config_path, [], working_dir)
+    pipeline = Pipeline(config_path, [], working_dir, should_perform_clean_up=False)
     pipeline.run()
 finally:
     # Revert back to previous view

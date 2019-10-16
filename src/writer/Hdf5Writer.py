@@ -27,8 +27,12 @@ class Hdf5Writer(Module):
             hdf5_path = os.path.join(output_dir, str(frame) + ".hdf5")
             with h5py.File(hdf5_path, "w") as f:
 
+                if 'output' not in bpy.context.scene:
+                    print("No output was designed in prior models!")
+                    return
                 # Go through all the output types
                 print("Merging data for frame " + str(frame) + " into " + hdf5_path)
+
                 for output_type in bpy.context.scene["output"]:
 
                     # Build path (path attribute is format string)
