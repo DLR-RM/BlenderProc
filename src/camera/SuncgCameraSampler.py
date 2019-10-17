@@ -28,7 +28,7 @@ class SuncgCameraSampler(CameraSampler):
        "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera."
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
-       "special_objects_weight", "Weighting factor for more spectial objects, used to estimate the interestingness of the scene."
+       "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
     """
     def __init__(self, config):
         CameraSampler.__init__(self, config)
