@@ -1,4 +1,5 @@
 import math
+from collections import defaultdict
 
 import bpy
 import mathutils
@@ -25,11 +26,18 @@ class SuncgCameraSampler(CameraSampler):
        "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera."
        "resolution_y", "The resolution of the camera in y-direction.Necessary when checking, if there are obstacles in front of the camera."
        "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera."
+       "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
+       "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
+       "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
     """
     def __init__(self, config):
         CameraSampler.__init__(self, config)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
+        self.min_interest_score = self.config.get_float("min_interest_score", 0.3)
+        self.special_objects = self.config.get_list("special_objects", [])
+        self.special_objects_weight = self.config.get_float("special_objects_weight", 2)
+
         self.position_ranges = [
             self.config.get_list("position_range_x", []),
             self.config.get_list("position_range_y", []),
@@ -77,6 +85,9 @@ class SuncgCameraSampler(CameraSampler):
                     world_matrix = mathutils.Matrix.Translation(mathutils.Vector(position)) @ mathutils.Euler(orientation, 'XYZ').to_matrix().to_4x4()
 
                     if self._is_too_close_obstacle_in_view(cam, position, world_matrix):
+                        continue
+
+                    if self._scene_coverage_score(cam, position, world_matrix) < self.min_interest_score:
                         continue
 
                     # Set the camera pose at the next frame
@@ -148,3 +159,55 @@ class SuncgCameraSampler(CameraSampler):
         """
 
         return self._position_is_above_object(position, floor_obj)
+
+    def _scene_coverage_score(self, cam, position, world_matrix):
+        """ Evaluate the interestingness/coverage of the scene.
+
+        Least interesting objects: walls, ceilings, floors.
+
+        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
+        :param position: The camera position vector to check
+        :param world_matrix: The world matrix which describes the camera orientation to check.
+        :return: the scoring of the scene.
+        """
+
+        num_of_rays = self.sqrt_number_of_rays * self.sqrt_number_of_rays
+        score = 0.0
+        scene_variance = 0.0
+        objects_hit = defaultdict(int)
+
+        # Get position of the corners of the near plane
+        frame = cam.view_frame(scene=bpy.context.scene)
+        # Bring to world space
+        frame = [world_matrix @ v for v in frame]
+
+        # Compute vectors along both sides of the plane
+        vec_x = frame[1] - frame[0]
+        vec_y = frame[3] - frame[0]
+
+        # Go in discrete grid-like steps over plane
+        for x in range(0, self.sqrt_number_of_rays):
+            for y in range(0, self.sqrt_number_of_rays):
+                # Compute current point on plane
+                end = frame[0] + vec_x * x / float(self.sqrt_number_of_rays - 1) + vec_y * y / float(self.sqrt_number_of_rays - 1)
+                # Send ray from the camera position through the current point on the plane
+
+                hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, end - position)
+
+                # calculate the score based on the type of the object, wall, floor and ceiling objects have 0 score
+                if hit and "type" in hit_object and hit_object["type"] == "Object":
+                    if "coarse_grained_class" in hit_object:
+                        object_class = hit_object["coarse_grained_class"]
+                        objects_hit[object_class] += 1
+                        score += (int(object_class in self.special_objects) * self.special_objects_weight)
+                    else:
+                        score += 1
+
+        # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for each object more/less, excluding floor, ceiling and walls
+        scene_variance = len(objects_hit.keys()) / 3
+        for object_hit in objects_hit.keys():
+            # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even distribution of the objects in the scene
+            scene_variance *= 1 - objects_hit[object_hit] / num_of_rays
+
+        score = scene_variance * (score / num_of_rays)
+        return score
