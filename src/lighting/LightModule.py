@@ -13,7 +13,8 @@ class LightModule(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "default_source_param", "A dict which can be used to specify properties across all light sources. See the next table for which properties can be set."
+       "default_source_settings", "A dict that contains Blender'\s default parameters of a light source."
+       "cross_source_settings", "A dict which can be used to specify properties across all light sources. See the next table for which properties can be set."
 
     **Properties per lights entry**:
 
@@ -30,13 +31,13 @@ class LightModule(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
-        # Settings of a default llight source, can be partially rewrited by default_source_param section of the configuration file
+        # Settings of a default light source
         self.default_source_settings = {
             "location": [5, -5, 5],
             "color": [1, 1, 1],
-            "energy": 1000,
-            "type": 'POINT'
-            #"distance": 100
+            "energy": 10,
+            "type": 'POINT',
+            "distance": 100
         }
         self.cross_source_settings = self.config.get_raw_dict("cross_source_settings", {})
 
@@ -72,7 +73,7 @@ class LightModule(Module):
         # Check if value is a list, if not - make it a list
         if not isinstance(value, list):
             value = [value]
-        
+
         if attribute_name == 'type':
             # Type of a light source
             light_data.type = value[0]
@@ -94,7 +95,7 @@ class LightModule(Module):
             # Skip
             pass
         else:
-            raise Exception("Unknown attribute: " + attribute_name + str(value))
+            raise Exception("Unknown attribute: " + attribute_name)
 
     def _length_of_attribute(self, attribute, length_dict):
         """ Returns how many arguments the given attribute expects.
