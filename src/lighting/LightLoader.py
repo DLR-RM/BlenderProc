@@ -33,17 +33,17 @@ class LightLoader(LightModule):
             "type": 1
         }
         # Length of the entry line yet to be extracted from a separate file based on the file_format section of the configuration file
-        self.file_format_length = sum([self._length_of_attribute(attribute) for attribute in self.file_format])
+        self.file_format_length = sum([self._length_of_attribute(attribute, self.light_source_attribute_length) for attribute in self.file_format])
 
     def run(self):
-        """ Sets light sources.
+        """ Sets light sources from config and loads them from file.
         
         """		
         # Add a light source as specified in the config file
         source_specs = self.config.get_list("lights", [])
         for i, source_spec in enumerate(source_specs):
             # Create light data, link it to the new object
-            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_specs["type"])
+            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_settings["type"])
             light_obj = bpy.data.objects.new(name="light_" + str(i), object_data=light_data)
             # Set default light source
             self._init_default_light_source(light_data, light_obj)
@@ -55,12 +55,12 @@ class LightLoader(LightModule):
         # Add a light source as specified in a separate file
         for source_spec in self._collect_source_specs_from_file(path):
             # Create light data, link it to the new object
-            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_specs["type"])
+            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_settings["type"])
             light_obj = bpy.data.objects.new(name="light_" + str(i), object_data=light_data)
             # Set default light source
             self._init_default_light_source(light_data, light_obj)
             # Configure default light source
-            self._set_light_source_from_file(light_data, light_obj, source_spec)
+            self._set_light_source_from_config(light_data, light_obj, source_spec)
             bpy.context.collection.objects.link(light_obj)
 
     def _collect_source_specs_from_file(self, path):
@@ -83,7 +83,7 @@ class LightLoader(LightModule):
                         raise Exception("A line in the given light source specifications file does not match the configured file format:\n" + line.strip() + " (Number of values: " + str(len(source_specs_entry)) + ")\n" + str(self.file_format) + " (Number of values: " + str(self.file_format_length) + ")")
                     # Check it type of the light source was specified
                     if "type" in self.file_format:
-                        idx = sum([self._length_of_attribute(attribute) for attribute in self.file_format[0:self.file_format.index('type')]])
+                        idx = sum([self._length_of_attribute(attribute, self.light_source_attribute_length) for attribute in self.file_format[0:self.file_format.index('type')]])
                         source_specs.append([float(x) if source_specs_entry.index(x) is not idx else x for x in source_specs_entry])
                     else:
                         source_specs.append([float(x) for x in source_specs_entry])
@@ -98,18 +98,6 @@ class LightLoader(LightModule):
         """
         # Go throught all configured attrubutes, set current one using N next argument
         for attribute in self.file_format:
-            self._set_attribute(light_data, light_obj, attribute, source_specs[:self._length_of_attribute(attribute)])
-            source_specs = source_specs[self._length_of_attribute(attribute):]
-
-    def _length_of_attribute(self, attribute):
-        """ Returns how many arguments the given attribute expects.
-
-        :param attribute: The name of the attribute
-        :return: The expected number of arguments
-		"""
-        # If not set, return 1
-        if attribute in self.light_source_attribute_length:
-            return self.light_source_attribute_length[attribute]
-        else:
-            return 1
+            self._set_attribute(light_data, light_obj, attribute, source_specs[:self._length_of_attribute(attribute, self.light_source_attribute_length)])
+            source_specs = source_specs[self._length_of_attribute(attribute, self.light_source_attribute_length):]
 

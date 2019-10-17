@@ -31,13 +31,14 @@ class LightModule(Module):
     def __init__(self, config):
         Module.__init__(self, config)
         # Settings of a default llight source, can be partially rewrited by default_source_param section of the configuration file
-        self.default_source_specs = {
+        self.default_source_settings = {
             "location": [5, -5, 5],
             "color": [1, 1, 1],
             "energy": 1000,
             "type": 'POINT'
             #"distance": 100
         }
+        self.cross_source_settings = self.config.get_raw_dict("cross_source_settings", {})
 
     def _init_default_light_source(self, light_data, light_obj):
         """ Sets a light source using the default parameters.
@@ -46,7 +47,7 @@ class LightModule(Module):
         :param light_obj: The object linked to the light source for purpose of general properties determining.	
         """
         # Overwrite default settings with user\'s settings specified in default_source_param section of the configuration file
-        config = Utility.merge_dicts(self.config.get_raw_dict("default_source_param", {}), self.default_source_specs)
+        config = Utility.merge_dicts(self.cross_source_settings, self.default_source_settings)
         self._set_light_source_from_config(light_data, light_obj, config)
 
     def _set_light_source_from_config(self, light_data, light_obj, source_specs):
@@ -64,7 +65,7 @@ class LightModule(Module):
         """ Sets the value of a given attribute.
         
         :param light_data: Light source containing light-specific attributes.
-        :param light_obj: The object linked to the light source for porposes of general properties determining.	
+        :param light_obj: The object linked to the light source for purposes of general properties determining.	
         :attribute_name: The name of an attribute to be changed.
         :param value: The value to set.
         """
@@ -93,5 +94,18 @@ class LightModule(Module):
             # Skip
             pass
         else:
-            raise Exception("Unknown attribute: " + attribute_name)
+            raise Exception("Unknown attribute: " + attribute_name + str(value))
+
+    def _length_of_attribute(self, attribute, length_dict):
+        """ Returns how many arguments the given attribute expects.
+
+        :param attribute: The name of the attribute
+        :param length_dict: Dict where {key:value} pairs are {name of the attrubute:expected length of an attribute} pairs.
+        :return: The expected number of arguments
+		"""
+        # If not set, return 1
+        if attribute in length_dict:
+            return length_dict[attribute]
+        else:
+            return 1
 
