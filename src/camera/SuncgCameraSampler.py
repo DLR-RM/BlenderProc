@@ -26,14 +26,18 @@ class SuncgCameraSampler(CameraSampler):
        "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera."
        "resolution_y", "The resolution of the camera in y-direction.Necessary when checking, if there are obstacles in front of the camera."
        "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera."
-       "more_interesting_objects", "Objects with double the normal score, used in evaluating scene coverage."
+       "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
+       "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
+       "special_objects_weight", "Weighting factor for more spectial objects, used to estimate the interestingness of the scene."
     """
     def __init__(self, config):
         CameraSampler.__init__(self, config)
         self.cams_per_square_meter = self.config.get_float("cams_per_square_meter", 0.5)
         self.max_tries_per_room = self.config.get_int("max_tries_per_room", 10000)
         self.min_interest_score = self.config.get_float("min_interest_score", 0.3)
-        self.more_interesting_objects = self.config.get_list("more_interesting_objects", [])
+        self.special_objects = self.config.get_list("special_objects", [])
+        self.special_objects_weight = self.config.get_float("special_objects_weight", 2)
+
         self.position_ranges = [
             self.config.get_list("position_range_x", []),
             self.config.get_list("position_range_y", []),
@@ -195,8 +199,9 @@ class SuncgCameraSampler(CameraSampler):
                     if "coarse_grained_class" in hit_object:
                         object_class = hit_object["coarse_grained_class"]
                         objects_hit[object_class] += 1
-                        score += int(object_class in self.more_interesting_objects)
-                    score += 1
+                        score += (int(object_class in self.special_objects) * self.special_objects_weight)
+                    else:
+                        score += 1
 
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for each object more/less, excluding floor, ceiling and walls
         scene_variance = len(objects_hit.keys()) / 3
