@@ -43,7 +43,7 @@ class LightLoader(LightModule):
         source_specs = self.config.get_list("lights", [])
         for i, source_spec in enumerate(source_specs):
             # Create light data, link it to the new object
-            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_settings["type"])
+            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.fallback_settings["type"])
             light_obj = bpy.data.objects.new(name="light_" + str(i), object_data=light_data)
             # Set default light source
             self._init_default_light_source(light_data, light_obj)
@@ -55,7 +55,7 @@ class LightLoader(LightModule):
         # Add a light source as specified in a separate file
         for source_spec in self._collect_source_specs_from_file(path):
             # Create light data, link it to the new object
-            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_settings["type"])
+            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.fallback_settings["type"])
             light_obj = bpy.data.objects.new(name="light_" + str(i), object_data=light_data)
             # Set default light source
             self._init_default_light_source(light_data, light_obj)
@@ -83,7 +83,8 @@ class LightLoader(LightModule):
                         raise Exception("A line in the given light source specifications file does not match the configured file format:\n" + line.strip() + " (Number of values: " + str(len(source_specs_entry)) + ")\n" + str(self.file_format) + " (Number of values: " + str(self.file_format_length) + ")")
                     # Check it type of the light source was specified
                     if "type" in self.file_format:
-                        idx = sum([self._length_of_attribute(attribute, self.light_source_attribute_length) for attribute in self.file_format[0:self.file_format.index('type')]])
+                        attr_before_type = self.file_format[0:self.file_format.index('type')]
+                        idx = sum([self._length_of_attribute(attribute, self.light_source_attribute_length) for attribute in attr_before_type])
                         source_specs.append([float(x) if source_specs_entry.index(x) is not idx else x for x in source_specs_entry])
                     else:
                         source_specs.append([float(x) for x in source_specs_entry])

@@ -13,7 +13,6 @@ class LightModule(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "default_source_settings", "A dict that contains Blender'\s default parameters of a light source."
        "cross_source_settings", "A dict which can be used to specify properties across all light sources. See the next table for which properties can be set."
 
     **Properties per lights entry**:
@@ -31,13 +30,13 @@ class LightModule(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
-        # Settings of a default light source
-        self.default_source_settings = {
-            "location": [5, -5, 5],
+        # Default settings used by Blender, used for initializing a default light source.
+        self.fallback_settings = {
+            "location": [0, 0, 0],
             "color": [1, 1, 1],
             "energy": 10,
             "type": 'POINT',
-            "distance": 100
+            "distance": 0
         }
         self.cross_source_settings = self.config.get_raw_dict("cross_source_settings", {})
 
@@ -48,7 +47,7 @@ class LightModule(Module):
         :param light_obj: The object linked to the light source for purpose of general properties determining.	
         """
         # Overwrite default settings with user\'s settings specified in default_source_param section of the configuration file
-        config = Utility.merge_dicts(self.cross_source_settings, self.default_source_settings)
+        config = Utility.merge_dicts(self.cross_source_settings, self.fallback_settings)
         self._set_light_source_from_config(light_data, light_obj, config)
 
     def _set_light_source_from_config(self, light_data, light_obj, source_specs):
@@ -108,5 +107,5 @@ class LightModule(Module):
         if attribute in length_dict:
             return length_dict[attribute]
         else:
-            return 1
+            return 0
 

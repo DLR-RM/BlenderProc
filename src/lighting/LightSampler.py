@@ -12,12 +12,12 @@ class LightSampler(LightModule):
     """ Samples light source\'s settings and sets them.
     
     **Configuration**:
-    
+
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "known_sampling_methods", "A dict that where {key:value} pairs are {known sampling method:expected amount of parameters for this sampling method}."
-
+       "path", "A path to a file where values used for setting a ligt source(s) (like position, type, color, etc.) are written, onelight source per line."
+    
     **Properties per sampling method**:
 
     .. csv-table::
@@ -30,7 +30,9 @@ class LightSampler(LightModule):
     def __init__(self, config):
         LightModule.__init__(self, config)
         self.known_sampling_methods = {
+            # type: BoundingBoxSampler, values : ([min_x, min_y, min_z], [max_x, max_y, max_z]) (6 in total)
             "BoundingBoxSampler": 6,
+            # type: SphereSampler, values: ([point_x, point_y, point_z], radius) (4 in total)
             "SphereSampler": 4
         }
 
@@ -42,7 +44,7 @@ class LightSampler(LightModule):
         source_specs = self.config.get_list("lights", [])
         for i, source_spec in enumerate(source_specs): 
             # Create light data, link it to the new object
-            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.default_source_settings["type"])
+            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.fallback_settings["type"])
             light_obj = bpy.data.objects.new(name="light_" + str(i), object_data=light_data) 
             # Set default light source
             self._init_default_light_source(light_data, light_obj)
@@ -80,12 +82,16 @@ class LightSampler(LightModule):
 
                         if value['type'] == 'BoundingBoxSampler':
                             # Use BoundingBoxSampler
-                            result = list(BoundingBoxSampler.sample(mathutils.Vector((sampling_params[0], sampling_params[1], sampling_params[2])), mathutils.Vector((sampling_params[3], sampling_params[4], sampling_params[5]))))
+                            box_min = mathutils.Vector((sampling_params[0], sampling_params[1], sampling_params[2]))
+                            box_max = mathutils.Vector((sampling_params[3], sampling_params[4], sampling_params[5]))
+                            result = list(BoundingBoxSampler.sample(box_min, box_max))
                             # Update output dict
                             sampled_settings.update({attribute_name : result})
                         elif value['type'] == 'SphereSampler':
                             # Use SphereSampler
-                            result = list(SphereSampler.sample(mathutils.Vector((sampling_params[0], sampling_params[1], sampling_params[2])), sampling_params[3]))
+                            sphere_center = mathutils.Vector((sampling_params[0], sampling_params[1], sampling_params[2]))
+                            radius = sampling_params[3]
+                            result = list(SphereSampler.sample(sphere_center, radius))
                             # Update output dict
                             sampled_settings.update({attribute_name : result})
                     else:
@@ -106,12 +112,14 @@ class LightSampler(LightModule):
         :param path: Path to output file specified in the configuration file.
         """
         line = ""
+        # Merge processed cross-source settings into fallback settings
+        used_def_settings = Utility.merge_dicts(self.cross_source_settings, self.fallback_settings)
         # Sort merged source specific and cross source settings alphabetically
-        settings_to_write = sorted(Utility.merge_dicts(sampled_settings, self.cross_source_settings).items(), key=lambda x: x[0])
+        settings_to_write = sorted(Utility.merge_dicts(sampled_settings, used_def_settings).items(), key=lambda x: x[0])
         with open(Utility.resolve_path(path), 'a') as f:
             for item, value in settings_to_write:
                 if not isinstance(value, list):
                     value = [value]
-                line = line + " ".join(str(x) for x in value) + " "
+                line +=" ".join(str(x) for x in value) + " "
             f.write('%s \n' % line)
     
