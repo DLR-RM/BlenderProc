@@ -17,7 +17,7 @@ class LightLoader(LightModule):
     
        "lights", "A list of dicts, where each entry describes one light. See next table for which properties can be used."
        "path", "Optionally, a path to a file which specifies one light source position, type, etc. per line. The lines has to be formatted as specified in 'file_format'."
-       "file_format", "file_format", "A string which specifies how each line of the given file is formatted. The string should contain the keywords of the corresponding properties separated by a space. See LightModule for allowed properties."
+       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain the keywords of the corresponding properties separated by a space. See LightModule for allowed properties."
     """
 
     def __init__(self, config):
@@ -71,7 +71,7 @@ class LightLoader(LightModule):
         :param path: The path to the file
         :return: A list of lists of arguments
         """
-        source_specs = [];
+        source_specs = []
         if path != "":
             with open(Utility.resolve_path(path)) as f:
                 lines = f.readlines()
