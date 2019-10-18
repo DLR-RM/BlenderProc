@@ -103,7 +103,7 @@ class LightModule(Module):
         :param length_dict: Dict where {key:value} pairs are {name of the attrubute:expected length of an attribute} pairs.
         :return: The expected number of arguments
 		"""
-        # If not set, return 1
+        # If not set, return 0
         if attribute in length_dict:
             return length_dict[attribute]
         else:
