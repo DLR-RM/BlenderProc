@@ -1,4 +1,4 @@
-// Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -58,7 +58,8 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-	"samples": 255
+        "samples": 255,
+        "stereo": true
       }
     },
     {

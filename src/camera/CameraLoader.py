@@ -1,5 +1,4 @@
 from src.camera.CameraModule import CameraModule
-from src.main.Module import Module
 import mathutils
 import bpy
 
@@ -7,6 +6,19 @@ from src.utility.Utility import Utility
 
 
 class CameraLoader(CameraModule):
+    """ Loads camera poses from the configuration and sets them as separate keypoints.
+
+    Camera poses can be specified either directly inside a the config or in an extra file.
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See the next table for which properties can be set."
+       "path", "Optionally, a path to a file which specifies one camera position per line. The lines has to be formatted as specified in 'file_format'."
+       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain the keywords of the corresponding properties separated by a space. See next table for allowed properties."
+    """
 
     def __init__(self, config):
         CameraModule.__init__(self, config)
@@ -18,19 +30,14 @@ class CameraLoader(CameraModule):
             "rotation_forward_vector": 3
         }
         self.file_format_length = sum([self._length_of_attribute(attribute) for attribute in self.file_format])
-        self.source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
 
     def run(self):
-        """ Loads camera poses from the configuration and sets them as separate keypoints.
-
-        Camera poses can be specified either directly inside a the config or in an extra file.
-        """
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        # Start with next frame
-        frame_id = bpy.context.scene.frame_end + 1
+        # Start with frame_end which points to the next free frame
+        frame_id = bpy.context.scene.frame_end
 
         # Add cam poses configured in the config
         cam_poses = self.config.get_list("cam_poses", [])
@@ -60,31 +67,9 @@ class CameraLoader(CameraModule):
             self._write_cam_pose_to_file(frame_id, cam, cam_ob)
             frame_id += 1
 
-        # Set frame end to the last written frame
-        bpy.context.scene.frame_end = frame_id - 1
-        # Make sure frame_start is 1 (By setting frame_end to 0 in the Initializer module, blender also sets frame_start to 0)
-        bpy.context.scene.frame_start = 1
+        # Set frame end to the next free frame
+        bpy.context.scene.frame_end = frame_id
         self._register_cam_pose_output()
-
-    def _initialize_cam_pose(self, cam, cam_ob):
-        """ Sets the attributes of the given camera to the configured default parameters.
-
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        """
-        # Default attribute values (same as default values in blender)
-        base_config = {
-            "fov": 0.691111,
-            "clip_start": 0.1,
-            "clip_end": 1000
-        }
-        # Overwrite default attribute values with configured default parameters
-        config = Utility.merge_dicts(self.config.get_raw_dict("default_cam_param", {}), base_config)
-
-        # Make sure we use FOV
-        cam.lens_unit = 'FOV'
-        # Set camera attributes
-        self._set_cam_from_config(cam, cam_ob, config)
 
     def _set_cam_from_file_args(self, cam, cam_ob, cam_args):
         """ Sets the camera parameters based on the arguments specified in one line of the configured file.
@@ -126,17 +111,6 @@ class CameraLoader(CameraModule):
 
         return cam_poses
 
-    def _set_cam_from_config(self, cam, cam_ob, config):
-        """ Sets cam attributes based on the given config dict.
-
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        :param config: A dict where the key is the attribute name and the value is the value to set this attribute to.
-        """
-        # Go through all key/value pairs of the given dict and set the corresponding attributes
-        for attribute_name, value in config.items():
-            self._set_attribute(cam, cam_ob, attribute_name, value)
-
     def _length_of_attribute(self, attribute):
         """ Returns, how many arguments the given attribute expects.
 
@@ -149,47 +123,6 @@ class CameraLoader(CameraModule):
         else:
             return 1
 
-    def _set_attribute(self, cam, cam_ob, attribute_name, value):
-        """ Sets the value of the given attribute.
-
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        :param attribute_name: The name of the attribute to change.
-        :param value: The value to set.
-        """
-        # Make sure value is always a list
-        if not isinstance(value, list):
-            value = [value]
-
-        if attribute_name == "fov":
-            # The full FOV (angle between both sides of the frustum)
-            cam.angle = value[0]
-        elif attribute_name == "fov_half":
-            # FOV is sometimes also given as the angle between forward vector and one side of the frustum
-            cam.angle = value[0] * 2
-        elif attribute_name == "clip_start":
-            # Near clipping
-            cam.clip_start = value[0]
-        elif attribute_name == "clip_end":
-            # Far clipping
-            cam.clip_end = value[0]
-        elif attribute_name == "location":
-            # Position (x,y,z)
-            cam_ob.location = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
-        elif attribute_name == "rotation_euler":
-            # Rotation, specified as euler angles
-            cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
-        elif attribute_name == "rotation_forward_vector":
-            # Rotation, specified as forward vector
-            forward_vec = mathutils.Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
-            # Convert forward vector to euler angle (Assume Up = Z)
-            cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
-        elif attribute_name == "_":
-            # Just skip this argument
-            pass
-        else:
-            raise Exception("No such attribute: " + attribute_name)
-
     def _insert_key_frames(self, cam, cam_ob, frame_id):
         """ Insert key frames for all relevant camera attributes.
 
@@ -201,4 +134,3 @@ class CameraLoader(CameraModule):
         cam.keyframe_insert(data_path='clip_end', frame=frame_id)
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
-

@@ -10,6 +10,20 @@ from src.utility.Utility import Utility
 
 
 class SuncgLoader(Module):
+    """ Loads a house.json file into blender.
+
+     - Loads all objects files specified in the house.json file.
+     - Orders them hierarchically (level -> room -> object)
+     - Writes metadata into the custom properties of each object
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "path", "The path to the house.json file which should be loaded."
+       "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures etc."
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -17,13 +31,6 @@ class SuncgLoader(Module):
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
 
     def run(self):
-        """ Loads a house.json file into blender.
-
-         - Loads all objects files specified in the house.json file.
-         - Orders them hierarchically (level -> room -> object)
-         - Writes metadata into the custom properties of each object
-
-        """
         with open(Utility.resolve_path(self.house_path), "r") as f:
             config = json.load(f)
 
@@ -55,6 +62,7 @@ class SuncgLoader(Module):
 
                     if node["modelId"] in self.object_fine_grained_label_map:
                         metadata["fine_grained_class"] = self.object_fine_grained_label_map[node["modelId"]]
+                        metadata["coarse_grained_class"] = self.object_coarse_grained_label_map[node["modelId"]]
                         metadata["category_id"] = self._get_label_id(node["modelId"])
 
                 if "bbox" in node:
@@ -334,7 +342,8 @@ class SuncgLoader(Module):
         self.labels = set()     
         self.windows = []       
         self.object_label_map = {}      
-        self.object_fine_grained_label_map = {}     
+        self.object_fine_grained_label_map = {}
+        self.object_coarse_grained_label_map = {}          
         self.label_index_map = {}       
         
         with open(Utility.resolve_path(path), 'r') as csvfile:      
@@ -343,6 +352,7 @@ class SuncgLoader(Module):
                 self.labels.add(row["nyuv2_40class"])       
                 self.object_label_map[row["model_id"]] = row["nyuv2_40class"]       
                 self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]     
+                self.object_coarse_grained_label_map[row["model_id"]] = row["coarse_grained_class"]     
         
         self.labels = sorted(list(self.labels))
         bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)

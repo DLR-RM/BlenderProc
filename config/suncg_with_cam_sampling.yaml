@@ -1,4 +1,4 @@
-// Args: <obj_file> <output_dir>
+# Args: <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -28,7 +28,17 @@
     {
       "name": "camera.SuncgCameraSampler",
       "config": {
-      }
+        "min_interest_score": 0.4,
+        "special_objects": [
+            "bed",
+            "chair",
+            "desk",
+            "kitchen_appliance",
+            "table",
+            "tv_stand"
+           ],
+        "special_objects_weight": "2"
+      },
     },
     {
       "name": "materials.SuncgMaterials",

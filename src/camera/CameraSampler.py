@@ -4,23 +4,24 @@ import bpy
 import bmesh
 import math
 import random
-import numpy as np
-import os
 
 class CameraSampler(CameraModule):
+    """ General class for a camera sampler. All common methods, attributes and initializations should be put here.
 
-    """
-    General class for a camera sampler. All common methods, attributes and initializations should be put here.
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "rotation_range_x, rotation_range_y, rotation_range_z", "The interval in which the angles should be sampled. The interval is specified as a list of two values (min and max value). The values should be specified in degree."
+       "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
+       "min_dist_to_obstacle", "The maximum distance to an obstacle allowed such that a sampled camera pose is still accepted."
+
     """
 
     def __init__(self, config):
         CameraModule.__init__(self, config)
 
-        self.position_ranges = [
-            self.config.get_list("positon_range_x", []),
-            self.config.get_list("positon_range_y", []),
-            self.config.get_list("positon_range_z", [1.4, 1.4])
-        ]
         self.rotation_ranges = [
             self.config.get_list("rotation_range_x", [90, 90]),
             self.config.get_list("rotation_range_y", [0, 0]),

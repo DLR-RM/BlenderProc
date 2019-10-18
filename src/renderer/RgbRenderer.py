@@ -5,15 +5,14 @@ from src.utility.Utility import Utility
 
 
 class RgbRenderer(Renderer):
+    """ Renders rgb images for each registered keypoint.
 
+    Images are stored as PNG-files with 8bit color depth.
+    """
     def __init__(self, config):
         Renderer.__init__(self, config)
 
     def run(self):
-        """ Renders rgb images for each registered keypoint.
-
-        Images are stored as PNG-files with 8bit color depth.
-        """
         with Utility.UndoAfterExecution():
             self._configure_renderer()
 

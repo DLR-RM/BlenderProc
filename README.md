@@ -1,17 +1,17 @@
-# Blender-Pipeline
-A blender pipeline to generate images for deep learning
+# BlenderProc
+A procedural blender pipeline to generate images for deep learning
 
 
 ## General
 
 In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and in the end renders different types of image (rgb, depth, normals etc.) for each of them.
 The blender pipeline consists of different modules, each of them performing one step in the described process.
-The modules are selected, ordered and configured via a json file.
+The modules are selected, ordered and configured via a yaml file.
  
 To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file.
 
 ```
-python run.py config.json <additional arguments>
+python run.py config.yaml <additional arguments>
 ```
 
 This will now run all modules specified in the config file step-by-step in the configured order.
@@ -35,7 +35,7 @@ For advanced usage which is not covered by these modules, own modules can easily
 
 A very small config file could look like this:
 
-```json
+```yaml
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -127,14 +127,14 @@ Nevertheless it should only be used for small preparation work, while most of th
 
 The module\`s configuration can be accessed via `self.config`. 
 This configuration object has the methods `get_int`, `get_float`, `get_bool`, `get_string`, `get_list`, `get_raw_dict`, each working in the same way.
- * The first parameter specifies the key/name of the parameter to get. By using `/` it is also possible access values nested inside additionaly json dicts (see example below).
+ * The first parameter specifies the key/name of the parameter to get. By using `/` it is also possible access values nested inside additional dicts (see example below).
  * The second parameter specifies the default value which is returned, if the requested parameter has not been specified inside the config file. If `None` is given, an error is thrown instead.
  
 **Example:**
 
 
 Config file:
-```json
+```yaml
 {
   "global": {
     "all": {
