@@ -3,7 +3,6 @@ import os
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
 from src.utility.ColorPicker import get_colors, rgb_to_hex
-from src.postprocessing.NoiseRemoval import NoiseRemoval
 from src.utility.Config import Config
 import imageio
 import csv
@@ -14,15 +13,6 @@ class SegMapRenderer(Renderer):
 
     def __init__(self, config):
         Renderer.__init__(self, config)
-
-    # def scale_color(self, color):
-    #     """ Maps color values to the range [0, 2^16], s.t. the space between the mapped colors is maximized.
-
-    #     :param color: An integer representing the index of the color has to be in [0, "num_labels" - 1]
-    #     :return: The integer representing the final color.
-    #     """
-    #     # 65536 = 2**16 the color depth, 32768 = 2**15 = 2**16/2
-    #     return ((color * 65536) / (bpy.data.scenes["Scene"]["num_labels"])) + (32768 / (bpy.data.scenes["Scene"]["num_labels"]))
 
     def _get_idx(self,array,item):
         try:
@@ -54,7 +44,6 @@ class SegMapRenderer(Renderer):
         """
         with Utility.UndoAfterExecution():
             self._configure_renderer()
-            NR = NoiseRemoval(self.config)
 
             # get current method for color mapping, instance or class
             method = self.config.get_string("map_by", "class") 
@@ -67,7 +56,6 @@ class SegMapRenderer(Renderer):
             else:
                 # Generated colors for each instance
                 rgbs = get_colors(len(bpy.context.scene.objects))
-
             hexes = [rgb_to_hex(rgb) for rgb in rgbs]
 
             # Initialize maps
@@ -114,12 +102,7 @@ class SegMapRenderer(Renderer):
                 file_path = os.path.join(self.output_dir, "seg_" +  "%04d"%frame + ".exr")
                 segmentation = imageio.imread(file_path)[:, :, :3]
                 segmentation = np.round(segmentation * 255).astype(int)
-                #segmentation = NR.run(segmentation) # remove noise (This is making each pixel equal to zero, need to debug it, however this part is not necessary for working)
-                # for idx, row in enumerate(segmentation):
-                #     #seg_hex.append([rgb_to_hex(rgb) for rgb in row])
-                #     for rgb in row:
-                #         if rgb[0] > 0 or rgb[1] > 0 or rgb[2] > 0:
-                #             print(rgb)
+
                 segmap = np.zeros(segmentation.shape[:2])# initialize mask
 
                 for idx, row in enumerate(segmentation):

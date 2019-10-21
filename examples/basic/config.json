@@ -52,7 +52,7 @@
       "name": "renderer.SegMapRenderer",
       "config": {
         "map_by": "instance",
-        "samples": 20,
+        "samples": 1,
         "render_depth": true
       }
     },
