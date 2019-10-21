@@ -84,14 +84,14 @@ class CameraModule(Module):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        # Set FOV
+        # Set FOV (Default value is the same as the default blender value)
         cam.lens_unit = 'FOV'
         cam.angle = config.get_float("fov", 0.691111)
         # FOV is sometimes also given as the angle between forward vector and one side of the frustum
         if config.get_bool("fov_is_half", False):
             cam.angle *= 2
 
-        # Clipping
+        # Clipping (Default values are the same as default blender values)
         cam.clip_start = config.get_float("clip_start", 0.1)
         cam.clip_end = config.get_float("clip_end", 1000)
 
@@ -114,9 +114,9 @@ class CameraModule(Module):
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
         cam.stereo.convergence_mode = config.get_string("stereo_convergence_mode", "OFFAXIS")
-        # The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen)
+        # The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen) (Default value is the same as the default blender value)
         cam.stereo.convergence_distance = config.get_float("convergence_distance", 1.95)
-        # Distance between the camera pair
+        # Distance between the camera pair (Default value is the same as the default blender value)
         cam.stereo.interocular_distance = config.get_float("interocular_distance", 0.065)
 
         # Store new cam pose as next frame

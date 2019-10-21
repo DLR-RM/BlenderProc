@@ -103,7 +103,7 @@ class ItemCollection:
         :param number_of_arguments: The total number of arguments required per line.
         :return: A list of lists of arguments
         """
-        cam_poses = []
+        arguments = []
         if path != "":
             with open(Utility.resolve_path(path)) as f:
                 lines = f.readlines()
@@ -112,12 +112,12 @@ class ItemCollection:
 
                 for line in lines:
                     # Split line into separate arguments
-                    cam_args = line.strip().split()
+                    line_args = line.strip().split()
                     # Make sure the arguments match the configured file format
-                    if len(cam_args) != number_of_arguments:
-                        raise Exception("A line in the given cam pose file does not match the configured file format:\n" + line.strip() + " (Number of values: " + str(len(cam_args)) + ")\n" + str(file_format) + " (Number of values: " + str(number_of_arguments) + ")")
+                    if len(line_args) != number_of_arguments:
+                        raise Exception("A line in the given cam pose file does not match the configured file format:\n" + line.strip() + " (Number of values: " + str(len(line_args)) + ")\n" + str(file_format) + " (Number of values: " + str(number_of_arguments) + ")")
 
                     # Parse arguments in line using json. (In this way "test" will be mapped to a string, while 42 will be mapped to an integer)
-                    cam_poses.append([json.loads(x) for x in cam_args])
+                    arguments.append([json.loads(x) for x in line_args])
 
-        return cam_poses
+        return arguments
