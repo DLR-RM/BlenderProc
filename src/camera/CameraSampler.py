@@ -90,18 +90,18 @@ class CameraSampler(CameraModule):
 
         return orientation
 
-    def _perform_obstacle_in_view_check(self, cam, position, world_matrix):
+    def _perform_obstacle_in_view_check(self, cam, position, cam2world_matrix):
         """ Check if there is an obstacle in front of the camera which is less than the configured "min_dist_to_obstacle" away from it.
 
         :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param position: The camera position vector to check
-        :param world_matrix: Transformation matrix that transforms from the camera space to the world space.
+        :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
         :return: True, if there are no obstacles too close to the cam.
         """
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
-        frame = [world_matrix @ v for v in frame]
+        frame = [cam2world_matrix @ v for v in frame]
 
         # Compute vectors along both sides of the plane
         vec_x = frame[1] - frame[0]
