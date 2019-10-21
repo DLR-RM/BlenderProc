@@ -95,8 +95,8 @@ class CameraSampler(CameraModule):
 
         :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param position: The camera position vector to check
-        :param world_matrix: The world matrix which describes the camera orientation to check.
-        :return: True, if there is an obstacle to close too the cam.
+        :param world_matrix: Transformation matrix that transforms from the camera space to the world space.
+        :return: True, if there are no obstacles too close to the cam.
         """
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
@@ -112,6 +112,7 @@ class CameraSampler(CameraModule):
 
         range_distance = sys.float_info.max
 
+        # Input validation
         for operator in self.proximity_checks:
             if (operator == "min" or operator == "max") and not isinstance(self.proximity_checks[operator], numbers.Number):
                 raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
