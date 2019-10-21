@@ -62,6 +62,7 @@ class SuncgLoader(Module):
 
                     if node["modelId"] in self.object_fine_grained_label_map:
                         metadata["fine_grained_class"] = self.object_fine_grained_label_map[node["modelId"]]
+                        metadata["coarse_grained_class"] = self.object_coarse_grained_label_map[node["modelId"]]
                         metadata["category_id"] = self._get_label_id(node["modelId"])
 
                 if "bbox" in node:
@@ -341,7 +342,8 @@ class SuncgLoader(Module):
         self.labels = set()     
         self.windows = []       
         self.object_label_map = {}      
-        self.object_fine_grained_label_map = {}     
+        self.object_fine_grained_label_map = {}
+        self.object_coarse_grained_label_map = {}          
         self.label_index_map = {}       
         
         with open(Utility.resolve_path(path), 'r') as csvfile:      
@@ -350,6 +352,7 @@ class SuncgLoader(Module):
                 self.labels.add(row["nyuv2_40class"])       
                 self.object_label_map[row["model_id"]] = row["nyuv2_40class"]       
                 self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]     
+                self.object_coarse_grained_label_map[row["model_id"]] = row["coarse_grained_class"]     
         
         self.labels = sorted(list(self.labels))
         bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)

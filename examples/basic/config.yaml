@@ -25,13 +25,13 @@
       }
     },
     {
-      "name": "lighting.LightPositioning",
+      "name": "lighting.LightLoader",
       "config": {
         "lights": [
           {
             "type": "POINT",
             "location": [5, -5, 5],
-            "energy": 1000
+            "energy": 1000 
           }
         ]
       }
@@ -62,7 +62,6 @@
     {
       "name": "writer.Hdf5Writer",
       "config": {
-        "delete_original_files_afterwards": false
       }
     }
   ]

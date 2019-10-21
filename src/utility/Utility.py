@@ -5,6 +5,7 @@ import inspect
 import importlib
 from src.utility.Config import Config
 from mathutils import Vector
+from copy import deepcopy
 
 class Utility:
     working_dir = ""
@@ -41,9 +42,13 @@ class Utility:
             # Merge global and local config (local overwrites global)
             model_type = module_config["name"].split(".")[0]
             base_config = global_config[model_type] if model_type in global_config else {}
-            config = module_config["config"]
-            Utility.merge_dicts(all_base_config, base_config)
+
+            # Initialize config with all_base_config
+            config = deepcopy(all_base_config)
+            # Overwrite with module type base config
             Utility.merge_dicts(base_config, config)
+            # Overwrite with module specific config
+            Utility.merge_dicts(module_config["config"], config)
 
             with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
                 # Import file and extract class

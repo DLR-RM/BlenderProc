@@ -23,11 +23,6 @@ class CameraSampler(CameraModule):
     def __init__(self, config):
         CameraModule.__init__(self, config)
 
-        self.position_ranges = [
-            self.config.get_list("positon_range_x", []),
-            self.config.get_list("positon_range_y", []),
-            self.config.get_list("positon_range_z", [1.4, 1.4])
-        ]
         self.rotation_ranges = [
             self.config.get_list("rotation_range_x", [90, 90]),
             self.config.get_list("rotation_range_y", [0, 0]),
