@@ -25,7 +25,7 @@ class CameraModule(Module):
 
        "location", "The position of the camera, specified as a list of three values (xyz)."
        "rotation", "Specifies the rotation of the camera. rotation_format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
-       "rotation_format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The z-Axis is assumed as Up-Vector)"
+       "rotation_format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector)"
        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the frustum"
        "clip_start", "Near clipping"
