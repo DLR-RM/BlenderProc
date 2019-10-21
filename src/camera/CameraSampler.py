@@ -4,6 +4,8 @@ import bpy
 import bmesh
 import math
 import random
+import sys
+import numbers
 
 class CameraSampler(CameraModule):
     """ General class for a camera sampler. All common methods, attributes and initializations should be put here.
@@ -15,8 +17,7 @@ class CameraSampler(CameraModule):
 
        "rotation_range_x, rotation_range_y, rotation_range_z", "The interval in which the angles should be sampled. The interval is specified as a list of two values (min and max value). The values should be specified in degree."
        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
-       "min_dist_to_obstacle", "The maximum distance to an obstacle allowed such that a sampled camera pose is still accepted."
-
+       "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min. The operators are combined in conjunction (i.e boolean and).
     """
 
     def __init__(self, config):
@@ -28,7 +29,9 @@ class CameraSampler(CameraModule):
             self.config.get_list("rotation_range_z", [])
         ]
         self.sqrt_number_of_rays = self.config.get_int("sqrt_number_of_rays", 10)
-        self.min_dist_to_obstacle = self.config.get_float("min_dist_to_obstacle", 1)
+
+        self.proximity_checks = self.config.get_raw_dict("proximity_checks", [])
+
         self.bvh_tree = None
 
     def _init_bvh_tree(self):
@@ -82,22 +85,46 @@ class CameraSampler(CameraModule):
 
         return orientation
 
-    def _is_too_close_obstacle_in_view(self, cam, position, world_matrix):
+    def _perform_obstacle_in_view_check(self, cam, position, cam2world_matrix):
         """ Check if there is an obstacle in front of the camera which is less than the configured "min_dist_to_obstacle" away from it.
 
         :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param position: The camera position vector to check
-        :param world_matrix: The world matrix which describes the camera orientation to check.
-        :return: True, if there is an obstacle to close too the cam.
+        :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
+        :return: True, if there are no obstacles too close to the cam.
         """
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
-        frame = [world_matrix @ v for v in frame]
+        frame = [cam2world_matrix @ v for v in frame]
 
         # Compute vectors along both sides of the plane
         vec_x = frame[1] - frame[0]
         vec_y = frame[3] - frame[0]
+
+        sum = 0.0
+        sum_sq = 0.0
+
+        range_distance = sys.float_info.max
+
+        # Input validation
+        for operator in self.proximity_checks:
+            if (operator == "min" or operator == "max") and not isinstance(self.proximity_checks[operator], numbers.Number):
+                raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
+            if operator == "avg" or operator == "var":
+                if "min" not in self.proximity_checks[operator] or "max" not in self.proximity_checks[operator]:
+                    raise Exception("please specify the accepted interval for the avg and var operators in perform_obstacle_in_view_check")
+                if not isinstance(self.proximity_checks[operator]["min"], numbers.Number) or not isinstance(self.proximity_checks[operator]["max"], numbers.Number):
+                    raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
+
+
+        # If there are no average or variance operators, we can decrease the ray range distance for efficiency
+        if "avg" not in self.proximity_checks and "var" not in self.proximity_checks:
+            if "max" in self.proximity_checks:
+                # Cap distance values at a value slightly higher than the max threshold
+                range_distance = self.proximity_checks["max"] + 1.0
+            else:
+                range_distance = self.proximity_checks["min"]
 
         # Go in discrete grid-like steps over plane
         for x in range(0, self.sqrt_number_of_rays):
@@ -105,10 +132,40 @@ class CameraSampler(CameraModule):
                 # Compute current point on plane
                 end = frame[0] + vec_x * x / (self.sqrt_number_of_rays - 1) + vec_y * y / (self.sqrt_number_of_rays - 1)
                 # Send ray from the camera position through the current point on the plane
-                _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, self.min_dist_to_obstacle)
+                _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
 
                 # Check if something was hit and how far it is away
-                if dist is not None and dist <= self.min_dist_to_obstacle:
-                    return True
+                if dist is not None:
+                    if "min" in self.proximity_checks:
+                        pass
+                    if dist <= self.proximity_checks["min"]:
+                        return False
+                    if "max" in self.proximity_checks:
+                        if dist >= self.proximity_checks["max"]:
+                            return False
+                    if "avg" in self.proximity_checks:
+                        sum += dist
+                    if "var" in self.proximity_checks:
+                        if not "avg" in self.proximity_checks:
+                            sum += dist
+                        sum_sq += dist * dist
 
-        return False
+        if "avg" in self.proximity_checks:
+            avg = sum / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
+            # Check that the average distance is not within the accepted interval
+            if avg >= self.proximity_checks["avg"]["max"] or avg <= self.proximity_checks["avg"]["min"]:
+                return False
+
+        if "var" in self.proximity_checks:
+            if not "avg" in self.proximity_checks:
+                avg = sum / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
+            sq_avg = avg * avg
+
+            avg_sq = sum_sq / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
+
+            var = avg_sq - sq_avg
+            # Check that the variance value of the distance is not within the accepted interval
+            if var >= self.proximity_checks["var"]["max"] or var <= self.proximity_checks["var"]["min"]:
+                return False
+
+        return True
