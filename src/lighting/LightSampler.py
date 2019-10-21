@@ -29,12 +29,6 @@ class LightSampler(LightModule):
 
     def __init__(self, config):
         LightModule.__init__(self, config)
-        self.known_sampling_methods = {
-            # type: BoundingBoxSampler, values : ([min_x, min_y, min_z], [max_x, max_y, max_z]) (6 in total)
-            "BoundingBoxSampler": 6,
-            # type: SphereSampler, values: ([point_x, point_y, point_z], radius) (4 in total)
-            "SphereSampler": 4
-        }
 
     def run(self):
         """ Sets light sources.
@@ -67,39 +61,15 @@ class LightSampler(LightModule):
             # Check if settings value must be sampled
             if isinstance(value, dict):
                 # Check if sampling type is specified
-                if 'type' in value:
-                    # Check if specified type is a known sampling type
-                    if value['type'] in self.known_sampling_methods:
+                if 'type' not in value:
+                    raise Exception("Sampling method type not specified!")
+                if 'parameters' not in value:
+                    raise Exception("Sampling method parameters not specified!")
 
-                        if not isinstance(value['sampling_params'], list):
-                            sampling_params= [value['sampling_params']]
-                        else:
-                            sampling_params = value['sampling_params']
-
-                        # Check if amount of values is correct
-                        if len(sampling_params) != self.known_sampling_methods[value['type']]:
-                            raise Exception("Wrong amount of arguments for " + value['type'])
-
-                        if value['type'] == 'BoundingBoxSampler':
-                            # Use BoundingBoxSampler
-                            box_min = mathutils.Vector((sampling_params[0], sampling_params[1], sampling_params[2]))
-                            box_max = mathutils.Vector((sampling_params[3], sampling_params[4], sampling_params[5]))
-                            result = list(BoundingBoxSampler.sample(box_min, box_max))
-                            # Update output dict
-                            sampled_settings.update({attribute_name : result})
-                        elif value['type'] == 'SphereSampler':
-                            # Use SphereSampler
-                            sphere_center = mathutils.Vector((sampling_params[0], sampling_params[1], sampling_params[2]))
-                            radius = sampling_params[3]
-                            result = list(SphereSampler.sample(sphere_center, radius))
-                            # Update output dict
-                            sampled_settings.update({attribute_name : result})
-                    else:
-                        raise Exception("Unknown sampling method: " + value['type'])
-                else:
-                    raise Exception("Samplimg method type not specified!")
+                result = list(Utility.sample(value['type'], value['parameters']))
+                sampled_settings.update({attribute_name: result})
             else:
-                sampled_settings.update({attribute_name : value})
+                sampled_settings.update({attribute_name: value})
 
         return sampled_settings
 
@@ -122,4 +92,3 @@ class LightSampler(LightModule):
                     value = [value]
                 line +=" ".join(str(x) for x in value) + " "
             f.write('%s \n' % line)
-    

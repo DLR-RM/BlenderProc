@@ -10,16 +10,19 @@ class SphereSampler(object):
     # https://math.stackexchange.com/a/87238
     # https://math.stackexchange.com/a/1585996
     @staticmethod
-    def sample(center, radius):
+    def sample(config):
         """
         Samples a point on and inside a solid sphere. Gaussian is spherically symmetric. Sample from three independent
         Guassian distributions the direction of the vector inside the sphere. Then sample from a uniform distribution
         a number from 0-1 to determine the magnitude, 1 means to lie on the surface and anything else inside.
 
-        :param center: Center of the sphere. Type: 3D mathutils vector
-        :param radius: Length of the radius of the sphere. Type: float
+        :param config: A configuration object containing the parameters necessary to sample.
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
+        # Center of the sphere.
+        center = config.get_vector3d("center")
+        # Length of the radius of the sphere.
+        radius = config.get_float("radius")
 
         direction = np.random.normal(size=3)
         magnitude = radius * (np.cbrt(np.random.uniform(high=0.9)))
