@@ -37,27 +37,21 @@ class LightSampler(LightModule):
         }
 
     def run(self):
-        """ Sets light sources.
-
-        """
+        """ Sets light sources. """
         self.cross_source_settings = self._sample_settings(self.cross_source_settings)
         source_specs = self.config.get_list("lights", [])
-        for i, source_spec in enumerate(source_specs): 
-            # Create light data, link it to the new object
-            light_data = bpy.data.lights.new(name="light_" + str(i), type=self.fallback_settings["type"])
-            light_obj = bpy.data.objects.new(name="light_" + str(i), object_data=light_data) 
-            # Set default light source
-            self._init_default_light_source(light_data, light_obj)
+        for i, source_spec in enumerate(source_specs):
             # Sample settings as specified in the config file
-            sampled_settings = self._sample_settings(source_spec) 
-            # Configure default light source
-            self._set_light_source_from_config(light_data, light_obj, sampled_settings)
-            bpy.context.collection.objects.link(light_obj)
+            sampled_settings = self._sample_settings(source_spec)
+
+            # Add new light source based on the sampled settings
+            self.light_source_collection.add_item(sampled_settings)
+
             # Write settings to file
             self._write_settings_to_file(sampled_settings, self.config.get_string("path", ""))
             
     def _sample_settings(self, source_spec):
-        """ Samples the parameters according to user-defined sampling types in the configration file.
+        """ Samples the parameters according to user-defined sampling types in the configuration file.
 
         :param source_spec: Dict that contains settings defined in the config file.
         :return: Processed settings dict.
@@ -112,14 +106,12 @@ class LightSampler(LightModule):
         :param path: Path to output file specified in the configuration file.
         """
         line = ""
-        # Merge processed cross-source settings into fallback settings
-        used_def_settings = Utility.merge_dicts(self.cross_source_settings, self.fallback_settings)
         # Sort merged source specific and cross source settings alphabetically
-        settings_to_write = sorted(Utility.merge_dicts(sampled_settings, used_def_settings).items(), key=lambda x: x[0])
+        settings_to_write = sorted(Utility.merge_dicts(sampled_settings, self.cross_source_settings).items(), key=lambda x: x[0])
         with open(Utility.resolve_path(path), 'a') as f:
             for item, value in settings_to_write:
                 if not isinstance(value, list):
                     value = [value]
-                line +=" ".join(str(x) for x in value) + " "
+                line += " ".join(str(x) for x in value) + " "
             f.write('%s \n' % line)
     
