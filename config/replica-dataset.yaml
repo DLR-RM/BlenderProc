@@ -54,22 +54,6 @@
         },
       }
     },
-#    {
-#      "name": "camera.SuncgCameraLoader",
-#      "config": {
-#        "path": "/volume/reconstruction_data/suncg/generate_data/version_1.1.0/camera_positions/10184924a263cd2ea9fb7d301dafb777/camera_positions",
-##        "path": "/volume/reconstruction_data/replica-dataset/Replica-Dataset/cam_poses_test",
-##        "path": "/volume/reconstruction_data/source_code/reconstructiondatascripts/convertscripts/cam_pose_gen",
-#        "near_clipping": 0.01
-#      }
-#    },
-#    {
-#      "name": "renderer.RgbRenderer",
-#      "config": {
-#        "output_key": "colors",
-#        "samples": 255
-#      }
-#    },
     {
       "name": "renderer.NormalRenderer",
       "config": {
