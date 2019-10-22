@@ -34,7 +34,7 @@
     {
       "name": "manipulators.FloorExtractor",
       "config": {
-        "height_list_path": "/volume/reconstruction_data/replica-dataset/data/office_1/height_list_values.txt",
+        "is_replica_object": "True",
         "compare_angle_degrees" : 7.5,
         "compare_height": 0.15
       }

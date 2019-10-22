@@ -3,6 +3,7 @@ from src.main.Module import Module
 import bpy
 import mathutils
 from math import radians, fabs, acos
+import os
 import bmesh
 
 class FloorExtractor(Module):
@@ -17,8 +18,11 @@ class FloorExtractor(Module):
         obj_name = 'mesh'
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
         compare_height = self.config.get_float('compare_height', 0.15)
-
-        file_path = self.config.get_string('height_list_path')
+        if not self.config.get_bool('is_replica_object', False):
+            file_path = self.config.get_string('height_list_path')
+        else:
+            main_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+            file_path = os.path.join(main_path, 'replica-dataset', self.config.get_string('data_set_name'), 'height_list_values.txt')
         with open(file_path) as file:
             import ast
             height_list = [float(val) for val in ast.literal_eval(file.read())]
