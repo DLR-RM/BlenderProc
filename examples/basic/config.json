@@ -25,12 +25,6 @@
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
-      "config": {
-        "path": "<args:0>"
-      }
-    },
-    {
       "name": "lighting.LightPositioning",
       "config": {
         "lights": [
@@ -52,7 +46,6 @@
       "name": "renderer.SegMapRenderer",
       "config": {
         "map_by": "instance",
-        "samples": 1,
         "render_depth": true
       }
     },

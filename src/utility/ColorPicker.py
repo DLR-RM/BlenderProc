@@ -3,13 +3,7 @@ import copy
 import numpy as np
 import colorsys
 
-def hex_to_rgb(hex):
-    _hex = hex.lstrip('#')
-    hlen = len(_hex)
-    return tuple(int(_hex[i:i+hlen//3], 16) for i in range(0, hlen, hlen//3))
 
-def rgb_to_hex(rgb):
-    return '#%02x%02x%02x' % tuple(rgb)
 
 def get_colors(num):
     """

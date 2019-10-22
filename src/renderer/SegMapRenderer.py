@@ -2,9 +2,9 @@ import bpy
 import os
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
-from src.utility.ColorPicker import get_colors, rgb_to_hex
 from src.utility.Config import Config
 import imageio
+from src.utility.ColorPicker import get_colors
 import csv
 import numpy as np
 
@@ -13,12 +13,7 @@ class SegMapRenderer(Renderer):
 
     def __init__(self, config):
         Renderer.__init__(self, config)
-
-    def _get_idx(self,array,item):
-        try:
-            return array.index(item)
-        except ValueError:
-            return -1
+        bpy.context.scene.cycles.samples = 1
 
     def color_obj(self, obj, color):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
@@ -56,7 +51,7 @@ class SegMapRenderer(Renderer):
             else:
                 # Generated colors for each instance
                 rgbs = get_colors(len(bpy.context.scene.objects))
-            hexes = [rgb_to_hex(rgb) for rgb in rgbs]
+            hexes = [Utility.rgb_to_hex(rgb) for rgb in rgbs]
 
             # Initialize maps
             color_map = []
@@ -82,7 +77,7 @@ class SegMapRenderer(Renderer):
                 # if mehtod to assign color is by class or by instance
                 if method == "class" and _class is not None: 
                     if _class not in class_to_rgb: # if class has not been assigned a color yet
-                        class_to_rgb[_class] = {"rgb" : rgbs[cur_idx], "rgb_idx": cur_idx, _hex: rgb_to_hex(rgbs[cur_idx])} # assign the class with a color
+                        class_to_rgb[_class] = {"rgb" : rgbs[cur_idx], "rgb_idx": cur_idx, _hex: Utility.rgb_to_hex(rgbs[cur_idx])} # assign the class with a color
                         cur_idx+=1 # set counter to next avialable color    
                     rgb = class_to_rgb[category_id]["rgb"] # assign this object the color of this class
                     color_idx = class_to_rgb[category_id]["rgb_idx"] # get idx of assigned color
@@ -106,7 +101,7 @@ class SegMapRenderer(Renderer):
                 segmap = np.zeros(segmentation.shape[:2])# initialize mask
 
                 for idx, row in enumerate(segmentation):
-                    segmap[idx,:] = [self._get_idx(hexes,rgb_to_hex(rgb)) for rgb in row]
+                    segmap[idx,:] = [Utility.get_idx(hexes,Utility.rgb_to_hex(rgb)) for rgb in row]
                 fname = os.path.join(self.output_dir,"segmap_" + "%04d"%frame)
                 np.save(fname,segmap)
                 #np.save(os.path.join(self.output_dir,"segmentation_" + "%04d"%frame),segmentation)
@@ -122,4 +117,5 @@ class SegMapRenderer(Renderer):
                     writer.writerow(mapping)
 
         self._register_output("seg_", "seg", ".exr", "2.0.1")
-        self._register_output("segmap_", "segmap", ".npy", "0.0.1")
+        self._register_output("segmap_", "segmap", ".npy", "1.0.0")
+        #self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0")
