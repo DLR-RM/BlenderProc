@@ -19,7 +19,7 @@ for module in list(sys.modules.keys()):
         
 from src.main.Pipeline import Pipeline
 
-config_path = "config/replica-dataset.json"
+config_path = "config/debug.json"
 
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:
@@ -32,7 +32,7 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
-    pipeline = Pipeline(config_path, [], working_dir, should_perform_clean_up=False)
+    pipeline = Pipeline(config_path, [], working_dir)
     pipeline.run()
 finally:
     # Revert back to previous view
