@@ -6,7 +6,37 @@ import addon_utils
 
 
 class Renderer(Module):
+    """
+    **Configuration**:
 
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "output_file_prefix", "The file prefix that should be used when writing the rendering to file."
+       "output_key", "The key which should be used for storing the rendering in a merged file."
+
+       "auto_tile_size", "If true, then the number of render tiles is set automatically using the render_auto_tile_size addon."
+       "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true."
+       "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true."
+       "resolution_x", "The render image width."
+       "resolution_y", "The render image height."
+       "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution aspect ratio to distort the image."
+       "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
+
+       "samples", "Number of samples to render for each pixel."
+       "max_bounces", "Total maximum number of bounces."
+       "min_bounces", "Total minimum number of bounces."
+       "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
+       "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the specified bounce."
+       "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum."
+       "volume_bounces", "Maximum number of volumetric scattering events"
+
+       "render_depth", "If true, the depth is also rendered to file."
+       "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
+       "depth_output_key", "The key which should be used for storing the depth in a merged file."
+
+       "stereo", "If true, renders a pair of stereoscopic images for each camera position."
+    """
     def __init__(self, config):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
@@ -56,6 +86,11 @@ class Renderer(Module):
         # Setting use_persistent_data to True makes the rendering getting slower and slower (probably a blender bug)
         bpy.context.scene.render.use_persistent_data = False
 
+        # Enable Stereoscopy
+        bpy.context.scene.render.use_multiview = self.config.get_bool("stereo", False)
+        if bpy.context.scene.render.use_multiview:
+            bpy.context.scene.render.views_format = "STEREO_3D"
+
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
         bpy.context.scene.render.use_compositing = True
@@ -68,7 +103,7 @@ class Renderer(Module):
         rl = tree.nodes.new('CompositorNodeRLayers')      
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
-        output_file.base_path = self.output_dir
+        output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
@@ -80,14 +115,18 @@ class Renderer(Module):
 
         :param default_prefix: The default prefix of the output files.
         """
-        if not os.path.exists(self.output_dir):
-            os.makedirs(self.output_dir)
-
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
-        bpy.context.scene.render.filepath = os.path.join(self.output_dir, self.config.get_string("output_file_prefix", default_prefix))
-        bpy.ops.render.render(animation=True, write_still=True)
+        bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
+
+        # Skip if there is nothing to render
+        if bpy.context.scene.frame_end != bpy.context.scene.frame_start:
+            # As frame_end is pointing to the next free frame, decrease it by one, as blender will render all frames in [frame_start, frame_ned]
+            bpy.context.scene.frame_end -= 1
+            bpy.ops.render.render(animation=True, write_still=True)
+            # Revert changes
+            bpy.context.scene.frame_end += 1
 
     def _register_output(self, default_prefix, default_key, suffix, version):
         """ Registers new output type using configured key and file prefix.
@@ -99,13 +138,16 @@ class Renderer(Module):
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
         """
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version)
+        use_stereo = self.config.get_bool("stereo", False)
+
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, use_stereo)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
-                "path": os.path.join(self.output_dir, self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
-                "version": "2.0.0"
+                "path": os.path.join(self._determine_output_dir(), self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
+                "version": "2.0.0",
+                "stereo": use_stereo
             })
 
 

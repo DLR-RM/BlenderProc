@@ -1,4 +1,4 @@
-// Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -28,9 +28,16 @@
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
+      "name": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "<args:0>",
+        "file_format": "location rotation _ _ _ fov _ _",
+        "source_frame": ["X", "-Z", "Y"],
+        "default_cam_param": {
+          "clip_start": 1,
+          "rotation_format": "forward_vec",
+          "fov_is_half": true
+        }
       }
     },
     {
@@ -53,7 +60,8 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-	"samples": 255
+        "samples": 255,
+        "stereo": true
       }
     },
     {

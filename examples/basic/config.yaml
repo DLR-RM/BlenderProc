@@ -1,4 +1,4 @@
-// Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -25,21 +25,25 @@
       }
     },
     {
-      "name": "lighting.LightPositioning",
+      "name": "lighting.LightLoader",
       "config": {
         "lights": [
           {
             "type": "POINT",
             "location": [5, -5, 5],
-            "energy": 1000
+            "energy": 1000 
           }
         ]
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
+      "name": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "<args:0>",
+        "file_format": "location rotation",
+        "default_cam_param": {
+          "fov": 1
+        }
       }
     },
     {
@@ -58,7 +62,6 @@
     {
       "name": "writer.Hdf5Writer",
       "config": {
-        "delete_original_files_afterwards": false
       }
     }
   ]
