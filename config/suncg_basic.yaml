@@ -58,24 +58,13 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 255,
-        "stereo": true
+        "samples": 255
       }
     },
     {
       "name": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
-          "seg": [
-            {
-              "name": "postprocessing.NoiseRemoval",
-              "config": {}
-            },
-            {
-              "name": "postprocessing.TrimRedundantChannels",
-              "config": {}
-            }
-          ],
           "depth":[
             {
               "name": "postprocessing.TrimRedundantChannels",
