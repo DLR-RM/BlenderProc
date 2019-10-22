@@ -42,8 +42,8 @@
     {
       "name": "camera.ReplicaCameraSampler",
       "config": {
-        "height_list_path": "/volume/reconstruction_data/replica-dataset/data/office_1/height_list_values.txt",
-        "sqrt_number_of_rays": 25,
+        "is_replica_object": "True",
+        "sqrt_number_of_rays": 50,
         "near_clipping": 0.01,
         "sample_amount": 15,
         "proximity_checks": {
