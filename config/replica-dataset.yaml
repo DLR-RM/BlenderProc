@@ -10,7 +10,9 @@
   },
   "global": {
     "all": {
-      "output_dir": "/tmp/output_test_replica_gen"
+      "output_dir": "/tmp/output_test_replica_gen",
+      "data_set_name": "office_1",
+      "data_path": "<args:0>"
     },
     "renderer": {
       "pixel_aspect_x": 1.333333333
@@ -24,10 +26,9 @@
     {
       "name": "loader.PlyLoader",
       "config": {
-        "path": "/volume/reconstruction_data/replica-dataset/data/office_1/mesh.ply",
+        "is_replica_object": "True",
         "use_smooth_shading": "True",
-        "use_ambient_occlusion": "True",
-        "rotation_file_path": "/volume/reconstruction_data/replica-dataset/data/office_1/rotation_file"
+        "use_ambient_occlusion": "True"
       }
     },
     {
