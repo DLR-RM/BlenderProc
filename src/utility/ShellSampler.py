@@ -21,9 +21,8 @@ class ShellSampler(object):
            "center", "Center of two spheres."
            "radius_min", "Radius of a smaller sphere."
            "radius_max", "Radius of a bigger sphere."
-           "opening_angle", "Opening angle of a sampling cone."
-           "mode", "Mode of operation: With rejection of 2d points that lie in the base of a rejection cone defined with a radius based on a rejection_factor. Mode without rejection: "FULL", with rejection: "RIM"."
-           "rejection_factor", "Factor used to calculate the radius of a rejection  cone."
+           "elevation_min", "Minimum angle of elevation: defines slant height of the sampling cone."
+           "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone."
         """
 
     def __init__(self):
@@ -31,7 +30,7 @@ class ShellSampler(object):
 
     @staticmethod
     def sample(config):
-        """ Sample a point from a space shared by two spheres with the same center point and a sampling cone with apex in this center.
+        """ Sample a point from a space shared by two halfspheres with the same center point and a sampling cone with apex in this center.
 
         :param config: A configuration object containing the parameters required to perform sampling.
         :return: A sampled point. Type: Mathutils vector.
@@ -42,33 +41,32 @@ class ShellSampler(object):
         radius_min = config.get_float("radius_min")
         # Radius of a bigger sphere
         radius_max = config.get_float("radius_max")
-        # Opening angle of a right circular cone
-        opening_angle = config.get_float("opening_angle")
-        # Mode of sampling
-        mode = config.get_string("mode")
-        # Set correct rejection factor
-        if mode == "FULL":
-            rejection_factor = 0
-        elif mode == "RIM":
-            rejection_factor = config.get_float("rejection_factor")
-            if rejection_factor >= 1:
-                rejection_factor = 0.5
-        else:
-            raise Exception("Unknown sampling mode: " + mode)
+        # Elevation angles
+        elevation_min = config.get_float("elevation_min")
+        elevation_max = config.get_float("elevation_max")
         
-        
-        # Base angle of a sampling right cone
-        base_angle = (180 - opening_angle)/2
         # Height of a sampling cone
         H = 1
+        # Base angle of a sampling right cone
+        sampling_opening_angle = 180 - elevation_min * 2
+        sampling_base_angle = 90 - sampling_opening_angle/2
+        # Base angle of a rejection right cone
+        rejection_opening_angle = 180 - elevation_max * 2
+        if elevation_max == 90:
+            rejection_base_angle = 0
+        else:
+            rejection_base_angle = 90 - rejection_opening_angle/2
 
-        # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling cone using Polar + Radial CDF method + rejection for 2-ball
+        # Sampling and rejection radius
+        R_sampling = H * np.tan(sampling_base_angle)
+        R_rejection = H * np.tan(rejection_base_angle)
+
+        # Init sampled point at the center of a sampling disk
         sampled_point = center[0:2]
-        reejction_radius = 0
-        while (sampled_point[0] - center[0])**2 + (sampled_point[1] - center[1])**2 <= rejection_radius**2:
-            R = H * np.tan(base_angle)
-            r = R * np.sqrt(np.random.uniform())
-            rejection_radius = R * rejection_factor
+        
+        # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone
+        while (sampled_point[0] - center[0])**2 + (sampled_point[1] - center[1])**2 <= R_rejection**2:
+            r = R_sampling * np.sqrt(np.random.uniform())
             theta = np.random.unifrom() * 2 * np.pi
             sampled_point[0] = center[0] + r * np.cos(theta)
             sampled_point[1] = center[1] + r * np.sin(theta)
