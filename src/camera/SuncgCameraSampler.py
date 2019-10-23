@@ -191,12 +191,11 @@ class SuncgCameraSampler(CameraSampler):
 
                 # calculate the score based on the type of the object, wall, floor and ceiling objects have 0 score
                 if hit and "type" in hit_object and hit_object["type"] == "Object":
+                    score += 1
                     if "coarse_grained_class" in hit_object:
                         object_class = hit_object["coarse_grained_class"]
                         objects_hit[object_class] += 1
                         score += (int(object_class in self.special_objects) * self.special_objects_weight)
-                    else:
-                        score += 1
 
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for each object more/less, excluding floor, ceiling and walls
         scene_variance = len(objects_hit.keys()) / 3
