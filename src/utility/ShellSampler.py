@@ -4,7 +4,6 @@ import mathutils
 class ShellSampler(object):
         """ 
          Samples a point from the space in between two spheres with a spherical angle (sampling cone) with apex in the center of those two spheres.
-        Sample a point on the disk that is a base of a subsampling cone defined by opening angle of the sampling cone and a fixed height. Then calculate a direction to this point, sample a factor for a resulting vector uniformly, then get a location.
 
         **Configuration**:
 
@@ -19,10 +18,10 @@ class ShellSampler(object):
            :header: "Keyword", "Description"
 
            "center", "Center of two spheres."
-           "radius_min", "Radius of a smaller sphere."
-           "radius_max", "Radius of a bigger sphere."
-           "elevation_min", "Minimum angle of elevation: defines slant height of the sampling cone."
-           "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone."
+           "radius_min", "Radius of a smaller sphere. Units: meters."
+           "radius_max", "Radius of a bigger sphere. Units: meters."
+           "elevation_min", "Minimum angle of elevation: defines slant height of the sampling cone. Units: degrees."
+           "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone. Units: degrees."
         """
 
     def __init__(self):
@@ -30,7 +29,7 @@ class ShellSampler(object):
 
     @staticmethod
     def sample(config):
-        """ Sample a point from a space shared by two halfspheres with the same center point and a sampling cone with apex in this center.
+        """ Sample a point from a space in between two halfspheres with the same center point and a sampling cone with apex in this center.
 
         :param config: A configuration object containing the parameters required to perform sampling.
         :return: A sampled point. Type: Mathutils vector.
@@ -44,7 +43,8 @@ class ShellSampler(object):
         # Elevation angles
         elevation_min = config.get_float("elevation_min")
         if elevation_min = 0:
-            elevation_min = 10
+            # here comes the magic number
+            elevation_min = 0.001
         elevation_max = config.get_float("elevation_max")
         
         # Height of a sampling cone
@@ -66,10 +66,12 @@ class ShellSampler(object):
         # Init sampled point at the center of a sampling disk
         sampled_point = center[0:2]
         
-        # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone
+        # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling
+        # cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone.
         while (sampled_point[0] - center[0])**2 + (sampled_point[1] - center[1])**2 <= R_rejection**2:
+        # http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
             r = R_sampling * np.sqrt(np.random.uniform())
-            theta = np.random.unifrom() * 2 * np.pi
+            theta = np.random.uniform() * 2 * np.pi
             sampled_point[0] = center[0] + r * np.cos(theta)
             sampled_point[1] = center[1] + r * np.sin(theta)
         
