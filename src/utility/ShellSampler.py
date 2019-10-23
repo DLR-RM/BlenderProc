@@ -43,6 +43,8 @@ class ShellSampler(object):
         radius_max = config.get_float("radius_max")
         # Elevation angles
         elevation_min = config.get_float("elevation_min")
+        if elevation_min = 0:
+            elevation_min = 10
         elevation_max = config.get_float("elevation_max")
         
         # Height of a sampling cone
