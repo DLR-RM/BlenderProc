@@ -4,14 +4,14 @@ import mathutils
 class ShellSampler(object):
         """ 
          Samples a point from the space in between two spheres with a spherical angle (sampling cone) with apex in the center of those two spheres.
-        Sample a point on the disk that is a base of a subsampling cone defined by opening angle of the sampling cone. Then calculate a direction to this point, sample a factor for a resulting vector uniformly, then get a location.
+        Sample a point on the disk that is a base of a subsampling cone defined by opening angle of the sampling cone and a fixed height. Then calculate a direction to this point, sample a factor for a resulting vector uniformly, then get a location.
 
         **Configuration**:
 
         .. csv-table::
            :header: "Parameter", "Description"
 
-           "config", "A configuration object containing the parameters necessary to sample."
+           "config", "A configuration object containing the parameters required to perform sampling."
 
         **Sampling settings**
 
@@ -22,8 +22,8 @@ class ShellSampler(object):
            "radius_min", "Radius of a smaller sphere."
            "radius_max", "Radius of a bigger sphere."
            "opening_angle", "Opening angle of a sampling cone."
-           "mode", "Mode of operation: With rejection of 2d points that lie in the base of a subsampling rejection cone defined with a radius based on a rejection_parameter. Mode without rejection: "FULL", with rejection: "RIM"."
-           "rejection_factor", "Factor used to calculate the radius of a rejection subsampling cone."
+           "mode", "Mode of operation: With rejection of 2d points that lie in the base of a rejection cone defined with a radius based on a rejection_factor. Mode without rejection: "FULL", with rejection: "RIM"."
+           "rejection_factor", "Factor used to calculate the radius of a rejection  cone."
         """
 
     def __init__(self):
@@ -31,7 +31,7 @@ class ShellSampler(object):
 
     @staticmethod
     def sample(config):
-        """ Sample a point from a shell of two spheres with a sampling cone.
+        """ Sample a point from a space shared by two spheres with the same center point and a sampling cone with apex in this center.
 
         :param config: A configuration object containing the parameters required to perform sampling.
         :return: A sampled point. Type: Mathutils vector.
@@ -52,7 +52,7 @@ class ShellSampler(object):
         elif mode == "RIM":
             rejection_factor = config.get_float("rejection_factor")
             if rejection_factor >= 1:
-                rejection_factor = 0.9
+                rejection_factor = 0.5
         else:
             raise Exception("Unknown sampling mode: " + mode)
         
@@ -62,7 +62,7 @@ class ShellSampler(object):
         # Height of a sampling cone
         H = 1
 
-        # Sampling a point from a 2-ball (disk) i.e. from the base of the right sampling cone using Polar + Radial CDF method + rejection for 2-ball
+        # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling cone using Polar + Radial CDF method + rejection for 2-ball
         sampled_point = center[0:2]
         reejction_radius = 0
         while (sampled_point[0] - center[0])**2 + (sampled_point[1] - center[1])**2 <= rejection_radius**2:
