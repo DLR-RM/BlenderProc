@@ -57,13 +57,15 @@ class Hdf5Writer(Module):
 
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
+
                         img_l = self._load_and_postprocess(path_l, output_type["key"])
                         img_r = self._load_and_postprocess(path_r, output_type["key"])
+
                         data = np.array([img_l, img_r])
-                        self._write_to_hdf_file(f, output_type["key"], data)
                     else:
                         data = self._load_and_postprocess(file_path, output_type["key"])
-                        self._write_to_hdf_file(f, output_type["key"], data)
+
+                    self._write_to_hdf_file(f, output_type["key"], data)
 
                     # Write version number of current output at key_version
                     self._write_to_hdf_file(f, output_type["key"] + "_version", np.string_([output_type["version"]]))
