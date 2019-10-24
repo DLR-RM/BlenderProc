@@ -93,6 +93,8 @@ class CameraSampler(CameraModule):
         :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
         :return: True, if there are no obstacles too close to the cam.
         """
+        if len(self.proximity_checks) == 0: # if no checks are in the settings all positions are accepted
+            return True
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
