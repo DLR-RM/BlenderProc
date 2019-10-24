@@ -1,4 +1,4 @@
-# Args: <cam_file> <ply_file> <output_dir>
+# Args: path_to_the_replica_data_folder  output_path
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "/tmp/output_test_replica_gen",
+      "output_dir": "<args:1>"
       "data_set_name": "office_1",
       "data_path": "<args:0>"
     },
