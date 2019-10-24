@@ -7,7 +7,6 @@ import bpy
 import numpy as np
 import os
 
-
 class CameraModule(Module):
     """
     **Configuration**:
@@ -52,23 +51,36 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1):
+    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1, suncg_version=False):
         """ Determines the current pose of the given camera and writes it to a .npy file.
 
         :param frame: The current frame number, used for naming the output file.
         :param cam: The camera which contains only camera specific attributes.
         :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param room_id: The id of the room which contains the camera (optional)
+        :param suncg_version: If this is set to true the output resembles the style of the suncg camera format
         """
         cam_pose = []
-        # Location
-        cam_pose.extend(cam_ob.location[:])
-        # Orientation
-        cam_pose.extend(cam_ob.rotation_euler[:])
-        # FOV
-        cam_pose.extend([cam.angle_x, cam.angle_y])
-        # Room
-        cam_pose.append(room_id)
+        if suncg_version:
+            # Location
+            cam_pose.extend(convertToSuncg(cam_ob.location[:]))
+            # convert euler angle to a direction vector
+            rot_mat = cam_ob.rotation_euler.to_matrix()
+            towards = rot_mat @ mathutils.Vector([0,0,-1])
+            cam_pose.extend(Utility.transform_point_to_blender_coord_frame(towards, ['X', 'Z', '-Y']))
+            up = rot_mat @ mathutils.Vector([0,1,0])
+            cam_pose.extend(Utility.transform_point_to_blender_coord_frame(up, ['X', 'Z', '-Y']))
+            # FOV
+            cam_pose.extend([cam.angle_x*0.5, cam.angle_y*0.5])
+        else:
+            # Location
+            cam_pose.extend(cam_ob.location[:])
+            # Orientation
+            cam_pose.extend(cam_ob.rotation_euler[:])
+            # FOV
+            cam_pose.extend([cam.angle_x, cam.angle_y])
+            # Room
+            cam_pose.append(room_id)
         np.save(os.path.join(self._determine_output_dir(), "campose_" + ("%04d" % frame)), cam_pose)
 
     def _register_cam_pose_output(self):
