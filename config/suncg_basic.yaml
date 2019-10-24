@@ -67,6 +67,12 @@
       "name": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
+          "seg": [
+             {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ],
           "depth":[
             {
               "name": "postprocessing.TrimRedundantChannels",
