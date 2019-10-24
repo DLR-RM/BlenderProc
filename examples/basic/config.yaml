@@ -53,13 +53,6 @@
       }
     },
     {
-      "name": "renderer.SegMapRenderer",
-      "config": {
-        "map_by": "instance",
-        "render_depth": true
-      }
-    },
-    {
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
