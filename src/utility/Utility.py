@@ -134,17 +134,6 @@ class Utility:
         return [x / 255 for x in bytes.fromhex(hex[-6:])] + [1.0]
 
     @staticmethod
-    def hex_to_rgb(hex):
-        """ Converts the given hex string to rgb color values.
-
-        :param hex: The hex string, describing rgb.
-        :return: The rgb color, in form of a list. Values between 0 and 255.
-        """
-        _hex = hex.lstrip('#')
-        hlen = len(_hex)
-        return tuple(int(_hex[i:i+hlen//3], 16) for i in range(0, hlen, hlen//3))
-
-    @staticmethod
     def rgb_to_hex(rgb):
         """ Converts the given rgb to hex values.
 
