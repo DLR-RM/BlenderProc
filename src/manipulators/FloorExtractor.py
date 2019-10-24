@@ -12,8 +12,17 @@ class FloorExtractor(Module):
         Module.__init__(self, config)
 
     def run(self):
-        """Will search for the specified object and splits the surfaces which point upwards at a specified level away
+        """Will search for the specified object and splits the surfaces which point upwards at a specified level away 
 
+        **Configuration**:
+        .. csv-table::
+            :header: "Parameter", "Description"
+            "obj_name", name of the object were the floor gets extracted
+            "compare_angle_degrees", maximum difference between the up vector and the current polygon normal in degrees
+            "compare_height", maximum difference in Z direction between the polygons median point and the specified height of the room
+
+            "is_replica_object", in this instance the data_set_name key has to be set
+            "data_set_name", name of the data set only useful with replica-dataset
         """
         obj_name = 'mesh'
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
