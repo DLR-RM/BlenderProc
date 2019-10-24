@@ -5,6 +5,8 @@ import os
 from src.utility.Utility import Utility
 import imageio
 import numpy as np
+import csv
+import json
 
 class Hdf5Writer(Module):
 
@@ -32,15 +34,21 @@ class Hdf5Writer(Module):
                 for output_type in bpy.context.scene["output"]:
 
                     # Build path (path attribute is format string)
-                    file_path = output_type["path"] % frame
+                    file_path = output_type["path"] 
+                    if '%' in file_path:
+                        file_path = file_path % frame
 
                     data = self._load_file(Utility.resolve_path(file_path))
 
-                    data = self._apply_postprocessing(output_type["key"], data)
-
-                    print("Key: " + output_type["key"] + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
-
-                    f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
+                    # in case the data is string, just store it
+                    if type(data) == str:
+                        f.create_dataset(output_type["key"], data=np.string_(data), dtype="S10")
+                        print("Key: " + output_type["key"] + "str - path: " + file_path)
+                    # otherwise its numbers, so apply postprocessing if applicable
+                    else:
+                        data = self._apply_postprocessing(output_type["key"], data)
+                        print("Key: " + output_type["key"] + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
+                        f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
 
                     # Write version number of current output at key_version
                     f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")
@@ -63,6 +71,8 @@ class Hdf5Writer(Module):
             return self._load_image(file_path)
         elif file_ending in ["npy", "npz"]:
             return self._load_npy(file_path)
+        elif file_ending in ["csv"]:
+            return self._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
@@ -83,6 +93,20 @@ class Hdf5Writer(Module):
         :return: The content of the file
         """
         return np.load(file_path)
+
+    def _load_csv(self, file_path):
+        """ Load the csv file at the given path.
+
+        :param file_path: The path.
+        :return: The content of the file
+        """
+        l = []
+        with open(file_path, mode='r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            for row in csv_reader:
+                l.append(row)
+        l = json.dumps(l) # make the list of dicts as a string
+        return l
 
     def _apply_postprocessing(self, output_key, data):
         """ Applies all postprocessing modules registered for this output type.

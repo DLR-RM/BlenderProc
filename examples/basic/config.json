@@ -37,9 +37,9 @@
       }
     },
     {
-      "name": "renderer.NormalRenderer",
+      "name": "camera.SuncgCameraLoader",
       "config": {
-        "output_key": "normals"
+        "path": "<args:0>"
       }
     },
     {
@@ -47,6 +47,12 @@
       "config": {
         "map_by": "instance",
         "render_depth": true
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
       }
     },
     {

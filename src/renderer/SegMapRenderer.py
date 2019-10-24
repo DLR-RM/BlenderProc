@@ -13,7 +13,7 @@ class SegMapRenderer(Renderer):
 
     def __init__(self, config):
         Renderer.__init__(self, config)
-        bpy.context.scene.cycles.samples = 1
+        
 
     def color_obj(self, obj, color):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
@@ -38,7 +38,7 @@ class SegMapRenderer(Renderer):
         The rendering is stored using the .exr filetype and a color depth of 16bit to achieve high precision.
         """
         with Utility.UndoAfterExecution():
-            self._configure_renderer()
+            self._configure_renderer(default_samples = 1)
 
             # get current method for color mapping, instance or class
             method = self.config.get_string("map_by", "class") 
@@ -118,4 +118,4 @@ class SegMapRenderer(Renderer):
 
         self._register_output("seg_", "seg", ".exr", "2.0.1")
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
-        #self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0")
+        self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0",unique_for_camposes = False)
