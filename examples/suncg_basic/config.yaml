@@ -1,0 +1,81 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:2>",
+      "output_is_temp": false
+    },
+    "renderer": {
+      "pixel_aspect_x": 1.333333333
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.SuncgLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "name": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation _ _ _ fov _ _",
+        "source_frame": ["X", "-Z", "Y"],
+        "default_cam_param": {
+          "rotation_format": "forward_vec",
+          "fov_is_half": true
+        }
+      }
+    },
+    {
+      "name": "materials.SuncgMaterials",
+      "config": {}
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {}
+    },
+    {
+      "name": "renderer.SegMapRenderer",
+      "config": {}
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+        "render_depth": true
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "seg": [
+            {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ],
+          "depth":[
+            {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
