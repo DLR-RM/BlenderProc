@@ -2,31 +2,20 @@ import numpy as np
 import mathutils
 
 
-class ShellSampler(object):
-    """ 
-    Samples a point from the space in between two spheres with a spherical angle (sampling cone) with apex in the center of those two spheres.
+class ShellSampler:
+    """ Samples a point from the space in between two spheres with a spherical angle (sampling cone) with apex in the center of those two spheres.
 
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-    "config", "A configuration object containing the parameters required to perform sampling."
-
-    **Sampling settings**
-
-    .. csv-table::
-       :header: "Keyword", "Description"
-
-    "center", "Center of two spheres."
-    "radius_min", "Radius of a smaller sphere. Units: meters."
-    "radius_max", "Radius of a bigger sphere. Units: meters."
-    "elevation_min", "Minimum angle of elevation: defines slant height of the sampling cone. Units: degrees."
-    "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone. Units: degrees."
+        "center", "Center of two spheres."
+        "radius_min", "Radius of a smaller sphere. Units: meters."
+        "radius_max", "Radius of a bigger sphere. Units: meters."
+        "elevation_min", "Minimum angle of elevation: defines slant height of the sampling cone. Units: degrees."
+        "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone. Units: degrees."
     """
-
-    def __init__(self):
-        object.__init__()
 
     @staticmethod
     def sample(config):
