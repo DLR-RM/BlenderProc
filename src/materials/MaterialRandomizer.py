@@ -17,9 +17,10 @@ class MaterialRandomizer(Module):
 
        "randomization_level", "Level of randomization, greater the value greater the number of objects for which the
                               materials are randomized. Allowed values are [0-1]"
-       "randomize_textures_only", "True if you want to randomize the materials of objects that has texture images"
-       "output_textures_only", "True if you want to assign an object a material that has
-                                    texture image and not just the diffuse color"
+       "randomize_textures_only", "True or False. When True, only materials that have texture(image)
+                                   will be randomly assigned a material
+       "output_textures_only", "True or False. When True, the set of materials used for the sampling will consist of
+                               only materials which have texture(image) in it."
 
     """
 
@@ -40,8 +41,7 @@ class MaterialRandomizer(Module):
     def _randomize_materials_in_scene(self):
 
         """
-        Randomizes the textures in a loaded scene
-
+        Randomizes the materials of objects in a loaded scene
         """
 
         for obj in bpy.context.scene.objects:
@@ -83,9 +83,9 @@ class MaterialRandomizer(Module):
         m.material = self.scene_materials[random_index]
 
     def _store_all_materials(self):
-        """
-        Stores all available textures in the scene
 
+        """
+        Stores all available materials(with or without textures depending on output_textures_only) from the scene
         """
 
         for obj in bpy.context.scene.objects:
