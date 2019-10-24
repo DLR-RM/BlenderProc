@@ -5,6 +5,7 @@ import mathutils
 from math import radians, fabs, acos
 import os
 import bmesh
+from src.utility.Utility import Utility
 
 class FloorExtractor(Module):
 
@@ -30,9 +31,8 @@ class FloorExtractor(Module):
         if not self.config.get_bool('is_replica_object', False):
             file_path = self.config.get_string('height_list_path')
         else:
-            main_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
             file_folder = os.path.join('resources', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
-            file_path = os.path.join(main_path, file_folder, 'height_list_values.txt')
+            file_path = Utility.resolve_path(os.path.join(file_folder, 'height_list_values.txt'))
         with open(file_path) as file:
             import ast
             height_list = [float(val) for val in ast.literal_eval(file.read())]
