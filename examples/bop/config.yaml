@@ -1,16 +1,18 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
-    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_install_path": "/home_local/<env:USER>/src/foreign_packages/",
+    "bop_toolkit_path": "/home_local/sund_ma/src/foreign_packages/bop/bop_toolkit-1/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
-      "imageio"
+      "imageio",
+      "png"
     ]
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>"
+      "output_dir": "<args:1>"
     }
   },
   "modules": [
@@ -21,7 +23,7 @@
     {
       "name": "loader.BopLoader",
       "config": {
-        "datasets_path": "<args:1>",
+        "datasets_path": "<args:0>",
         "scene_id": 1
       }
     },
@@ -39,16 +41,16 @@
         ]
       }
     },
-    {
-      "name": "camera.CameraLoader",
-      "config": {
-        "path": "<args:0>",
-        "file_format": "location rotation",
-        "default_cam_param": {
-          "fov": 1
-        }
-      }
-    },
+    # {
+    #   "name": "camera.CameraLoader",
+    #   "config": {
+    #     "path": "<args:0>",
+    #     "file_format": "location rotation",
+    #     "default_cam_param": {
+    #       "fov": 1
+    #     }
+    #   }
+    # },
     {
       "name": "renderer.NormalRenderer",
       "config": {
