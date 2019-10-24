@@ -62,17 +62,14 @@ class CameraModule(Module):
         """
         cam_pose = []
         if suncg_version:
-            # Fix coordinate frame (blender and suncg use different ones)
-            def convertToSuncg(vec):
-                return [vec[0], vec[2], -vec[1]]
             # Location
             cam_pose.extend(convertToSuncg(cam_ob.location[:]))
             # convert euler angle to a direction vector
             rot_mat = cam_ob.rotation_euler.to_matrix()
             towards = rot_mat @ mathutils.Vector([0,0,-1])
-            cam_pose.extend(convertToSuncg(towards))
+            cam_pose.extend(Utility.transform_point_to_blender_coord_frame(towards, ['X', 'Z', '-Y']))
             up = rot_mat @ mathutils.Vector([0,1,0])
-            cam_pose.extend(convertToSuncg(up))
+            cam_pose.extend(Utility.transform_point_to_blender_coord_frame(up, ['X', 'Z', '-Y']))
             # FOV
             cam_pose.extend([cam.angle_x*0.5, cam.angle_y*0.5])
         else:
