@@ -9,7 +9,7 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser('Runs the blender pipeline by using the house.json files provided by the given service')
     arg_parser.add_argument('service_name_for_house_jsons', help='The slurm path getter service id name for getting house jsons')
     arg_parser.add_argument('output_dir', help='The path were to store the output files')
-    arg_parser.add_argument('--config', default='config/suncg_with_cam_sampling.json')
+    arg_parser.add_argument('--config', default='examples/suncg_with_cam_sampling/config.yaml')
     args = arg_parser.parse_args()
 
     def args_from_path(house_path):
