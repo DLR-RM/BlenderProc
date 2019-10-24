@@ -34,7 +34,7 @@
       }
     },
     {
-      "name": "materials.SuncgMaterials",
+      "name": "lighting.SuncgLighting",
       "config": {}
     },
     {

@@ -72,11 +72,11 @@ The second argument should contain the path to a house.json file which describes
 * It's also necessary here to specify a different `source_frame`, as SUNCG does not use the same coordinate frame as Blender
 * In `default_cam_param` we set parameters which should be set across all cam poses: We change the `rotation_format`. This is necessary as rotations are specified via a forward vector in the camera file. Also `fov_is_half` has to be activated, as SUNCG describes the FOV as the angle between forward vector and one side of the frustum, while blender assumes the FOV describes the angle between both sides of the frustum.
 
-### SuncgMaterials
+### SuncgLighting
 
 ```yaml
 {
-  "name": "materials.SuncgMaterials",
+  "name": "lighting.SuncgLighting",
   "config": {}
 },
 ```

@@ -5,7 +5,7 @@ import csv
 from src.utility.Utility import Utility
 
 
-class SuncgMaterials(Module):
+class SuncgLighting(Module):
     """ Adds emission shader to lamps, windows and ceilings.
 
     **Configuration**:
