@@ -1,5 +1,7 @@
 # Basic SUNCG scene
 
+![](output-summary.png)
+
 ## Usage
 
 Execute in the Blender-Pipeline main directory:
