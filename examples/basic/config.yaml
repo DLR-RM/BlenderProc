@@ -25,23 +25,13 @@
       }
     },
     {
-      "name": "lighting.LightSampler",
+      "name": "lighting.LightLoader",
       "config": {
-        "path": "test",
         "lights": [
           {
-            "location": {
-              "type": "ShellSampler",
-              "parameters": {
-                "center": [1, 2, 3],
-                "radius_min": 4,
-                "radius_max": 7,
-                "elevation_min": 15,
-                "elevation_max": 70
-              }
-            },
             "type": "POINT",
-            "energy": 500
+            "location": [5, -5, 5],
+            "energy": 1000
           }
         ]
       }
