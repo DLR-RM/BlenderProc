@@ -28,8 +28,8 @@ class BopLoader(Module):
         scene_id = int(self.config.get_string("scene_id"))
         datasets_path = os.path.dirname(bop_dataset_path)
         dataset = os.path.basename(bop_dataset_path)
-        print(bop_dataset_path)
-        print(dataset)
+        print("bob: {}, dataset_path: {}".format(bop_dataset_path, datasets_path))
+        print("dataset: {}".format(dataset))
 
         model_p = dataset_params.get_model_params(datasets_path, dataset, model_type='reconst')
         # camera_p = dataset_params.get_camera_params(datasets_path, dataset)
