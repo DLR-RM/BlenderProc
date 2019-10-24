@@ -1,7 +1,7 @@
-// Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
-    "blender_install_path": "/home_local/${USER}/blender/",
+    "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
@@ -19,30 +19,31 @@
       "config": {}
     },
     {
-      "name": "loader.BopLoader",
+      "name": "loader.ObjLoader",
       "config": {
-        "datasets_path": "<args:1>",
-        "scene_id": 1
+        "path": "<args:1>"
       }
     },
     {
-      "name": "lighting.LightPositioning",
+      "name": "lighting.LightLoader",
       "config": {
         "lights": [
           {
-            "type": "AREA",
-            "location": [0, 0, 5],
-            "energy": 10000,
-            "shape": "SQUARE",
-            "size": 30
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
           }
         ]
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
+      "name": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "<args:0>",
+        "file_format": "location rotation",
+        "default_cam_param": {
+          "fov": 1
+        }
       }
     },
     {
@@ -56,6 +57,11 @@
       "config": {
         "output_key": "colors",
         "samples": 350
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
       }
     }
   ]

@@ -6,3 +6,7 @@ output/
 debug/
 .vscode
 *.pyc
+*.swp
+docs/build/
+!docs/source/index.rst
+docs/source/*rst

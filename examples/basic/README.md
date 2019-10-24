@@ -5,10 +5,10 @@
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/basic/config.json examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
+python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
 ```
 
-Here `examples/basic/config.json` is the config file which defines the structure and properties of the pipeline.
+Here `examples/basic/config.yaml` is the config file which defines the structure and properties of the pipeline.
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file. 
 
 ## Steps
@@ -22,9 +22,9 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 ## Explanation of the config file
 
 ### Setup
-```json
+```yaml
   "setup": {
-    "blender_install_path": "/home_local/${USER}/blender/",
+    "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
@@ -33,13 +33,13 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
   }
 ```
 
-* blender is installed into `/home_local/${USER}/blender/` where `${USER}` is automatically replaced by the username
+* blender is installed into `/home_local/<env:USER>/blender/` where `<env:USER>` is automatically replaced by the username
 * we want to use blender 2.8 (installation is done automatically on the first run)
 * inside the blender python environment the python packages `h5py` and `imageio` should be automatically installed. These are not provided per default, but are required in order to make the `writer.Hdf5Writer` module work.
 
 ### Global
 
-```json
+```yaml
   "global": {
     "all": {
       "output_dir": "<args:2>"
@@ -47,7 +47,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
   }
 ```
 
-* In the global section, we just specify the `output_dir` which defines where created files should be stored.
+* In the global section, we just specify the `output_dir` which defines where the final files should be stored.
 * As this configuration is defined in `global/all`, it is inherited by all modules. This is equivalent to just putting the `output_dir` configuration into the `config` block of each single module.
 * As we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
 
@@ -58,7 +58,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### Initalizer
 
-```json
+```yaml
  {
   "name": "main.Initializer",
   "config": {}
@@ -70,7 +70,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### ObjLoader
 
-```json
+```yaml
 {
   "name": "loader.ObjLoader",
   "config": {
@@ -86,9 +86,9 @@ Every module has a name which specifies the python path to the corresponding cla
 
 #### LightPositioning
 
-```json
+```yaml
 {
-  "name": "lightning.LightPositioning",
+  "name": "lighting.LightPositioning",
   "config": {
     "lights": [
       {
@@ -105,30 +105,35 @@ Every module has a name which specifies the python path to the corresponding cla
 * The properties of this light are configured via the parameter `lights`
 
 
-#### SuncgCameraLoader
+#### CameraLoader
 
-```json
+```yaml
 {
-  "name": "camera.SuncgCameraLoader",
+  "name": "camera.CameraLoader",
   "config": {
-    "path": "<args:0>"
+    "path": "<args:0>",
+    "file_format": "location rotation_euler",
+    "default_cam_param": {
+      "fov": 1
+    }
   }
 }
 ```
 
 * This module imports the camera poses which defines from where the renderings should be taken
 * The camera positions are defined in a file whose path is again given via the command line (`examples/basic/camera_positions` - contains 2 cam poses)
-* The file uses the following format
+* The file uses the following format which is defined at `file_format`
 ```
-position_x position_y position_z  forward_x forward_y forward_z  up_x up_y up_z  xFOV yFOV
+location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
-* This module also writes the cam poses into extra `.npy` files located inside the `output_dir`. This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
+* The FOV is the same for all cameras and is therefore set inside `default_cam_param`
+* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0001.npy` and `campose_0002.npy` 
 
 #### NormalRenderer
 
-```json
+```yaml
 {
   "name": "renderer.NormalRenderer",
   "config": {
@@ -146,7 +151,7 @@ position_x position_y position_z  forward_x forward_y forward_z  up_x up_y up_z 
 
 #### RgbRenderer
 
-```json
+```yaml
 {
   "name": "renderer.RgbRenderer",
   "config": {
@@ -164,27 +169,26 @@ position_x position_y position_z  forward_x forward_y forward_z  up_x up_y up_z 
 
 #### Hdf5Writer
 
-```json
+```yaml
 {
   "name": "writer.Hdf5Writer",
   "config": {
-    "delete_original_files_afterwards": false
   }
 }
 ```
 
-* The last module now merges all the single files created by the two rendering modules into one `.hdf5` file per cam pose
+* The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before
 
 The file `1.h5py` would therefore look like the following:
-```json
+```yaml
 {
-  "normals": <numpy array with pixel values read in from normal_0001.exr>,
-  "colors": <numpy array with pixel values read in from rgb_0001.png>,
-  "campose": <numpy array with cam pose read in from campose_0001.npy>
+  "normals": #<numpy array with pixel values read in from normal_0001.exr>,
+  "colors": #<numpy array with pixel values read in from rgb_0001.png>,
+  "campose": #<numpy array with cam pose read in from campose_0001.npy>
 }
 ``` 
 
-* Normally the original files like `normal_0001.exr` would be deleted after merging their content into the `.hdf5` files, but here in this example we prevent this by setting `delete_original_files_afterwards` to `false` for demonstration purposes
+* At the end of the hdf5 writer all temporary files are deleted
 
 => Creates the files `1.h5py` and `2.h5py`

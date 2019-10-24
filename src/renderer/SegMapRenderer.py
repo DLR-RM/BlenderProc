@@ -5,6 +5,10 @@ from src.utility.Utility import Utility
 
 
 class SegMapRenderer(Renderer):
+    """ Renders segmentation maps for each registered keypoint.
+
+    The rendering is stored using the .exr filetype and a color depth of 16bit to achieve high precision.
+    """
 
     def __init__(self, config):
         Renderer.__init__(self, config)
@@ -37,10 +41,6 @@ class SegMapRenderer(Renderer):
             links.new(emission_node.outputs[0], output.inputs[0])
 
     def run(self):
-        """ Renders segmentation maps for each registered keypoint.
-
-        The rendering is stored using the .exr filetype and a color depth of 16bit to achieve high precision.
-        """
         with Utility.UndoAfterExecution():
             self._configure_renderer()
 
@@ -48,6 +48,7 @@ class SegMapRenderer(Renderer):
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
 
+            bpy.context.scene.cycles.samples = 1 # this gives the best result for emission shader
             bpy.context.view_layer.cycles.use_denoising = False
             bpy.data.scenes["Scene"].cycles.filter_width = 0.0
             for obj in bpy.context.scene.objects:
@@ -57,4 +58,4 @@ class SegMapRenderer(Renderer):
 
             self._render("seg_")
 
-        self._register_output("seg_", "seg", ".exr", "2.0.0")
+        self._register_output("seg_", "seg", ".exr", "2.0.1")

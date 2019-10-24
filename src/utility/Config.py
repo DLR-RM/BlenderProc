@@ -1,6 +1,4 @@
-import json
-import re
-import os
+import mathutils
 
 
 class Config:
@@ -135,34 +133,60 @@ class Config:
 
         return value
 
-    @staticmethod
-    def read_config_dict(config_path, args):
-        """ Reads the json file at the given path and returns it as a cleaned dict.
+    def get_vector(self, name, fallback=None, dimensions=None):
+        """ Returns the vector stored at the given parameter path.
 
-        Removes all comments and replaces arguments and env variables with their corresponding values.
+        If the value cannot be converted to mathutils vector, an error is thrown.
 
-        :param config_path: The path to the json file.
-        :param args: A list with the arguments which should be used for replacing <args:i> templates inside the config.
-        :return: The dict containing the configuration.
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :param dimensions: If not None, specifies the required number of dimensions. If the configured vector has not exactly this number of dimensions, an error is thrown.
+        :return: The vector.
         """
-        with open(config_path, "r") as f:
-            json_text = f.read()
+        value = self.get_list(name, fallback)
 
-            # Remove comments
-            json_text = re.sub(r'^//.*\n?', '', json_text, flags=re.MULTILINE)
-            # Replace arguments
-            for i, arg in enumerate(args):
-                json_text = json_text.replace("<args:" + str(i) + ">", arg)
-            # Replace env variables
-            for key in os.environ.keys():
-                json_text = json_text.replace("${" + key + "}", os.environ[key])
+        if dimensions is not None and len(value) != dimensions:
+            raise TypeError(str(value) + "' must have exactly " + str(dimensions) + " dimensions!")
 
-            if "<args:" in json_text:
-                raise Exception("Too less arguments given")
+        try:
+            value = mathutils.Vector(value)
+        except ValueError:
+            raise TypeError("Cannot convert '" + str(value) + "' to a mathutils vector!")
 
-            config = json.loads(json_text)
-        return config
+        return value
 
+    def get_vector2d(self, name, fallback=None):
+        """ Returns the vector stored at the given parameter path.
+
+        If the value cannot be converted to an mathutils vector, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The vector.
+        """
+        return self.get_vector(name, fallback, 2)
+
+    def get_vector3d(self, name, fallback=None):
+        """ Returns the vector stored at the given parameter path.
+
+        If the value cannot be converted to an mathutils vector, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The vector.
+        """
+        return self.get_vector(name, fallback, 3)
+
+    def get_vector4d(self, name, fallback=None):
+        """ Returns the vector stored at the given parameter path.
+
+        If the value cannot be converted to an mathutils vector, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The vector.
+        """
+        return self.get_vector(name, fallback, 4)
 
 class NotFoundError(Exception):
     pass

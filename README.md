@@ -1,30 +1,46 @@
-# Blender-Pipeline
-A blender pipeline to generate images for deep learning
+# BlenderProc
+A procedural blender pipeline to generate images for deep learning
 
 
 ## General
 
-The blender pipeline consists of different modules which can be selected, ordered and configured via a json file. 
+In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and in the end renders different types of image (rgb, depth, normals etc.) for each of them.
+The blender pipeline consists of different modules, each of them performing one step in the described process.
+The modules are selected, ordered and configured via a yaml file.
+ 
 To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file.
 
 ```
-python run.py config.json <additional arguments>
+python run.py config.yaml <additional arguments>
 ```
 
 This will now run all modules specified in the config file step-by-step in the configured order.
 
+The following modules are already implemented and ready to use:
+
+* Load *.obj files and SunCG scenes
+* Automatic lighting of SunCG scenes
+* Loading camera positions from file
+* Sampling camera positions inside SunCG rooms
+* Rendering of rgb, depth, normal and segmentation images
+* Merging data into .hdf5 files
+
+For advanced usage which is not covered by these modules, own modules can easily be implemented (see [Writing modules](#writing-modules))
+
 ## Examples
 
-* [Basic scene](examples/basic/README.md): A small example loading an .obj file and camera positions before rendering normal and color images.
+* [Basic scene](examples/basic/): A small example loading an .obj file and camera positions before rendering normal and color images.
+* [Simple SUNCG scene](examples/suncg_basic/): Loads a suncg scene and camera positions from file before rendering color, normal, segmentation and a depth images.
+* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a suncg scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a depth images.
 
 ## Config
 
 A very small config file could look like this:
 
-```json
+```yaml
 {
   "setup": {
-    "blender_install_path": "/home_local/${USER}/blender/",
+    "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py"
@@ -54,7 +70,7 @@ To prevent the hardcoding of e.q. paths, placeholder are allowed inside the conf
  placeholder | replacement
 ------------ | -------------
 `<args:i>` | Is replaced by the ith argument given to the `run.py` script (not including the path of the config file). The numbering starts from zero.
-`${ENV}` | Is replaced by the value of the environment variable with name `ENV` 
+`<env:NAME>` | Is replaced by the value of the environment variable with name `NAME` 
 
 
 ### Setup
@@ -113,14 +129,14 @@ Nevertheless it should only be used for small preparation work, while most of th
 
 The module\`s configuration can be accessed via `self.config`. 
 This configuration object has the methods `get_int`, `get_float`, `get_bool`, `get_string`, `get_list`, `get_raw_dict`, each working in the same way.
- * The first parameter specifies the key/name of the parameter to get. By using `/` it is also possible access values nested inside additionaly json dicts (see example below).
+ * The first parameter specifies the key/name of the parameter to get. By using `/` it is also possible access values nested inside additional dicts (see example below).
  * The second parameter specifies the default value which is returned, if the requested parameter has not been specified inside the config file. If `None` is given, an error is thrown instead.
  
 **Example:**
 
 
 Config file:
-```json
+```yaml
 {
   "global": {
     "all": {
