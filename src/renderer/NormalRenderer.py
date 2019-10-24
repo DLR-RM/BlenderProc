@@ -52,7 +52,7 @@ class NormalRenderer(Renderer):
             new_mat = self._create_normal_material()
 
             # render normals
-            bpy.context.scene.cycles.samples = self.config.get_int("samples", 100)  # to smooth the result
+            bpy.context.scene.cycles.samples = 1 # this gives the best result for emission shader
             bpy.context.view_layer.cycles.use_denoising = False
             for obj in bpy.context.scene.objects:
                 if len(obj.material_slots) > 0:
@@ -67,4 +67,4 @@ class NormalRenderer(Renderer):
 
             self._render("normal_")
 
-        self._register_output("normal_", "normal", ".exr", "2.0.0")
+        self._register_output("normal_", "normals", ".exr", "2.0.0")

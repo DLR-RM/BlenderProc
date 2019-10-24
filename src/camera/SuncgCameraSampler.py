@@ -91,8 +91,8 @@ class SuncgCameraSampler(CameraSampler):
 
                     # Set the camera pose at the next frame
                     self.cam_pose_collection.add_item({
-                        "location": position,
-                        "rotation": orientation
+                        "location": list(position),
+                        "rotation": list(orientation)
                     })
 
                     successful_tries += 1
@@ -194,9 +194,13 @@ class SuncgCameraSampler(CameraSampler):
                     if "coarse_grained_class" in hit_object:
                         object_class = hit_object["coarse_grained_class"]
                         objects_hit[object_class] += 1
-                        score += (int(object_class in self.special_objects) * self.special_objects_weight)
+                        if object_class in self.special_objects:
+                            score += self.special_objects_weight
+                        else:
+                            score += 1
                     else:
                         score += 1
+
 
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for each object more/less, excluding floor, ceiling and walls
         scene_variance = len(objects_hit.keys()) / 3

@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>"
+      "output_dir": "examples/debugging/output"
     }
   },
   "modules": [
@@ -21,7 +21,7 @@
     {
       "name": "loader.ObjLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "examples/debugging/scene.obj"
       }
     },
     {
@@ -31,7 +31,7 @@
           {
             "type": "POINT",
             "location": [5, -5, 5],
-            "energy": 1000
+            "energy": 1000 
           }
         ]
       }
@@ -39,29 +39,11 @@
     {
       "name": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>",
+        "path": "examples/debugging/camera_positions",
         "file_format": "location rotation",
         "default_cam_param": {
           "fov": 1
         }
-      }
-    },
-    {
-      "name": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
-      "name": "renderer.RgbRenderer",
-      "config": {
-        "output_key": "colors",
-        "samples": 350
-      }
-    },
-    {
-      "name": "writer.Hdf5Writer",
-      "config": {
       }
     }
   ]

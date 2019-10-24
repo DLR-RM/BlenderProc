@@ -9,7 +9,7 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser('Runs the blender pipeline by using the camera files provided by the given service')
     arg_parser.add_argument('service_name_for_cam_poses', help='The slurm path getter service id name for getting camera poses')
     arg_parser.add_argument('output_dir', help='The path were to store the output files.')
-    arg_parser.add_argument('--config', default='config/suncg_basic.json')
+    arg_parser.add_argument('--config', default='examples/suncg_basic/config.yaml')
     arg_parser.add_argument('--houses', default='/volume/reconstruction_data/suncg/improved_data/version_1.0.0/house')
     args = arg_parser.parse_args()
 
