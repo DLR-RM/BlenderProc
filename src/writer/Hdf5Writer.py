@@ -1,13 +1,16 @@
-from src.main.Module import Module
-import bpy
-import h5py
-import os
-from src.utility.Utility import Utility
-import imageio
-import numpy as np
 import csv
 import json
+import os
 import shutil
+
+import bpy
+import h5py
+import imageio
+import numpy as np
+
+from src.main.Module import Module
+from src.utility.Utility import Utility
+
 
 class Hdf5Writer(Module):
     """ For each key frame merges all registered output files into one hdf5 file
