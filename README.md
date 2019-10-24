@@ -30,6 +30,8 @@ For advanced usage which is not covered by these modules, own modules can easily
 ## Examples
 
 * [Basic scene](examples/basic/): A small example loading an .obj file and camera positions before rendering normal and color images.
+* [Simple SUNCG scene](examples/suncg_basic/): Loads a suncg scene and camera positions from file before rendering color, normal, segmentation and a depth images.
+* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a suncg scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a depth images.
 
 ## Config
 

@@ -34,7 +34,6 @@
         "file_format": "location rotation _ _ _ fov _ _",
         "source_frame": ["X", "-Z", "Y"],
         "default_cam_param": {
-          "clip_start": 1,
           "rotation_format": "forward_vec",
           "fov_is_half": true
         }
@@ -46,21 +45,16 @@
     },
     {
       "name": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
+      "config": {}
     },
     {
       "name": "renderer.SegMapRenderer",
-      "config": {
-        "render_depth": true
-      }
+      "config": {}
     },
     {
       "name": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors",
-        "samples": 255
+        "render_depth": true
       }
     },
     {
@@ -68,7 +62,7 @@
       "config": {
         "postprocessing_modules": {
           "seg": [
-             {
+            {
               "name": "postprocessing.TrimRedundantChannels",
               "config": {}
             }

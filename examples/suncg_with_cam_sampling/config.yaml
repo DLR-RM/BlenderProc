@@ -10,8 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:1>",
-      "pixel_aspect_x": 1.333333333
+      "output_dir": "<args:1>"
     }
   },
   "modules": [
@@ -29,22 +28,9 @@
       "name": "camera.SuncgCameraSampler",
       "config": {
         "proximity_checks": {
-          "min": 1.0,
-          "avg": {
-            "min": 1.0,
-            "max": 4.0
-          }
+          "min": 1.0
         },
-        "min_interest_score": 0.4,
-        "special_objects": [
-          "bed",
-          "chair",
-          "desk",
-          "kitchen_appliance",
-          "table",
-          "tv_stand"
-        ],
-        "special_objects_weight": "2"
+        "min_interest_score": 0.4
       }
     },
     {
@@ -52,14 +38,36 @@
       "config": {}
     },
     {
+      "name": "renderer.NormalRenderer",
+      "config": {}
+    },
+    {
+      "name": "renderer.SegMapRenderer",
+      "config": {}
+    },
+    {
       "name": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors"
+        "render_depth": true
       }
     },
     {
       "name": "writer.Hdf5Writer",
       "config": {
+        "postprocessing_modules": {
+          "seg": [
+            {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ],
+          "depth":[
+            {
+              "name": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
       }
     }
   ]
