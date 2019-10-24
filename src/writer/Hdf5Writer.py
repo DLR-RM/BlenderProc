@@ -48,33 +48,38 @@ class Hdf5Writer(Module):
 
                     use_stereo = output_type["stereo"]
                     # Build path (path attribute is format string)
-                    file_path = output_type["path"] 
-                    data =  None
+                    file_path = output_type["path"]
                     if '%' in file_path:
                         file_path = file_path % frame
-                    else:
-                        data = self._load_file(file_path)
-                    print(file_path)
+
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
                         img_l = self._load_and_postprocess(path_l, output_type["key"])
                         img_r = self._load_and_postprocess(path_r, output_type["key"])
                         data = np.array([img_l, img_r])
-                        f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
-                    # in case the data is string, just store it
-                    elif data is not None and type(data) == str:
-                        f.create_dataset(output_type["key"], data=np.string_(data), dtype="S10")
-                    # otherwise its numbers, so apply postprocessing if applicable
+                        self._write_to_hdf_file(f, output_type["key"], data)
                     else:
                         data = self._load_and_postprocess(file_path, output_type["key"])
-                        f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
+                        self._write_to_hdf_file(f, output_type["key"], data)
 
                     # Write version number of current output at key_version
-                    f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")
+                    self._write_to_hdf_file(f, output_type["key"] + "_version", np.string_([output_type["version"]]))
 
         # Remove temp data
         if self.config.get_bool("delete_temporary_files_afterwards", True):
             shutil.rmtree(self._temp_dir)
+
+    def _write_to_hdf_file(self, file, key, data):
+        """ Adds the given data as a new entry to the given hdf5 file.
+
+        :param file: The hdf5 file handle.
+        :param key: The key at which the data should be stored in the hdf5 file.
+        :param data: The data to store.
+        """
+        if data.dtype.char == 'S':
+            file.create_dataset(key, data=data, dtype="S10")
+        else:
+            file.create_dataset(key, data=data, compression=self.config.get_string("compression", 'gzip'))
 
     def _load_file(self, file_path):
         """ Tries to read in the file with the given path into a numpy array.
@@ -125,7 +130,7 @@ class Hdf5Writer(Module):
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
                 rows.append(row)
-        return json.dumps(rows) # make the list of dicts as a string
+        return np.string_(json.dumps(rows)) # make the list of dicts as a string
 
     def _apply_postprocessing(self, output_key, data):
         """ Applies all postprocessing modules registered for this output type.
