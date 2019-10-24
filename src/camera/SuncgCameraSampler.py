@@ -6,6 +6,8 @@ import mathutils
 
 from src.camera.CameraSampler import CameraSampler
 from src.utility.BoundingBoxSampler import BoundingBoxSampler
+from src.utility.Config import Config
+
 
 class SuncgCameraSampler(CameraSampler):
     """ Samples multiple cameras per suncg room.
@@ -121,7 +123,10 @@ class SuncgCameraSampler(CameraSampler):
                 min[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][0]
                 max[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][1]
 
-        return BoundingBoxSampler.sample(min, max)
+        return BoundingBoxSampler.sample(Config({
+            "min": list(min),
+            "max": list(max)
+        }))
 
 
     def _calc_number_of_cams_in_room(self, room_obj):
