@@ -6,7 +6,7 @@ class SphereSampler:
     """ Samples a point on and inside a solid sphere
 
     Gaussian is spherically symmetric. Sample from three independent
-    Guassian distributions the direction of the vector inside the sphere. Then sample from a uniform distribution
+    Gaussian distributions the direction of the vector inside the sphere. Then sample from a uniform distribution
     a number from 0-1 to determine the magnitude, 1 means to lie on the surface and anything else inside.
 
     **Configuration**:
