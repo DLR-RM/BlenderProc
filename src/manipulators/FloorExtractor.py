@@ -31,7 +31,7 @@ class FloorExtractor(Module):
             file_path = self.config.get_string('height_list_path')
         else:
             main_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-            file_folder = os.path.join('examples', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
+            file_folder = os.path.join('resources', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
             file_path = os.path.join(main_path, file_folder, 'height_list_values.txt')
         with open(file_path) as file:
             import ast
