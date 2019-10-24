@@ -22,11 +22,11 @@ class FloorExtractor(Module):
             file_path = self.config.get_string('height_list_path')
         else:
             main_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-            file_path = os.path.join(main_path, 'replica-dataset', self.config.get_string('data_set_name'), 'height_list_values.txt')
+            file_folder = os.path.join('examples', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
+            file_path = os.path.join(main_path, file_folder, 'height_list_values.txt')
         with open(file_path) as file:
             import ast
             height_list = [float(val) for val in ast.literal_eval(file.read())]
-        print(height_list)
         for obj in bpy.data.objects:
             obj.select_set(False)
         if obj_name in bpy.data.objects:

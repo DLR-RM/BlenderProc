@@ -74,7 +74,8 @@ class ReplicaCameraSampler(CameraSampler):
             file_path = self.config.get_string('height_list_path')
         else:
             main_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-            file_path = os.path.join(main_path, 'replica-dataset', self.config.get_string('data_set_name'), 'height_list_values.txt')
+            folder_path = os.path.join('examples', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
+            file_path = os.path.join(main_path, folder_path, 'height_list_values.txt')
         with open(file_path) as file:
             height_list = [float(val) for val in ast.literal_eval(file.read())]
         while successful_tries < self.number_of_successfull_tries and tries < self.max_tries_per_room:
