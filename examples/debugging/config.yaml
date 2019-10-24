@@ -1,0 +1,50 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "examples/debugging/output"
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.ObjLoader",
+      "config": {
+        "path": "examples/debugging/scene.obj"
+      }
+    },
+    {
+      "name": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000 
+          }
+        ]
+      }
+    },
+    {
+      "name": "camera.CameraLoader",
+      "config": {
+        "path": "examples/debugging/camera_positions",
+        "file_format": "location rotation",
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    }
+  ]
+}

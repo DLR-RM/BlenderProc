@@ -10,6 +10,10 @@ import numpy as np
 
 
 class SegMapRenderer(Renderer):
+    """ Renders segmentation maps for each registered keypoint.
+
+    The rendering is stored using the .exr filetype and a color depth of 16bit to achieve high precision.
+    """
 
     def __init__(self, config):
         Renderer.__init__(self, config)
@@ -33,10 +37,6 @@ class SegMapRenderer(Renderer):
             links.new(emission_node.outputs[0], output.inputs[0])
 
     def run(self):
-        """ Renders segmentation maps for each registered keypoint.
-
-        The rendering is stored using the .exr filetype and a color depth of 16bit to achieve high precision.
-        """
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_samples = 1)
 
