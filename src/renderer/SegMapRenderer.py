@@ -93,8 +93,8 @@ class SegMapRenderer(Renderer):
             self._render("seg_")
 
             # After rendering
-            for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end + 1): # for each rendered frame
-                file_path = os.path.join(self.output_dir, "seg_" +  "%04d"%frame + ".exr")
+            for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end): # for each rendered frame
+                file_path = os.path.join(self._determine_output_dir(), "seg_" +  "%04d"%frame + ".exr")
                 segmentation = imageio.imread(file_path)[:, :, :3]
                 segmentation = np.round(segmentation * 255).astype(int)
 
@@ -102,14 +102,14 @@ class SegMapRenderer(Renderer):
 
                 for idx, row in enumerate(segmentation):
                     segmap[idx,:] = [Utility.get_idx(hexes,Utility.rgb_to_hex(rgb)) for rgb in row]
-                fname = os.path.join(self.output_dir,"segmap_" + "%04d"%frame)
+                fname = os.path.join(self._determine_output_dir(),"segmap_" + "%04d"%frame)
                 np.save(fname,segmap)
-                #np.save(os.path.join(self.output_dir,"segmentation_" + "%04d"%frame),segmentation)
+                #np.save(os.path.join(self._determine_output_dir(),"segmentation_" + "%04d"%frame),segmentation)
             
-            #np.save(os.path.join(self.output_dir,"rgbs"),rgbs)
+            #np.save(os.path.join(self._determine_output_dir(),"rgbs"),rgbs)
 
             # write color mappings to file
-            with open(os.path.join(self.output_dir,"class_inst_col_map.csv"), 'w', newline='') as csvfile:
+            with open(os.path.join(self._determine_output_dir(),"class_inst_col_map.csv"), 'w', newline='') as csvfile:
                 fieldnames = list(color_map[0].keys())
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()

@@ -45,23 +45,25 @@ class Hdf5Writer(Module):
                     use_stereo = output_type["stereo"]
                     # Build path (path attribute is format string)
                     file_path = output_type["path"] 
-                    
+                    data =  None
                     if '%' in file_path:
                         file_path = file_path % frame
-
+                    else:
+                        data = self._load_file(file_path)
+                    print(file_path)
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
                         img_l = self._load_and_postprocess(path_l, output_type["key"])
                         img_r = self._load_and_postprocess(path_r, output_type["key"])
                         data = np.array([img_l, img_r])
+                        f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
                     # in case the data is string, just store it
-                    elif type(data) == str:
+                    elif data is not None and type(data) == str:
                         f.create_dataset(output_type["key"], data=np.string_(data), dtype="S10")
                     # otherwise its numbers, so apply postprocessing if applicable
                     else:
                         data = self._load_and_postprocess(file_path, output_type["key"])
-                    
-                    f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
+                        f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
 
                     # Write version number of current output at key_version
                     f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")

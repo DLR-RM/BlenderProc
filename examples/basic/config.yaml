@@ -53,19 +53,7 @@
         "render_depth": true
       }
     },
-    {
-      "name": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
-      "name": "renderer.RgbRenderer",
-      "config": {
-        "output_key": "colors",
-        "samples": 350
-      }
-    },
+
     {
       "name": "writer.Hdf5Writer",
       "config": {
