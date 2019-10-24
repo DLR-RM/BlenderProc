@@ -15,6 +15,13 @@ from src.camera.CameraSampler import CameraSampler
 class ReplicaCameraSampler(CameraSampler):
 
     def __init__(self, config):
+        """ Samples multiple cameras per room.
+
+        Procedure per room:
+         - sample positions in
+         - send ray from position straight down and make sure it hits the room's floor first
+         - send rays through the field of view to approximate a depth map and to make sure no obstacle is too close to the camera
+        """
         CameraSampler.__init__(self, config)
         self.camera_height = 1.55 # out of the suncg scn2cam
         self.camera_height_radius = 0.05 # out of the suncg scn2cam, -0.05 - +0.05 on the camera height added
@@ -40,8 +47,8 @@ class ReplicaCameraSampler(CameraSampler):
         """ Samples multiple cameras per suncg room.
 
         Procedure per room:
-         - sample position inside bbox
-         - send ray from position straight down and make sure it hits the room's floor first
+         - sample position (x,y) inside bounding box of the whole scene, the z component is fixed by the camera_height
+         - send ray from position straight down and make sure it hits the floor object of the scene
          - send rays through the field of view to approximate a depth map and to make sure no obstacle is too close to the camera
         """
         self._init_bvh_tree()
@@ -50,7 +57,6 @@ class ReplicaCameraSampler(CameraSampler):
         cam = cam_ob.data
         cam.lens_unit = 'FOV'
         cam.angle = 1.0
-        # cam.clip_start = self.config.get_float("near_clipping", 1)
 
         # Set resolution and aspect ratio, as they have an influence on the near plane
         bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
