@@ -114,13 +114,12 @@ class Hdf5Writer(Module):
         :param file_path: The path.
         :return: The content of the file
         """
-        l = []
+        rows = []
         with open(file_path, mode='r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
-                l.append(row)
-        l = json.dumps(l) # make the list of dicts as a string
-        return l
+                rows.append(row)
+        return json.dumps(rows) # make the list of dicts as a string
 
     def _apply_postprocessing(self, output_key, data):
         """ Applies all postprocessing modules registered for this output type.
