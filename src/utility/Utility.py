@@ -186,3 +186,41 @@ class Utility:
             bpy.ops.ed.undo_push(message="after " + self.check_point_name)
             # The current state points to "after", now by calling undo we go back to "before"
             bpy.ops.ed.undo()
+
+    @staticmethod
+    def sample(name, parameters):
+        """ A general sample function.
+
+        It first builds the required sampler and then calls its sample function.
+
+        :param name: The name of the sampler class.
+        :param parameters: A dict containing the parameters that should be used to sample.
+        :return: The sampled value.
+        """
+        # Import class from src.utility
+        module_class = getattr(importlib.import_module("src.utility." + name), name.split(".")[-1])
+        # Build configuration
+        config = Config(parameters)
+        # Call sample method
+        return module_class.sample(config)
+
+    @staticmethod
+    def sample_based_on_config(config):
+        """ A general sample function using the sampler and sample parameters described in the given config.
+
+        The given config should follow the following scheme:
+
+        {
+          "name": "<name of sampler class>"
+          "parameters": {
+            <sampler parameters>
+          }
+        }
+
+        :param config: A Configuration object or a dict containing the configuration data.
+        :return: The sampled value.
+        """
+        if isinstance(config, dict):
+            config = Config(config)
+
+        return Utility.sample(config.get_string("name"), config.get_raw_dict("parameters"))
