@@ -34,7 +34,7 @@ class SuncgLoader(Module):
         with open(Utility.resolve_path(self.house_path), "r") as f:
             config = json.load(f)
 
-        self._read_model_category_mapping('suncg/Better_labeling_for_NYU.csv')
+        self._read_model_category_mapping(os.path.join('resources','suncg','Better_labeling_for_NYU.csv'))
 
         house_id = config["id"]
 
