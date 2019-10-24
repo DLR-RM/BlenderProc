@@ -91,8 +91,8 @@ class SuncgCameraSampler(CameraSampler):
 
                     # Set the camera pose at the next frame
                     self.cam_pose_collection.add_item({
-                        "location": list(position.to_tuple()),
-                        "rotation": list(orientation.to_tuple())
+                        "location": list(position),
+                        "rotation": list(orientation)
                     })
 
                     successful_tries += 1
