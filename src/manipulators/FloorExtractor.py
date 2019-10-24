@@ -24,7 +24,7 @@ class FloorExtractor(Module):
             "is_replica_object", in this instance the data_set_name key has to be set
             "data_set_name", name of the data set only useful with replica-dataset
         """
-        obj_name = 'mesh'
+        obj_name = self.config.get_string('obj_name')
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
         compare_height = self.config.get_float('compare_height', 0.15)
         if not self.config.get_bool('is_replica_object', False):

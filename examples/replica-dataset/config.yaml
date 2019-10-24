@@ -35,6 +35,7 @@
       "name": "manipulators.FloorExtractor",
       "config": {
         "is_replica_object": "True",
+        "obj_name": "mesh",
         "compare_angle_degrees" : 7.5, # max angle difference to up facing polygons
         "compare_height": 0.15  # height, which is allowed for polygons to be away from the height level in up and down dir.
       }
