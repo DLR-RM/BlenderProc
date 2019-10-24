@@ -60,13 +60,7 @@ class LightSampler(LightModule):
         for attribute_name, value in source_spec.items():
             # Check if settings value must be sampled
             if isinstance(value, dict):
-                # Check if sampling type is specified
-                if 'type' not in value:
-                    raise Exception("Sampling method type not specified!")
-                if 'parameters' not in value:
-                    raise Exception("Sampling method parameters not specified!")
-
-                result = list(Utility.sample(value['type'], value['parameters']))
+                result = list(Utility.sample_based_on_config(value))
                 sampled_settings.update({attribute_name: result})
             else:
                 sampled_settings.update({attribute_name: value})

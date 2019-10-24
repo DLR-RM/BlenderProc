@@ -2,15 +2,22 @@ import mathutils
 import random
 
 
-class BoundingBoxSampler(object):
+class BoundingBoxSampler:
+    """ Samples a random position inside a bounding box
 
-    def __init__(self):
-        object.__init__()
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "min", "A list of three values, describing the x, y and z coordinate of the minimum point of the bounding box."
+       "max", "A list of three values, describing the x, y and z coordinate of the maximum point of the bounding box."
+
+    """
 
     @staticmethod
     def sample(config):
-        """ Samples a random position inside a bounding box
-
+        """
         :param config: A configuration object containing the parameters necessary to sample.
         :return: position vector of the sampled point Type: Mathutils Vector
         """

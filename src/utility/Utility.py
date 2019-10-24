@@ -203,3 +203,24 @@ class Utility:
         config = Config(parameters)
         # Call sample method
         return module_class.sample(config)
+
+    @staticmethod
+    def sample_based_on_config(config):
+        """ A general sample function using the sampler and sample parameters described in the given config.
+
+        The given config should follow the following scheme:
+
+        {
+          "name": "<name of sampler class>"
+          "parameters": {
+            <sampler parameters>
+          }
+        }
+
+        :param config: A Configuration object or a dict containing the configuration data.
+        :return: The sampled value.
+        """
+        if isinstance(config, dict):
+            config = Config(config)
+
+        return Utility.sample(config.get_string("name"), config.get_raw_dict("parameters"))
