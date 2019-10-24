@@ -58,7 +58,6 @@
     {
       "name": "renderer.NormalRenderer",
       "config": {
-        "output_key": "normals"
       }
     },
     {
