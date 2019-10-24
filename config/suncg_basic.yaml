@@ -60,8 +60,7 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 255,
-        "stereo": true
+        "samples": 255
       }
     },
     {
@@ -69,11 +68,7 @@
       "config": {
         "postprocessing_modules": {
           "seg": [
-            {
-              "name": "postprocessing.NoiseRemoval",
-              "config": {}
-            },
-            {
+             {
               "name": "postprocessing.TrimRedundantChannels",
               "config": {}
             }
