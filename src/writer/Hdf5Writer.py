@@ -1,13 +1,16 @@
-from src.main.Module import Module
-import bpy
-import h5py
-import os
-from src.utility.Utility import Utility
-import imageio
-import numpy as np
 import csv
 import json
+import os
 import shutil
+
+import bpy
+import h5py
+import imageio
+import numpy as np
+
+from src.main.Module import Module
+from src.utility.Utility import Utility
+
 
 class Hdf5Writer(Module):
     """ For each key frame merges all registered output files into one hdf5 file
@@ -49,12 +52,12 @@ class Hdf5Writer(Module):
                     use_stereo = output_type["stereo"]
                     # Build path (path attribute is format string)
                     file_path = output_type["path"] 
-                    data =  None
+                    data = None
                     if '%' in file_path:
                         file_path = file_path % frame
                     else:
                         data = self._load_file(file_path)
-                    print(file_path)
+
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
                         img_l = self._load_and_postprocess(path_l, output_type["key"])

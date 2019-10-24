@@ -1,8 +1,9 @@
-from src.main.Module import Module
-import bpy
 import os
 
 import addon_utils
+import bpy
+
+from src.main.Module import Module
 
 
 class Renderer(Module):
@@ -41,8 +42,12 @@ class Renderer(Module):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples = 256):
-        """ Sets many different render parameters which can be adjusted via the config. """
+    def _configure_renderer(self, default_samples=256):
+        """
+         Sets many different render parameters which can be adjusted via the config.
+
+         :param default_samples: Default number of samples to render for each pixel
+        """
         bpy.context.scene.cycles.samples = self.config.get_int("samples", default_samples)
 
         if self.config.get_bool("auto_tile_size", True):
@@ -137,10 +142,12 @@ class Renderer(Module):
         :param default_key: The default key which should be used for storing the output in merged file.
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
+        :param unique_for_camposes: True if the registered output is unique for all the camera poses
         """
         use_stereo = self.config.get_bool("stereo", False)
 
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, stereo = use_stereo, unique_for_camposes = unique_for_camposes)
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, stereo = use_stereo,
+                                               unique_for_camposes=unique_for_camposes)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({
