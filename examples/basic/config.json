@@ -25,6 +25,25 @@
       }
     },
     {
+      "name": "object.PositionSampler",
+      "config":{
+        "pos_sampler":{
+          "type":"cuboid",
+          "params":{
+            "max":[5,5,5],
+            "min":[-5,-5,-5]
+          }
+        },
+        "rot_sampler":{
+          "type":"cuboid",
+          "params":{
+            "max":[0,0,0],
+            "min":[6.28,6.28,6.28]
+          }
+        }
+      }
+    },
+    {
       "name": "lighting.LightPositioning",
       "config": {
         "lights": [
