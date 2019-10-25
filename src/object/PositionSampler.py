@@ -28,51 +28,15 @@ class PositionSampler(Module):
         for obj in bpy.context.scene.objects:
             obj.location = bad_position
         bpy.context.view_layer.update()
+   
 
-        # initialize the sampler (This will change, just an example sampler to make the code work)
-        class CubeSampler:
-            def __init__(self,_min,_max):
-                self.min = _min
-                self.max = _max
-            def get_sample(self):
-                x = uniform(self.min[0], self.max[0])
-                y = uniform(self.min[1], self.max[1])
-                z = uniform(self.min[2], self.max[2])
-                return (x,y,z)
-        
-        # All of sampler configs will be handled more elaborately when we have the general sampler class
-        # Please refer to https://rmc-github.robotic.dlr.de/denn-ma/BlenderProc/issues/106
-        pos_sampler_type = self.config.get_string("pos_sampler/type")
-        pos_sampler_params = self.config.get_raw_dict("pos_sampler/params") # this will evantually be passed to the generic sampler class
-
-        if pos_sampler_type is None:
-            raise Exception("Missing sampler type")
-
-        if pos_sampler_params is None:
-            raise Exception("Missing sampler params")
-
-        # since for now we only have one sampler for position sampling, we hardcode the method to extract
-        # params required by this sampler which are triplets of min and max
-        pos_min = self.config.get_list("pos_sampler/params/min",size=3)
-        pos_max = self.config.get_list("pos_sampler/params/max",size=3)
-        
-        # similarly a naive rotation sampler, this can change in future
-        rot_sampler_type = self.config.get_string("rot_sampler/type")
-        rot_sampler_params = self.config.get_raw_dict("rot_sampler/params") # this will evantually be passed to the generic sampler class
-
-        if rot_sampler_type is None:
-            raise Exception("Missing sampler type")
+        pos_sampler_params = self.config.get_raw_dict("pos_sampler")    
+        rot_sampler_params = self.config.get_raw_dict("rot_sampler")
 
         if rot_sampler_params is None:
             raise Exception("Missing sampler params")
-        
-        # since for now we only have one sampler for rotation sampling, we hardcode the method to extract
-        # params required by this sampler which are triplets of min and max
-        rot_min = self.config.get_list("rot_sampler/params/min",size=3)
-        rot_max = self.config.get_list("rot_sampler/params/max",size=3)
-
-        pos_sampler = CubeSampler(pos_min,pos_max)
-        rad_sampler = CubeSampler(rot_min,rot_max)
+        if pos_sampler_params is None:
+            raise Exception("Missing sampler params")            
 
         # 2- Until we have objects remaining and have not run out of tries, Sample a point
         placed = [] # List of objects successfully placed
@@ -86,8 +50,8 @@ class PositionSampler(Module):
                 no_collision = True
                 for i in range(max_tries): # Try max_iter amount of times
                     # 3- Put the top object in queue at the sampled point in space
-                    position = pos_sampler.get_sample() 
-                    rotation = rad_sampler.get_sample()
+                    position = Utility.sample_based_on_config(pos_sampler_params) #pos_sampler.get_sample() 
+                    rotation = Utility.sample_based_on_config(rot_sampler_params) #rad_sampler.get_sample()
                     obj.location = position # assign it a new position
                     obj.rotation_euler = rotation # and a rotation
                     bpy.context.view_layer.update() # then udpate scene

@@ -1,19 +1,29 @@
 from src.main.Module import Module
 import bpy
 import csv
+import os
 
 from src.utility.Utility import Utility
 
 
-class SuncgMaterials(Module):
+class SuncgLighting(Module):
+    """ Adds emission shader to lamps, windows and ceilings.
 
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "lightbulb_emission_strength", "The emission strength that should be used for light bulbs."
+       "lampshade_emission_strength", "The emission strength that should be used for lamp shades."
+    """
     def __init__(self, config):
         Module.__init__(self, config)
 
         # Read in lights
         self.lights = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
+        with open(Utility.resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -37,7 +47,7 @@ class SuncgMaterials(Module):
 
         # Read in windows
         self.windows = []
-        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
+        with open(Utility.resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":
@@ -146,7 +156,6 @@ class SuncgMaterials(Module):
                     links.new(emission_node.outputs[0], mix_node.inputs[1])
 
     def run(self):
-        """ Adds emission shader to lamps, windows and ceilings. """
         # Make some objects emit lights
         for obj in bpy.context.scene.objects:
             if "modelId" in obj:

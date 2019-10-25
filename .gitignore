@@ -4,3 +4,7 @@ blender
 .idea/
 output/
 *.pyc
+*.swp
+docs/build/
+!docs/source/index.rst
+docs/source/*rst

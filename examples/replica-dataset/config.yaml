@@ -1,0 +1,70 @@
+# Args: path_to_the_replica_data_folder  output_path
+{
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:1>",
+      "data_set_name": "office_1",
+      "data_path": "<args:0>"
+    },
+    "renderer": {
+      "pixel_aspect_x": 1.333333333
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.PlyLoader",
+      "config": {
+        "is_replica_object": "True",
+        "use_smooth_shading": "True",
+        "use_ambient_occlusion": "True"
+      }
+    },
+    {
+      "name": "manipulators.FloorExtractor",
+      "config": {
+        "is_replica_object": "True",
+        "obj_name": "mesh",
+        "compare_angle_degrees" : 7.5, # max angle difference to up facing polygons
+        "compare_height": 0.15  # height, which is allowed for polygons to be away from the height level in up and down dir.
+      }
+    },
+    {
+      "name": "camera.ReplicaCameraSampler",
+      "config": {
+        "is_replica_object": "True",
+        "sqrt_number_of_rays": 50,
+        "near_clipping": 0.01,
+        "sample_amount": 15,
+        "proximity_checks": {
+          "min": 1.0,
+          "avg": {
+            "min": 2.0,
+            "max": 4.0
+          }
+        },
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}

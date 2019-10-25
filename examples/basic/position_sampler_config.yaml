@@ -1,4 +1,4 @@
-// Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
@@ -25,32 +25,7 @@
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
-      "config": {
-        "path": "<args:0>"
-      }
-    },
-    {
-      "name": "object.PositionSampler",
-      "config":{
-        "pos_sampler":{
-          "type":"cuboid",
-          "params":{
-            "max":[250,250,250],
-            "min":[-250,-250,-250]
-          }
-        },
-        "rot_sampler":{
-          "type":"cuboid",
-          "params":{
-            "max":[0,0,0],
-            "min":[6.28,6.28,6.28]
-          }
-        }
-      }
-    },
-    {
-      "name": "lighting.LightPositioning",
+      "name": "lighting.LightLoader",
       "config": {
         "lights": [
           {
@@ -59,6 +34,41 @@
             "energy": 1000
           }
         ]
+      }
+    },
+    {
+      "name": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation",
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    },
+    {
+      "name": "object.PositionSampler",
+      "config":{
+        "pos_sampler":{
+          "name":"BoundingBoxSampler",
+          "parameters":{
+            "max":[250,250,250],
+            "min":[-250,-250,-250]
+          }
+        },
+        "rot_sampler":{
+          "name":"BoundingBoxSampler",
+          "parameters":{
+            "max":[0,0,0],
+            "min":[6.28,6.28,6.28]
+          }
+        }
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
       }
     },
     {
@@ -71,7 +81,6 @@
     {
       "name": "writer.Hdf5Writer",
       "config": {
-        "delete_original_files_afterwards": false
       }
     }
   ]
