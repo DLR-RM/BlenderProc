@@ -2,6 +2,7 @@ import os
 import numpy as np
 from mathutils import Vector, Euler
 import bpy
+import json
 
 class ItemWriter:
 
@@ -30,20 +31,20 @@ class ItemWriter:
         value_list = []
         # Go over all items
         for item in items:
-            value_list_per_item = []
+            value_list_per_item = {}
             # Go through all attributes
             for attribute in attributes:
                 # Get the attribute value
                 value = self.get_item_attribute_func(item, attribute)
 
                 # If its a list of numbers, just add to the array, else just add one value
-                if isinstance(value, Vector) or isinstance(value, Euler) or isinstance(value, list):
-                    value_list_per_item.extend(value[:])
-                else:
-                    value_list_per_item.append(value)
+                if isinstance(value, Vector) or isinstance(value, Euler):
+                    value = list(value)
+
+                value_list_per_item[attribute] = value
 
             value_list.append(value_list_per_item)
 
         # Write to a numpy file
-        np.save(path_prefix + "%04d" % frame + ".npy", value_list)
+        np.save(path_prefix + "%04d" % frame + ".npy", np.string_(json.dumps(value_list)))
 

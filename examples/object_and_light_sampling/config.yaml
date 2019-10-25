@@ -56,22 +56,13 @@
       }
     },
     {
-      "name": "writer.ObjectStateWriter",
-      "config": {
-        "attributes_to_write": ["id", "location", "rotation_euler"]
-      }
+      "name": "writer.ObjectStateWriter"
     },
     {
-      "name": "writer.LightStateWriter",
-      "config": {
-        "attributes_to_write": ["id", "location", "rotation_euler"]
-      }
+      "name": "writer.LightStateWriter"
     },
     {
-      "name": "writer.CameraStateWriter",
-      "config": {
-        "attributes_to_write": ["id", "location", "rotation_forward_vec", "rotation_up_vec", "half_fov_x", "half_fov_y"]
-      }
+      "name": "writer.CameraStateWriter"
     },
     {
       "name": "renderer.RgbRenderer",

@@ -25,7 +25,7 @@ class ObjectStateWriter(StateWriter):
             if object.type == 'MESH':
                 objects.append(object)
 
-        self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states")
+        self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states", ["id", "location", "rotation_euler"])
 
     def _get_attribute(self, object, attribute_name):
         """ Returns the value of the requested attribute for the given object.

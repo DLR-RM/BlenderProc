@@ -27,7 +27,7 @@ class LightStateWriter(StateWriter):
             if object.type == 'LIGHT':
                 lights.append(object)
 
-        self.write_attributes_to_file(self.light_writer, lights, "light_states_", "light_states")
+        self.write_attributes_to_file(self.light_writer, lights, "light_states_", "light_states", ["id", "location", "rotation_euler", "energy"])
 
     def _get_attribute(self, light, attribute_name):
         """ Returns the value of the requested attribute for the given light.

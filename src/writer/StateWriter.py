@@ -34,7 +34,7 @@ class StateWriter(Module):
         self.name_to_id = {}
         self.destination_frame = self.config.get_list("destination_frame", ["X", "Y", "Z"])
 
-    def write_attributes_to_file(self, item_writer, items, default_file_prefix, default_output_key, version="1.0.0"):
+    def write_attributes_to_file(self, item_writer, items, default_file_prefix, default_output_key, default_attributes, version="1.0.0"):
         """ Writes the state of the given items to a file with the configured prefix.
 
         This method also registers the corresponding output.
@@ -48,7 +48,7 @@ class StateWriter(Module):
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
 
-        item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write"))
+        item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
 
         self._register_output(file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
 
