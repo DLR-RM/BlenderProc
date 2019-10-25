@@ -4,8 +4,6 @@ import random
 
 from src.lighting.LightModule import LightModule
 from src.utility.Utility import Utility
-from src.utility.BoundingBoxSampler import BoundingBoxSampler
-from src.utility.SphereSampler import SphereSampler
 
 
 class LightSampler(LightModule):
@@ -17,14 +15,6 @@ class LightSampler(LightModule):
        :header: "Parameter", "Description"
 
        "path", "A path to a file where values used for setting a ligt source(s) (like position, type, color, etc.) are written, onelight source per line."
-    
-    **Properties per sampling method**:
-
-    .. csv-table::
-       :header: "Keyword", "Description"
-
-       "BoundingBoxSampling", "Uniform 3D sampling method that samples a random position inside a bounding box. See src/utility/BoundingBoxSampler.py for more info."
-       "SphereSampling", "Samples a point in and inside a solid sphere. See src/utility/SphereSampler.py for more info."
     """
 
     def __init__(self, config):

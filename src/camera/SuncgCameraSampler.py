@@ -5,7 +5,7 @@ import bpy
 import mathutils
 
 from src.camera.CameraSampler import CameraSampler
-from src.utility.BoundingBoxSampler import BoundingBoxSampler
+from src.utility.3dUniformSampler import 3dUniformSampler
 from src.utility.Config import Config
 
 
@@ -123,7 +123,7 @@ class SuncgCameraSampler(CameraSampler):
                 min[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][0]
                 max[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][1]
 
-        return BoundingBoxSampler.sample(Config({
+        return 3dUniformSampler.sample(Config({
             "min": list(min),
             "max": list(max)
         }))
