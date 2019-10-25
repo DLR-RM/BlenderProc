@@ -43,6 +43,7 @@ class StateWriter(Module):
         :param items: The list of items.
         :param default_file_prefix: The default file name prefix to use.
         :param default_output_key: The default output key to use.
+        :param default_attributes: The default attributes to write, if no attributes are specified in the config.
         :param version: The version to use when registering the output.
         """
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
