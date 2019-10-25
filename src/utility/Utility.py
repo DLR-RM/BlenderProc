@@ -226,7 +226,7 @@ class Utility:
         :return: The sampled value.
         """
         # Import class from src.utility
-        module_class = getattr(importlib.import_module("src.utility." + name), name.split(".")[-1])
+        module_class = getattr(importlib.import_module("src.utility.sampler." + name), name.split(".")[-1])
         # Build configuration
         config = Config(parameters)
         # Call sample method
