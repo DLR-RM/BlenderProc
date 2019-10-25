@@ -5,7 +5,7 @@ import bpy
 from random import uniform
 from src.utility.Utility import Utility
 from src.main.Module import Module
-import time
+
 
 class PositionSampler(Module):
 
@@ -21,7 +21,6 @@ class PositionSampler(Module):
             4- If no collision then keep the position else reset
         Here we use any general sampling method supported by us
         """
-        start = time.time()
         bad_position = (10000,10000,10000) # for now just assuming that this will always be outside our sampling space
 
         # 1- Place the object outside sampling volume
@@ -75,7 +74,6 @@ class PositionSampler(Module):
                         bpy.context.view_layer.update()
                 if not no_collision:
                     print("giving up on ",obj.name)
-        print("=====>> Time spent in position sampling ",time.time() - start)
 
 
 
