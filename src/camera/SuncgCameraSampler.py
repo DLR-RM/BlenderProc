@@ -5,7 +5,7 @@ import bpy
 import mathutils
 
 from src.camera.CameraSampler import CameraSampler
-from src.utility.Uniform3dSampler import Uniform3dSampler
+from src.utility.sampler.Uniform3dSampler import Uniform3dSampler
 from src.utility.Config import Config
 
 
