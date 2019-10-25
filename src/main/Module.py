@@ -1,7 +1,9 @@
-import bpy
 import os
 
+import bpy
+
 from src.utility.Utility import Utility
+
 
 class Module:
     """
@@ -51,7 +53,7 @@ class Module:
         else:
             bpy.context.scene["output"] = [output]
 
-    def _register_output(self, default_prefix, default_key, suffix, version, stereo=False):
+    def _register_output(self, default_prefix, default_key, suffix, version, stereo=False, unique_for_camposes=True):
         """ Registers new output type using configured key and file prefix.
 
         :param default_prefix: The default prefix of the generated files.
@@ -59,10 +61,12 @@ class Module:
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
         :param stereo: Boolean indicating whether the output of this rendering result will be stereo.
+        :param unique_for_camposes: True if the output to be registered is unique for all the camera poses
         """
+
         self._add_output_entry({
             "key": self.config.get_string("output_key", default_key),
-            "path": os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix)) + "%04d" + suffix,
+            "path": os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix)) + ("%04d" if unique_for_camposes else "") + suffix,
             "version": version,
             "stereo": stereo
         })
