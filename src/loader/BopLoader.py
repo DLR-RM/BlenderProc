@@ -8,6 +8,8 @@ import numpy as np
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
+from src.utility.Config import Config
+from src.camera.CameraModule import CameraModule
 from bop_toolkit_lib import dataset_params, inout
 
 class BopLoader(Module):
@@ -43,6 +45,28 @@ class BopLoader(Module):
         cam_H_w2c = np.eye(4)
         cam_H_w2c[:3,:3] = np.array(sc_camera['1']['cam_R_w2c']).reshape(3,3) 
         cam_H_w2c[:3, 3] = np.array(sc_camera['1']['cam_t_w2c']).reshape(3) *0.01
+        print('-----------------------------')
+        print("Cam: {}".format(cam_H_w2c))
+        print('-----------------------------')
+        cm = CameraModule(self.config)
+        def rotationMatrixToEulerAngles(R):
+            sy = math.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
+
+            singular = sy < 1e-6
+
+            if  not singular :
+                x = math.atan2(R[2,1] , R[2,2])
+                y = math.atan2(-R[2,0], sy)
+                z = math.atan2(R[1,0], R[0,0])
+            else :
+                x = math.atan2(-R[1,2], R[1,1])
+                y = math.atan2(-R[2,0], sy)
+                z = 0
+
+            return np.array([x, y, z])
+        config = {"location": list(cam_H_w2c[3,:]), "rotation": list(rotationMatrixToEulerAngles(cam_H_w2c)), "fov": 1.8}
+        cm._add_cam_pose(Config(config))
+
         print(sc_gt.keys())
         for gt in sc_gt[1]:
            
