@@ -39,6 +39,10 @@ class Utility:
         all_base_config = global_config["all"] if "all" in global_config else {}
 
         for module_config in module_configs:
+            # If only the module name is given (short notation)
+            if isinstance(module_config, str):
+                module_config = {"name": module_config}
+
             # Merge global and local config (local overwrites global)
             model_type = module_config["name"].split(".")[0]
             base_config = global_config[model_type] if model_type in global_config else {}
@@ -47,8 +51,10 @@ class Utility:
             config = deepcopy(all_base_config)
             # Overwrite with module type base config
             Utility.merge_dicts(base_config, config)
-            # Overwrite with module specific config
-            Utility.merge_dicts(module_config["config"], config)
+            # Check if there is a module specific config
+            if "config" in module_config:
+                # Overwrite with module specific config
+                Utility.merge_dicts(module_config["config"], config)
 
             with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
                 # Import file and extract class
@@ -132,6 +138,28 @@ class Utility:
         :return: The rgba color, in form of a list. Values between 0 and 1.
         """
         return [x / 255 for x in bytes.fromhex(hex[-6:])] + [1.0]
+
+    @staticmethod
+    def rgb_to_hex(rgb):
+        """ Converts the given rgb to hex values.
+
+        :param rgb: tuple of three with rgb integers.
+        :return: Hex string.
+        """
+        return '#%02x%02x%02x' % tuple(rgb)
+
+    @staticmethod
+    def get_idx(array,item):
+        """
+        Returns index of an element if it exists in the list
+        :param array: a list with values for which == operator works.
+        :param item: item to find the index of
+        :return: index of item, -1 otherwise
+        """
+        try:
+            return array.index(item)
+        except ValueError:
+            return -1
 
     @staticmethod
     def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
