@@ -41,9 +41,6 @@ class LightSampler(LightModule):
             # Add new light source based on the sampled settings
             self.light_source_collection.add_item(sampled_settings)
 
-            # Write settings to file
-            self._write_settings_to_file(sampled_settings, self.config.get_string("path", ""))
-            
     def _sample_settings(self, source_spec):
         """ Samples the parameters according to user-defined sampling types in the configuration file.
 
@@ -61,20 +58,3 @@ class LightSampler(LightModule):
 
         return sampled_settings
 
-    def _write_settings_to_file(self, sampled_settings, path):
-        """ Writes light source settings used in a file.
-
-        One light source is one line in the file, settings sorted alphabetically.
-
-        :param sampled_settings: Dict with used settings where {key:value} pairs are {setting name: used setting value}.
-        :param path: Path to output file specified in the configuration file.
-        """
-        line = ""
-        # Sort merged source specific and cross source settings alphabetically
-        settings_to_write = sorted(Utility.merge_dicts(sampled_settings, self.cross_source_settings).items(), key=lambda x: x[0])
-        with open(Utility.resolve_path(path), 'a') as f:
-            for item, value in settings_to_write:
-                if not isinstance(value, list):
-                    value = [value]
-                line += " ".join(str(x) for x in value) + " "
-            f.write('%s \n' % line)

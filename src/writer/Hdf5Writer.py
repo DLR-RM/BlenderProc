@@ -1,11 +1,16 @@
-from src.main.Module import Module
+import csv
+import json
+import os
+import shutil
+
 import bpy
 import h5py
-import os
-from src.utility.Utility import Utility
 import imageio
 import numpy as np
-import shutil
+
+from src.main.Module import Module
+from src.utility.Utility import Utility
+
 
 class Hdf5Writer(Module):
     """ For each key frame merges all registered output files into one hdf5 file
@@ -36,13 +41,19 @@ class Hdf5Writer(Module):
             hdf5_path = os.path.join(self._determine_output_dir(False), str(frame) + ".hdf5")
             with h5py.File(hdf5_path, "w") as f:
 
+                if 'output' not in bpy.context.scene:
+                    print("No output was designed in prior models!")
+                    return
                 # Go through all the output types
                 print("Merging data for frame " + str(frame) + " into " + hdf5_path)
+
                 for output_type in bpy.context.scene["output"]:
 
                     use_stereo = output_type["stereo"]
                     # Build path (path attribute is format string)
-                    file_path = output_type["path"] % frame
+                    file_path = output_type["path"]
+                    if '%' in file_path:
+                        file_path = file_path % frame
 
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
@@ -54,14 +65,26 @@ class Hdf5Writer(Module):
                     else:
                         data = self._load_and_postprocess(file_path, output_type["key"])
 
-                    f.create_dataset(output_type["key"], data=data, compression=self.config.get_string("compression", 'gzip'))
+                    self._write_to_hdf_file(f, output_type["key"], data)
 
                     # Write version number of current output at key_version
-                    f.create_dataset(output_type["key"] + "_version", data=np.string_([output_type["version"]]), dtype="S10")
+                    self._write_to_hdf_file(f, output_type["key"] + "_version", np.string_([output_type["version"]]))
 
         # Remove temp data
         if self.config.get_bool("delete_temporary_files_afterwards", True):
             shutil.rmtree(self._temp_dir)
+
+    def _write_to_hdf_file(self, file, key, data):
+        """ Adds the given data as a new entry to the given hdf5 file.
+
+        :param file: The hdf5 file handle.
+        :param key: The key at which the data should be stored in the hdf5 file.
+        :param data: The data to store.
+        """
+        if data.dtype.char == 'S':
+            file.create_dataset(key, data=data, dtype="S10")
+        else:
+            file.create_dataset(key, data=data, compression=self.config.get_string("compression", 'gzip'))
 
     def _load_file(self, file_path):
         """ Tries to read in the file with the given path into a numpy array.
@@ -78,6 +101,8 @@ class Hdf5Writer(Module):
             return self._load_image(file_path)
         elif file_ending in ["npy", "npz"]:
             return self._load_npy(file_path)
+        elif file_ending in ["csv"]:
+            return self._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
@@ -98,6 +123,19 @@ class Hdf5Writer(Module):
         :return: The content of the file
         """
         return np.load(file_path)
+
+    def _load_csv(self, file_path):
+        """ Load the csv file at the given path.
+
+        :param file_path: The path.
+        :return: The content of the file
+        """
+        rows = []
+        with open(file_path, mode='r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            for row in csv_reader:
+                rows.append(row)
+        return np.string_(json.dumps(rows)) # make the list of dicts as a string
 
     def _apply_postprocessing(self, output_key, data):
         """ Applies all postprocessing modules registered for this output type.

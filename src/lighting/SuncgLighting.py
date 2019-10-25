@@ -1,6 +1,7 @@
 from src.main.Module import Module
 import bpy
 import csv
+import os
 
 from src.utility.Utility import Utility
 
@@ -22,7 +23,7 @@ class SuncgLighting(Module):
         # Read in lights
         self.lights = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(Utility.resolve_path("suncg/light_geometry_compact.txt")) as f:
+        with open(Utility.resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -46,7 +47,7 @@ class SuncgLighting(Module):
 
         # Read in windows
         self.windows = []
-        with open(Utility.resolve_path('suncg/ModelCategoryMapping.csv'), 'r') as csvfile:
+        with open(Utility.resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":

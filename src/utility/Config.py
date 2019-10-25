@@ -22,7 +22,7 @@ class Config:
             delimiter_pos = name.find("/")
             block_name = name[:delimiter_pos]
             if block_name in block and type(block[block_name]) is dict:
-                return self._get_value_with_fallback(name[delimiter_pos + 1:], block[block_name])
+                return self._get_value(name[delimiter_pos + 1:], block[block_name])
             else:
                 raise NotFoundError("No such configuration block '" + block_name + "'!")
         else:

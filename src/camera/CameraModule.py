@@ -7,7 +7,6 @@ import bpy
 import numpy as np
 import os
 
-
 class CameraModule(Module):
     """
     **Configuration**:
@@ -52,30 +51,7 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1):
-        """ Determines the current pose of the given camera and writes it to a .npy file.
-
-        :param frame: The current frame number, used for naming the output file.
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        :param room_id: The id of the room which contains the camera (optional)
-        """
-        cam_pose = []
-        # Location
-        cam_pose.extend(cam_ob.location[:])
-        # Orientation
-        cam_pose.extend(cam_ob.rotation_euler[:])
-        # FOV
-        cam_pose.extend([cam.angle_x, cam.angle_y])
-        # Room
-        cam_pose.append(room_id)
-        np.save(os.path.join(self._determine_output_dir(), "campose_" + ("%04d" % frame)), cam_pose)
-
-    def _register_cam_pose_output(self):
-        """ Registers the written cam pose files as an output """
-        self._register_output("campose_", "campose", ".npy", "1.0.0")
-
-    def _add_cam_pose(self, config, mat=None):
+    def _add_cam_pose(self, config):
         """ Adds a new cam pose according to the given configuration.
 
         :param config: A configuration object which contains all parameters relevant for the new cam pose.
@@ -125,5 +101,4 @@ class CameraModule(Module):
         # Store new cam pose as next frame
         frame_id = bpy.context.scene.frame_end
         self._insert_key_frames(cam, cam_ob, frame_id)
-        self._write_cam_pose_to_file(frame_id, cam, cam_ob)
         bpy.context.scene.frame_end = frame_id + 1
