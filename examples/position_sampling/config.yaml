@@ -51,14 +51,14 @@
       "config":{
         "max_iterations": 1000,
         "pos_sampler":{
-          "name":"BoundingBoxSampler",
+          "name":"Uniform3dSampler",
           "parameters":{
-            "max":[250,250,250],
-            "min":[-250,-250,-250]
+            "max":[5,5,5],
+            "min":[-5,-5,-5]
           }
         },
         "rot_sampler":{
-          "name":"BoundingBoxSampler",
+          "name":"Uniform3dSampler",
           "parameters":{
             "max":[0,0,0],
             "min":[6.28,6.28,6.28]
