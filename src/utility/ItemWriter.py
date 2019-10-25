@@ -44,7 +44,6 @@ class ItemWriter:
 
             value_list.append(value_list_per_item)
 
-        print(value_list)
         # Write to a numpy file
         np.save(path_prefix + "%04d" % frame + ".npy", value_list)
 

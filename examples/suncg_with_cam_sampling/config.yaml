@@ -38,6 +38,12 @@
       "config": {}
     },
     {
+      "name": "writer.CameraStateWriter",
+      "config": {
+        "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y", "customprop_room_id"]
+      }
+    },
+    {
       "name": "renderer.NormalRenderer",
       "config": {}
     },

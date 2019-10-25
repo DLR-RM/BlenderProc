@@ -32,5 +32,4 @@ class CameraLoader(CameraModule):
         self.cam_pose_collection.add_items_from_dicts(self.config.get_list("cam_poses", []))
         self.cam_pose_collection.add_items_from_file(self.config.get_string("path", ""), self.config.get_string("file_format", ""), self.number_of_arguments_per_parameter)
 
-        self._register_cam_pose_output()
 

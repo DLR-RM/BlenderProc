@@ -25,13 +25,22 @@
       }
     },
     {
-      "name": "lighting.LightLoader",
+      "name": "lighting.LightSampler",
       "config": {
         "lights": [
           {
+            "location": {
+              "name": "ShellSampler",
+              "parameters": {
+                "center": [1, 2, 3],
+                "radius_min": 4,
+                "radius_max": 7,
+                "elevation_min": 15,
+                "elevation_max": 70
+              }
+            },
             "type": "POINT",
-            "location": [5, -5, 5],
-            "energy": 1000
+            "energy": 500
           }
         ]
       }
@@ -56,6 +65,12 @@
       "name": "writer.LightStateWriter",
       "config": {
         "attributes_to_write": ["id", "location", "rotation_euler"]
+      }
+    },
+    {
+      "name": "writer.CameraStateWriter",
+      "config": {
+        "attributes_to_write": ["id", "location", "rotation_forward_vec", "rotation_up_vec", "half_fov_x", "half_fov_y"]
       }
     },
     {

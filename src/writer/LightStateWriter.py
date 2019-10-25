@@ -6,7 +6,7 @@ from src.writer.StateWriter import StateWriter
 
 
 class LightStateWriter(StateWriter):
-    """ Writes the state of all object for each frame to a file.
+    """ Writes the state of all lights for each frame to a file.
 
     **Attributes per object**:
 

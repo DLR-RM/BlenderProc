@@ -6,15 +6,12 @@ from src.writer.StateWriter import StateWriter
 
 
 class ObjectStateWriter(StateWriter):
-    """ Writes the state of all object for each frame to a file.
+    """ Writes the state of all objects for each frame to a file.
 
     **Attributes per object**:
 
     .. csv-table::
        :header: "Keyword", "Description"
-
-       "id", ""
-       "SphereSampling", "Samples a point in and inside a solid sphere. See src/utility/SphereSampler.py for more info."
     """
 
     def __init__(self, config):

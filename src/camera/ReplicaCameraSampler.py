@@ -117,7 +117,6 @@ class ReplicaCameraSampler(CameraSampler):
         print(str(tries) + " tries were necessary")
 
         bpy.context.scene.frame_end = frame_id
-        self._register_cam_pose_output()
 
     def _calc_number_of_cams_in_room(self, room_obj):
         """ Approximates the square meters of the room and then uses cams_per_square_meter to get total number of cams in room.
