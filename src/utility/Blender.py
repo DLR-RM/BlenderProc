@@ -6,7 +6,7 @@ from mathutils import Vector
 
 def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
     """
-    :obj: object to trangilate, must be a mesh
+    :obj: object to triangulate, must be a mesh
     :transform: transform to world coordinates if True
     :triangulate: perform triangulation if True
     :apply_modifiers: applies modifiers if any and True
