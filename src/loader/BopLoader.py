@@ -47,30 +47,12 @@ class BopLoader(Module):
         for cam_id in sc_camera.keys():
             cam_H_w2c = np.eye(4)
             cam_H_w2c[:3,:3] = np.array(sc_camera[cam_id]['cam_R_w2c']).reshape(3,3)
-            cam_H_w2c[:3, 3] = np.array(sc_camera[cam_id]['cam_t_w2c']).reshape(3) *0.01
+            cam_H_w2c[:3, 3] = np.array(sc_camera[cam_id]['cam_t_w2c']).reshape(3) * 0.01
             print('-----------------------------')
             print("Cam: {}".format(cam_H_w2c))
             print('-----------------------------')
-            def rotationMatrixToEulerAngles(R):
-                sy = math.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
-
-                singular = sy < 1e-6
-
-                if  not singular :
-                    x = math.atan2(R[2,1] , R[2,2])
-                    y = math.atan2(-R[2,0], sy)
-                    z = math.atan2(R[1,0], R[0,0])
-                else :
-                    x = math.atan2(-R[1,2], R[1,1])
-                    y = math.atan2(-R[2,0], sy)
-                    z = 0
-
-                return np.array([x, y, z])
-            print(list(cam_H_w2c[:3,3]))
-            source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
-            pos = Utility.transform_point_to_blender_coord_frame(list(cam_H_w2c[:3,3]), source_frame)
-            config = {"location": pos, "rotation": list(rotationMatrixToEulerAngles(cam_H_w2c))}
-            cm._add_cam_pose(Config(config))
+            config = {"location": [0,0,0], "rotation": list([0,0,0])}
+            cm._add_cam_pose(Config(config), Matrix(np.linalg.inv(cam_H_w2c)))
 
         first_scene = [key for key in sc_camera.keys()][0]
         cam_H_w2c = np.eye(4)
@@ -88,11 +70,7 @@ class BopLoader(Module):
 
             cur_obj = bpy.context.selected_objects[-1]
 
-            mat_H = Matrix.Identity(4)
-            mat_H[0][0], mat_H[0][1], mat_H[0][2], mat_H[0][3] = cam_H_m2w[0,0], cam_H_m2w[0,1], cam_H_m2w[0,2], cam_H_m2w[0,3]
-            mat_H[1][0], mat_H[1][1], mat_H[1][2], mat_H[1][3] = cam_H_m2w[1,0], cam_H_m2w[1,1], cam_H_m2w[1,2], cam_H_m2w[1,3]
-            mat_H[2][0], mat_H[2][1], mat_H[2][2], mat_H[2][3] = cam_H_m2w[2,0], cam_H_m2w[2,1], cam_H_m2w[2,2], cam_H_m2w[2,3]
-            mat_H[3][0], mat_H[3][1], mat_H[3][2], mat_H[3][3] = cam_H_m2w[3, 0], cam_H_m2w[3, 1], cam_H_m2w[3, 2], cam_H_m2w[3, 3]
+            mat_H = Matrix(cam_H_m2w)
 
             cur_obj.matrix_world = mat_H # m2w = c2w @ m2c
             cur_obj.scale = Vector((0.01,0.01,0.01))

@@ -75,7 +75,7 @@ class CameraModule(Module):
         """ Registers the written cam pose files as an output """
         self._register_output("campose_", "campose", ".npy", "1.0.0")
 
-    def _add_cam_pose(self, config):
+    def _add_cam_pose(self, config, mat=None):
         """ Adds a new cam pose according to the given configuration.
 
         :param config: A configuration object which contains all parameters relevant for the new cam pose.
@@ -110,6 +110,9 @@ class CameraModule(Module):
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
             raise Exception("No such rotation_format:" + str(rotation_format))
+        if mat is not None:
+            cam_ob.matrix_world = mat
+            cam_ob.scale = [1,-1,-1] # fix orientation
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
