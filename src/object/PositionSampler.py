@@ -1,11 +1,11 @@
-from src.utility.Blender import check_intersection
+from src.utility.Blender import check_intersection, check_bb_intersection
 import mathutils
 from math import pi
 import bpy
 from random import uniform
 from src.utility.Utility import Utility
 from src.main.Module import Module
-
+import time
 
 class PositionSampler(Module):
 
@@ -21,6 +21,7 @@ class PositionSampler(Module):
             4- If no collision then keep the position else reset
         Here we use any general sampling method supported by us
         """
+        start = time.time()
         bad_position = (10000,10000,10000) # for now just assuming that this will always be outside our sampling space
 
         # 1- Place the object outside sampling volume
@@ -78,28 +79,39 @@ class PositionSampler(Module):
         max_tries = 1000 # After this many tries we give up on current object and continue with rest
         cache = {} # cache to fasten collision detection
         for obj in bpy.context.scene.objects: # for each object
-            prior_location = obj.location
-            prior_rotation = obj.rotation_euler
-            for i in range(max_tries): # Try max_iter amount of times
-                # 3- Put the top object in queue at the sampled point in space
-                position = pos_sampler.get_sample() 
-                rotation = rad_sampler.get_sample()
-                obj.location = position # assign it a new position
-                obj.rotation_euler = rotation # and a rotation
-                bpy.context.view_layer.update() # then udpate scene
+            if obj.type == "MESH":
+                print("Trying to put ", obj.name)
+                prior_location = obj.location
+                prior_rotation = obj.rotation_euler
                 no_collision = True
-                for already_placed in placed: # Now check for collisions
-                    intersection, cache = check_intersection(obj,already_placed, cache)
-                    if intersection:
-                        no_collision = False
-                        break
-                # 4- If no collision then keep the position else reset
-                if no_collision: # if no collisions 
-                    break # then stop trying and keep assigned position and orientation
-                else: # if any collisions then reset object to initial state
-                    obj.location = prior_location
-                    obj.rotation_euler = prior_rotation 
-                    bpy.context.view_layer.update()
+                for i in range(max_tries): # Try max_iter amount of times
+                    # 3- Put the top object in queue at the sampled point in space
+                    position = pos_sampler.get_sample() 
+                    rotation = rad_sampler.get_sample()
+                    obj.location = position # assign it a new position
+                    obj.rotation_euler = rotation # and a rotation
+                    bpy.context.view_layer.update() # then udpate scene
+                    no_collision = True
+                    for already_placed in placed: # Now check for collisions
+                        intersection  = check_bb_intersection(obj,already_placed) # First check if bounding boxes collides
+                        if intersection: # if they do
+                            intersection, cache = check_intersection(obj,already_placed) # then check for more refined collisions
+                        if intersection:
+                            no_collision = False
+                            break
+                    # 4- If no collision then keep the position else reset
+                    if no_collision: # if no collisions
+                        print("No collision detected, Moving forward!") 
+                        placed.append(obj)
+                        break # then stop trying and keep assigned position and orientation
+                    else: # if any collisions then reset object to initial state
+                        print("collision detected, Retrying!!") 
+                        obj.location = prior_location
+                        obj.rotation_euler = prior_rotation 
+                        bpy.context.view_layer.update()
+                if not no_collision:
+                    print("giving up on ",obj.name)
+        print("=====>> Time spent in position sampling ",time.time() - start)
 
 
 

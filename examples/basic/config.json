@@ -25,13 +25,19 @@
       }
     },
     {
+      "name": "camera.SuncgCameraLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
       "name": "object.PositionSampler",
       "config":{
         "pos_sampler":{
           "type":"cuboid",
           "params":{
-            "max":[5,5,5],
-            "min":[-5,-5,-5]
+            "max":[250,250,250],
+            "min":[-250,-250,-250]
           }
         },
         "rot_sampler":{
@@ -56,22 +62,10 @@
       }
     },
     {
-      "name": "camera.SuncgCameraLoader",
-      "config": {
-        "path": "<args:0>"
-      }
-    },
-    {
-      "name": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350
+        "samples": 50
       }
     },
     {

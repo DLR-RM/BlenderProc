@@ -1,15 +1,8 @@
 import bpy
 import bmesh
-
+from mathutils import Vector
 
     
-def local_to_world(cords, world):
-    """
-    :param cords: coordinates a tuple of 3 values for x,y,z
-    :param world: world matrix <- transformation matrix
-    Returns a transformed, triangulated copy of the mesh
-    """
-    return [world @ Vector(cord) for cord in cords]
 
 def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
     """
@@ -51,13 +44,58 @@ def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
 
     return bm
 
+def local_to_world(cords, world):
+    """
+    :param cords: coordinates a tuple of 3 values for x,y,z
+    :param world: world matrix <- transformation matrix
+    Returns a cords transformed to the given transformation world matrix
+    """
+    return [world @ Vector(cord) for cord in cords]
 
+def get_bounds(obj):
+    """
+    :param obj: a mesh object
+    returns the 8 axis aligned bounding box coordinates transformed to world matrix
+    """
+    return local_to_world(obj.bound_box, obj.matrix_world)
+
+def dot_product(v1,v2):
+    """
+    :param v1: a vector of 3 scalars
+    :param v2: a vector of 3 scalars
+    returns dot product between the vectors
+    """
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
+
+def check_bb_intersection(obj1,obj2):
+    """
+    :param obj1: object 1  to check for intersection, must be a mesh
+    :param obj2: object 2  to check for intersection, must be a mesh
+    Checks if there is a bounding box collision
+    returns a boolean
+    """
+    b1w = get_bounds(obj1)
+    b2w = get_bounds(obj2)
+    origins = [[0,3],[0,4],[0,1]]
+    deltas = [b1w[origins[0][0]] - b1w[origins[0][1]], b1w[origins[1][0]] - b1w[origins[1][1]], b1w[origins[2][0]] - b1w[origins[2][1]]]
+    for point in b2w:
+        collide = True
+        # check if that point lies inside the area
+        # Explanation found at https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
+        for idx in range(3): 
+            dot_with_query = dot_product(deltas[idx],point)
+            dot_with_r1 = dot_product(deltas[idx],b1w[origins[idx][0]])
+            dot_with_r2 = dot_product(deltas[idx],b1w[origins[idx][1]])
+            collide = collide and (dot_with_r2 < dot_with_query and dot_with_query < dot_with_r1)
+        if collide:
+            return True
+    return False
 
 
 def check_intersection(obj, obj2, cache = None):
     """
-    :obj1: object 1  to check for intersection, must be a mesh
-    :obj2: object 2  to check for intersection, must be a mesh
+    :param obj1: object 1  to check for intersection, must be a mesh
+    :param obj2: object 2  to check for intersection, must be a mesh
     Check if any faces intersect with the other object
     returns a boolean
     """
@@ -86,7 +124,7 @@ def check_intersection(obj, obj2, cache = None):
     if len(bm.edges) > len(bm2.edges):
         bm2, bm = bm, bm2
 
-    # Create a real mesh (lame!)
+    # Create a real mesh 
     scene = bpy.context.scene
     me_tmp = bpy.data.meshes.new(name="~temp~")
     bm2.to_mesh(me_tmp)

@@ -13,8 +13,6 @@ class Config:
         :param block: A dict containing the configuration. If none, the whole data of this config object will be used.
         :return: The value of the parameter.
         """
-        print("Here with ",name)
-        print("and block",block)
         if block is None:
             block = self.data
         if "/" in name:
