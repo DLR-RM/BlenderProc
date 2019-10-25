@@ -2,7 +2,7 @@ import mathutils
 import random
 
 
-class 3dUniformSampler:
+class Uniform3dSampler:
     """ Uniformly samples a 3-dimensional value.
 
     **Configuration**:
