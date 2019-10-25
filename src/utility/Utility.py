@@ -39,6 +39,10 @@ class Utility:
         all_base_config = global_config["all"] if "all" in global_config else {}
 
         for module_config in module_configs:
+            # If only the module name is given (short notation)
+            if isinstance(module_config, str):
+                module_config = {"name": module_config}
+
             # Merge global and local config (local overwrites global)
             model_type = module_config["name"].split(".")[0]
             base_config = global_config[model_type] if model_type in global_config else {}
@@ -47,8 +51,10 @@ class Utility:
             config = deepcopy(all_base_config)
             # Overwrite with module type base config
             Utility.merge_dicts(base_config, config)
-            # Overwrite with module specific config
-            Utility.merge_dicts(module_config["config"], config)
+            # Check if there is a module specific config
+            if "config" in module_config:
+                # Overwrite with module specific config
+                Utility.merge_dicts(module_config["config"], config)
 
             with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
                 # Import file and extract class
