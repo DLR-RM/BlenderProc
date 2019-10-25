@@ -25,7 +25,8 @@
       "name": "loader.BopLoader",
       "config": {
         "datasets_path": "<args:0>",
-        "scene_id": 1
+        "scene_id": 1,
+        "source_frame": ["X", "Y", "-Z"]
       }
     },
     {

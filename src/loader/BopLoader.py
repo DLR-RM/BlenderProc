@@ -11,6 +11,7 @@ from src.utility.Utility import Utility
 from src.utility.Config import Config
 from src.camera.CameraModule import CameraModule
 from bop_toolkit_lib import dataset_params, inout
+from copy import deepcopy
 
 class BopLoader(Module):
 
@@ -64,7 +65,8 @@ class BopLoader(Module):
                 z = 0
 
             return np.array([x, y, z])
-        config = {"location": list(cam_H_w2c[3,:]), "rotation": list(rotationMatrixToEulerAngles(cam_H_w2c)), "fov": 1.8}
+        print(list(cam_H_w2c[:3,3]))
+        config = {"location": list(cam_H_w2c[:3,3]), "rotation": list(rotationMatrixToEulerAngles(cam_H_w2c))}
         cm._add_cam_pose(Config(config))
 
         print(sc_gt.keys())
