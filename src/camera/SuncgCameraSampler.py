@@ -94,7 +94,8 @@ class SuncgCameraSampler(CameraSampler):
                     # Set the camera pose at the next frame
                     self.cam_pose_collection.add_item({
                         "location": list(position),
-                        "rotation": list(orientation)
+                        "rotation": list(orientation),
+                        "room_id": room_id
                     })
 
                     successful_tries += 1
@@ -102,8 +103,32 @@ class SuncgCameraSampler(CameraSampler):
                 print(str(tries) + " tries were necessary")
                 room_id += 1
 
-        self._register_cam_pose_output()
+    def _insert_key_frames(self, cam, cam_ob, frame_id):
+        """ Insert key frames for all relevant camera attributes.
 
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
+        :param frame_id: The frame number where key frames should be inserted.
+        """
+        # As the room id depends on the camera pose and therefore on the keyframe, we also need to add keyframes for the room id
+        cam_ob.keyframe_insert(data_path='["room_id"]', frame=frame_id)
+
+        # Add the usual key frames
+        super()._insert_key_frames(cam, cam_ob, frame_id)
+
+    def _add_cam_pose(self, config):
+        """ Adds a new cam pose according to the given configuration.
+
+        :param config: A configuration object which contains all parameters relevant for the new cam pose.
+        """
+        # Collect camera and camera object
+        cam_ob = bpy.context.scene.camera
+
+        # Set room id as custom prop
+        cam_ob["room_id"] = config.get_int("room_id", -1)
+
+        # Set the usual attributes
+        super()._add_cam_pose(config)
 
     def _sample_position(self, room_obj):
         """ Samples a random position inside the bbox of the given room object.
