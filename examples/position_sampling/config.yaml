@@ -49,6 +49,7 @@
     {
       "name": "object.PositionSampler",
       "config":{
+        "max_iterations": 1000,
         "pos_sampler":{
           "name":"BoundingBoxSampler",
           "parameters":{

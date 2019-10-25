@@ -1,4 +1,4 @@
-from src.utility.Blender import check_intersection, check_bb_intersection
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 import mathutils
 from math import pi
 import bpy
@@ -26,7 +26,7 @@ class PositionSampler(Module):
 
         # 2- Until we have objects remaining and have not run out of tries, Sample a point
         placed = [] # List of objects successfully placed
-        max_tries = 1000 # After this many tries we give up on current object and continue with rest
+        max_tries = self.config.get_int("max_iterations",1000)   # After this many tries we give up on current object and continue with rest
         cache = {} # cache to fasten collision detection
         for obj in bpy.context.scene.objects: # for each object
             if obj.type == "MESH":
