@@ -26,7 +26,7 @@
       "config": {
         "datasets_path": "<args:0>",
         "scene_id": 1,
-        "source_frame": ["X", "Y", "-Z"]
+        "source_frame": ["X", "Y", "Z"]
       }
     },
     {
@@ -53,21 +53,21 @@
     #     }
     #   }
     # },
-    {
-      "name": "renderer.NormalRenderer",
-      "config": {
-      }
-    },
-    {
-      "name": "renderer.RgbRenderer",
-      "config": {
-        "samples": 350
-      }
-    },
-    {
-      "name": "writer.Hdf5Writer",
-      "config": {
-      }
-    }
+#    {
+#      "name": "renderer.NormalRenderer",
+#      "config": {
+#      }
+#    },
+#    {
+#      "name": "renderer.RgbRenderer",
+#      "config": {
+#        "samples": 350
+#      }
+#    },
+#    {
+#      "name": "writer.Hdf5Writer",
+#      "config": {
+#      }
+#    }
   ]
 }

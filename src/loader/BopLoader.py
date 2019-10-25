@@ -43,34 +43,40 @@ class BopLoader(Module):
         sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
         sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id':scene_id}))
 
-        cam_H_w2c = np.eye(4)
-        cam_H_w2c[:3,:3] = np.array(sc_camera['1']['cam_R_w2c']).reshape(3,3) 
-        cam_H_w2c[:3, 3] = np.array(sc_camera['1']['cam_t_w2c']).reshape(3) *0.01
-        print('-----------------------------')
-        print("Cam: {}".format(cam_H_w2c))
-        print('-----------------------------')
         cm = CameraModule(self.config)
-        def rotationMatrixToEulerAngles(R):
-            sy = math.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
+        for cam_id in sc_camera.keys():
+            cam_H_w2c = np.eye(4)
+            cam_H_w2c[:3,:3] = np.array(sc_camera[cam_id]['cam_R_w2c']).reshape(3,3)
+            cam_H_w2c[:3, 3] = np.array(sc_camera[cam_id]['cam_t_w2c']).reshape(3) *0.01
+            print('-----------------------------')
+            print("Cam: {}".format(cam_H_w2c))
+            print('-----------------------------')
+            def rotationMatrixToEulerAngles(R):
+                sy = math.sqrt(R[0,0] * R[0,0] +  R[1,0] * R[1,0])
 
-            singular = sy < 1e-6
+                singular = sy < 1e-6
 
-            if  not singular :
-                x = math.atan2(R[2,1] , R[2,2])
-                y = math.atan2(-R[2,0], sy)
-                z = math.atan2(R[1,0], R[0,0])
-            else :
-                x = math.atan2(-R[1,2], R[1,1])
-                y = math.atan2(-R[2,0], sy)
-                z = 0
+                if  not singular :
+                    x = math.atan2(R[2,1] , R[2,2])
+                    y = math.atan2(-R[2,0], sy)
+                    z = math.atan2(R[1,0], R[0,0])
+                else :
+                    x = math.atan2(-R[1,2], R[1,1])
+                    y = math.atan2(-R[2,0], sy)
+                    z = 0
 
-            return np.array([x, y, z])
-        print(list(cam_H_w2c[:3,3]))
-        config = {"location": list(cam_H_w2c[:3,3]), "rotation": list(rotationMatrixToEulerAngles(cam_H_w2c))}
-        cm._add_cam_pose(Config(config))
+                return np.array([x, y, z])
+            print(list(cam_H_w2c[:3,3]))
+            source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
+            pos = Utility.transform_point_to_blender_coord_frame(list(cam_H_w2c[:3,3]), source_frame)
+            config = {"location": pos, "rotation": list(rotationMatrixToEulerAngles(cam_H_w2c))}
+            cm._add_cam_pose(Config(config))
 
-        print(sc_gt.keys())
-        for gt in sc_gt[1]:
+        first_scene = [key for key in sc_camera.keys()][0]
+        cam_H_w2c = np.eye(4)
+        cam_H_w2c[:3,:3] = np.array(sc_camera[first_scene]['cam_R_w2c']).reshape(3,3)
+        cam_H_w2c[:3, 3] = np.array(sc_camera[first_scene]['cam_t_w2c']).reshape(3) *0.01
+        for gt in sc_gt[int(first_scene)]:
            
             bpy.ops.import_mesh.ply(filepath=model_p['model_tpath'].format(**{'obj_id': gt['obj_id']}))
             
