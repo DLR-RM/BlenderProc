@@ -37,6 +37,6 @@ class LightStateWriter(StateWriter):
         :return: The attribute value.
         """
         if attribute_name == "energy":
-            return light.energy
+            return light.data.energy
         else:
             return super()._get_attribute(light, attribute_name)
