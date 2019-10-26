@@ -2,12 +2,12 @@
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "bop_toolkit_path": "/home/<env:USER>/workspace/bop_toolkit/",
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "bop_toolkit_path": "/home_local/<env:USER>/src/bop_toolkit/",
     "pip": [
       "h5py",
       "imageio",
-      "pypng==0.0.19",
+      "pypng==0.0.18",
       "scipy==1.2.2"
     ]
   },
@@ -24,8 +24,9 @@
     {
       "name": "loader.BopLoader",
       "config": {
-        "datasets_path": "<args:0>",
-        "scene_id": 1
+        "bop_dataset_path": "<args:0>",
+        "split": "test",
+        "scene_id": 3
       }
     },
     {
@@ -42,16 +43,6 @@
         ]
       }
     },
-    # {
-    #   "name": "camera.CameraLoader",
-    #   "config": {
-    #     "path": "<args:0>",
-    #     "file_format": "location rotation",
-    #     "default_cam_param": {
-    #       "fov": 1
-    #     }
-    #   }
-    # },
     {
       "name": "renderer.NormalRenderer",
       "config": {
@@ -60,7 +51,7 @@
     {
       "name": "renderer.RgbRenderer",
       "config": {
-        "samples": 350
+        "samples": 200
       }
     },
     {

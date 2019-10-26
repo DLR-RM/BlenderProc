@@ -74,7 +74,7 @@ class CameraModule(Module):
         """ Registers the written cam pose files as an output """
         self._register_output("campose_", "campose", ".npy", "1.0.0")
 
-    def _add_cam_pose(self, config, mat=None):
+    def _add_cam_pose(self, config, mat=None, cam_K=None):
         """ Adds a new cam pose according to the given configuration.
 
         :param config: A configuration object which contains all parameters relevant for the new cam pose.
@@ -83,12 +83,28 @@ class CameraModule(Module):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        # Set FOV (Default value is the same as the default blender value)
         cam.lens_unit = 'FOV'
-        cam.angle = config.get_float("fov", 0.691111)
-        # FOV is sometimes also given as the angle between forward vector and one side of the frustum
-        if config.get_bool("fov_is_half", False):
-            cam.angle *= 2
+        if cam_K is not None:
+            # this is still hacked, has to be fixed:
+
+            w, h = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+            cam.angle_y = 1. / (2 * np.arctan(h / (2 * cam_K[1,1]))) # magic    
+            cam.angle_x = 1. / (2 * np.arctan(w / (2 * cam_K[0,0]))) # magic
+            
+            # cam.shift_x = -(cam_K[0,2] / w - 0.5)
+            # cam.shift_y = -(cam_K[1,2] - 0.5 * h) / w
+
+            ### the unit of shiftXY is FOV unit (Lens Shift)
+            ## https://blender.stackexchange.com/questions/12225/use-top-left-corner-as-origin-in-blenders-camera
+            # maxdim = max(w,h) 
+            # cam.shift_x = (cam_K[0,2] - w / 2.0) / maxdim
+            # cam.shift_y = (cam_K[1,2] - h / 2.0) / maxdim
+        else:
+            # Set FOV (Default value is the same as the default blender value)
+            cam.angle = config.get_float("fov", 0.691111)
+            # FOV is sometimes also given as the angle between forward vector and one side of the frustum
+            if config.get_bool("fov_is_half", False):
+                cam.angle *= 2
 
         # Clipping (Default values are the same as default blender values)
         cam.clip_start = config.get_float("clip_start", 0.1)
