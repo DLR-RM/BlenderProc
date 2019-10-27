@@ -1,6 +1,7 @@
 # BlenderProc
 A procedural blender pipeline to generate images for deep learning
 
+The corresponding arxiv paper: https://arxiv.org/2901471
 
 ## General
 

@@ -92,9 +92,7 @@ class BopLoader(Module):
 
                     mat = self._load_materials(cur_obj)
                     self._link_col_node(mat)
-
-            if i<20:
-                continue                      
+                     
             cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
             print('-----------------------------')

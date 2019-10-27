@@ -8,10 +8,10 @@ dir = "."  # From CLI
 if not dir in sys.path:
     sys.path.append(dir)
 
-
 # Add path to custom packages inside the blender main directory
 sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
 from src.utility.ConfigParser import ConfigParser
+
 
 # Read args
 argv = sys.argv

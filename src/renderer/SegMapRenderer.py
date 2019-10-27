@@ -121,6 +121,5 @@ class SegMapRenderer(Renderer):
                 for mapping in color_map:
                     writer.writerow(mapping)
 
-        self._register_output("seg_", "seg", ".exr", "2.0.1")
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
         self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0",unique_for_camposes = False)

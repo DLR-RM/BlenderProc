@@ -11,14 +11,14 @@ if not working_dir in sys.path:
 
 # Add path to custom packages inside the blender main directory
 sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
-from src.utility.ConfigParser import ConfigParser
-from src.utility.Utility import Utility
 
 # Delete all loaded models inside src/, as they are cached inside blender
 for module in list(sys.modules.keys()):
     if module.startswith("src"):
         del sys.modules[module]
         
+from src.utility.ConfigParser import ConfigParser
+from src.utility.Utility import Utility
 from src.main.Pipeline import Pipeline
 
 config_path = "examples/bop/config.yaml"
@@ -36,6 +36,7 @@ else:
     print('ERROR: Please download the bop_toolkit package and set bop_toolkit_path in config:')
     print('https://github.com/thodan/bop_toolkit')
 
+
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:
     screen = window.screen
@@ -47,7 +48,11 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
+<<<<<<< HEAD
     pipeline = Pipeline(config_path, argv, working_dir)
+=======
+    pipeline = Pipeline(config_path, [], working_dir)
+>>>>>>> master
     pipeline.run()
 finally:
     # Revert back to previous view

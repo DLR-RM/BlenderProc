@@ -125,6 +125,7 @@ class CameraModule(Module):
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
             raise Exception("No such rotation_format:" + str(rotation_format))
+
         if mat is not None:
             cam_ob.matrix_world = mat
             cam_ob.scale = [1,-1,-1] # fix orientation
@@ -141,4 +142,5 @@ class CameraModule(Module):
         frame_id = bpy.context.scene.frame_end
         self._insert_key_frames(cam, cam_ob, frame_id)
         self._write_cam_pose_to_file(frame_id, cam, cam_ob)
+
         bpy.context.scene.frame_end = frame_id + 1
