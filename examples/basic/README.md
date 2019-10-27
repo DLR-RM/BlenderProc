@@ -84,11 +84,11 @@ Every module has a name which specifies the python path to the corresponding cla
 * Here we are using the second argument given, in the upper command the output path is set to `examples/basic/scene.obj`
 
 
-#### LightPositioning
+#### LightLoader
 
 ```yaml
 {
-  "name": "lighting.LightPositioning",
+  "name": "lighting.LightLoader",
   "config": {
     "lights": [
       {

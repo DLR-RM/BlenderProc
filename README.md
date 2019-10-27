@@ -4,7 +4,7 @@ Procedural Annotated Data Generation using the [Blender](https://www.blender.org
 
 BlenderProc4BOP interfaces with the [BOP datasets](https://bop.felk.cvut.cz/datasets/) and lets you generate photo-realistic training data, e.g. for Object Instance Segmentation and Pose Estimation methods. 
 
-Note: This library is usable but is still under active development. We are open for new contributors and happy to accept pull requests e.g. defining new modules.
+Note: This library is usable but is still under active development. We are open for new contributors and happy to accept pull requests that improve the code or simply introduce a new module / dataset.
 
 <!-- 
 Citation: 
@@ -16,7 +16,7 @@ Citation:
 	year={2019}
 }
 ``` -->
-<img src=examples/bop/icbin.png width="210" height="160"> <img src=examples/bop/tless.png width="210" height="160"> <img src=examples/bop/tless_sample.png width="210" height="160">
+<img src=examples/bop/icbin.png width="360" height="240"> <img src=examples/bop/tless.png width="360" height="240"> <img src=examples/bop/tless_sample.png width="360" height="240">
 
 ![](examples/suncg_basic/output-summary.png)
 
@@ -43,7 +43,7 @@ Because of the modularity of this package and the sole dependency on the Blender
 
 ## Usage with BOP
 
-First make sure that you have downloaded a [BOP datasets](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
+First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
 ### Configure examples/bop/config.yaml
 
