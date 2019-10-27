@@ -2,7 +2,7 @@
 
 Procedural Annotated Data Generation using the [Blender](https://www.blender.org/) API.
 
-BlenderProc4BOP interfaces with the [BOP datasets](https://bop.felk.cvut.cz/datasets/) and lets you generate photo-realistic training data for Object Instance Segmentation and Pose Estimation methods. 
+BlenderProc4BOP interfaces with the [BOP datasets](https://bop.felk.cvut.cz/datasets/) and lets you generate photo-realistic training data, e.g. for Object Instance Segmentation and Pose Estimation methods. 
 
 Note: This library is usable but is still under active development. We are open for new contributors and happy to accept pull requests e.g. defining new modules.
 
