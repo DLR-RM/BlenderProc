@@ -4,6 +4,7 @@ import urllib
 import tarfile
 import subprocess
 import shutil
+import sys
 
 from src.utility.ConfigParser import ConfigParser
 

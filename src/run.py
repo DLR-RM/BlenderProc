@@ -10,6 +10,8 @@ if not dir in sys.path:
 
 # Add path to custom packages inside the blender main directory
 sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
+from src.utility.ConfigParser import ConfigParser
+
 
 # Read args
 argv = sys.argv
@@ -24,6 +26,17 @@ working_dir = os.path.dirname(os.path.abspath(__file__))
 from src.main.Pipeline import Pipeline
 
 config_path = argv[0]
+
+config_parser = ConfigParser()
+config = config_parser.parse(config_path, argv[1:]) # Don't parse placeholder args in batch mode.
+setup_config = config["setup"]
+
+if "bop_toolkit_path" in setup_config:
+    sys.path.append(setup_config["bop_toolkit_path"])
+else:
+    print('ERROR: Please download the bop_toolkit package and set bop_toolkit_path in config:')
+    print('https://github.com/thodan/bop_toolkit')
+
 if batch_index_file == None:
 	pipeline = Pipeline(config_path, argv[1:], working_dir)
 	pipeline.run()
