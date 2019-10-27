@@ -88,8 +88,8 @@ class CameraModule(Module):
             # this is still hacked, has to be fixed:
 
             w, h = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
-            cam.angle_y = 1. / (2 * np.arctan(h / (2 * cam_K[1,1]))) # magic    
-            cam.angle_x = 1. / (2 * np.arctan(w / (2 * cam_K[0,0]))) # magic
+            cam.angle_y = 2 * np.arctan(h / (2 * cam_K[1,1])) / 1.15 # magic    
+            cam.angle_x = 2 * np.arctan(w / (2 * cam_K[0,0])) / 1.15 # magic
             
             # cam.shift_x = -(cam_K[0,2] / w - 0.5)
             # cam.shift_y = -(cam_K[1,2] - 0.5 * h) / w

@@ -33,15 +33,18 @@ class BopLoader(Module):
     def run(self):
         bop_dataset_path = self.config.get_string("bop_dataset_path")
         scene_id = self.config.get_int("scene_id")
-        split = self.config.get_string("split")
+        split = self.config.get_string("split", "test")
+        model_type = self.config.get_string("model_type", "")
+        mm2m = 0.001 if self.config.get_bool("mm2m") else 1
 
         datasets_path = os.path.dirname(bop_dataset_path)
         dataset = os.path.basename(bop_dataset_path)
         print("bob: {}, dataset_path: {}".format(bop_dataset_path, datasets_path))
         print("dataset: {}".format(dataset))
 
-        model_p = dataset_params.get_model_params(datasets_path, dataset)
+        model_p = dataset_params.get_model_params(datasets_path, dataset, model_type=model_type if model_type else None)
         camera_p = dataset_params.get_camera_params(datasets_path, dataset)
+
         try:
             split_p = dataset_params.get_split_params(datasets_path, dataset, split = split)
         except ValueError:
@@ -57,12 +60,13 @@ class BopLoader(Module):
         cm = CameraModule(self.config)
 
         for i, (cam_id, insts) in enumerate(sc_gt.items()):
+
             
             cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
 
             cam_H_m2c_ref = np.eye(4)
             cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
-            cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3)
+            cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * mm2m
 
             if i == 0:
                 # define world = first camera
@@ -74,25 +78,33 @@ class BopLoader(Module):
                     
                     cam_H_m2c = np.eye(4)
                     cam_H_m2c[:3,:3] = np.array(inst['cam_R_m2c']).reshape(3,3) 
-                    cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3)
+                    cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3) * mm2m
 
                     # world = camera @ i=0
                     cam_H_m2w = cam_H_m2c
+                    print('-----------------------------')
+                    print("Model: {}".format(cam_H_m2w))
+                    print('-----------------------------')
 
                     cur_obj = bpy.context.selected_objects[-1]
                     cur_obj.matrix_world = Matrix(cam_H_m2w)
+                    cur_obj.scale = Vector((mm2m,mm2m,mm2m))
 
                     mat = self._load_materials(cur_obj)
                     self._link_col_node(mat)
-                                                
-            cam_H_w2c = np.linalg.inv(np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref)))
+
+            if i<20:
+                continue                      
+            cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
             print('-----------------------------')
-            print("Cam: {}".format(cam_H_w2c))
+            print("Cam: {}".format(cam_H_c2w))
             print('-----------------------------')
+
+
 
             config = {"location": [0,0,0], "rotation": list([0,0,0])}
-            cm._add_cam_pose(Config(config), Matrix(np.linalg.inv(cam_H_w2c)), cam_K)
+            cm._add_cam_pose(Config(config), Matrix(cam_H_c2w), cam_K)
 
     def _load_materials(self, cur_obj):
         """ Loads / defines materials, e.g. vertex colors 
