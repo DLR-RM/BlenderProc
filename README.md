@@ -16,7 +16,7 @@ Citation:
 	year={2019}
 }
 ``` -->
-<img src=examples/bop/icbin.png width="360" height="240"> <img src=examples/bop/tless.png width="360" height="240"> <img src=examples/bop/tless_sample.png width="360" height="240">
+<img src=examples/bop/icbin.png width="240" height="180"> <img src=examples/bop/tless.png width="240" height="180"> <img src=examples/bop/tless_sample.png width="240" height="180">
 
 ![](examples/suncg_basic/output-summary.png)
 
