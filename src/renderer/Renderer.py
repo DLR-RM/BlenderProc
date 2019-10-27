@@ -64,9 +64,15 @@ class Renderer(Module):
             bpy.context.scene.render.threads_mode = "FIXED"
             bpy.context.scene.render.threads = number_of_threads
 
-        bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
-        bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
-        bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+        if bpy.context.scene.render.resolution_x == 0:
+            bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
+            bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
+            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+        else:
+            print('#########################')
+            print('resolution already set in loader')
+            print('#########################')
+            
         bpy.context.scene.render.resolution_percentage = 100
 
         # Lightning settings to reduce training time

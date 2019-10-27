@@ -51,7 +51,30 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _add_cam_pose(self, config):
+    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1):
+        """ Determines the current pose of the given camera and writes it to a .npy file.
+
+        :param frame: The current frame number, used for naming the output file.
+        :param cam: The camera which contains only camera specific attributes.
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
+        :param room_id: The id of the room which contains the camera (optional)
+        """
+        cam_pose = []
+        # Location
+        cam_pose.extend(cam_ob.location[:])
+        # Orientation
+        cam_pose.extend(cam_ob.rotation_euler[:])
+        # FOV
+        cam_pose.extend([cam.angle_x, cam.angle_y])
+        # Room
+        cam_pose.append(room_id)
+        np.save(os.path.join(self._determine_output_dir(), "campose_" + ("%04d" % frame)), cam_pose)
+
+    def _register_cam_pose_output(self):
+        """ Registers the written cam pose files as an output """
+        self._register_output("campose_", "campose", ".npy", "1.0.0")
+
+    def _add_cam_pose(self, config, mat=None, cam_K=None):
         """ Adds a new cam pose according to the given configuration.
 
         :param config: A configuration object which contains all parameters relevant for the new cam pose.
@@ -60,12 +83,28 @@ class CameraModule(Module):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        # Set FOV (Default value is the same as the default blender value)
         cam.lens_unit = 'FOV'
-        cam.angle = config.get_float("fov", 0.691111)
-        # FOV is sometimes also given as the angle between forward vector and one side of the frustum
-        if config.get_bool("fov_is_half", False):
-            cam.angle *= 2
+        if cam_K is not None:
+            # this is still hacked, has to be fixed:
+
+            w, h = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+            cam.angle_y = 2 * np.arctan(h / (2 * cam_K[1,1])) / 1.15 # magic    
+            cam.angle_x = 2 * np.arctan(w / (2 * cam_K[0,0])) / 1.15 # magic
+            
+            # cam.shift_x = -(cam_K[0,2] / w - 0.5)
+            # cam.shift_y = -(cam_K[1,2] - 0.5 * h) / w
+
+            ### the unit of shiftXY is FOV unit (Lens Shift)
+            ## https://blender.stackexchange.com/questions/12225/use-top-left-corner-as-origin-in-blenders-camera
+            # maxdim = max(w,h) 
+            # cam.shift_x = (cam_K[0,2] - w / 2.0) / maxdim
+            # cam.shift_y = (cam_K[1,2] - h / 2.0) / maxdim
+        else:
+            # Set FOV (Default value is the same as the default blender value)
+            cam.angle = config.get_float("fov", 0.691111)
+            # FOV is sometimes also given as the angle between forward vector and one side of the frustum
+            if config.get_bool("fov_is_half", False):
+                cam.angle *= 2
 
         # Clipping (Default values are the same as default blender values)
         cam.clip_start = config.get_float("clip_start", 0.1)
@@ -87,6 +126,10 @@ class CameraModule(Module):
         else:
             raise Exception("No such rotation_format:" + str(rotation_format))
 
+        if mat is not None:
+            cam_ob.matrix_world = mat
+            cam_ob.scale = [1,-1,-1] # fix orientation
+
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
         cam.stereo.convergence_mode = config.get_string("stereo_convergence_mode", "OFFAXIS")
@@ -98,4 +141,6 @@ class CameraModule(Module):
         # Store new cam pose as next frame
         frame_id = bpy.context.scene.frame_end
         self._insert_key_frames(cam, cam_ob, frame_id)
+        self._write_cam_pose_to_file(frame_id, cam, cam_ob)
+
         bpy.context.scene.frame_end = frame_id + 1
