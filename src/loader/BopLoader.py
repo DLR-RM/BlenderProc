@@ -92,14 +92,12 @@ class BopLoader(Module):
 
                     mat = self._load_materials(cur_obj)
                     self._link_col_node(mat)
-                     
+
             cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
             print('-----------------------------')
             print("Cam: {}".format(cam_H_c2w))
             print('-----------------------------')
-
-
 
             config = {"location": [0,0,0], "rotation": list([0,0,0])}
             cm._add_cam_pose(Config(config), Matrix(cam_H_c2w), cam_K)
