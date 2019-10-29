@@ -16,7 +16,6 @@ class SphereSampler:
        "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere."
        "radius", "The radius of the sphere."
        "mode", "Mode of sampling. SURFACE - sampling from the surface of the sphere, INTERIOR = sampling from the interior of the sphere."
-
     """
 
     # https://math.stackexchange.com/a/87238
@@ -46,11 +45,11 @@ class SphereSampler:
         # If sampling from the surface set magnitude to radius of the sphere
         if mode == "SURFACE":
             magnitude = radius
-        # If sampling from the interior set it to uniformly sampled value
+        # If sampling from the interior set it to scaled radius
         elif mode == "INTERIOR":
             magnitude = radius * np.random.unform()**(1./3)
         else:
-            raise Exception("Unknows sampling mode: " + mode)
+            raise Exception("Unknown sampling mode: " + mode)
         
         # Normalize
         sampled_point = list(map(lambda x: magnitude*x/norm, direction))
