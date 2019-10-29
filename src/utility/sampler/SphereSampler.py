@@ -40,14 +40,14 @@ class SphereSampler:
             direction[0] = 1e-5
 
         # For normalization
-        norm = direction.dot(direction)**(0.5)
+        norm = np.sqrt(direction.dot(direction))
 
         # If sampling from the surface set magnitude to radius of the sphere
         if mode == "SURFACE":
             magnitude = radius
         # If sampling from the interior set it to scaled radius
         elif mode == "INTERIOR":
-            magnitude = radius * np.random.unform()**(1./3)
+            magnitude = radius * np.cbrt(np.random.unform())
         else:
             raise Exception("Unknown sampling mode: " + mode)
         

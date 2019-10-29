@@ -3,14 +3,14 @@ import mathutils
 
 
 class DiskSampler:
-    """ Samples a point from the circle or form the disk.
+    """ Samples a point from the 2d circle or from the disk in 3d space.
 
     **Configuration**:
 
     .. csv-table::
        :header:, "Parameter", "Description"
 
-       "center", "A list of three values, descriving x, y and z coordinates of the center of a 2-ball."
+       "center", "A list of three values, describing x, y and z coordinates of the center of a 2-ball. "
        "radius", "The radius of the disk."
        "mode", "Mode of sampling. CIRCLE - sampling from the 1-sphere, DISK - sampling from the 2-ball."
     """
@@ -35,21 +35,22 @@ class DiskSampler:
             direction[0] = 1e-5
 
         # For normalization
-        norm = direction.dot(direction)**(0.5)
+        norm = np.sqrt(direction.dot(direction))
 
         # If sampling from the circle set magnitude to radius of the disk
         if mode == "CIRCLE":
             magnitude = radius
         # If sampling from a disk set it to scaled radius
         elif mode == "DISK":
-            magnitude = radius * np.random.uniform()**(1./2)
+            magnitude = radius * np.sqrt(np.random.uniform())
         else:
             raise Exception("Unknown sampling mode: " + mode)
 
         # Normilize
         sampled_point = list(map(lambda x: magnitude*x/norm, direction))
 
-        #Add center
+        # Add center (from 2d sampled_point to 3d location).
+        # Sampled point is sampled from a disk/circle that is parallel to Z axis.
         location = mathutils.Vector(np.append(np.array(sampled_point), 0) + center)
 
         return location
