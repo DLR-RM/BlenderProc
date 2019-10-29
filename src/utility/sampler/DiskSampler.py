@@ -18,7 +18,8 @@ class DiskSampler:
     @staticmethod
     def sample(config):
         """
-
+        :param config: A configuration object containing the parameters necessary to sample.
+        :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
         # Center of the disk.
         center = np.array(config.get_list("center"))
