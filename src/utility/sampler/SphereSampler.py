@@ -15,7 +15,7 @@ class SphereSampler:
 
        "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere."
        "radius", "The radius of the sphere."
-       "mode", "Mode of sampling. SURFACE - sampling from the surface of the sphere, INTERIOR = sampling from the interior of the sphere."
+       "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball."
     """
 
     # https://math.stackexchange.com/a/87238

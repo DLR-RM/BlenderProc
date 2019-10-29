@@ -3,8 +3,16 @@ import mathutils
 
 
 class DiskSampler:
-    """
+    """ Samples a point from the circle or form the disk.
 
+    **Configuration**:
+
+    .. csv-table::
+       :header:, "Parameter", "Description"
+
+       "center", "A list of three values, descriving x, y and z coordinates of the center of a 2-ball."
+       "radius", "The radius of the disk."
+       "mode", "Mode of sampling. CIRCLE - sampling from the 1-sphere, DISK - sampling from the 2-ball."
     """
 
     @staticmethod
