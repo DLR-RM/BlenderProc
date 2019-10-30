@@ -8,7 +8,7 @@ class Loader(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "enable_physics", "Determines the the physics property of all created objects. Set to ACTIVE if you want the objects to actively participate in the simulation and be influenced by e.q. gravity. Set to PASSIVE, if you want the object to be static and only act as an obstacle."
+       "physics", "Determines the the physics property of all created objects. Set to ACTIVE if you want the objects to actively participate in the simulation and be influenced by e.q. gravity. Set to PASSIVE, if you want the object to be static and only act as an obstacle."
     """
     def __init__(self, config):
         Module.__init__(self, config)
