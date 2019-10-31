@@ -55,7 +55,7 @@ This is done via a physics simulation where the spheres are first placed randoml
 ```
 
 * Load spheres from obj file and set physics to `ACTIVE`, so that they will later be influenced by gravity
-* Use the PositionSampler to place them randomly to place them randomly above the plane
+* Uses the PositionSampler to place them randomly above the plane
  
  
 ### Load plane
