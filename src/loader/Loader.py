@@ -19,4 +19,4 @@ class Loader(Module):
         :type objects: A list of objects which should retrieve the custom property.
         """
         for obj in objects:
-            obj["physics"] = self.config.get_string("physics", "PASSIVE")
+            obj["physics"] = self.config.get_string("physics", "passive")
