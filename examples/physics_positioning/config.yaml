@@ -22,7 +22,7 @@
       "name": "loader.ObjLoader",
       "config": {
         "path": "examples/physics_positioning/active.obj",
-        "physics": "ACTIVE"
+        "physics": "active"
       }
     },
     {

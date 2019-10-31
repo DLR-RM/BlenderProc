@@ -42,7 +42,7 @@ class PhysicsPositioning(Module):
             if obj.type == 'MESH':
                 bpy.context.view_layer.objects.active = obj
                 bpy.ops.rigidbody.object_add()
-                obj.rigid_body.type = obj["physics"]
+                obj.rigid_body.type = obj["physics"].upper()
                 # TODO: Configure this per object. MESH is very slow but sometimes necessary.
                 obj.rigid_body.collision_shape = "MESH"
 
