@@ -79,11 +79,13 @@ This is done via a physics simulation where the spheres are first placed randoml
 {
   "name": "object.PhysicsPositioning",
   "config": {
-    "simulation_iterations": 100
+    "min_simulation_iterations": 100,
+    "max_simulation_iterations": 500,
+    "simulation_iterations_increase_step": 20
   }
 },
 ```
 
-* We run now the physics simulation for 100 iterations
+* We run now the physics simulation for at least 100 iterations. This number is increased by 20 until all objects have stopped moving or the maximum number of 500 iterations is reached
 * In this way all ACTIVE objects (the spheres) will be influenced by gravity and fall down until they hit the bumpy plane
 * At the end of the simulation the position of all spheres is made fixed again

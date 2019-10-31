@@ -78,7 +78,9 @@
     {
       "name": "object.PhysicsPositioning",
       "config": {
-        "simulation_iterations": 100
+        "min_simulation_iterations": 100,
+        "max_simulation_iterations": 500,
+        "simulation_iterations_increase_step": 20
       }
     },
     {
