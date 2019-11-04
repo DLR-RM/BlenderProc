@@ -79,13 +79,13 @@ This is done via a physics simulation where the spheres are first placed randoml
 {
   "name": "object.PhysicsPositioning",
   "config": {
-    "min_simulation_iterations": 100,
-    "max_simulation_iterations": 500,
-    "simulation_iterations_increase_step": 20
+    "min_simulation_time": 4,
+    "max_simulation_time": 20,
+    "check_object_interval": 1
   }
 },
 ```
 
-* We run now the physics simulation for at least 100 iterations. This number is increased by 20 until all objects have stopped moving or the maximum number of 500 iterations is reached
+* When running the physics simulation the module checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped. Nevertheless the simulation is run at least for 4 seconds and at most for 20 seconds.
 * In this way all ACTIVE objects (the spheres) will be influenced by gravity and fall down until they hit the bumpy plane
 * At the end of the simulation the position of all spheres is made fixed again
