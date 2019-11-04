@@ -2,7 +2,7 @@ import mathutils
 import bpy
 
 from src.main.Module import Module
-from time import time
+import numpy as np
 
 class PhysicsPositioning(Module):
     """ Performs physics simulation in the scene, assigns new poses for all objects that participated.
@@ -10,17 +10,17 @@ class PhysicsPositioning(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "object_stopped_location_threshold", "The maximum difference per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'."
-       "object_stopped_rotation_threshold", "The maximum difference per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'."
-       "min_simulation_iterations", "The minimum number of iterations to simulate."
-       "simulation_iterations_increase_step", "The value with which the simulation iterations should be increased until all objects have stopped moving."
-       "max_simulation_iterations", "The maximum number of iterations to simulate."
+       "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'."
+       "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'."
+       "min_simulation_time", "The minimum number of seconds to simulate."
+       "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped."
+       "max_simulation_time", "The maximum number of seconds to simulate."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
         self.object_stopped_location_threshold = self.config.get_float("object_stopped_location_threshold", 0.01)
-        self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.01)
+        self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
 
     def run(self):
         """ Performs physics simulation in the scene. """
@@ -51,6 +51,12 @@ class PhysicsPositioning(Module):
                 bpy.context.view_layer.objects.active = obj
                 bpy.ops.rigidbody.object_remove()
 
+    def _seconds_to_frames(self, seconds):
+        return int(seconds * bpy.context.scene.render.fps)
+
+    def _frames_to_seconds(self, frames):
+        return float(frames) / bpy.context.scene.render.fps
+
     def _do_simulation(self):
         """ Perform the simulation.
 
@@ -62,40 +68,41 @@ class PhysicsPositioning(Module):
         point_cache = bpy.context.scene.rigidbody_world.point_cache
         point_cache.frame_start = 1
 
-        min_simulation_iterations = self.config.get_int("min_simulation_iterations", 100)
-        max_simulation_iterations = self.config.get_int("max_simulation_iterations", 1000)
-        simulation_iterations_increase_step = self.config.get_int("simulation_iterations_increase_step", 100)
+        min_simulation_time = self.config.get_float("min_simulation_time", 4.0)
+        max_simulation_time = self.config.get_float("max_simulation_time", 40.0)
+        check_object_interval = self.config.get_float("check_object_interval", 2.0)
 
-        if min_simulation_iterations >= max_simulation_iterations:
+        if min_simulation_time >= max_simulation_time:
             raise Exception("max_simulation_iterations has to be bigger than min_simulation_iterations")
 
         # Run simulation starting from min to max in the configured steps
-        for simulation_iterations in range(min_simulation_iterations, max_simulation_iterations, simulation_iterations_increase_step):
-            print("Running simulation up to frame " + str(simulation_iterations))
+        for current_time in np.arange(min_simulation_time, max_simulation_time, check_object_interval):
+            current_frame = self._seconds_to_frames(current_time)
+            print("Running simulation up to " + str(current_time) + " seconds (" + str(current_frame) + " frames)")
 
             # Simulate current interval
-            point_cache.frame_end = simulation_iterations
+            point_cache.frame_end = current_frame
             bpy.ops.ptcache.bake({"point_cache": point_cache}, bake=True)
 
             # Go to second last frame and get poses
-            bpy.context.scene.frame_set(simulation_iterations - 1)
-            second_last_frame_poses = self._get_pose()
+            bpy.context.scene.frame_set(current_frame - self._seconds_to_frames(1))
+            old_poses = self._get_pose()
 
             # Go to last frame of simulation and get poses
-            bpy.context.scene.frame_set(simulation_iterations)
-            last_frame_poses = self._get_pose()
+            bpy.context.scene.frame_set(current_frame)
+            new_poses = self._get_pose()
 
             # Free bake (this will not completely remove the simulation cache, so further simulations can reuse the already calculated frames)
             bpy.ops.ptcache.free_bake({"point_cache": point_cache})
 
             # If objects have stopped moving between the last two frames, then stop here
-            if self._have_objects_stopped_moving(second_last_frame_poses, last_frame_poses):
-                print("Objects have stopped moving after " + str(simulation_iterations) + " iterations")
+            if self._have_objects_stopped_moving(old_poses, new_poses):
+                print("Objects have stopped moving after " + str(current_time) + "  seconds (" + str(current_frame) + " frames)")
                 break
-            elif simulation_iterations + simulation_iterations_increase_step >= max_simulation_iterations:
-                print("Stopping simulation as configured max_simulation_iterations has been reached")
+            elif current_time + check_object_interval >= max_simulation_time:
+                print("Stopping simulation as configured max_simulation_time has been reached")
 
-        return last_frame_poses
+        return new_poses
 
     def _get_pose(self):
         """Returns position and rotation values of all objects in the scene with ACTIVE rigid_body type.
