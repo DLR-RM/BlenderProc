@@ -10,7 +10,6 @@ class PhysicsPositioning(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "simulation_iterations", "For how many iterations the simulation should be computed until the new object positions should be read."
        "object_stopped_location_threshold", "The maximum difference per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'."
        "object_stopped_rotation_threshold", "The maximum difference per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'."
        "min_simulation_iterations", "The minimum number of iterations to simulate."
@@ -43,7 +42,6 @@ class PhysicsPositioning(Module):
                 bpy.context.view_layer.objects.active = obj
                 bpy.ops.rigidbody.object_add()
                 obj.rigid_body.type = obj["physics"].upper()
-                # TODO: Configure this per object. MESH is very slow but sometimes necessary.
                 obj.rigid_body.collision_shape = "MESH"
 
     def _remove_rigidbody(self):
@@ -134,15 +132,11 @@ class PhysicsPositioning(Module):
         for obj_name in last_poses:
             # Check location difference
             location_diff = last_poses[obj_name]['location'] - new_poses[obj_name]['location']
-            for i in range(3):
-                if location_diff[i] > self.object_stopped_location_threshold:
-                    stopped = False
+            stopped = stopped and not any(location_diff[i] > self.object_stopped_location_threshold for i in range(3))
 
             # Check rotation difference
             rotation_diff = last_poses[obj_name]['rotation'] - new_poses[obj_name]['rotation']
-            for i in range(3):
-                if rotation_diff[i] > self.object_stopped_rotation_threshold:
-                    stopped = False
+            stopped = stopped and not any(rotation_diff[i] > self.object_stopped_rotation_threshold for i in range(3))
 
             if not stopped:
                 break
