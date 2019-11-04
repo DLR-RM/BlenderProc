@@ -8,7 +8,7 @@ class Loader(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "physics", "Determines the the physics property of all created objects. Set to ACTIVE if you want the objects to actively participate in the simulation and be influenced by e.q. gravity. Set to PASSIVE, if you want the object to be static and only act as an obstacle."
+       "physics", "Determines the the physics property of all created objects. Set to 'active' if you want the objects to actively participate in the simulation and be influenced by e.q. gravity. Set to 'passive', if you want the object to be static and only act as an obstacle."
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -18,5 +18,6 @@ class Loader(Module):
 
         :type objects: A list of objects which should retrieve the custom property.
         """
+        physics_type = self.config.get_string("physics", "passive")
         for obj in objects:
-            obj["physics"] = self.config.get_string("physics", "passive")
+            obj["physics"] = physics_type
