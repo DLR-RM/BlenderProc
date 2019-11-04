@@ -52,9 +52,19 @@ class PhysicsPositioning(Module):
                 bpy.ops.rigidbody.object_remove()
 
     def _seconds_to_frames(self, seconds):
+        """ Converts the given number of seconds into the corresponding number of blender animation frames.
+
+        :param seconds: The number of seconds
+        :return: The number of frames
+        """
         return int(seconds * bpy.context.scene.render.fps)
 
     def _frames_to_seconds(self, frames):
+        """ Converts the given number of frames into the corresponding number of seconds.
+
+        :param frames: The number of frames
+        :return: The number of seconds
+        """
         return float(frames) / bpy.context.scene.render.fps
 
     def _do_simulation(self):
