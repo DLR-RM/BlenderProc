@@ -7,7 +7,7 @@
     "pip": [
       "h5py",
       "imageio",
-      "pypng==0.0.18",
+      "pypng==0.0.20",
       "scipy==1.2.2"
     ]
   },
