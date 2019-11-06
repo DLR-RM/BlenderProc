@@ -6,13 +6,15 @@ BlenderProc4BOP interfaces with the [BOP datasets](https://bop.felk.cvut.cz/data
 
 Note: This library is usable but is still under active development. We are open for new contributors and happy to accept pull requests that improve the code or simply introduce a new module / dataset.
 
+The corresponding paper can be found here: https://arxiv.org/abs/1911.01911
+
 <!-- 
 Citation: 
 ```
 @article{blenderproc2019,
-	title={},
-	author={},
-	journal={arXiv preprint arXiv:1910.00199},
+	title={BlenderProc},
+	author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef  and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
+	journal={arXiv preprint arXiv:1911.01911},
 	year={2019}
 }
 ``` -->
