@@ -169,3 +169,12 @@ def check_intersection(obj, obj2, cache = None):
 
     return intersect, cache
 
+def norm_vector(a, b):
+    """
+    Returns a normalized vector directing from point A to point B.
+
+    :param a: Point a. Type: mathutils Vector.
+    :param a: Point b. Type: mathutils Vector.
+    :return: Normilized vector.
+    """
+    return (a-b)/(a-b).dot(a-b)**(0.5)
