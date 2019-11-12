@@ -4,8 +4,7 @@ import src.utility.BlenderUtility
 
 
 class POIGetter:
-    """ Computes a median point of interest in the scene based on bounding boxes of all objects in the scene.
-    """
+    """ Computes a point of interest in the scene. """
 
     @staticmethod
     def get():
@@ -23,8 +22,9 @@ class POIGetter:
                 bb_points = np.vstack([bb_points, np.array([point[:]])])
             # Stack mean coords of bounding boxes
             mean_bb_points = np.vstack([mean_bb_points, np.mean(bb_points, axis = 0)])
-
-        # Calculate median point
-        median_bb_point = mathutils.Vector(np.median(objs_bb_points, axis = 0))
-
-        return median_bb_point
+        # Query point - mean of means
+        mean_bb_point = np.mean(mean_bb_points, axis = 0)
+        # Closest point (from means) to query point (mean of means)
+        poi = mathutils.Vector(mean_bb_points[np.argsort(np.sqrt(((mean_bb_points - mean_bb_point)**2).sum(axis = 1)))[0]])
+        
+        return poi
