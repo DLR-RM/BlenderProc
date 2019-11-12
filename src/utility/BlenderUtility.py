@@ -169,12 +169,20 @@ def check_intersection(obj, obj2, cache = None):
 
     return intersect, cache
 
-def norm_vector(a, b):
+def vector_to_euler(vector, vector_type):
     """
-    Returns a normalized vector directing from point A to point B.
+    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils Vector.
+    :param vector_type: Type of an input vector: UP or FORWARD. Type: string.
+    :return: Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.
+    """
+    # Check vector type
+    if vector_type == "UP":
+        # UP vectors are used for MESH type objects
+        euler_angles = vector.to_track_quat('Z', 'Y').to_euler()
+    elif vector_type == "FORWARD":
+        # FORWARD vectors are used for LIGHT and CAMERA type objects
+        euler_angles = vector.to_track_quat('-Z', 'Y').to_euler()
+    else:
+        raise Exception("Unknown vector type: " + vector_type)
 
-    :param a: Point a. Type: mathutils Vector.
-    :param a: Point b. Type: mathutils Vector.
-    :return: Normilized vector.
-    """
-    return (a-b)/(a-b).dot(a-b)**(0.5)
+    return euler_angles

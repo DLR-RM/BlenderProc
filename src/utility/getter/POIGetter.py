@@ -25,6 +25,6 @@ class POIGetter:
         # Query point - mean of means
         mean_bb_point = np.mean(mean_bb_points, axis = 0)
         # Closest point (from means) to query point (mean of means)
-        poi = mathutils.Vector(mean_bb_points[np.argsort(np.sqrt(((mean_bb_points - mean_bb_point)**2).sum(axis = 1)))[0]])
+        poi = mathutils.Vector(mean_bb_points[np.argmin(np.lianlg.norm(mean_bb_points - mean_bb_point, axis = 1))])
         
         return poi
