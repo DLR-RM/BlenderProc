@@ -22,7 +22,7 @@ class PhysicsPositioning(Module):
         Module.__init__(self, config)
         self.object_stopped_location_threshold = self.config.get_float("object_stopped_location_threshold", 0.01)
         self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
-        self.collision_margin = self.config.get_float("collision_margin", 0.0)
+        self.collision_margin = self.config.get_float("collision_margin", 0.001)
 
     def run(self):
         """ Performs physics simulation in the scene. """
