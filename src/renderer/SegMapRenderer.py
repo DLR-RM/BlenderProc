@@ -8,7 +8,6 @@ import numpy as np
 from src.renderer.Renderer import Renderer
 from src.utility.ColorPicker import get_colors
 from src.utility.Utility import Utility
-from src.utility.CocoUtility import generate_coco_annotations
 
 import json
 
@@ -103,7 +102,6 @@ class SegMapRenderer(Renderer):
                      
             self._render("seg_")
 
-            annotated_images = []
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end): # for each rendered frame
                 file_path = os.path.join(self._determine_output_dir(), "seg_" +  "%04d"%frame + ".exr")
@@ -116,7 +114,6 @@ class SegMapRenderer(Renderer):
                     segmap[idx,:] = [Utility.get_idx(hexes,Utility.rgb_to_hex(rgb)) for rgb in row]
                 fname = os.path.join(self._determine_output_dir(),"segmap_" + "%04d"%frame)
                 np.save(fname, segmap)
-                annotated_images.append(fname+'.npy')
 
             # write color mappings to file
             with open(os.path.join(self._determine_output_dir(),"class_inst_col_map.csv"), 'w', newline='') as csvfile:
@@ -126,9 +123,5 @@ class SegMapRenderer(Renderer):
                 for mapping in color_map:
                     writer.writerow(mapping)
 
-            coco_output = generate_coco_annotations(annotated_images,color_map,bpy.context.scene.objects, "coco_annotations")
-            fname = os.path.join(self._determine_output_dir(),"coco_annotations.json")
-            with open(fname, 'w') as fp:
-                json.dump(coco_output, fp)
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
         self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0",unique_for_camposes = False)
