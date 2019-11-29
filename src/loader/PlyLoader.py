@@ -1,14 +1,15 @@
-from src.main.Module import Module
+import os
+
 import bpy
 
-import mathutils
-import os
-from math import radians
+from src.loader.Loader import Loader
+from src.main.Module import Module
 
-class PlyLoader(Module):
+
+class PlyLoader(Loader):
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        Loader.__init__(self, config)
 
     def run(self):
         """Just imports the configured .ply file straight into blender
@@ -22,9 +23,14 @@ class PlyLoader(Module):
                 bpy.ops.import_mesh.ply(filepath=file_path)
             else:
                 raise Exception("The filepath is not known: {}".format(file_path))
+
+        # Set the physics property of all imported objects
+        self._set_physics_property(bpy.context.selected_objects)
+
         if self.config.get_bool('use_ambient_occlusion', False):
             bpy.context.scene.world.light_settings.use_ambient_occlusion = True  # turn AO on
             bpy.context.scene.world.light_settings.ao_factor = 0.9  # set it to 0.5
+
         if self.config.get_bool('use_smooth_shading', False):
             for poly in bpy.data.objects['mesh'].data.polygons:
                 poly.use_smooth = True
