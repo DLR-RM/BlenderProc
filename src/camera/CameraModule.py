@@ -85,7 +85,7 @@ class CameraModule(Module):
             # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         elif rotation_format == "look_at":
-            look_at_point = config.get_vector3d("look_at_point")
+            look_at_point = config._get_value("look_at_point")
             vec = look_at_point - cam_ob.location
             forward_vec = vec/(vec).dot(vec)**(0.5)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
