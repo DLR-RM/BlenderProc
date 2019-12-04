@@ -56,7 +56,6 @@ class CameraSampler(CameraModule):
         
         return sampled_pose
 
-
     def _init_bvh_tree(self):
         """ Creates a bvh tree which contains all mesh objects in the scene.
 
