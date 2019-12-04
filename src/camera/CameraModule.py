@@ -24,7 +24,7 @@ class CameraModule(Module):
 
        "location", "The position of the camera, specified as a list of three values (xyz)."
        "rotation", "Specifies the rotation of the camera. rotation_format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
-       "rotation_format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector)"
+       "rotation_format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector), 'look_at': Camera will be turned such it looks at 'look_at_point' location, whicn can be defined as a fixed XYZ location or sampled."
        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the frustum"
        "clip_start", "Near clipping"
@@ -83,6 +83,11 @@ class CameraModule(Module):
             # Rotation, specified as forward vector
             forward_vec = mathutils.Vector(Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame))
             # Convert forward vector to euler angle (Assume Up = Z)
+            cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+        elif rotation_format == "look_at":
+            look_at_point = config["look_at_point"]
+            vec = cam_ob.location - look_at_point
+            forward_vec = vec/(vec).dot(vec)**(0.5)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
             raise Exception("No such rotation_format:" + str(rotation_format))

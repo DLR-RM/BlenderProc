@@ -1,4 +1,5 @@
 from src.camera.CameraModule import CameraModule
+from src.utility.Utility import Utility
 import mathutils
 import bpy
 import bmesh
@@ -33,6 +34,28 @@ class CameraSampler(CameraModule):
         self.proximity_checks = self.config.get_raw_dict("proximity_checks", [])
 
         self.bvh_tree = None
+
+    def run(self):
+        """ Sets camera poses. """
+        sampled_pose = self._sample_pose(self.config.data)
+        self.cam_pose_collection.add_item(sampled_pose)
+
+    def _sample_pose(self, cam_pose):
+        """ Samples the parameters according to user-defined sampling types in the config file.
+
+        :param cam_pose: Dict that contains settings defined in the config file.
+        :return: Processed settings dict.
+        """
+        sampled_pose = {}
+        for attribute_name, value in cam_pose.items():
+            if isinstance(value, dict):
+                result = Utility.sample_based_on_config(value)
+                sampled_pose.update({attribute_name: result})
+            else:
+                sampled_pose.update({attribute_name: value})
+        
+        return sampled_pose
+
 
     def _init_bvh_tree(self):
         """ Creates a bvh tree which contains all mesh objects in the scene.
