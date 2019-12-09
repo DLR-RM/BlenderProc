@@ -25,7 +25,9 @@ class CameraModule(Module):
        "location", "The position of the camera, specified as a list of three values (xyz)."
        "rotation", "Specifies the rotation of the camera. rotation_format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
        "rotation_format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector)"
+       "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension"
        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
+       "cam_K", "Camera Matrix K"
        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the frustum"
        "clip_start", "Near clipping"
        "clip_end", "Far clipping"
@@ -48,28 +50,74 @@ class CameraModule(Module):
         """
         cam.keyframe_insert(data_path='clip_start', frame=frame_id)
         cam.keyframe_insert(data_path='clip_end', frame=frame_id)
+
+        cam.keyframe_insert(data_path='shift_x', frame=frame_id)
+        cam.keyframe_insert(data_path='shift_y', frame=frame_id)
+
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _add_cam_pose(self, config):
-        """ Adds a new cam pose according to the given configuration.
+    def _register_cam_pose_output(self):
+        """ Registers the written cam pose files as an output """
+        self._register_output("campose_", "campose", ".npy", "1.0.0")
 
-        :param config: A configuration object which contains all parameters relevant for the new cam pose.
+    def _add_cam_intrinsics(self, config, cam_K=None):
+        """ Adds camera intrinsics according to the config file or given camera matrix cam_K.
+
+        :param config: A configuration object with cam intrinsics.
+        :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
         """
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        # Set FOV (Default value is the same as the default blender value)
-        cam.lens_unit = 'FOV'
-        cam.angle = config.get_float("fov", 0.691111)
-        # FOV is sometimes also given as the angle between forward vector and one side of the frustum
-        if config.get_bool("fov_is_half", False):
-            cam.angle *= 2
+        w, h = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
+        if 'loaded_resolution' in cam and not config._has_param('resolution_x'):
+            w, h = cam['loaded_resolution']
+        bpy.context.scene.render.resolution_x = w
+        bpy.context.scene.render.resolution_y = h
 
+        if config._has_param("cam_K"):
+            if cam_K != None:
+                print('WARNING: Got cam_K from both config and loader. Using config cam_K.')
+            cam_K = np.array(config.get_list("cam_K", [])).reshape(3,3).astype(np.float32)
+
+        cam.lens_unit = 'FOV'
+        if cam_K is not None:
+            if config._has_param("fov"):
+                print('WARNING: FOV defined in config is ignored')
+            
+            # Convert focal lengths to FOV
+            cam.angle_y = 2 * np.arctan(h / (2 * cam_K[1,1]))
+            cam.angle_x = 2 * np.arctan(w / (2 * cam_K[0, 0]))
+
+            # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
+            maxdim = max(w, h)
+            cam.shift_x = -(cam_K[0,2] - w / 2.0) / maxdim
+            cam.shift_y = (cam_K[1, 2] - h / 2.0) / maxdim
+        else:
+            # Set FOV (Default value is the same as the default blender value)
+            cam.angle = config.get_float("fov", 0.691111)
+            # FOV is sometimes also given as the angle between forward vector and one side of the frustum
+            if config.get_bool("fov_is_half", False):
+                cam.angle *= 2
         # Clipping (Default values are the same as default blender values)
         cam.clip_start = config.get_float("clip_start", 0.1)
         cam.clip_end = config.get_float("clip_end", 1000)
+
+    def _add_cam_pose(self, config, H_cam2world=None, cam_K=None):
+        """ Adds new cam pose + intrinsics according to the given configuration.
+
+        :param config: A configuration object which contains all parameters relevant for the new cam pose.
+        :param H_cam2world: Optionally, 4x4 numpy array defining homogenous trafo from camera to world coordinates. 
+        :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
+        """
+
+        self._add_cam_intrinsics(config, cam_K)
+
+        # Collect camera object
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
 
         cam_ob.location = Utility.transform_point_to_blender_coord_frame(config.get_list("location", [0, 0, 0]), self.source_frame)
 
@@ -86,6 +134,10 @@ class CameraModule(Module):
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
             raise Exception("No such rotation_format:" + str(rotation_format))
+
+        if H_cam2world is not None:
+            cam_ob.matrix_world = H_cam2world
+            cam_ob.scale = [1,-1,-1] # fix orientation
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)

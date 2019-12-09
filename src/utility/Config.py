@@ -6,6 +6,27 @@ class Config:
     def __init__(self, data):
         self.data = data
 
+    def _has_param(self, name, block=None):
+        """ Check if parameter is defined in config 
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param block: A dict containing the configuration. If none, the whole data of this config object will be used.
+        :return: True if parameter exists, False if not
+        """
+
+        if block is None:
+            block = self.data
+
+        if "/" in name:
+            delimiter_pos = name.find("/")
+            block_name = name[:delimiter_pos]
+            if block_name in block and type(block[block_name]) is dict:
+                return True
+        else:
+            if name in block:
+                return True
+
+        return False
+            
     def _get_value(self, name, block=None):
         """ Returns the value of the parameter with the given name inside the given block.
 
