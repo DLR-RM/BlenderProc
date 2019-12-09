@@ -63,7 +63,18 @@ class Renderer(Module):
         if number_of_threads > 0:
             bpy.context.scene.render.threads_mode = "FIXED"
             bpy.context.scene.render.threads = number_of_threads
+        
+        # Collect camera and camera object
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
+        
+        if not 'loaded_resolution' in cam:
+            bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
+            bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
+            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+        print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
 
+<<<<<<< HEAD
         if bpy.context.scene.render.resolution_x == 0:
             bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
             bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
@@ -73,8 +84,9 @@ class Renderer(Module):
             print('resolution already set in loader')
             print('#########################')
             
+=======
+>>>>>>> develop
         bpy.context.scene.render.resolution_percentage = 100
-
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
         bpy.context.view_layer.cycles.use_denoising = True
