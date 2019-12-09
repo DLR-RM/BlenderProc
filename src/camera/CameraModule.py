@@ -57,10 +57,6 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _register_cam_pose_output(self):
-        """ Registers the written cam pose files as an output """
-        self._register_output("campose_", "campose", ".npy", "1.0.0")
-
     def _add_cam_intrinsics(self, config, cam_K=None):
         """ Adds camera intrinsics according to the config file or given camera matrix cam_K.
 
