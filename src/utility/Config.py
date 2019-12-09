@@ -22,9 +22,8 @@ class Config:
             if block_name in block and type(block[block_name]) is dict:
                 return True
         else:
-            if name in block:
-                return True
-
+            return name in block
+            
         return False
             
     def _get_value(self, name, block=None):

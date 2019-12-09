@@ -71,11 +71,11 @@ class CameraModule(Module):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        w, h = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
+        width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
         if 'loaded_resolution' in cam and not config._has_param('resolution_x'):
-            w, h = cam['loaded_resolution']
-        bpy.context.scene.render.resolution_x = w
-        bpy.context.scene.render.resolution_y = h
+            width, height = cam['loaded_resolution']
+        bpy.context.scene.render.resolution_x = width
+        bpy.context.scene.render.resolution_y = height
 
         if config._has_param("cam_K"):
             if cam_K != None:
@@ -88,13 +88,13 @@ class CameraModule(Module):
                 print('WARNING: FOV defined in config is ignored')
             
             # Convert focal lengths to FOV
-            cam.angle_y = 2 * np.arctan(h / (2 * cam_K[1,1]))
-            cam.angle_x = 2 * np.arctan(w / (2 * cam_K[0, 0]))
+            cam.angle_y = 2 * np.arctan(height / (2 * cam_K[1,1]))
+            cam.angle_x = 2 * np.arctan(width / (2 * cam_K[0, 0]))
 
             # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
-            maxdim = max(w, h)
-            cam.shift_x = -(cam_K[0,2] - w / 2.0) / maxdim
-            cam.shift_y = (cam_K[1, 2] - h / 2.0) / maxdim
+            max_resolution = max(width, height)
+            cam.shift_x = -(cam_K[0,2] - width / 2.0) / max_resolution
+            cam.shift_y = (cam_K[1, 2] - height / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
             cam.angle = config.get_float("fov", 0.691111)
@@ -136,8 +136,9 @@ class CameraModule(Module):
             raise Exception("No such rotation_format:" + str(rotation_format))
 
         if H_cam2world is not None:
+            # Set homogenous camera pose from input parameter H_cam2world
             cam_ob.matrix_world = H_cam2world
-            cam_ob.scale = [1,-1,-1] # fix orientation
+            cam_ob.scale = [1,-1,-1] # fix orientation OpenCV to Blender
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
