@@ -37,8 +37,10 @@ class CameraSampler(CameraModule):
 
     def run(self):
         """ Sets camera poses. """
-        sampled_pose = self._sample_pose(self.config.data)
-        self.cam_pose_collection.add_item(sampled_pose)
+        source_specs = self.config.get_list("cam_poses", [])
+        for i, source_spec in enumerate(source_specs):
+            sampled_pose = self._sample_pose(source_spec)
+            self.cam_pose_collection.add_item(sampled_pose)
 
     def _sample_pose(self, cam_pose):
         """ Samples the parameters according to user-defined sampling types in the config file.
@@ -49,7 +51,7 @@ class CameraSampler(CameraModule):
         sampled_pose = {}
         for attribute_name, value in cam_pose.items():
             if isinstance(value, dict):
-                result = Utility.sample_based_on_config(value)
+                result = list(Utility.sample_based_on_config(value))
                 sampled_pose.update({attribute_name: result})
             else:
                 sampled_pose.update({attribute_name: value})

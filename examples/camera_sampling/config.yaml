@@ -1,0 +1,80 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:0>",
+      "output_is_temp": false
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.ObjLoader",
+      "config": {
+        "path": "examples/camera_sampling/scene.obj"
+      }
+    },
+    {
+      "name": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "name": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [
+          {
+            "location": {
+              "name":"Uniform3dSampler",
+              "parameters":{
+                "max":[10, 10, 8],
+                "min":[-10, -10, 12]
+              }
+            },
+            "look_at_point": {
+              "name": "POIGetter",
+              "parameters": {}
+            },
+            "rotation_format": "look_at"
+          }
+        ]
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}

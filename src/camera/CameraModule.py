@@ -76,6 +76,7 @@ class CameraModule(Module):
         # Rotation
         rotation_format = config.get_string("rotation_format", "euler")
         rotation = config.get_list("rotation", [0, 0, 0])
+        print(rotation_format)
         if rotation_format == "euler":
             # Rotation, specified as euler angles
             cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame)
@@ -85,9 +86,13 @@ class CameraModule(Module):
             # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         elif rotation_format == "look_at":
-            look_at_point = config._get_value("look_at_point")
-            vec = look_at_point - cam_ob.location
-            forward_vec = vec/(vec).dot(vec)**(0.5)
+            look_at_point = config.get_vector3d("look_at_point")
+
+            # Compute forward vector
+            forward_vec = look_at_point - cam_ob.location
+            forward_vec.normalize()
+
+            # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
             raise Exception("No such rotation_format:" + str(rotation_format))
