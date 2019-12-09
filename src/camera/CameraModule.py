@@ -68,19 +68,19 @@ class CameraModule(Module):
         cam = cam_ob.data
 
         width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
-        if 'loaded_resolution' in cam and not config._has_param('resolution_x'):
+        if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
             width, height = cam['loaded_resolution']
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
 
-        if config._has_param("cam_K"):
+        if config.has_param("cam_K"):
             if cam_K != None:
                 print('WARNING: Got cam_K from both config and loader. Using config cam_K.')
             cam_K = np.array(config.get_list("cam_K", [])).reshape(3,3).astype(np.float32)
 
         cam.lens_unit = 'FOV'
         if cam_K is not None:
-            if config._has_param("fov"):
+            if config.has_param("fov"):
                 print('WARNING: FOV defined in config is ignored')
             
             # Convert focal lengths to FOV
