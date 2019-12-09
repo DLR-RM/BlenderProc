@@ -20,7 +20,7 @@ class Config:
             delimiter_pos = name.find("/")
             block_name = name[:delimiter_pos]
             if block_name in block and type(block[block_name]) is dict:
-                return self._has_param(name[delimiter_pos + 1:], block[block_name])
+                return self.has_param(name[delimiter_pos + 1:], block[block_name])
         else:
             return name in block
             
