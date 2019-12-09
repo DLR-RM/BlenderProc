@@ -2,7 +2,8 @@ from src.main.Module import Module
 from src.utility.ItemCollection import ItemCollection
 from src.utility.Utility import Utility
 
-import mathutils
+from mathutils import Matrix, Vector
+import math
 import bpy
 import numpy as np
 import os
@@ -125,7 +126,7 @@ class CameraModule(Module):
             cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame)
         elif rotation_format == "forward_vec":
             # Rotation, specified as forward vector
-            forward_vec = mathutils.Vector(Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame))
+            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame))
             # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
@@ -134,7 +135,8 @@ class CameraModule(Module):
         if H_cam2world is not None:
             # Set homogenous camera pose from input parameter H_cam2world
             cam_ob.matrix_world = H_cam2world
-            cam_ob.scale = [1,-1,-1] # fix orientation OpenCV to Blender
+            # transform from OpenCV to blender coords
+            cam_ob.matrix_world @= Matrix.Rotation(math.radians(180), 4, "X")
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
