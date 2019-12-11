@@ -142,7 +142,7 @@ class CameraModule(Module):
             raise Exception("No such rotation_format:" + str(rotation_format))
 
         if H_cam2world is not None:
-            # Set homogenous camera pose from input parameter H_cam2world
+            # Set homogeneous camera pose from input parameter H_cam2world
             cam_ob.matrix_world = H_cam2world
             # transform from OpenCV to blender coords
             cam_ob.matrix_world @= Matrix.Rotation(math.radians(180), 4, "X")

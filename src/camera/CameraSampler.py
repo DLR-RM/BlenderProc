@@ -39,24 +39,7 @@ class CameraSampler(CameraModule):
         """ Sets camera poses. """
         source_specs = self.config.get_list("cam_poses", [])
         for i, source_spec in enumerate(source_specs):
-            sampled_pose = self._sample_pose(source_spec)
-            self.cam_pose_collection.add_item(sampled_pose)
-
-    def _sample_pose(self, cam_pose):
-        """ Samples the parameters according to user-defined sampling types in the config file.
-
-        :param cam_pose: Dict that contains settings defined in the config file.
-        :return: Processed settings dict.
-        """
-        sampled_pose = {}
-        for attribute_name, value in cam_pose.items():
-            if isinstance(value, dict):
-                result = list(Utility.sample_based_on_config(value))
-                sampled_pose.update({attribute_name: result})
-            else:
-                sampled_pose.update({attribute_name: value})
-        
-        return sampled_pose
+            self.cam_pose_collection.add_item(source_spec)
 
     def _init_bvh_tree(self):
         """ Creates a bvh tree which contains all mesh objects in the scene.
