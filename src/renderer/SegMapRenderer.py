@@ -46,8 +46,11 @@ class SegMapRenderer(Renderer):
         links.new(emission_node.outputs[0], output.inputs[0])
 
         # Set material to be used for coloring all faces of the given object
-        for i in range(len(obj.material_slots)):
-            obj.data.materials[i] = new_mat
+        if len(obj.material_slots) > 0:
+            for i in range(len(obj.material_slots)):
+                obj.data.materials[i] = new_mat
+        else:
+            obj.data.materials.append(new_mat)
 
     def run(self):
         with Utility.UndoAfterExecution():
@@ -77,32 +80,32 @@ class SegMapRenderer(Renderer):
             bpy.data.scenes["Scene"].cycles.filter_width = 0.0
 
             for idx, obj in enumerate(bpy.context.scene.objects):
+                if hasattr(obj.data, 'materials'):
+                    # if class specified for this object or not
+                    if "category_id" in obj:
+                        _class = obj['category_id']
+                    else:
+                        _class = None
 
-                # if class specified for this object or not
-                if "category_id" in obj:
-                    _class = obj['category_id']
-                else:
-                    _class = None
+                    # if method to assign color is by class or by instance
+                    if method == "class" and _class is not None:
+                        if _class not in class_to_rgb:  # if class has not been assigned a color yet
+                            class_to_rgb[_class] = {
+                                "rgb": rgbs[cur_idx],
+                                "rgb_idx": cur_idx,
+                                "_hex": Utility.rgb_to_hex(rgbs[cur_idx])
+                            }  # assign the class with a color
+                            cur_idx += 1  # set counter to next avialable color
+                        rgb = class_to_rgb[_class]["rgb"]  # assign this object the color of this class
+                        color_idx = class_to_rgb[_class]["rgb_idx"]  # get idx of assigned color
+                    else:
+                        rgb = rgbs[idx]  # assign this object a color
+                        color_idx = idx  # each instance to color is one to one mapping, both have same idx
 
-                # if method to assign color is by class or by instance
-                if method == "class" and _class is not None:
-                    if _class not in class_to_rgb:  # if class has not been assigned a color yet
-                        class_to_rgb[_class] = {
-                            "rgb": rgbs[cur_idx],
-                            "rgb_idx": cur_idx,
-                            "_hex": Utility.rgb_to_hex(rgbs[cur_idx])
-                        }  # assign the class with a color
-                        cur_idx += 1  # set counter to next avialable color
-                    rgb = class_to_rgb[_class]["rgb"]  # assign this object the color of this class
-                    color_idx = class_to_rgb[_class]["rgb_idx"]  # get idx of assigned color
-                else:
-                    rgb = rgbs[idx]  # assign this object a color
-                    color_idx = idx  # each instance to color is one to one mapping, both have same idx
+                    # add values to a map
+                    color_map.append({'color': rgb, 'objname': obj.name, 'class': _class, 'idx': color_idx})
 
-                # add values to a map
-                color_map.append({'color': rgb, 'objname': obj.name, 'class': _class, 'idx': color_idx})
-
-                self.color_obj(obj, rgb)
+                    self.color_obj(obj, rgb)
 
             self._render("seg_")
 
