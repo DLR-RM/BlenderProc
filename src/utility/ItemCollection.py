@@ -98,7 +98,7 @@ class ItemCollection:
         """
         if len(parameter_name_parts) == 1:
             data[parameter_name_parts[0]] = value
-        else:
+        elif len(parameter_name_parts) > 1:
             if parameter_name_parts[0] not in data:
                 data[parameter_name_parts[0]] = {}
             self._set_parameter_value(data[parameter_name_parts[0]], parameter_name_parts[1:], value)
