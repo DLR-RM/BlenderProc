@@ -112,7 +112,7 @@ Every module has a name which specifies the python path to the corresponding cla
   "name": "camera.CameraLoader",
   "config": {
     "path": "<args:0>",
-    "file_format": "location rotation_euler",
+    "file_format": "location rotation/value",
     "default_cam_param": {
       "fov": 1
     }
