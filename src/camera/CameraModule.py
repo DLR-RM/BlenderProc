@@ -25,7 +25,7 @@ class CameraModule(Module):
 
        "location", "The position of the camera, specified as a list of three values (xyz)."
        "rotation/value", "Specifies the rotation of the camera. rotation/format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
-       "rotation/format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector), 'look_at': Camera will be turned such as it looks at 'look_at_point' location, which can be defined as a fixed or sampled XYZ location."
+       "rotation/format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector), 'look_at': Camera will be turned such as it looks at 'value' location, which can be defined as a fixed or sampled XYZ location."
        "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension"
        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
        "cam_K", "Camera Matrix K"
@@ -120,22 +120,19 @@ class CameraModule(Module):
 
         # Rotation
         rotation_format = config.get_string("rotation/format", "euler")
-        rotation = config.get_list("rotation/value", [0, 0, 0])
+        value = config.get_vector3d("rotation/value", [0, 0, 0])
         if rotation_format == "euler":
             # Rotation, specified as euler angles
-            cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame)
+            cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
         elif rotation_format == "forward_vec":
             # Rotation, specified as forward vector
-            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame))
+            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
             # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         elif rotation_format == "look_at":
-            look_at_point = config.get_vector3d("look_at_point")
-
             # Compute forward vector
-            forward_vec = look_at_point - cam_ob.location
+            forward_vec = value - cam_ob.location
             forward_vec.normalize()
-
             # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
