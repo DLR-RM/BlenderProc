@@ -1,23 +1,13 @@
 from src.utility.ItemWriter import ItemWriter
 import bpy
 import os
-from src.utility.CocoUtility import generate_coco_annotations
+from src.utility.CocoUtility import CocoUtility 
 from src.main.Module import Module
 import csv
 import json
 
 class CocoAnnotationsWriter(Module):
     """ Writes Coco Annotations in to a file.
-
-    **Attributes per object**:
-
-    .. csv-table::
-       :header: "Keyword", "Description"
-
-       "fov_x", "The horizontal FOV."
-       "fov_y", "The vertical FOV."
-       "half_fov_x", "Half of the horizontal FOV."
-       "half_fov_y", "Half of the vertical FOV."
     """
 
     def __init__(self, config):
@@ -39,7 +29,7 @@ class CocoAnnotationsWriter(Module):
             for mapping in reader:
                 color_map.append(mapping)
         
-        coco_output = generate_coco_annotations(annotated_images,color_map,bpy.context.scene.objects, "coco_annotations")
+        coco_output = CocoUtility.generate_coco_annotations(annotated_images,color_map,bpy.context.scene.objects, "coco_annotations")
         fname = os.path.join(self._determine_output_dir(),"coco_annotations.json")
         with open(fname, 'w') as fp:
             json.dump(coco_output, fp)

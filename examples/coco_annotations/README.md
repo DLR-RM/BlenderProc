@@ -8,7 +8,7 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/coco_annotations/config.yaml examples/coco_annotations/camera_positions examples/coco_annotations/scene.obj examples/coco_annotations/output
 ```
 
-Here `examples/basic/config.yaml` is the config file which defines the structure and properties of the pipeline.
+Here `examples/coco_annotations/config.yaml` is the config file which defines the structure and properties of the pipeline.
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file. 
 
 ## Steps
