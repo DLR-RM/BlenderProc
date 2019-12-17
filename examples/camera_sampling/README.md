@@ -36,11 +36,13 @@ This example explains how to sample random camera positions that all look toward
             "min":[-10, -10, 12]
           }
         },
-        "look_at_point": {
-          "name": "POIGetter",
-          "parameters": {}
-        },
-        "rotation_format": "look_at"
+        "rotation": {
+          "format": "look_at",
+          "value": {
+            "name": "POIGetter",
+            "parameters": {}
+          }
+        }
       }
     ]
   }
