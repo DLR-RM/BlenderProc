@@ -56,11 +56,13 @@ The second argument should contain the path to a house.json file which describes
 {
   "name": "camera.CameraLoader",
   "config": {
-  "path": "<args:0>",
-  "file_format": "location rotation _ _ _ fov _ _",
+    "path": "<args:0>",
+    "file_format": "location rotation/value _ _ _ fov _ _",
     "source_frame": ["X", "-Z", "Y"],
     "default_cam_param": {
-      "rotation_format": "forward_vec",
+      "rotation" {
+        "format": "forward_vec"
+      }
       "fov_is_half": true
     }
   }
@@ -70,7 +72,7 @@ The second argument should contain the path to a house.json file which describes
 * Here the cam poses from the given file are loaded
 * The `file_format` describes how each line should be parsed (Here we use the format used by files created by `scn2cam`; `_` denotes values which should be skipped)
 * It's also necessary here to specify a different `source_frame`, as SUNCG does not use the same coordinate frame as Blender
-* In `default_cam_param` we set parameters which should be set across all cam poses: We change the `rotation_format`. This is necessary as rotations are specified via a forward vector in the camera file. Also `fov_is_half` has to be activated, as SUNCG describes the FOV as the angle between forward vector and one side of the frustum, while blender assumes the FOV describes the angle between both sides of the frustum.
+* In `default_cam_param` we set parameters which should be set across all cam poses: We change the `rotation/format`. This is necessary as rotations are specified via a forward vector in the camera file. Also `fov_is_half` has to be activated, as SUNCG describes the FOV as the angle between forward vector and one side of the frustum, while blender assumes the FOV describes the angle between both sides of the frustum.
 
 ### SuncgLighting
 
