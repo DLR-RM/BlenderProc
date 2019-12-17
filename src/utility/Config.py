@@ -1,4 +1,5 @@
 import mathutils
+import src.utility.Utility as Utility
 
 
 class Config:
@@ -26,13 +27,14 @@ class Config:
             
         return False
             
-    def _get_value(self, name, block=None):
+    def _get_value(self, name, block=None, allow_invoke_provider=False):
         """ Returns the value of the parameter with the given name inside the given block.
 
         Basically just a recursive dict lookup, making sure the parameter exists, otherwise an error is thrown.
 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param block: A dict containing the configuration. If none, the whole data of this config object will be used.
+        :param allow_invoke_provider: If set to True, then a provider is automatically invoked if the parameter value is a dict.
         :return: The value of the parameter.
         """
         if block is None:
@@ -42,16 +44,21 @@ class Config:
             delimiter_pos = name.find("/")
             block_name = name[:delimiter_pos]
             if block_name in block and type(block[block_name]) is dict:
-                return self._get_value(name[delimiter_pos + 1:], block[block_name])
+                return self._get_value(name[delimiter_pos + 1:], block[block_name], allow_invoke_provider)
             else:
                 raise NotFoundError("No such configuration block '" + block_name + "'!")
         else:
             if name in block:
-                return block[name]
+
+                # Check for whether a provider should be invoked to get the parameter value
+                if allow_invoke_provider and type(block[name]) is dict:
+                    return Utility.Utility.invoke_provider_based_on_config(block[name])
+                else:
+                    return block[name]
             else:
                 raise NotFoundError("No such configuration '" + name + "'!")
             
-    def _get_value_with_fallback(self, name, fallback=None):
+    def _get_value_with_fallback(self, name, fallback=None, allow_invoke_provider=False):
         """ Returns the value of the given parameter with the given name.
 
         If the parameter does not exist, the given fallback value is returned.
@@ -59,10 +66,11 @@ class Config:
 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param fallback: The fallback value.
+        :param allow_invoke_provider: If set to True, then a provider is automatically invoked if the parameter value is a dict.
         :return: The value of the parameter.
         """
         try:
-            return self._get_value(name)
+            return self._get_value(name, None, allow_invoke_provider)
         except NotFoundError:
             if fallback is not None:
                 return fallback
@@ -87,7 +95,7 @@ class Config:
         :param fallback: The fallback value, returned if the parameter does not exist.
         :return: The integer value.
         """
-        value = self._get_value_with_fallback(name, fallback)
+        value = self._get_value_with_fallback(name, fallback, True)
         try:
             return int(value)
         except ValueError:
@@ -102,7 +110,7 @@ class Config:
         :param fallback: The fallback value, returned if the parameter does not exist.
         :return: The boolean value.
         """
-        value = self._get_value_with_fallback(name, fallback)
+        value = self._get_value_with_fallback(name, fallback, True)
         try:
             return bool(value)
         except ValueError:
@@ -117,7 +125,7 @@ class Config:
         :param fallback: The fallback value, returned if the parameter does not exist.
         :return: The float value.
         """
-        value = self._get_value_with_fallback(name, fallback)
+        value = self._get_value_with_fallback(name, fallback, True)
         try:
             return float(value)
         except ValueError:
@@ -132,7 +140,7 @@ class Config:
         :param fallback: The fallback value, returned if the parameter does not exist.
         :return: The string value.
         """
-        value = self._get_value_with_fallback(name, fallback)
+        value = self._get_value_with_fallback(name, fallback, True)
         try:
             return str(value)
         except ValueError:
@@ -147,7 +155,11 @@ class Config:
         :param fallback: The fallback value, returned if the parameter does not exist.
         :return: The list.
         """
-        value = self._get_value_with_fallback(name, fallback)
+        value = self._get_value_with_fallback(name, fallback, True)
+
+        if isinstance(value, mathutils.Vector):
+            value = list(value)
+
         if not isinstance(value, list):
             raise TypeError("Cannot convert '" + str(value) + "' to list!")
 
