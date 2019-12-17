@@ -155,6 +155,6 @@ class CameraModule(Module):
         # Store new cam pose as next frame
         frame_id = bpy.context.scene.frame_end
         self._insert_key_frames(cam, cam_ob, frame_id)
-        self._write_cam_pose_to_file(frame_id, cam, cam_ob)
+        # self._write_cam_pose_to_file(frame_id, cam, cam_ob)
 
         bpy.context.scene.frame_end = frame_id + 1
