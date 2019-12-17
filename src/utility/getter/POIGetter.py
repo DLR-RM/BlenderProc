@@ -22,10 +22,10 @@ class POIGetter:
                 # Stack points of a bounding box
                 bb_points = np.vstack([bb_points, np.array([point[:]])])
             # Stack mean coords of bounding boxes
-            mean_bb_points = np.vstack([mean_bb_points, np.mean(bb_points, axis = 0)])
+            mean_bb_points = np.vstack([mean_bb_points, np.mean(bb_points, axis=0)])
         # Query point - mean of means
-        mean_bb_point = np.mean(mean_bb_points, axis = 0)
+        mean_bb_point = np.mean(mean_bb_points, axis=0)
         # Closest point (from means) to query point (mean of means)
         poi = mathutils.Vector(mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis = 1))])
-        
+
         return poi
