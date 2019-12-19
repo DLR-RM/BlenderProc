@@ -9,8 +9,6 @@ from src.renderer.Renderer import Renderer
 from src.utility.ColorPicker import get_colors
 from src.utility.Utility import Utility
 
-import json
-
 
 class SegMapRenderer(Renderer):
     """
