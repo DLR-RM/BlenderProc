@@ -4,7 +4,6 @@ import h5py
 import argparse
 import numpy as np
 from matplotlib import pyplot as plt
-from skimage import color
 
 
 parser = argparse.ArgumentParser("Script to visualize hdf5 files")

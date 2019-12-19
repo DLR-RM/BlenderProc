@@ -15,12 +15,14 @@ class PhysicsPositioning(Module):
        "min_simulation_time", "The minimum number of seconds to simulate."
        "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped."
        "max_simulation_time", "The maximum number of seconds to simulate."
+       "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
         self.object_stopped_location_threshold = self.config.get_float("object_stopped_location_threshold", 0.01)
         self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
+        self.collision_margin = self.config.get_float("collision_margin", 0.001)
 
     def run(self):
         """ Performs physics simulation in the scene. """
@@ -43,6 +45,7 @@ class PhysicsPositioning(Module):
                 bpy.ops.rigidbody.object_add()
                 obj.rigid_body.type = obj["physics"].upper()
                 obj.rigid_body.collision_shape = "MESH"
+                obj.rigid_body.collision_margin = self.collision_margin
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """

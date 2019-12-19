@@ -21,12 +21,10 @@ class PositionSampler(Module):
             4- If no collision then keep the position else reset
         Here we use any general sampling method supported by us
         """
-        pos_sampler_params = self.config.get_raw_dict("pos_sampler")    
-        rot_sampler_params = self.config.get_raw_dict("rot_sampler")
 
         # 2- Until we have objects remaining and have not run out of tries, Sample a point
         placed = [] # List of objects successfully placed
-        max_tries = self.config.get_int("max_iterations",1000)   # After this many tries we give up on current object and continue with rest
+        max_tries = self.config.get_int("max_iterations", 1000)   # After this many tries we give up on current object and continue with rest
         cache = {} # cache to fasten collision detection
         for obj in bpy.context.scene.objects: # for each object
             if obj.type == "MESH":
@@ -36,8 +34,8 @@ class PositionSampler(Module):
                 no_collision = True
                 for i in range(max_tries): # Try max_iter amount of times
                     # 3- Put the top object in queue at the sampled point in space
-                    position = Utility.sample_based_on_config(pos_sampler_params) 
-                    rotation = Utility.sample_based_on_config(rot_sampler_params) 
+                    position = self.config.get_vector3d("pos_sampler")
+                    rotation = self.config.get_vector3d("rot_sampler")
                     obj.location = position # assign it a new position
                     obj.rotation_euler = rotation # and a rotation
                     bpy.context.view_layer.update() # then udpate scene

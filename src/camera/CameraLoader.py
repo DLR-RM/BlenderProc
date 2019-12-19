@@ -25,7 +25,7 @@ class CameraLoader(CameraModule):
         # A dict specifying the length of parameters that require more than one argument. If not specified, 1 is assumed.
         self.number_of_arguments_per_parameter = {
             "location": 3,
-            "rotation": 3
+            "rotation/value": 3
         }
 
     def run(self):
