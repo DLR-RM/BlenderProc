@@ -5,13 +5,13 @@
     "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
-      "imageio"
+      "imageio",
+      "scikit-image"
     ]
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>",
-      "output_is_temp": False
+      "output_dir": "<args:2>"
     }
   },
   "modules": [
@@ -50,15 +50,13 @@
     {
       "name": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors",
-        "samples": 350
+        "output_key": "colors"
       }
     },
     {
       "name": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "object",
-        "samples": 350
+        "map_by": "object"
       }
     },
     {

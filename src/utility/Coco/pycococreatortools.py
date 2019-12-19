@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-
-import os
-import re
 import datetime
 import numpy as np
 from itertools import groupby
@@ -10,9 +6,6 @@ from PIL import Image
 
 class PycocoCreatorTools:
 
-    convert = lambda text: int(text) if text.isdigit() else text.lower()
-    natrual_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
-    
     @staticmethod
     def bbox(img):
         rows = np.any(img, axis=1)
