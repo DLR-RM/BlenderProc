@@ -27,8 +27,8 @@ class CocoUtility:
             "description": dataset_name,
             "url": "https://github.com/waspinator/pycococreator",
             "version": "0.1.0",
-            "year": 2018,
-            "contributor": "waspinator",
+            "year": 2020,
+            "contributor": "Unknown",
             "date_created": datetime.datetime.utcnow().isoformat(' ')
         }
 
