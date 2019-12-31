@@ -7,7 +7,8 @@ import numpy as np
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--conf', dest='conf', default='coco_annotations.json', help='coco annotation json file')
 parser.add_argument('-i', '--image_index', dest='image_index', default=0, help='image over which to annotate, uses the rgb rendering', type=int)
-parser.add_argument('-b', '--base_path', dest='base_path', default='output', help='base path for all the files', type=str)
+parser.add_argument('-b', '--base_path', dest='base_path', default='examples/coco_annotations/output', 
+help='base path for all the files', type=str)
 args = parser.parse_args()
 
 conf = args.conf

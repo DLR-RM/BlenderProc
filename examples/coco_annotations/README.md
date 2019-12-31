@@ -39,19 +39,19 @@ This modules depends on output from 'renderer.SegMapRenderer' and stores annotat
 
 ### Visualizing Annotations
 
-You can use vis_annotation.py like following to visualize annotation over a rendered rgb image.
+You can use vis_coco_annotation.py like following to visualize annotation over a rendered rgb image.
 
 ```
-python vis_annotation.py -i <image index> -c <coco annotaions json file> -b <base path for the files>
+python scripts/vis_coco_annotation.py [-i <hdf5 index>] [-c <coco annotations json>] [-b <base path for the files>]
 ```
 
 #### Working Examples
 With specific values
 ```
-python vis_annotation.py -i 1 -c coco_annotations.json -b output
+python scripts/vis_coco_annotation.py -i 1 -c coco_annotations.json -b examples/coco_annotations/output
 ```
 
-With default values
+Above are also the default values, i.e. for the same result call
 ```
-python vis_annotation.py
+python scripts/vis_coco_annotation.py
 ```
