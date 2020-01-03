@@ -25,7 +25,7 @@ def get_colors(num):
             for b in range(cube_length):
                 b_mid_point = int(round(block_length * b +  block_length/2))
                 colors.append([r_mid_point,g_mid_point,b_mid_point])
-    return colors[:-num]
+    return colors[:num]
     
     
 
