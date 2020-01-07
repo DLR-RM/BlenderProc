@@ -14,7 +14,7 @@ class RgbRenderer(Renderer):
 
     def run(self):
         with Utility.UndoAfterExecution():
-            self._configure_renderer()
+            self._configure_renderer(default_denoiser="Intel")
 
             # In case a previous renderer changed these settings
             bpy.context.scene.render.image_settings.color_mode = "RGB"

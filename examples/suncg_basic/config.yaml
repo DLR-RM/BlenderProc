@@ -2,7 +2,7 @@
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py",
       "imageio"
@@ -34,9 +34,9 @@
         "file_format": "location rotation/value _ _ _ fov _ _",
         "source_frame": ["X", "-Z", "Y"],
         "default_cam_param": {
-          "rotation" {
+          "rotation": {
             "format": "forward_vec"
-          }
+          },
           "fov_is_half": true
         }
       }
