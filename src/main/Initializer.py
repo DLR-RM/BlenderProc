@@ -13,7 +13,8 @@ class Initializer(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "horizon_color", A list of three elements specifying rgb of the world's horizon/background color.
+       "horizon_color", "A list of three elements specifying rgb of the world's horizon/background color."
+       "compute_device_type", "Device to use for computation. Available options are 'CUDA', 'OPTIX', 'OPENCL' and 'NONE'. 'OPTIX' requires a driver version of >=435.12!
     """
 
     def __int__(self, config):
