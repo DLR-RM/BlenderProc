@@ -34,9 +34,9 @@
         "file_format": "location rotation/value _ _ _ fov _ _",
         "source_frame": ["X", "-Z", "Y"],
         "default_cam_param": {
-          "rotation" {
+          "rotation": {
             "format": "forward_vec"
-          }
+          },
           "fov_is_half": true
         }
       }
