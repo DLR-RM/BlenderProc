@@ -26,6 +26,7 @@ class Renderer(Module):
        "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
 
        "samples", "Number of samples to render for each pixel."
+       "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or set to 'Intel', if you want to use the Intel Open Image Denoiser.
        "max_bounces", "Total maximum number of bounces."
        "min_bounces", "Total minimum number of bounces."
        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
