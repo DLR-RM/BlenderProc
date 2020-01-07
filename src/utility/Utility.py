@@ -216,39 +216,50 @@ class Utility:
             bpy.ops.ed.undo()
 
     @staticmethod
-    def sample(name, parameters):
-        """ A general sample function.
+    def invoke_provider(name, parameters):
+        """ Builds up and calls provider like sampler or getter.
 
-        It first builds the required sampler and then calls its sample function.
+        It first builds the required provider and then calls its sample/get/... function.
 
-        :param name: The name of the sampler class.
-        :param parameters: A dict containing the parameters that should be used to sample.
-        :return: The sampled value.
+        :param name: The name of the provider class.
+        :param parameters: A dict containing the parameters that should be used.
+        :return: The value returned from the provider.
         """
+        if name.endswith("Sampler"):
+            provider_type = "sampler"
+        elif name.endswith("Getter"):
+            provider_type = "getter"
+        else:
+            raise Exception("Unknown type of provider with name " + name)
+
         # Import class from src.utility
-        module_class = getattr(importlib.import_module("src.utility.sampler." + name), name.split(".")[-1])
+        module_class = getattr(importlib.import_module("src.utility." + provider_type + "." + name), name.split(".")[-1])
         # Build configuration
         config = Config(parameters)
-        # Call sample method
-        return module_class.sample(config)
+
+        # Call providing method
+        if provider_type == "sampler":
+            return module_class.sample(config)
+        elif provider_type == "getter":
+            return module_class.get(config)
 
     @staticmethod
-    def sample_based_on_config(config):
-        """ A general sample function using the sampler and sample parameters described in the given config.
+    def invoke_provider_based_on_config(config):
+        """ Builds up and calls a provider using the parameters described in the given config.
 
         The given config should follow the following scheme:
 
         {
-          "name": "<name of sampler class>"
+          "name": "<name of provider class>"
           "parameters": {
-            <sampler parameters>
+            <provider parameters>
           }
         }
 
         :param config: A Configuration object or a dict containing the configuration data.
-        :return: The sampled value.
+        :return: The value returned from the provider.
         """
         if isinstance(config, dict):
             config = Config(config)
 
-        return Utility.sample(config.get_string("name"), config.get_raw_dict("parameters"))
+        return Utility.invoke_provider(config.get_string("name"), config.get_raw_dict("parameters"))

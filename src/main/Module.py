@@ -71,6 +71,19 @@ class Module:
             "stereo": stereo
         })
 
+    def _find_registered_output_by_key(self, key):
+        """ Returns the output which was registered with the given key.
+
+        :param key: The output key to look for.
+        :return: The dict containing all information registered for that output. If no output with the given key exists, None is returned.
+        """
+        if "output" in bpy.context.scene:
+            for output in bpy.context.scene["output"]:
+                if output["key"] == key:
+                    return output.to_dict()
+
+        return None
+
     def _output_already_registered(self, output, output_list):
         """ Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
         Also throws an error if it detects an entry having the same key but not the same path and vice versa since this

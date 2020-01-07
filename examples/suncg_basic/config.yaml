@@ -31,10 +31,12 @@
       "name": "camera.CameraLoader",
       "config": {
         "path": "<args:0>",
-        "file_format": "location rotation _ _ _ fov _ _",
+        "file_format": "location rotation/value _ _ _ fov _ _",
         "source_frame": ["X", "-Z", "Y"],
         "default_cam_param": {
-          "rotation_format": "forward_vec",
+          "rotation" {
+            "format": "forward_vec"
+          }
           "fov_is_half": true
         }
       }

@@ -2,7 +2,7 @@
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81-linux-glibc217-x86_64",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
       "imageio"
@@ -10,7 +10,8 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>"
+      "output_dir": "<args:0>",
+      "output_is_temp": false
     }
   },
   "modules": [
@@ -21,7 +22,7 @@
     {
       "name": "loader.ObjLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "examples/camera_sampling/scene.obj"
       }
     },
     {
@@ -37,13 +38,26 @@
       }
     },
     {
-      "name": "camera.CameraLoader",
+      "name": "camera.CameraSampler",
       "config": {
-        "path": "<args:0>",
-        "file_format": "location rotation/value",
-        "default_cam_param": {
-          "fov": 1
-        }
+        "cam_poses": [
+          {
+            "location": {
+              "name":"Uniform3dSampler",
+              "parameters":{
+                "max":[10, 10, 8],
+                "min":[-10, -10, 12]
+              }
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "name": "POIGetter",
+                "parameters": {}
+              }
+            }
+          }
+        ]
       }
     },
     {
