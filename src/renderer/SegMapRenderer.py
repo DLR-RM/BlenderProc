@@ -6,7 +6,6 @@ import imageio
 import numpy as np
 
 from src.renderer.Renderer import Renderer
-from src.utility.ColorPicker import get_colors
 from src.utility.Utility import Utility
 
 
@@ -26,7 +25,7 @@ class SegMapRenderer(Renderer):
 
         Renderer.__init__(self, config)
 
-    def color_obj(self, obj, color):
+    def colorize_object(self, obj, color):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
 
         This is done by replacing all nodes just with an emission node, which emits the color corresponding to the category of the object.
@@ -52,59 +51,61 @@ class SegMapRenderer(Renderer):
         else:
             obj.data.materials.append(new_mat)
 
+    def colorize_objects_for_semantic_segmentation(self, objects):
+        """ Sets the color of each object according to their category_id.
+
+        :param objects: A list of objects.
+        :return: The cube_length of the spanned color space, the color map
+        """
+        colors, cube_length = Utility.span_equally_spaced_color_space(bpy.data.scenes["Scene"]["num_labels"])
+
+        for obj in objects:
+            if "category_id" not in obj:
+                raise Exception("The object " + obj.name + " does not have a category_id.")
+
+            self.colorize_object(obj, colors[obj["category_id"]])
+
+        return cube_length, None
+
+    def colorize_objects_for_instance_segmentation(self, objects):
+        """ Sets a different color to each object.
+
+        :param objects: A list of objects.
+        :return: The cube_length of the spanned color space, the color map
+        """
+        colors, cube_length = Utility.span_equally_spaced_color_space(len(objects))
+
+        color_map = []
+        for idx, obj in enumerate(objects):
+            self.colorize_object(obj, colors[idx])
+
+            obj_class = obj["category_id"] if "category_id" in obj else None
+            color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx})
+
+        return cube_length, color_map
+
     def run(self):
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_samples=1)
 
             # get current method for color mapping, instance or class
             method = self.config.get_string("map_by", "class")
-            
+
             # Get objects with materials (i.e. not lights or cameras)
             objs_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
 
             if method == "class":
-                # Generated colors for each class
-                rgbs = get_colors(bpy.data.scenes["Scene"]["num_labels"])
-                class_to_rgb = {}
-                cur_idx = 0
+                cube_length, color_map = self.colorize_objects_for_semantic_segmentation(objs_with_mats)
+            elif method == "instance":
+                cube_length, color_map = self.colorize_objects_for_instance_segmentation(objs_with_mats)
             else:
-                # Generated colors for each instance
-                rgbs = get_colors(len(objs_with_mats))
-
-            hexes = [Utility.rgb_to_hex(rgb) for rgb in rgbs]
-
-            # Initialize maps
-            color_map = []
+                raise Exception("Invalid mapping method: " + method)
 
             bpy.context.scene.render.image_settings.color_mode = "BW"
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
             bpy.context.view_layer.cycles.use_denoising = False
-            bpy.data.scenes["Scene"].cycles.filter_width = 0.0
-
-            for idx, obj in enumerate(objs_with_mats):
-                # if class specified for this object or not
-                _class = obj["category_id"] if "category_id" in obj else None
-
-                # if method to assign color is by class or by instance
-                if method == "class" and _class is not None:
-                    if _class not in class_to_rgb:  # if class has not been assigned a color yet
-                        class_to_rgb[_class] = {
-                            "rgb": rgbs[cur_idx],
-                            "rgb_idx": cur_idx,
-                            "_hex": Utility.rgb_to_hex(rgbs[cur_idx])
-                        }  # assign the class with a color
-                        cur_idx += 1  # set counter to next avialable color
-                    rgb = class_to_rgb[_class]["rgb"]  # assign this object the color of this class
-                    color_idx = class_to_rgb[_class]["rgb_idx"]  # get idx of assigned color
-                else:
-                    rgb = rgbs[idx]  # assign this object a color
-                    color_idx = idx  # each instance to color is one to one mapping, both have same idx
-
-                # add values to a map
-                color_map.append({'color': rgb, 'objname': obj.name, 'class': _class, 'idx': color_idx})
-
-                self.color_obj(obj, rgb)
+            bpy.context.scene.cycles.filter_width = 0.0
 
             self._render("seg_")
 
@@ -114,20 +115,20 @@ class SegMapRenderer(Renderer):
                 segmentation = imageio.imread(file_path)[:, :, :3]
                 segmentation = np.round(segmentation * 255).astype(int)
 
-                segmap = np.zeros(segmentation.shape[:2])  # initialize mask
+                segmap = Utility.map_back_from_equally_spaced_color_space(segmentation, cube_length)
 
-                for idx, row in enumerate(segmentation):
-                    segmap[idx, :] = [Utility.get_idx(hexes, Utility.rgb_to_hex(rgb)) for rgb in row]
                 fname = os.path.join(self._determine_output_dir(), "segmap_" + "%04d" % frame)
                 np.save(fname, segmap)
 
             # write color mappings to file
-            with open(os.path.join(self._determine_output_dir(), "class_inst_col_map.csv"), 'w', newline='') as csvfile:
-                fieldnames = list(color_map[0].keys())
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
-                for mapping in color_map:
-                    writer.writerow(mapping)
+            if color_map is not None:
+                with open(os.path.join(self._determine_output_dir(), "class_inst_col_map.csv"), 'w', newline='') as csvfile:
+                    fieldnames = list(color_map[0].keys())
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                    writer.writeheader()
+                    for mapping in color_map:
+                        writer.writerow(mapping)
 
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
-        self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False)
+        if color_map is not None:
+            self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False)

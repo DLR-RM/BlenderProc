@@ -263,3 +263,40 @@ class Utility:
             config = Config(config)
 
         return Utility.invoke_provider(config.get_string("name"), config.get_raw_dict("parameters"))
+
+    @staticmethod
+    def span_equally_spaced_color_space(num):
+        """ This function generates N equidistant rgb colors and returns num of them.
+
+        Basically it splits a cube of shape 256 x 256 x 256 in to N smaller cubes. Where, N = cube_length^3
+        and cube_length is the smallest integer for which N >= num.
+        :param num: integer
+        :return colors: list of rgb colors, where each element is a list of size 3 for each channel of rgb
+        """
+        cube_length = 1
+        colors = []
+        while cube_length ** 3 < num:  # find cube_length bound of cubes to be made
+            cube_length += 1
+
+        block_length = 256 // cube_length
+        for r in range(cube_length):
+            r_mid_point = block_length * r + block_length // 2
+            for g in range(cube_length):
+                g_mid_point = block_length * g + block_length // 2
+                for b in range(cube_length):
+                    b_mid_point = block_length * b + block_length // 2
+                    colors.append([r_mid_point, g_mid_point, b_mid_point])
+
+        return colors[:num], cube_length
+
+    @staticmethod
+    def map_back_from_equally_spaced_color_space(values, cube_length):
+        """ Maps the given values back to their original indices.
+
+        :param values: A
+        :param cube_length: list of rgb colors, where each element is a list of size 3 for each channel of rgb
+        """
+        block_length = 256 // cube_length
+        values -= block_length // 2
+        values //= block_length
+        return values[:, :, 0] * cube_length * cube_length + values[:, :, 1] * cube_length + values[:, :, 2]
