@@ -25,7 +25,7 @@ class SegMapRenderer(Renderer):
 
         Renderer.__init__(self, config)
 
-    def colorize_object(self, obj, color):
+    def _colorize_object(self, obj, color):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
 
         This is done by replacing all nodes just with an emission node, which emits the color corresponding to the category of the object.
@@ -51,38 +51,55 @@ class SegMapRenderer(Renderer):
         else:
             obj.data.materials.append(new_mat)
 
-    def colorize_objects_for_semantic_segmentation(self, objects):
+    def _set_world_background_color(self, color):
+        """ Set the background color of the blender world obejct.
+
+        :param color: A 3-dim array containing the background color in range [0, 255]
+        """
+        nodes = bpy.context.scene.world.node_tree.nodes
+        nodes.get("Background").inputs[0].default_value = [c / 255 for c in color] + [1]
+
+    def _colorize_objects_for_semantic_segmentation(self, objects):
         """ Sets the color of each object according to their category_id.
 
         :param objects: A list of objects.
-        :return: The cube_length of the spanned color space, the color map
+        :return: The num_splits_per_dimension of the spanned color space, the color map
         """
-        colors, cube_length = Utility.span_equally_spaced_color_space(bpy.data.scenes["Scene"]["num_labels"])
+        colors, num_splits_per_dimension = Utility.span_equally_spaced_color_space(bpy.context.scene["num_labels"] + 1)
 
         for obj in objects:
             if "category_id" not in obj:
                 raise Exception("The object " + obj.name + " does not have a category_id.")
 
-            self.colorize_object(obj, colors[obj["category_id"]])
+            self._colorize_object(obj, colors[obj["category_id"]])
 
-        return cube_length, None
+        # Set world background label
+        if "category_id" not in bpy.context.scene.world:
+            raise Exception("The world does not have a category_id. It will be used to set the label of the world background.")
+        self._set_world_background_color(colors[bpy.context.scene.world["category_id"]])
 
-    def colorize_objects_for_instance_segmentation(self, objects):
+        return colors, num_splits_per_dimension, None
+
+    def _colorize_objects_for_instance_segmentation(self, objects):
         """ Sets a different color to each object.
 
         :param objects: A list of objects.
-        :return: The cube_length of the spanned color space, the color map
+        :return: The num_splits_per_dimension of the spanned color space, the color map
         """
-        colors, cube_length = Utility.span_equally_spaced_color_space(len(objects))
+        colors, num_splits_per_dimension = Utility.span_equally_spaced_color_space(len(objects) + 1)
 
         color_map = []
         for idx, obj in enumerate(objects):
-            self.colorize_object(obj, colors[idx])
+            self._colorize_object(obj, colors[idx])
 
             obj_class = obj["category_id"] if "category_id" in obj else None
             color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx})
 
-        return cube_length, color_map
+        # Set world background label
+        self._set_world_background_color(colors[-1])
+        color_map.append({'objname': "background", 'class': -1, 'idx': len(colors) - 1})
+
+        return colors, num_splits_per_dimension, color_map
 
     def run(self):
         with Utility.UndoAfterExecution():
@@ -95,13 +112,12 @@ class SegMapRenderer(Renderer):
             objs_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
 
             if method == "class":
-                cube_length, color_map = self.colorize_objects_for_semantic_segmentation(objs_with_mats)
+                colors, num_splits_per_dimension, color_map = self._colorize_objects_for_semantic_segmentation(objs_with_mats)
             elif method == "instance":
-                cube_length, color_map = self.colorize_objects_for_instance_segmentation(objs_with_mats)
+                colors, num_splits_per_dimension, color_map = self._colorize_objects_for_instance_segmentation(objs_with_mats)
             else:
                 raise Exception("Invalid mapping method: " + method)
 
-            bpy.context.scene.render.image_settings.color_mode = "BW"
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
             bpy.context.view_layer.cycles.use_denoising = False
@@ -109,13 +125,19 @@ class SegMapRenderer(Renderer):
 
             self._render("seg_")
 
+            # Find optimal dtype of output based on max index
+            for dtype in [np.uint8, np.uint16, np.uint32]:
+                optimal_dtype = dtype
+                if np.iinfo(optimal_dtype).max >= len(colors) - 1:
+                    break
+
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
                 file_path = os.path.join(self._determine_output_dir(), "seg_" + "%04d" % frame + ".exr")
                 segmentation = imageio.imread(file_path)[:, :, :3]
-                segmentation = np.round(segmentation * 255).astype(int)
+                segmentation = np.round(segmentation * 255).astype(optimal_dtype)
 
-                segmap = Utility.map_back_from_equally_spaced_color_space(segmentation, cube_length)
+                segmap = Utility.map_back_from_equally_spaced_color_space(segmentation, num_splits_per_dimension)
 
                 fname = os.path.join(self._determine_output_dir(), "segmap_" + "%04d" % frame)
                 np.save(fname, segmap)

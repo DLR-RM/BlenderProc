@@ -268,35 +268,48 @@ class Utility:
     def span_equally_spaced_color_space(num):
         """ This function generates N equidistant rgb colors and returns num of them.
 
-        Basically it splits a cube of shape 256 x 256 x 256 in to N smaller cubes. Where, N = cube_length^3
-        and cube_length is the smallest integer for which N >= num.
+        Basically it splits a cube of shape 256 x 256 x 256 in to N smaller blocks. Where, N = cube_length^3
+        and cube_length is the smallest integer for which N >= num. If 256 is not a multiple of N, then the sum of all blocks might
+        not fill up the whole 256 ** 3 cube.
+
         :param num: integer
         :return colors: list of rgb colors, where each element is a list of size 3 for each channel of rgb
         """
-        cube_length = 1
+        num_splits_per_dimension = 1
         colors = []
-        while cube_length ** 3 < num:  # find cube_length bound of cubes to be made
-            cube_length += 1
+        # find cube_length bound of cubes to be made
+        while num_splits_per_dimension ** 3 < num:
+            num_splits_per_dimension += 1
 
-        block_length = 256 // cube_length
-        for r in range(cube_length):
+        # Calc the side length of a block. We do a integer division here, s.t. we get blocks with the exact same size, even though we are then not using the full space of [0, 255] ** 3
+        block_length = 256 // num_splits_per_dimension
+
+        # Calculate the center of each block and use them as equidistant rgb colors
+        for r in range(num_splits_per_dimension):
             r_mid_point = block_length * r + block_length // 2
-            for g in range(cube_length):
+            for g in range(num_splits_per_dimension):
                 g_mid_point = block_length * g + block_length // 2
-                for b in range(cube_length):
+                for b in range(num_splits_per_dimension):
                     b_mid_point = block_length * b + block_length // 2
                     colors.append([r_mid_point, g_mid_point, b_mid_point])
 
-        return colors[:num], cube_length
+        return colors[:num], num_splits_per_dimension
 
     @staticmethod
-    def map_back_from_equally_spaced_color_space(values, cube_length):
-        """ Maps the given values back to their original indices.
+    def map_back_from_equally_spaced_color_space(colors, num_splits_per_dimension):
+        """ Maps the given color values back to their original color indices.
 
-        :param values: A
-        :param cube_length: list of rgb colors, where each element is a list of size 3 for each channel of rgb
+        This function calculates for each given color the corresponding index in the color list created by the span_equally_spaced_color_space() method.
+
+        :param colors: A 2-dim array of colors / an image.
+        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the equally spaced color space.
+        :return: A 2-dim array of indices corresponding to the given colors
         """
-        block_length = 256 // cube_length
-        values -= block_length // 2
-        values //= block_length
-        return values[:, :, 0] * cube_length * cube_length + values[:, :, 1] * cube_length + values[:, :, 2]
+        # Calc the side length of a block.
+        block_length = 256 // num_splits_per_dimension
+        # Subtract a half of a block from all values, s.t. now every color points to the lower corner of a block
+        colors -= block_length // 2
+        # Calculate the block indices per dimension
+        colors //= block_length
+        # Compute the global index of the block (corresponds to the three nested for loops inside span_equally_spaced_color_space())
+        return colors[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + colors[:, :, 1] * num_splits_per_dimension + colors[:, :, 2]

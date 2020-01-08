@@ -360,7 +360,9 @@ class SuncgLoader(Loader):
         
         self.labels = sorted(list(self.labels))
         bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
-        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}      
+        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
+        # Use the void category as label for the world background
+        bpy.context.scene.world["category_id"] = self.label_index_map["void"]
 
     def _get_label_id(self, obj_id):
         """ Returns the label id for an object with the given model_id.
