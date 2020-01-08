@@ -64,7 +64,6 @@ class ReplicaCameraSampler(CameraSampler):
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
         bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
 
-        frame_id = 0
         tries = 0
         successful_tries = 0
         if 'mesh' in bpy.data.objects:
@@ -99,24 +98,18 @@ class ReplicaCameraSampler(CameraSampler):
             if not self._perform_obstacle_in_view_check(cam, position, world_matrix):
                 continue
 
-            # Set the camera pose at the next frame:
-            cam_ob.location = position
-            cam_ob.rotation_euler = orientation
-            cam_ob.keyframe_insert(data_path='location', frame=frame_id + 1)
-            cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id + 1)
-
             # Set the camera pose at the next frame
             self.cam_pose_collection.add_item({
                 "location": list(position),
-                "rotation": list(orientation)
+                "rotation": {
+                    "value": list(orientation)
+                }
             })
 
-            frame_id += 1
             successful_tries += 1
 
         print(str(tries) + " tries were necessary")
 
-        bpy.context.scene.frame_end = frame_id
 
     def _calc_number_of_cams_in_room(self, room_obj):
         """ Approximates the square meters of the room and then uses cams_per_square_meter to get total number of cams in room.
