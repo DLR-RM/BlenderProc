@@ -18,7 +18,7 @@ class POIGetter:
         for obj in bpy.context.scene.objects:
             if obj.type == "MESH":
                 # Get bounding box corners
-                bb_points = [point[:] for point in get_bounds(obj)]
+                bb_points = get_bounds(obj)
                 # Compute mean coords of bounding box
                 mean_bb_points.append(np.mean(bb_points, axis=0))
         # Query point - mean of means
