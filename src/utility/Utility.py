@@ -289,13 +289,16 @@ class Utility:
         block_length = space_size_per_dimension // num_splits_per_dimension
 
         # Calculate the center of each block and use them as equidistant values
+        r_mid_point = block_length // 2
         for r in range(num_splits_per_dimension):
-            r_mid_point = block_length * r + block_length // 2
+            g_mid_point = block_length // 2
             for g in range(num_splits_per_dimension):
-                g_mid_point = block_length * g + block_length // 2
+                b_mid_point = block_length // 2
                 for b in range(num_splits_per_dimension):
-                    b_mid_point = block_length * b + block_length // 2
                     values.append([r_mid_point, g_mid_point, b_mid_point])
+                    b_mid_point += block_length
+                g_mid_point += block_length
+            r_mid_point += block_length
 
         return values[:num], num_splits_per_dimension
 
