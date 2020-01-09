@@ -22,8 +22,10 @@ class SegMapRenderer(Renderer):
     """
 
     def __init__(self, config):
-
         Renderer.__init__(self, config)
+        # As we use float16 for storing the rendering, the interval of integers which can be precisely stored is [-2048, 2048].
+        # As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our color space which allows ~8 billion different colors/labels. This should be enough.
+        self.render_colorspace_size_per_dimension = 2048
 
     def _colorize_object(self, obj, color):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
@@ -41,7 +43,7 @@ class SegMapRenderer(Renderer):
         emission_node = nodes.new(type='ShaderNodeEmission')
         output = nodes.get("Material Output")
 
-        emission_node.inputs[0].default_value[:3] = [c / 255 for c in color]
+        emission_node.inputs[0].default_value[:3] = color
         links.new(emission_node.outputs[0], output.inputs[0])
 
         # Set material to be used for coloring all faces of the given object
@@ -57,7 +59,7 @@ class SegMapRenderer(Renderer):
         :param color: A 3-dim array containing the background color in range [0, 255]
         """
         nodes = bpy.context.scene.world.node_tree.nodes
-        nodes.get("Background").inputs[0].default_value = [c / 255 for c in color] + [1]
+        nodes.get("Background").inputs[0].default_value = color + [1]
 
     def _colorize_objects_for_semantic_segmentation(self, objects):
         """ Sets the color of each object according to their category_id.
@@ -65,7 +67,7 @@ class SegMapRenderer(Renderer):
         :param objects: A list of objects.
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
-        colors, num_splits_per_dimension = Utility.span_equally_spaced_color_space(bpy.context.scene["num_labels"] + 1)
+        colors, num_splits_per_dimension = Utility.generate_equidistant_values(bpy.context.scene["num_labels"] + 1, self.render_colorspace_size_per_dimension)
 
         for obj in objects:
             if "category_id" not in obj:
@@ -78,6 +80,7 @@ class SegMapRenderer(Renderer):
             raise Exception("The world does not have a category_id. It will be used to set the label of the world background.")
         self._set_world_background_color(colors[bpy.context.scene.world["category_id"]])
 
+        # As we don't need any color map when doing semantic segmenation, just return None instead.
         return colors, num_splits_per_dimension, None
 
     def _colorize_objects_for_instance_segmentation(self, objects):
@@ -86,7 +89,7 @@ class SegMapRenderer(Renderer):
         :param objects: A list of objects.
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
-        colors, num_splits_per_dimension = Utility.span_equally_spaced_color_space(len(objects) + 1)
+        colors, num_splits_per_dimension = Utility.generate_equidistant_values(len(objects) + 1, self.render_colorspace_size_per_dimension)
 
         color_map = []
         for idx, obj in enumerate(objects):
@@ -135,9 +138,9 @@ class SegMapRenderer(Renderer):
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
                 file_path = os.path.join(self._determine_output_dir(), "seg_" + "%04d" % frame + ".exr")
                 segmentation = imageio.imread(file_path)[:, :, :3]
-                segmentation = np.round(segmentation * 255).astype(optimal_dtype)
 
-                segmap = Utility.map_back_from_equally_spaced_color_space(segmentation, num_splits_per_dimension)
+                segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
+                segmap = segmap.astype(optimal_dtype)
 
                 fname = os.path.join(self._determine_output_dir(), "segmap_" + "%04d" % frame)
                 np.save(fname, segmap)

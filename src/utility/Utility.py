@@ -6,6 +6,7 @@ import importlib
 from src.utility.Config import Config
 from mathutils import Vector
 from copy import deepcopy
+import numpy as np
 
 class Utility:
     working_dir = ""
@@ -265,51 +266,56 @@ class Utility:
         return Utility.invoke_provider(config.get_string("name"), config.get_raw_dict("parameters"))
 
     @staticmethod
-    def span_equally_spaced_color_space(num):
-        """ This function generates N equidistant rgb colors and returns num of them.
+    def generate_equidistant_values(num, space_size_per_dimension):
+        """ This function generates N equidistant values in a 3-dim space and returns num of them.
 
-        Basically it splits a cube of shape 256 x 256 x 256 in to N smaller blocks. Where, N = cube_length^3
-        and cube_length is the smallest integer for which N >= num. If 256 is not a multiple of N, then the sum of all blocks might
-        not fill up the whole 256 ** 3 cube.
+        Every dimension of the space is limited by [0, K], where K is the given space_size_per_dimension.
+        Basically it splits a cube of shape K x K x K in to N smaller blocks. Where, N = cube_length^3
+        and cube_length is the smallest integer for which N >= num.
 
-        :param num: integer
-        :return colors: list of rgb colors, where each element is a list of size 3 for each channel of rgb
+        If K is not a multiple of N, then the sum of all blocks might
+        not fill up the whole K ** 3 cube.
+
+        :param num: The total number of values required.
+        :param space_size_per_dimension: The side length of cube.
         """
         num_splits_per_dimension = 1
-        colors = []
+        values = []
         # find cube_length bound of cubes to be made
         while num_splits_per_dimension ** 3 < num:
             num_splits_per_dimension += 1
 
         # Calc the side length of a block. We do a integer division here, s.t. we get blocks with the exact same size, even though we are then not using the full space of [0, 255] ** 3
-        block_length = 256 // num_splits_per_dimension
+        block_length = space_size_per_dimension // num_splits_per_dimension
 
-        # Calculate the center of each block and use them as equidistant rgb colors
+        # Calculate the center of each block and use them as equidistant values
         for r in range(num_splits_per_dimension):
             r_mid_point = block_length * r + block_length // 2
             for g in range(num_splits_per_dimension):
                 g_mid_point = block_length * g + block_length // 2
                 for b in range(num_splits_per_dimension):
                     b_mid_point = block_length * b + block_length // 2
-                    colors.append([r_mid_point, g_mid_point, b_mid_point])
+                    values.append([r_mid_point, g_mid_point, b_mid_point])
 
-        return colors[:num], num_splits_per_dimension
+        return values[:num], num_splits_per_dimension
 
     @staticmethod
-    def map_back_from_equally_spaced_color_space(colors, num_splits_per_dimension):
-        """ Maps the given color values back to their original color indices.
+    def map_back_from_equally_spaced_equidistant_values(values, num_splits_per_dimension, space_size_per_dimension):
+        """ Maps the given values back to their original indices.
 
-        This function calculates for each given color the corresponding index in the color list created by the span_equally_spaced_color_space() method.
+        This function calculates for each given value the corresponding index in the list of values created by the generate_equidistant_values() method.
 
-        :param colors: A 2-dim array of colors / an image.
-        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the equally spaced color space.
-        :return: A 2-dim array of indices corresponding to the given colors
+        :param values: An array of shape [M, N, 3];
+        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the equidistant values.
+        :return: A 2-dim array of indices corresponding to the given values.
         """
         # Calc the side length of a block.
-        block_length = 256 // num_splits_per_dimension
-        # Subtract a half of a block from all values, s.t. now every color points to the lower corner of a block
-        colors -= block_length // 2
+        block_length = space_size_per_dimension // num_splits_per_dimension
+        # Subtract a half of a block from all values, s.t. now every value points to the lower corner of a block
+        values -= block_length // 2
         # Calculate the block indices per dimension
-        colors //= block_length
-        # Compute the global index of the block (corresponds to the three nested for loops inside span_equally_spaced_color_space())
-        return colors[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + colors[:, :, 1] * num_splits_per_dimension + colors[:, :, 2]
+        values /= block_length
+        # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())
+        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
+        # Round the values, s.t. derivations are put back to their closest index.
+        return np.round(values)
