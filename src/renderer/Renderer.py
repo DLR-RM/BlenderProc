@@ -174,6 +174,9 @@ class Renderer(Module):
         """
         Adds transparency to all textures, which contain an .png image as an image input
 
+        :param blurry_edges: If True, the edges of the alpha channel might be blurry,
+                             this causes errors if the alpha channel should only be 0 or 1
+
         Be careful, when you replace the original texture with something else (Segmentation, Normals, ...),
         the necessary texture node gets lost. By copying it into a new material as done in the NormalRenderer, you
         can keep the transparency even for those nodes.
