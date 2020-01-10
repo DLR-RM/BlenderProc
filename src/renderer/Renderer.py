@@ -37,6 +37,9 @@ class Renderer(Module):
        "render_depth", "If true, the depth is also rendered to file."
        "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
+       "depth_start", "Starting distance of the depth, measured from the camera."
+       "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range"
+       "depth_falloff", "Type of transition used to fade depth. Default=Linear. [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
     """
@@ -132,22 +135,37 @@ class Renderer(Module):
 
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
+
+        # Mist settings
+        depth_start = self.config.get_float("depth_start", 0.1)
+        depth_range = self.config.get_float("depth_range", 25.0)
+        bpy.context.scene.world.mist_settings.start = depth_start
+        bpy.context.scene.world.mist_settings.depth = depth_range
+        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")
+
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.view_layer.use_pass_z = True
+        bpy.context.view_layer.use_pass_mist = True  # Enable depth pass
+
         tree = bpy.context.scene.node_tree
         links = tree.links
 
         # Use existing render layer
         render_layer_node = tree.nodes.get('Render Layers')
+        # Create a mapper node to map from 0-1 to SI units
+        mapper_node = tree.nodes.new("CompositorNodeMapRange")
+
+        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs[0])
+        mapper_node.inputs[3].default_value = depth_start
+        mapper_node.inputs[4].default_value = depth_range
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
-        # Feed the Z output of the render layer to the input of the file IO layer
-        links.new(render_layer_node.outputs['Depth'], output_file.inputs['Image'])
+        # Feed the Mist output of the render layer to the input of the file IO layer
+        links.new(mapper_node.outputs[0], output_file.inputs[0])
 
     def _render(self, default_prefix):
         """ Renders each registered keypoint.
