@@ -4,6 +4,7 @@ import addon_utils
 import bpy
 
 from src.main.Module import Module
+from src.utility.Utility import Utility
 
 
 class Renderer(Module):
@@ -25,6 +26,7 @@ class Renderer(Module):
        "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
 
        "samples", "Number of samples to render for each pixel."
+       "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or set to 'Intel', if you want to use the Intel Open Image Denoiser.
        "max_bounces", "Total maximum number of bounces."
        "min_bounces", "Total minimum number of bounces."
        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
@@ -35,6 +37,9 @@ class Renderer(Module):
        "render_depth", "If true, the depth is also rendered to file."
        "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
+       "depth_start", "Starting distance of the depth, measured from the camera."
+       "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range"
+       "depth_falloff", "Type of transition used to fade depth. Default=Linear. [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
     """
@@ -42,7 +47,7 @@ class Renderer(Module):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples=256):
+    def _configure_renderer(self, default_samples=256, default_denoiser="Blender"):
         """
          Sets many different render parameters which can be adjusted via the config.
 
@@ -77,7 +82,33 @@ class Renderer(Module):
         bpy.context.scene.render.resolution_percentage = 100
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
-        bpy.context.view_layer.cycles.use_denoising = True
+
+        denoiser = self.config.get_string("denoiser", default_denoiser)
+        if denoiser == "Intel":
+            # The intel denoiser is activated via the compositor
+            bpy.context.view_layer.cycles.use_denoising = False
+            bpy.context.scene.use_nodes = True
+            nodes = bpy.context.scene.node_tree.nodes
+            links = bpy.context.scene.node_tree.links
+
+            # The denoiser gets normal and diffuse color as input
+            bpy.context.view_layer.use_pass_normal = True
+            bpy.context.view_layer.use_pass_diffuse_color = True
+
+            # Add denoiser node
+            denoise_node = nodes.new("CompositorNodeDenoise")
+
+            # Link nodes
+            render_layer_node = nodes.get('Render Layers')
+            composite_node = nodes.get('Composite')
+            Utility.insert_node_instead_existing_link(links, render_layer_node.outputs['Image'], denoise_node.inputs['Image'], denoise_node.outputs['Image'], composite_node.inputs['Image'])
+
+            links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
+            links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
+        elif denoiser == "Blender":
+            bpy.context.view_layer.cycles.use_denoising = True
+        else:
+            raise Exception("No such denoiser: " + denoiser)
 
         simplify_subdivision_render = self.config.get_int("simplify_subdivision_render", 3)
         if simplify_subdivision_render > 0:
@@ -104,22 +135,37 @@ class Renderer(Module):
 
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
+
+        # Mist settings
+        depth_start = self.config.get_float("depth_start", 0.1)
+        depth_range = self.config.get_float("depth_range", 25.0)
+        bpy.context.scene.world.mist_settings.start = depth_start
+        bpy.context.scene.world.mist_settings.depth = depth_range
+        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")
+
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.view_layer.use_pass_z = True
+        bpy.context.view_layer.use_pass_mist = True  # Enable depth pass
+
         tree = bpy.context.scene.node_tree
         links = tree.links
 
-        # Create a render layer
-        rl = tree.nodes.new('CompositorNodeRLayers')      
+        # Use existing render layer
+        render_layer_node = tree.nodes.get('Render Layers')
+        # Create a mapper node to map from 0-1 to SI units
+        mapper_node = tree.nodes.new("CompositorNodeMapRange")
+
+        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs[0])
+        mapper_node.inputs[3].default_value = depth_start
+        mapper_node.inputs[4].default_value = depth_range
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
-        # Feed the Z output of the render layer to the input of the file IO layer
-        links.new(rl.outputs[2], output_file.inputs['Image'])
+        # Feed the Mist output of the render layer to the input of the file IO layer
+        links.new(mapper_node.outputs[0], output_file.inputs[0])
 
     def _render(self, default_prefix):
         """ Renders each registered keypoint.

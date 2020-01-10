@@ -6,6 +6,7 @@ BlenderProc4BOP extends [DLR-RM/BlenderProc](https://github.com/DLR-RM/BlenderPr
 
 Note: This library is under active development. We are open for new contributors and happy to accept pull requests e.g. defining new modules.
 
+The corresponding arxiv paper: https://arxiv.org/2901471
 
 <!-- 
 Citation: 

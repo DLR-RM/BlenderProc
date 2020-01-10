@@ -5,7 +5,8 @@
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py",
-      "imageio"
+      "imageio",
+      "scikit-image"
     ]
   },
   "global": {
@@ -25,22 +26,13 @@
       }
     },
     {
-      "name": "lighting.LightSampler",
+      "name": "lighting.LightLoader",
       "config": {
         "lights": [
           {
-            "location": {
-              "name": "ShellSampler",
-              "parameters": {
-                "center": [1, 2, 3],
-                "radius_min": 4,
-                "radius_max": 7,
-                "elevation_min": 15,
-                "elevation_max": 70
-              }
-            },
             "type": "POINT",
-            "energy": 500
+            "location": [5, -5, 5],
+            "energy": 1000
           }
         ]
       }
@@ -56,16 +48,19 @@
       }
     },
     {
-      "name": "writer.ObjectStateWriter"
-    },
-    {
-      "name": "writer.LightStateWriter"
-    },
-    {
-      "name": "writer.CameraStateWriter"
-    },
-    {
       "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors"
+      }
+    },
+    {
+      "name": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": "object"
+      }
+    },
+    {
+      "name": "writer.CocoAnnotationsWriter",
       "config": {
       }
     },
