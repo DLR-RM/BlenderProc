@@ -39,6 +39,7 @@ class Renderer(Module):
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
 
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
+       "use_alpha", "If true, the alpha channel stored in .png textures is used."
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -130,6 +131,8 @@ class Renderer(Module):
         if bpy.context.scene.render.use_multiview:
             bpy.context.scene.render.views_format = "STEREO_3D"
 
+        self._use_alpha_channel = self.config.get_bool('use_alpha', False)
+
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
         bpy.context.scene.render.use_compositing = True
@@ -166,6 +169,57 @@ class Renderer(Module):
             bpy.ops.render.render(animation=True, write_still=True)
             # Revert changes
             bpy.context.scene.frame_end += 1
+
+    def add_alpha_channel_to_textures(self):
+        """
+        Adds transparency to all textures, which contain an .png image as an image input
+
+        Be careful, when you replace the original texture with something else (Segmentation, Normals, ...),
+        the necessary texture node gets lost. By copying it into a new material as done in the NormalRenderer, you
+        can keep the transparency even for those nodes.
+
+        """
+        if self._use_alpha_channel:
+            obj_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
+            # walk over all objects, which have materials
+            for obj in obj_with_mats:
+                for slot in obj.material_slots:
+                    texture_node = None
+                    # check each node of the material
+                    for node in slot.material.node_tree.nodes:
+                        # if it is a texture image node
+                        if 'TexImage' in node.bl_idname:
+                            if '.png' in node.image.name: # contains an alpha channel
+                                texture_node = node
+                    # this material contains an alpha png texture
+                    if texture_node is not None:
+                        nodes = slot.material.node_tree.nodes
+                        links = slot.material.node_tree.links
+
+                        material_output = nodes.get("Material Output")
+                        if material_output is None:
+                            raise Exception("This material: {} has no material output!".format(slot.name))
+                        # find the node, which is connected to the output
+                        node_connected_to_the_output = None
+                        for link in links:
+                            if link.to_node == material_output:
+                                node_connected_to_the_output = link.from_node
+                                # remove this link
+                                links.remove(link)
+                                break
+                        if node_connected_to_the_output is not None:
+                            mix_node = nodes.new(type='ShaderNodeMixShader')
+
+                            # add the alpha channel of the image to the mix shader node as a factor
+                            links.new(texture_node.outputs[1], mix_node.inputs[0])
+
+                            links.new(node_connected_to_the_output.outputs[0], mix_node.inputs[2])
+                            transparent_node = nodes.new(type='ShaderNodeBsdfTransparent')
+                            links.new(transparent_node.outputs[0], mix_node.inputs[1])
+                            # connect to material output
+                            links.new(mix_node.outputs[0], material_output.inputs[0])
+                        else:
+                            raise Exception("Could not find shader node, which is connected to the material output for: {}".format(slot.name))
 
     def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes = True):
         """ Registers new output type using configured key and file prefix.

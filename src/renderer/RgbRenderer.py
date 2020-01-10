@@ -21,5 +21,8 @@ class RgbRenderer(Renderer):
             bpy.context.scene.render.image_settings.file_format = "PNG"
             bpy.context.scene.render.image_settings.color_depth = "8"
 
+            if self._use_alpha_channel:
+                self.add_alpha_channel_to_textures()
+
             self._render("rgb_")
         self._register_output("rgb_", "colors", ".png", "1.0.0")
