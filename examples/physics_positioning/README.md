@@ -34,7 +34,7 @@ This is done via a physics simulation where the spheres are first placed randoml
   }
 },
 {
-  "name": "object.PositionSampler",
+  "name": "object.ObjectPoseSampler",
   "config":{
     "pos_sampler":{
       "name":"Uniform3dSampler",
@@ -55,7 +55,7 @@ This is done via a physics simulation where the spheres are first placed randoml
 ```
 
 * Load spheres from obj file and set physics to `active`, so that they will later be influenced by gravity
-* Uses the PositionSampler to place them randomly above the plane
+* Uses the ObjectPoseSampler to place them randomly above the plane
  
  
 ### Load plane
@@ -71,7 +71,7 @@ This is done via a physics simulation where the spheres are first placed randoml
 
 * Load the plane from an obj file 
 * Physics will be automatically set to `passive`
-* As we load this object after the `PositionSampler`, the location of the plane is not changed
+* As we load this object after the `ObjectPoseSampler`, the location of the plane is not changed
 
 ### Run simulation
 

@@ -7,7 +7,7 @@ from src.utility.Utility import Utility
 from src.main.Module import Module
 
 
-class PositionSampler(Module):
+class ObjectPoseSampler(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -60,7 +60,16 @@ class PositionSampler(Module):
                 if not no_collision:
                     print("giving up on ",obj.name)
 
+    def insert_key_frames(self, mesh_objects, frame_id):
+        """ Insert key frames for all relevant object poses.
 
+        :param mesh_objects: All loaded MESH objects
+        :param frame_id: The frame number where key frames should be inserted.
+        """
+
+        for obj in mesh_objects:
+            obj.keyframe_insert(data_path='location', frame=frame_id)
+            obj.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
             
 
