@@ -5,19 +5,20 @@ import math
 import csv
 import bpy
 import numpy as np
+import sys
 from copy import deepcopy
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 from src.camera.CameraModule import CameraModule
-from bop_toolkit_lib import dataset_params, inout
 
 class BopLoader(Module):
-    """ Replicates a scene of any BOP dataset by loading 3D models and cameras in their gt poses
+    """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
     
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
-    - Relative cameras are loaded/computed with respect to a reference model
+    - Relative camera poses are loaded/computed with respect to a reference model
+    - Sets real camera intrinsics
 
     **Configuration**:
 
@@ -25,87 +26,150 @@ class BopLoader(Module):
        :header: "Parameter", "Description"
 
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless"
+       "mm2m", "Specify whether to convert poses to meters"
+       "split", "Optionally, test or val split depending on BOP dataset"
+       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate"
+       "obj_ids", "If scene_id is not specified (-1): List of object ids to load (default: All objects from the BOP dataset)"
+       "model_type", "Type of BOP model, e.g. reconstruction or CAD"
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
 
+        for sys_path in self.config.get_list("sys_paths"):
+            if 'bop_toolkit' in sys_path:
+                sys.path.append(sys_path)
+        
     def run(self):
+        
         bop_dataset_path = self.config.get_string("bop_dataset_path")
-        scene_id = self.config.get_int("scene_id")
+        scene_id = self.config.get_int("scene_id", -1)
+        obj_ids = self.config.get_list("obj_ids", [])
         split = self.config.get_string("split", "test")
         model_type = self.config.get_string("model_type", "")
-        mm2m = 0.001 if self.config.get_bool("mm2m") else 1
-
+        cam_type = self.config.get_string("cam_type", "")
+        mm2m = 0.001 if self.config.get_bool("mm2m", False) else 1
         datasets_path = os.path.dirname(bop_dataset_path)
         dataset = os.path.basename(bop_dataset_path)
+        
+        
         print("bob: {}, dataset_path: {}".format(bop_dataset_path, datasets_path))
         print("dataset: {}".format(dataset))
 
+        try:
+            from bop_toolkit_lib import dataset_params, inout
+        except ImportError as error:
+            print('ERROR: Please download the bop_toolkit package and add it to sys_paths in config!')
+            print('https://github.com/thodan/bop_toolkit')
+            raise error
+
         model_p = dataset_params.get_model_params(datasets_path, dataset, model_type=model_type if model_type else None)
-        camera_p = dataset_params.get_camera_params(datasets_path, dataset)
+        cam_p = dataset_params.get_camera_params(datasets_path, dataset, cam_type=cam_type if cam_type else None)
+        bpy.data.scenes["Scene"]["num_labels"] = len(model_p['obj_ids'])
 
         try:
             split_p = dataset_params.get_split_params(datasets_path, dataset, split = split)
         except ValueError:
             raise Exception("Wrong path or {} split does not exist in {}.".format(split, dataset))
-
-        sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
-        sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id':scene_id}))
-
+        
+        bpy.context.scene.world["category_id"] = 0
         bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", split_p['im_size'][0])
         bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", split_p['im_size'][1])
-        #bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1) #split_p['im_size'][0] / split_p['im_size'][1])
 
-        cm = CameraModule(self.config)
+        # Collect camera and camera object
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
+        cam['loaded_resolution'] = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y 
+        cam['loaded_intrinsics'] = cam_p['K'] # load default intrinsics from camera.json
 
-        for i, (cam_id, insts) in enumerate(sc_gt.items()):
+        loaded_meshes = []
+        #only load all/selected objects here, later use camera.CameraSampler / object.ObjectPoseSampler
+        if scene_id == -1:
+            obj_ids = obj_ids if obj_ids else model_p['obj_ids']
+            for obj_id in obj_ids:
+                loaded_meshes = self._load_mesh(obj_id, loaded_meshes, model_p)
+                cur_obj = bpy.context.selected_objects[-1]
+                cur_obj.scale = Vector((mm2m, mm2m, mm2m))
+        # replicate scene: load scene objects, object poses, camera intrinsics and camera poses
+        else:
+            sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
+            sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id':scene_id}))
 
-            
-            cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
+            cm = CameraModule(self.config)
 
-            cam_H_m2c_ref = np.eye(4)
-            cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
-            cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * mm2m
+            for i, (cam_id, insts) in enumerate(sc_gt.items()):
 
-            if i == 0:
-                # define world = first camera
-                cam_H_m2w_ref = cam_H_m2c_ref.copy()
+                cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
 
-                for inst in insts:
+                cam_H_m2c_ref = np.eye(4)
+                cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
+                cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * mm2m
+
+                if i == 0:
+                    # define world = first camera
+                    cam_H_m2w_ref = cam_H_m2c_ref.copy()
                     
-                    bpy.ops.import_mesh.ply(filepath=model_p['model_tpath'].format(**{'obj_id': inst['obj_id']}))
-                    
-                    cam_H_m2c = np.eye(4)
-                    cam_H_m2c[:3,:3] = np.array(inst['cam_R_m2c']).reshape(3,3) 
-                    cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3) * mm2m
+                    for inst in insts:
+                        loaded_meshes = self._load_mesh(inst['obj_id'], loaded_meshes, model_p)
 
-                    # world = camera @ i=0
-                    cam_H_m2w = cam_H_m2c
-                    print('-----------------------------')
-                    print("Model: {}".format(cam_H_m2w))
-                    print('-----------------------------')
+                        cam_H_m2c = np.eye(4)
+                        cam_H_m2c[:3,:3] = np.array(inst['cam_R_m2c']).reshape(3,3) 
+                        cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3) * mm2m
 
-                    cur_obj = bpy.context.selected_objects[-1]
-                    cur_obj.matrix_world = Matrix(cam_H_m2w)
-                    cur_obj.scale = Vector((mm2m,mm2m,mm2m))
+                        # world = camera @ i=0
+                        cam_H_m2w = cam_H_m2c
+                        print('-----------------------------')
+                        print("Model: {}".format(cam_H_m2w))
+                        print('-----------------------------')
 
-                    mat = self._load_materials(cur_obj)
-                    self._link_col_node(mat)
+                        cur_obj = bpy.context.selected_objects[-1]
+                        cur_obj.matrix_world = Matrix(cam_H_m2w)
+                        cur_obj.scale = Vector((mm2m,mm2m,mm2m))
 
-            cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
+                cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
-            print('-----------------------------')
-            print("Cam: {}".format(cam_H_c2w))
-            print('-----------------------------')
+                print('-----------------------------')
+                print("Cam: {}".format(cam_H_c2w))
+                print('-----------------------------')
 
-            config = {"location": [0,0,0], "rotation": list([0,0,0])}
-            cm._add_cam_pose(Config(config), Matrix(cam_H_c2w), cam_K)
+                config = {"location": [0,0,0], "rotation": list([0,0,0])}
+                cm._add_cam_pose(Config(config), Matrix(cam_H_c2w), cam_K)
+
+
+    def _load_mesh(self, obj_id, loaded_meshes, model_p):
+        """ Loads or copies BOP mesh
+
+        :param obj_id: The obj_id of the BOP Object (int)
+        :param loaded_meshes: List of already loaded object meshes
+        :param model_p: model parameters defined in dataset_params.py in bop_toolkit
+
+        :return loaded_meshes: loaded_meshes with a new object mesh appended
+        """
+
+        model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
+
+        if model_path in loaded_meshes:
+            print('duplicate mesh')
+            loaded_obj = bpy.context.selected_objects[loaded_meshes.index(model_path)]
+            bpy.ops.object.duplicate({"object" : loaded_obj, "selected_objects" : [loaded_obj]})
+        else:
+            print('load new mesh')
+            bpy.ops.import_mesh.ply(filepath = model_path)
+            loaded_meshes.append(model_path)
+
+        cur_obj = bpy.context.selected_objects[-1]
+        cur_obj['category_id'] = obj_id
+        mat = self._load_materials(cur_obj)
+        self._link_col_node(mat)
+
+        return loaded_meshes
 
     def _load_materials(self, cur_obj):
         """ Loads / defines materials, e.g. vertex colors 
         
         :param object: The object to use.
+
+        return: material with vertex color (bpy.data.materials)
         """
 
         mat = cur_obj.data.materials.get("Material")
@@ -123,8 +187,6 @@ class BopLoader(Module):
             # no slots
             cur_obj.data.materials.append(mat)
 
-        # if cur_obj.data.vertex_colors:
-        #     color_layer = cur_obj.data.vertex_colors["Col"]
         return mat
 
     def _link_col_node(self, mat):
