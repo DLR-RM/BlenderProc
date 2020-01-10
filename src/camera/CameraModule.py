@@ -59,11 +59,16 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
     def _add_cam_intrinsics(self, config, cam_K=None):
-        """ Adds camera intrinsics according to the config file or given camera matrix cam_K.
+        """ Adds camera intrinsics from a source with following priority
+            1. cam_K if defined in config file
+            2. function argument cam_K if not None
+            3. constant cam['loaded_intrinsics'] if set in Loader
+            4. default/config FOV
 
         :param config: A configuration object with cam intrinsics.
         :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
         """
+
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
@@ -78,6 +83,9 @@ class CameraModule(Module):
             if cam_K != None:
                 print('WARNING: Got cam_K from both config and loader. Using config cam_K.')
             cam_K = np.array(config.get_list("cam_K", [])).reshape(3,3).astype(np.float32)
+        else:
+            if 'loaded_intrinsics' in cam and cam_K is None:
+                cam_K = np.array(cam['loaded_intrinsics']).reshape(3,3).astype(np.float32)
 
         cam.lens_unit = 'FOV'
         if cam_K is not None:
@@ -121,6 +129,7 @@ class CameraModule(Module):
         # Rotation
         rotation_format = config.get_string("rotation/format", "euler")
         value = config.get_vector3d("rotation/value", [0, 0, 0])
+
         if rotation_format == "euler":
             # Rotation, specified as euler angles
             cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
@@ -155,6 +164,5 @@ class CameraModule(Module):
         # Store new cam pose as next frame
         frame_id = bpy.context.scene.frame_end
         self._insert_key_frames(cam, cam_ob, frame_id)
-        # self._write_cam_pose_to_file(frame_id, cam, cam_ob)
 
         bpy.context.scene.frame_end = frame_id + 1
