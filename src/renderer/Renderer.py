@@ -170,7 +170,7 @@ class Renderer(Module):
             # Revert changes
             bpy.context.scene.frame_end += 1
 
-    def add_alpha_channel_to_textures(self):
+    def add_alpha_channel_to_textures(self, blurry_edges):
         """
         Adds transparency to all textures, which contain an .png image as an image input
 
@@ -210,8 +210,16 @@ class Renderer(Module):
                         if node_connected_to_the_output is not None:
                             mix_node = nodes.new(type='ShaderNodeMixShader')
 
-                            # add the alpha channel of the image to the mix shader node as a factor
-                            links.new(texture_node.outputs[1], mix_node.inputs[0])
+                            # avoid blurry edges on the edges important for Normal, SegMapRenderer and others
+                            if blurry_edges:
+                                # add the alpha channel of the image to the mix shader node as a factor
+                                links.new(texture_node.outputs[1], mix_node.inputs[0])
+                            else:
+                                bright_contrast_node = nodes.new("ShaderNodeBrightContrast")
+                                # extreme high contrast to avoid blurry edges
+                                bright_contrast_node.inputs['Contrast'].default_value = 1000.0
+                                links.new(texture_node.outputs[1], bright_contrast_node.inputs[0])
+                                links.new(bright_contrast_node.outputs[0], mix_node.inputs[0])
 
                             links.new(node_connected_to_the_output.outputs[0], mix_node.inputs[2])
                             transparent_node = nodes.new(type='ShaderNodeBsdfTransparent')
@@ -220,6 +228,25 @@ class Renderer(Module):
                             links.new(mix_node.outputs[0], material_output.inputs[0])
                         else:
                             raise Exception("Could not find shader node, which is connected to the material output for: {}".format(slot.name))
+
+    def add_alpha_texture_node(self, used_material, new_material):
+        # find out if there is an .png file used here
+        texture_node = None
+        for node in used_material.node_tree.nodes:
+            # if it is a texture image node
+            if 'TexImage' in node.bl_idname:
+                if '.png' in node.image.name: # contains an alpha channel
+                    texture_node = node
+        # this material contains an alpha png texture
+        if texture_node is not None:
+            new_mat_alpha = new_material.copy() # copy the material
+            nodes = new_mat_alpha.node_tree.nodes
+            # copy the texture node into the new material to make sure it is used
+            new_tex_node = nodes.new(type='ShaderNodeTexImage')
+            new_tex_node.image = texture_node.image
+            # use the new material
+            return new_mat_alpha
+        return new_material
 
     def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes = True):
         """ Registers new output type using configured key and file prefix.

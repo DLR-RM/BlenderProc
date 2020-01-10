@@ -56,30 +56,11 @@ class NormalRenderer(Renderer):
             # render normals
             bpy.context.scene.cycles.samples = 1 # this gives the best result for emission shader
             bpy.context.view_layer.cycles.use_denoising = False
-            alpha_mode = True
             for obj in bpy.context.scene.objects:
                 if len(obj.material_slots) > 0:
                     for i in range(len(obj.material_slots)):
-                        if alpha_mode:
-                            material = obj.data.materials[i]
-                            # find out if there is an .png file used here
-                            texture_node = None
-                            for node in material.node_tree.nodes:
-                                # if it is a texture image node
-                                if 'TexImage' in node.bl_idname:
-                                    if '.png' in node.image.name: # contains an alpha channel
-                                        texture_node = node
-                            # this material contains an alpha png texture
-                            if texture_node is not None:
-                                new_mat_alpha = new_mat.copy() # copy the material
-                                nodes = new_mat_alpha.node_tree.nodes
-                                # copy the texture node into the new material to make sure it is used
-                                new_tex_node = nodes.new(type='ShaderNodeTexImage')
-                                new_tex_node.image = texture_node.image
-                                # use the new material
-                                obj.data.materials[i] = new_mat_alpha
-                            else:
-                                obj.data.materials[i] = new_mat
+                        if self._use_alpha_channel:
+                            obj.data.materials[i] = self.add_alpha_texture_node(obj.material_slots[i].material, new_mat)
                         else:
                             obj.data.materials[i] = new_mat
                 elif hasattr(obj.data, 'materials'):
@@ -90,7 +71,7 @@ class NormalRenderer(Renderer):
             bpy.context.scene.render.image_settings.color_depth = "32"
 
             if self._use_alpha_channel:
-                self.add_alpha_channel_to_textures()
+                self.add_alpha_channel_to_textures(blurry_edges=False)
 
             self._render("normal_")
 

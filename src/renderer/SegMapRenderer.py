@@ -49,7 +49,10 @@ class SegMapRenderer(Renderer):
         # Set material to be used for coloring all faces of the given object
         if len(obj.material_slots) > 0:
             for i in range(len(obj.material_slots)):
-                obj.data.materials[i] = new_mat
+                if self._use_alpha_channel:
+                    obj.data.materials[i] = self.add_alpha_texture_node(obj.material_slots[i].material, new_mat)
+                else:
+                    obj.data.materials[i] = new_mat
         else:
             obj.data.materials.append(new_mat)
 
@@ -125,6 +128,9 @@ class SegMapRenderer(Renderer):
             bpy.context.scene.render.image_settings.color_depth = "16"
             bpy.context.view_layer.cycles.use_denoising = False
             bpy.context.scene.cycles.filter_width = 0.0
+
+            if self._use_alpha_channel:
+                self.add_alpha_channel_to_textures(blurry_edges=False)
 
             self._render("seg_")
 
