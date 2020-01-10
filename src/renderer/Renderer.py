@@ -39,7 +39,8 @@ class Renderer(Module):
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
        "mist_start", "Starting distance of the mist, measured from the camera."
        "mist_depth", "Distance over which the mist effect fades in."
-       "mist_falloff", "Type of transition used to fade mist."
+       "mist_falloff", "Type of transition used to fade mist. [QUADRATIC, LINEAR, INVERSE_QUADRATIC]"
+
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
     """
     def __init__(self, config):
