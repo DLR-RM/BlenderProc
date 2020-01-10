@@ -32,8 +32,10 @@ class NormalRenderer(Renderer):
 
         mapping_node = nodes.new(type='ShaderNodeMapping')
         mapping_node.vector_type = "TEXTURE"
-        mapping_node.translation = [-1, -1, 1]
-        mapping_node.scale = [2, 2, -2]
+        # Translation
+        mapping_node.inputs[1].default_value = [-1, -1, 1]
+        # Scaling
+        mapping_node.inputs[3].default_value = [2, 2, -2]
 
         emission_node = nodes.new(type='ShaderNodeEmission')
 

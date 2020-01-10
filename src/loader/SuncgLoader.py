@@ -1,15 +1,16 @@
-from src.main.Module import Module
-import bpy
-import json
-import os
-from mathutils import Matrix, Vector, Euler
-import math
 import csv
+import json
+import math
+import os
 
+import bpy
+from mathutils import Matrix
+
+from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 
 
-class SuncgLoader(Module):
+class SuncgLoader(Loader):
     """ Loads a house.json file into blender.
 
      - Loads all objects files specified in the house.json file.
@@ -26,7 +27,7 @@ class SuncgLoader(Module):
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        Loader.__init__(self, config)
         self.house_path = self.config.get_string("path")
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
 
@@ -227,6 +228,9 @@ class SuncgLoader(Module):
 
                 self._transform_and_colorize_object(object, material_adjustments, transform, parent)
 
+            # Set the physics property of all imported objects
+            self._set_physics_property(bpy.context.selected_objects)
+
     def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None):
         """ Applies the given transformation to the object and refactors its materials.
 
@@ -356,7 +360,9 @@ class SuncgLoader(Module):
         
         self.labels = sorted(list(self.labels))
         bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
-        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}      
+        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
+        # Use the void category as label for the world background
+        bpy.context.scene.world["category_id"] = self.label_index_map["void"]
 
     def _get_label_id(self, obj_id):
         """ Returns the label id for an object with the given model_id.

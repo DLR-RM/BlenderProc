@@ -82,7 +82,7 @@ class Hdf5Writer(Module):
         :param data: The data to store.
         """
         if data.dtype.char == 'S':
-            file.create_dataset(key, data=data, dtype="S10")
+            file.create_dataset(key, data=data, dtype=data.dtype)
         else:
             file.create_dataset(key, data=data, compression=self.config.get_string("compression", 'gzip'))
 
