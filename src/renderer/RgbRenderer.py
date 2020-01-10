@@ -15,7 +15,7 @@ class RgbRenderer(Renderer):
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
-        self._texture_less_mode = config.get_bool('render_texture_less')
+        self._texture_less_mode = config.get_bool('render_texture_less', False)
 
     def change_to_texture_less_render(self):
         """
