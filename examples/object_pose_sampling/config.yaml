@@ -47,7 +47,7 @@
       }
     },
     {
-      "name": "object.PositionSampler",
+      "name": "object.ObjectPoseSampler",
       "config":{
         "max_iterations": 1000,
         "pos_sampler":{

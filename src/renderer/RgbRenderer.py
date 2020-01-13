@@ -15,7 +15,7 @@ class RgbRenderer(Renderer):
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
-        self._texture_less_mode = config.get_bool('render_texture_less')
+        self._texture_less_mode = config.get_bool('render_texture_less', False)
 
     def change_to_texture_less_render(self):
         """
@@ -43,7 +43,10 @@ class RgbRenderer(Renderer):
                         break
                 # only replace materials, which do not contain any emission shader
                 if not emission_shader:
-                    slot.material = new_mat
+                    if self._use_alpha_channel:
+                        slot.material = self.add_alpha_texture_node(slot.material, new_mat)
+                    else:
+                        slot.material = new_mat
 
     def run(self):
         with Utility.UndoAfterExecution():
@@ -57,6 +60,9 @@ class RgbRenderer(Renderer):
             # check if texture less render mode is active
             if self._texture_less_mode:
                 self.change_to_texture_less_render()
+
+            if self._use_alpha_channel:
+                self.add_alpha_channel_to_textures(blurry_edges=True)
 
             self._render("rgb_")
         self._register_output("rgb_", "colors", ".png", "1.0.0")
