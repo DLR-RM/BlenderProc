@@ -26,7 +26,7 @@
       }
     },
     {
-      "name": "object.PositionSampler",
+      "name": "object.ObjectPoseSampler",
       "config":{
         "pos_sampler":{
           "name":"Uniform3dSampler",
