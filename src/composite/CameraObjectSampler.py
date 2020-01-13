@@ -32,12 +32,18 @@ class CameraObjectSampler(Module):
 
         for i in range(total_noof_cams):
             if i % noof_cams_per_scene == 0:
+                # sample new object poses
                 self._object_pose_sampler.run()
 
-            # insert keyframes for current object poses so that we can render them later
+            # get current keyframe id
             frame_id = bpy.context.scene.frame_end
-            mesh_objects = [obj for obj in bpy.context.scene.objects if obj.type == "MESH"]
-            self._object_pose_sampler.insert_key_frames(mesh_objects, frame_id)
 
+            for obj in bpy.context.scene.objects:
+                # TODO: Use Getter for selecting objects
+                if obj.type == "MESH":
+                    # insert keyframes for current object poses
+                    self._object_pose_sampler.insert_key_frames(obj, frame_id)
+
+            # sample new camera poses
             self._camera_pose_sampler.run()
 

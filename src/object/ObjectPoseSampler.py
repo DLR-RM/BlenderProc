@@ -60,16 +60,15 @@ class ObjectPoseSampler(Module):
                 if not no_collision:
                     print("giving up on ",obj.name)
 
-    def insert_key_frames(self, mesh_objects, frame_id):
-        """ Insert key frames for all relevant object poses.
+    def insert_key_frames(self, obj, frame_id):
+        """ Insert key frames for given object pose
 
-        :param mesh_objects: All loaded MESH objects
+        :param obj: Loaded object
         :param frame_id: The frame number where key frames should be inserted.
         """
 
-        for obj in mesh_objects:
-            obj.keyframe_insert(data_path='location', frame=frame_id)
-            obj.keyframe_insert(data_path='rotation_euler', frame=frame_id)
+        obj.keyframe_insert(data_path='location', frame=frame_id)
+        obj.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
             
 
