@@ -59,13 +59,19 @@ class NormalRenderer(Renderer):
             for obj in bpy.context.scene.objects:
                 if len(obj.material_slots) > 0:
                     for i in range(len(obj.material_slots)):
-                        obj.data.materials[i] = new_mat
+                        if self._use_alpha_channel:
+                            obj.data.materials[i] = self.add_alpha_texture_node(obj.material_slots[i].material, new_mat)
+                        else:
+                            obj.data.materials[i] = new_mat
                 elif hasattr(obj.data, 'materials'):
                     obj.data.materials.append(new_mat)
 
             # Set the color channel depth of the output to 32bit
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "32"
+
+            if self._use_alpha_channel:
+                self.add_alpha_channel_to_textures(blurry_edges=False)
 
             self._render("normal_")
 
