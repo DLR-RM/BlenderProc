@@ -168,8 +168,8 @@ class BopLoader(Module):
         """ Loads / defines materials, e.g. vertex colors 
         
         :param object: The object to use.
-
         return: material with vertex color (bpy.data.materials)
+
         """
 
         mat = cur_obj.data.materials.get("Material")
