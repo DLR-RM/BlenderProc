@@ -14,7 +14,7 @@ All samplers share the same structure, so understanding one of them makes it eas
 Here are examples for camera, light and object pose sampling: 
 
 * [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation
-* [light sampling](object_and_light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling
+* [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling
 * [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler
 
 ## Physics
