@@ -44,16 +44,13 @@
           {
             "location": {
               "name":"Uniform3dSampler",
-              "parameters":{
-                "max":[10, 10, 8],
-                "min":[-10, -10, 12]
-              }
+              "max":[10, 10, 8],
+              "min":[-10, -10, 12]
             },
             "rotation": {
               "format": "look_at",
               "value": {
-                "name": "POIGetter",
-                "parameters": {}
+                "name": "POIGetter"
               }
             }
           }

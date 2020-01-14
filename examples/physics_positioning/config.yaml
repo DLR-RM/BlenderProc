@@ -30,17 +30,13 @@
       "config":{
         "pos_sampler":{
           "name":"Uniform3dSampler",
-          "parameters":{
-            "max":[5, 5, 8],
-            "min":[-5, -5, 12]
-          }
+          "max":[5, 5, 8],
+          "min":[-5, -5, 12]
         },
         "rot_sampler":{
           "name":"Uniform3dSampler",
-          "parameters":{
-            "max":[0, 0, 0],
-            "min":[6.28, 6.28, 6.28]
-          }
+          "max":[0, 0, 0],
+          "min":[6.28, 6.28, 6.28]
         }
       }
     },

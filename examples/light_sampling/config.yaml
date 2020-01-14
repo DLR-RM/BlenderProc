@@ -31,13 +31,11 @@
           {
             "location": {
               "name": "ShellSampler",
-              "parameters": {
-                "center": [1, 2, 3],
-                "radius_min": 4,
-                "radius_max": 7,
-                "elevation_min": 15,
-                "elevation_max": 70
-              }
+              "center": [1, 2, 3],
+              "radius_min": 4,
+              "radius_max": 7,
+              "elevation_min": 15,
+              "elevation_max": 70
             },
             "type": "POINT",
             "energy": 500
