@@ -70,8 +70,6 @@ After the generation has finished you can view the generated data using
 python scripts/visHdf5Files.py /path/to/output/0.hdf5
 
 ```
-python scripts/visHdf5Files.py /path/to/output/0.hdf5
-```
 
 ## Generate Random Object/Camera/Light Poses
 
