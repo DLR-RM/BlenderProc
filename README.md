@@ -42,7 +42,7 @@ A very small config file could look like this:
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py"
     ]
