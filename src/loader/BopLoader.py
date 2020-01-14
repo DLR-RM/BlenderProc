@@ -28,8 +28,8 @@ class BopLoader(Module):
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless"
        "mm2m", "Specify whether to convert poses to meters"
        "split", "Optionally, test or val split depending on BOP dataset"
-       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate"
-       "obj_ids", "If scene_id is not specified (-1): List of object ids to load (default: All objects from the BOP dataset)"
+       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1 means no scene is replicated, only BOP Objects are loaded)"
+       "obj_ids", "If scene_id is not specified (scene_id: -1): List of object ids to load (default: All objects from the BOP dataset)"
        "model_type", "Type of BOP model, e.g. reconstruction or CAD"
     """
 
@@ -51,7 +51,6 @@ class BopLoader(Module):
         mm2m = 0.001 if self.config.get_bool("mm2m", False) else 1
         datasets_path = os.path.dirname(bop_dataset_path)
         dataset = os.path.basename(bop_dataset_path)
-        
         
         print("bob: {}, dataset_path: {}".format(bop_dataset_path, datasets_path))
         print("dataset: {}".format(dataset))
@@ -82,14 +81,11 @@ class BopLoader(Module):
         cam['loaded_resolution'] = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y 
         cam['loaded_intrinsics'] = cam_p['K'] # load default intrinsics from camera.json
 
-        loaded_meshes = []
-        #only load all/selected objects here, later use camera.CameraSampler / object.ObjectPoseSampler
+        #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
             for obj_id in obj_ids:
-                loaded_meshes = self._load_mesh(obj_id, loaded_meshes, model_p)
-                cur_obj = bpy.context.selected_objects[-1]
-                cur_obj.scale = Vector((mm2m, mm2m, mm2m))
+                self._load_mesh(obj_id, model_p, mm2m=mm2m)
         # replicate scene: load scene objects, object poses, camera intrinsics and camera poses
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
@@ -110,7 +106,7 @@ class BopLoader(Module):
                     cam_H_m2w_ref = cam_H_m2c_ref.copy()
                     
                     for inst in insts:
-                        loaded_meshes = self._load_mesh(inst['obj_id'], loaded_meshes, model_p)
+                        cur_obj = self._load_mesh(inst['obj_id'], model_p, mm2m=mm2m)
 
                         cam_H_m2c = np.eye(4)
                         cam_H_m2c[:3,:3] = np.array(inst['cam_R_m2c']).reshape(3,3) 
@@ -122,9 +118,8 @@ class BopLoader(Module):
                         print("Model: {}".format(cam_H_m2w))
                         print('-----------------------------')
 
-                        cur_obj = bpy.context.selected_objects[-1]
                         cur_obj.matrix_world = Matrix(cam_H_m2w)
-                        cur_obj.scale = Vector((mm2m,mm2m,mm2m))
+                        
 
                 cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
@@ -136,33 +131,46 @@ class BopLoader(Module):
                 cm._add_cam_pose(Config(config), Matrix(cam_H_c2w), cam_K)
 
 
-    def _load_mesh(self, obj_id, loaded_meshes, model_p):
-        """ Loads or copies BOP mesh
+    def _try_duplicate_obj(self, model_path):
+        """ If object with given model_path has already been loaded, duplicate this object
+
+        :param model_path: model path of the new object
+        :return: True if object was duplicated else False
+
+        """
+        for loaded_obj in bpy.context.selected_objects:
+            if loaded_obj['model_path'] == model_path:
+                print('duplicate obj: ', model_path)
+                bpy.ops.object.duplicate({"object" : loaded_obj, "selected_objects" : [loaded_obj]})
+                return True
+        return False
+
+    def _load_mesh(self, obj_id, model_p, mm2m=1):
+        """ Loads or copies BOP mesh and sets category_id
 
         :param obj_id: The obj_id of the BOP Object (int)
-        :param loaded_meshes: List of already loaded object meshes
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit
+        :param mm2m: "Specify whether to convert object scale from mm to meter"
 
-        :return loaded_meshes: loaded_meshes with a new object mesh appended
         """
 
         model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
-
-        if model_path in loaded_meshes:
-            print('duplicate mesh')
-            loaded_obj = bpy.context.selected_objects[loaded_meshes.index(model_path)]
-            bpy.ops.object.duplicate({"object" : loaded_obj, "selected_objects" : [loaded_obj]})
-        else:
+        
+        duplicated = self._try_duplicate_obj(model_path)
+        
+        if not duplicated:
             print('load new mesh')
             bpy.ops.import_mesh.ply(filepath = model_path)
-            loaded_meshes.append(model_path)
 
         cur_obj = bpy.context.selected_objects[-1]
+        cur_obj.scale = Vector((mm2m, mm2m, mm2m))
         cur_obj['category_id'] = obj_id
+        cur_obj['model_path'] = model_path
+
         mat = self._load_materials(cur_obj)
         self._link_col_node(mat)
 
-        return loaded_meshes
+        return cur_obj
 
     def _load_materials(self, cur_obj):
         """ Loads / defines materials, e.g. vertex colors 
