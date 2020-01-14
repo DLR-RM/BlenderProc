@@ -68,7 +68,12 @@ After the generation has finished you can view the generated data using
 
 ```
 python scripts/visHdf5Files.py /path/to/output/0.hdf5
+
 ```
+python scripts/visHdf5Files.py /path/to/output/0.hdf5
+```
+
+## Generate Random Object/Camera/Light Poses
 
 Go to [examples/bop/README.md](examples/bop/README.md) for a more detailed explanation and a second example where we replicate BOP scenes.
 
@@ -79,4 +84,5 @@ You can create realistic synthetic data and labels by combining and parametrizin
 Parametrize lighting.LightSampler, camera.CameraSampler, or object.ObjectPoseSampler with existing sampling functions (e.g. uniform shell, sphere or cube). Use loaders like lighting.LightLoader and camera.CameraLoader to load poses and other parameters from a file or from the config directly. Sample object poses using physics like in examples/physics_positioning. Sample objects in synthetic or real scene environments like SunCG or Replica.
 
 Besides parametrizing existing modules, you can also create your own modules (see [Writing Modules](https://github.com/DLR-RM/BlenderProc#writing-modules)). New modules can either combine existing modules with some logic (e.g. [composite/CameraObjectSampler](composite/CameraObjectSampler)) or create completely new functionality based on the Blender API.
+
 
