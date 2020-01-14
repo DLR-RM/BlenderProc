@@ -2,7 +2,6 @@
 import bpy
 
 from src.loader.Loader import Loader
-from src.main.Module import Module
 from src.utility.Utility import Utility
 
 
@@ -22,7 +21,7 @@ class ObjLoader(Loader):
         Loader.__init__(self, config)
 
     def run(self):
-        bpy.ops.import_scene.obj(filepath=Utility.resolve_path(self.config.get_string("path")))
+        loaded_objects = Utility.import_objects(filepath=Utility.resolve_path(self.config.get_string("path")))
 
         # Set the physics property of all imported objects
-        self._set_physics_property(bpy.context.selected_objects)
+        self._set_physics_property(loaded_objects)
