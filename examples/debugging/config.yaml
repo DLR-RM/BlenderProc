@@ -19,7 +19,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "examples/debugging/scene.obj"
       }

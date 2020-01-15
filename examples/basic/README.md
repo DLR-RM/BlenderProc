@@ -68,11 +68,11 @@ Every module has a name which specifies the python path to the corresponding cla
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera)
 * We are using the default parameters here, so `config` is empty
 
-#### ObjLoader
+#### ObjectLoader
 
 ```yaml
 {
-  "name": "loader.ObjLoader",
+  "name": "loader.ObjectLoader",
   "config": {
     "path": "<args:1>"
   }

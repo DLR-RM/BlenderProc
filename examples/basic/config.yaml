@@ -19,7 +19,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "<args:1>"
       }
@@ -53,10 +53,17 @@
       }
     },
     {
+      "name": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": "Instance"
+      }
+    },
+    {
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350
+        "samples": 350,
+        "render_depth": True
       }
     },
     {
