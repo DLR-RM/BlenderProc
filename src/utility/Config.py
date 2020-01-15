@@ -86,6 +86,16 @@ class Config:
         """
         return self._get_value_with_fallback(name, fallback)
 
+    def get_raw_value(self, name, fallback=None):
+        """ Returns the raw value stored at the given parameter path.
+        If a provider is specified at the given parameter path, then the provider is first invoked and the result is directly returned.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The raw value.
+        """
+        return self._get_value_with_fallback(name, fallback, True)
+
     def get_int(self, name, fallback=None):
         """ Returns the integer value stored at the given parameter path.
 
