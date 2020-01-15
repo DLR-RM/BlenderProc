@@ -1,6 +1,5 @@
 import mathutils
 import numpy as np
-import src.utility.BlenderUtility
 import bpy
 from src.utility.BlenderUtility import get_bounds
 
