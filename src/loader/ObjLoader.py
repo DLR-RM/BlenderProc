@@ -21,7 +21,11 @@ class ObjLoader(Loader):
         Loader.__init__(self, config)
 
     def run(self):
-        loaded_objects = Utility.import_objects(filepath=Utility.resolve_path(self.config.get_string("path")))
+        file_path = Utility.resolve_path(self.config.get_string("path"))
+        if file_path.endswith('.obj'):
+            loaded_objects = Utility.import_objects(filepath=file_path)
+        else:
+            raise Exception("The file path must end with .obj: {}".format(file_path))
 
         # Set the physics property of all imported objects
         self._set_physics_property(loaded_objects)

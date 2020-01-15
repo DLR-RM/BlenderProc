@@ -15,10 +15,13 @@ class PlyLoader(Loader):
 
         """
         if not self.config.get_bool('is_replica_object', False):
-            loaded_objects = Utility.import_objects(filepath=self.config.get_string("path"))
+            file_path = self.config.get_string("path")
         else:
             file_path = os.path.join(self.config.get_string('data_path'), self.config.get_string('data_set_name'), 'mesh.ply')
+        if file_path.endswith('.ply'):
             loaded_objects = Utility.import_objects(file_path)
+        else:
+            raise Exception("The file path must end in '.ply': {}".format(file_path))
 
         # Set the physics property of all imported objects
         self._set_physics_property(loaded_objects)
