@@ -43,8 +43,8 @@ class SegMapRenderer(Renderer):
         emission_node = nodes.new(type='ShaderNodeEmission')
         output = nodes.get("Material Output")
 
-        emission_node.inputs[0].default_value[:3] = color
-        links.new(emission_node.outputs[0], output.inputs[0])
+        emission_node.inputs['Color'].default_value[:3] = color
+        links.new(emission_node.outputs['Emission'], output.inputs['Surface'])
 
         # Set material to be used for coloring all faces of the given object
         if len(obj.material_slots) > 0:
@@ -62,7 +62,7 @@ class SegMapRenderer(Renderer):
         :param color: A 3-dim array containing the background color in range [0, 255]
         """
         nodes = bpy.context.scene.world.node_tree.nodes
-        nodes.get("Background").inputs[0].default_value = color + [1]
+        nodes.get("Background").inputs['Color'].default_value = color + [1]
 
     def _colorize_objects_for_semantic_segmentation(self, objects):
         """ Sets the color of each object according to their category_id.
@@ -117,12 +117,12 @@ class SegMapRenderer(Renderer):
             # Get objects with materials (i.e. not lights or cameras)
             objs_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
 
-            if method == "class":
+            if method.lower() == "class":
                 colors, num_splits_per_dimension, color_map = self._colorize_objects_for_semantic_segmentation(objs_with_mats)
-            elif method == "instance":
+            elif method.lower() == "instance":
                 colors, num_splits_per_dimension, color_map = self._colorize_objects_for_instance_segmentation(objs_with_mats)
             else:
-                raise Exception("Invalid mapping method: " + method)
+                raise Exception("Invalid mapping method: {}, possible for map_by are: class, instance".format(method))
 
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
