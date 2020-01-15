@@ -138,8 +138,8 @@ class BopLoader(Module):
         :return: True if object was duplicated else False
 
         """
-        for loaded_obj in bpy.context.selected_objects:
-            if loaded_obj['model_path'] == model_path:
+        for loaded_obj in bpy.context.scene.objects:
+            if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
                 print('duplicate obj: ', model_path)
                 bpy.ops.object.duplicate({"object" : loaded_obj, "selected_objects" : [loaded_obj]})
                 return True
