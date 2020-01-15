@@ -31,7 +31,7 @@
       }
     },
     {
-      "name": "manipulators.FloorExtractor",
+      "name": "object.FloorExtractor",
       "config": {
         "is_replica_object": "True",
         "obj_name": "mesh",
