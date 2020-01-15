@@ -20,7 +20,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "examples/camera_sampling/scene.obj"
       }

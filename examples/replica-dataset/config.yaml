@@ -24,15 +24,14 @@
       "config": {}
     },
     {
-      "name": "loader.PlyLoader",
+      "name": "loader.ReplicaLoader",
       "config": {
-        "is_replica_object": "True",
         "use_smooth_shading": "True",
         "use_ambient_occlusion": "True"
       }
     },
     {
-      "name": "manipulators.FloorExtractor",
+      "name": "object.FloorExtractor",
       "config": {
         "is_replica_object": "True",
         "obj_name": "mesh",

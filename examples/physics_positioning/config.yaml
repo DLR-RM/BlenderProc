@@ -19,7 +19,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "examples/physics_positioning/active.obj",
         "physics": "active"
@@ -41,7 +41,7 @@
       }
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "examples/physics_positioning/passive.obj"
       }
