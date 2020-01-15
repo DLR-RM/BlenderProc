@@ -33,18 +33,18 @@ class NormalRenderer(Renderer):
         mapping_node = nodes.new(type='ShaderNodeMapping')
         mapping_node.vector_type = "TEXTURE"
         # Translation
-        mapping_node.inputs[1].default_value = [-1, -1, 1]
+        mapping_node.inputs['Location'].default_value = [-1, -1, 1]
         # Scaling
-        mapping_node.inputs[3].default_value = [2, 2, -2]
+        mapping_node.inputs['Scale'].default_value = [2, 2, -2]
 
         emission_node = nodes.new(type='ShaderNodeEmission')
 
         output_node = nodes.get("Material Output")
 
-        links.new(texture_coord_node.outputs[1], vector_transform_node.inputs[0])
-        links.new(vector_transform_node.outputs[0], mapping_node.inputs[0])
-        links.new(mapping_node.outputs[0], emission_node.inputs[0])
-        links.new(emission_node.outputs[0], output_node.inputs[0])
+        links.new(texture_coord_node.outputs['Normal'], vector_transform_node.inputs['Vector'])
+        links.new(vector_transform_node.outputs['Vector'], mapping_node.inputs['Vector'])
+        links.new(mapping_node.outputs['Vector'], emission_node.inputs['Color'])
+        links.new(emission_node.outputs['Emission'], output_node.inputs['Surface'])
         return new_mat
 
     def run(self):

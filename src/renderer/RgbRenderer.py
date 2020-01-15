@@ -28,8 +28,8 @@ class RgbRenderer(Renderer):
         principled_bsdf = nodes.get("Principled BSDF")
 
         # setting the color values for the shader
-        principled_bsdf.inputs[5].default_value = 0.65 # specular
-        principled_bsdf.inputs[7].default_value = 0.2  # roughness
+        principled_bsdf.inputs['Specular'].default_value = 0.65  # specular
+        principled_bsdf.inputs['Roughness'].default_value = 0.2  # roughness
 
         for object in [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]:
             # replace all materials with the new texture less material
