@@ -24,7 +24,7 @@ Citation:
 
 ## General
 
-Please refer to [DLR-RM/BlenderProc](https://github.com/DLR-RM/BlenderProc) for a general introduction on how to set up a data generation pipeline.
+Please refer to [DLR-RM/BlenderProc](https://github.com/DLR-RM/BlenderProc) for a general introduction on how to set up a data generation pipeline with a yaml config.
 
 Using this package you can 
 - synthetically recreate BOP datasets
@@ -32,7 +32,7 @@ Using this package you can
 - use collision detection and physics to generate realistic object poses
 - place objects in synthetic scenes like SunCG or real scenes like Replica
 
-You can render normals, RGB and depth and  extract class + instance segmentation labels and pose annotations. All generated data is saved in a compressed hdf5 file.
+You can render normals, RGB and depth and  extract class + instance segmentation labels and pose annotations. All generated data and labels are saved in compressed hdf5 files.
 
 You can parametrize both, loaders and samplers for  
 - object poses
@@ -47,11 +47,9 @@ Because of the modularity of this package and the sole dependency on the Blender
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-### Configure examples/bop/config.yaml
+### Configure `examples/bop/config_sample.yaml`
 
- Set the blender_install_path where Blender 2.80 should be installed and the path to your bop_toolkit clone.
-
-Select the scene_id you want to recreate in loader.BopLoader and set split to "test" or "val" depending on the considered BOP dataset.
+Set the `blender_install_path` where Blender 2.81 should be installed and add the path to your bop_toolkit clone to `sys_paths`.
 
 ## Start the data generation
 In general, to run a BlenderProc pipeline and install dependencies, you run:
@@ -60,26 +58,29 @@ In general, to run a BlenderProc pipeline and install dependencies, you run:
 python run.py config.yaml <additional arguments>
 ```
 
-To run the bop example, we need to specify the paths to the bop dataset and an output directory:
+To run a BOP example where we sample object and cameras, we additionally need to specify the paths to the bop dataset and an output directory:
 
 ```
-python run.py examples/bop/config.yaml /path/to/bop/dataset /path/to/output_dir
+python run.py examples/bop/config_sample.yaml /path/to/bop/dataset /path/to/output_dir
 ```
-
-Note: Initial loading can take some time, in the config you can adjust the samples of the renderer to trade-off quality and render time.
 
 After the generation has finished you can view the generated data using
 
 ```
 python scripts/visHdf5Files.py /path/to/output/0.hdf5
+
 ```
 
 ## Generate Random Object/Camera/Light Poses
 
-In examples/bop/config.yaml simply comment in the object.PositionSampler and run the script again. Now the objects of a scene are rendered at random positions uniformly distributed inside a 3D block at random orientations. You can parametrize different samplers, have a look at utility/sampler. If a sampled object collides with another object, it is resampled.
+Go to [examples/bop/README.md](examples/bop/README.md) for a more detailed explanation and a second example where we replicate BOP scenes.
 
-The same samplers can also be used to sample new camera and light poses. Simply define a lighting.LightSampler or camera.CameraSampler in your config. You can also use a lighting.LightLoader and camera.CameraLoader to load poses from a file or the config directly.
+## Customized Modules
 
+You can create realistic synthetic data and labels by combining and parametrizing existing modules. Use the documented examples to build your own config.
 
+Parametrize lighting.LightSampler, camera.CameraSampler, or object.ObjectPoseSampler with existing sampling functions (e.g. uniform shell, sphere or cube). Use loaders like lighting.LightLoader and camera.CameraLoader to load poses and other parameters from a file or from the config directly. Sample object poses using physics like in examples/physics_positioning. Sample objects in synthetic or real scene environments like SunCG or Replica.
+
+Besides parametrizing existing modules, you can also create your own modules (see [Writing Modules](https://github.com/DLR-RM/BlenderProc#writing-modules)). New modules can either combine existing modules with some logic (e.g. [composite/CameraObjectSampler](composite/CameraObjectSampler)) or create completely new functionality based on the Blender API.
 
 
