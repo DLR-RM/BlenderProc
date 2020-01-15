@@ -27,7 +27,7 @@ This is done via a physics simulation where the spheres are first placed randoml
 ### Load spheres and position them randomly
 ```yaml
 {
-  "name": "loader.ObjLoader",
+  "name": "loader.ObjectLoader",
   "config": {
     "path": "examples/physics_positioning/active.obj",
     "physics": "active"
@@ -62,7 +62,7 @@ This is done via a physics simulation where the spheres are first placed randoml
 
 ```yaml
 {
-  "name": "loader.ObjLoader",
+  "name": "loader.ObjectLoader",
   "config": {
     "path": "examples/physics_positioning/passive.obj"
   }

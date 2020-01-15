@@ -219,10 +219,10 @@ class SuncgLoader(Loader):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
-            bpy.ops.import_scene.obj(filepath=path)
+            loaded_objects = Utility.import_objects(filepath=path)
 
             # Go through all imported objects
-            for object in bpy.context.selected_objects:
+            for object in loaded_objects:
                 for key in metadata.keys():
                     object[key] = metadata[key]
 

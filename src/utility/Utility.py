@@ -322,3 +322,29 @@ class Utility:
         values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
+
+    @staticmethod
+    def import_objects(filepath, **kwargs):
+        """ Import all objects for the given file and returns the loaded objects
+
+        In .obj files a list of objects can be saved in.
+        In .ply files only one object can saved so the list has always at most one element
+
+        :param filepath: the filepath to the location where the data is stored
+        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
+        :return: a list of all newly loaded objects, in the failure case an empty list is returned
+        """
+        if os.path.exists(filepath):
+            # save all selected objects
+            previously_selected_objects = set(bpy.context.selected_objects)
+            if filepath.endswith('.obj'):
+                # load an .obj file:
+                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+            elif filepath.endswith('.ply'):
+                # load a .ply mesh
+                bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+            # return all currently selected objects
+            return list(set(bpy.context.selected_objects) - previously_selected_objects)
+        else:
+            raise Exception("The given filepath does not exist: {}".format(filepath))
+        return []
