@@ -334,6 +334,8 @@ class Utility:
         :return: a list of all newly loaded objects, in the failure case an empty list is returned
         """
         if os.path.exists(filepath):
+            # save all selected objects
+            previously_selected_objects = set(bpy.context.selected_objects)
             if filepath.endswith('.obj'):
                 # load an .obj file:
                 bpy.ops.import_scene.obj(filepath=filepath)
@@ -341,7 +343,7 @@ class Utility:
                 # load a .ply mesh
                 bpy.ops.import_mesh.ply(filepath=filepath)
             # return all currently selected objects
-            return list(bpy.context.selected_objects)
+            return list(set(bpy.context.selected_objects) - previously_selected_objects)
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))
         return []
