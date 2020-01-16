@@ -1,0 +1,91 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:2>"
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "name": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "name": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation/value",
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    },
+    {
+      "name": "object.ObjectManipulator",
+      "config": {
+        "instances": [
+          {
+            "selector": {
+              "name": "getter.Object",
+              "condition": {
+                "name": 'Suzanne'
+              }
+            },
+            "location": {
+              "name":"sampler.Uniform3d",
+              "max":[1, 2, 3],
+              "min":[0, 1, 2]
+            },
+            "rotation_euler": [1, 1, 0],
+            "physics": 'active'
+          }
+        ]
+      }
+    },
+    {
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "output_is_temp": False
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}

@@ -2,7 +2,8 @@ from src.main.Module import Module
 from src.utility.ItemCollection import ItemCollection
 from src.utility.Utility import Utility
 
-import mathutils
+from mathutils import Matrix, Vector
+import math
 import bpy
 import numpy as np
 import os
@@ -23,9 +24,11 @@ class CameraModule(Module):
        :header: "Keyword", "Description"
 
        "location", "The position of the camera, specified as a list of three values (xyz)."
-       "rotation", "Specifies the rotation of the camera. rotation_format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
-       "rotation_format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector)"
+       "rotation/value", "Specifies the rotation of the camera. rotation/format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
+       "rotation/format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector), 'look_at': Camera will be turned such as it looks at 'value' location, which can be defined as a fixed or sampled XYZ location."
+       "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension"
        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
+       "cam_K", "Camera Matrix K"
        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the frustum"
        "clip_start", "Near clipping"
        "clip_end", "Far clipping"
@@ -48,87 +51,107 @@ class CameraModule(Module):
         """
         cam.keyframe_insert(data_path='clip_start', frame=frame_id)
         cam.keyframe_insert(data_path='clip_end', frame=frame_id)
+
+        cam.keyframe_insert(data_path='shift_x', frame=frame_id)
+        cam.keyframe_insert(data_path='shift_y', frame=frame_id)
+
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _write_cam_pose_to_file(self, frame, cam, cam_ob, room_id=-1):
-        """ Determines the current pose of the given camera and writes it to a .npy file.
+    def _add_cam_intrinsics(self, config, cam_K=None):
+        """ Adds camera intrinsics from a source with following priority
+            1. cam_K if defined in config file
+            2. function argument cam_K if not None
+            3. constant cam['loaded_intrinsics'] if set in Loader
+            4. default/config FOV
 
-        :param frame: The current frame number, used for naming the output file.
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        :param room_id: The id of the room which contains the camera (optional)
+        :param config: A configuration object with cam intrinsics.
+        :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
         """
-        cam_pose = []
-        # Location
-        cam_pose.extend(cam_ob.location[:])
-        # Orientation
-        cam_pose.extend(cam_ob.rotation_euler[:])
-        # FOV
-        cam_pose.extend([cam.angle_x, cam.angle_y])
-        # Room
-        cam_pose.append(room_id)
-        np.save(os.path.join(self._determine_output_dir(), "campose_" + ("%04d" % frame)), cam_pose)
 
-    def _register_cam_pose_output(self):
-        """ Registers the written cam pose files as an output """
-        self._register_output("campose_", "campose", ".npy", "1.0.0")
-
-    def _add_cam_pose(self, config, mat=None, cam_K=None):
-        """ Adds a new cam pose according to the given configuration.
-
-        :param config: A configuration object which contains all parameters relevant for the new cam pose.
-        """
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
+        width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
+        if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
+            width, height = cam['loaded_resolution']
+        bpy.context.scene.render.resolution_x = width
+        bpy.context.scene.render.resolution_y = height
+
+        if config.has_param("cam_K"):
+            if cam_K != None:
+                print('WARNING: Got cam_K from both config and loader. Using config cam_K.')
+            cam_K = np.array(config.get_list("cam_K", [])).reshape(3,3).astype(np.float32)
+        else:
+            if 'loaded_intrinsics' in cam and cam_K is None:
+                cam_K = np.array(cam['loaded_intrinsics']).reshape(3,3).astype(np.float32)
+
         cam.lens_unit = 'FOV'
         if cam_K is not None:
-            # this is still hacked, has to be fixed:
-
-            w, h = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
-            cam.angle_y = 2 * np.arctan(h / (2 * cam_K[1,1])) / 1.15 # magic    
-            cam.angle_x = 2 * np.arctan(w / (2 * cam_K[0,0])) / 1.15 # magic
+            if config.has_param("fov"):
+                print('WARNING: FOV defined in config is ignored')
             
-            # cam.shift_x = -(cam_K[0,2] / w - 0.5)
-            # cam.shift_y = -(cam_K[1,2] - 0.5 * h) / w
+            # Convert focal lengths to FOV
+            cam.angle_y = 2 * np.arctan(height / (2 * cam_K[1,1]))
+            cam.angle_x = 2 * np.arctan(width / (2 * cam_K[0, 0]))
 
-            ### the unit of shiftXY is FOV unit (Lens Shift)
-            ## https://blender.stackexchange.com/questions/12225/use-top-left-corner-as-origin-in-blenders-camera
-            # maxdim = max(w,h) 
-            # cam.shift_x = (cam_K[0,2] - w / 2.0) / maxdim
-            # cam.shift_y = (cam_K[1,2] - h / 2.0) / maxdim
+            # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
+            max_resolution = max(width, height)
+            cam.shift_x = -(cam_K[0,2] - width / 2.0) / max_resolution
+            cam.shift_y = (cam_K[1, 2] - height / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
             cam.angle = config.get_float("fov", 0.691111)
             # FOV is sometimes also given as the angle between forward vector and one side of the frustum
             if config.get_bool("fov_is_half", False):
                 cam.angle *= 2
-
         # Clipping (Default values are the same as default blender values)
         cam.clip_start = config.get_float("clip_start", 0.1)
         cam.clip_end = config.get_float("clip_end", 1000)
 
+    def _add_cam_pose(self, config, H_cam2world=None, cam_K=None):
+        """ Adds new cam pose + intrinsics according to the given configuration.
+
+        :param config: A configuration object which contains all parameters relevant for the new cam pose.
+        :param H_cam2world: Optionally, 4x4 numpy array defining homogenous trafo from camera to world coordinates. 
+        :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
+        """
+
+        self._add_cam_intrinsics(config, cam_K)
+
+        # Collect camera object
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
+
         cam_ob.location = Utility.transform_point_to_blender_coord_frame(config.get_list("location", [0, 0, 0]), self.source_frame)
 
         # Rotation
-        rotation_format = config.get_string("rotation_format", "euler")
-        rotation = config.get_list("rotation", [0, 0, 0])
+        rotation_format = config.get_string("rotation/format", "euler")
+        value = config.get_vector3d("rotation/value", [0, 0, 0])
+
         if rotation_format == "euler":
             # Rotation, specified as euler angles
-            cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame)
+            cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
         elif rotation_format == "forward_vec":
             # Rotation, specified as forward vector
-            forward_vec = mathutils.Vector(Utility.transform_point_to_blender_coord_frame(rotation, self.source_frame))
+            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
+            # Convert forward vector to euler angle (Assume Up = Z)
+            cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+        elif rotation_format == "look_at":
+            # Compute forward vector
+            forward_vec = value - cam_ob.location
+            forward_vec.normalize()
             # Convert forward vector to euler angle (Assume Up = Z)
             cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
         else:
-            raise Exception("No such rotation_format:" + str(rotation_format))
+            raise Exception("No such rotation format:" + str(rotation_format))
 
-        if mat is not None:
-            cam_ob.matrix_world = mat
-            cam_ob.scale = [1,-1,-1] # fix orientation
+        if H_cam2world is not None:
+            # Set homogeneous camera pose from input parameter H_cam2world
+            cam_ob.matrix_world = H_cam2world
+            # transform from OpenCV to blender coords
+            cam_ob.matrix_world @= Matrix.Rotation(math.radians(180), 4, "X")
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
@@ -141,6 +164,5 @@ class CameraModule(Module):
         # Store new cam pose as next frame
         frame_id = bpy.context.scene.frame_end
         self._insert_key_frames(cam, cam_ob, frame_id)
-        self._write_cam_pose_to_file(frame_id, cam, cam_ob)
 
         bpy.context.scene.frame_end = frame_id + 1

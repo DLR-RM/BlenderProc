@@ -4,6 +4,7 @@ import addon_utils
 import bpy
 
 from src.main.Module import Module
+from src.utility.Utility import Utility
 
 
 class Renderer(Module):
@@ -25,6 +26,7 @@ class Renderer(Module):
        "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
 
        "samples", "Number of samples to render for each pixel."
+       "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or set to 'Intel', if you want to use the Intel Open Image Denoiser.
        "max_bounces", "Total maximum number of bounces."
        "min_bounces", "Total minimum number of bounces."
        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
@@ -35,14 +37,18 @@ class Renderer(Module):
        "render_depth", "If true, the depth is also rendered to file."
        "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
        "depth_output_key", "The key which should be used for storing the depth in a merged file."
+       "depth_start", "Starting distance of the depth, measured from the camera."
+       "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range"
+       "depth_falloff", "Type of transition used to fade depth. Default=Linear. [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
+       "use_alpha", "If true, the alpha channel stored in .png textures is used."
     """
     def __init__(self, config):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples=256):
+    def _configure_renderer(self, default_samples=256, default_denoiser="Blender"):
         """
          Sets many different render parameters which can be adjusted via the config.
 
@@ -63,21 +69,47 @@ class Renderer(Module):
         if number_of_threads > 0:
             bpy.context.scene.render.threads_mode = "FIXED"
             bpy.context.scene.render.threads = number_of_threads
-
-        if bpy.context.scene.render.resolution_x == 0:
+        
+        # Collect camera and camera object
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
+        
+        if not 'loaded_resolution' in cam:
             bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
             bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
             bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
-        else:
-            print('#########################')
-            print('resolution already set in loader')
-            print('#########################')
-            
-        bpy.context.scene.render.resolution_percentage = 100
+        print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
 
+        bpy.context.scene.render.resolution_percentage = 100
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
-        bpy.context.view_layer.cycles.use_denoising = True
+
+        denoiser = self.config.get_string("denoiser", default_denoiser)
+        if denoiser == "Intel":
+            # The intel denoiser is activated via the compositor
+            bpy.context.view_layer.cycles.use_denoising = False
+            bpy.context.scene.use_nodes = True
+            nodes = bpy.context.scene.node_tree.nodes
+            links = bpy.context.scene.node_tree.links
+
+            # The denoiser gets normal and diffuse color as input
+            bpy.context.view_layer.use_pass_normal = True
+            bpy.context.view_layer.use_pass_diffuse_color = True
+
+            # Add denoiser node
+            denoise_node = nodes.new("CompositorNodeDenoise")
+
+            # Link nodes
+            render_layer_node = nodes.get('Render Layers')
+            composite_node = nodes.get('Composite')
+            Utility.insert_node_instead_existing_link(links, render_layer_node.outputs['Image'], denoise_node.inputs['Image'], denoise_node.outputs['Image'], composite_node.inputs['Image'])
+
+            links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
+            links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
+        elif denoiser == "Blender":
+            bpy.context.view_layer.cycles.use_denoising = True
+        else:
+            raise Exception("No such denoiser: " + denoiser)
 
         simplify_subdivision_render = self.config.get_int("simplify_subdivision_render", 3)
         if simplify_subdivision_render > 0:
@@ -102,24 +134,42 @@ class Renderer(Module):
         if bpy.context.scene.render.use_multiview:
             bpy.context.scene.render.views_format = "STEREO_3D"
 
+        self._use_alpha_channel = self.config.get_bool('use_alpha', False)
+
     def _write_depth_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
+
+        # Mist settings
+        depth_start = self.config.get_float("depth_start", 0.1)
+        depth_range = self.config.get_float("depth_range", 25.0)
+        bpy.context.scene.world.mist_settings.start = depth_start
+        bpy.context.scene.world.mist_settings.depth = depth_range
+        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")
+
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.view_layer.use_pass_z = True
+        bpy.context.view_layer.use_pass_mist = True  # Enable depth pass
+
         tree = bpy.context.scene.node_tree
         links = tree.links
 
-        # Create a render layer
-        rl = tree.nodes.new('CompositorNodeRLayers')      
+        # Use existing render layer
+        render_layer_node = tree.nodes.get('Render Layers')
+        # Create a mapper node to map from 0-1 to SI units
+        mapper_node = tree.nodes.new("CompositorNodeMapRange")
+
+        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
+        # map the values 0-1 to range depth_start to depth_range
+        mapper_node.inputs['To Min'].default_value = depth_start
+        mapper_node.inputs['To Max'].default_value = depth_range
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
-        # Feed the Z output of the render layer to the input of the file IO layer
-        links.new(rl.outputs[2], output_file.inputs['Image'])
+        # Feed the Mist output of the render layer to the input of the file IO layer
+        links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
 
     def _render(self, default_prefix):
         """ Renders each registered keypoint.
@@ -138,6 +188,94 @@ class Renderer(Module):
             bpy.ops.render.render(animation=True, write_still=True)
             # Revert changes
             bpy.context.scene.frame_end += 1
+
+    def add_alpha_channel_to_textures(self, blurry_edges):
+        """
+        Adds transparency to all textures, which contain an .png image as an image input
+
+        :param blurry_edges: If True, the edges of the alpha channel might be blurry,
+                             this causes errors if the alpha channel should only be 0 or 1
+
+        Be careful, when you replace the original texture with something else (Segmentation, Normals, ...),
+        the necessary texture node gets lost. By copying it into a new material as done in the NormalRenderer, you
+        can keep the transparency even for those nodes.
+
+        """
+        if self._use_alpha_channel:
+            obj_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
+            # walk over all objects, which have materials
+            for obj in obj_with_mats:
+                for slot in obj.material_slots:
+                    texture_node = None
+                    # check each node of the material
+                    for node in slot.material.node_tree.nodes:
+                        # if it is a texture image node
+                        if 'TexImage' in node.bl_idname:
+                            if '.png' in node.image.name: # contains an alpha channel
+                                texture_node = node
+                    # this material contains an alpha png texture
+                    if texture_node is not None:
+                        nodes = slot.material.node_tree.nodes
+                        links = slot.material.node_tree.links
+
+                        material_output = nodes.get("Material Output")
+                        if material_output is None:
+                            raise Exception("This material: {} has no material output!".format(slot.name))
+                        # find the node, which is connected to the output
+                        node_connected_to_the_output = None
+                        for link in links:
+                            if link.to_node == material_output:
+                                node_connected_to_the_output = link.from_node
+                                # remove this link
+                                links.remove(link)
+                                break
+                        if node_connected_to_the_output is not None:
+                            mix_node = nodes.new(type='ShaderNodeMixShader')
+
+                            # avoid blurry edges on the edges important for Normal, SegMapRenderer and others
+                            if blurry_edges:
+                                # add the alpha channel of the image to the mix shader node as a factor
+                                links.new(texture_node.outputs['Alpha'], mix_node.inputs['Fac'])
+                            else:
+                                bright_contrast_node = nodes.new("ShaderNodeBrightContrast")
+                                # extreme high contrast to avoid blurry edges
+                                bright_contrast_node.inputs['Contrast'].default_value = 1000.0
+                                links.new(texture_node.outputs['Alpha'], bright_contrast_node.inputs['Color'])
+                                links.new(bright_contrast_node.outputs['Color'], mix_node.inputs['Fac'])
+
+                            links.new(node_connected_to_the_output.outputs[0], mix_node.inputs[2])
+                            transparent_node = nodes.new(type='ShaderNodeBsdfTransparent')
+                            links.new(transparent_node.outputs['BSDF'], mix_node.inputs[1])
+                            # connect to material output
+                            links.new(mix_node.outputs['Shader'], material_output.inputs['Surface'])
+                        else:
+                            raise Exception("Could not find shader node, which is connected to the material output for: {}".format(slot.name))
+
+    def add_alpha_texture_node(self, used_material, new_material):
+        """
+        Adds to a predefined new_material a texture node from an existing material (used_material)
+        This is necessary to connect it later on in the add_alpha_channel_to_textures
+        :param used_material: existing material, which might contain a texture node with a .png texture
+        :param new_material: a new material, which will get a copy of this texture node
+        :return: the modified new_material, if no texture node was found, the original new_material
+        """
+        # find out if there is an .png file used here
+        texture_node = None
+        for node in used_material.node_tree.nodes:
+            # if it is a texture image node
+            if 'TexImage' in node.bl_idname:
+                if '.png' in node.image.name: # contains an alpha channel
+                    texture_node = node
+        # this material contains an alpha png texture
+        if texture_node is not None:
+            new_mat_alpha = new_material.copy() # copy the material
+            nodes = new_mat_alpha.node_tree.nodes
+            # copy the texture node into the new material to make sure it is used
+            new_tex_node = nodes.new(type='ShaderNodeTexImage')
+            new_tex_node.image = texture_node.image
+            # use the new material
+            return new_mat_alpha
+        return new_material
 
     def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes = True):
         """ Registers new output type using configured key and file prefix.

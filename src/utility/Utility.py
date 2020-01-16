@@ -6,6 +6,7 @@ import importlib
 from src.utility.Config import Config
 from mathutils import Vector
 from copy import deepcopy
+import numpy as np
 
 class Utility:
     working_dir = ""
@@ -216,39 +217,128 @@ class Utility:
             bpy.ops.ed.undo()
 
     @staticmethod
-    def sample(name, parameters):
-        """ A general sample function.
+    def build_provider(name, parameters):
+        """ Builds up providers like sampler or getter.
 
-        It first builds the required sampler and then calls its sample function.
+        It first builds the config and then constructs the required provider.
 
-        :param name: The name of the sampler class.
-        :param parameters: A dict containing the parameters that should be used to sample.
-        :return: The sampled value.
+        :param name: The name of the provider class.
+        :param parameters: A dict containing the parameters that should be used.
+        :return: The constructed provider.
         """
         # Import class from src.utility
-        module_class = getattr(importlib.import_module("src.utility.sampler." + name), name.split(".")[-1])
+        module_class = getattr(importlib.import_module("src.provider." + name), name.split(".")[-1])
         # Build configuration
         config = Config(parameters)
-        # Call sample method
-        return module_class.sample(config)
+        # Construct provider
+        return module_class(config)
 
     @staticmethod
-    def sample_based_on_config(config):
-        """ A general sample function using the sampler and sample parameters described in the given config.
+    def build_provider_based_on_config(config):
+        """ Builds up the provider using the parameters described in the given config.
 
         The given config should follow the following scheme:
 
         {
-          "name": "<name of sampler class>"
+          "name": "<name of provider class>"
           "parameters": {
-            <sampler parameters>
+            <provider parameters>
           }
         }
 
         :param config: A Configuration object or a dict containing the configuration data.
-        :return: The sampled value.
+        :return: The constructed provider.
         """
         if isinstance(config, dict):
             config = Config(config)
 
-        return Utility.sample(config.get_string("name"), config.get_raw_dict("parameters"))
+        parameters = {}
+        for key in config.data.keys():
+            if key != 'name':
+                parameters[key] = config.data[key]
+
+        return Utility.build_provider(config.get_string("name"), parameters)
+
+    @staticmethod
+    def generate_equidistant_values(num, space_size_per_dimension):
+        """ This function generates N equidistant values in a 3-dim space and returns num of them.
+
+        Every dimension of the space is limited by [0, K], where K is the given space_size_per_dimension.
+        Basically it splits a cube of shape K x K x K in to N smaller blocks. Where, N = cube_length^3
+        and cube_length is the smallest integer for which N >= num.
+
+        If K is not a multiple of N, then the sum of all blocks might
+        not fill up the whole K ** 3 cube.
+
+        :param num: The total number of values required.
+        :param space_size_per_dimension: The side length of cube.
+        """
+        num_splits_per_dimension = 1
+        values = []
+        # find cube_length bound of cubes to be made
+        while num_splits_per_dimension ** 3 < num:
+            num_splits_per_dimension += 1
+
+        # Calc the side length of a block. We do a integer division here, s.t. we get blocks with the exact same size, even though we are then not using the full space of [0, 255] ** 3
+        block_length = space_size_per_dimension // num_splits_per_dimension
+
+        # Calculate the center of each block and use them as equidistant values
+        r_mid_point = block_length // 2
+        for r in range(num_splits_per_dimension):
+            g_mid_point = block_length // 2
+            for g in range(num_splits_per_dimension):
+                b_mid_point = block_length // 2
+                for b in range(num_splits_per_dimension):
+                    values.append([r_mid_point, g_mid_point, b_mid_point])
+                    b_mid_point += block_length
+                g_mid_point += block_length
+            r_mid_point += block_length
+
+        return values[:num], num_splits_per_dimension
+
+    @staticmethod
+    def map_back_from_equally_spaced_equidistant_values(values, num_splits_per_dimension, space_size_per_dimension):
+        """ Maps the given values back to their original indices.
+
+        This function calculates for each given value the corresponding index in the list of values created by the generate_equidistant_values() method.
+
+        :param values: An array of shape [M, N, 3];
+        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the equidistant values.
+        :return: A 2-dim array of indices corresponding to the given values.
+        """
+        # Calc the side length of a block.
+        block_length = space_size_per_dimension // num_splits_per_dimension
+        # Subtract a half of a block from all values, s.t. now every value points to the lower corner of a block
+        values -= block_length // 2
+        # Calculate the block indices per dimension
+        values /= block_length
+        # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())
+        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
+        # Round the values, s.t. derivations are put back to their closest index.
+        return np.round(values)
+
+    @staticmethod
+    def import_objects(filepath, **kwargs):
+        """ Import all objects for the given file and returns the loaded objects
+
+        In .obj files a list of objects can be saved in.
+        In .ply files only one object can saved so the list has always at most one element
+
+        :param filepath: the filepath to the location where the data is stored
+        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
+        :return: a list of all newly loaded objects, in the failure case an empty list is returned
+        """
+        if os.path.exists(filepath):
+            # save all selected objects
+            previously_selected_objects = set(bpy.context.selected_objects)
+            if filepath.endswith('.obj'):
+                # load an .obj file:
+                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+            elif filepath.endswith('.ply'):
+                # load a .ply mesh
+                bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+            # return all currently selected objects
+            return list(set(bpy.context.selected_objects) - previously_selected_objects)
+        else:
+            raise Exception("The given filepath does not exist: {}".format(filepath))
+        return []
