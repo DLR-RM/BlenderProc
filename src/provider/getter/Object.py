@@ -2,8 +2,9 @@ import bpy
 import mathutils
 import re
 
+from src.main.Provider import Provider
 
-class ObjectGetter:
+class Object(Provider):
     """ Returns a list of objects in accordance to a condition.
     Specify a desired condition in the format {attribute_name: attribute_value}, note that attribute_value for a custom
     property can be a string/int/bool/float, while only attribute_value for valid attributes of objects can be a list
@@ -18,14 +19,15 @@ class ObjectGetter:
     "condition/attribute_name", "Name of any valid object's attribute or custom property. Type: string."
     "condition/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
     """
+    def __init__(self, config):
+        Provider.__init__(self, config)
 
-    @staticmethod
-    def get(config):
+    def run(self):
         """
         :param config: Config objects with user-defined properties.
         :return: List of objects that met the conditional requirement.
         """
-        cond = config.get_raw_dict('condition')
+        cond = self.config.get_raw_dict('condition')
         if len(cond) > 1:
             raise Exception('ObjectGetter supports only one condition (for now)!')
 

@@ -52,13 +52,13 @@
         "instances": [
           {
             "selector": {
-              "name": "ObjectGetter",
+              "name": "getter.Object",
               "condition": {
                 "name": 'Suzanne'
               }
             },
             "location": {
-              "name":"Uniform3dSampler",
+              "name":"sampler.Uniform3d",
               "max":[1, 2, 3],
               "min":[0, 1, 2]
             },
