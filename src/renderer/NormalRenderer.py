@@ -32,17 +32,19 @@ class NormalRenderer(Renderer):
 
         mapping_node = nodes.new(type='ShaderNodeMapping')
         mapping_node.vector_type = "TEXTURE"
-        mapping_node.translation = [-1, -1, 1]
-        mapping_node.scale = [2, 2, -2]
+        # Translation
+        mapping_node.inputs['Location'].default_value = [-1, -1, 1]
+        # Scaling
+        mapping_node.inputs['Scale'].default_value = [2, 2, -2]
 
         emission_node = nodes.new(type='ShaderNodeEmission')
 
         output_node = nodes.get("Material Output")
 
-        links.new(texture_coord_node.outputs[1], vector_transform_node.inputs[0])
-        links.new(vector_transform_node.outputs[0], mapping_node.inputs[0])
-        links.new(mapping_node.outputs[0], emission_node.inputs[0])
-        links.new(emission_node.outputs[0], output_node.inputs[0])
+        links.new(texture_coord_node.outputs['Normal'], vector_transform_node.inputs['Vector'])
+        links.new(vector_transform_node.outputs['Vector'], mapping_node.inputs['Vector'])
+        links.new(mapping_node.outputs['Vector'], emission_node.inputs['Color'])
+        links.new(emission_node.outputs['Emission'], output_node.inputs['Surface'])
         return new_mat
 
     def run(self):
@@ -57,13 +59,19 @@ class NormalRenderer(Renderer):
             for obj in bpy.context.scene.objects:
                 if len(obj.material_slots) > 0:
                     for i in range(len(obj.material_slots)):
-                        obj.data.materials[i] = new_mat
+                        if self._use_alpha_channel:
+                            obj.data.materials[i] = self.add_alpha_texture_node(obj.material_slots[i].material, new_mat)
+                        else:
+                            obj.data.materials[i] = new_mat
                 elif hasattr(obj.data, 'materials'):
                     obj.data.materials.append(new_mat)
 
             # Set the color channel depth of the output to 32bit
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "32"
+
+            if self._use_alpha_channel:
+                self.add_alpha_channel_to_textures(blurry_edges=False)
 
             self._render("normal_")
 

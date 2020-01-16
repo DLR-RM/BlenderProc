@@ -1,8 +1,9 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
+  "version": 1,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py",
       "imageio"
@@ -19,7 +20,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "examples/debugging/scene.obj"
       }
@@ -40,7 +41,7 @@
       "name": "camera.CameraLoader",
       "config": {
         "path": "examples/debugging/camera_positions",
-        "file_format": "location rotation",
+        "file_format": "location rotation/value",
         "default_cam_param": {
           "fov": 1
         }

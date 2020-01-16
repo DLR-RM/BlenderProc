@@ -71,14 +71,37 @@ class ItemCollection:
                 parameter_length = self._length_of_parameter(parameter_name, number_of_arguments_per_parameter)
                 # Read in the next N arguments
                 if parameter_length > 1:
-                    data[parameter_name] = arguments[:parameter_length]
+                    parameter_value = arguments[:parameter_length]
                 else:
-                    data[parameter_name] = arguments[0]
+                    parameter_value = arguments[0]
+                # Set parameter
+                self._set_parameter_value(data, parameter_name.split("/"), parameter_value)
                 arguments = arguments[parameter_length:]
             else:
                 arguments = arguments[1:]
 
         return data
+
+    def _set_parameter_value(self, data, parameter_name_parts, value):
+        """ Sets the parameter inside the given nested dict
+
+        ({}, ["rotation","value"], 42) will result in:
+        {
+          "rotation": {
+            "value": 42
+          }
+        }
+
+        :param data: The dict into which the parameter value should be written.
+        :param parameter_name_parts: A list of strings which will be used as keys when creating the nested dicts and setting the value.
+        :param value: The value to set
+        """
+        if len(parameter_name_parts) == 1:
+            data[parameter_name_parts[0]] = value
+        elif len(parameter_name_parts) > 1:
+            if parameter_name_parts[0] not in data:
+                data[parameter_name_parts[0]] = {}
+            self._set_parameter_value(data[parameter_name_parts[0]], parameter_name_parts[1:], value)
 
     def _length_of_parameter(self, parameter_name, number_of_arguments_per_parameter):
         """ Returns how many arguments the given parameter expects.

@@ -25,7 +25,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 ```yaml
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py",
       "imageio"
@@ -68,11 +68,11 @@ Every module has a name which specifies the python path to the corresponding cla
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera)
 * We are using the default parameters here, so `config` is empty
 
-#### ObjLoader
+#### ObjectLoader
 
 ```yaml
 {
-  "name": "loader.ObjLoader",
+  "name": "loader.ObjectLoader",
   "config": {
     "path": "<args:1>"
   }
@@ -112,7 +112,7 @@ Every module has a name which specifies the python path to the corresponding cla
   "name": "camera.CameraLoader",
   "config": {
     "path": "<args:0>",
-    "file_format": "location rotation_euler",
+    "file_format": "location rotation/value",
     "default_cam_param": {
       "fov": 1
     }
