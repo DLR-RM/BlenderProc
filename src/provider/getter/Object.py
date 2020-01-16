@@ -7,8 +7,8 @@ from src.main.Provider import Provider
 class Object(Provider):
     """ Returns a list of objects in accordance to a condition.
     Specify a desired condition in the format {attribute_name: attribute_value}, note that attribute_value for a custom
-    property can be a string/int/bool/float, while only attribute_value for valid attributes of objects can be a list
-    (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by 'list' type).
+    property can be a string/int/float, while only attribute_value for valid attributes of objects can be a bool or a
+    list (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by 'list' type).
 
     NOTE: any given attribute_value of the type string will be treated as a REGULAR EXPRESSION.
 

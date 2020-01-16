@@ -54,8 +54,13 @@ Our condition is: `"name": 'Suzanne'`, which means that we want to select all th
 Yet one may define any condition where `key` is the valid name of any attribute of objects present in the scene or the name of an existing custom property.
 This way it is possible to select multiple objects. One may try this condition to try multiple object selection: `"location": [0, 0, 0]`
 
- NOTE: any given attribute_value of the type string will be treated as a *REGULAR EXPRESSION*.
- So try `"name": '^Cylinder'` condition and set all Cylinders in the scene flying.
+Data types:
+attribute_name - a valid name of any attribute, attribute_value types: string/int/bool/float/list.
+attribute_name - a valid name of an existing custom property (or of a custom property to create), attribute_value types: string/int/float.
+```
+NOTE: any given attribute_value of the type string will be treated as a *REGULAR EXPRESSION*.
+So try `"name": '^Cylinder'` condition and set all Cylinders in the scene flying.
+```
 
 After `selector` section we are defining attribute name and attribute value pairs in the familiar format of {attribute_name: attribute_value}.
 If attribute_name is a valid name of any attribute of selected object(s), its value will be set to attribute_value.
