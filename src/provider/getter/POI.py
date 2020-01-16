@@ -1,13 +1,17 @@
 import mathutils
 import numpy as np
 import bpy
+
+from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds
 
-class POIGetter:
+class POI(Provider):
     """ Computes a point of interest in the scene. """
 
-    @staticmethod
-    def get(config):
+    def __init__(self, config):
+        Provider.__init__(self, config)
+
+    def run(self):
         """
         :return: Point of interest in the scene. Type: mathutils Vector.
         """

@@ -57,7 +57,7 @@ class SuncgLighting(Module):
         """ Adds an emission shader to the object materials which are specified in the light list
 
         :param obj: The blender object.
-        :param light: A list of two lists. The first list specifies all materials which should act lightbulb, the second one lists all materials corresponding to lampshades.
+        :param light: A list of two lists. The first list specifies all materials which should act as a lightbulb, the second one lists all materials corresponding to lampshades.
         """
         for m in obj.material_slots:
             mat_name = m.material.name
@@ -76,6 +76,8 @@ class SuncgLighting(Module):
                         mix_node = nodes.new(type='ShaderNodeMixShader')
                         Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
+                        # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
+                        # In this way the mix shader will use the diffuse shader for rendering the color of the lightbulb itself, while using the emission shader for lighting the scene.
                         lightPath_node = nodes.new(type='ShaderNodeLightPath')
                         links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
@@ -116,6 +118,8 @@ class SuncgLighting(Module):
                         link = next(l for l in links if l.to_socket == output.inputs['Surface'])
                         links.remove(link)
 
+                        # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
+                        # In this way the mix shader will use the diffuse shader for rendering the color of the window itself, while using the emission shader for lighting the scene.
                         mix_node = nodes.new(type='ShaderNodeMixShader')
                         emission_node = nodes.new(type='ShaderNodeEmission')
                         transparent_node = nodes.new(type='ShaderNodeBsdfDiffuse')
@@ -148,6 +152,8 @@ class SuncgLighting(Module):
 
                     Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
+                    # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
+                    # In this way the mix shader will use the diffuse shader for rendering the color of the ceiling itself, while using the emission shader for lighting the scene.
                     lightPath_node = nodes.new(type='ShaderNodeLightPath')
                     links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
