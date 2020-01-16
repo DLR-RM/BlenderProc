@@ -1,8 +1,9 @@
 import numpy as np
 import mathutils
 
+from src.main.Provider import Provider
 
-class ShellSampler:
+class Shell(Provider):
     """ Samples a point from the space in between two spheres with a spherical angle (sampling cone) with apex in the center of those two spheres.
 
     **Configuration**:
@@ -17,25 +18,27 @@ class ShellSampler:
         "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone. Units: degrees."
     """
 
-    @staticmethod
-    def sample(config):
+    def __init__(self, config):
+        Provider.__init__(self, config)
+
+    def run(self):
         """ Sample a point from a space in between two halfspheres with the same center point and a sampling cone with apex in this center.
 
         :param config: A configuration object containing the parameters required to perform sampling.
         :return: A sampled point. Type: Mathutils vector.
         """
         # Center of both spheres
-        center = np.array(config.get_list("center"))
+        center = np.array(self.config.get_list("center"))
         # Radius of a smaller sphere
-        radius_min = config.get_float("radius_min")
+        radius_min = self.config.get_float("radius_min")
         # Radius of a bigger sphere
-        radius_max = config.get_float("radius_max")
+        radius_max = self.config.get_float("radius_max")
         # Elevation angles
-        elevation_min = config.get_float("elevation_min")
+        elevation_min = self.config.get_float("elevation_min")
         if elevation_min == 0:
             # here comes the magic number
             elevation_min = 0.001
-        elevation_max = config.get_float("elevation_max") 
+        elevation_max = self.config.get_float("elevation_max")
         if elevation_max == 90:
             # behold! magic number
             elevation_max = 0

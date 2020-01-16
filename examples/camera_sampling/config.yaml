@@ -43,7 +43,7 @@
         "cam_poses": [
           {
             "location": {
-              "name":"Uniform3dSampler",
+              "name":"sampler.Uniform3d",
               "parameters":{
                 "max":[10, 10, 8],
                 "min":[-10, -10, 12]
@@ -52,7 +52,7 @@
             "rotation": {
               "format": "look_at",
               "value": {
-                "name": "POIGetter",
+                "name": "getter.POI",
                 "parameters": {}
               }
             }
