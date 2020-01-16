@@ -13,13 +13,14 @@ How to do this check out the folder [debugging](debugging).
 All samplers share the same structure, so understanding one of them makes it easier to understand the others as well.
 Here are examples for camera, light and object pose sampling: 
 
-* [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation
-* [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling
-* [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler
+* [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation.
+* [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling.
+* [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
 
-## Physics
+## Object manipulation
 
-We also provide a easy to use module to use physics in your simulations, check the [physics](physics_positioning) folder for more information.
+* [physics](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
+* [object manipulation](object_manipulation): Changing various parameters of objects via selecting them through config file.
 
 ## Dataset related examples
 
