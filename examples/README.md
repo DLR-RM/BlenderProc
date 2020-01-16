@@ -17,9 +17,11 @@ Here are examples for camera, light and object pose sampling:
 * [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling.
 * [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
 
+## Physics
+* [physics](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
+
 ## Object manipulation
 
-* [physics](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
 * [object manipulation](object_manipulation): Changing various parameters of objects via selecting them through config file.
 
 ## Dataset related examples
