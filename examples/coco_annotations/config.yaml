@@ -1,5 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
+  "version": 1,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -20,7 +21,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "<args:1>"
       }

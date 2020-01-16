@@ -1,5 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
+  "version": 1,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -20,7 +21,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "examples/camera_sampling/scene.obj"
       }
@@ -43,17 +44,14 @@
         "cam_poses": [
           {
             "location": {
-              "name":"Uniform3dSampler",
-              "parameters":{
-                "max":[10, 10, 8],
-                "min":[-10, -10, 12]
-              }
+              "name":"sampler.Uniform3d",
+              "max":[10, 10, 8],
+              "min":[-10, -10, 12]
             },
             "rotation": {
               "format": "look_at",
               "value": {
-                "name": "POIGetter",
-                "parameters": {}
+                "name": "getter.POI"
               }
             }
           }

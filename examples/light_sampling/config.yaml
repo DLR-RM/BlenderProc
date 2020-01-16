@@ -1,5 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
+  "version": 1,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -19,7 +20,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "<args:1>"
       }
@@ -30,14 +31,12 @@
         "lights": [
           {
             "location": {
-              "name": "ShellSampler",
-              "parameters": {
-                "center": [1, 2, 3],
-                "radius_min": 4,
-                "radius_max": 7,
-                "elevation_min": 15,
-                "elevation_max": 70
-              }
+              "name": "sampler.Shell",
+              "center": [1, 2, 3],
+              "radius_min": 4,
+              "radius_max": 7,
+              "elevation_min": 15,
+              "elevation_max": 70
             },
             "type": "POINT",
             "energy": 500

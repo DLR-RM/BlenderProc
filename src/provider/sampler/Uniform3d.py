@@ -1,8 +1,9 @@
 import mathutils
 import random
 
+from src.main.Provider import Provider
 
-class Uniform3dSampler:
+class Uniform3d(Provider):
     """ Uniformly samples a 3-dimensional value.
 
     **Configuration**:
@@ -15,16 +16,18 @@ class Uniform3dSampler:
 
     """
 
-    @staticmethod
-    def sample(config):
+    def __init__(self, config):
+        Provider.__init__(self, config)
+
+    def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
         :return: Sampled value. Type: Mathutils Vector
         """
         # minimum values vector
-        min = config.get_vector3d("min")
+        min = self.config.get_vector3d("min")
         # maximum values vector
-        max = config.get_vector3d("max")
+        max = self.config.get_vector3d("max")
 
         position = mathutils.Vector()
         for i in range(3):

@@ -158,9 +158,10 @@ class Renderer(Module):
         # Create a mapper node to map from 0-1 to SI units
         mapper_node = tree.nodes.new("CompositorNodeMapRange")
 
-        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs[0])
-        mapper_node.inputs[3].default_value = depth_start
-        mapper_node.inputs[4].default_value = depth_range
+        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
+        # map the values 0-1 to range depth_start to depth_range
+        mapper_node.inputs['To Min'].default_value = depth_start
+        mapper_node.inputs['To Max'].default_value = depth_range
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
@@ -168,7 +169,7 @@ class Renderer(Module):
         output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
 
         # Feed the Mist output of the render layer to the input of the file IO layer
-        links.new(mapper_node.outputs[0], output_file.inputs[0])
+        links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
 
     def _render(self, default_prefix):
         """ Renders each registered keypoint.
@@ -234,19 +235,19 @@ class Renderer(Module):
                             # avoid blurry edges on the edges important for Normal, SegMapRenderer and others
                             if blurry_edges:
                                 # add the alpha channel of the image to the mix shader node as a factor
-                                links.new(texture_node.outputs[1], mix_node.inputs[0])
+                                links.new(texture_node.outputs['Alpha'], mix_node.inputs['Fac'])
                             else:
                                 bright_contrast_node = nodes.new("ShaderNodeBrightContrast")
                                 # extreme high contrast to avoid blurry edges
                                 bright_contrast_node.inputs['Contrast'].default_value = 1000.0
-                                links.new(texture_node.outputs[1], bright_contrast_node.inputs[0])
-                                links.new(bright_contrast_node.outputs[0], mix_node.inputs[0])
+                                links.new(texture_node.outputs['Alpha'], bright_contrast_node.inputs['Color'])
+                                links.new(bright_contrast_node.outputs['Color'], mix_node.inputs['Fac'])
 
                             links.new(node_connected_to_the_output.outputs[0], mix_node.inputs[2])
                             transparent_node = nodes.new(type='ShaderNodeBsdfTransparent')
-                            links.new(transparent_node.outputs[0], mix_node.inputs[1])
+                            links.new(transparent_node.outputs['BSDF'], mix_node.inputs[1])
                             # connect to material output
-                            links.new(mix_node.outputs[0], material_output.inputs[0])
+                            links.new(mix_node.outputs['Shader'], material_output.inputs['Surface'])
                         else:
                             raise Exception("Could not find shader node, which is connected to the material output for: {}".format(slot.name))
 

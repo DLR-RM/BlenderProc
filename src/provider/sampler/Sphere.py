@@ -1,8 +1,9 @@
 import numpy as np
 import mathutils
 
+from src.main.Provider import Provider
 
-class SphereSampler:
+class Sphere(Provider):
     """ Samples a point from the surface or from the interior of solid sphere
 
     Gaussian is spherically symmetric. Sample from three independent Gaussian distributions
@@ -18,20 +19,22 @@ class SphereSampler:
        "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball."
     """
 
+    def __init__(self, config):
+        Provider.__init__(self, config)
+
     # https://math.stackexchange.com/a/87238
     # https://math.stackexchange.com/a/1585996
-    @staticmethod
-    def sample(config):
+    def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
         # Center of the sphere.
-        center = np.array(config.get_list("center"))
+        center = np.array(self.config.get_list("center"))
         # Radius of the sphere.
-        radius = config.get_float("radius")
+        radius = self.config.get_float("radius")
         # Mode of operation.
-        mode = config.get_string("mode")
+        mode = self.config.get_string("mode")
         
         # Sample
         direction = np.random.normal(size=3)

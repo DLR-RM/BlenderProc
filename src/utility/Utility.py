@@ -217,36 +217,25 @@ class Utility:
             bpy.ops.ed.undo()
 
     @staticmethod
-    def invoke_provider(name, parameters):
-        """ Builds up and calls provider like sampler or getter.
+    def build_provider(name, parameters):
+        """ Builds up providers like sampler or getter.
 
-        It first builds the required provider and then calls its sample/get/... function.
+        It first builds the config and then constructs the required provider.
 
         :param name: The name of the provider class.
         :param parameters: A dict containing the parameters that should be used.
-        :return: The value returned from the provider.
+        :return: The constructed provider.
         """
-        if name.endswith("Sampler"):
-            provider_type = "sampler"
-        elif name.endswith("Getter"):
-            provider_type = "getter"
-        else:
-            raise Exception("Unknown type of provider with name " + name)
-
         # Import class from src.utility
-        module_class = getattr(importlib.import_module("src.utility." + provider_type + "." + name), name.split(".")[-1])
+        module_class = getattr(importlib.import_module("src.provider." + name), name.split(".")[-1])
         # Build configuration
         config = Config(parameters)
-
-        # Call providing method
-        if provider_type == "sampler":
-            return module_class.sample(config)
-        elif provider_type == "getter":
-            return module_class.get(config)
+        # Construct provider
+        return module_class(config)
 
     @staticmethod
-    def invoke_provider_based_on_config(config):
-        """ Builds up and calls a provider using the parameters described in the given config.
+    def build_provider_based_on_config(config):
+        """ Builds up the provider using the parameters described in the given config.
 
         The given config should follow the following scheme:
 
@@ -258,12 +247,17 @@ class Utility:
         }
 
         :param config: A Configuration object or a dict containing the configuration data.
-        :return: The value returned from the provider.
+        :return: The constructed provider.
         """
         if isinstance(config, dict):
             config = Config(config)
 
-        return Utility.invoke_provider(config.get_string("name"), config.get_raw_dict("parameters"))
+        parameters = {}
+        for key in config.data.keys():
+            if key != 'name':
+                parameters[key] = config.data[key]
+
+        return Utility.build_provider(config.get_string("name"), parameters)
 
     @staticmethod
     def generate_equidistant_values(num, space_size_per_dimension):
@@ -322,3 +316,29 @@ class Utility:
         values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
+
+    @staticmethod
+    def import_objects(filepath, **kwargs):
+        """ Import all objects for the given file and returns the loaded objects
+
+        In .obj files a list of objects can be saved in.
+        In .ply files only one object can saved so the list has always at most one element
+
+        :param filepath: the filepath to the location where the data is stored
+        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
+        :return: a list of all newly loaded objects, in the failure case an empty list is returned
+        """
+        if os.path.exists(filepath):
+            # save all selected objects
+            previously_selected_objects = set(bpy.context.selected_objects)
+            if filepath.endswith('.obj'):
+                # load an .obj file:
+                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+            elif filepath.endswith('.ply'):
+                # load a .ply mesh
+                bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+            # return all currently selected objects
+            return list(set(bpy.context.selected_objects) - previously_selected_objects)
+        else:
+            raise Exception("The given filepath does not exist: {}".format(filepath))
+        return []

@@ -1,5 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
+  "version": 1,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -19,7 +20,7 @@
       "config": {}
     },
     {
-      "name": "loader.ObjLoader",
+      "name": "loader.ObjectLoader",
       "config": {
         "path": "<args:1>"
       }
@@ -51,18 +52,14 @@
       "config":{
         "max_iterations": 1000,
         "pos_sampler":{
-          "name":"Uniform3dSampler",
-          "parameters":{
-            "max":[5,5,5],
-            "min":[-5,-5,-5]
-          }
+          "name":"sampler.Uniform3d",
+          "max":[5,5,5],
+          "min":[-5,-5,-5]
         },
         "rot_sampler":{
-          "name":"Uniform3dSampler",
-          "parameters":{
-            "max":[0,0,0],
-            "min":[6.28,6.28,6.28]
-          }
+          "name":"sampler.Uniform3d",
+          "max":[0,0,0],
+          "min":[6.28,6.28,6.28]
         }
       }
     },

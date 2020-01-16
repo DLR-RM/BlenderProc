@@ -219,10 +219,10 @@ class SuncgLoader(Loader):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
-            bpy.ops.import_scene.obj(filepath=path)
+            loaded_objects = Utility.import_objects(filepath=path)
 
             # Go through all imported objects
-            for object in bpy.context.selected_objects:
+            for object in loaded_objects:
                 for key in metadata.keys():
                     object[key] = metadata[key]
 
@@ -279,7 +279,7 @@ class SuncgLoader(Loader):
 
             # The principled BSDF node contains all imported material properties
             principled_node = nodes.get("Principled BSDF")
-            diffuse_color = principled_node.inputs[0].default_value
+            diffuse_color = principled_node.inputs['Base Color'].default_value
             image_node = nodes.get("Image Texture")
             if image_node is not None:
                 texture = image_node.image
@@ -299,13 +299,13 @@ class SuncgLoader(Loader):
                 image_node = nodes.new(type='ShaderNodeTexImage')
 
             # Link them
-            links.new(diffuse_node.outputs[0], output_node.inputs[0])
+            links.new(diffuse_node.outputs['BSDF'], output_node.inputs['Surface'])
             if texture is not None or force_texture:
-                links.new(image_node.outputs[0], diffuse_node.inputs[0])
-                links.new(uv_node.outputs[2], image_node.inputs[0])
+                links.new(image_node.outputs['Color'], diffuse_node.inputs['Color'])
+                links.new(uv_node.outputs['UV'], image_node.inputs['Vector'])
 
             # Set values from imported material properties
-            diffuse_node.inputs[0].default_value = diffuse_color
+            diffuse_node.inputs['Color'].default_value = diffuse_color
             if texture is not None:
                 image_node.image = texture
 
@@ -322,7 +322,7 @@ class SuncgLoader(Loader):
         image_node = nodes.get("Image Texture")
 
         if "diffuse" in adjustments:
-            diffuse_node.inputs[0].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
+            diffuse_node.inputs['Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
             image_path = os.path.join(self.suncg_dir, "texture", adjustments["texture"])

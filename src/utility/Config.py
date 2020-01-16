@@ -1,6 +1,7 @@
 import mathutils
 import src.utility.Utility as Utility
 
+from src.main.Provider import Provider
 
 class Config:
 
@@ -50,9 +51,13 @@ class Config:
         else:
             if name in block:
 
-                # Check for whether a provider should be invoked to get the parameter value
+                # Check for whether a provider should be invoked
                 if allow_invoke_provider and type(block[name]) is dict:
-                    return Utility.Utility.invoke_provider_based_on_config(block[name])
+                    block[name] = Utility.Utility.build_provider_based_on_config(block[name])
+
+                # If the parameter is set to a provider object, call the provider to return the parameter value
+                if isinstance(block[name], Provider):
+                    return block[name].run()
                 else:
                     return block[name]
             else:
@@ -85,6 +90,16 @@ class Config:
         :return: The dict.
         """
         return self._get_value_with_fallback(name, fallback)
+
+    def get_raw_value(self, name, fallback=None):
+        """ Returns the raw value stored at the given parameter path.
+        If a provider is specified at the given parameter path, then the provider is first invoked and the result is directly returned.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The raw value.
+        """
+        return self._get_value_with_fallback(name, fallback, True)
 
     def get_int(self, name, fallback=None):
         """ Returns the integer value stored at the given parameter path.
