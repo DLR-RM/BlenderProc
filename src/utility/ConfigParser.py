@@ -65,7 +65,7 @@ class ConfigParser:
 
     def _check_version(self):
         """ Checks if the configuration file contain a valid version number and if its up to date. """
-        warning = None
+        exception_text = None
         # Check if there is any version number in the config
         if "version" in self.config:
             version = self.config["version"]
@@ -73,14 +73,14 @@ class ConfigParser:
             if isinstance(version, int):
                 # Check if the version number is up to date
                 if version < self.current_version:
-                    warning = "Warning: The given configuration file might not be up to date. The version of the config is %d while the currently most recent version is %d." % (version, self.current_version)
+                    exception_text = "The given configuration file might not be up to date. The version of the config is %d while the currently most recent version is %d." % (version, self.current_version)
             else:
-                warning = "Warning: The given configuration file has an invalid version number. Cannot check if the config is still up to date."
+                exception_text = "The given configuration file has an invalid version number. Cannot check if the config is still up to date."
         else:
-            warning = "Warning: The given configuration file does not contain any version number. Cannot check if the config is still up to date."
+            exception_text = "The given configuration file does not contain any version number. Cannot check if the config is still up to date."
 
-        if warning is not None:
-            print("\n" + "#" * 150 + "\n" + warning + "\n" + "#" * 150 + "\n")
+        if exception_text is not None:
+            raise Exception(exception_text)
 
 
     def _parse_placeholders_in_block(self, element, path=[]):
