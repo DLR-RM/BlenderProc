@@ -39,7 +39,7 @@ class ObjectManipulator(Module):
             params_conf = Config(set_params)
             sel_conf = Config(sel_objs)
             # invoke a Getter, get a list of objects to manipulate
-            objects = sel_conf.get_list("selector", [])
+            objects = sel_conf.get_list("selector")
 
             for key in params_conf.data.keys():
                 # get raw value from the set parameters config object
