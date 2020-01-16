@@ -25,20 +25,13 @@
       }
     },
     {
-      "name": "lighting.LightSampler",
+      "name": "lighting.LightLoader",
       "config": {
         "lights": [
           {
-            "location": {
-              "name": "sampler.Shell",
-              "center": [1, 2, 3],
-              "radius_min": 4,
-              "radius_max": 7,
-              "elevation_min": 15,
-              "elevation_max": 70
-            },
             "type": "POINT",
-            "energy": 500
+            "location": [5, -5, 5],
+            "energy": 1000
           }
         ]
       }
@@ -54,17 +47,39 @@
       }
     },
     {
-      "name": "writer.ObjectStateWriter"
+      "name": "object.ObjectManipulator",
+      "config": {
+        "instances": [
+          {
+            "selector": {
+              "name": "getter.Object",
+              "condition": {
+                "name": 'Suzanne'
+              }
+            },
+            "location": {
+              "name":"sampler.Uniform3d",
+              "max":[1, 2, 3],
+              "min":[0, 1, 2]
+            },
+            "rotation_euler": [1, 1, 0],
+            "physics": 'active'
+          }
+        ]
+      }
     },
     {
-      "name": "writer.LightStateWriter"
-    },
-    {
-      "name": "writer.CameraStateWriter"
+      "name": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
     },
     {
       "name": "renderer.RgbRenderer",
       "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "output_is_temp": False
       }
     },
     {

@@ -252,7 +252,12 @@ class Utility:
         if isinstance(config, dict):
             config = Config(config)
 
-        return Utility.build_provider(config.get_string("name"), config.get_raw_dict("parameters"))
+        parameters = {}
+        for key in config.data.keys():
+            if key != 'name':
+                parameters[key] = config.data[key]
+
+        return Utility.build_provider(config.get_string("name"), parameters)
 
     @staticmethod
     def generate_equidistant_values(num, space_size_per_dimension):

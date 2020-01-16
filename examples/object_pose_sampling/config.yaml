@@ -52,17 +52,13 @@
         "max_iterations": 1000,
         "pos_sampler":{
           "name":"sampler.Uniform3d",
-          "parameters":{
-            "max":[5,5,5],
-            "min":[-5,-5,-5]
-          }
+          "max":[5,5,5],
+          "min":[-5,-5,-5]
         },
         "rot_sampler":{
           "name":"sampler.Uniform3d",
-          "parameters":{
-            "max":[0,0,0],
-            "min":[6.28,6.28,6.28]
-          }
+          "max":[0,0,0],
+          "min":[6.28,6.28,6.28]
         }
       }
     },
