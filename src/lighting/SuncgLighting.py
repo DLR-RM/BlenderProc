@@ -152,6 +152,8 @@ class SuncgLighting(Module):
 
                     Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
+                    # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
+                    # In this way the mix shader will use the diffuse shader for rendering the color of the ceiling itself, while using the emission shader for lighting the scene.
                     lightPath_node = nodes.new(type='ShaderNodeLightPath')
                     links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
