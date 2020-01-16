@@ -25,6 +25,7 @@ class ConfigParser:
         self.args = None
         self.placeholders = None
         self.silent = silent
+        self.current_version = 1
 
     def parse(self, config_path, args, show_help=False, skip_arg_placeholders=False):
         """ Reads the yaml file at the given path and returns it as a cleaned dict.
@@ -44,6 +45,9 @@ class ConfigParser:
             self.config = yaml.load(f)
             self.args = args
 
+            # Check if the config is up to date
+            self._check_version()
+
             # Collect all placeholders
             self.placeholders = self._parse_placeholders_in_block(self.config)
 
@@ -58,6 +62,26 @@ class ConfigParser:
 
             self.log("Successfully finished parsing ", is_info=True)
         return self.config
+
+    def _check_version(self):
+        """ Checks if the configuration file contain a valid version number and if its up to date. """
+        warning = None
+        # Check if there is any version number in the config
+        if "version" in self.config:
+            version = self.config["version"]
+            # Check if the version number is valid
+            if isinstance(version, int):
+                # Check if the version number is up to date
+                if version < self.current_version:
+                    warning = "Warning: The given configuration file might not be up to date. The version of the config is %d while the currently most recent version is %d." % (version, self.current_version)
+            else:
+                warning = "Warning: The given configuration file has an invalid version number. Cannot check if the config is still up to date."
+        else:
+            warning = "Warning: The given configuration file does not contain any version number. Cannot check if the config is still up to date."
+
+        if warning is not None:
+            print("\n" + "#" * 150 + "\n" + warning + "\n" + "#" * 150 + "\n")
+
 
     def _parse_placeholders_in_block(self, element, path=[]):
         """ Collects all placeholders in the given block.
