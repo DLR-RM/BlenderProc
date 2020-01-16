@@ -1,5 +1,6 @@
 import bpy
 import mathutils
+import re
 
 
 class ObjectGetter:
@@ -26,7 +27,7 @@ class ObjectGetter:
         """
         cond = config.get_raw_dict('condition')
         if len(cond) > 1:
-            raise Exception('ObjectGetter supports only one condition!')
+            raise Exception('ObjectGetter supports only one condition (for now)!')
 
         objects = []
         # through every key-value/name-value pair in condition
@@ -37,9 +38,12 @@ class ObjectGetter:
                 if key in obj:
                     # check if the type of the value of such custom property matches desired
                     if isinstance(obj[key], type(value)):
+                        # if is a string and if search is not returning None which means that we have a match
+                        if isinstance(obj[key], str) and not isinstance(re.search(value, obj[key]), (bytes, type(None))):
+                            objects.append(obj)
                         # check for equality
-                        if obj[key] == value:
-                            objects += [obj]
+                        elif obj[key] == value:
+                            objects.append(obj)
                     # raise an exception if not
                     else:
                         raise Exception("Types are not matching: %s and %s !"
@@ -61,8 +65,11 @@ class ObjectGetter:
                         else:
                             raise Exception("Types are not matching: %s and %s !"
                                             % (type(getattr(obj, key)), type(value)))
+                    if isinstance(getattr(obj, key), str) and not isinstance(re.search(value, getattr(obj, key)), (bytes, type(None))):
+                        objects.append(obj)
+                        # check for equality
                     # finally check for equality
-                    if getattr(obj, key) == new_value:
-                        objects += [obj]
+                    elif getattr(obj, key) == new_value:
+                        objects.append(obj)
 
             return objects
