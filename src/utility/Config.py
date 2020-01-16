@@ -1,6 +1,7 @@
 import mathutils
 import src.utility.Utility as Utility
 
+from src.main.Provider import Provider
 
 class Config:
 
@@ -50,9 +51,13 @@ class Config:
         else:
             if name in block:
 
-                # Check for whether a provider should be invoked to get the parameter value
+                # Check for whether a provider should be invoked
                 if allow_invoke_provider and type(block[name]) is dict:
-                    return Utility.Utility.invoke_provider_based_on_config(block[name])
+                    block[name] = Utility.Utility.build_provider_based_on_config(block[name])
+
+                # If the parameter is set to a provider object, call the provider to return the parameter value
+                if isinstance(block[name], Provider):
+                    return block[name].run()
                 else:
                     return block[name]
             else:

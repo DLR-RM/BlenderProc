@@ -30,7 +30,7 @@
         "lights": [
           {
             "location": {
-              "name": "ShellSampler",
+              "name": "sampler.Shell",
               "parameters": {
                 "center": [1, 2, 3],
                 "radius_min": 4,

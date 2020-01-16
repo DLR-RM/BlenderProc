@@ -1,8 +1,9 @@
 import numpy as np
 import mathutils
 
+from src.main.Provider import Provider
 
-class DiskSampler:
+class Disk(Provider):
     """ Samples a point from the 2d circle or from the disk in 3d space.
 
     **Configuration**:
@@ -16,20 +17,22 @@ class DiskSampler:
        "up_vector", "An up vector which specifies a local coordinate system of the disk."
     """
 
-    @staticmethod
-    def sample(config):
+    def __init__(self, config):
+        Provider.__init__(self, config)
+
+    def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
         # Center of the disk.
-        center = config.get_vector3d("center")
+        center = self.config.get_vector3d("center")
         # Radius of the disk.
-        radius = config.get_float("radius")
+        radius = self.config.get_float("radius")
         # Mode of operation.
-        mode = config.get_string("mode", "DISK")
+        mode = self.config.get_string("mode", "DISK")
         # Up vector
-        up_vector = config.get_vector3d("up_vector", [0, 0, 1])
+        up_vector = self.config.get_vector3d("up_vector", [0, 0, 1])
         # Sample directions
         direction = np.random.normal(size=2)
 
