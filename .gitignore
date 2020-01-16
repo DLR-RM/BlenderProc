@@ -2,6 +2,7 @@ __pycache__
 */__pycache__
 blender
 .idea/
+.vscode/
 output/
 debug/
 .vscode

@@ -29,7 +29,7 @@ class CameraStateWriter(StateWriter):
         cam = cam_ob.data
         cam_pose = (cam, cam_ob)
 
-        self.write_attributes_to_file(self.object_writer, [cam_pose], "campose_", "campose", ["id", "location", "rotation_euler", "fov_x", "fov_y"])
+        self.write_attributes_to_file(self.object_writer, [cam_pose], "campose_", "campose", ["id", "location", "rotation_euler", "fov_x", "fov_y", "shift_x", "shift_y"])
 
     def _get_attribute(self, cam_pose, attribute_name):
         """ Returns the value of the requested attribute for the given object.
@@ -44,6 +44,10 @@ class CameraStateWriter(StateWriter):
             return cam.angle_x
         elif attribute_name == "fov_y":
             return cam.angle_y
+        elif attribute_name == "shift_x":
+            return cam.shift_x
+        elif attribute_name == "shift_y":
+            return cam.shift_y
         elif attribute_name == "half_fov_x":
             return cam.angle_x * 0.5
         elif attribute_name == "half_fov_y":

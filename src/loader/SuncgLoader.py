@@ -1,15 +1,16 @@
-from src.main.Module import Module
-import bpy
-import json
-import os
-from mathutils import Matrix, Vector, Euler
-import math
 import csv
+import json
+import math
+import os
 
+import bpy
+from mathutils import Matrix
+
+from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 
 
-class SuncgLoader(Module):
+class SuncgLoader(Loader):
     """ Loads a house.json file into blender.
 
      - Loads all objects files specified in the house.json file.
@@ -26,7 +27,7 @@ class SuncgLoader(Module):
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        Loader.__init__(self, config)
         self.house_path = self.config.get_string("path")
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
 
@@ -218,14 +219,17 @@ class SuncgLoader(Module):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
-            bpy.ops.import_scene.obj(filepath=path)
+            loaded_objects = Utility.import_objects(filepath=path)
 
             # Go through all imported objects
-            for object in bpy.context.selected_objects:
+            for object in loaded_objects:
                 for key in metadata.keys():
                     object[key] = metadata[key]
 
                 self._transform_and_colorize_object(object, material_adjustments, transform, parent)
+
+            # Set the physics property of all imported objects
+            self._set_physics_property(bpy.context.selected_objects)
 
     def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None):
         """ Applies the given transformation to the object and refactors its materials.
@@ -275,7 +279,7 @@ class SuncgLoader(Module):
 
             # The principled BSDF node contains all imported material properties
             principled_node = nodes.get("Principled BSDF")
-            diffuse_color = principled_node.inputs[0].default_value
+            diffuse_color = principled_node.inputs['Base Color'].default_value
             image_node = nodes.get("Image Texture")
             if image_node is not None:
                 texture = image_node.image
@@ -295,13 +299,13 @@ class SuncgLoader(Module):
                 image_node = nodes.new(type='ShaderNodeTexImage')
 
             # Link them
-            links.new(diffuse_node.outputs[0], output_node.inputs[0])
+            links.new(diffuse_node.outputs['BSDF'], output_node.inputs['Surface'])
             if texture is not None or force_texture:
-                links.new(image_node.outputs[0], diffuse_node.inputs[0])
-                links.new(uv_node.outputs[2], image_node.inputs[0])
+                links.new(image_node.outputs['Color'], diffuse_node.inputs['Color'])
+                links.new(uv_node.outputs['UV'], image_node.inputs['Vector'])
 
             # Set values from imported material properties
-            diffuse_node.inputs[0].default_value = diffuse_color
+            diffuse_node.inputs['Color'].default_value = diffuse_color
             if texture is not None:
                 image_node.image = texture
 
@@ -318,7 +322,7 @@ class SuncgLoader(Module):
         image_node = nodes.get("Image Texture")
 
         if "diffuse" in adjustments:
-            diffuse_node.inputs[0].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
+            diffuse_node.inputs['Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
             image_path = os.path.join(self.suncg_dir, "texture", adjustments["texture"])
@@ -356,7 +360,9 @@ class SuncgLoader(Module):
         
         self.labels = sorted(list(self.labels))
         bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
-        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}      
+        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
+        # Use the void category as label for the world background
+        bpy.context.scene.world["category_id"] = self.label_index_map["void"]
 
     def _get_label_id(self, obj_id):
         """ Returns the label id for an object with the given model_id.

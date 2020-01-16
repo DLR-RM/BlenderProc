@@ -5,7 +5,7 @@ import bpy
 import mathutils
 
 from src.camera.CameraSampler import CameraSampler
-from src.utility.sampler.Uniform3dSampler import Uniform3dSampler
+from src.provider.sampler.Uniform3d import Uniform3d
 from src.utility.Config import Config
 
 
@@ -94,7 +94,9 @@ class SuncgCameraSampler(CameraSampler):
                     # Set the camera pose at the next frame
                     self.cam_pose_collection.add_item({
                         "location": list(position),
-                        "rotation": list(orientation),
+                        "rotation": {
+                            "value": list(orientation)
+                        },
                         "room_id": room_id
                     })
 
@@ -148,10 +150,10 @@ class SuncgCameraSampler(CameraSampler):
                 min[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][0]
                 max[i] = room_obj["bbox"]["min"][i] + self.position_ranges[i][1]
 
-        return Uniform3dSampler.sample(Config({
+        return Uniform3d(Config({
             "min": list(min),
             "max": list(max)
-        }))
+        })).run()
 
 
     def _calc_number_of_cams_in_room(self, room_obj):

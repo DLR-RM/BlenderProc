@@ -48,11 +48,7 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
-<<<<<<< HEAD
-    pipeline = Pipeline(config_path, argv, working_dir)
-=======
     pipeline = Pipeline(config_path, [], working_dir)
->>>>>>> master
     pipeline.run()
 finally:
     # Revert back to previous view

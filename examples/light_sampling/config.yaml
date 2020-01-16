@@ -1,0 +1,77 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 1,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:2>"
+    }
+  },
+  "modules": [
+    {
+      "name": "main.Initializer",
+      "config": {}
+    },
+    {
+      "name": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "name": "lighting.LightSampler",
+      "config": {
+        "lights": [
+          {
+            "location": {
+              "name": "sampler.Shell",
+              "center": [1, 2, 3],
+              "radius_min": 4,
+              "radius_max": 7,
+              "elevation_min": 15,
+              "elevation_max": 70
+            },
+            "type": "POINT",
+            "energy": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation/value",
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    },
+    {
+      "name": "writer.ObjectStateWriter"
+    },
+    {
+      "name": "writer.LightStateWriter"
+    },
+    {
+      "name": "writer.CameraStateWriter"
+    },
+    {
+      "name": "renderer.RgbRenderer",
+      "config": {
+      }
+    },
+    {
+      "name": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}
