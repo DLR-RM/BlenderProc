@@ -10,6 +10,8 @@ class Object(Provider):
     property can be a string/int/bool/float, while only attribute_value for valid attributes of objects can be a list
     (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by 'list' type).
 
+    NOTE: any given attribute_value of the type string will be treated as a REGULAR EXPRESSION.
+
     **Configuration**:
 
     .. csv-table::
@@ -24,7 +26,6 @@ class Object(Provider):
 
     def run(self):
         """
-        :param config: Config objects with user-defined properties.
         :return: List of objects that met the conditional requirement.
         """
         cond = self.config.get_raw_dict('condition')
@@ -41,7 +42,7 @@ class Object(Provider):
                     # check if the type of the value of such custom property matches desired
                     if isinstance(obj[key], type(value)):
                         # if is a string and if search is not returning None which means that we have a match
-                        if isinstance(obj[key], str) and not isinstance(re.search(value, obj[key]), (bytes, type(None))):
+                        if isinstance(obj[key], str) and re.search(value, obj[key]) is not None:
                             objects.append(obj)
                         # check for equality
                         elif obj[key] == value:
@@ -67,7 +68,7 @@ class Object(Provider):
                         else:
                             raise Exception("Types are not matching: %s and %s !"
                                             % (type(getattr(obj, key)), type(value)))
-                    if isinstance(getattr(obj, key), str) and not isinstance(re.search(value, getattr(obj, key)), (bytes, type(None))):
+                    if isinstance(getattr(obj, key), str) and re.search(value, getattr(obj, key)) is not None:
                         objects.append(obj)
                         # check for equality
                     # finally check for equality
