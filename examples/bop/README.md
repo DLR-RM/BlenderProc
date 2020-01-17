@@ -28,9 +28,7 @@ python scripts/visHdf5Files.py /path/to/output_dir/0.hdf5
 * Renders instance segmentation masks
 * Writes labels and images to compressed hdf5 files in output_dir
 
-<img src=icbin.png width="240" height="180"> 
-<img src=tless.png width="240" height="180"> 
-<img src=hb.png width="240" height="180"> 
+<img src=icbin.png width="240" height="180"> <img src=tless.png width="240" height="180"> <img src=hb.png width="240" height="180"> 
 
 
 ## Sampling BOP objects, cameras and lights (```config_sample.yaml```)
@@ -65,9 +63,7 @@ python scripts/vis_coco_annotation.py /path/to/output_dir
     * Renders instance segmentation masks
     * Writes labels and images to compressed hdf5 files in output_dir
 
-<img src=tless_sample.png width="240" height="180">
-<img src=hb_sample.png width="240" height="180">
-<img src=hb_sample_inst.png width="240" height="180">
+<img src=tless_sample.png width="240" height="180"> <img src=hb_sample.png width="240" height="180"> <img src=hb_sample_inst.png width="240" height="180">
 
 ## Explanation of the config file
 
@@ -90,7 +86,7 @@ If `scene_id` is specified, BopLoader recreates the specified scene of the BOP d
     },
 ```
 
-If `scene_id` is not specified, you just load a number of `obj_ids` from the BOP dataset specified by `bop_dataset_path`. 
+If `scene_id` is not specified (default = -1), `loader.BopLoader` loads all or the specified `obj_ids` from the BOP dataset given by `bop_dataset_path`. 
 ```yaml
     {
       "name": "loader.BopLoader",
