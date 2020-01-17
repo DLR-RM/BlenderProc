@@ -9,7 +9,7 @@ In this example we demonstrate how to select objects in the scene using `ObjectG
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/object_manipulation/config.yaml examples/object_manipulation/camera_positions examples/object_manipulation/scene.obj examples/object_manipulation/output
+python run.py examples/object_manipulation/config.yaml examples/object_manipulation/scene.obj examples/object_manipulation/output
 ```
 
 Explanation of the arguments:

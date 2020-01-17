@@ -190,18 +190,18 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 * The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose.
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before.
 
-The file `1.h5py` would therefore look like the following:
+The file `0.h5py` would therefore look like the following:
 
 ```yaml
 {
-  "normals": #<numpy array with pixel values read in from normal_0001.exr>,
-  "colors": #<numpy array with pixel values read in from rgb_0001.png>,
-  "campose": #<numpy array with cam pose read in from campose_0001.npy>
+  "normals": #<numpy array with pixel values read in from normal_0000.exr>,
+  "colors": #<numpy array with pixel values read in from rgb_0000.png>,
+  "campose": #<numpy array with cam pose read in from campose_0000.npy>
 }
 ``` 
 
 * At the end of the hdf5 writer all temporary files are deleted.
-*If you want to keep them, put `"output_is_temp": False` into the config of the corresponding module or in the `Global` section.
+* If you want to keep them, put `"output_is_temp": False` into the config of the corresponding module or in the `Global` section.
 
 => Creates the files `0.h5py` and `1.h5py`
 

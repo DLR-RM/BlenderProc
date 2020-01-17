@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <obj_file> <output_dir>
 {
   "version": 1,
   "setup": {
@@ -11,8 +11,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:0>",
-      "output_is_temp": false
+      "output_dir": "<args:1>"
     }
   },
   "modules": [
@@ -23,7 +22,7 @@
     {
       "name": "loader.ObjectLoader",
       "config": {
-        "path": "examples/camera_sampling/scene.obj"
+        "path": "<args:0>"
       }
     },
     {
