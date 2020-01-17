@@ -35,7 +35,7 @@ class BopLoader(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
-
+        print(self.config.has_param("sys_paths"))
         for sys_path in self.config.get_list("sys_paths"):
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
