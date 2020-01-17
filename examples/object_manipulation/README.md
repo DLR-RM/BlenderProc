@@ -24,6 +24,9 @@ Explanation of the arguments:
 * Sets two camera positions: `camera.CameraLoader` module.
 * Selects objects based on the condition: `object.ObjectManipulator` module.
 * Change some parameters of the selected object: `object.ObjectManipulator` module.
+* Renders normals: `renderer.NormalRenderer` module.
+* Renders rgb: `renderer.RgbRenderer` module.
+* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
 
