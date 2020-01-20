@@ -40,19 +40,15 @@ Explanation of the arguments:
 {
   "name": "object.ObjectPoseSampler",
   "config":{
-    "pos_sampler":{
-      "name":"Uniform3dSampler",
-      "parameters":{
-        "max":[5, 5, 8],
-        "min":[-5, -5, 12]
-      }
+    "pos_sampler": {
+      "name":"sampler.Uniform3d",
+      "max":[5, 5, 8],
+      "min":[-5, -5, 12]
     },
-    "rot_sampler":{
-      "name":"Uniform3dSampler",
-      "parameters":{
-        "max":[0, 0, 0],
-        "min":[6.28, 6.28, 6.28]
-      }
+    "rot_sampler": {
+      "name":"sampler.Uniform3d",
+      "max":[0, 0, 0],
+      "min":[6.28, 6.28, 6.28]
     }
   }
 },
