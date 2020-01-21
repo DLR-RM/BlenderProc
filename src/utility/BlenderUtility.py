@@ -2,7 +2,8 @@ import bpy
 import bmesh
 from mathutils import Vector
 
-    
+import numpy as np
+
 
 def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
     """
@@ -75,17 +76,26 @@ def check_bb_intersection(obj1,obj2):
     returns a boolean
     """
     b1w = get_bounds(obj1)
+    def min_and_max_point(bb):
+        """
+        Find the minimum and maximum point of the bounding box
+        :param bb: bounding box
+        :return: min, max
+        """
+        values = np.array(bb)
+        return np.min(values, axis=0), np.max(values, axis=0)
     # get min and max point of the axis-aligned bounding box
-    min_b1, max_b1 = b1w[0], b1w[6]
+    min_b1, max_b1 = min_and_max_point(b1w)
     b2w = get_bounds(obj2)
     # get min and max point of the axis-aligned bounding box
-    min_b2, max_b2 = b2w[0], b2w[6]
+    min_b2, max_b2 = min_and_max_point(b2w)
     collide = True
     for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
         # inspired by this:
         # https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
         # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
         def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
+            # returns true if the min and max values are overlapping
             return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
         collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
     return collide
