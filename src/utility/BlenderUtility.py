@@ -81,13 +81,13 @@ def check_bb_intersection(obj1,obj2):
     # get min and max point of the axis-aligned bounding box
     min_b2, max_b2 = b2w[0], b2w[6]
     collide = True
-    for i in range(3):
+    for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
         # inspired by this:
         # https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
         # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
         def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
             return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
-        collide = collide and is_overlapping_1D(min_b1[i], max_b1[i], min_b2[i], max_b2[i])
+        collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
     return collide
 
 
