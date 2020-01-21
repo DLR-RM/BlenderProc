@@ -68,11 +68,19 @@ class SuncgLighting(Module):
                 nodes = m.material.node_tree.nodes
                 links = m.material.node_tree.links
 
-                output = nodes.get("Material Output")
-                emission = nodes.get("Emission")
-                if emission is None:
-                    diffuse = nodes.get("Diffuse BSDF")
-                    if diffuse is not None:
+                output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
+                if output and len(output) == 1:
+                    output = output[0]
+                else:
+                    raise Exception("This material: {} has not one material output!".format(m.name))
+                emission = Utility.get_nodes_with_type(nodes, "Emission")
+                if not emission:
+                    diffuse = Utility.get_nodes_with_type(nodes, "BSDFDiffuse")
+                    if diffuse:
+                        if len(diffuse) == 1:
+                            diffuse = diffuse[0]
+                        else:
+                            raise Exception("There is more than one Diffuse shader node in material: {}".format(m.name))
                         mix_node = nodes.new(type='ShaderNodeMixShader')
                         Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
@@ -107,14 +115,19 @@ class SuncgLighting(Module):
             links = m.material.node_tree.links
 
             # All parameters imported from the .mtl file are stored inside the principled bsdf node
-            principled_node = nodes.get("Principled BSDF")
+            principled_node = Utility.get_nodes_with_type(nodes, "BSDFPrincipled")
+            if principled_node and len(principled_node) == 1:
+                principled_node = principled_node[0]
+            else:
+                raise Exception("The creation of material: {} failed".format(m.name))
             alpha = principled_node.inputs['Alpha'].default_value
 
             if alpha < 1:
-                emission = nodes.get("Emission")
-                if emission is None:
-                    output = nodes.get("Material Output")
-                    if output is not None:
+                emission = Utility.get_nodes_with_type(nodes, 'Emission')
+                if not emission:
+                    output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
+                    if output and len(output) == 1:
+                        output = output[0]
                         link = next(l for l in links if l.to_socket == output.inputs['Surface'])
                         links.remove(link)
 
@@ -133,6 +146,8 @@ class SuncgLighting(Module):
 
                         emission_node.inputs['Color'].default_value = (1, 1, 1, 1)
                         emission_node.inputs['Strength'].default_value = 10  # strength of the windows
+                    else:
+                        raise Exception("This material: {} has not one material output!".format(m.name))
 
     def _make_ceiling_emissive(self, obj):
         """ Makes the given ceiling object emissive, s.t. there is always a little bit ambient light.
@@ -143,11 +158,19 @@ class SuncgLighting(Module):
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
 
-            output = nodes.get("Material Output")
-            emission = nodes.get("Emission")
-            if emission is None:
-                diffuse = nodes.get("Diffuse BSDF")
-                if diffuse is not None:
+            output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
+            if output and len(output) == 1:
+                output = output[0]
+            else:
+                raise Exception("This material: {} has not one material output!".format(m.name))
+
+            if Utility.get_nodes_with_type(nodes, "Emission"):
+                diffuse = Utility.get_nodes_with_type(nodes, "DiffuseBSDF")
+                if diffuse:
+                    if len(diffuse) == 1:
+                        diffuse = diffuse[0]
+                    else:
+                        raise Exception("This material: {} has more than one Diffuse Shader".format(m.name))
                     mix_node = nodes.new(type='ShaderNodeMixShader')
 
                     Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])

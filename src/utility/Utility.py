@@ -183,6 +183,16 @@ class Utility:
         links.new(source_socket, new_node_dest_socket)
         links.new(new_node_src_socket, dest_socket)
 
+    @staticmethod
+    def get_nodes_with_type(nodes, node_type):
+        """
+        Returns all nodes which are of the given node_type
+        :param nodes: list of nodes of the current material
+        :param node_type: node types
+        :return: list of nodes, which belong to the type
+        """
+        return [node for node in nodes if node_type in node.bl_idname]
+
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.
 

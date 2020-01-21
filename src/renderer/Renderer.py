@@ -218,9 +218,12 @@ class Renderer(Module):
                         nodes = slot.material.node_tree.nodes
                         links = slot.material.node_tree.links
 
-                        material_output = nodes.get("Material Output")
-                        if material_output is None:
-                            raise Exception("This material: {} has no material output!".format(slot.name))
+
+                        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
+                        if output and len(output) == 1:
+                            material_output = output[0]
+                        else:
+                            raise Exception("This material: {} has not one material output!".format(slot.name))
                         # find the node, which is connected to the output
                         node_connected_to_the_output = None
                         for link in links:
