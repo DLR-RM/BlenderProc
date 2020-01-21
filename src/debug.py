@@ -17,11 +17,23 @@ for module in list(sys.modules.keys()):
     if module.startswith("src"):
         del sys.modules[module]
 
-from src.utility.BlenderUtility import check_bb_intersection
+from src.main.Pipeline import Pipeline
 
-cube = bpy.context.scene.objects['Cube']
-sphere = bpy.context.scene.objects['Sphere']
+config_path = "examples/debugging/config.yaml"
 
+# Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
+for window in bpy.context.window_manager.windows:
+    screen = window.screen
 
-print(check_bb_intersection(cube, sphere))
-print(check_bb_intersection(sphere, cube))
+    for area in screen.areas:
+        if area.type == 'VIEW_3D':
+            override = {'window': window, 'screen': screen, 'area': area}
+            bpy.ops.screen.screen_full_area(override)
+            break
+
+try:
+    pipeline = Pipeline(config_path, [], working_dir)
+    pipeline.run()
+finally:
+    # Revert back to previous view
+    bpy.ops.screen.back_to_previous()
