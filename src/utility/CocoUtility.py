@@ -49,7 +49,7 @@ class CocoUtility:
             unique_objects = np.delete(unique_objects,np.where( unique_objects == -1 ))
             for obj in unique_objects:
                 binary_inst_mask = np.array([[1 if c == obj else 0 for c in r] for r in annotation])
-                category_info = {'id': obj, 'is_crowd': None}
+                category_info = {'id': int(obj), 'is_crowd': None}
                 annotation_info = PycocoCreatorTools.create_annotation_info(segmentation_id, image_id, category_info, binary_inst_mask)
                 if annotation_info is not None:
                     coco_output["annotations"].append(annotation_info)

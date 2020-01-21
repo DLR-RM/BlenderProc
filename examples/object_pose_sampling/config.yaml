@@ -73,7 +73,8 @@
       "name": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 50
+        "samples": 50,
+        "output_is_temp": False
       }
     },
     {

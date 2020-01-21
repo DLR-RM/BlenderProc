@@ -10,12 +10,14 @@ This is done via a physics simulation where the spheres are first placed randoml
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/physics_positioning/config.yaml examples/physics_positioning/output
+python run.py examples/physics_positioning/config.yaml examples/physics_positioning/active.obj examples/physics_positioning/passive.obj examples/physics_positioning/output
 ```
 
 Explanation of the arguments:
 * `examples/physics_positioning/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/physics_positioning/output`: path to the output directory.
+* `examples/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.
+* `examples/physics_positioning/passive.obj`: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.
 
 ## Steps
 
@@ -26,14 +28,15 @@ Explanation of the arguments:
 * Runs the physics simulation: `object.PhysicsPositioning` module.
 * Renders rgb and depth: `renderer.RgbRenderer` module.
 
-## Explanation of the config file
+## Config File
 
 ### Load spheres and position them randomly
+
 ```yaml
 {
   "name": "loader.ObjectLoader",
   "config": {
-    "path": "examples/physics_positioning/active.obj",
+    "path": "<args:0>",
     "physics": "active"
   }
 },
@@ -54,9 +57,8 @@ Explanation of the arguments:
 },
 ```
 
-First some spheres are loaded from the file `active.obj` and their physics attribute is set to `active`, so that they will later be influenced by gravity. 
+First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `active`, so that they will later be influenced by gravity. 
 Then the `ObjectPoseSampler` is used to place them randomly above the plane.
- 
  
 ### Load plane
 
@@ -64,12 +66,12 @@ Then the `ObjectPoseSampler` is used to place them randomly above the plane.
 {
   "name": "loader.ObjectLoader",
   "config": {
-    "path": "examples/physics_positioning/passive.obj"
+    "path": "<args: 1>"
   }
 }
 ```
 
-Now the the plane is loaded from the file `passive.obj`. 
+Now the the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`).
 The `physics` attribute will hereby be automatically set to `passive`.
 As we load this object after the `ObjectPoseSampler`, the location of the plane is not randomly sampled.
 
@@ -101,7 +103,7 @@ In this way we can easily sample random positions of the spheres on top of the b
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
+python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
 ```
 
 ## More examples

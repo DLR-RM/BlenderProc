@@ -47,6 +47,7 @@ Next to setting the output directory for all modules, we also set the `pixel_asp
 This is necessary to coincide with the aspect ratio assumed by the `scn2cam` script which generated the camera poses.  
 
 ### SuncgLoader
+
 ```yaml
 {
   "name": "loader.SuncgLoader",
@@ -61,6 +62,7 @@ Therefore all objects specified in the given `house.json` file are imported and 
 The `SuncgLoader` also sets the `category_id` of each object, such that semantic segmentation maps can be rendered in a following step.
 
 ### CameraLoader
+
 ```yaml
 {
   "name": "camera.CameraLoader",
