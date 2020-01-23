@@ -9,7 +9,7 @@ class CocoUtility:
     def generate_coco_annotations(segmentation_map_paths, colormap, dataset_name):
         """Generates coco annotations for images
 
-        :param segmentation_map_paths: list of annotated images, where each pixel is its annotation
+        :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
         :param dataset_name: name of the dataset, a feature required by coco annotation format
         :return: dict containing coco annotations
