@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sampling/camera_positions examples/object_pose_sampling/scene.obj examples/object_pose_sampling/output
 ``` 
 
-Explanation of the arguments:
 * `examples/object_pose_sampling/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/object_pose_sampling/camera_positions`: text file with parameters of camera positions.
 * `examples/object_poses_sampling/scene.obj`: path to the object file with the basic scene.

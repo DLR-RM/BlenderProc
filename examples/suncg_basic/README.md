@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/suncg_basic/config.yaml <path to cam_pose file> <path to house.json> examples/suncg_basic/output
 ```
 
-Explanation of the arguments:
 * `examples/suncg_basic/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.

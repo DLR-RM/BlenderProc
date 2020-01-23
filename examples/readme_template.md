@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py ...
 ``` 
 
-Explanation of the arguments (since they are sometimes lengthy and their number may vary from example to example): 
 * `examples/basic/config.yaml`: explanation
 * `examples/basic/camera_positions`: explanation
 * ...

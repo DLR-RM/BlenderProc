@@ -1,5 +1,7 @@
 # COCO annotations
 
+![](rendering.png)
+
 The focus of this example is to introduce user to `writer.CocoAnnotationsWriter` module.
 
 ## Usage
@@ -10,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/coco_annotations/config.yaml examples/coco_annotations/camera_positions examples/coco_annotations/scene.obj examples/coco_annotations/output
 ```
 
-Explanation of the arguments:
 * `examples/coco_annotations/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/coco_annotations/camera_positions`: text file with parameters of camera positions.
 * `examples/oco_annotations/scene.obj`: path to the object file with the basic scene.

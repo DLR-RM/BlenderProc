@@ -13,7 +13,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/physics_positioning/config.yaml examples/physics_positioning/active.obj examples/physics_positioning/passive.obj examples/physics_positioning/output
 ```
 
-Explanation of the arguments:
 * `examples/physics_positioning/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/physics_positioning/output`: path to the output directory.
 * `examples/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.

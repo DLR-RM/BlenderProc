@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/object_manipulation/config.yaml examples/object_manipulation/scene.obj examples/object_manipulation/output
 ```
 
-Explanation of the arguments:
 * `examples/object_manipulation/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/object_manipulation/scene.obj`: path to the object file with the basic scene.
 * `examples/object_manipulation/output`: path to the output directory.

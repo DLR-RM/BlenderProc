@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scene.obj examples/camera_sampling/output
 ```
 
-Explanation of the arguments:
 * `examples/camera_sampling/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/camera_sampling/scene.obj`: path to the object file with the basic scene.
 * `examples/camera_sampling/output`: path to the output directory.

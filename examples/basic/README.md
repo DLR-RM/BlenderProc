@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
 ```
 
-Explanation of the arguments:
 * `examples/basic/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.

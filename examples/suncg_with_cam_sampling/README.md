@@ -12,7 +12,6 @@ Execute in the Blender-Pipeline main directory:
 python run.py examples/suncg_with_cam_sampling/config.yaml <path to house.json> examples/suncg_with_cam_sampling/output
 ```
 
-Explanation of the arguments:
 * `examples/suncg_with_cam_sampling/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
 * `examples/suncg_with_cam_sampling/output`: path to the output directory.
