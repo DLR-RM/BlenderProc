@@ -40,7 +40,7 @@ class CocoAnnotationsWriter(Module):
         # Find path of name class mapping csv file
         segcolormap_output = self._find_registered_output_by_key(self.segcolormap_output_key)
         if segcolormap_output is None:
-            raise Exception("There is no output registered with key " + self.segcolormap_output_key + ". Are you sure you ran the SegMapRenderer module before?")
+            raise Exception("There is no output registered with key " + self.segcolormap_output_key + ". Are you sure you ran the SegMapRenderer module with 'map_by' set to 'instance' before?")
 
         # read colormappings, which include object name/class to integer mapping
         color_map = []
