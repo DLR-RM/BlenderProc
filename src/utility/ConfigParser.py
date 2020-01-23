@@ -42,7 +42,7 @@ class ConfigParser:
             self.log("Parsing config '" + config_path + "'", is_info=True)
         with open(config_path, "r") as f:
             # Read in dict
-            self.config = yaml.load(f)
+            self.config = yaml.safe_load(f)
             self.args = args
 
             # Check if the config is up to date
