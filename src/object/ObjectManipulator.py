@@ -17,6 +17,7 @@ class ObjectManipulator(Module):
     "selector", "ObjectGetter specific dict."
     "selector/name", "Name of the getter to use. Type: string."
     "selector/condition", "Condition to use for selecting. Type: dict."
+    "mode", "Mode of operation. Optional. Available values: "each" (if samplers are called, new sampled value is set to each selected object) and "all" (if samplers are called, value is sampled once and set to all selected objects)."
     """
 
     def __init__(self, config):
@@ -41,16 +42,26 @@ class ObjectManipulator(Module):
             # invoke a Getter, get a list of objects to manipulate
             objects = sel_conf.get_list("selector")
 
+            op_mode = self.config.get_string("mode", "each")
+
             for key in params_conf.data.keys():
-                # get raw value from the set parameters config object
-                result = params_conf.get_raw_value(key)
+                # get raw value from the set parameters if it is to be sampled once for all selected objects
+                if op_mode == "all":
+                    result = params_conf.get_raw_value(key)
 
                 for obj in objects:
-                    # if an attribute with such name exists for this object
-                    if hasattr(obj, key):
-                        # set the value
-                        setattr(obj, key, result)
-                    # if not, then treat it as a custom property. Values will be overwritten for existing custom
-                    # property, but if the name is new then new custom property will be created
-                    else:
-                        obj[key] = result
+                    # if it is a mesh
+                    if obj.type == "MESH":
+
+                        if op_mode == "each":
+                            # get raw value from the set parameters if it is to be sampled anew for each selected object
+                            result = params_conf.get_raw_value(key)
+
+                        # if an attribute with such name exists for this object
+                        if hasattr(obj, key):
+                            # set the value
+                            setattr(obj, key, result)
+                        # if not, then treat it as a custom property. Values will be overwritten for existing custom
+                        # property, but if the name is new then new custom property will be created
+                        else:
+                            obj[key] = result
