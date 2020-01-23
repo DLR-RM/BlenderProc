@@ -23,7 +23,7 @@ class NormalRenderer(Renderer):
         nodes = new_mat.node_tree.nodes
 
         # clean material from Principled BSDF nodes
-        for node in Utility.get_nodes_with_type(nodes, "BSDFPrincipled"):
+        for node in Utility.get_nodes_with_type(nodes, "BsdfPrincipled"):
             nodes.remove(node)
 
         links = new_mat.node_tree.links

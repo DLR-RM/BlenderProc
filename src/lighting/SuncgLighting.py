@@ -115,7 +115,7 @@ class SuncgLighting(Module):
             links = m.material.node_tree.links
 
             # All parameters imported from the .mtl file are stored inside the principled bsdf node
-            principled_node = Utility.get_nodes_with_type(nodes, "BSDFPrincipled")
+            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
             if principled_node and len(principled_node) == 1:
                 principled_node = principled_node[0]
             else:

@@ -275,26 +275,26 @@ class SuncgLoader(Loader):
         nodes = mat.node_tree.nodes
 
         # Make sure we have not changed this material already (materials can be shared between objects)
-        if not Utility.get_nodes_with_type(nodes, "BSDFDiffuse"):
+        if not Utility.get_nodes_with_type(nodes, "BsdfDiffuse"):
 
             # The principled BSDF node contains all imported material properties
-            principled_node = Utility.get_nodes_with_type(nodes, "BSDFPrincipled")
-            if principled_node and len(principled_node) == 1:
+            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+            if len(principled_node) == 1:
                 principled_node = principled_node[0]
             else:
                 raise Exception("This material has not one principled shader node, mat: {}".format(mat.name))
             diffuse_color = principled_node.inputs['Base Color'].default_value
             image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
-            if image_node and len(image_node) == 1:
+            if len(image_node) == 1:
                 image_node = image_node[0]
-            else:
+            elif len(image_node) > 1:
                 raise Exception("There is more than one texture node in this material: {}".format(mat.name))
 
             texture = image_node.image if image_node else None
 
             # Remove all nodes except the principled bsdf node (useful to lookup imported material properties in other modules)
             for node in nodes:
-                if node.name != "Principled BSDF":
+                if "BsdfPrincipled" not in node.bl_idname:
                     nodes.remove(node)
 
             # Build output, diffuse and texture nodes
@@ -326,8 +326,8 @@ class SuncgLoader(Loader):
         nodes = mat.node_tree.nodes
 
         if "diffuse" in adjustments:
-            diffuse_node = Utility.get_nodes_with_type(nodes, "Diffuse BSDF")
-            if diffuse_node and len(diffuse_node) == 1:
+            diffuse_node = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
+            if len(diffuse_node) == 1:
                 diffuse_node = diffuse_node[0]
             else:
                 raise Exception("There is not one diffuse node in this material: {}".format(mat.name))

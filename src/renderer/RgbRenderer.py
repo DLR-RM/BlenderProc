@@ -26,7 +26,7 @@ class RgbRenderer(Renderer):
         new_mat.use_nodes = True
         nodes = new_mat.node_tree.nodes
 
-        principled_bsdf = Utility.get_nodes_with_type(nodes, "BSDFPrincipled")
+        principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
         if principled_bsdf and len(principled_bsdf) == 1:
             principled_bsdf = principled_bsdf[0]
         else:
