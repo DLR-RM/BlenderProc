@@ -67,7 +67,7 @@
             "selector": {
               "name": "getter.Object",
               "condition": {
-                "name": 'Suzanne'
+                "name": '^Suzanne$'
               }
             },
             "location": {
