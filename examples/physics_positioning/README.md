@@ -57,7 +57,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
     "selector": {
       "name": "getter.Object",
       "condition": {
-        "physics": 'active'
+        "physics": '^active$'
       }
     },
     "pos_sampler":{
@@ -74,7 +74,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
 },
 ```
  
-The `ObjectPoseSampler` is used to place `active`objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `active` physics property.
+The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `active` (`^active$` as a regex) physics property.
 Pose sampling can be done by calling any two appropriate Providers (Samplers). In our case we called `sampler.Uniform3d` twice: once for `pos_sampler` and once for `rot_sampler`.
 
 ### Run simulation

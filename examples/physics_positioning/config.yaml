@@ -38,7 +38,7 @@
       "selector": {
         "name": "getter.Object",
         "condition": {
-          "physics": 'active'
+          "physics": '^active$'
         }
         },
         "pos_sampler":{
