@@ -139,7 +139,7 @@ class SegMapRenderer(Renderer):
                 self.add_alpha_channel_to_textures(blurry_edges=False)
 
             # Determine path for temporary and for final output
-            temporary_segmentation_file_path = os.path.join(self._determine_output_dir(), "seg_")
+            temporary_segmentation_file_path = os.path.join(self._temp_dir, "seg_")
             final_segmentation_file_path = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", "segmap_"))
 
             # Render the temporary output
