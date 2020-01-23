@@ -2,61 +2,62 @@
 
 ![](rendering.png)
 
+This example places some spheres randomly across a bumpy plane without any intersections between objects.
+This is done via a physics simulation where the spheres are first placed randomly above the plane and then are influenced by gravity such that they fall down upon the plane until they find a new resting positon.
+
 ## Usage
 
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/physics_positioning/config.yaml examples/physics_positioning/output
+python run.py examples/physics_positioning/config.yaml examples/physics_positioning/active.obj examples/physics_positioning/passive.obj examples/physics_positioning/output
 ```
 
-This example places some spheres randomly across a bumpy plane without any intersections between objects.
-This is done via a physics simulation where the spheres are first placed randomly above the plane and then are influenced by gravity such that they fall down upon the plane until they find a new resting positon.
+* `examples/physics_positioning/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/physics_positioning/output`: path to the output directory.
+* `examples/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.
+* `examples/physics_positioning/passive.obj`: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.
 
 ## Steps
 
-* Loads `active.obj` (6 spheres) with `"physics" = ACTIVE`
-* Randomly places them
-* Loads `passive.obj` (one bumpy plane) with `"physics" = PASSIVE`
-* Adds a camera and a light
-* Runs the physics simulation
-* Renders rgb
+* Loads `active.obj` (6 spheres) with `"physics" = ACTIVE`: `loader.ObjectLoader` module.
+* Randomly places them: `object.ObjectPoseSampler` module.
+* Loads `passive.obj` (one bumpy plane) with `"physics" = PASSIVE`: `loader.ObjectLoader` module.
+* Adds a camera and a light: `camera.CameraLoader` and `lighting.LightLoader` module.
+* Runs the physics simulation: `object.PhysicsPositioning` module.
+* Renders rgb and depth: `renderer.RgbRenderer` module.
 
-## Explanation of the config file
+## Config File
 
 ### Load spheres and position them randomly
+
 ```yaml
 {
   "name": "loader.ObjectLoader",
   "config": {
-    "path": "examples/physics_positioning/active.obj",
+    "path": "<args:0>",
     "physics": "active"
   }
 },
 {
   "name": "object.ObjectPoseSampler",
   "config":{
-    "pos_sampler":{
-      "name":"Uniform3dSampler",
-      "parameters":{
-        "max":[5, 5, 8],
-        "min":[-5, -5, 12]
-      }
+    "pos_sampler": {
+      "name":"sampler.Uniform3d",
+      "max":[5, 5, 8],
+      "min":[-5, -5, 12]
     },
-    "rot_sampler":{
-      "name":"Uniform3dSampler",
-      "parameters":{
-        "max":[0, 0, 0],
-        "min":[6.28, 6.28, 6.28]
-      }
+    "rot_sampler": {
+      "name":"sampler.Uniform3d",
+      "max":[0, 0, 0],
+      "min":[6.28, 6.28, 6.28]
     }
   }
 },
 ```
 
-* Load spheres from obj file and set physics to `active`, so that they will later be influenced by gravity
-* Uses the ObjectPoseSampler to place them randomly above the plane
- 
+First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `active`, so that they will later be influenced by gravity. 
+Then the `ObjectPoseSampler` is used to place them randomly above the plane.
  
 ### Load plane
 
@@ -64,14 +65,14 @@ This is done via a physics simulation where the spheres are first placed randoml
 {
   "name": "loader.ObjectLoader",
   "config": {
-    "path": "examples/physics_positioning/passive.obj"
+    "path": "<args: 1>"
   }
 }
 ```
 
-* Load the plane from an obj file 
-* Physics will be automatically set to `passive`
-* As we load this object after the `ObjectPoseSampler`, the location of the plane is not changed
+Now the the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`).
+The `physics` attribute will hereby be automatically set to `passive`.
+As we load this object after the `ObjectPoseSampler`, the location of the plane is not randomly sampled.
 
 ### Run simulation
 
@@ -86,6 +87,24 @@ This is done via a physics simulation where the spheres are first placed randoml
 },
 ```
 
-* When running the physics simulation the module checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped. Nevertheless the simulation is run at least for 4 seconds and at most for 20 seconds.
-* In this way all ACTIVE objects (the spheres) will be influenced by gravity and fall down until they hit the bumpy plane
-* At the end of the simulation the position of all spheres is made fixed again
+This module now internally does a physics simulation. 
+All objects with `pyhsics` set to `active` will be influenced by gravity, while all `passive` objects will remain steady.
+In this way the spheres will fall down until they hit the bumpy plane.
+
+When running the physics simulation the module checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped.
+Nevertheless the simulation is run at least for 4 seconds and at most for 20 seconds.
+
+At the end of the simulation the position of all spheres is made fixed again.
+In this way we can easily sample random positions of the spheres on top of the bumpy plane.
+
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
+```
+
+## More examples
+
+* [object_pose_sampling](../object_pose_sampling): More on sampling object positions inside simple shapes.

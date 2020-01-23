@@ -57,7 +57,7 @@
     {
       "name": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "object"
+        "map_by": "instance"
       }
     },
     {
