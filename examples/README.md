@@ -1,6 +1,47 @@
-* [Config file example](#config-file-example)
 * [Examples overview](#examples-overview)
+* [Config file example](#config-file-example)
 * [Writing your own modules](#writing-your-own-modules)
+
+# Examples overview
+
+Each folder contains a different example, some of those need external datasets.
+
+## Basic
+
+When you are feeling brave enough to start with some actual examples, start with a [basic example](basic)!
+It will give you an idea about how, why and when certain things happen.
+
+## Debug
+
+To understand what happens during the execution of the pipeline and certain modules it is sometimes useful to use blender directly. 
+How to do this check out the folder [debugging](debugging).
+
+## Sampling
+
+All samplers share the same structure, so understanding one of them makes it easier to understand the others as well.
+Here are examples for camera, light and object pose sampling: 
+
+* [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation.
+* [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling.
+* [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
+
+## Physics
+
+* [physics_positioning](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
+
+## Object manipulation
+
+* [object manipulation](object_manipulation): Changing various parameters of objects via selecting them through config file.
+
+## Dataset related examples
+
+We provided limited dataset support, for example for SUNCG, Replica, CoCo Annotations and others.
+
+These can be found in:
+* [replica-dataset](replica-dataset)
+* [suncg_basic](suncg_basic)
+* [suncg_with_cam_sampling](suncg_with_cam_sampling)
+* [CoCo annotations](coco_annotations)
 
 # Config file example
 
@@ -71,47 +112,6 @@ The modules are executed in the exact same order as they are configured inside t
 
 This section contains configuration parameters that are relevant for multiple or all modules. 
 The configuration specified inside `all` is inherited by all modules, while the config specified inside `<dir>` (e.q. `renderer`) is inherited by all modules with the prefix `<dir>.` (e.q. `renderer.NormalRenderer`)
-
-# Examples overview
-
-Each folder contains a different example, some of those need external datasets.
-
-## Basic
-
-When you are feeling brave enough to start with some actual examples, start with a [basic example](basic)!
-It will give you an idea about how, why and when certain things happen.
-
-## Debug
-
-To understand what happens during the execution of the pipeline and certain modules it is sometimes useful to use blender directly. 
-How to do this check out the folder [debugging](debugging).
-
-## Sampling
-
-All samplers share the same structure, so understanding one of them makes it easier to understand the others as well.
-Here are examples for camera, light and object pose sampling: 
-
-* [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation.
-* [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling.
-* [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
-
-## Physics
-
-* [physics_positioning](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
-
-## Object manipulation
-
-* [object manipulation](object_manipulation): Changing various parameters of objects via selecting them through config file.
-
-## Dataset related examples
-
-We provided limited dataset support, for example for SUNCG, Replica, CoCo Annotations and others.
-
-These can be found in:
-* [replica-dataset](replica-dataset)
-* [suncg_basic](suncg_basic)
-* [suncg_with_cam_sampling](suncg_with_cam_sampling)
-* [CoCo annotations](coco_annotations)
 
 # Writing your own modules
 
