@@ -19,6 +19,8 @@ class SegMapRenderer(Renderer):
        :header: "Parameter", "Description"
 
        "map_by", "Method to be used for color mapping. Allowed values: instance, class"
+       "segcolormap_output_key": "The key which should be used for storing the class instance to color mapping in a merged file."
+       "segcolormap_output_file_prefix": "The file prefix that should be used when writing the class instance to color mapping to file."
     """
 
     def __init__(self, config):
@@ -166,4 +168,4 @@ class SegMapRenderer(Renderer):
 
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
         if color_map is not None:
-            self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False)
+            self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False, output_key_parameter_name="segcolormap_output_key", output_file_prefix_parameter_name="segcolormap_output_file_prefix")
