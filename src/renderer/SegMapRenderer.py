@@ -74,6 +74,9 @@ class SegMapRenderer(Renderer):
         :param objects: A list of objects.
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
+        if "num_labels" not in bpy.context.scene:
+            raise Exception("The scene is missing the custom property 'num_labels'. For generating semantic segmentation maps, this needs to contain the total number classes!")
+
         colors, num_splits_per_dimension = Utility.generate_equidistant_values(bpy.context.scene["num_labels"] + 1, self.render_colorspace_size_per_dimension)
 
         for obj in objects:
