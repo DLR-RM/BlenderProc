@@ -275,20 +275,26 @@ class SuncgLoader(Loader):
         nodes = mat.node_tree.nodes
 
         # Make sure we have not changed this material already (materials can be shared between objects)
-        if nodes.get("Diffuse BSDF") is None:
+        if not Utility.get_nodes_with_type(nodes, "BsdfDiffuse"):
 
             # The principled BSDF node contains all imported material properties
-            principled_node = nodes.get("Principled BSDF")
-            diffuse_color = principled_node.inputs['Base Color'].default_value
-            image_node = nodes.get("Image Texture")
-            if image_node is not None:
-                texture = image_node.image
+            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+            if len(principled_node) == 1:
+                principled_node = principled_node[0]
             else:
-                texture = None
+                raise Exception("This material has not one principled shader node, mat: {}".format(mat.name))
+            diffuse_color = principled_node.inputs['Base Color'].default_value
+            image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
+            if len(image_node) == 1:
+                image_node = image_node[0]
+            elif len(image_node) > 1:
+                raise Exception("There is more than one texture node in this material: {}".format(mat.name))
+
+            texture = image_node.image if image_node else None
 
             # Remove all nodes except the principled bsdf node (useful to lookup imported material properties in other modules)
             for node in nodes:
-                if node.name != "Principled BSDF":
+                if "BsdfPrincipled" not in node.bl_idname:
                     nodes.remove(node)
 
             # Build output, diffuse and texture nodes
@@ -318,10 +324,13 @@ class SuncgLoader(Loader):
         :param adjustments: A dict containing a new "diffuse" color or a new "texture" path
         """
         nodes = mat.node_tree.nodes
-        diffuse_node = nodes.get("Diffuse BSDF")
-        image_node = nodes.get("Image Texture")
 
         if "diffuse" in adjustments:
+            diffuse_node = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
+            if len(diffuse_node) == 1:
+                diffuse_node = diffuse_node[0]
+            else:
+                raise Exception("There is not one diffuse node in this material: {}".format(mat.name))
             diffuse_node.inputs['Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
@@ -334,6 +343,11 @@ class SuncgLoader(Loader):
                 image_path += ".jpg"
 
             if os.path.exists(image_path):
+                image_node = Utility.get_nodes_with_type(nodes, "TexImage")
+                if image_node and len(image_node) == 1:
+                    image_node = image_node[0]
+                else:
+                    raise Exception("There is not one image node in this material: {}".format(mat.name))
                 image_node.image = bpy.data.images.load(image_path, check_existing=True)
             else:
                 print("Warning: Cannot load texture, path does not exist: " + image_path)

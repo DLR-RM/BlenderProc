@@ -1,5 +1,6 @@
 from src.main.Module import Module
 import bpy
+from src.utility.Utility import Utility
 import numpy as np
 
 
@@ -35,8 +36,10 @@ class MaterialRandomizer(Module):
     def run(self):
 
         self._store_all_materials()
-
-        self._randomize_materials_in_scene()
+        if self.scene_materials:
+            self._randomize_materials_in_scene()
+        else:
+            print("Warning there are no materials, which can be switched!")
 
     def _randomize_materials_in_scene(self):
 
@@ -45,26 +48,19 @@ class MaterialRandomizer(Module):
         """
 
         for obj in bpy.context.scene.objects:
-
             self._randomize_material_for_obj(obj)
 
     def _randomize_material_for_obj(self, obj):
 
         for m in obj.material_slots:
-
             # Check if materials without texture should be randomized
             if self.randomize_textures_only:
-
                 # Check if the material has a texture image
                 nodes = m.material.node_tree.nodes
-                image_node = nodes.get("Image Texture")
 
-                if image_node is not None and image_node.image is not None:
-
+                if Utility.get_nodes_with_type(nodes, "TexImage"):
                     self._pick_assign_random_material(m)
-
             else:
-
                 self._pick_assign_random_material(m)
 
     def _pick_assign_random_material(self, m):
@@ -76,11 +72,9 @@ class MaterialRandomizer(Module):
         :param m: Material slot for which material should be randomized
         """
 
-        if np.random.uniform(0, 1) > self.randomization_level:
-            return
-
-        random_index = np.random.random_integers(0, len(self.scene_materials) - 1)
-        m.material = self.scene_materials[random_index]
+        if np.random.uniform(0, 1) <= self.randomization_level:
+            random_index = np.random.random_integers(0, len(self.scene_materials) - 1)
+            m.material = self.scene_materials[random_index]
 
     def _store_all_materials(self):
 
@@ -89,16 +83,10 @@ class MaterialRandomizer(Module):
         """
 
         for obj in bpy.context.scene.objects:
-
             for m in obj.material_slots:
-
                 if self.output_textures_only:
-
-                    nodes = m.material.node_tree.nodes
-                    image_node = nodes.get("Image Texture")
-
-                    if image_node is not None and image_node.image is not None:
+                    # check if any texture nodes are in this material, no check if they are connected to the output
+                    if Utility.get_nodes_with_type(m.material.node_tree.nodes, 'TexImage'):
                         self.scene_materials.append(m.material.copy())
-
                 else:
                     self.scene_materials.append(m.material.copy())
