@@ -171,7 +171,7 @@ class Renderer(Module):
         # Feed the Mist output of the render layer to the input of the file IO layer
         links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
 
-    def _render(self, default_prefix):
+    def _render(self, default_prefix, custom_file_path=None):
         """ Renders each registered keypoint.
 
         :param default_prefix: The default prefix of the output files.
@@ -179,7 +179,10 @@ class Renderer(Module):
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
-        bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
+        if custom_file_path is None:
+            bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
+        else:
+            bpy.context.scene.render.filepath = custom_file_path
 
         # Skip if there is nothing to render
         if bpy.context.scene.frame_end != bpy.context.scene.frame_start:

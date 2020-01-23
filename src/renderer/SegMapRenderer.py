@@ -138,7 +138,12 @@ class SegMapRenderer(Renderer):
             if self._use_alpha_channel:
                 self.add_alpha_channel_to_textures(blurry_edges=False)
 
-            self._render("seg_")
+            # Determine path for temporary and for final output
+            temporary_segmentation_file_path = os.path.join(self._determine_output_dir(), "seg_")
+            final_segmentation_file_path = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", "segmap_"))
+
+            # Render the temporary output
+            self._render("seg_", custom_file_path=temporary_segmentation_file_path)
 
             # Find optimal dtype of output based on max index
             for dtype in [np.uint8, np.uint16, np.uint32]:
@@ -148,18 +153,18 @@ class SegMapRenderer(Renderer):
 
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
-                file_path = os.path.join(self._determine_output_dir(), "seg_" + "%04d" % frame + ".exr")
+                file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
                 segmentation = imageio.imread(file_path)[:, :, :3]
 
                 segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
                 segmap = segmap.astype(optimal_dtype)
 
-                fname = os.path.join(self._determine_output_dir(), "segmap_" + "%04d" % frame)
+                fname = final_segmentation_file_path + "%04d" % frame
                 np.save(fname, segmap)
 
             # write color mappings to file
             if color_map is not None:
-                with open(os.path.join(self._determine_output_dir(), "class_inst_col_map.csv"), 'w', newline='') as csvfile:
+                with open(os.path.join(self._determine_output_dir(), self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map") + ".csv"), 'w', newline='') as csvfile:
                     fieldnames = list(color_map[0].keys())
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
