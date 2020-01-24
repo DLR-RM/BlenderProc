@@ -187,7 +187,7 @@ def vector_to_euler(vector, vector_type):
 
     return euler_angles
 
-def draw_object_only_with_vertices(vertices, name='NewVertexObject'):
+def add_object_only_with_vertices(vertices, name='NewVertexObject'):
     """
     Generates a new object with the given vertices, no edges or faces are generated.
 
@@ -211,7 +211,7 @@ def draw_object_only_with_vertices(vertices, name='NewVertexObject'):
     bm.free()
     return obj
 
-def draw_cube_with_bb(bouding_box, name='NewCube'):
+def add_cube_based_on_bb(bouding_box, name='NewCube'):
     """
     Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
 
