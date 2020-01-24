@@ -186,3 +186,61 @@ def vector_to_euler(vector, vector_type):
         raise Exception("Unknown vector type: " + vector_type)
 
     return euler_angles
+
+def draw_object_only_with_vertices(vertices, name='NewVertexObject'):
+    """
+    Generates a new object with the given vertices, no edges or faces are generated.
+
+    :param vertices: [[float, float, float]] list of vertices
+    :param name: str name of the new object
+    :return the generated obj
+    """
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    bm = bmesh.new()
+    for v in vertices:
+        bm.verts.new(v)
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+
+def draw_cube_with_bb(bouding_box, name='NewCube'):
+    """
+    Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
+
+    :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
+    :param name: name of the new cube
+    """
+    if len(bouding_box) != 8:
+        raise Exception("The amount of vertices is wrong for this bounding box!")
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    new_vertices = []
+    bm = bmesh.new()
+    for v in bouding_box:
+        new_vertices.append(bm.verts.new(v))
+    # create all 6 surfaces, the ordering is depending on the ordering of the vertices in the bounding box
+    bm.faces.new([new_vertices[0], new_vertices[1], new_vertices[2], new_vertices[3]])
+    bm.faces.new([new_vertices[0], new_vertices[4], new_vertices[5], new_vertices[1]])
+    bm.faces.new([new_vertices[1], new_vertices[5], new_vertices[6], new_vertices[2]])
+    bm.faces.new([new_vertices[2], new_vertices[3], new_vertices[7], new_vertices[6]])
+    bm.faces.new([new_vertices[0], new_vertices[4], new_vertices[7], new_vertices[3]])
+    bm.faces.new([new_vertices[4], new_vertices[5], new_vertices[6], new_vertices[7]])
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+
