@@ -122,8 +122,8 @@ class CocoUtility:
         rmin, rmax = np.where(rows)[0][[0, -1]]
         cmin, cmax = np.where(cols)[0][[0, -1]]
         # Calc height and width
-        h = rmax - rmin + 1
-        w = cmax - cmin + 1
+        h = rmax - rmin
+        w = cmax - cmin
         return [int(cmin), int(rmin), int(w), int(h)]
 
     @staticmethod
