@@ -2,7 +2,8 @@ import bpy
 import bmesh
 from mathutils import Vector
 
-    
+import numpy as np
+
 
 def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
     """
@@ -71,25 +72,34 @@ def check_bb_intersection(obj1,obj2):
     """
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    Checks if there is a bounding box collision
+    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
+        The enclosing axis-aligned bounding box is calculated and used to check the intersection
     returns a boolean
     """
     b1w = get_bounds(obj1)
+    def min_and_max_point(bb):
+        """
+        Find the minimum and maximum point of the bounding box
+        :param bb: bounding box
+        :return: min, max
+        """
+        values = np.array(bb)
+        return np.min(values, axis=0), np.max(values, axis=0)
+    # get min and max point of the axis-aligned bounding box
+    min_b1, max_b1 = min_and_max_point(b1w)
     b2w = get_bounds(obj2)
-    origins = [[0,3],[0,4],[0,1]]
-    deltas = [b1w[origins[0][0]] - b1w[origins[0][1]], b1w[origins[1][0]] - b1w[origins[1][1]], b1w[origins[2][0]] - b1w[origins[2][1]]]
-    for point in b2w:
-        collide = True
-        # check if that point lies inside the area
-        # Explanation found at https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
-        for idx in range(3): 
-            dot_with_query = dot_product(deltas[idx],point)
-            dot_with_r1 = dot_product(deltas[idx],b1w[origins[idx][0]])
-            dot_with_r2 = dot_product(deltas[idx],b1w[origins[idx][1]])
-            collide = collide and (dot_with_r2 < dot_with_query and dot_with_query < dot_with_r1)
-        if collide:
-            return True
-    return False
+    # get min and max point of the axis-aligned bounding box
+    min_b2, max_b2 = min_and_max_point(b2w)
+    collide = True
+    for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
+        # inspired by this:
+        # https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
+        # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
+        def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
+            # returns true if the min and max values are overlapping
+            return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
+        collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
+    return collide
 
 
 def check_intersection(obj, obj2, cache = None):
