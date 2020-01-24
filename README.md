@@ -8,13 +8,14 @@ Note: This library is under active development. We are open for new contributors
 
 The corresponding arxiv paper: https://arxiv.org/abs/1911.01911
 
+
 <!-- 
 Citation: 
 ```
 @article{blenderproc2019,
-	title={},
-	author={},
-	journal={arXiv preprint arXiv:1910.00199},
+	title={BlenderProc},
+	author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef  and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
+	journal={arXiv preprint arXiv:1911.01911},
 	year={2019}
 }
 ``` -->

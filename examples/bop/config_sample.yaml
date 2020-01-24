@@ -1,5 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
+  "version": 1,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -13,9 +14,9 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:1>"
+      "output_dir": "<args:1>",
+      "sys_paths": ["/path/to/bop_toolkit"]
     },
-    "sys_paths": ["/path/to/bop_toolkit"]
   },
   "modules": [
     {
@@ -38,14 +39,12 @@
         "lights": [
           {
             "location": {
-              "name": "ShellSampler",
-              "parameters": {
-                "center": [0, 0, -0.8],
-                "radius_min": 1,
-                "radius_max": 4,
-                "elevation_min": 40,
-                "elevation_max": 89
-              }
+              "name": "sampler.Shell",
+              "center": [0, 0, -0.8],
+              "radius_min": 1,
+              "radius_max": 4,
+              "elevation_min": 40,
+              "elevation_max": 89
             },
             "type": "POINT",
             "energy": 1000
@@ -63,18 +62,14 @@
           "config": {
             "max_iterations": 1000,
             "pos_sampler": {
-              "name": "Uniform3dSampler",
-              "parameters": {
-                  "max": [0.5, 0.5, 0.5],
-                  "min": [-0.5, -0.5, -0.5]
-              }
+              "name": "sampler.Uniform3d",
+              "max": [0.5, 0.5, 0.5],
+              "min": [-0.5, -0.5, -0.5]
             },
             "rot_sampler": {
-              "name": "Uniform3dSampler",
-              "parameters": {
-                  "max": [0, 0, 0],
-                  "min": [6.28, 6.28, 6.28]
-              }
+              "name": "sampler.Uniform3d",
+              "max": [0, 0, 0],
+              "min": [6.28, 6.28, 6.28]
             }
           }
         },
@@ -84,19 +79,17 @@
             "cam_poses": [
               {
                 "location": {
-                  "name": "ShellSampler",
-                  "parameters": {
-                    "center": [0, 0, 0],
-                    "radius_min": 0.8,
-                    "radius_max": 1.2,
-                    "elevation_min": 1,
-                    "elevation_max": 89
-                  }
+                  "name": "sampler.Shell",
+                  "center": [0, 0, 0],
+                  "radius_min": 0.8,
+                  "radius_max": 1.2,
+                  "elevation_min": 1,
+                  "elevation_max": 89
                 },
                 "rotation": {
                   "format": "look_at",
                   "value": {
-                    "name": "POIGetter",
+                    "name": "getter.POI",
                     "parameters": {}
                   }
                 }
