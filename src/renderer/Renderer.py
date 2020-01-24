@@ -171,7 +171,7 @@ class Renderer(Module):
         # Feed the Mist output of the render layer to the input of the file IO layer
         links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
 
-    def _render(self, default_prefix):
+    def _render(self, default_prefix, custom_file_path=None):
         """ Renders each registered keypoint.
 
         :param default_prefix: The default prefix of the output files.
@@ -179,7 +179,10 @@ class Renderer(Module):
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
-        bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
+        if custom_file_path is None:
+            bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
+        else:
+            bpy.context.scene.render.filepath = custom_file_path
 
         # Skip if there is nothing to render
         if bpy.context.scene.frame_end != bpy.context.scene.frame_start:
@@ -280,7 +283,7 @@ class Renderer(Module):
             return new_mat_alpha
         return new_material
 
-    def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes = True):
+    def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes=True, output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix"):
         """ Registers new output type using configured key and file prefix.
 
         If depth rendering is enabled, this will also register the corresponding depth output type.
@@ -290,11 +293,12 @@ class Renderer(Module):
         :param suffix: The suffix of the generated files.
         :param version: The version number which will be stored at key_version in the final merged file.
         :param unique_for_camposes: True if the registered output is unique for all the camera poses
+        :param output_key_parameter_name: The parameter name to use for retrieving the output key from the config.
+        :param output_file_prefix_parameter_name: The parameter name to use for retrieving the output file prefix from the config.
         """
         use_stereo = self.config.get_bool("stereo", False)
 
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, stereo = use_stereo,
-                                               unique_for_camposes=unique_for_camposes)
+        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, stereo=use_stereo, unique_for_camposes=unique_for_camposes, output_key_parameter_name=output_key_parameter_name, output_file_prefix_parameter_name=output_file_prefix_parameter_name)
 
         if self.config.get_bool("render_depth", False):
             self._add_output_entry({

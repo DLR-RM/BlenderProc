@@ -75,7 +75,7 @@ class Utility:
         :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame the point is in. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
         :return: The converted point also in form of a list or mathutils.Vector.
         """
-        assert(len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: " + str(frame_of_point))
+        assert len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
 
         output = []
         for i, axis in enumerate(frame_of_point):
