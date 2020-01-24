@@ -1,6 +1,6 @@
 # Args: <output_dir>
 {
-  "version": 1,
+  "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -17,17 +17,17 @@
   },
   "modules": [
     {
-      "name": "main.Initializer",
+      "module": "main.Initializer",
       "config": {}
     },
     {
-      "name": "loader.ObjectLoader",
+      "module": "loader.ObjectLoader",
       "config": {
         "path": "examples/camera_sampling/scene.obj"
       }
     },
     {
-      "name": "lighting.LightLoader",
+      "module": "lighting.LightLoader",
       "config": {
         "lights": [
           {
@@ -39,19 +39,19 @@
       }
     },
     {
-      "name": "camera.CameraSampler",
+      "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [
           {
             "location": {
-              "name":"sampler.Uniform3d",
+              "provider":"sampler.Uniform3d",
               "max":[10, 10, 8],
               "min":[-10, -10, 12]
             },
             "rotation": {
               "format": "look_at",
               "value": {
-                "name": "getter.POI"
+                "provider": "getter.POI"
               }
             }
           }
@@ -59,22 +59,23 @@
       }
     },
     {
-      "name": "renderer.NormalRenderer",
+      "module": "renderer.NormalRenderer",
       "config": {
         "output_key": "normals"
       }
     },
     {
-      "name": "renderer.RgbRenderer",
+      "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
         "samples": 350
       }
     },
     {
-      "name": "writer.Hdf5Writer",
+      "module": "writer.Hdf5Writer",
       "config": {
       }
     }
   ]
 }
+
