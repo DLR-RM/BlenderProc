@@ -99,15 +99,16 @@ class SegMapRenderer(Renderer):
         colors, num_splits_per_dimension = Utility.generate_equidistant_values(len(objects) + 1, self.render_colorspace_size_per_dimension)
 
         color_map = []
-        for idx, obj in enumerate(objects):
-            self._colorize_object(obj, colors[idx])
-
-            obj_class = obj["category_id"] if "category_id" in obj else None
-            color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx})
 
         # Set world background label
-        self._set_world_background_color(colors[-1])
-        color_map.append({'objname': "background", 'class': -1, 'idx': len(colors) - 1})
+        self._set_world_background_color(colors[0])
+        color_map.append({'objname': "background", 'class': -1, 'idx': 0})
+
+        for idx, obj in enumerate(objects):
+            self._colorize_object(obj, colors[idx + 1])
+
+            obj_class = obj["category_id"] if "category_id" in obj else None
+            color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx + 1})
 
         return colors, num_splits_per_dimension, color_map
 

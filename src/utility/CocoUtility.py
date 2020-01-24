@@ -14,9 +14,9 @@ class CocoUtility:
         :param dataset_name: name of the dataset, a feature required by coco annotation format
         :return: dict containing coco annotations
         """
-        # Adds all objects from the color map to the coco output
+        # Adds all objects from the color map to the coco output (skip background)
         categories = []
-        for obj in colormap:
+        for obj in colormap[1:]:
             categories.append({'id': int(obj["idx"]), 'name': obj["objname"], 'supercategory': dataset_name})
 
         licenses = [{
@@ -45,6 +45,8 @@ class CocoUtility:
 
             # Go through all objects visible in this image
             unique_objects = np.unique(segmentation_map)
+            # Remove background
+            unique_objects = np.delete(unique_objects, np.where(unique_objects == 0))
             for obj in unique_objects:
                 # Calc object mask
                 binary_inst_mask = np.where(segmentation_map == obj, 1, 0)
