@@ -86,7 +86,7 @@ If `scene_id` is specified, BopLoader recreates the specified scene of the BOP d
     },
 ```
 
-If `scene_id` is not specified, you just load a number of `obj_ids` from the BOP dataset specified by `bop_dataset_path`. 
+If `scene_id` is not specified (default = -1), `loader.BopLoader` loads all or the specified `obj_ids` from the BOP dataset given by `bop_dataset_path`. 
 ```yaml
     {
       "name": "loader.BopLoader",
