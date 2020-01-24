@@ -21,7 +21,10 @@ class NormalRenderer(Renderer):
         new_mat = bpy.data.materials.new(name="Normal")
         new_mat.use_nodes = True
         nodes = new_mat.node_tree.nodes
-        nodes.remove(nodes.get("Principled BSDF"))
+
+        # clean material from Principled BSDF nodes
+        for node in Utility.get_nodes_with_type(nodes, "BsdfPrincipled"):
+            nodes.remove(node)
 
         links = new_mat.node_tree.links
         texture_coord_node = nodes.new(type='ShaderNodeTexCoord')
@@ -39,12 +42,16 @@ class NormalRenderer(Renderer):
 
         emission_node = nodes.new(type='ShaderNodeEmission')
 
-        output_node = nodes.get("Material Output")
+        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
+        if output and len(output) == 1:
+            output = output[0]
+        else:
+            raise Exception("This material: {} has not one material output!".format(new_mat.name))
 
         links.new(texture_coord_node.outputs['Normal'], vector_transform_node.inputs['Vector'])
         links.new(vector_transform_node.outputs['Vector'], mapping_node.inputs['Vector'])
         links.new(mapping_node.outputs['Vector'], emission_node.inputs['Color'])
-        links.new(emission_node.outputs['Emission'], output_node.inputs['Surface'])
+        links.new(emission_node.outputs['Emission'], output.inputs['Surface'])
         return new_mat
 
     def run(self):

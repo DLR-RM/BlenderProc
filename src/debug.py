@@ -19,6 +19,7 @@ for module in list(sys.modules.keys()):
         
 from src.utility.ConfigParser import ConfigParser
 from src.utility.Utility import Utility
+
 from src.main.Pipeline import Pipeline
 
 config_path = "examples/bop/config.yaml"

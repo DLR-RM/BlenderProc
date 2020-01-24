@@ -79,6 +79,8 @@ if "pip" in setup_config:
 if len(required_packages) > 0:
     # Install pip    
     subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+    # Make sure pip is up-to-date
+    subprocess.Popen(["./python3.7m", "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
     
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))

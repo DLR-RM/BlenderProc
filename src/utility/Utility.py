@@ -75,7 +75,7 @@ class Utility:
         :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame the point is in. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
         :return: The converted point also in form of a list or mathutils.Vector.
         """
-        assert(len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: " + str(frame_of_point))
+        assert len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
 
         output = []
         for i, axis in enumerate(frame_of_point):
@@ -182,6 +182,16 @@ class Utility:
 
         links.new(source_socket, new_node_dest_socket)
         links.new(new_node_src_socket, dest_socket)
+
+    @staticmethod
+    def get_nodes_with_type(nodes, node_type):
+        """
+        Returns all nodes which are of the given node_type
+        :param nodes: list of nodes of the current material
+        :param node_type: node types
+        :return: list of nodes, which belong to the type
+        """
+        return [node for node in nodes if node_type in node.bl_idname]
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.
