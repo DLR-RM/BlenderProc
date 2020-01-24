@@ -217,6 +217,7 @@ def draw_cube_with_bb(bouding_box, name='NewCube'):
 
     :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
     :param name: name of the new cube
+    :return the generated object
     """
     if len(bouding_box) != 8:
         raise Exception("The amount of vertices is wrong for this bounding box!")
