@@ -55,7 +55,7 @@ def local_to_world(cords, world):
 def get_bounds(obj):
     """
     :param obj: a mesh object
-    returns the 8 axis aligned bounding box coordinates transformed to world matrix
+    :returns [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
