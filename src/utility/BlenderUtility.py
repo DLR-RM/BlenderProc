@@ -104,11 +104,12 @@ def check_bb_intersection(obj1,obj2):
 
 def check_intersection(obj, obj2, cache = None):
     """
-    :param obj1: object 1  to check for intersection, must be a mesh
-    :param obj2: object 2  to check for intersection, must be a mesh
+    :param obj1: object 1 to check for intersection, must be a mesh
+    :param obj2: object 2 to check for intersection, must be a mesh
     Check if any faces intersect with the other object
     returns a boolean
     """
+    # refer to https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
     assert(obj != obj2)
 
     if cache is None:
@@ -165,7 +166,7 @@ def check_intersection(obj, obj2, cache = None):
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
 
-        t, co, no, index = ray_cast(co_1, co_2)
+        t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
             intersect = True
             break
