@@ -22,7 +22,8 @@
     {
       "name": "loader.ObjectLoader",
       "config": {
-        "path": "examples/debugging/scene.obj"
+        "path": "examples/debugging/scene.obj",
+        "physics": False
       }
     },
     {
@@ -34,6 +35,44 @@
             "location": [5, -5, 5],
             "energy": 1000 
           }
+        ]
+      }
+    },
+    {
+      "name": "object.ObjectManipulator",
+      "config": {
+        "instances": [
+        {
+          "selector": {
+            "name": "getter.Object",
+            "conditions": {
+              "name": "Cylinder.001"
+            }
+          },
+          "physics": True
+        }
+        ]
+      }
+    },
+    {
+      "name": "object.ObjectManipulator",
+      "config": {
+        "instances": [
+        {
+          "selector": {
+            "name": "getter.Object",
+            "conditions": {
+              "name": "Cylinder*",
+              "physics": True
+            }
+          },
+          "location": {
+            "name":"sampler.Uniform3d",
+            "max":[1, 2, 3],
+            "min":[0, 1, 2]
+          },
+          "rotation_euler": [1, 1, 0],
+        }
         ]
       }
     },
