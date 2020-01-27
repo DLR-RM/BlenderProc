@@ -186,6 +186,9 @@ class Renderer(Module):
 
         # Skip if there is nothing to render
         if bpy.context.scene.frame_end != bpy.context.scene.frame_start:
+            if len([obj for obj in bpy.context.scene.objects if obj.type == 'MESH']) == 0:
+                raise Exception("There are no mesh-objects to render, "
+                                "please load an object before invoking the renderer.")
             # As frame_end is pointing to the next free frame, decrease it by one, as blender will render all frames in [frame_start, frame_ned]
             bpy.context.scene.frame_end -= 1
             bpy.ops.render.render(animation=True, write_still=True)
