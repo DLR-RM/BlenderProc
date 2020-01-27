@@ -1,6 +1,6 @@
 # Args: path_to_the_replica_data_folder  output_path
 {
-  "version": 1,
+  "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81-linux-glibc217-x86_64",
@@ -21,18 +21,18 @@
   },
   "modules": [
     {
-      "name": "main.Initializer",
+      "module": "main.Initializer",
       "config": {}
     },
     {
-      "name": "loader.ReplicaLoader",
+      "module": "loader.ReplicaLoader",
       "config": {
         "use_smooth_shading": "True",
         "use_ambient_occlusion": "True"
       }
     },
     {
-      "name": "object.FloorExtractor",
+      "module": "object.FloorExtractor",
       "config": {
         "is_replica_object": "True",
         "obj_name": "mesh",
@@ -41,7 +41,7 @@
       }
     },
     {
-      "name": "camera.ReplicaCameraSampler",
+      "module": "camera.ReplicaCameraSampler",
       "config": {
         "is_replica_object": "True",
         "sqrt_number_of_rays": 50,
@@ -57,12 +57,12 @@
       }
     },
     {
-      "name": "renderer.NormalRenderer",
+      "module": "renderer.NormalRenderer",
       "config": {
       }
     },
     {
-      "name": "writer.Hdf5Writer",
+      "module": "writer.Hdf5Writer",
       "config": {
       }
     }
