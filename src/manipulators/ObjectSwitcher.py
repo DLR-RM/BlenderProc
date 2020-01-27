@@ -58,21 +58,17 @@ class ObjectSwitcher(Module):
         bpy.ops.object.select_all(action='DESELECT')
         obj2.select_set(True)
         obj2.location = obj1.location
-        obj2.location[2] = obj2.location[2] + 1.0
         obj2.rotation_euler = obj1.rotation_euler
         if scale:
             obj2.scale = self._bb_ratio(obj1.bound_box, obj2.bound_box)
-            #obj2.scale /= 4.0
+
         # Check for collision between the new object and other objects in the scene
         intersection = False
         for obj in bpy.context.scene.objects: # for each object
-            if obj.type == "MESH" and obj != obj2 and "Floor" not in obj.name and "Ceiling" not in obj.name and "Wall" not in obj.name:
-                intersection  = check_intersection(obj, obj2)
+            if obj.type == "MESH" and obj != obj2 and obj1 != obj and "Floor" not in obj.name:
+                intersection = check_intersection(obj, obj2)[0]
                 if intersection:
-                    # print(obj.name)
-                    print(obj.name, obj1.name, obj2.name)
                     break
-
         return not intersection
 
     def run(self):
@@ -98,7 +94,6 @@ class ObjectSwitcher(Module):
         # Now we have two lists to do the switching between
         # Switch between a ratio of the objects in the scene with the list of the provided ikea objects randomly
         indices = np.random.choice(len(objects_to_replace_with), int(self._switch_ratio * len(objects_to_be_replaced)))
-
         for idx, new_obj_idx in enumerate(indices):
             original_object = objects_to_be_replaced[idx]
             new_object = objects_to_replace_with[new_obj_idx]
