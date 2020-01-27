@@ -23,16 +23,16 @@ class ObjectLoader(Loader):
         Loader.__init__(self, config)
 
     def run(self):
-        files_paths = Utility.resolve_path(self.config.get_string("paths"))
-        properties = Utility.get_dict(self.config.get_string("add_properties"))
+        files_paths = self.config.get_list("paths", [])
+        properties = self.config.get_raw_dict("add_properties", {})
 
         for path in files_paths:
             file_path = Utility.resolve_path(path)
             loaded_objects = Utility.import_objects(filepath=file_path)
             for obj in loaded_objects:
                 for key in properties.keys():
-                    if hasattr(obj, prop):
-                        obj.key = properties[key]
+                    if hasattr(obj, key):
+                        setattr(obj, key, properties[key])
                     else:
                         obj[key] = properties[key]
 

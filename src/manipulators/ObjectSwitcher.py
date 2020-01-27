@@ -5,23 +5,26 @@ import random
 import numpy as np
 import math
 from collections import defaultdict
-from src.utility.BlenderUtility import check_bb_intersection
+from src.utility.BlenderUtility import check_bb_intersection, check_intersection
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 
 class ObjectSwitcher(Module):
-    """ Randomly switch between objects in the scene and other objects loaded using Loader.IkeaObjectsLoader.
+    """ Switch between two objects lists, selecting them based on certain property set in the config.
     **Configuration**:
     .. csv-table::
        :header: "Parameter", "Description"
+
        "switch_ratio", "Ratio of objects in the orginal scene to try replacing."
-       "ikea_objects_loader", "loader.IkeaObjectsLoader"
+       "objects_to_be_replaced", "Object getter, objects to try to remove from the scene, gets list of object on a certain condition"
+       "objects_to_replace_with", "Object getter, objects to try to add to the scene, gets list of object on a certain condition"
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
         self._switch_ratio = self.config.get_float("switch_ratio", 1)
-        self._ikea_objects_selector = config.get_raw_dict("selector", {})
+        self._objects_to_be_replaced = config.get_raw_dict("objects_to_be_replaced", {})
+        self._objects_to_replace_with = config.get_raw_dict("objects_to_replace_with", {})
 
     def _two_points_distance(self, point1, point2):
         """
@@ -30,12 +33,8 @@ class ObjectSwitcher(Module):
         Eclidian distance between two points
         returns a float.
         """
-        locx = point2[0] - point1[0]
-        locy = point2[1] - point1[1]
-        locz = point2[2] - point1[2]
-        distance = math.sqrt((locx)**2 + (locy)**2 + (locz)**2) 
-        return distance
-
+        return np.linalg.norm(np.array(point1) - np.array(point2))
+        
     def _bb_ratio(self, bb1, bb2):
         """
         :param bb1: bounding box 1
@@ -56,70 +55,63 @@ class ObjectSwitcher(Module):
         Scale, translate, rotate obj2 to match obj1 and check if there is a bounding box collision
         returns a boolean.
         """        
-        # Render the Ikea object
         bpy.ops.object.select_all(action='DESELECT')
         obj2.select_set(True)
         obj2.location = obj1.location
+        obj2.location[2] = obj2.location[2] + 1.0
         obj2.rotation_euler = obj1.rotation_euler
         if scale:
             obj2.scale = self._bb_ratio(obj1.bound_box, obj2.bound_box)
-
-        # Check for collision between the ikea object and other objects in the scene
+            #obj2.scale /= 4.0
+        # Check for collision between the new object and other objects in the scene
         intersection = False
         for obj in bpy.context.scene.objects: # for each object
-            if obj.type == "MESH" and "ikea" not in obj:
-                intersection  = check_bb_intersection(obj, obj2)
+            if obj.type == "MESH" and obj != obj2 and "Floor" not in obj.name and "Ceiling" not in obj.name and "Wall" not in obj.name:
+                intersection  = check_intersection(obj, obj2)
                 if intersection:
+                    # print(obj.name)
+                    print(obj.name, obj1.name, obj2.name)
                     break
 
         return not intersection
 
     def run(self):
 
+        # Gets two lists of objects to swap
         # Use a selector to get the list of ikea objects
         sel_objs = {}
-        sel_objs['selector'] = self._ikea_objects_selector
+        sel_objs['selector'] = self._objects_to_be_replaced
         # create Config objects
         sel_conf = Config(sel_objs)
-        ikea_objects = sel_conf.get_list("selector")
+        objects_to_be_replaced = sel_conf.get_list("selector")
+        print(objects_to_be_replaced)
 
-        # TODO: there should be a better way to do this once we support multiple conditions
-        # Group Ikea objects by the category they replace
-        ikea_objects_dict = defaultdict(list)
-        for ikea_obj in ikea_objects:
-            ikea_objects_dict[ikea_obj["replacing"]].append(ikea_obj)
+        # Use a selector to get the list of ikea objects
+        sel_objs = {}
+        sel_objs['selector'] = self._objects_to_replace_with
+        # create Config objects
+        sel_conf = Config(sel_objs)
+        objects_to_replace_with = sel_conf.get_list("selector")
 
-        # Get objects in the scene that belongs to that category
-        for category in ikea_objects_dict:
-            ikea_category_list = ikea_objects_dict[category]
+        print(objects_to_replace_with)
 
-            # Use a selector to get objects to be replaced in the original scene
-            sel_objs = {}
-            self._ikea_objects_selector["condition"] = {"coarse_grained_class": category}
-            sel_objs['selector'] = self._ikea_objects_selector
+        # Now we have two lists to do the switching between
+        # Switch between a ratio of the objects in the scene with the list of the provided ikea objects randomly
+        indices = np.random.choice(len(objects_to_replace_with), int(self._switch_ratio * len(objects_to_be_replaced)))
 
-            # create Config objects
-            sel_conf = Config(sel_objs)
-
-            # invoke a Getter, get a list of objects to replace
-            orginal_objects = sel_conf.get_list("selector")
-
-            # Now we have two lists to do the switching between
-            # Switch between a ratio of the objects in the scene with the list of the provided ikea objects randomly
-            indices = np.random.choice(len(ikea_category_list), int(self._switch_ratio * len(orginal_objects)))
-
-            for idx, ikea_idx in enumerate(indices):
-                original_object = orginal_objects[idx]
-                ikea_object = ikea_category_list[ikea_idx]
-                if self._can_replace(original_object, ikea_object):
-                    # Update the scene
-                    original_object.hide_render = True
-                    ikea_object.hide_render = False
-                    bpy.context.view_layer.objects.active = ikea_object
-                    bpy.context.view_layer.update()
-                    ikea_object['category_id'] = original_object['category_id']
-                    print('Switched', original_object.name, ' by an ikea object', ikea_object.name)       
-                else:
-                    bpy.context.view_layer.objects.active = original_object
-                    bpy.context.view_layer.update()
-                    print('Collision happened while replacing an object, falling back to original one.')
+        for idx, new_obj_idx in enumerate(indices):
+            original_object = objects_to_be_replaced[idx]
+            new_object = objects_to_replace_with[new_obj_idx]
+            # print(new_object.hide_render)
+            if self._can_replace(original_object, new_object):
+                # Update the scene
+                original_object.hide_render = True
+                new_object.hide_render = False
+                bpy.context.view_layer.objects.active = new_object
+                new_object['category_id'] = original_object['category_id']
+                bpy.context.view_layer.update()
+                print('Switched', original_object.name, ' by an ikea object', new_object.name)       
+            else:
+                bpy.context.view_layer.objects.active = original_object
+                bpy.context.view_layer.update()
+                print('Collision happened while replacing an object, falling back to original one.')
