@@ -178,7 +178,7 @@ def check_intersection(obj, obj2, cache = None):
     # new method to udpate scene
     bpy.context.view_layer.update()
 
-    return intersect, cache
+    return intersect
 
 def vector_to_euler(vector, vector_type):
     """
