@@ -74,8 +74,8 @@ class Object(Provider):
                     if key in obj:
                         # check if the type of the value of such custom property matches desired
                         if isinstance(obj[key], type(value)) or (isinstance(obj[key], int) and isinstance(value, bool)):
-                            # if is a string and if search is not returning None which means that we have a match
-                            if not ((isinstance(obj[key], str) and re.search(value, obj[key]) is not None) or
+                            # if is a string and if the whole string matches the given pattern
+                            if not ((isinstance(obj[key], str) and re.fullmatch(value, obj[key]) is not None) or
                                     obj[key] == value):
                                 select_object = False
                                 break
@@ -101,7 +101,7 @@ class Object(Provider):
                                 raise Exception("Types are not matching: %s and %s !"
                                                 % (type(getattr(obj, key)), type(value)))
                         # or check for equality
-                        if not ((isinstance(getattr(obj, key), str) and re.search(value, getattr(obj, key)) is not None)
+                        if not ((isinstance(getattr(obj, key), str) and re.fullmatch(value, getattr(obj, key)) is not None)
                                 or getattr(obj, key) == new_value):
                             select_object = False
                             break
