@@ -25,24 +25,29 @@
       }
     },
     {
-      "name": "loader.IkeaObjectsLoader",
+      "name": "loader.ObjectLoader",
       "config": {
-        "mapping": [
-          {
-            "category": "chair",
-            "paths": ["/volume/reconstruction_data/ikea/IKE020017_obj/IKEA-Frosta_Stool-3D.obj", "/volume/reconstruction_data/ikea/IKE160097_obj/IKE160097.obj", "/volume/reconstruction_data/ikea/IKE120005_obj/IKEA-ISALA_coffee_table-3D.obj"]
-          },
-       ]
-      }
+          "paths": ["/volume/reconstruction_data/ikea/IKE020017_obj/IKEA-Frosta_Stool-3D.obj", "/volume/reconstruction_data/ikea/IKE160097_obj/IKE160097.obj", "/volume/reconstruction_data/ikea/IKE120005_obj/IKEA-ISALA_coffee_table-3D.obj"],
+          "add_properties": {
+            "replace", "chair",
+            "hide_renderer": True
+          }
+        },
     },
     {
       "name": "manipulators.ObjectSwitcher",
       "config": {
         "switch_ratio": 1,
-        "selector": {
+        "replaced_objects": {
             "name": "getter.Object",
             "condition": {
-              "ikea": 1
+              "replace": "chair"
+            }
+        },
+        "objects_to_replace": {
+            "name": "getter.Object",
+            "condition": {
+              "category": "chair"
             }
         }
       }
