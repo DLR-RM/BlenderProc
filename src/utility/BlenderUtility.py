@@ -109,6 +109,7 @@ def check_intersection(obj, obj2, cache = None):
     Check if any faces intersect with the other object
     returns a boolean
     """
+    # refer to https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
     assert(obj != obj2)
 
     if cache is None:
