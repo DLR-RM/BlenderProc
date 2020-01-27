@@ -27,14 +27,14 @@
     {
       "name": "loader.ReplicaLoader",
       "config": {
-        "use_smooth_shading": "True",
-        "use_ambient_occlusion": "True"
+        "use_smooth_shading": True,
+        "use_ambient_occlusion": True
       }
     },
     {
       "name": "object.FloorExtractor",
       "config": {
-        "is_replica_object": "True",
+        "is_replica_object": True,
         "obj_name": "mesh",
         "compare_angle_degrees" : 7.5, # max angle difference to up facing polygons
         "compare_height": 0.15  # height, which is allowed for polygons to be away from the height level in up and down dir.
@@ -43,7 +43,7 @@
     {
       "name": "camera.ReplicaCameraSampler",
       "config": {
-        "is_replica_object": "True",
+        "is_replica_object": True,
         "sqrt_number_of_rays": 50,
         "near_clipping": 0.01,
         "sample_amount": 15,

@@ -1,4 +1,5 @@
 from src.camera.CameraModule import CameraModule
+from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.Utility import Utility
 import mathutils
 import bpy
@@ -49,15 +50,14 @@ class CameraSampler(CameraModule):
         # Create bmesh which will contain the meshes of all objects
         bm = bmesh.new()
         # Go through all mesh objects
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH':
-                # Add object mesh to bmesh (the newly added vertices will be automatically selected)
-                bm.from_mesh(obj.data)
-                # Apply world matrix to all selected vertices
-                bm.transform(obj.matrix_world, filter={"SELECT"})
-                # Deselect all vertices
-                for v in bm.verts:
-                    v.select = False
+        for obj in get_all_mesh_objects():
+            # Add object mesh to bmesh (the newly added vertices will be automatically selected)
+            bm.from_mesh(obj.data)
+            # Apply world matrix to all selected vertices
+            bm.transform(obj.matrix_world, filter={"SELECT"})
+            # Deselect all vertices
+            for v in bm.verts:
+                v.select = False
 
         # Create tree from bmesh
         self.bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)

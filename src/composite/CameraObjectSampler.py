@@ -1,5 +1,6 @@
 from src.main.Module import Module
 from src.utility.Utility import Utility
+from src.utility.BlenderUtility import get_all_mesh_objects
 
 import bpy
 
@@ -38,11 +39,10 @@ class CameraObjectSampler(Module):
             # get current keyframe id
             frame_id = bpy.context.scene.frame_end
 
-            for obj in bpy.context.scene.objects:
-                # TODO: Use Getter for selecting objects
-                if obj.type == "MESH":
-                    # insert keyframes for current object poses
-                    self._object_pose_sampler.insert_key_frames(obj, frame_id)
+            # TODO: Use Getter for selecting objects
+            for obj in get_all_mesh_objects():
+                # insert keyframes for current object poses
+                self._object_pose_sampler.insert_key_frames(obj, frame_id)
 
             # sample new camera poses
             self._camera_pose_sampler.run()

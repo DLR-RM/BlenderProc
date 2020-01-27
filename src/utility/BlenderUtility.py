@@ -104,10 +104,14 @@ def check_bb_intersection(obj1,obj2):
 
 def check_intersection(obj, obj2, cache = None):
     """
-    :param obj1: object 1  to check for intersection, must be a mesh
-    :param obj2: object 2  to check for intersection, must be a mesh
-    Check if any faces intersect with the other object
-    returns a boolean
+    Checks if the two objects are colliding, the code is from:
+        https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
+
+    The check is performed along the edges from the object, which has less edges.
+
+    :param obj1: object 1 to check for intersection, must be a mesh
+    :param obj2: object 2 to check for intersection, must be a mesh
+    returns a boolean and the cache of the objects, which already have been triangulated
     """
     assert(obj != obj2)
 
@@ -165,7 +169,7 @@ def check_intersection(obj, obj2, cache = None):
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
 
-        t, co, no, index = ray_cast(co_1, co_2)
+        t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
             intersect = True
             break
@@ -254,4 +258,12 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     bm.to_mesh(mesh)
     bm.free()
     return obj
+
+def get_all_mesh_objects():
+    """
+    Returns a list of all mesh objects in the scene
+    :return: a list of all mesh objects
+    """
+    return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
+
 

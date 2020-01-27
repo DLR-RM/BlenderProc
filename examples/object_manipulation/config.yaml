@@ -54,7 +54,7 @@
           {
             "selector": {
               "name": "getter.Object",
-              "condition": {
+              "conditions": {
                 "name": 'Suzanne'
               }
             },

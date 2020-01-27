@@ -53,6 +53,7 @@ The focus of this example is the ObjectManipulator module and ObjectGetter which
 Our condition is: `"name": 'Suzanne'`, which means that we want to select all the objects with `obj.name == 'Suzanne'`. In our case we have only one object which meets the requirement.
 Yet one may define any condition where `key` is the valid name of any attribute of objects present in the scene or the name of an existing custom property.
 This way it is possible to select multiple objects. One may try this condition to try multiple object selection: `"location": [0, 0, 0]`
+NOTE: any given attribute_value of the type string will be treated as a *REGULAR EXPRESSION*, so `"name": 'Cylinder.*'` condition will select us all three cylinders in the scene.
 
 Data types:
 attribute_name - a valid name of any attribute, attribute_value types: string/int/bool/float/list.
