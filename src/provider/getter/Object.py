@@ -26,7 +26,7 @@ class Object(Provider):
             "conditions": [{
                 "name": "Suzanne"   # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
             },{
-                "name": "Cube*",   # this checks if the name of the object starts with Cube (treated as a regular expr.)
+                "name": "Cube.*",   # this checks if the name of the object starts with Cube (treated as a regular expr.)
                 "category": "is_cube" # both have to be true
             }
             ]
