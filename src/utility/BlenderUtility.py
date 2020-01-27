@@ -104,12 +104,15 @@ def check_bb_intersection(obj1,obj2):
 
 def check_intersection(obj, obj2, cache = None):
     """
+    Checks if the two objects are colliding, the code is from:
+        https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
+
+    The check is performed along the edges from the object, which has less edges.
+
     :param obj1: object 1 to check for intersection, must be a mesh
     :param obj2: object 2 to check for intersection, must be a mesh
-    Check if any faces intersect with the other object
-    returns a boolean
+    returns a boolean and the cache of the objects, which already have been triangulated
     """
-    # refer to https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
     assert(obj != obj2)
 
     if cache is None:
@@ -178,7 +181,7 @@ def check_intersection(obj, obj2, cache = None):
     # new method to udpate scene
     bpy.context.view_layer.update()
 
-    return intersect
+    return intersect, cache
 
 def vector_to_euler(vector, vector_type):
     """
