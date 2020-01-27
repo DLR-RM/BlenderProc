@@ -41,8 +41,8 @@ class Object(Provider):
                 if key in obj:
                     # check if the type of the value of such custom property matches desired
                     if isinstance(obj[key], type(value)):
-                        # if is a string and if search is not returning None which means that we have a match
-                        if isinstance(obj[key], str) and re.search(value, obj[key]) is not None:
+                        # if is a string and if the whole string matches the given pattern
+                        if isinstance(obj[key], str) and re.fullmatch(value, obj[key]) is not None:
                             objects.append(obj)
                         # check for equality
                         elif obj[key] == value:
@@ -68,7 +68,7 @@ class Object(Provider):
                         else:
                             raise Exception("Types are not matching: %s and %s !"
                                             % (type(getattr(obj, key)), type(value)))
-                    if isinstance(getattr(obj, key), str) and re.search(value, getattr(obj, key)) is not None:
+                    if isinstance(getattr(obj, key), str) and re.fullmatch(value, getattr(obj, key)) is not None:
                         objects.append(obj)
                         # check for equality
                     # finally check for equality
