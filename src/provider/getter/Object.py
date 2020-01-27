@@ -105,6 +105,9 @@ class Object(Provider):
                                 or getattr(obj, key) == new_value):
                             select_object = False
                             break
+                    else:
+                        select_object = False
+                        break
                 if select_object:
                     new_objects.append(obj)
             return new_objects
