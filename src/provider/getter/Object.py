@@ -12,6 +12,29 @@ class Object(Provider):
 
     NOTE: any given attribute_value of the type string will be treated as a REGULAR EXPRESSION.
 
+    An example:
+        "name_of_selector": {
+            "provider": "getter.Object"
+            "conditions": {
+                "name": "Suzanne"   # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
+            }
+        }
+    Another more complex example:
+    Here all objects which are either named Suzanne or (the name starts with Cube and belong to the category "is_cube")
+        "name_of_selector": {
+            "provider": "getter.Object"
+            "conditions": [{
+                "name": "Suzanne"   # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
+            },{
+                "name": "Cube*",   # this checks if the name of the object is equal to Cube (treated as a regular expr.)
+                "category": "is_cube"
+            }
+            ]
+        }
+
+    This means: conditions, which are in one {...} are connected with AND, conditions which are in the
+    list are connected with or
+
     **Configuration**:
 
     .. csv-table::
@@ -28,51 +51,71 @@ class Object(Provider):
         """
         :return: List of objects that met the conditional requirement.
         """
-        cond = self.config.get_raw_dict('condition')
-        if len(cond) > 1:
-            raise Exception('ObjectGetter supports only one condition (for now)!')
+        conditions = self.config.get_raw_dict('conditions')
 
-        objects = []
-        # through every key-value/name-value pair in condition
-        for key, value in cond.items():
+        def perform_and_condition_check(and_condition, objects):
+            """
+            Checks for all objects in the scene if all given conditions are true, collects them in the return list
+            See class description on how to set up AND and OR connections.
+            :param and_condition: Given dictionary with conditions
+            :param objects: list of objects, which already have been used
+            :return: list of objects, which full fill the conditions
+            """
+            new_objects = []
             # through every object
             for obj in bpy.context.scene.objects:
-                # check if a custom property with this name exists
-                if key in obj:
-                    # check if the type of the value of such custom property matches desired
-                    if isinstance(obj[key], type(value)):
-                        # if is a string and if search is not returning None which means that we have a match
-                        if isinstance(obj[key], str) and re.search(value, obj[key]) is not None:
-                            objects.append(obj)
-                        # check for equality
-                        elif obj[key] == value:
-                            objects.append(obj)
-                    # raise an exception if not
-                    else:
-                        raise Exception("Types are not matching: %s and %s !"
-                                        % (type(obj[key]), type(value)))
-                # check if an attribute with this name exists
-                if hasattr(obj, key):
-                    # check if the type of the value of attribute matches desired
-                    if isinstance(getattr(obj, key), type(value)):
-                        new_value = value
-                    # if not, try to enforce some mathutils-specific type
-                    else:
-                        if isinstance(getattr(obj, key), mathutils.Vector):
-                            new_value = mathutils.Vector(value)
-                        elif isinstance(getattr(obj, key), mathutils.Euler):
-                            new_value = mathutils.Euler(value)
-                        elif isinstance(getattr(obj, key), mathutils.Color):
-                            new_value = mathutils.Color(value)
-                        # raise an exception if it is none of them
+                # if object is in list, skip it
+                if obj in objects:
+                    continue
+                select_object = True
+                # run over all conditions and check if any one of them holds, if one does not work -> go to next obj
+                for key, value in and_condition.items():
+                    # check if a custom property with this name exists
+                    if key in obj:
+                        # check if the type of the value of such custom property matches desired
+                        if isinstance(obj[key], type(value)):
+                            # if is a string and if search is not returning None which means that we have a match
+                            if not ((isinstance(obj[key], str) and re.search(value, obj[key]) is not None) or
+                                    obj[key] == value):
+                                select_object = False
+                                break
+                        # raise an exception if not
                         else:
                             raise Exception("Types are not matching: %s and %s !"
-                                            % (type(getattr(obj, key)), type(value)))
-                    if isinstance(getattr(obj, key), str) and re.search(value, getattr(obj, key)) is not None:
-                        objects.append(obj)
-                        # check for equality
-                    # finally check for equality
-                    elif getattr(obj, key) == new_value:
-                        objects.append(obj)
+                                            % (type(obj[key]), type(value)))
+                    # check if an attribute with this name exists
+                    if hasattr(obj, key):
+                        # check if the type of the value of attribute matches desired
+                        if isinstance(getattr(obj, key), type(value)):
+                            new_value = value
+                        # if not, try to enforce some mathutils-specific type
+                        else:
+                            if isinstance(getattr(obj, key), mathutils.Vector):
+                                new_value = mathutils.Vector(value)
+                            elif isinstance(getattr(obj, key), mathutils.Euler):
+                                new_value = mathutils.Euler(value)
+                            elif isinstance(getattr(obj, key), mathutils.Color):
+                                new_value = mathutils.Color(value)
+                            # raise an exception if it is none of them
+                            else:
+                                raise Exception("Types are not matching: %s and %s !"
+                                                % (type(getattr(obj, key)), type(value)))
+                        # or check for equality
+                        if not ((isinstance(getattr(obj, key), str) and re.search(value, getattr(obj, key)) is not None)
+                                or getattr(obj, key) == new_value):
+                            select_object = False
+                            break
+                if select_object:
+                    new_objects.append(obj)
+            return new_objects
 
-            return objects
+        # the list of conditions is treated as or condition
+        if isinstance(conditions, list):
+            objects = []
+            # each single condition is treated as and condition
+            for and_condition in conditions:
+                objects.extend(perform_and_condition_check(and_condition, objects))
+        else:
+            # only one condition was given, treat it as and condition
+            objects = perform_and_condition_check(conditions, [])
+        return objects
