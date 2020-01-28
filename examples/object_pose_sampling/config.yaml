@@ -51,12 +51,18 @@
       "module": "object.ObjectPoseSampler",
       "config":{
         "max_iterations": 1000,
+        "objects_to_sample": {
+          "provider": "getter.Object",
+          "conditions": {
+            "physics": 'passive'
+          }
+        },
         "pos_sampler": {
           "provider": "sampler.Uniform3d",
           "max": [5,5,5],
           "min": [-5,-5,-5]
         },
-        "rot_sampler":{
+        "rot_sampler": {
           "provider": "sampler.Uniform3d",
           "max": [0,0,0],
           "min": [6.28,6.28,6.28]
@@ -73,7 +79,8 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 50
+        "samples": 50,
+        "output_is_temp": False
       }
     },
     {

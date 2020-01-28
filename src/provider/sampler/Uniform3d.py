@@ -4,7 +4,7 @@ import random
 from src.main.Provider import Provider
 
 class Uniform3d(Provider):
-    """ Uniformly samples a 3-dimensional value.
+    """ Uniformly samples a 3-dimensional vector.
 
     **Configuration**:
 

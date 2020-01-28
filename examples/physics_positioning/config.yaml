@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <obj_file1> <obj_file2> <output_dir>
 {
   "version": 2,
   "setup": {
@@ -11,7 +11,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:0>"
+      "output_dir": "<args:2>"
     }
   },
   "modules": [
@@ -22,29 +22,35 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "examples/physics_positioning/active.obj",
+        "path": "<args:0>",
         "physics": "active"
-      }
-    },
-    {
-      "module": "object.ObjectPoseSampler",
-      "config": {
-        "pos_sampler": {
-          "provider": "sampler.Uniform3d",
-          "max": [5, 5, 8],
-          "min": [-5, -5, 12]
-        },
-        "rot_sampler": {
-          "provider": "sampler.Uniform3d",
-          "max": [0, 0, 0],
-          "min": [6.28, 6.28, 6.28]
-        }
       }
     },
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "examples/physics_positioning/passive.obj"
+        "path": "<args:1>"
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config":{
+        "objects_to_sample": {
+          "provider": "getter.Object",
+          "conditions": {
+            "physics": 'active'
+          }
+        },
+        "pos_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[5, 5, 8],
+          "min":[-5, -5, 12]
+        },
+        "rot_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[0, 0, 0],
+          "min":[6.28, 6.28, 6.28]
+        }
       }
     },
     {
