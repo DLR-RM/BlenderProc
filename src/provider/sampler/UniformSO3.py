@@ -18,7 +18,7 @@ class UniformSO3(Provider):
         :return: Sampled rotation in euler angles. Type: Mathutils Vector
         """
         quat_rand = self._random_quaternion()
-        euler_rand = transforms3d.euler.quat2euler(quat_rand)
+        euler_rand = mathutils.Quaternion(quat_rand).to_euler()
 
         return mathutils.Vector(euler_rand)
 
@@ -29,10 +29,10 @@ class UniformSO3(Provider):
             Three independent random variables that are uniformly distributed
             between 0 and 1.
 
-        >>> q = random_quaternion()
+        >>> q = _random_quaternion()
         >>> np.allclose(1, vector_norm(q))
         True
-        >>> q = random_quaternion(np.random.random(3))
+        >>> q = _random_quaternion(np.random.random(3))
         >>> len(q.shape), q.shape[0]==4
         (1, True)
         
