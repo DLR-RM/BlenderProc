@@ -31,14 +31,16 @@ class UpperRegionSampler(Provider):
                             possible values [float, float, float], default: [0.0, 0.0, 1.0]"
         "use_upper_dir", "the sampling above the selected surface, can be done with the upper_dir or
                             with the face normal, if this is true the upper_dir is used: default: True"
+        "use_ray_trace_check", "When this is true, a ray is cast towards the sampled object and only if the object
+                            is directly below the sampled position is the position accepted."
     """
     def __init__(self, config):
         Provider.__init__(self, config)
         self._regions = []
 
         # invoke a Getter, get a list of objects to manipulate
-        objects = config.get_list("to_sample_on")
-        if len(objects) == 0:
+        self._objects = config.get_list("to_sample_on")
+        if len(self._objects) == 0:
             raise Exception("The used selector returns an empty list, check the config value: \"to_sample_on\"")
 
         # min and max distance to the bounding box
@@ -47,6 +49,7 @@ class UpperRegionSampler(Provider):
         if self._max_height < self._min_height:
             raise Exception("The minimum height ({}) must be smaller "
                             "than the maximum height ({})!".format(self._min_height, self._max_height))
+        self._use_ray_trace_check = config.get_bool('use_ray_trace_check', False)
 
         # the upper direction, to define what is up in the scene
         # is used to selected the correct face
@@ -69,7 +72,7 @@ class UpperRegionSampler(Provider):
             return (vec1, vec2), normal
 
         # determine for each object in objects the region, where to sample on
-        for obj in objects:
+        for obj in self._objects:
             bb = get_bounds(obj)
             faces = []
             faces.append([bb[0], bb[1], bb[2], bb[3]])
@@ -103,13 +106,20 @@ class UpperRegionSampler(Provider):
         :return: Sampled value. Type: mathutils.Vector
         """
 
-        if self._regions:
-            selected_region = random.choice(self._regions)
-            ret = selected_region.sample_point()
-            if self._use_upper_dir:
-                ret += self._upper_dir * random.uniform(self._min_height, self._max_height)
-            else:
-                ret += selected_region.normal() * random.uniform(self._min_height, self._max_height)
+        if self._regions and len(self._regions) == len(self._objects):
+            selected_region_id = random.randint(0, len(self._regions))
+            while True:
+                selected_region, obj = self._regions[selected_region_id], self._objects[selected_region_id]
+                ret = selected_region.sample_point()
+                dir = self._upper_dir if self._use_upper_dir else selected_region.normal()
+                ret += dir * random.uniform(self._min_height, self._max_height)
+                if self._use_ray_trace_check:
+                    # check if the object was hit
+                    hit, _, _, _ = obj.ray_trace(ret, dir * -1.0)
+                    if hit:  # if the object was hit return
+                        break
+                else:
+                    break
             return ret
         else:
             # if the init failed return [0,0,0]
