@@ -32,7 +32,7 @@ class UpperRegionSampler(Provider):
         "use_upper_dir", "the sampling above the selected surface, can be done with the upper_dir or
                             with the face normal, if this is true the upper_dir is used: default: True"
         "use_ray_trace_check", "When this is true, a ray is cast towards the sampled object and only if the object
-                            is directly below the sampled position is the position accepted."
+                            is directly below the sampled position is the position accepted. default: False"
     """
     def __init__(self, config):
         Provider.__init__(self, config)
