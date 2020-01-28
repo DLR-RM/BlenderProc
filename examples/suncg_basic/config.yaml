@@ -70,7 +70,7 @@
               "config": {}
             }
           ],
-          "depth":[
+          "depth": [
             {
               "module": "postprocessing.TrimRedundantChannels",
               "config": {}

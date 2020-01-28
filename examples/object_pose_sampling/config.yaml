@@ -56,7 +56,7 @@
           "max": [5,5,5],
           "min": [-5,-5,-5]
         },
-        "rot_sampler":{
+        "rot_sampler": {
           "provider": "sampler.Uniform3d",
           "max": [0,0,0],
           "min": [6.28,6.28,6.28]
@@ -73,7 +73,8 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 50
+        "samples": 50,
+        "output_is_temp": False
       }
     },
     {
