@@ -4,12 +4,12 @@ from src.main.Module import Module
 
 
 class ObjectPoseSampler(Module):
-    """ Samples positions and rotations of selected object inside the sampling volume while performing collision checks.
+    """ Samples positions and rotations of selected object inside the sampling volume while performing mesh and bounding box collision checks.
 
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "selector", "Here call an appropriate Provider (Getter) in order to select objects."
+       "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects."
        "max_tries", "Amount of tries before giving up on an object and moving to the next one. Optional. Type: int. Default value: 1000."
        "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each object."
        "rot_sampler", "Here call an appropriate Provider (Sampler )in order to sample rotation (Euler angles 3d vector) for each object."
@@ -24,7 +24,7 @@ class ObjectPoseSampler(Module):
         placed = []
         # After this many tries we give up on current object and continue with the rest
         max_tries = self.config.get_int("max_iterations", 1000)
-        objects = self.config.get_list("selector")
+        objects = self.config.get_list("objects_to_sample")
 
         # cache to fasten collision detection
         cache = {}

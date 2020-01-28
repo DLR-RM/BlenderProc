@@ -56,7 +56,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
 {
   "module": "object.ObjectPoseSampler",
   "config": {
-    "selector": {
+    "objects_to_sample": {
       "provider": "getter.Object",
       "conditions": {
         "physics": 'active'

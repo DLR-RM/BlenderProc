@@ -36,7 +36,7 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
   "module": "object.ObjectPoseSampler",
   "config":{
     "max_iterations": 1000,
-    "selector": {
+    "objects_to_sample": {
       "provider": "getter.Object",
       "condition": {
         "physics": 'passive'

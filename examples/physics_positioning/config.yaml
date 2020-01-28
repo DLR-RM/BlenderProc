@@ -35,11 +35,11 @@
     {
       "module": "object.ObjectPoseSampler",
       "config":{
-      "selector": {
-        "provider": "getter.Object",
-        "conditions": {
-          "physics": 'active'
-        }
+        "objects_to_sample": {
+          "provider": "getter.Object",
+          "conditions": {
+            "physics": 'active'
+          }
         },
         "pos_sampler":{
           "provider":"sampler.Uniform3d",
