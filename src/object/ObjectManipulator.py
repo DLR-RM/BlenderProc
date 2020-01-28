@@ -17,7 +17,7 @@ class ObjectManipulator(Module):
     "selector", "ObjectGetter specific dict."
     "selector/name", "Name of the getter to use. Type: string."
     "selector/condition", "Condition to use for selecting. Type: dict."
-    "mode", "Mode of operation. Optional. Available values: "each" (if samplers are called, new sampled value is set to each selected object) and "all" (if samplers are called, value is sampled once and set to all selected objects)."
+    "mode", "Mode of operation. Optional. Type: string. Available values: "once_for_each" (if samplers are called, new sampled value is set to each selected object) and "once_for_all" (if samplers are called, value is sampled once and set to all selected objects)."
     """
 
     def __init__(self, config):
@@ -42,18 +42,18 @@ class ObjectManipulator(Module):
             # invoke a Getter, get a list of objects to manipulate
             objects = sel_conf.get_list("selector")
 
-            op_mode = self.config.get_string("mode", "each")
+            op_mode = self.config.get_string("mode", "once_for_each")
 
             for key in params_conf.data.keys():
                 # get raw value from the set parameters if it is to be sampled once for all selected objects
-                if op_mode == "all":
+                if op_mode == "once_for_all":
                     result = params_conf.get_raw_value(key)
 
                 for obj in objects:
                     # if it is a mesh
                     if obj.type == "MESH":
 
-                        if op_mode == "each":
+                        if op_mode == "once_for_each":
                             # get raw value from the set parameters if it is to be sampled anew for each selected object
                             result = params_conf.get_raw_value(key)
 
