@@ -21,7 +21,6 @@ class Uniform3d(Provider):
 
     def run(self):
         """
-        :param config: A configuration object containing the parameters necessary to sample.
         :return: Sampled value. Type: Mathutils Vector
         """
         # minimum values vector
