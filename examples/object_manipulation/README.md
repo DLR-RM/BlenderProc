@@ -66,7 +66,6 @@ This way it is possible to select multiple objects. One may try this condition t
 
 NOTE: any given attribute_value of the type string will be treated as a *REGULAR EXPRESSION*, so `"name": 'Cylinder.*'` condition will select us all three cylinders in the scene.
 
-
 For possible `attribute_name`'s data types check `provider.getter.Object` documentation.
 
 After `selector` section we are defining attribute name and attribute value pairs in the familiar format of {attribute_name: attribute_value}.
