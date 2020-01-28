@@ -37,7 +37,7 @@
       "config":{
       "selector": {
         "provider": "getter.Object",
-        "condition": {
+        "conditions": {
           "physics": 'active'
         }
         },

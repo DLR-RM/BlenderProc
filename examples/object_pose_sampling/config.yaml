@@ -53,7 +53,7 @@
         "max_iterations": 1000,
         "selector": {
           "provider": "getter.Object",
-          "condition": {
+          "conditions": {
             "physics": 'passive'
           }
         },
