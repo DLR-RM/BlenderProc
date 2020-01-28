@@ -70,7 +70,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
  {
-  "name": "main.Initializer",
+  "module": "main.Initializer",
   "config": {}
 }
 ```
@@ -82,7 +82,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
 {
-  "name": "loader.ObjectLoader",
+  "module": "loader.ObjectLoader",
   "config": {
     "path": "<args:1>"
   }
@@ -97,7 +97,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
 {
-  "name": "lighting.LightPositioning",
+  "module": "lighting.LightPositioning",
   "config": {
     "lights": [
       {
@@ -117,7 +117,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
 {
-  "name": "camera.CameraLoader",
+  "module": "camera.CameraLoader",
   "config": {
     "path": "<args:0>",
     "file_format": "location rotation/value",
@@ -145,7 +145,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 ```yaml
 {
-  "name": "renderer.NormalRenderer",
+  "module": "renderer.NormalRenderer",
   "config": {
       "output_key": "normals"
   }
@@ -163,7 +163,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 ```yaml
 {
-  "name": "renderer.RgbRenderer",
+  "module": "renderer.RgbRenderer",
   "config": {
      "output_key": "colors",
      "samples": 350
@@ -181,7 +181,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 ```yaml
 {
-  "name": "writer.Hdf5Writer",
+  "module": "writer.Hdf5Writer",
   "config": {
   }
 }

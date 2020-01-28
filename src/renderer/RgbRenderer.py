@@ -25,7 +25,12 @@ class RgbRenderer(Renderer):
         new_mat = bpy.data.materials.new(name="TextureLess")
         new_mat.use_nodes = True
         nodes = new_mat.node_tree.nodes
-        principled_bsdf = nodes.get("Principled BSDF")
+
+        principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+        if principled_bsdf and len(principled_bsdf) == 1:
+            principled_bsdf = principled_bsdf[0]
+        else:
+            print("Warning: The generation of the new texture failed, it has more than one Prinicipled BSDF!")
 
         # setting the color values for the shader
         principled_bsdf.inputs['Specular'].default_value = 0.65  # specular

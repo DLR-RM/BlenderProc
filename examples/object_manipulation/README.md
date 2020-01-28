@@ -33,18 +33,18 @@ python run.py examples/object_manipulation/config.yaml examples/object_manipulat
 
 ```yaml
     {
-      "name": "object.ObjectManipulator",
+      "module": "object.ObjectManipulator",
       "config": {
         "instances": [
           {
             "selector": {
-              "name": "Object",
-              "condition": {
-                "name": '^Suzanne$'
+              "provier": "Object",
+              "conditions": {
+                "name": 'Suzanne'
               }
             },
             "location": {
-              "name":"Uniform3dSampler",
+              "provider": "Uniform3dSampler",
               "max":[1, 2, 3],
               "min":[0, 1, 2]
             },
@@ -55,14 +55,17 @@ python run.py examples/object_manipulation/config.yaml examples/object_manipulat
       }
     },
 ```
+
 The focus of this example is the ObjectManipulator module and ObjectGetter which allow us to select multiple objects based on a user-defined condition and change the attribute and custom property values of the selected objects.
 * `instances` - list with one "action" upon the selected objects inside a cell.
 * `selector` - section of the `ObjectManipulator` for stating the `name` of the Getter and the `condition` to use for selecting.
 
-Our condition is: `"name": '^Suzanne$'`, which means that we want to select all the objects with `obj.name == 'Suzanne'`. In our case we have only one object which meets the requirement.
+Our condition is: `"name": 'Suzanne'`, which means that we want to select all the objects with `obj.name == 'Suzanne'`. In our case we have only one object which meets the requirement.
 Yet one may define any condition where `key` is the valid name of any attribute of objects present in the scene or the name of an existing custom property.
 This way it is possible to select multiple objects. One may try this condition to try multiple object selection: `"location": [0, 0, 0]`
-NOTE: any given attribute_value of the type string will be treated as a *REGULAR EXPRESSION*, so `"name": '^Cylinder'` condition will select us all three cylinders in the scene.
+
+NOTE: any given attribute_value of the type string will be treated as a *REGULAR EXPRESSION*, so `"name": 'Cylinder.*'` condition will select us all three cylinders in the scene.
+
 
 For possible `attribute_name`'s data types check `provider.getter.Object` documentation.
 

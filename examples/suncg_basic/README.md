@@ -49,7 +49,7 @@ This is necessary to coincide with the aspect ratio assumed by the `scn2cam` scr
 
 ```yaml
 {
-  "name": "loader.SuncgLoader",
+  "module": "loader.SuncgLoader",
   "config": {
     "path": "<args:1>"
   }
@@ -64,13 +64,13 @@ The `SuncgLoader` also sets the `category_id` of each object, such that semantic
 
 ```yaml
 {
-  "name": "camera.CameraLoader",
+  "module": "camera.CameraLoader",
   "config": {
     "path": "<args:0>",
     "file_format": "location rotation/value _ _ _ fov _ _",
     "source_frame": ["X", "-Z", "Y"],
     "default_cam_param": {
-      "rotation" {
+      "rotation": {
         "format": "forward_vec"
       }
       "fov_is_half": true
@@ -93,7 +93,7 @@ Also `fov_is_half` has to be activated, as SUNCG describes the FOV as the angle 
 
 ```yaml
 {
-  "name": "lighting.SuncgLighting",
+  "module": "lighting.SuncgLighting",
   "config": {}
 },
 ```

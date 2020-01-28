@@ -33,18 +33,18 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
 
 ```yaml
 {
-  "name": "object.ObjectPoseSampler",
+  "module": "object.ObjectPoseSampler",
   "config":{
     "max_iterations": 1000,
-    "pos_sampler":{
-      "name":"sampler.Uniform3d",
-      "max":[5,5,5],
-      "min":[-5,-5,-5]
+    "pos_sampler": {
+      "provider": "sampler.Uniform3d",
+      "max": [5,5,5],
+      "min": [-5,-5,-5]
     },
-    "rot_sampler":{
-      "name":"sampler.Uniform3d",
-      "max":[0,0,0],
-      "min":[6.28,6.28,6.28]
+    "rot_sampler": {
+      "provider": "sampler.Uniform3d",
+      "max": [0,0,0],
+      "min": [6.28,6.28,6.28]
     }
   }
 },

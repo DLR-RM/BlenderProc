@@ -25,7 +25,7 @@ class ConfigParser:
         self.args = None
         self.placeholders = None
         self.silent = silent
-        self.current_version = 1
+        self.current_version = 2
 
     def parse(self, config_path, args, show_help=False, skip_arg_placeholders=False):
         """ Reads the yaml file at the given path and returns it as a cleaned dict.
@@ -42,7 +42,7 @@ class ConfigParser:
             self.log("Parsing config '" + config_path + "'", is_info=True)
         with open(config_path, "r") as f:
             # Read in dict
-            self.config = yaml.load(f)
+            self.config = yaml.safe_load(f)
             self.args = args
 
             # Check if the config is up to date
@@ -190,9 +190,9 @@ class ConfigParser:
         :return: The path string.
         """
         # If the path goes through ["modules"][i] with i being the module index, then insert modules name for better readability
-        if len(path) > 1 and path[0] == "modules" and "name" in self.config["modules"][path[1]]:
+        if len(path) > 1 and path[0] == "modules" and "module" in self.config["modules"][path[1]]:
             path = path[:]
-            path[1] = "(" + self.config["modules"][path[1]]["name"] + ")"
+            path[1] = "(" + self.config["modules"][path[1]]["module"] + ")"
 
         return "/".join([str(path_segment) for path_segment in path])
 

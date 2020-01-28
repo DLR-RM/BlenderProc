@@ -41,9 +41,9 @@ class ObjectPoseSampler(Module):
                     bpy.context.view_layer.update() # then udpate scene
                     no_collision = True
                     for already_placed in placed: # Now check for collisions
-                        intersection  = check_bb_intersection(obj,already_placed) # First check if bounding boxes collides
+                        intersection = check_bb_intersection(obj, already_placed) # First check if bounding boxes collides
                         if intersection: # if they do
-                            intersection, cache = check_intersection(obj,already_placed) # then check for more refined collisions
+                            intersection, cache = check_intersection(obj, already_placed) # then check for more refined collisions
                         if intersection:
                             no_collision = False
                             break

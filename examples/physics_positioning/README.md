@@ -33,24 +33,24 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
 
 ```yaml
 {
-  "name": "loader.ObjectLoader",
+  "module": "loader.ObjectLoader",
   "config": {
     "path": "<args:0>",
     "physics": "active"
   }
 },
 {
-  "name": "object.ObjectPoseSampler",
+  "module": "object.ObjectPoseSampler",
   "config":{
     "pos_sampler": {
-      "name":"sampler.Uniform3d",
-      "max":[5, 5, 8],
-      "min":[-5, -5, 12]
+      "provider": "sampler.Uniform3d",
+      "max": [5, 5, 8],
+      "min": [-5, -5, 12]
     },
     "rot_sampler": {
-      "name":"sampler.Uniform3d",
-      "max":[0, 0, 0],
-      "min":[6.28, 6.28, 6.28]
+      "provider": "sampler.Uniform3d",
+      "max": [0, 0, 0],
+      "min": [6.28, 6.28, 6.28]
     }
   }
 },
@@ -63,7 +63,7 @@ Then the `ObjectPoseSampler` is used to place them randomly above the plane.
 
 ```yaml
 {
-  "name": "loader.ObjectLoader",
+  "module": "loader.ObjectLoader",
   "config": {
     "path": "<args: 1>"
   }
@@ -78,7 +78,7 @@ As we load this object after the `ObjectPoseSampler`, the location of the plane 
 
 ```yaml
 {
-  "name": "object.PhysicsPositioning",
+  "module": "object.PhysicsPositioning",
   "config": {
     "min_simulation_time": 4,
     "max_simulation_time": 20,

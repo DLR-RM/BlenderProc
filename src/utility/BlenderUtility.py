@@ -2,7 +2,8 @@ import bpy
 import bmesh
 from mathutils import Vector
 
-    
+import numpy as np
+
 
 def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
     """
@@ -55,7 +56,7 @@ def local_to_world(cords, world):
 def get_bounds(obj):
     """
     :param obj: a mesh object
-    returns the 8 axis aligned bounding box coordinates transformed to world matrix
+    :returns [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
@@ -71,33 +72,46 @@ def check_bb_intersection(obj1,obj2):
     """
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    Checks if there is a bounding box collision
+    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
+        The enclosing axis-aligned bounding box is calculated and used to check the intersection
     returns a boolean
     """
     b1w = get_bounds(obj1)
+    def min_and_max_point(bb):
+        """
+        Find the minimum and maximum point of the bounding box
+        :param bb: bounding box
+        :return: min, max
+        """
+        values = np.array(bb)
+        return np.min(values, axis=0), np.max(values, axis=0)
+    # get min and max point of the axis-aligned bounding box
+    min_b1, max_b1 = min_and_max_point(b1w)
     b2w = get_bounds(obj2)
-    origins = [[0,3],[0,4],[0,1]]
-    deltas = [b1w[origins[0][0]] - b1w[origins[0][1]], b1w[origins[1][0]] - b1w[origins[1][1]], b1w[origins[2][0]] - b1w[origins[2][1]]]
-    for point in b2w:
-        collide = True
-        # check if that point lies inside the area
-        # Explanation found at https://math.stackexchange.com/questions/1472049/check-if-a-point-is-inside-a-rectangular-shaped-area-3d
-        for idx in range(3): 
-            dot_with_query = dot_product(deltas[idx],point)
-            dot_with_r1 = dot_product(deltas[idx],b1w[origins[idx][0]])
-            dot_with_r2 = dot_product(deltas[idx],b1w[origins[idx][1]])
-            collide = collide and (dot_with_r2 < dot_with_query and dot_with_query < dot_with_r1)
-        if collide:
-            return True
-    return False
+    # get min and max point of the axis-aligned bounding box
+    min_b2, max_b2 = min_and_max_point(b2w)
+    collide = True
+    for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
+        # inspired by this:
+        # https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
+        # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
+        def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
+            # returns true if the min and max values are overlapping
+            return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
+        collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
+    return collide
 
 
 def check_intersection(obj, obj2, cache = None):
     """
-    :param obj1: object 1  to check for intersection, must be a mesh
-    :param obj2: object 2  to check for intersection, must be a mesh
-    Check if any faces intersect with the other object
-    returns a boolean
+    Checks if the two objects are colliding, the code is from:
+        https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
+
+    The check is performed along the edges from the object, which has less edges.
+
+    :param obj1: object 1 to check for intersection, must be a mesh
+    :param obj2: object 2 to check for intersection, must be a mesh
+    returns a boolean and the cache of the objects, which already have been triangulated
     """
     assert(obj != obj2)
 
@@ -155,7 +169,7 @@ def check_intersection(obj, obj2, cache = None):
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
 
-        t, co, no, index = ray_cast(co_1, co_2)
+        t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
             intersect = True
             break
@@ -186,3 +200,62 @@ def vector_to_euler(vector, vector_type):
         raise Exception("Unknown vector type: " + vector_type)
 
     return euler_angles
+
+def add_object_only_with_vertices(vertices, name='NewVertexObject'):
+    """
+    Generates a new object with the given vertices, no edges or faces are generated.
+
+    :param vertices: [[float, float, float]] list of vertices
+    :param name: str name of the new object
+    :return the generated obj
+    """
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    bm = bmesh.new()
+    for v in vertices:
+        bm.verts.new(v)
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+
+def add_cube_based_on_bb(bouding_box, name='NewCube'):
+    """
+    Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
+
+    :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
+    :param name: name of the new cube
+    :return the generated object
+    """
+    if len(bouding_box) != 8:
+        raise Exception("The amount of vertices is wrong for this bounding box!")
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    new_vertices = []
+    bm = bmesh.new()
+    for v in bouding_box:
+        new_vertices.append(bm.verts.new(v))
+    # create all 6 surfaces, the ordering is depending on the ordering of the vertices in the bounding box
+    bm.faces.new([new_vertices[0], new_vertices[1], new_vertices[2], new_vertices[3]])
+    bm.faces.new([new_vertices[0], new_vertices[4], new_vertices[5], new_vertices[1]])
+    bm.faces.new([new_vertices[1], new_vertices[5], new_vertices[6], new_vertices[2]])
+    bm.faces.new([new_vertices[2], new_vertices[3], new_vertices[7], new_vertices[6]])
+    bm.faces.new([new_vertices[0], new_vertices[4], new_vertices[7], new_vertices[3]])
+    bm.faces.new([new_vertices[4], new_vertices[5], new_vertices[6], new_vertices[7]])
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+

@@ -33,7 +33,7 @@ python run.py examples/coco_annotations/config.yaml examples/coco_annotations/ca
 
 ```yaml
   {
-    "name": "writer.CocoAnnotationsWriter",
+    "module": "writer.CocoAnnotationsWriter",
     "config": {
     }
   }
