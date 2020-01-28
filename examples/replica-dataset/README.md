@@ -1,7 +1,5 @@
 # Replica dataset
 
-![](rendering.png)
-
 This example introduces new tools for using replica dataset with BlenderProc.
 
 ## Usage
