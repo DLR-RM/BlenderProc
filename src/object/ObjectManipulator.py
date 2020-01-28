@@ -1,3 +1,4 @@
+import bpy
 from src.main.Module import Module
 from src.utility.Config import Config
 
@@ -54,3 +55,5 @@ class ObjectManipulator(Module):
                     # property, but if the name is new then new custom property will be created
                     else:
                         obj[key] = result
+        # update all objects matrices
+        bpy.context.view_layer.update()
