@@ -45,12 +45,12 @@ class ObjectPoseSampler(Module):
                     # Put the top object in queue at the sampled point in space
                     position = self.config.get_vector3d("pos_sampler")
                     rotation = self.config.get_vector3d("rot_sampler")
-                    obj.location = position
                     # assign it a new position
-                    obj.rotation_euler = rotation
+                    obj.location = position
                     # and a rotation
-                    bpy.context.view_layer.update()
+                    obj.rotation_euler = rotation
                     # then update scene
+                    bpy.context.view_layer.update()
                     no_collision = True
 
                     # Now check for collisions
