@@ -23,7 +23,9 @@
       "module": "loader.ObjectLoader",
       "config": {
         "path": "<args:0>",
-        "physics": "active"
+        "add_properties": {
+           "physics": "active"
+        }
       }
     },
     {
@@ -44,7 +46,10 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "physics": "passive"
+        }
       }
     },
     {
