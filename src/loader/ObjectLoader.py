@@ -36,5 +36,5 @@ class ObjectLoader(Loader):
         else:
             raise Exception("Loader module needs either a path or paths config value")
 
-        # Set the physics property of all imported objects
-        self._set_physics_property(loaded_objects)
+        # Set the add_properties of all imported objects
+        self._set_properties(loaded_objects)
