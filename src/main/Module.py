@@ -53,7 +53,7 @@ class Module:
         else:
             bpy.context.scene["output"] = [output]
 
-    def _register_output(self, default_prefix, default_key, suffix, version, stereo=False, unique_for_camposes=True):
+    def _register_output(self, default_prefix, default_key, suffix, version, stereo=False, unique_for_camposes=True, output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix"):
         """ Registers new output type using configured key and file prefix.
 
         :param default_prefix: The default prefix of the generated files.
@@ -62,11 +62,13 @@ class Module:
         :param version: The version number which will be stored at key_version in the final merged file.
         :param stereo: Boolean indicating whether the output of this rendering result will be stereo.
         :param unique_for_camposes: True if the output to be registered is unique for all the camera poses
+        :param output_key_parameter_name: The parameter name to use for retrieving the output key from the config.
+        :param output_file_prefix_parameter_name: The parameter name to use for retrieving the output file prefix from the config.
         """
 
         self._add_output_entry({
-            "key": self.config.get_string("output_key", default_key),
-            "path": os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix)) + ("%04d" if unique_for_camposes else "") + suffix,
+            "key": self.config.get_string(output_key_parameter_name, default_key),
+            "path": os.path.join(self._determine_output_dir(), self.config.get_string(output_file_prefix_parameter_name, default_prefix)) + ("%04d" if unique_for_camposes else "") + suffix,
             "version": version,
             "stereo": stereo
         })

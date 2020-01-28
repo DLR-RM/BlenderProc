@@ -19,6 +19,8 @@ class SegMapRenderer(Renderer):
        :header: "Parameter", "Description"
 
        "map_by", "Method to be used for color mapping. Allowed values: instance, class"
+       "segcolormap_output_key": "The key which should be used for storing the class instance to color mapping in a merged file."
+       "segcolormap_output_file_prefix": "The file prefix that should be used when writing the class instance to color mapping to file."
     """
 
     def __init__(self, config):
@@ -74,6 +76,9 @@ class SegMapRenderer(Renderer):
         :param objects: A list of objects.
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
+        if "num_labels" not in bpy.context.scene:
+            raise Exception("The scene is missing the custom property 'num_labels'. For generating semantic segmentation maps, this needs to contain the total number classes!")
+
         colors, num_splits_per_dimension = Utility.generate_equidistant_values(bpy.context.scene["num_labels"] + 1, self.render_colorspace_size_per_dimension)
 
         for obj in objects:
@@ -99,15 +104,16 @@ class SegMapRenderer(Renderer):
         colors, num_splits_per_dimension = Utility.generate_equidistant_values(len(objects) + 1, self.render_colorspace_size_per_dimension)
 
         color_map = []
-        for idx, obj in enumerate(objects):
-            self._colorize_object(obj, colors[idx])
-
-            obj_class = obj["category_id"] if "category_id" in obj else None
-            color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx})
 
         # Set world background label
-        self._set_world_background_color(colors[-1])
-        color_map.append({'objname': "background", 'class': -1, 'idx': len(colors) - 1})
+        self._set_world_background_color(colors[0])
+        color_map.append({'objname': "background", 'class': -1, 'idx': 0})
+
+        for idx, obj in enumerate(objects):
+            self._colorize_object(obj, colors[idx + 1])
+
+            obj_class = obj["category_id"] if "category_id" in obj else None
+            color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx + 1})
 
         return colors, num_splits_per_dimension, color_map
 
@@ -136,7 +142,12 @@ class SegMapRenderer(Renderer):
             if self._use_alpha_channel:
                 self.add_alpha_channel_to_textures(blurry_edges=False)
 
-            self._render("seg_")
+            # Determine path for temporary and for final output
+            temporary_segmentation_file_path = os.path.join(self._temp_dir, "seg_")
+            final_segmentation_file_path = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", "segmap_"))
+
+            # Render the temporary output
+            self._render("seg_", custom_file_path=temporary_segmentation_file_path)
 
             # Find optimal dtype of output based on max index
             for dtype in [np.uint8, np.uint16, np.uint32]:
@@ -146,18 +157,18 @@ class SegMapRenderer(Renderer):
 
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
-                file_path = os.path.join(self._determine_output_dir(), "seg_" + "%04d" % frame + ".exr")
+                file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
                 segmentation = imageio.imread(file_path)[:, :, :3]
 
                 segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
                 segmap = segmap.astype(optimal_dtype)
 
-                fname = os.path.join(self._determine_output_dir(), "segmap_" + "%04d" % frame)
+                fname = final_segmentation_file_path + "%04d" % frame
                 np.save(fname, segmap)
 
             # write color mappings to file
             if color_map is not None:
-                with open(os.path.join(self._determine_output_dir(), "class_inst_col_map.csv"), 'w', newline='') as csvfile:
+                with open(os.path.join(self._determine_output_dir(), self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map") + ".csv"), 'w', newline='') as csvfile:
                     fieldnames = list(color_map[0].keys())
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
@@ -166,4 +177,4 @@ class SegMapRenderer(Renderer):
 
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
         if color_map is not None:
-            self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False)
+            self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False, output_key_parameter_name="segcolormap_output_key", output_file_prefix_parameter_name="segcolormap_output_file_prefix")

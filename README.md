@@ -1,6 +1,6 @@
 # BlenderProc
 
-![](http://imgur.com/IfARGokl.png)
+![](readme.png)
 
 A procedural blender pipeline for image generation for deep learning.
 

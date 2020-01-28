@@ -34,12 +34,12 @@ python run.py examples/light_sampling/config.yaml examples/light_sampling/camera
 
 ```yaml
 {
-  "name": "lighting.LightSampler",
+  "module": "lighting.LightSampler",
   "config": {
     "lights": [
       {
         "location": {
-          "name": "sampler.Shell",
+          "provider": "sampler.Shell",
           "center": [1, 2, 3],
           "radius_min": 4,
           "radius_max": 7,

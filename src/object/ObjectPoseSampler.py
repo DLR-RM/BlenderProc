@@ -61,6 +61,7 @@ class ObjectPoseSampler(Module):
                         if intersection:
                             # then check for more refined collisions
                             intersection, cache = check_intersection(obj, already_placed)
+
                         if intersection:
                             no_collision = False
                             break

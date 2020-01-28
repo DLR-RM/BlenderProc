@@ -1,6 +1,6 @@
 # Name of the example
 
-![](https://i.imgur.com/KQjwKSg.png)
+![](example_rendering.png)
 
 One-two sentences explaining the main focus of the example, e.g. new module/feature we are introducing.
 

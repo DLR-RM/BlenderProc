@@ -33,30 +33,30 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
 
 ```yaml
 {
-  "name": "object.ObjectPoseSampler",
+  "module": "object.ObjectPoseSampler",
   "config":{
     "max_iterations": 1000,
     "selector": {
-      "name": "getter.Object",
+      "provider": "getter.Object",
       "condition": {
-        "physics": '^passive$'
+        "physics": 'passive'
       }
     },
     "pos_sampler":{
-      "name":"sampler.Uniform3d",
-      "max":[5,5,5],
-      "min":[-5,-5,-5]
+      "provider": "sampler.Uniform3d",
+      "max": [5,5,5],
+      "min": [-5,-5,-5]
     },
-    "rot_sampler":{
-      "name":"sampler.Uniform3d",
-      "max":[0,0,0],
-      "min":[6.28,6.28,6.28]
+    "rot_sampler": {
+      "provider": "sampler.Uniform3d",
+      "max": [0,0,0],
+      "min": [6.28,6.28,6.28]
     }
   }
 },
 ```
  
-`object.ObjectPoseSampler` for each `passive` (`^passive$` as a regex) object in the scene places the object outside the sampling volume until there are objects remaining and `max_iterations` have not been reached, point is sampled.
+`object.ObjectPoseSampler` for each `passive` object in the scene places the object outside the sampling volume until there are objects remaining and `max_iterations` have not been reached, point is sampled.
 Then the object is placed at the sampled point with collision check. If there is a collision - the position is reset and module tries to sample a new one.
 Here we are sampling location and rotation using `sampler.Uniform3d` provider.
 

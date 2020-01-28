@@ -29,22 +29,24 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
 
 ## Config File
 
-### 
+### Load active and passive objects
+
 ```yaml
 {
-  "name": "loader.ObjectLoader",
+  "module": "loader.ObjectLoader",
   "config": {
     "path": "<args:0>",
     "physics": "active"
     }
 },
 {
-  "name": "loader.ObjectLoader",
+  "module": "loader.ObjectLoader",
   "config": {
     "path": "<args:1>"
   }
 },
  ```
+
 First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `active`, so that they will later be influenced by gravity.
 Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`). The `physics` attribute will hereby be automatically set to `passive`.
 
@@ -52,36 +54,35 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
 
 ```yaml
 {
-  "name": "object.ObjectPoseSampler",
-  "config":{
+  "module": "object.ObjectPoseSampler",
+  "config": {
     "selector": {
-      "name": "getter.Object",
-      "condition": {
-        "physics": '^active$'
+      "provider": "getter.Object",
+      "conditions": {
+        "physics": 'active'
       }
     },
-    "pos_sampler":{
-      "name":"sampler.Uniform3d",
-      "max":[5, 5, 8],
-      "min":[-5, -5, 12]
+    "pos_sampler": {
+      "provider": "sampler.Uniform3d",
+      "max": [5, 5, 8],
+      "min": [-5, -5, 12]
     },
-    "rot_sampler":{
-      "name":"sampler.Uniform3d",
-      "max":[0, 0, 0],
-      "min":[6.28, 6.28, 6.28]
-    }
+    "rot_sampler": {
+      "provider": "sampler.Uniform3d",
+      "max": [0, 0, 0],
+      "min": [6.28, 6.28, 6.28]
   }
 },
 ```
- 
-The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `active` (`^active$` as a regex) physics property.
+
+The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `active` physics property.
 Pose sampling can be done by calling any two appropriate Providers (Samplers). In our case we called `sampler.Uniform3d` twice: once for `pos_sampler` and once for `rot_sampler`.
 
 ### Run simulation
 
 ```yaml
 {
-  "name": "object.PhysicsPositioning",
+  "module": "object.PhysicsPositioning",
   "config": {
     "min_simulation_time": 4,
     "max_simulation_time": 20,

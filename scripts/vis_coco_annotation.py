@@ -3,6 +3,7 @@ import json
 import argparse
 import h5py
 import numpy as np
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--conf', dest='conf', default='coco_annotations.json', help='coco annotation json file')
@@ -16,13 +17,13 @@ image_idx = args.image_index
 base_path = args.base_path
 
 # Read coco_annotations config
-with open(base_path + '/' + conf) as f:
+with open(os.path.join(base_path, conf)) as f:
     annotations = json.load(f)
     categories = annotations['categories']
     annotations = annotations['annotations']
 
 # Read rgb image from hdf5 file
-with h5py.File(base_path + '/' + str(image_idx) + ".hdf5", 'r') as data:
+with h5py.File(os.path.join(base_path, str(image_idx) + ".hdf5"), 'r') as data:
     im = Image.fromarray(np.array(data["colors"]).astype('uint8'), 'RGB')
     draw = ImageDraw.Draw(im)
 
@@ -42,6 +43,6 @@ for idx, annotation in enumerate(annotations):
         pdraw.polygon(annotation["segmentation"][0], fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))
         im.paste(poly, mask=poly)
 
-im.save('annotated.png', "PNG")
-an = Image.open('annotated.png')
+im.save(os.path.join(base_path,'coco_annotated_{}.png'.format(image_idx)), "PNG")
+an = Image.open(os.path.join(base_path,'coco_annotated_{}.png'.format(image_idx)))
 an.show()

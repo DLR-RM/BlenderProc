@@ -16,7 +16,7 @@ sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-pac
 for module in list(sys.modules.keys()):
     if module.startswith("src"):
         del sys.modules[module]
-        
+
 from src.main.Pipeline import Pipeline
 
 config_path = "examples/debugging/config.yaml"

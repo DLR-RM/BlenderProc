@@ -31,12 +31,12 @@ python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scen
 
 ```yaml
 {
-  "name": "camera.CameraSampler",
+  "module": "camera.CameraSampler",
   "config": {
     "cam_poses": [
       {
         "location": {
-          "name":"sampler.Uniform3d",
+          "provider":"sampler.Uniform3d",
           "max":[10, 10, 8],
           "min":[-10, -10, 12]
           }
@@ -44,7 +44,7 @@ python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scen
         "rotation": {
           "format": "look_at",
           "value": {
-            "name": "getter.POIGetter"
+            "provider": "getter.POIGetter"
           }
         }
       }

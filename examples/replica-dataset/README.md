@@ -1,7 +1,5 @@
 # Replica dataset
 
-![](rendering.png)
-
 This example introduces new tools for using replica dataset with BlenderProc.
 
 ## Usage
@@ -48,7 +46,7 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 
 ```yaml
 {
-  "name": "loader.ReplicaLoader",
+  "module": "loader.ReplicaLoader",
   "config": {
     "use_smooth_shading": "True",
     "use_ambient_occlusion": "True"
@@ -62,7 +60,7 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 
 ```yaml
 {
-  "name": "object.FloorExtractor",
+  "module": "object.FloorExtractor",
   "config": {
     "is_replica_object": "True",
     "obj_name": "mesh",
@@ -78,7 +76,7 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 
 ```yaml
 {
-  "name": "camera.ReplicaCameraSampler",
+  "module": "camera.ReplicaCameraSampler",
   "config": {
     "is_replica_object": "True",
     "sqrt_number_of_rays": 50,

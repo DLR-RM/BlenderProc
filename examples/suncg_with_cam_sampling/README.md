@@ -33,7 +33,7 @@ python run.py examples/suncg_with_cam_sampling/config.yaml <path to house.json> 
 
 ```yaml
 {
-  "name": "camera.SuncgCameraSampler",
+  "module": "camera.SuncgCameraSampler",
   "config": {
     "proximity_checks": {
       "min": 1.0
