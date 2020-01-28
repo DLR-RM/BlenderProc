@@ -21,15 +21,15 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
 ## Steps
 
 * Loads `active.obj` (6 spheres) with `"physics" = ACTIVE`: `loader.ObjectLoader` module.
-* Randomly places them: `object.ObjectPoseSampler` module.
 * Loads `passive.obj` (one bumpy plane) with `"physics" = PASSIVE`: `loader.ObjectLoader` module.
+* Randomly places them: `object.ObjectPoseSampler` module.
 * Adds a camera and a light: `camera.CameraLoader` and `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
 * Renders rgb and depth: `renderer.RgbRenderer` module.
 
 ## Config File
 
-### Load spheres and position them randomly
+### Load active and passive objects
 
 ```yaml
 {
@@ -37,11 +37,31 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
   "config": {
     "path": "<args:0>",
     "physics": "active"
-  }
+    }
 },
 {
+  "module": "loader.ObjectLoader",
+  "config": {
+    "path": "<args:1>"
+  }
+},
+ ```
+
+First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `active`, so that they will later be influenced by gravity.
+Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`). The `physics` attribute will hereby be automatically set to `passive`.
+
+### Random positioning
+
+```yaml
+{
   "module": "object.ObjectPoseSampler",
-  "config":{
+  "config": {
+    "objects_to_sample": {
+      "provider": "getter.Object",
+      "conditions": {
+        "physics": 'active'
+      }
+    },
     "pos_sampler": {
       "provider": "sampler.Uniform3d",
       "max": [5, 5, 8],
@@ -51,28 +71,12 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
       "provider": "sampler.Uniform3d",
       "max": [0, 0, 0],
       "min": [6.28, 6.28, 6.28]
-    }
   }
 },
 ```
 
-First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `active`, so that they will later be influenced by gravity. 
-Then the `ObjectPoseSampler` is used to place them randomly above the plane.
- 
-### Load plane
-
-```yaml
-{
-  "module": "loader.ObjectLoader",
-  "config": {
-    "path": "<args: 1>"
-  }
-}
-```
-
-Now the the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`).
-The `physics` attribute will hereby be automatically set to `passive`.
-As we load this object after the `ObjectPoseSampler`, the location of the plane is not randomly sampled.
+The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `active` physics property.
+Pose sampling can be done by calling any two appropriate Providers (Samplers). In our case we called `sampler.Uniform3d` twice: once for `pos_sampler` and once for `rot_sampler`.
 
 ### Run simulation
 
@@ -108,3 +112,4 @@ python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
 ## More examples
 
 * [object_pose_sampling](../object_pose_sampling): More on sampling object positions inside simple shapes.
+* [object_manipulation](../object_manipulation): More on true power of Providers.

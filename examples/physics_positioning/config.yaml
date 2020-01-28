@@ -27,24 +27,30 @@
       }
     },
     {
-      "module": "object.ObjectPoseSampler",
-      "config": {
-        "pos_sampler": {
-          "provider": "sampler.Uniform3d",
-          "max": [5, 5, 8],
-          "min": [-5, -5, 12]
-        },
-        "rot_sampler": {
-          "provider": "sampler.Uniform3d",
-          "max": [0, 0, 0],
-          "min": [6.28, 6.28, 6.28]
-        }
-      }
-    },
-    {
       "module": "loader.ObjectLoader",
       "config": {
         "path": "<args:1>"
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config":{
+        "objects_to_sample": {
+          "provider": "getter.Object",
+          "conditions": {
+            "physics": 'active'
+          }
+        },
+        "pos_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[5, 5, 8],
+          "min":[-5, -5, 12]
+        },
+        "rot_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[0, 0, 0],
+          "min":[6.28, 6.28, 6.28]
+        }
       }
     },
     {
