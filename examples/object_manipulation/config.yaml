@@ -62,23 +62,19 @@
     {
       "module": "object.ObjectManipulator",
       "config": {
-        "instances": [
-          {
-            "selector": {
-              "provider": "getter.Object",
-              "conditions": {
-                "name": 'Suzanne'
-              }
-            },
-            "location": {
-              "provider": "sampler.Uniform3d",
-              "max":[1, 2, 3],
-              "min":[0, 1, 2]
-            },
-            "rotation_euler": [1, 1, 0],
-            "physics": 'active'
+        "selector": {
+          "provider": "getter.Object",
+          "conditions": {
+            "name": 'Suzanne'
           }
-        ]
+        },
+        "location": {
+          "provider": "sampler.Uniform3d",
+          "max":[1, 2, 3],
+          "min":[0, 1, 2]
+        },
+        "rotation_euler": [1, 1, 0],
+        "physics": True
       }
     },
     {

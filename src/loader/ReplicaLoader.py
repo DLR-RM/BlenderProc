@@ -31,7 +31,7 @@ class ReplicaLoader(Loader):
         loaded_objects = Utility.import_objects(file_path)
 
         # Set the physics property of all imported objects
-        self._set_physics_property(loaded_objects)
+        self._set_properties(loaded_objects)
 
         if self.config.get_bool('use_ambient_occlusion', False):
             bpy.context.scene.world.light_settings.use_ambient_occlusion = True  # turn AO on

@@ -1,3 +1,4 @@
+import bpy
 from src.main.Module import Module
 from src.utility.Config import Config
 
@@ -25,43 +26,43 @@ class ObjectManipulator(Module):
 
     def run(self):
         """ 'Selects' objects and sets according values for defined attributes/custom properties."""
-        instances = self.config.get_list("instances", [])
-        for instance in instances:
-            # separating defined part with the selector from ambiguous part with attribute names and their values to set
-            set_params = {}
-            sel_objs = {}
-            for key in instance.keys():
-                # if its not a selector -> to the set parameters dict
-                if key != 'selector':
-                    set_params[key] = instance[key]
-                else:
-                    sel_objs[key] = instance[key]
-            # create Config objects
-            params_conf = Config(set_params)
-            sel_conf = Config(sel_objs)
-            # invoke a Getter, get a list of objects to manipulate
-            objects = sel_conf.get_list("selector")
+        # separating defined part with the selector from ambiguous part with attribute names and their values to set
+        set_params = {}
+        sel_objs = {}
+        for key in self.config.data.keys():
+            # if its not a selector -> to the set parameters dict
+            if key != 'selector':
+                set_params[key] = self.config.data[key]
+            else:
+                sel_objs[key] = self.config.data[key]
+        # create Config objects
+        params_conf = Config(set_params)
+        sel_conf = Config(sel_objs)
+        # invoke a Getter, get a list of objects to manipulate
+        objects = sel_conf.get_list("selector")
 
-            op_mode = self.config.get_string("mode", "once_for_each")
+        op_mode = self.config.get_string("mode", "once_for_each")
 
-            for key in params_conf.data.keys():
-                # get raw value from the set parameters if it is to be sampled once for all selected objects
-                if op_mode == "once_for_all":
-                    result = params_conf.get_raw_value(key)
+        for key in params_conf.data.keys():
+            # get raw value from the set parameters if it is to be sampled once for all selected objects
+            if op_mode == "once_for_all":
+                result = params_conf.get_raw_value(key)
 
-                for obj in objects:
-                    # if it is a mesh
-                    if obj.type == "MESH":
+            for obj in objects:
+                # if it is a mesh
+                if obj.type == "MESH":
 
-                        if op_mode == "once_for_each":
-                            # get raw value from the set parameters if it is to be sampled anew for each selected object
-                            result = params_conf.get_raw_value(key)
+                    if op_mode == "once_for_each":
+                        # get raw value from the set parameters if it is to be sampled anew for each selected object
+                        result = params_conf.get_raw_value(key)
 
-                        # if an attribute with such name exists for this object
-                        if hasattr(obj, key):
-                            # set the value
-                            setattr(obj, key, result)
-                        # if not, then treat it as a custom property. Values will be overwritten for existing custom
-                        # property, but if the name is new then new custom property will be created
-                        else:
-                            obj[key] = result
+                    # if an attribute with such name exists for this object
+                    if hasattr(obj, key):
+                        # set the value
+                        setattr(obj, key, result)
+                    # if not, then treat it as a custom property. Values will be overwritten for existing custom
+                    # property, but if the name is new then new custom property will be created
+                    else:
+                        obj[key] = result
+        # update all objects matrices
+        bpy.context.view_layer.update()

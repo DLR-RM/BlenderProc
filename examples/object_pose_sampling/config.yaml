@@ -22,7 +22,10 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "sample_pose": True
+        }
       }
     },
     {
@@ -54,7 +57,7 @@
         "objects_to_sample": {
           "provider": "getter.Object",
           "conditions": {
-            "physics": 'passive'
+            "sample_pose": True
           }
         },
         "pos_sampler": {
