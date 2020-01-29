@@ -1,10 +1,11 @@
 
 # Planned Features
 
-- Add support for YCB objects (not just Bob)
+- Merge BlenderProc and BlenderProc4Bop, except README
 - Add optical flow estimation
 - Add depth corruption (making the perfect depth images more realistic)
-- Merge BlenderProc and BlenderProc4Bop, except README
+- Add support for YCB objects (not just Bob)
+- Add support for single object datasets
 
 
 # Version History
