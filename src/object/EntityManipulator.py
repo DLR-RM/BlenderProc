@@ -3,9 +3,9 @@ from src.main.Module import Module
 from src.utility.Config import Config
 
 
-class ObjectManipulator(Module):
-    """ Allows basic manipulator for MESH objects.
-    Specify a desired getter for selecting objects in 'selector' section, then specify any desired {key: value} pairs.
+class EntityManipulator(Module):
+    """ Allows basic manipulator for all entities, including Meshes, Cameras, lights, and more.
+    Specify a desired getter for selecting entities in 'selector' section, then specify any desired {key: value} pairs.
     Each pair is treated like a {attribute_name:attribute_value} where attr_name is any valid name for an existing
     attribute or custom property or a name of a custom property to create, while the attr_value is an according value
     for such attribute or custom property (this value can be sampled).
@@ -15,10 +15,12 @@ class ObjectManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-    "selector", "ObjectGetter specific dict."
-    "selector/name", "Name of the getter to use. Type: string."
-    "selector/condition", "Condition to use for selecting. Type: dict."
-    "mode", "Mode of operation. Optional. Type: string. Available values: "once_for_each" (if samplers are called, new sampled value is set to each selected object) and "once_for_all" (if samplers are called, value is sampled once and set to all selected objects)."
+    "selector", "getter.entity (Provider) specific dict."
+    "selector/name", "Name of the getter.entity: Name of the getter to use. Type: string."
+    "selector/condition", "Condition of the getter.entity: Condition to use for selecting. Type: dict."
+    "mode", "Mode of operation. Optional. Type: string. Available values: "once_for_each" (if samplers are called,
+             new sampled value is set to each selected entity) and "once_for_all" (if samplers are called, value
+             is sampled once and set to all selected entities)."
     """
 
     def __init__(self, config):
@@ -49,20 +51,17 @@ class ObjectManipulator(Module):
                 result = params_conf.get_raw_value(key)
 
             for obj in objects:
-                # if it is a mesh
-                if obj.type == "MESH":
+                if op_mode == "once_for_each":
+                    # get raw value from the set parameters if it is to be sampled anew for each selected object
+                    result = params_conf.get_raw_value(key)
 
-                    if op_mode == "once_for_each":
-                        # get raw value from the set parameters if it is to be sampled anew for each selected object
-                        result = params_conf.get_raw_value(key)
-
-                    # if an attribute with such name exists for this object
-                    if hasattr(obj, key):
-                        # set the value
-                        setattr(obj, key, result)
-                    # if not, then treat it as a custom property. Values will be overwritten for existing custom
-                    # property, but if the name is new then new custom property will be created
-                    else:
-                        obj[key] = result
+                # if an attribute with such name exists for this object
+                if hasattr(obj, key):
+                    # set the value
+                    setattr(obj, key, result)
+                # if not, then treat it as a custom property. Values will be overwritten for existing custom
+                # property, but if the name is new then new custom property will be created
+                else:
+                    obj[key] = result
         # update all objects matrices
         bpy.context.view_layer.update()
