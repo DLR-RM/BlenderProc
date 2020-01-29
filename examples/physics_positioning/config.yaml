@@ -43,7 +43,8 @@
         "objects_to_sample": {
           "provider": "getter.Entity",
           "conditions": {
-            "physics": True
+            "physics": True,
+            "type": "MESH"
           }
         },
         "pos_sampler":{

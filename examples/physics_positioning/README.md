@@ -65,7 +65,8 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
     "objects_to_sample": {
       "provider": "getter.Entity",
       "conditions": {
-        "physics": True 
+        "physics": True,
+        "type": "MESH"
       }
     },
     "pos_sampler": {
