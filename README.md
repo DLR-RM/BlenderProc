@@ -86,6 +86,9 @@ property | description
 `custom_blender_path` | If you want to use an existing blender installation, you can set this option to the main directory of your blender installation which will then be used for running the blender pipeline. Therefore automatic blender installation is disabled and the options `blender_install_path` and `blender_version` are ignored. 
 `pip` | A list of python packages which are required to run the configured pipeline. They are automatically installed inside the blender python environment via `pip install`.
 
+### Change log 
+
+See the [change log](chane_log.md) for more information.
 
 ### Modules
 
