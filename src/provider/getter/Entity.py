@@ -4,7 +4,7 @@ import re
 
 from src.main.Provider import Provider
 
-class Object(Provider):
+class Entity(Provider):
     """ Returns a list of objects in accordance to a condition.
     Specify a desired condition in the format {attribute_name: attribute_value}, note that attribute_value for a custom
     property can be a string/int/bool/float, while only attribute_value for valid attributes of objects can be a bool or a
@@ -14,7 +14,7 @@ class Object(Provider):
 
     An example:
         "name_of_selector": {
-            "provider": "getter.Object"
+            "provider": "getter.Entity"
             "conditions": {
                 "name": "Suzanne"   # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
             }
@@ -22,9 +22,10 @@ class Object(Provider):
     Another more complex example:
     Here all objects which are either named Suzanne or (the name starts with Cube and belong to the category "is_cube")
         "name_of_selector": {
-            "provider": "getter.Object"
+            "provider": "getter.Entity"
             "conditions": [{
-                "name": "Suzanne"   # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
+                "name": "Suzanne",  # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
+                "type": "MESH"      # this will make sure that the object is a mesh
             },{
                 "name": "Cube.*",   # this checks if the name of the object starts with Cube (treated as a regular expr.)
                 "category": "is_cube" # both have to be true

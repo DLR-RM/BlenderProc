@@ -29,9 +29,9 @@ Here are examples for camera, light and object pose sampling:
 
 * [physics_positioning](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
 
-## Object manipulation
+## Entity manipulation
 
-* [object manipulation](object_manipulation): Changing various parameters of objects via selecting them through config file.
+* [entity manipulation](entity_manipulation): Changing various parameters of entities via selecting them through config file.
 
 ## Dataset related examples
 

@@ -41,9 +41,10 @@
       "module": "object.ObjectPoseSampler",
       "config":{
         "objects_to_sample": {
-          "provider": "getter.Object",
+          "provider": "getter.Entity",
           "conditions": {
-            "physics": True
+            "physics": True,
+            "type": "MESH"
           }
         },
         "pos_sampler":{
