@@ -89,11 +89,7 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
           "max": 4.0
         }
       },
-      "location": {
-        "provider":"sampler.Uniform3d",
-        "max":[0, 0, 1.55],
-        "min":[0, 0, 1.55]
-      },
+      "location": [0, 0, 1.55],
       "rotation": {
         "value": {
           "provider":"sampler.Uniform3d",
