@@ -122,8 +122,7 @@ class UpperRegionSampler(Provider):
                     break
             return ret
         else:
-            # if the init failed return [0,0,0]
-            return mathutils.Vector([0,0,0])
+            raise Exception("The amount of regions is either zero or does not match the amount of objects!")
 
 
 
