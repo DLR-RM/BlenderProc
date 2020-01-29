@@ -60,14 +60,6 @@ def get_bounds(obj):
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
-def dot_product(v1,v2):
-    """
-    :param v1: a vector of 3 scalars
-    :param v2: a vector of 3 scalars
-    returns dot product between the vectors
-    """
-    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
-
 def check_bb_intersection(obj1,obj2):
     """
     :param obj1: object 1  to check for intersection, must be a mesh
