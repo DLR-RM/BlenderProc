@@ -24,7 +24,7 @@
       "config": {
         "path": "<args:1>",
         "add_properties": {
-          "sample_pose": False
+          "sample_pose": True
         }
       }
     },
@@ -57,7 +57,7 @@
         "objects_to_sample": {
           "provider": "getter.Object",
           "conditions": {
-            "sample_pose": False
+            "sample_pose": True
           }
         },
         "pos_sampler": {
