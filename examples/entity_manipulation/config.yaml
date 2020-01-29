@@ -60,12 +60,13 @@
       }
     },
     {
-      "module": "object.ObjectManipulator",
+      "module": "object.EntityManipulator",
       "config": {
         "selector": {
-          "provider": "getter.Object",
+          "provider": "getter.Entity",
           "conditions": {
-            "name": 'Suzanne'
+            "name": 'Suzanne',
+            "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera
           }
         },
         "location": {
