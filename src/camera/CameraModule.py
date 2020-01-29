@@ -2,7 +2,7 @@ from src.main.Module import Module
 from src.utility.ItemCollection import ItemCollection
 from src.utility.Utility import Utility
 
-from mathutils import Matrix, Vector
+from mathutils import Matrix, Vector, Euler
 import math
 import bpy
 import numpy as np
@@ -40,7 +40,6 @@ class CameraModule(Module):
     def __init__(self, config):
         Module.__init__(self, config)
         self.source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
-        self.cam_pose_collection = ItemCollection(self._add_cam_pose, self.config.get_raw_dict("default_cam_param", {}))
 
     def _insert_key_frames(self, cam, cam_ob, frame_id):
         """ Insert key frames for all relevant camera attributes.
@@ -58,29 +57,23 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='location', frame=frame_id)
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
-    def _add_cam_intrinsics(self, config, cam_K=None):
-        """ Adds camera intrinsics according to the config file or given camera matrix cam_K.
+    def _set_cam_intrinsics(self, cam, config):
+        """ Sets camera intrinsics according to the config.
 
         :param config: A configuration object with cam intrinsics.
-        :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
         """
-        # Collect camera and camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-
         width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
         if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
             width, height = cam['loaded_resolution']
+        else:
+            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
 
-        if config.has_param("cam_K"):
-            if cam_K != None:
-                print('WARNING: Got cam_K from both config and loader. Using config cam_K.')
-            cam_K = np.array(config.get_list("cam_K", [])).reshape(3,3).astype(np.float32)
-
         cam.lens_unit = 'FOV'
-        if cam_K is not None:
+        if config.has_param("cam_K"):
+            cam_K = np.array(config.get_list("cam_K", [])).reshape(3, 3).astype(np.float32)
+
             if config.has_param("fov"):
                 print('WARNING: FOV defined in config is ignored')
             
@@ -98,51 +91,10 @@ class CameraModule(Module):
             # FOV is sometimes also given as the angle between forward vector and one side of the frustum
             if config.get_bool("fov_is_half", False):
                 cam.angle *= 2
+
         # Clipping (Default values are the same as default blender values)
         cam.clip_start = config.get_float("clip_start", 0.1)
         cam.clip_end = config.get_float("clip_end", 1000)
-
-    def _add_cam_pose(self, config, H_cam2world=None, cam_K=None):
-        """ Adds new cam pose + intrinsics according to the given configuration.
-
-        :param config: A configuration object which contains all parameters relevant for the new cam pose.
-        :param H_cam2world: Optionally, 4x4 numpy array defining homogenous trafo from camera to world coordinates. 
-        :param cam_K: Optionally, 3x3 numpy array containing the camera matrix cam_K.
-        """
-
-        self._add_cam_intrinsics(config, cam_K)
-
-        # Collect camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-
-        cam_ob.location = Utility.transform_point_to_blender_coord_frame(config.get_list("location", [0, 0, 0]), self.source_frame)
-
-        # Rotation
-        rotation_format = config.get_string("rotation/format", "euler")
-        value = config.get_vector3d("rotation/value", [0, 0, 0])
-        if rotation_format == "euler":
-            # Rotation, specified as euler angles
-            cam_ob.rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
-        elif rotation_format == "forward_vec":
-            # Rotation, specified as forward vector
-            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
-            # Convert forward vector to euler angle (Assume Up = Z)
-            cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
-        elif rotation_format == "look_at":
-            # Compute forward vector
-            forward_vec = value - cam_ob.location
-            forward_vec.normalize()
-            # Convert forward vector to euler angle (Assume Up = Z)
-            cam_ob.rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
-        else:
-            raise Exception("No such rotation format:" + str(rotation_format))
-
-        if H_cam2world is not None:
-            # Set homogeneous camera pose from input parameter H_cam2world
-            cam_ob.matrix_world = H_cam2world
-            # transform from OpenCV to blender coords
-            cam_ob.matrix_world @= Matrix.Rotation(math.radians(180), 4, "X")
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
@@ -152,7 +104,43 @@ class CameraModule(Module):
         # Distance between the camera pair (Default value is the same as the default blender value)
         cam.stereo.interocular_distance = config.get_float("interocular_distance", 0.065)
 
-        # Store new cam pose as next frame
-        frame_id = bpy.context.scene.frame_end
-        self._insert_key_frames(cam, cam_ob, frame_id)
-        bpy.context.scene.frame_end = frame_id + 1
+    def _set_cam_extrinsics(self, cam_ob, config):
+        """ Sets camera extrinsics according to the config.
+
+        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
+        :param config: A configuration object with cam extrinsics.
+        """
+        cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
+        cam_ob.matrix_world = cam2world_matrix
+
+    def _cam2world_matrix_from_cam_extrinsics(self, config):
+        """ Determines camera extrinsics by using the given config and returns them in form of a cam to world frame transformation matrix.
+
+        :param config: The configuration object.
+        :return: The cam to world transformation matrix.
+        """
+        position = Utility.transform_point_to_blender_coord_frame(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
+
+        # Rotation
+        rotation_format = config.get_string("rotation/format", "euler")
+        value = config.get_vector3d("rotation/value", [0, 0, 0])
+        if rotation_format == "euler":
+            # Rotation, specified as euler angles
+            rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
+        elif rotation_format == "forward_vec":
+            # Rotation, specified as forward vector
+            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
+            # Convert forward vector to euler angle (Assume Up = Z)
+            rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+        elif rotation_format == "look_at":
+            # Compute forward vector
+            forward_vec = value - position
+            forward_vec.normalize()
+            # Convert forward vector to euler angle (Assume Up = Z)
+            rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+        else:
+            raise Exception("No such rotation format:" + str(rotation_format))
+
+        cam2world_matrix = Matrix.Translation(Vector(position)) @ Euler(rotation_euler, 'XYZ').to_matrix().to_4x4()
+        return cam2world_matrix
+

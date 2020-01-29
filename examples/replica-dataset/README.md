@@ -78,17 +78,30 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 {
   "module": "camera.ReplicaCameraSampler",
   "config": {
-    "is_replica_object": "True",
-    "sqrt_number_of_rays": 50,
-    "near_clipping": 0.01,
-    "sample_amount": 15,
-    "proximity_checks": {
-      "min": 1.0,
-      "avg": {
-        "min": 2.0,
-        "max": 4.0
-      }
-    },
+    "is_replica_object": True,
+    "cam_poses": [{
+      "number_of_samples": 15,
+      "clip_start": 0.01,
+      "proximity_checks": {
+        "min": 1.0,
+        "avg": {
+          "min": 2.0,
+          "max": 4.0
+        }
+      },
+      "location": {
+        "provider":"sampler.Uniform3d",
+        "max":[0, 0, 1.55],
+        "min":[0, 0, 1.55]
+      },
+      "rotation": {
+        "value": {
+          "provider":"sampler.Uniform3d",
+          "max":[1.373401334, 0, 6.283185307],
+          "min":[1.373401334, 0, 0]
+        }
+      },
+    }]
   }
 },
 ```

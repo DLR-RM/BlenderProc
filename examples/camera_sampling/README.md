@@ -35,6 +35,7 @@ python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scen
   "config": {
     "cam_poses": [
       {
+        "number_of_samples": 5,
         "location": {
           "provider":"sampler.Uniform3d",
           "max":[10, 10, 8],

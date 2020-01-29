@@ -42,6 +42,7 @@
       "config": {
         "cam_poses": [
           {
+            "number_of_samples": 5,
             "location": {
               "provider":"sampler.Uniform3d",
               "max":[10, 10, 8],

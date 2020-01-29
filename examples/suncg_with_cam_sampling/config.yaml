@@ -28,10 +28,25 @@
     {
       "module": "camera.SuncgCameraSampler",
       "config": {
-        "proximity_checks": {
-          "min": 1.0
-        },
-        "min_interest_score": 0.4
+        "cam_poses": [{
+          "number_of_samples": 10,
+          "proximity_checks": {
+            "min": 1.0
+          },
+          "min_interest_score": 0.4,
+          "location": {
+            "provider":"sampler.Uniform3d",
+            "max":[0, 0, 2],
+            "min":[0, 0, 0.5]
+          },
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.2217, 0, 6.283185307],
+              "min":[1.2217, 0, 0]
+            }
+          },
+        }]
       }
     },
     {
