@@ -58,7 +58,12 @@ class CameraModule(Module):
         cam_ob.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
     def _set_cam_intrinsics(self, cam, config):
-        """ Sets camera intrinsics according to the config.
+        """ Sets camera intrinsics from a source with following priority
+
+           1. cam_K if defined in config file
+           2. function argument cam_K if not None
+           3. constant cam['loaded_intrinsics'] if set in Loader
+           4. default/config FOV
 
         :param config: A configuration object with cam intrinsics.
         """
@@ -70,10 +75,15 @@ class CameraModule(Module):
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
 
-        cam.lens_unit = 'FOV'
         if config.has_param("cam_K"):
             cam_K = np.array(config.get_list("cam_K", [])).reshape(3, 3).astype(np.float32)
+        elif 'loaded_intrinsics' in cam:
+            cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
+        else:
+            cam_K = None
 
+        cam.lens_unit = 'FOV'
+        if cam_K is not None:
             if config.has_param("fov"):
                 print('WARNING: FOV defined in config is ignored')
             
@@ -119,28 +129,31 @@ class CameraModule(Module):
         :param config: The configuration object.
         :return: The cam to world transformation matrix.
         """
-        position = Utility.transform_point_to_blender_coord_frame(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
+        if not config.has_param("cam2world_matrix"):
+            position = Utility.transform_point_to_blender_coord_frame(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
 
-        # Rotation
-        rotation_format = config.get_string("rotation/format", "euler")
-        value = config.get_vector3d("rotation/value", [0, 0, 0])
-        if rotation_format == "euler":
-            # Rotation, specified as euler angles
-            rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
-        elif rotation_format == "forward_vec":
-            # Rotation, specified as forward vector
-            forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
-            # Convert forward vector to euler angle (Assume Up = Z)
-            rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
-        elif rotation_format == "look_at":
-            # Compute forward vector
-            forward_vec = value - position
-            forward_vec.normalize()
-            # Convert forward vector to euler angle (Assume Up = Z)
-            rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+            # Rotation
+            rotation_format = config.get_string("rotation/format", "euler")
+            value = config.get_vector3d("rotation/value", [0, 0, 0])
+            if rotation_format == "euler":
+                # Rotation, specified as euler angles
+                rotation_euler = Utility.transform_point_to_blender_coord_frame(value, self.source_frame)
+            elif rotation_format == "forward_vec":
+                # Rotation, specified as forward vector
+                forward_vec = Vector(Utility.transform_point_to_blender_coord_frame(value, self.source_frame))
+                # Convert forward vector to euler angle (Assume Up = Z)
+                rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+            elif rotation_format == "look_at":
+                # Compute forward vector
+                forward_vec = value - position
+                forward_vec.normalize()
+                # Convert forward vector to euler angle (Assume Up = Z)
+                rotation_euler = forward_vec.to_track_quat('-Z', 'Y').to_euler()
+            else:
+                raise Exception("No such rotation format:" + str(rotation_format))
+
+            cam2world_matrix = Matrix.Translation(Vector(position)) @ Euler(rotation_euler, 'XYZ').to_matrix().to_4x4()
         else:
-            raise Exception("No such rotation format:" + str(rotation_format))
-
-        cam2world_matrix = Matrix.Translation(Vector(position)) @ Euler(rotation_euler, 'XYZ').to_matrix().to_4x4()
+            cam2world_matrix = Matrix(np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32))
         return cam2world_matrix
 
