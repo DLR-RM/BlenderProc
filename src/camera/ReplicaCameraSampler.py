@@ -22,6 +22,8 @@ class ReplicaCameraSampler(CameraSampler):
         - Always sets the x and y coordinate of the camera location to a value uniformly sampled inside a rooms bounding box
         - The configured z coordinate of the configured camera location is used as relative to the floor
         - All sampled camera locations need to lie straight above the room's floor to be valid
+        - Using the scene coverage/interestingness score in the ReplicaCameraSampler does not make much sense, as the 3D mesh is not split into individual objects.
+
         """
         CameraSampler.__init__(self, config)
 
