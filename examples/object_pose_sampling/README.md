@@ -39,7 +39,7 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
     "objects_to_sample": {
       "provider": "getter.Object",
       "condition": {
-        "physics": False
+        "sample_pose": False
       }
     },
     "pos_sampler":{
