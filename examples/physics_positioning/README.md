@@ -63,7 +63,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
   "module": "object.ObjectPoseSampler",
   "config": {
     "objects_to_sample": {
-      "provider": "getter.Object",
+      "provider": "getter.Entity",
       "conditions": {
         "physics": True 
       }
@@ -81,7 +81,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
 },
 ```
 
-The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `True` physics property.
+The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Entity` which allows us to select objects with `True` physics property.
 Pose sampling can be done by calling any two appropriate Providers (Samplers). In our case we called `sampler.Uniform3d` twice: once for `pos_sampler` and once for `rot_sampler`.
 
 ### Run simulation
@@ -118,4 +118,4 @@ python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
 ## More examples
 
 * [object_pose_sampling](../object_pose_sampling): More on sampling object positions inside simple shapes.
-* [object_manipulation](../object_manipulation): More on true power of Providers.
+* [entity_manipulation](../entity_manipulation): More on the true power of Providers.

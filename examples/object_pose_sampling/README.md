@@ -37,7 +37,7 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
   "config":{
     "max_iterations": 1000,
     "objects_to_sample": {
-      "provider": "getter.Object",
+      "provider": "getter.Entity",
       "condition": {
         "sample_pose": True 
       }
@@ -72,4 +72,4 @@ python scripts/visHdf5Files.py examples/object_pose_sampling/output/0.hdf5
 
 * [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
 * [light_sampling](../light_sampling): Introduction to sampling for lights.
-* [object_manipulation](../object_manipulation): More on true power of Providers.
+* [entity_manipulation](../entity_manipulation): More on the true power of Providers.

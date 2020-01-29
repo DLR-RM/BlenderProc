@@ -41,7 +41,7 @@
       "module": "object.ObjectPoseSampler",
       "config":{
         "objects_to_sample": {
-          "provider": "getter.Object",
+          "provider": "getter.Entity",
           "conditions": {
             "physics": True
           }
