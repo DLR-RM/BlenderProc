@@ -35,29 +35,24 @@ python run.py examples/object_manipulation/config.yaml examples/object_manipulat
     {
       "module": "object.ObjectManipulator",
       "config": {
-        "instances": [
-          {
-            "selector": {
-              "provier": "Object",
-              "conditions": {
-                "name": 'Suzanne'
-              }
-            },
-            "location": {
-              "provider": "Uniform3dSampler",
-              "max":[1, 2, 3],
-              "min":[0, 1, 2]
-            },
-            "rotation_euler": [1, 1, 0],
-            "physics": 'active'
+        "selector": {
+          "provier": "Object",
+          "conditions": {
+            "name": 'Suzanne'
           }
-        ]
+        },
+        "location": {
+          "provider": "Uniform3dSampler",
+          "max":[1, 2, 3],
+          "min":[0, 1, 2]
+        },
+        "rotation_euler": [1, 1, 0],
+        "physics": 'active'
       }
     },
 ```
 
 The focus of this example is the ObjectManipulator module and ObjectGetter which allow us to select multiple objects based on a user-defined condition and change the attribute and custom property values of the selected objects.
-* `instances` - list with one "action" upon the selected objects inside a cell.
 * `selector` - section of the `ObjectManipulator` for stating the `name` of the Getter and the `condition` to use for selecting.
 
 Our condition is: `"name": 'Suzanne'`, which means that we want to select all the objects with `obj.name == 'Suzanne'`. In our case we have only one object which meets the requirement.
