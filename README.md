@@ -88,7 +88,7 @@ property | description
 
 ### Change log 
 
-See the [change log](chane_log.md) for more information.
+See the [change log](change_log.md) for more information.
 
 ### Modules
 
