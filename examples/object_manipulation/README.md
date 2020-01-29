@@ -47,7 +47,7 @@ python run.py examples/object_manipulation/config.yaml examples/object_manipulat
           "min":[0, 1, 2]
         },
         "rotation_euler": [1, 1, 0],
-        "physics": 'active'
+        "physics": True
       }
     },
 ```
