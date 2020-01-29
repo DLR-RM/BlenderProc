@@ -22,7 +22,10 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "physics": False
+        }
       }
     },
     {
