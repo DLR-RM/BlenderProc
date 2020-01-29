@@ -1,5 +1,6 @@
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 import bpy
+
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 from src.main.Module import Module
 
 
