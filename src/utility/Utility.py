@@ -17,7 +17,7 @@ class Utility:
 
         Example for module_configs:
         [{
-          "name": "base.ModuleA",
+          "module": "base.ModuleA",
           "config": {...}
         }, ...]
 
@@ -42,10 +42,10 @@ class Utility:
         for module_config in module_configs:
             # If only the module name is given (short notation)
             if isinstance(module_config, str):
-                module_config = {"name": module_config}
+                module_config = {"module": module_config}
 
             # Merge global and local config (local overwrites global)
-            model_type = module_config["name"].split(".")[0]
+            model_type = module_config["module"].split(".")[0]
             base_config = global_config[model_type] if model_type in global_config else {}
 
             # Initialize config with all_base_config
@@ -57,9 +57,9 @@ class Utility:
                 # Overwrite with module specific config
                 Utility.merge_dicts(module_config["config"], config)
 
-            with Utility.BlockStopWatch("Initializing module " + module_config["name"]):
+            with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
                 # Import file and extract class
-                module_class = getattr(importlib.import_module("src." + module_config["name"]), module_config["name"].split(".")[-1])
+                module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
                 # Create module
                 modules.append(module_class(Config(config)))
 
@@ -250,7 +250,7 @@ class Utility:
         The given config should follow the following scheme:
 
         {
-          "name": "<name of provider class>"
+          "provider": "<name of provider class>"
           "parameters": {
             <provider parameters>
           }
@@ -264,10 +264,13 @@ class Utility:
 
         parameters = {}
         for key in config.data.keys():
-            if key != 'name':
+            if key != 'provider':
                 parameters[key] = config.data[key]
 
-        return Utility.build_provider(config.get_string("name"), parameters)
+        if not config.has_param('provider'):
+            raise Exception("Each provider needs an provider label, this one does not contain one: {}".format(config.data))
+
+        return Utility.build_provider(config.get_string("provider"), parameters)
 
     @staticmethod
     def generate_equidistant_values(num, space_size_per_dimension):
