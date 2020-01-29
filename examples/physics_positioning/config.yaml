@@ -24,7 +24,7 @@
       "config": {
         "path": "<args:0>",
         "add_properties": {
-           "physics": "active"
+           "physics": True
         }
       }
     },
@@ -33,7 +33,7 @@
       "config": {
         "path": "<args:1>",
         "add_properties": {
-          "physics": "passive"
+          "physics": False
         }
       }
     },
@@ -43,7 +43,7 @@
         "objects_to_sample": {
           "provider": "getter.Object",
           "conditions": {
-            "physics": 'active'
+            "physics": True
           }
         },
         "pos_sampler":{

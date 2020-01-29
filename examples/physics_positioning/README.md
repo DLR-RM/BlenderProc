@@ -20,8 +20,8 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
 
 ## Steps
 
-* Loads `active.obj` (6 spheres) with `"physics" = ACTIVE`: `loader.ObjectLoader` module.
-* Loads `passive.obj` (one bumpy plane) with `"physics" = PASSIVE`: `loader.ObjectLoader` module.
+* Loads `active.obj` (6 spheres) with `"physics" = True`: `loader.ObjectLoader` module.
+* Loads `passive.obj` (one bumpy plane) with `"physics" = False`: `loader.ObjectLoader` module.
 * Randomly places them: `object.ObjectPoseSampler` module.
 * Adds a camera and a light: `camera.CameraLoader` and `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
@@ -36,19 +36,25 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
   "module": "loader.ObjectLoader",
   "config": {
     "path": "<args:0>",
-    "physics": "active"
+    "add_properties": {
+      "physics": True 
+      }
     }
 },
 {
   "module": "loader.ObjectLoader",
   "config": {
-    "path": "<args:1>"
+    "path": "<args:1>",
+    "add_properties": {
+      "physics": False 
+      }
+    }
   }
 },
  ```
 
-First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `active`, so that they will later be influenced by gravity.
-Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`). The `physics` attribute will hereby be automatically set to `passive`.
+First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `True`, so that they will later be influenced by gravity.
+Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`). The `physics` attribute will hereby set to `False`. 
 
 ### Random positioning
 
@@ -59,7 +65,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
     "objects_to_sample": {
       "provider": "getter.Object",
       "conditions": {
-        "physics": 'active'
+        "physics": True 
       }
     },
     "pos_sampler": {
@@ -75,7 +81,7 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
 },
 ```
 
-The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `active` physics property.
+The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Object` which allows us to select objects with `True` physics property.
 Pose sampling can be done by calling any two appropriate Providers (Samplers). In our case we called `sampler.Uniform3d` twice: once for `pos_sampler` and once for `rot_sampler`.
 
 ### Run simulation
@@ -92,7 +98,7 @@ Pose sampling can be done by calling any two appropriate Providers (Samplers). I
 ```
 
 This module now internally does a physics simulation. 
-All objects with `pyhsics` set to `active` will be influenced by gravity, while all `passive` objects will remain steady.
+All objects with `physics` set to `True` will be influenced by gravity, while all `False` objects will remain steady.
 In this way the spheres will fall down until they hit the bumpy plane.
 
 When running the physics simulation the module checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped.

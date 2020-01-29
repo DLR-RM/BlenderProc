@@ -47,7 +47,7 @@ python run.py examples/object_manipulation/config.yaml examples/object_manipulat
           "min":[0, 1, 2]
         },
         "rotation_euler": [1, 1, 0],
-        "physics": 'active'
+        "physics": True
       }
     },
 ```
@@ -68,7 +68,7 @@ If attribute_name is a valid name of any attribute of selected object(s), its va
 If attribute_name is a name of an existing custom property, its value will be set to attribute_value.
 If attribute_name is not a valid name of any attribute nor it is a name of an existing custom property, it will be treated as a name for a new custom property, and its value will be set to attribute_value.
 
-In our case we sample the `location` attribute's value of the selected object using `Uniform3d` sampler, set the value of the `rotation_euler` attribute to `[1, 1, 0]`, and create new custom property `physics` and set it's value to `active`.
+In our case we sample the `location` attribute's value of the selected object using `Uniform3d` sampler, set the value of the `rotation_euler` attribute to `[1, 1, 0]`, and create new custom property `physics` and set it's value to `True`.
 By default for each selected object defined samplers will be called. If one wants to have values sampled once and have them set to defined attribute/properties, set `"mode": "all"` at the end of this section. 
 
 ## Visualization

@@ -74,7 +74,7 @@
           "min":[0, 1, 2]
         },
         "rotation_euler": [1, 1, 0],
-        "physics": 'active'
+        "physics": True
       }
     },
     {
