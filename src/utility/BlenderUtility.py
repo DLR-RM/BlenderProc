@@ -251,3 +251,11 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     bm.free()
     return obj
 
+def get_all_mesh_objects():
+    """
+    Returns a list of all mesh objects in the scene
+    :return: a list of all mesh objects
+    """
+    return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
+
+
