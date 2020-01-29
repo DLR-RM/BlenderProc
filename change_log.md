@@ -4,6 +4,7 @@
 - Add support for YCB objects (not just Bob)
 - Add optical flow estimation
 - Add depth corruption (making the perfect depth images more realistic)
+- Merge BlenderProc and BlenderProc4Bop, except README
 
 
 # Version History
