@@ -1,4 +1,4 @@
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 import bpy
 from src.main.Module import Module
 
