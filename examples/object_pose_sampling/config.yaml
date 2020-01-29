@@ -54,7 +54,7 @@
         "objects_to_sample": {
           "provider": "getter.Object",
           "conditions": {
-            "physics": 'passive'
+            "physics": False
           }
         },
         "pos_sampler": {
