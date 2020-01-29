@@ -9,6 +9,28 @@
 
 # Version History
 
+## Version 1.2.0: 29th January 2020
+
+- added more detailed examples to most of the important modules
+- adapt CoCo annotation tools to newer Version of SegMapRenderer
+- background class is now zero when doing instance segmentation
+- renamed getter.Object to getter.Entity, same for ObjectManipulator is now named EntityManipulator
+- entity conditions do now work with AND and OR connections
+- strings are now matched with fullmatch instead of search in entity conditions
+- conditions now support book custom properties
+- material randomizer now supports getter.entity providers
+- added UpperRegionSampler, which can sample on the up surface of the bounding box of an object
+- scripts now support execution with python3.x
+- physics are now saved with bool instead of active and passive
+- the ObjectLoader can now load several objects at once and set their properties with `"add_properties"`
+- moved more functionality in the camera sampler instead of having in specific sampler to make writing a new one easier
+- added a SO3 Sampler for rotation sampling
+- change the "name" of modules in the config to "module" and "provider" depending on the case
+- added this changelog
+- fixes:
+  - fixed a problem that the check_bb_intersection did not work right in all cases (Bounding box check)
+  - fixed a problem with the check_intersection fct., where the reference coordinate system was not always right.
+
 ## Version 1.1.0: 16th January 2020
 
 - Added provider, which can be executed inside of different modules, examples:
