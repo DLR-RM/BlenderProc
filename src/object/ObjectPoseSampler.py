@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
-import mathutils
-from math import pi
-=======
->>>>>>> develop
 import bpy
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 from src.main.Module import Module
 
 
