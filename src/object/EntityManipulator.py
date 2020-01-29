@@ -27,7 +27,7 @@ class EntityManipulator(Module):
         Module.__init__(self, config)
 
     def run(self):
-        """ 'Selects' objects and sets according values for defined attributes/custom properties."""
+        """ 'Selects' entities and sets according values for defined attributes/custom properties."""
         # separating defined part with the selector from ambiguous part with attribute names and their values to set
         set_params = {}
         sel_objs = {}
@@ -40,28 +40,28 @@ class EntityManipulator(Module):
         # create Config objects
         params_conf = Config(set_params)
         sel_conf = Config(sel_objs)
-        # invoke a Getter, get a list of objects to manipulate
-        objects = sel_conf.get_list("selector")
+        # invoke a Getter, get a list of entities to manipulate
+        entities = sel_conf.get_list("selector")
 
         op_mode = self.config.get_string("mode", "once_for_each")
 
         for key in params_conf.data.keys():
-            # get raw value from the set parameters if it is to be sampled once for all selected objects
+            # get raw value from the set parameters if it is to be sampled once for all selected entities
             if op_mode == "once_for_all":
                 result = params_conf.get_raw_value(key)
 
-            for obj in objects:
+            for entity in entities:
                 if op_mode == "once_for_each":
-                    # get raw value from the set parameters if it is to be sampled anew for each selected object
+                    # get raw value from the set parameters if it is to be sampled anew for each selected entity
                     result = params_conf.get_raw_value(key)
 
-                # if an attribute with such name exists for this object
-                if hasattr(obj, key):
+                # if an attribute with such name exists for this entity
+                if hasattr(entity, key):
                     # set the value
-                    setattr(obj, key, result)
+                    setattr(entity, key, result)
                 # if not, then treat it as a custom property. Values will be overwritten for existing custom
                 # property, but if the name is new then new custom property will be created
                 else:
-                    obj[key] = result
-        # update all objects matrices
+                    entity[key] = result
+        # update all entities matrices
         bpy.context.view_layer.update()
