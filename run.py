@@ -89,7 +89,7 @@ if len(required_packages) > 0:
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
     installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=os.path.join(blender_path, major_version, "python", "bin"))
     # Split up strings into two lists (names and versions)
-    installed_packages_name, installed_packages_versions = zip(*[line.lower().split('==') for line in installed_packages.splitlines()])
+    installed_packages_name, installed_packages_versions = zip(*[str(line).lower().split('==') for line in installed_packages.splitlines()])
 
     # Install all packages
     for package in required_packages:
