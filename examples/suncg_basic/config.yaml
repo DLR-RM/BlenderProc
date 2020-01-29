@@ -62,22 +62,6 @@
     },
     {
       "module": "writer.Hdf5Writer",
-      "config": {
-        "postprocessing_modules": {
-          "seg": [
-            {
-              "module": "postprocessing.TrimRedundantChannels",
-              "config": {}
-            }
-          ],
-          "depth": [
-            {
-              "module": "postprocessing.TrimRedundantChannels",
-              "config": {}
-            }
-          ]
-        }
-      }
     }
   ]
 }

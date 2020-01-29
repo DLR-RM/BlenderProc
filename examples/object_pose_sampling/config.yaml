@@ -51,6 +51,12 @@
       "module": "object.ObjectPoseSampler",
       "config":{
         "max_iterations": 1000,
+        "objects_to_sample": {
+          "provider": "getter.Object",
+          "conditions": {
+            "physics": 'passive'
+          }
+        },
         "pos_sampler": {
           "provider": "sampler.Uniform3d",
           "max": [5,5,5],
