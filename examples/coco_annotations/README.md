@@ -26,6 +26,7 @@ python run.py examples/coco_annotations/config.yaml examples/coco_annotations/ca
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.
+* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
 
