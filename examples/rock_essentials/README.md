@@ -39,21 +39,21 @@ python run.py examples/rock_essentials/config.yaml examples/rock_essentials/came
   "config": {
     "rocks": [ 
       {
-        "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-        "objects": ['Rock_Sea_Large003', 'Rock_Sea_Large002','Rock_Sea_Large001'],
+        "path": "/path/to/blend/file.blend",
+        "objects": ['Rock_1', 'Rock_2','Rock_3'],
         "physics": False,
         "render_levels": 2,
         "high_detail_mode": True,
       },
       {
-        "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
+        "path": "/path/to/blend/file.blend",
         "amount": 20,
         "physics": True,
         "render_levels": 2,
         "high_detail_mode": True
       },
       {
-        "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+        "path": "/path/to/blend/file.blend",
         "amount": 20,
         "physics": True,
         "render_levels": 2,
@@ -61,15 +61,15 @@ python run.py examples/rock_essentials/config.yaml examples/rock_essentials/came
       },
     ],
     "ground": {
-      "shader_path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+      "shader_path": "/path/to/blend/file.blend",
       "images": {
-        "image_path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Ground Textures/Sand/RDTSandWavy001/",
+        "image_path": "/path/to/textures/folder/",
         "maps": {
-          "color": "RDTSandWavy001_COL_VAR1_3K.jpg",
-          "roughness": "RDTSandWavy001_GLOSS_3K.jpg",
-          "reflection": "RDTSandWavy001_REFL_3K.jpg",
-          "normal": "RDTSandWavy001_NRM_3K.jpg",
-          "displacement": "RDTSandWavy001_DISP16_3K.tif"
+          "color": "color.jpg",
+          "roughness": "glossy.jpg",
+          "reflection": "reflection.jpg",
+          "normal": "normal.jpg",
+          "displacement": "displacement.tif"
         }
       },
       "plane_scale": [20, 20, 1],
