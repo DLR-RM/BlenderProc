@@ -260,4 +260,21 @@ def get_all_mesh_objects():
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
+def load_image(file_path):
+    """ Load the image at the given path returns its pixels as a numpy array.
+
+    The alpha channel is neglected.
+
+    :param file_path: The path to the image.
+    :return: The numpy array
+    """
+    # load image with blender function
+    img = bpy.data.images.load(file_path, check_existing=False)
+    # convert image to proper size
+    size = img.size
+    channels = img.channels
+    img = np.array(img.pixels).reshape(size[0], size[1], channels)
+    img = np.flip(img, axis=0)
+    return img[:, :, :3]
+
 

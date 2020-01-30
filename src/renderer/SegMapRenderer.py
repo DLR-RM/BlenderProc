@@ -7,6 +7,7 @@ import numpy as np
 
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
+from src.utility.BlenderUtility import load_image
 
 
 class SegMapRenderer(Renderer):
@@ -158,7 +159,7 @@ class SegMapRenderer(Renderer):
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
                 file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
-                segmentation = imageio.imread(file_path)[:, :, :3]
+                segmentation = load_image(file_path)
 
                 segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
                 segmap = segmap.astype(optimal_dtype)

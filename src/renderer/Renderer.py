@@ -1,4 +1,6 @@
 import os
+from sys import platform
+import multiprocessing
 
 import addon_utils
 import bpy
@@ -117,7 +119,12 @@ class Renderer(Module):
             bpy.context.scene.render.use_simplify = True
             bpy.context.scene.render.simplify_subdivision_render = simplify_subdivision_render
 
-        bpy.context.scene.cycles.device = "GPU"
+        if platform == "darwin":
+            # there is no gpu support in mac os so use the cpu with maximum power
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.scene.render.threads = multiprocessing.cpu_count()
+        else:
+            bpy.context.scene.cycles.device = "GPU"
         bpy.context.scene.cycles.glossy_bounces = self.config.get_int("glossy_bounces", 0)
         bpy.context.scene.cycles.ao_bounces_render = self.config.get_int("ao_bounces_render", 3)
         bpy.context.scene.cycles.max_bounces = self.config.get_int("max_bounces", 3)

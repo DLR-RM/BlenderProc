@@ -10,7 +10,7 @@ import numpy as np
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
-
+from src.utility.BlenderUtility import load_image
 
 class Hdf5Writer(Module):
     """ For each key frame merges all registered output files into one hdf5 file
@@ -98,23 +98,13 @@ class Hdf5Writer(Module):
         file_ending = file_path[file_path.rfind(".") + 1:].lower()
 
         if file_ending in ["exr", "png", "jpg"]:
-            return self._load_image(file_path)
+            return load_image(file_path)
         elif file_ending in ["npy", "npz"]:
             return self._load_npy(file_path)
         elif file_ending in ["csv"]:
             return self._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
-
-    def _load_image(self, file_path):
-        """ Load the image at the given path returns its pixels as a numpy array.
-
-        The alpha channel is neglected.
-
-        :param file_path: The path to the image.
-        :return: The numpy array
-        """
-        return imageio.imread(file_path)[:, :, :3]
 
     def _load_npy(self, file_path):
         """ Load the npy/npz file at the given path.
