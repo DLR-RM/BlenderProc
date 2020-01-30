@@ -59,7 +59,7 @@ In this example we are doing it in such a way that all camera positions always "
 * Sample location uniformly in a bounding box above the plane.
 
 Note that for this we are using [sampler.Uniform3d](../../src/provider/sampler) Provider which is not a part of a module, but a useful tool for introducing some "controlled randomness" into the process.
-To call a sampler for some attribute of a camera, specify a `provider` of a desired sampler and define some input arguments for it, e.g. `min` and `max`.
+To call a sampler for some attribute of a camera, specify a name (`provider`) of a desired sampler and define some input arguments for it, e.g. `min` and `max`.
 Sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.
 
 * Set orientation of the camera such that it will always look at the POI in any pose.
