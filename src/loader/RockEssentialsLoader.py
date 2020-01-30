@@ -100,18 +100,18 @@ class RockEssentialsLoader(Loader):
 
         return loaded_objects
     
-    def _set_rocks_properties(self, objects, subsec_config):
+    def _set_rocks_properties(self, objects, batch_config):
         """ Sets rocks properties in accordance to user-defined values.
 
         :param objects: List of objects.
-        :param subsec_config: Config object that contains user-defined settings for a current batch.
+        :param batch_config: Config object that contains user-defined settings for a current batch.
         """
         # get physics custom setting, 'passive' if not defined
-        physics = subsec_config.get_bool("physics", False)
+        physics = batch_config.get_bool("physics", False)
         # get render level for a batch, '3' if not defined
-        render_levels = subsec_config.get_int("render_levels", 3)
+        render_levels = batch_config.get_int("render_levels", 3)
         # get HDM custom setting for a batch, 'disabled'\'False' if not defined
-        high_detail_mode = subsec_config.get_bool("high_detail_mode", False)
+        high_detail_mode = batch_config.get_bool("high_detail_mode", False)
     
         for obj in objects:
             # set physics parameter
