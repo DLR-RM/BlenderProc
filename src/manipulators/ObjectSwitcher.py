@@ -97,19 +97,18 @@ class ObjectSwitcher(Module):
         for idx, new_obj_idx in enumerate(indices):
             original_object = objects_to_be_replaced[idx]
             new_object = objects_to_replace_with[new_obj_idx]
-            # print(new_object.hide_render)
             if self._can_replace(original_object, new_object):
+                # Duplicate the added object to be able to add it again.
+                new_object['category_id'] = original_object['category_id']
+                bpy.ops.object.duplicate_move()
+                objects_to_replace_with[new_obj_idx] = bpy.context.selected_objects[0]
+
                 # Update the scene
                 original_object.hide_render = True
                 new_object.hide_render = False
                 bpy.context.view_layer.objects.active = new_object
-                new_object['category_id'] = original_object['category_id']
                 
                 print('Switched', original_object.name, ' by an ikea object', new_object.name)
-      
-                # Duplicate the added object to be able to add it again.
-                bpy.ops.object.duplicate_move()
-                objects_to_replace_with[new_obj_idx] = bpy.context.selected_objects[0]
 
                 # Delete the original object
                 bpy.ops.object.select_all(action='DESELECT')
