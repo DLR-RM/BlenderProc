@@ -4,7 +4,7 @@ import random
 from src.main.Provider import Provider
 
 class Uniform3d(Provider):
-    """ Uniformly samples a 3-dimensional value.
+    """ Uniformly samples a 3-dimensional vector.
 
     **Configuration**:
 
@@ -21,7 +21,6 @@ class Uniform3d(Provider):
 
     def run(self):
         """
-        :param config: A configuration object containing the parameters necessary to sample.
         :return: Sampled value. Type: Mathutils Vector
         """
         # minimum values vector

@@ -229,7 +229,7 @@ class SuncgLoader(Loader):
                 self._transform_and_colorize_object(object, material_adjustments, transform, parent)
 
             # Set the physics property of all imported objects
-            self._set_physics_property(bpy.context.selected_objects)
+            self._set_properties(bpy.context.selected_objects)
 
     def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None):
         """ Applies the given transformation to the object and refactors its materials.

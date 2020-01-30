@@ -22,7 +22,10 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "sample_pose": True
+        }
       }
     },
     {
@@ -51,12 +54,19 @@
       "module": "object.ObjectPoseSampler",
       "config":{
         "max_iterations": 1000,
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "sample_pose": True,
+            "type": "MESH"
+          }
+        },
         "pos_sampler": {
           "provider": "sampler.Uniform3d",
           "max": [5,5,5],
           "min": [-5,-5,-5]
         },
-        "rot_sampler":{
+        "rot_sampler": {
           "provider": "sampler.Uniform3d",
           "max": [0,0,0],
           "min": [6.28,6.28,6.28]
@@ -73,7 +83,8 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 50
+        "samples": 50,
+        "output_is_temp": False
       }
     },
     {

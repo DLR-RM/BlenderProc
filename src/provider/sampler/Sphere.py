@@ -7,7 +7,7 @@ class Sphere(Provider):
     """ Samples a point from the surface or from the interior of solid sphere
 
     Gaussian is spherically symmetric. Sample from three independent Gaussian distributions
-    the direction of the vector inside the sphere. Then scalculate magnitude based on the operation mode.
+    the direction of the vector inside the sphere. Then calculate magnitude based on the operation mode.
 
     **Configuration**:
 
