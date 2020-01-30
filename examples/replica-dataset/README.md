@@ -4,7 +4,7 @@ This example introduces new tools for using replica dataset with BlenderProc.
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/replica-dataset/config.yaml <path_to_the_replica_data_folder>  examples/replica-dataset/output
@@ -109,7 +109,7 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py /example/replica-dataset/0.hdf5
+python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
 ```
 
 ## More examples

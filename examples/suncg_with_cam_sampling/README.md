@@ -6,7 +6,7 @@ In contrast to the SUNCG basic example, we do here not load precomputed camera p
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/suncg_with_cam_sampling/config.yaml <path to house.json> examples/suncg_with_cam_sampling/output

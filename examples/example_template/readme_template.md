@@ -45,7 +45,7 @@ Always end the description of the config section with short description of the o
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py /path/to/output/0.hdf5
+python scripts/visHdf5Files.py path/to/output/0.hdf5
 ```
 
 ## More examples

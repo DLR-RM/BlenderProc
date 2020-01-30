@@ -1,12 +1,13 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <output_dir>
 {
   "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81-linux-glibc217-x86_64",
+    "blender_version": "blender-2.80-linux-glibc217-x86_64",
     "pip": [
       "h5py",
-      "imageio"
+      "imageio",
+      "scikit-image"
     ]
   },
   "global": {
@@ -20,31 +21,143 @@
       "config": {}
     },
     {
-      "module": "loader.ObjectLoader",
+      "module": "loader.RockEssentialsLoader",
       "config": {
-        "path": "examples/debugging/scene.obj"
+        "rocks": [
+        {
+          "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+          "objects": ['Rock_Sea_Large003', 'Rock_Sea_Large002','Rock_Sea_Large001'],
+          "physics": False,
+          "render_levels": 2,
+          "high_detail_mode": True,
+        },
+        {
+          "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
+          "amount": 20,
+          "physics": True,
+          "render_levels": 2,
+          "high_detail_mode": True
+        },
+        {
+          "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+          "amount": 20,
+          "physics": True,
+          "render_levels": 2,
+          "high_detail_mode": True
+        },
+        ],
+        "ground": {
+          "shader_path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+          "images": {
+            "image_path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Ground Textures/Sand/RDTSandWavy001/",
+            "maps": {
+              "color": "RDTSandWavy001_COL_VAR1_3K.jpg",
+              "roughness": "RDTSandWavy001_GLOSS_3K.jpg",
+              "reflection": "RDTSandWavy001_REFL_3K.jpg",
+              "normal": "RDTSandWavy001_NRM_3K.jpg",
+              "displacement": "RDTSandWavy001_DISP16_3K.tif"
+            }
+          },
+          "plane_scale": [20, 20, 1],
+          "subdivision_cuts": 30,
+          "subdivision_render_levels": 2,
+          "displacement_strength": 0.7
+        }
+      }
+    },
+    {
+      "module": "object.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": 'Rock_Sea.*'
+          }
+        },
+        "location": {
+          "provider": "sampler.Uniform3d",
+          "max":[6, 6, 0],
+          "min":[-6, -6, 0]
+        }
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config":{
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "physics": True,
+            "type": "MESH"
+          }
+        },
+        "pos_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[5, 5, 5],
+          "min":[-5, -5, 6]
+        },
+        "rot_sampler":{
+          "provider":"sampler.Uniform3d",
+          "max":[5, 5, 5],
+          "min":[0, 0, 0]
+        }
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "path": "examples/rock_essentials/camera_positions",
+        "file_format": "location rotation/value",
+        "default_cam_param": {
+          "fov": 1
+        }
       }
     },
     {
       "module": "lighting.LightLoader",
       "config": {
         "lights": [
-          {
-            "type": "POINT",
-            "location": [5, -5, 5],
-            "energy": 1000 
-          }
+        {
+          "type": "SUN",
+          "location": [15, -15, 5],
+          "rotation": [-0.063, 0.6177, -0.1985],
+          "energy": 10,
+          "color": [1, 0.978, 0.407]
+        }
         ]
       }
     },
     {
-      "module": "camera.CameraLoader",
+      "module": "object.PhysicsPositioning",
       "config": {
-        "path": "examples/debugging/camera_positions",
-        "file_format": "location rotation/value",
-        "default_cam_param": {
-          "fov": 1
-        }
+        "min_simulation_time": 2,
+        "max_simulation_time": 4,
+        "check_object_interval": 1,
+
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "output_is_temp": False
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": "instance",
+        "output_is_temp": False
+      }
+    },
+    {
+      "module": "writer.CocoAnnotationsWriter",
+      "config": {
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
       }
     }
   ]
