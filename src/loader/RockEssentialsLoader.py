@@ -3,6 +3,7 @@ import os
 
 from src.loader.Loader import Loader
 from src.utility.Config import Config
+from src.utility.Utility import Utility
 
 
 class RockEssentialsLoader(Loader):
@@ -15,7 +16,7 @@ class RockEssentialsLoader(Loader):
        "path", "Path to a .blend file containing desired rock/cliff objects in //Object// section. Type: string."
        "objects", "List of rock-/cliff-object names to be loaded. Type: list. Optional. Default value: []. If not specified amount property is used for consequential loading."
        "amount", "Amount of rock-/cliff-object to load. Type: int. Optional. Default value: 0. If not specified amount will be eventually set to the amount of suitable objects in the current section of a blend file."
-       "render_levels", "Number of subdivs to perform when rendering. Type: int. Optional. Default value: 3."
+       "render_levels", "Number of subdivisions to perform when rendering. Type: int. Optional. Default value: 3."
        "high_detail_mode", "Flag for enabling HDM when possible. Type: boolean. Optional. Default value: False."
        "physics", "Custom property for physics/rigidbody state. Type: bool Optional. Default value: False."
 
@@ -33,7 +34,7 @@ class RockEssentialsLoader(Loader):
        "images/maps/displacement", "Full name of a displacement map image. Type: string."
        "plane_scale", "Scale of a ground plane. Type: mathutils Vector/list. Optional. Default value: [10, 10, 1]"
        "subdivision_cuts", "Amount of cuts along each plane axis. Type: int. Optional. Default value: 50."
-       "subdivision_render_levels", "Render level for a plane's subdiv modifier. Type: int. Optional. Default value: 3."
+       "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Optional. Default value: 3."
        "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Optional. Default value: 1."
     """
 
@@ -59,8 +60,8 @@ class RockEssentialsLoader(Loader):
     def _load_rocks(self, subsec_num, subsec_config):
         """ Loads rocks.
 
-        :param subsec_num: Number of a corresponding subsection in the config file which is used for object names gen.
-        :param subsec_config: Config object where all settings relevant for this rock batch are defined.
+        :param subsec_num: Number of a corresponding cell (batch) in `rocks` list in configuration. Used for name generation.
+        :param subsec_config: Config object that contains user-defined settings for a current batch.
         :return: List of loaded objects.
         """
         loaded_objects = []

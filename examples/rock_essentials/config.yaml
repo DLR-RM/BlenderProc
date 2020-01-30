@@ -64,7 +64,7 @@
           "displacement_strength": 0.7
         }
       }
-    }
+    },
     {
       "module": "object.EntityManipulator",
       "config": {
