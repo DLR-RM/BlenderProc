@@ -120,7 +120,7 @@ def check_intersection(obj, obj2, cache = None):
         cache[obj.name] = bm
 
     if obj2.name in cache:
-        bm = cache[obj2.name]
+        bm2 = cache[obj2.name]
     else:
         bm2 = triangulate(obj2, transform=True, triangulate=True)
         cache[obj2.name] = bm2
@@ -136,12 +136,11 @@ def check_intersection(obj, obj2, cache = None):
     bm2.to_mesh(me_tmp)
     bm2.free()
     obj_tmp = bpy.data.objects.new(name=me_tmp.name, object_data=me_tmp)
-    #scene.objects.link(obj_tmp)
-    # refer https://wiki.blender.org/wiki/Reference/Release_Notes/2.80/Python_API/Scene_and_Object_API
-    scene.collection.objects.link(obj_tmp) # add object to scene
-    #scene.update() # depretiated
-    bpy.context.view_layer.update() # new method to udpate scene
-
+    scene.collection.objects.link(obj_tmp)
+    bpy.context.view_layer.update()
+    
+    # this ray_cast is performed in object coordinates, but both objects were moved in world coordinates
+    # so the world_matrix is the identity matrix
     ray_cast = obj_tmp.ray_cast
 
     intersect = False
@@ -158,8 +157,11 @@ def check_intersection(obj, obj2, cache = None):
         co_2 = v2.co.copy()
         co_mid = (co_1 + co_2) * 0.5
         no_mid = (v1.normal + v2.normal).normalized() * EPS_NORMAL
+        # interpolation between co_1 and co_mid, with a small value to get away from the original co_1
+        # plus the average direction of the normal to get away from the object itself
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
+
 
         t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
