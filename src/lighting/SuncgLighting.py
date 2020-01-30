@@ -75,7 +75,7 @@ class SuncgLighting(Module):
                     raise Exception("This material: {} has not one material output!".format(m.name))
                 emission = Utility.get_nodes_with_type(nodes, "Emission")
                 if not emission:
-                    diffuse = Utility.get_nodes_with_type(nodes, "BSDFDiffuse")
+                    diffuse = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
                     if diffuse:
                         if len(diffuse) == 1:
                             diffuse = diffuse[0]
@@ -164,8 +164,8 @@ class SuncgLighting(Module):
             else:
                 raise Exception("This material: {} has not one material output!".format(m.name))
 
-            if Utility.get_nodes_with_type(nodes, "Emission"):
-                diffuse = Utility.get_nodes_with_type(nodes, "DiffuseBSDF")
+            if not Utility.get_nodes_with_type(nodes, "Emission"):
+                diffuse = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
                 if diffuse:
                     if len(diffuse) == 1:
                         diffuse = diffuse[0]
