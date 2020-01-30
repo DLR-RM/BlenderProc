@@ -22,7 +22,10 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "sample_pose": True
+        }
       }
     },
     {
@@ -52,9 +55,10 @@
       "config":{
         "max_iterations": 1000,
         "objects_to_sample": {
-          "provider": "getter.Object",
+          "provider": "getter.Entity",
           "conditions": {
-            "physics": 'passive'
+            "sample_pose": True,
+            "type": "MESH"
           }
         },
         "pos_sampler": {

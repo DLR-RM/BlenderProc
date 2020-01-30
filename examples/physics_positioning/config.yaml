@@ -23,22 +23,28 @@
       "module": "loader.ObjectLoader",
       "config": {
         "path": "<args:0>",
-        "physics": "active"
+        "add_properties": {
+           "physics": True
+        }
       }
     },
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "physics": False
+        }
       }
     },
     {
       "module": "object.ObjectPoseSampler",
       "config":{
         "objects_to_sample": {
-          "provider": "getter.Object",
+          "provider": "getter.Entity",
           "conditions": {
-            "physics": 'active'
+            "physics": True,
+            "type": "MESH"
           }
         },
         "pos_sampler":{
@@ -47,9 +53,7 @@
           "min":[-5, -5, 12]
         },
         "rot_sampler":{
-          "provider":"sampler.Uniform3d",
-          "max":[0, 0, 0],
-          "min":[6.28, 6.28, 6.28]
+          "provider":"sampler.UniformSO3"
         }
       }
     },

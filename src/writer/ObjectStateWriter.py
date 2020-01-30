@@ -1,4 +1,5 @@
 from src.utility.ItemWriter import ItemWriter
+from src.utility.BlenderUtility import get_all_mesh_objects
 import bpy
 import os
 
@@ -21,9 +22,8 @@ class ObjectStateWriter(StateWriter):
     def run(self):
         # Collect all mesh objects
         objects = []
-        for object in bpy.context.scene.objects:
-            if object.type == 'MESH':
-                objects.append(object)
+        for object in get_all_mesh_objects():
+            objects.append(object)
 
         self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states", ["id", "location", "rotation_euler"])
 

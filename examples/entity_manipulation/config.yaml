@@ -60,25 +60,22 @@
       }
     },
     {
-      "module": "object.ObjectManipulator",
+      "module": "object.EntityManipulator",
       "config": {
-        "instances": [
-          {
-            "selector": {
-              "provider": "getter.Object",
-              "conditions": {
-                "name": 'Suzanne'
-              }
-            },
-            "location": {
-              "provider": "sampler.Uniform3d",
-              "max":[1, 2, 3],
-              "min":[0, 1, 2]
-            },
-            "rotation_euler": [1, 1, 0],
-            "physics": 'active'
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": 'Suzanne',
+            "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera
           }
-        ]
+        },
+        "location": {
+          "provider": "sampler.Uniform3d",
+          "max":[1, 2, 3],
+          "min":[0, 1, 2]
+        },
+        "rotation_euler": [1, 1, 0],
+        "physics": True
       }
     },
     {

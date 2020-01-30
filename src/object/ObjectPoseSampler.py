@@ -1,4 +1,5 @@
 import bpy
+
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 from src.main.Module import Module
 
@@ -31,7 +32,6 @@ class ObjectPoseSampler(Module):
 
         # for every selected object
         for obj in objects:
-
             if obj.type == "MESH":
 
                 print("Trying to put ", obj.name)

@@ -60,14 +60,6 @@ def get_bounds(obj):
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
-def dot_product(v1,v2):
-    """
-    :param v1: a vector of 3 scalars
-    :param v2: a vector of 3 scalars
-    returns dot product between the vectors
-    """
-    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
-
 def check_bb_intersection(obj1,obj2):
     """
     :param obj1: object 1  to check for intersection, must be a mesh
@@ -128,7 +120,7 @@ def check_intersection(obj, obj2, cache = None):
         cache[obj.name] = bm
 
     if obj2.name in cache:
-        bm = cache[obj2.name]
+        bm2 = cache[obj2.name]
     else:
         bm2 = triangulate(obj2, transform=True, triangulate=True)
         cache[obj2.name] = bm2
@@ -144,12 +136,11 @@ def check_intersection(obj, obj2, cache = None):
     bm2.to_mesh(me_tmp)
     bm2.free()
     obj_tmp = bpy.data.objects.new(name=me_tmp.name, object_data=me_tmp)
-    #scene.objects.link(obj_tmp)
-    # refer https://wiki.blender.org/wiki/Reference/Release_Notes/2.80/Python_API/Scene_and_Object_API
-    scene.collection.objects.link(obj_tmp) # add object to scene
-    #scene.update() # depretiated
-    bpy.context.view_layer.update() # new method to udpate scene
-
+    scene.collection.objects.link(obj_tmp)
+    bpy.context.view_layer.update()
+    
+    # this ray_cast is performed in object coordinates, but both objects were moved in world coordinates
+    # so the world_matrix is the identity matrix
     ray_cast = obj_tmp.ray_cast
 
     intersect = False
@@ -166,8 +157,11 @@ def check_intersection(obj, obj2, cache = None):
         co_2 = v2.co.copy()
         co_mid = (co_1 + co_2) * 0.5
         no_mid = (v1.normal + v2.normal).normalized() * EPS_NORMAL
+        # interpolation between co_1 and co_mid, with a small value to get away from the original co_1
+        # plus the average direction of the normal to get away from the object itself
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
+
 
         t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
@@ -258,4 +252,12 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     bm.to_mesh(mesh)
     bm.free()
     return obj
+
+def get_all_mesh_objects():
+    """
+    Returns a list of all mesh objects in the scene
+    :return: a list of all mesh objects
+    """
+    return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
+
 

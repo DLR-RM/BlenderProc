@@ -38,30 +38,33 @@
       }
     },
     {
-      "module": "camera.CameraSampler",
+      "module": "camera.CameraLoader",
       "config": {
         "cam_poses": [
-          {
-            "number_of_samples": 5,
-            "location": {
-              "provider":"sampler.Uniform3d",
-              "max":[10, 10, 8],
-              "min":[-10, -10, 12]
-            },
-            "rotation": {
-              "format": "look_at",
-              "value": {
-                "provider": "getter.POI"
-              }
-            }
+        {
+          "location": [0, -13.741, 4.1242],
+          "rotation": {
+            "value":[1.3, 0, 0]
           }
-        ]
+        },
+        {
+          "location": [1.9488, -6.5202, 0.23291],
+          "rotation": {
+            "value": [1.84, 0, 0.5]
+          }
+        }
+        ],
+        "default_cam_param": {
+          "fov": 1
+        }
       }
     },
     {
-      "module": "renderer.NormalRenderer",
+      "module": "materials.MaterialRandomizer",
       "config": {
-        "output_key": "normals"
+        "randomization_level": 0.5,
+        "randomize_textures_only": False,
+        "output_textures_only": False
       }
     },
     {
@@ -73,9 +76,6 @@
     },
     {
       "module": "writer.Hdf5Writer",
-      "config": {
-      }
     }
   ]
 }
-

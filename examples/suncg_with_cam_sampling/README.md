@@ -35,15 +35,31 @@ python run.py examples/suncg_with_cam_sampling/config.yaml <path to house.json> 
 {
   "module": "camera.SuncgCameraSampler",
   "config": {
-    "proximity_checks": {
-      "min": 1.0
-    },
-    "min_interest_score": 0.4
+    "cam_poses": [{
+      "number_of_samples": 10,
+      "proximity_checks": {
+        "min": 1.0
+      },
+      "min_interest_score": 0.4,
+      "location": {
+        "provider":"sampler.Uniform3d",
+        "max":[0, 0, 2],
+        "min":[0, 0, 0.5]
+      },
+      "rotation": {
+        "value": {
+          "provider":"sampler.Uniform3d",
+          "max":[1.2217, 0, 6.283185307],
+          "min":[1.2217, 0, 0]
+        }
+      },
+    }]
   }
-},
 ```
 
-This module goes through all rooms of the loaded house and samples camera poses inside them randomly.
+With this module we want to sample `10` valid camera poses inside the loaded SUNCG rooms. 
+The x and y coordinate are hereby automatically sampled uniformly across a random room, while we configure the z coordinate to lie between `0.5m` and `2m` above the ground.
+Regarding the camera rotation we fix the pitch angle to `70°`, the roll angle to `0°` and sample the yaw angle uniformly between `0°` and `360°`. 
 
 After sampling a pose the pose is only accepted if it is valid according to the properties we have specified:
   * Per default a camera pose is only accepted, if there is no object between it and the floor

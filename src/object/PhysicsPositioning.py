@@ -1,6 +1,7 @@
 import mathutils
 import bpy
 
+from src.utility.BlenderUtility import get_all_mesh_objects
 from src.main.Module import Module
 import numpy as np
 
@@ -39,20 +40,18 @@ class PhysicsPositioning(Module):
 
     def _add_rigidbody(self):
         """ Adds a rigidbody element to all mesh objects and sets their type depending on the custom property "physics". """
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH':
-                bpy.context.view_layer.objects.active = obj
-                bpy.ops.rigidbody.object_add()
-                obj.rigid_body.type = obj["physics"].upper()
-                obj.rigid_body.collision_shape = "MESH"
-                obj.rigid_body.collision_margin = self.collision_margin
+        for obj in get_all_mesh_objects():
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.rigidbody.object_add()
+            obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
+            obj.rigid_body.collision_shape = "MESH"
+            obj.rigid_body.collision_margin = self.collision_margin
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH':
-                bpy.context.view_layer.objects.active = obj
-                bpy.ops.rigidbody.object_remove()
+        for obj in get_all_mesh_objects():
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.rigidbody.object_remove()
 
     def _seconds_to_frames(self, seconds):
         """ Converts the given number of seconds into the corresponding number of blender animation frames.
@@ -123,8 +122,8 @@ class PhysicsPositioning(Module):
         :return: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         """
         objects_poses = {}
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH' and obj.rigid_body.type == 'ACTIVE':
+        for obj in get_all_mesh_objects():
+            if obj.rigid_body.type == 'ACTIVE':
                 location = bpy.context.scene.objects[obj.name].matrix_world.translation
                 rotation = mathutils.Vector(bpy.context.scene.objects[obj.name].matrix_world.to_euler())
                 objects_poses.update({obj.name: {'location': location, 'rotation': rotation}})
