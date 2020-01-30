@@ -190,12 +190,12 @@ class RockEssentialsLoader(Loader):
         links = mat_obj.node_tree.links
 
         # delete Principled BSDF node
-        nodes.remove(nodes["Principled BSDF"])
+        nodes.remove(Utility.get_nodes_with_type(nodes, "BsdfPrincipled")[0])
 
         # create PBR Rock Shader, connect its output 'Shader' to the Material Output nodes input 'Surface'
         group_pbr = nodes.new("ShaderNodeGroup")
         group_pbr.node_tree = bpy.data.node_groups['PBR Rock Shader']
-        output_node = nodes.get("Material Output")
+        output_node = Utility.get_nodes_with_type(nodes, 'OutputMaterial')[0]
         links.new(group_pbr.outputs['Shader'], output_node.inputs['Surface'])
 
         # create Image Texture node, set color map
