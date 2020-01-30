@@ -104,8 +104,19 @@ class ObjectSwitcher(Module):
                 new_object.hide_render = False
                 bpy.context.view_layer.objects.active = new_object
                 new_object['category_id'] = original_object['category_id']
+                
+                print('Switched', original_object.name, ' by an ikea object', new_object.name)
+      
+                # Duplicate the added object to be able to add it again.
+                bpy.ops.object.duplicate_move()
+                objects_to_replace_with[new_obj_idx] = bpy.context.selected_objects[0]
+
+                # Delete the original object
+                bpy.ops.object.select_all(action='DESELECT')
+                original_object.select_set(True)
+                bpy.ops.object.delete()
+                
                 bpy.context.view_layer.update()
-                print('Switched', original_object.name, ' by an ikea object', new_object.name)       
             else:
                 bpy.context.view_layer.objects.active = original_object
                 bpy.context.view_layer.update()
