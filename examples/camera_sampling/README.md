@@ -40,12 +40,11 @@ python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scen
           "provider":"sampler.Uniform3d",
           "max":[10, 10, 8],
           "min":[-10, -10, 12]
-          }
         },
         "rotation": {
           "format": "look_at",
           "value": {
-            "provider": "getter.POIGetter"
+            "provider": "getter.POI"
           }
         }
       }
@@ -60,13 +59,13 @@ In this example we are doing it in such a way that all camera positions always "
 * Sample location uniformly in a bounding box above the plane.
 
 Note that for this we are using [sampler.Uniform3d](../../src/provider/sampler) Provider which is not a part of a module, but a useful tool for introducing some "controlled randomness" into the process.
-To call a sampler for some attribute of a camera, specify a `name` of a desired sampler and define some input arguments for it, e.g. `min` and `max`.
+To call a sampler for some attribute of a camera, specify a `provider` of a desired sampler and define some input arguments for it, e.g. `min` and `max`.
 Sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.
 
 * Set orientation of the camera such that it will always look at the POI in any pose.
 
-Note that here we are using a [getter.POIGetter](../../src/provider/getter) Provider which is just as like a `sampler.Uniform3d`, but without any "randomness" inside.
-They also have a well-defined config structure, but `getter.POIGetter`, for example, has no input arguments since it's output is fully dependent on the current state of the objects in the scene.
+Note that here we are using a [getter.POI](../../src/provider/getter) Provider which is just as like a `sampler.Uniform3d`, but without any "randomness" inside.
+They also have a well-defined config structure, but `getter.POI`, for example, has no input arguments since it's output is fully dependent on the current state of the objects in the scene.
 The POI is calculated from the position of all objects.
  
 ## Visualization
