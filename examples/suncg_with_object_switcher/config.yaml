@@ -11,7 +11,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:0>"
+      "output_dir": "<args:1>"
     }
   },
   "modules": [
@@ -22,13 +22,13 @@
     {
       "name": "loader.SuncgLoader",
       "config": {
-        "path": "/volume/reconstruction_data/suncg/improved_data/version_1.1.0/house/4ef95e333ff350eaefa3134d6336bc0d/house.json"
+        "path": "<args:0>"
       }
     },
     {
       "name": "loader.ObjectLoader",
       "config": {
-          "paths": ["/volume/reconstruction_data/ikea/IKE020017_obj/IKEA-Frosta_Stool-3D.obj", "/volume/reconstruction_data/ikea/IKE160097_obj/IKE160097.obj", "/volume/reconstruction_data/ikea/IKE120005_obj/IKEA-ISALA_coffee_table-3D.obj"],
+          "paths": ["/volume/reconstruction_data/ikea/IKE160097_obj/IKE160097.obj"],
           "add_properties": {
             "replace": "chair",
             "hide_render": True
