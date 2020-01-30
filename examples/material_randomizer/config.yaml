@@ -1,0 +1,81 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 2,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
+    "pip": [
+      "h5py",
+      "imageio"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:1>"
+    }
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {}
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "cam_poses": [
+        {
+          "location": [0, -13.741, 4.1242],
+          "rotation": {
+            "value":[1.3, 0, 0]
+          }
+        },
+        {
+          "location": [1.9488, -6.5202, 0.23291],
+          "rotation": {
+            "value": [1.84, 0, 0.5]
+          }
+        }
+        ],
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.5,
+        "randomize_textures_only": False,
+        "output_textures_only": False
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+    }
+  ]
+}
