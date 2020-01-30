@@ -57,21 +57,21 @@ class RockEssentialsLoader(Loader):
             loaded_images = self._load_images(ground_config)
             self._construct_ground_plane(loaded_images, ground_config)
 
-    def _load_rocks(self, subsec_num, subsec_config):
+    def _load_rocks(self, subsec_num, batch_config):
         """ Loads rocks.
 
         :param subsec_num: Number of a corresponding cell (batch) in `rocks` list in configuration. Used for name generation.
-        :param subsec_config: Config object that contains user-defined settings for a current batch.
+        :param batch_config: Config object that contains user-defined settings for a current batch.
         :return: List of loaded objects.
         """
         loaded_objects = []
         obj_types = ["Rock", "Cliff"]
         # get path to .blend file
-        path = subsec_config.get_string("path")
+        path = batch_config.get_string("path")
         # get list of obj names, empty if not defined
-        objects = subsec_config.get_list("objects", [])
+        objects = batch_config.get_list("objects", [])
         # get amount of rocks in this batch, 0 if not defined
-        amount = subsec_config.get_int("amount", 0)
+        amount = batch_config.get_int("amount", 0)
 
         obj_list = []
         with bpy.data.libraries.load(path) as (data_from, data_to):
