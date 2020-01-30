@@ -162,10 +162,6 @@ def check_intersection(obj, obj2, cache = None):
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
 
-<<<<<<< HEAD
-
-=======
->>>>>>> after check collition hotfix
         t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
             intersect = True

@@ -16,15 +16,13 @@ class ObjectSwitcher(Module):
        :header: "Parameter", "Description"
 
        "switch_ratio", "Ratio of objects in the orginal scene to try replacing."
-       "objects_to_be_replaced", "Object getter, objects to try to remove from the scene, gets list of object on a certain condition"
-       "objects_to_replace_with", "Object getter, objects to try to add to the scene, gets list of object on a certain condition"
+       "self._objects_to_be_replaced", "Object getter, objects to try to remove from the scene, gets list of object on a certain condition"
+       "self._objects_to_replace_with", "Object getter, objects to try to add to the scene, gets list of object on a certain condition"
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
         self._switch_ratio = self.config.get_float("switch_ratio", 1)
-        self._objects_to_be_replaced = config.get_raw_dict("objects_to_be_replaced", {})
-        self._objects_to_replace_with = config.get_raw_dict("objects_to_replace_with", {})
 
     def _two_points_distance(self, point1, point2):
         """
@@ -72,36 +70,20 @@ class ObjectSwitcher(Module):
         return not intersection
 
     def run(self):
-
-        # Gets two lists of objects to swap
-        # Use a selector to get the list of ikea objects
-        sel_objs = {}
-        sel_objs['selector'] = self._objects_to_be_replaced
-        # create Config objects
-        sel_conf = Config(sel_objs)
-        objects_to_be_replaced = sel_conf.get_list("selector")
-        print(objects_to_be_replaced)
-
-        # Use a selector to get the list of ikea objects
-        sel_objs = {}
-        sel_objs['selector'] = self._objects_to_replace_with
-        # create Config objects
-        sel_conf = Config(sel_objs)
-        objects_to_replace_with = sel_conf.get_list("selector")
-
-        print(objects_to_replace_with)
+        self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced")
+        self._objects_to_replace_with = self.config.get_list("objects_to_replace_with")
 
         # Now we have two lists to do the switching between
         # Switch between a ratio of the objects in the scene with the list of the provided ikea objects randomly
-        indices = np.random.choice(len(objects_to_replace_with), int(self._switch_ratio * len(objects_to_be_replaced)))
+        indices = np.random.choice(len(self._objects_to_replace_with), int(self._switch_ratio * len(self._objects_to_be_replaced)))
         for idx, new_obj_idx in enumerate(indices):
-            original_object = objects_to_be_replaced[idx]
-            new_object = objects_to_replace_with[new_obj_idx]
+            original_object = self._objects_to_be_replaced[idx]
+            new_object = self._objects_to_replace_with[new_obj_idx]
             if self._can_replace(original_object, new_object):
                 # Duplicate the added object to be able to add it again.
                 new_object['category_id'] = original_object['category_id']
                 bpy.ops.object.duplicate_move()
-                objects_to_replace_with[new_obj_idx] = bpy.context.selected_objects[0]
+                self._objects_to_replace_with[new_obj_idx] = bpy.context.selected_objects[0]
 
                 # Update the scene
                 original_object.hide_render = True
