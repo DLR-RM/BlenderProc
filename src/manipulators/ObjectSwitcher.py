@@ -16,8 +16,8 @@ class ObjectSwitcher(Module):
        :header: "Parameter", "Description"
 
        "switch_ratio", "Ratio of objects in the orginal scene to try replacing."
-       "self._objects_to_be_replaced", "Object getter, objects to try to remove from the scene, gets list of object on a certain condition"
-       "self._objects_to_replace_with", "Object getter, objects to try to add to the scene, gets list of object on a certain condition"
+       "objects_to_be_replaced", "Provider (Getter) in order to select objects to try to remove from the scene, gets list of object on a certain condition"
+       "objects_to_replace_with", "Provider (Getter) in order to select objects to try to add to the scene, gets list of object on a certain condition"
     """
 
     def __init__(self, config):

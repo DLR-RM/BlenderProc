@@ -28,7 +28,7 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-          "paths": ["<args:2>"],
+          "paths": "<args:2>",
           "add_properties": {
             "replace": "chair",
             "hide_render": True
