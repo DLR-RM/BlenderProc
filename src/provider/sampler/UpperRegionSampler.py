@@ -24,7 +24,7 @@ class UpperRegionSampler(Provider):
     **Configuration**:
     .. csv-table::
         :header: "Parameter", "Description"
-        "to_sample_on": "Selector (getter.Object), which gives a selection of object, which are used to sample on"
+        "to_sample_on": "Selector (getter.Entity), which gives a selection of object, which are used to sample on"
         "min_height", "float, this is the minimum distance to the bounding box that a point is sampled on"
         "max_height", "float, this is the maximum distance to the bounding box that a point is sampled on"
         "upper_dir", "the upper direction of the sampling box,
@@ -107,15 +107,20 @@ class UpperRegionSampler(Provider):
         """
 
         if self._regions and len(self._regions) == len(self._objects):
-            selected_region_id = random.randint(0, len(self._regions))
+            selected_region_id = random.randint(0, len(self._regions) - 1)
+            selected_region, obj = self._regions[selected_region_id], self._objects[selected_region_id]
+            if self._use_ray_trace_check:
+                inv_world_matrix = obj.matrix_world.inverted()
             while True:
-                selected_region, obj = self._regions[selected_region_id], self._objects[selected_region_id]
                 ret = selected_region.sample_point()
                 dir = self._upper_dir if self._use_upper_dir else selected_region.normal()
                 ret += dir * random.uniform(self._min_height, self._max_height)
                 if self._use_ray_trace_check:
+                    # transform the coords into the reference frame of the object
+                    c_ret = inv_world_matrix @ ret
+                    c_dir = inv_world_matrix @ (dir * -1.0)
                     # check if the object was hit
-                    hit, _, _, _ = obj.ray_trace(ret, dir * -1.0)
+                    hit, _, _, _ = obj.ray_cast(c_ret, c_dir)
                     if hit:  # if the object was hit return
                         break
                 else:

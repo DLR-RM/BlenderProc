@@ -79,4 +79,4 @@ python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
 ## More examples
 
 * [light_sampling](../light_sampling): More on sampling for lights.
-* [object_manipulation](../object_manipulation): More on true power of Providers.
+* [entity_manipulation](../entity_manipulation): More on the true power of Providers.
