@@ -5,7 +5,6 @@ import shutil
 
 import bpy
 import h5py
-import imageio
 import numpy as np
 
 from src.main.Module import Module

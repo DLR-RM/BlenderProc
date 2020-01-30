@@ -6,7 +6,6 @@
     "blender_version": "blender-2.81",
     "pip": [
       "h5py",
-      "imageio",
       "scikit-image"
     ]
   },

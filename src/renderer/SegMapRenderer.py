@@ -2,7 +2,6 @@ import csv
 import os
 
 import bpy
-import imageio
 import numpy as np
 
 from src.renderer.Renderer import Renderer

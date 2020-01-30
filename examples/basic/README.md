@@ -37,15 +37,14 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81",
     "pip": [
-      "h5py",
-      "imageio"
+      "h5py"
     ]
   }
 ```
 
 * blender is installed into `/home_local/<env:USER>/blender/` where `<env:USER>` is automatically replaced by the username.
 * we want to use blender 2.8 (installation is done automatically on the first run).
-* inside the blender python environment the python packages `h5py` and `imageio` should be automatically installed. These are not provided per default, but are required in order to make the `writer.Hdf5Writer` module work.
+* inside the blender python environment the python package `h5py` should be automatically installed. These are not provided per default, but are required in order to make the `writer.Hdf5Writer` module work.
 
 ### Global
 

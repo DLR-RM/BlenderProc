@@ -5,8 +5,7 @@
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "blender_version": "blender-2.81",
     "pip": [
-      "h5py",
-      "imageio"
+      "h5py"
     ]
   },
   "global": {
