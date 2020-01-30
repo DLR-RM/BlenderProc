@@ -1,17 +1,18 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <cam_file> <output_dir>
 {
   "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.80-linux-glibc217-x86_64",
+    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py",
-      "imageio"
+      "imageio",
+      "scikit-image"
     ]
   },
   "global": {
     "all": {
-      "output_dir": "examples/debugging/output"
+      "output_dir": "<args:1>"
     }
   },
   "modules": [
@@ -26,21 +27,21 @@
         {
           "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
           "objects": ['Rock_Sea_Large003', 'Rock_Sea_Large002','Rock_Sea_Large001'],
-          "physics": "passive",
+          "physics": False,
           "render_levels": 2,
           "high_detail_mode": True,
         },
         {
           "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
           "amount": 20,
-          "physics": "active",
+          "physics": True,
           "render_levels": 2,
           "high_detail_mode": True
         },
         {
           "path": "/volume/pekdat/datasets/internal/rock_essentials/original/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
           "amount": 20,
-          "physics": "active",
+          "physics": True,
           "render_levels": 2,
           "high_detail_mode": True
         },
@@ -65,32 +66,29 @@
       }
     },
     {
-      "module": "object.ObjectManipulator",
+      "module": "object.EntityManipulator",
       "config": {
-        "instances": [
-        {
-          "selector": {
-            "provider": "getter.Object",
-            "conditions": {
-              "name": 'Rock_Sea.*'
-            }
-          },
-          "location": {
-            "provider": "sampler.Uniform3d",
-            "max":[6, 6, 0],
-            "min":[-6, -6, 0]
-          },
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": 'Rock_Sea.*'
+          }
+        },
+        "location": {
+          "provider": "sampler.Uniform3d",
+          "max":[6, 6, 0],
+          "min":[-6, -6, 0]
         }
-        ]
       }
     },
     {
       "module": "object.ObjectPoseSampler",
       "config":{
         "objects_to_sample": {
-          "provider": "getter.Object",
+          "provider": "getter.Entity",
           "conditions": {
-            "physics": 'active'
+            "physics": True,
+            "type": "MESH"
           }
         },
         "pos_sampler":{
@@ -108,7 +106,7 @@
     {
       "module": "camera.CameraLoader",
       "config": {
-        "path": "examples/rock_essentials_dataset/camera_positions",
+        "path": "<args:0>",
         "file_format": "location rotation/value",
         "default_cam_param": {
           "fov": 1
@@ -135,6 +133,8 @@
         "min_simulation_time": 2,
         "max_simulation_time": 4,
         "check_object_interval": 1
+        "solver_iters": 25,
+        "steps_per_sec": 250
       }
     },
     {

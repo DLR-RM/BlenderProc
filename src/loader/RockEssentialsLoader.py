@@ -17,7 +17,7 @@ class RockEssentialsLoader(Loader):
        "amount", "Amount of rock-/cliff-object to load. Type: int. Optional. Default value: 0. If not specified amount will be eventually set to the amount of suitable objects in the current section of a blend file."
        "render_levels", "Number of subdivs to perform when rendering. Type: int. Optional. Default value: 3."
        "high_detail_mode", "Flag for enabling HDM when possible. Type: boolean. Optional. Default value: False."
-       "physics", "Custom property for physics/rigidbody state. Type: string. Optional. Default value: 'passive'."
+       "physics", "Custom property for physics/rigidbody state. Type: bool Optional. Default value: False."
 
     **Ground plane properties**:
 
@@ -106,7 +106,7 @@ class RockEssentialsLoader(Loader):
         :param subsec_config: Config object that contains user-defined settings for a current batch.
         """
         # get physics custom setting, 'passive' if not defined
-        physics = subsec_config.get_string("physics", "passive")
+        physics = subsec_config.get_bool("physics", False)
         # get render level for a batch, '3' if not defined
         render_levels = subsec_config.get_int("render_levels", 3)
         # get HDM custom setting for a batch, 'disabled'\'False' if not defined
@@ -225,7 +225,7 @@ class RockEssentialsLoader(Loader):
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
         bpy.context.object.modifiers["Subdivision"].render_levels = subdivision_render_levels
         bpy.context.object.modifiers["Displace"].strength = displacement_strength
-        plane_obj["physics"] = "passive"
+        plane_obj["physics"] = False
 
     def _create_node(self, nodes, links, loaded_images, map_type, in_point):
         """ Handles creating a ShaderNodeTexImage node, setting maps and creating links.
