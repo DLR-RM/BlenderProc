@@ -10,7 +10,7 @@
 
 # Version History
 
-## Version 1.2.0: 29th January 2020
+## Version 1.2.0: 31th January 2020
 
 - added more detailed examples to most of the important modules
 - adapt CoCo annotation tools to newer Version of SegMapRenderer
@@ -18,7 +18,7 @@
 - renamed getter.Object to getter.Entity, same for ObjectManipulator is now named EntityManipulator
 - entity conditions do now work with AND and OR connections
 - strings are now matched with fullmatch instead of search in entity conditions
-- conditions now support book custom properties
+- conditions now support bool custom properties
 - material randomizer now supports getter.entity providers
 - added UpperRegionSampler, which can sample on the up surface of the bounding box of an object
 - scripts now support execution with python3.x
