@@ -1,6 +1,7 @@
 import mathutils
 import bpy
 
+from src.utility.BlenderUtility import get_all_mesh_objects
 from src.main.Module import Module
 import numpy as np
 
@@ -16,6 +17,8 @@ class PhysicsPositioning(Module):
        "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped."
        "max_simulation_time", "The maximum number of seconds to simulate."
        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
+       "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
+       "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
     """
 
     def __init__(self, config):
@@ -26,9 +29,13 @@ class PhysicsPositioning(Module):
 
     def run(self):
         """ Performs physics simulation in the scene. """
-
         # Enable physics for all objects
         self._add_rigidbody()
+        # set custom animation settings
+        steps_per_sec = self.config.get_int("steps_per_sec", 60)
+        solver_iters = self.config.get_int("solver_iters", 10)
+        bpy.context.scene.rigidbody_world.steps_per_second = steps_per_sec
+        bpy.context.scene.rigidbody_world.solver_iterations = solver_iters
 
         # Run simulation and use the position of the objects at the end of the simulation as new initial position.
         obj_poses = self._do_simulation()
@@ -39,20 +46,18 @@ class PhysicsPositioning(Module):
 
     def _add_rigidbody(self):
         """ Adds a rigidbody element to all mesh objects and sets their type depending on the custom property "physics". """
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH':
-                bpy.context.view_layer.objects.active = obj
-                bpy.ops.rigidbody.object_add()
-                obj.rigid_body.type = obj["physics"].upper()
-                obj.rigid_body.collision_shape = "MESH"
-                obj.rigid_body.collision_margin = self.collision_margin
+        for obj in get_all_mesh_objects():
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.rigidbody.object_add()
+            obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
+            obj.rigid_body.collision_shape = "MESH"
+            obj.rigid_body.collision_margin = self.collision_margin
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH':
-                bpy.context.view_layer.objects.active = obj
-                bpy.ops.rigidbody.object_remove()
+        for obj in get_all_mesh_objects():
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.rigidbody.object_remove()
 
     def _seconds_to_frames(self, seconds):
         """ Converts the given number of seconds into the corresponding number of blender animation frames.
@@ -123,8 +128,8 @@ class PhysicsPositioning(Module):
         :return: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         """
         objects_poses = {}
-        for obj in bpy.context.scene.objects:
-            if obj.type == 'MESH' and obj.rigid_body.type == 'ACTIVE':
+        for obj in get_all_mesh_objects():
+            if obj.rigid_body.type == 'ACTIVE':
                 location = bpy.context.scene.objects[obj.name].matrix_world.translation
                 rotation = mathutils.Vector(bpy.context.scene.objects[obj.name].matrix_world.to_euler())
                 objects_poses.update({obj.name: {'location': location, 'rotation': rotation}})

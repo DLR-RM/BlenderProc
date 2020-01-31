@@ -32,56 +32,34 @@ Using this package you can
 - sample and render new object poses using a variety of samplers
 - use collision detection and physics to generate realistic object poses
 - place objects in synthetic scenes like SunCG or real scenes like Replica
+This runs all modules specified in the config file in a step-by-step fashion in the configured order.
 
-You can render normals, RGB and depth and  extract class + instance segmentation labels and pose annotations. All generated data and labels are saved in compressed hdf5 files.
+## Functionality
 
-You can parametrize both, loaders and samplers for  
-- object poses
-- lights
-- cameras
-- materials
-- whole datasets 
+The following modules are already implemented and ready to use:
 
-Because of the modularity of this package and the sole dependency on the Blender API, it is very simple to insert your own module. Also, any new feature introduced in Blender can be utilized here.
+* Loading: *.obj, SunCG, Replica scenes.
+* Lighting: Set, sample lights, automatic lighting of SunCG scenes.
+* Cameras: set, sample or load camera poses from file.
+* Rendering: RGB, depth, normal and segmentation images.
+* Merging: .hdf5 containers.
 
-## Usage with BOP
+For advanced usage which is not covered by these modules, own modules can easily be implemented.
 
-First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
+## Examples
 
-### Configure `examples/bop/config_sample.yaml`
+* [Basic scene](examples/basic/): Basic example 
+* [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a depth images.
+* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a depth images.
+* [Replica dataset](examples/replica-dataset): Load a replica room, sample camera poses and render normal images.
+* [COCO annotations](examples/coco_annotations): Write to a .json file containing COCO annotations for the objects in the scene.
 
-Set the `blender_install_path` where Blender 2.81 should be installed and add the path to your bop_toolkit clone to `sys_paths`.
+... And much more!
 
-## Start the data generation
-In general, to run a BlenderProc pipeline and install dependencies, you run:
+## First step
 
-```
-python run.py config.yaml <additional arguments>
-```
+Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get a gist about writing yor own modules!
 
-To run a BOP example where we sample object and cameras, we additionally need to specify the paths to the bop dataset and an output directory:
+## Chane log
 
-```
-python run.py examples/bop/config_sample.yaml /path/to/bop/dataset /path/to/output_dir
-```
-
-After the generation has finished you can view the generated data using
-
-```
-python scripts/visHdf5Files.py /path/to/output/0.hdf5
-
-```
-
-## Generate Random Object/Camera/Light Poses
-
-Go to [examples/bop/README.md](examples/bop/README.md) for a more detailed explanation and a second example where we replicate BOP scenes.
-
-## Customized Modules
-
-You can create realistic synthetic data and labels by combining and parametrizing existing modules. Use the documented examples to build your own config.
-
-Parametrize lighting.LightSampler, camera.CameraSampler, or object.ObjectPoseSampler with existing sampling functions (e.g. uniform shell, sphere or cube). Use loaders like lighting.LightLoader and camera.CameraLoader to load poses and other parameters from a file or from the config directly. Sample object poses using physics like in examples/physics_positioning. Sample objects in synthetic or real scene environments like SunCG or Replica.
-
-Besides parametrizing existing modules, you can also create your own modules (see [Writing Modules](https://github.com/DLR-RM/BlenderProc#writing-modules)). New modules can either combine existing modules with some logic (e.g. [composite/CameraObjectSampler](composite/CameraObjectSampler)) or create completely new functionality based on the Blender API.
-
-
+See our [change log](change_log.md).

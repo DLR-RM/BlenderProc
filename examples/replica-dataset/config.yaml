@@ -1,12 +1,10 @@
 # Args: path_to_the_replica_data_folder  output_path
 {
-  "version": 1,
+  "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
-      "h5py",
-      "imageio"
+      "h5py"
     ]
   },
   "global": {
@@ -21,48 +19,57 @@
   },
   "modules": [
     {
-      "name": "main.Initializer",
+      "module": "main.Initializer",
       "config": {}
     },
     {
-      "name": "loader.ReplicaLoader",
+      "module": "loader.ReplicaLoader",
       "config": {
-        "use_smooth_shading": "True",
-        "use_ambient_occlusion": "True"
+        "use_smooth_shading": True,
+        "use_ambient_occlusion": True
       }
     },
     {
-      "name": "object.FloorExtractor",
+      "module": "object.FloorExtractor",
       "config": {
-        "is_replica_object": "True",
+        "is_replica_object": True,
         "obj_name": "mesh",
         "compare_angle_degrees" : 7.5, # max angle difference to up facing polygons
         "compare_height": 0.15  # height, which is allowed for polygons to be away from the height level in up and down dir.
       }
     },
     {
-      "name": "camera.ReplicaCameraSampler",
+      "module": "camera.ReplicaCameraSampler",
       "config": {
-        "is_replica_object": "True",
-        "sqrt_number_of_rays": 50,
-        "near_clipping": 0.01,
-        "sample_amount": 15,
-        "proximity_checks": {
-          "min": 1.0,
-          "avg": {
-            "min": 2.0,
-            "max": 4.0
-          }
-        },
+        "is_replica_object": True,
+        "cam_poses": [{
+          "number_of_samples": 15,
+          "clip_start": 0.01,
+          "proximity_checks": {
+            "min": 1.0,
+            "avg": {
+              "min": 2.0,
+              "max": 4.0
+            }
+          },
+          "location": [0, 0, 1.55],
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.373401334, 0, 6.283185307],
+              "min":[1.373401334, 0, 0]
+            }
+          },
+        }]
       }
     },
     {
-      "name": "renderer.NormalRenderer",
+      "module": "renderer.NormalRenderer",
       "config": {
       }
     },
     {
-      "name": "writer.Hdf5Writer",
+      "module": "writer.Hdf5Writer",
       "config": {
       }
     }

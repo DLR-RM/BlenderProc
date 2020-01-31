@@ -1,12 +1,10 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 1,
+  "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
-      "h5py",
-      "imageio"
+      "h5py"
     ]
   },
   "global": {
@@ -16,17 +14,20 @@
   },
   "modules": [
     {
-      "name": "main.Initializer",
+      "module": "main.Initializer",
       "config": {}
     },
     {
-      "name": "loader.ObjectLoader",
+      "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "add_properties": {
+          "sample_pose": True
+        }
       }
     },
     {
-      "name": "lighting.LightLoader",
+      "module": "lighting.LightLoader",
       "config": {
         "lights": [
           {
@@ -38,7 +39,7 @@
       }
     },
     {
-      "name": "camera.CameraLoader",
+      "module": "camera.CameraLoader",
       "config": {
         "path": "<args:0>",
         "file_format": "location rotation/value",
@@ -48,36 +49,44 @@
       }
     },
     {
-      "name": "object.ObjectPoseSampler",
+      "module": "object.ObjectPoseSampler",
       "config":{
         "max_iterations": 1000,
-        "pos_sampler":{
-          "name":"sampler.Uniform3d",
-          "max":[5,5,5],
-          "min":[-5,-5,-5]
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "sample_pose": True,
+            "type": "MESH"
+          }
         },
-        "rot_sampler":{
-          "name":"sampler.Uniform3d",
-          "max":[0,0,0],
-          "min":[6.28,6.28,6.28]
+        "pos_sampler": {
+          "provider": "sampler.Uniform3d",
+          "max": [5,5,5],
+          "min": [-5,-5,-5]
+        },
+        "rot_sampler": {
+          "provider": "sampler.Uniform3d",
+          "max": [0,0,0],
+          "min": [6.28,6.28,6.28]
         }
       }
     },
     {
-      "name": "renderer.NormalRenderer",
+      "module": "renderer.NormalRenderer",
       "config": {
         "output_key": "normals"
       }
     },
     {
-      "name": "renderer.RgbRenderer",
+      "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 50
+        "samples": 50,
+        "output_is_temp": False
       }
     },
     {
-      "name": "writer.Hdf5Writer",
+      "module": "writer.Hdf5Writer",
       "config": {
       }
     }

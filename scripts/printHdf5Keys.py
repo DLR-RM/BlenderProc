@@ -21,7 +21,7 @@ def processFile(file_path):
 			if len(keys) > 0:
 				key_result_list = [(key, np.array(data[key]).shape if 'version' not in key else np.array(data[key])) for key in keys]
 				print("Keys: " + ', '.join(["'{}': {}".format(key, key_res) for key, key_res in key_result_list]))
-if isinstance(args.hdf5, basestring):
+if isinstance(args.hdf5, str):
 	procressFile(args.hdf5)	
 elif isinstance(args.hdf5, list):
 	for file in args.hdf5:

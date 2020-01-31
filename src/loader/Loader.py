@@ -1,5 +1,5 @@
 from src.main.Module import Module
-
+import mathutils
 
 class Loader(Module):
     """
@@ -7,17 +7,21 @@ class Loader(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-
-       "physics", "Determines the the physics property of all created objects. Set to 'active' if you want the objects to actively participate in the simulation and be influenced by e.q. gravity. Set to 'passive', if you want the object to be static and only act as an obstacle."
+       "add_properties", "properties in form of a dict, which should be add to all loaded objects."
     """
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def _set_physics_property(self, objects):
-        """ Sets the physics custom property of all given objects according to the configuration.
+    def _set_properties(self, objects):
+        """ Sets all custom properties of all given objects according to the configuration.
 
-        :type objects: A list of objects which should retrieve the custom property.
+        :parameter objects: A list of objects which should receive the custom properties
         """
-        physics_type = self.config.get_string("physics", "passive")
+
+        properties = self.config.get_raw_dict("add_properties", {})
+
         for obj in objects:
-            obj["physics"] = physics_type
+            for key, value in properties.items():
+                obj[key] = value
+
+
