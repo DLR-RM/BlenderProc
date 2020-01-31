@@ -13,8 +13,7 @@ if not dir in sys.path:
 if platform == "linux" or platform == "linux2":
     packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
 elif platform == "darwin":
-    packages_path = os.path.abspath(
-        os.path.join(os.path.dirname(sys.executable), "..", "Resources", "custom-python-packages"))
+    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "Resources", "custom-python-packages"))
 else:
     raise Exception("This system is not supported yet: {}".format(platform))
 sys.path.append(packages_path)
@@ -32,7 +31,6 @@ working_dir = os.path.dirname(os.path.abspath(__file__))
 from src.main.Pipeline import Pipeline
 
 config_path = argv[0]
-
 if batch_index_file == None:
     pipeline = Pipeline(config_path, argv[1:], working_dir)
     pipeline.run()
