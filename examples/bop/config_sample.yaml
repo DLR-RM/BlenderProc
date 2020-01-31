@@ -1,12 +1,10 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 1,
+  "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81-linux-glibc217-x86_64",
     "pip": [
       "h5py",
-      "imageio",
       "scikit-image",
       "pypng==0.0.18",
       "scipy==1.2.2"

@@ -95,7 +95,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
 {
-  "name": "lighting.LightLoader",
+  "module": "lighting.LightLoader",
   "config": {
     "lights": [
       {

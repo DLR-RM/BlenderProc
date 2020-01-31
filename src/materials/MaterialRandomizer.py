@@ -44,7 +44,7 @@ class MaterialRandomizer(Module):
     def run(self):
 
         self._store_all_materials()
-        if self.scene_materials:
+        if len(self.scene_materials) > 0:
             self._randomize_materials_in_scene()
         else:
             print("Warning there are no materials, which can be switched!")

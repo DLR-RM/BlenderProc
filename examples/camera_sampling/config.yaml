@@ -1,4 +1,4 @@
-# Args: <output_dir>
+# Args: <obj_file> <output_dir>
 {
   "version": 2,
   "setup": {

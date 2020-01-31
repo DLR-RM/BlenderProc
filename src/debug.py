@@ -22,27 +22,10 @@ sys.path.append(packages_path)
 for module in list(sys.modules.keys()):
     if module.startswith("src"):
         del sys.modules[module]
-        
-from src.utility.ConfigParser import ConfigParser
-from src.utility.Utility import Utility
 
 from src.main.Pipeline import Pipeline
 
-config_path = "examples/bop/config.yaml"
-
-argv = ['/volume/pekdat/datasets/public/bop/original/tless', '/tmp/output_bop']
-Utility.working_dir = working_dir
-
-config_parser = ConfigParser()
-config = config_parser.parse(Utility.resolve_path(config_path), argv) # Don't parse placeholder args in batch mode.
-setup_config = config["setup"]
-
-if "bop_toolkit_path" in setup_config:
-    sys.path.append(setup_config["bop_toolkit_path"])
-else:
-    print('ERROR: Please download the bop_toolkit package and set bop_toolkit_path in config:')
-    print('https://github.com/thodan/bop_toolkit')
-
+config_path = "examples/debugging/config.yaml"
 
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:
