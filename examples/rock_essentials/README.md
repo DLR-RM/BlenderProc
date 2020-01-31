@@ -6,13 +6,14 @@ The focus of this example is the `RockEssentialsLoader` module that allows us to
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/rock_essentials/config.yaml examples/rock_essentials/camera_positions examples/rock_essentials/output
+python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} examples/rock_essentials/camera_positions examples/rock_essentials/output
 ``` 
 
 * `examples/rock_essentials/config.yaml`: path to the configuration file with pipeline configuration.
+* `${PATH_TO_RE_DATASET}`: path to the downloaded rock essential dataset 
 * `examples/rock_essentials/camera_positions`: text file with parameters of camera positions.
 * `examples/rock_essentials/output`: path to the output directory.
 
@@ -37,39 +38,39 @@ python run.py examples/rock_essentials/config.yaml examples/rock_essentials/came
 {
   "module": "loader.RockEssentialsLoader",
   "config": {
-    "rocks": [ 
-      {
-        "path": "/path/to/blend/file.blend",
-        "objects": ['Rock_1', 'Rock_2','Rock_3'],
-        "physics": False,
-        "render_levels": 2,
-        "high_detail_mode": True,
-      },
-      {
-        "path": "/path/to/blend/file.blend",
-        "amount": 20,
-        "physics": True,
-        "render_levels": 2,
-        "high_detail_mode": True
-      },
-      {
-        "path": "/path/to/blend/file.blend",
-        "amount": 20,
-        "physics": True,
-        "render_levels": 2,
-        "high_detail_mode": True
-      },
+    "rocks": [
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+      "objects": ['Rock_1', 'Rock_2','Rock_3'],
+      "physics": False,
+      "render_levels": 2,
+      "high_detail_mode": True,
+    },
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
+      "amount": 20,
+      "physics": True,
+      "render_levels": 2,
+      "high_detail_mode": True
+    },
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+      "amount": 20,
+      "physics": True,
+      "render_levels": 2,
+      "high_detail_mode": True
+    },
     ],
     "ground": {
-      "shader_path": "/path/to/blend/file.blend",
+      "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
       "images": {
-        "image_path": "/path/to/textures/folder/",
+        "image_path": "<args:0>/Rock Essentials/Ground Textures/Sand/RDTSandWavy001/",
         "maps": {
-          "color": "color.jpg",
-          "roughness": "glossy.jpg",
-          "reflection": "reflection.jpg",
-          "normal": "normal.jpg",
-          "displacement": "displacement.tif"
+          "color": "RDTSandWavy001_COL_VAR1_3K.jpg",
+          "roughness": "RDTSandWavy001_GLOSS_3K.jpg",
+          "reflection": "RDTSandWavy001_REFL_3K.jpg",
+          "normal": "RDTSandWavy001_NRM_3K.jpg",
+          "displacement": "RDTSandWavy001_DISP16_3K.tif"
         }
       },
       "plane_scale": [20, 20, 1],

@@ -1,4 +1,4 @@
-# Args: <cam_file> <output_dir>
+# Args: <rock_essential_folder> <cam_file> <output_dir>
 {
   "version": 2,
   "setup": {
@@ -11,7 +11,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:1>"
+      "output_dir": "<args:2>"
     }
   },
   "modules": [
@@ -24,21 +24,21 @@
       "config": {
         "rocks": [
         {
-          "path": "/path/to/blend/file.blend",
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
           "objects": ['Rock_1', 'Rock_2','Rock_3'],
           "physics": False,
           "render_levels": 2,
           "high_detail_mode": True,
         },
         {
-          "path": "/path/to/blend/file.blend",
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
           "amount": 20,
           "physics": True,
           "render_levels": 2,
           "high_detail_mode": True
         },
         {
-          "path": "/path/to/blend/file.blend",
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
           "amount": 20,
           "physics": True,
           "render_levels": 2,
@@ -46,15 +46,15 @@
         },
         ],
         "ground": {
-          "shader_path": "/path/to/blend/file.blend",
+          "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
           "images": {
-            "image_path": "/path/to/textures/folder/",
+            "image_path": "<args:0>/Rock Essentials/Ground Textures/Sand/RDTSandWavy001/",
             "maps": {
-              "color": "color.jpg",
-              "roughness": "glossy.jpg",
-              "reflection": "reflection.jpg",
-              "normal": "normal.jpg",
-              "displacement": "displacement.tif"
+              "color": "RDTSandWavy001_COL_VAR1_3K.jpg",
+              "roughness": "RDTSandWavy001_GLOSS_3K.jpg",
+              "reflection": "RDTSandWavy001_REFL_3K.jpg",
+              "normal": "RDTSandWavy001_NRM_3K.jpg",
+              "displacement": "RDTSandWavy001_DISP16_3K.tif"
             }
           },
           "plane_scale": [20, 20, 1],
@@ -105,7 +105,7 @@
     {
       "module": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>",
+        "path": "<args:1>",
         "file_format": "location rotation/value",
         "default_cam_param": {
           "fov": 1
