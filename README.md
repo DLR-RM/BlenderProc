@@ -1,37 +1,23 @@
-# BlenderProc4BOP
+# BlenderProc
 
-Procedural Annotated Data Generation using the [Blender](https://www.blender.org/) API.
+![](readme.png)
 
-BlenderProc4BOP extends [DLR-RM/BlenderProc](https://github.com/DLR-RM/BlenderProc) with interfaces to the [BOP datasets](https://bop.felk.cvut.cz/datasets/) and provides code to generate photo-realistic training data for Object Instance Segmentation and Pose Estimation methods. 
+A procedural blender pipeline for image generation for deep learning.
 
-Note: This library is under active development. We are open for new contributors and happy to accept pull requests e.g. defining new modules.
-
-The corresponding arxiv paper: https://arxiv.org/abs/1911.01911
-
-
-<!-- 
-Citation: 
-```
-@article{blenderproc2019,
-	title={BlenderProc},
-	author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef  and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
-	journal={arXiv preprint arXiv:1911.01911},
-	year={2019}
-}
-``` -->
-<img src=examples/bop/icbin.png width="240" height="180"> <img src=examples/bop/tless.png width="240" height="180"> <img src=examples/bop/tless_sample.png width="240" height="180">
-
-![](examples/suncg_basic/output-summary.png)
+Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
 ## General
 
-Please refer to [DLR-RM/BlenderProc](https://github.com/DLR-RM/BlenderProc) for a general introduction on how to set up a data generation pipeline with a yaml config.
+In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and renders different types of images (rgb, depth, normals etc.) for each of them.
+The blender pipeline consists of different modules, where each of them performs one step in the described process.
+The modules are selected, ordered and configured via a .yaml file.
+ 
+To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file and any additional arguments.
 
-Using this package you can 
-- synthetically recreate BOP datasets
-- sample and render new object poses using a variety of samplers
-- use collision detection and physics to generate realistic object poses
-- place objects in synthetic scenes like SunCG or real scenes like Replica
+```
+python run.py config.yaml <additional arguments>
+```
+
 This runs all modules specified in the config file in a step-by-step fashion in the configured order.
 
 ## Functionality
@@ -60,6 +46,6 @@ For advanced usage which is not covered by these modules, own modules can easily
 
 Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get a gist about writing yor own modules!
 
-## Chane log
+## Change log
 
 See our [change log](change_log.md).
