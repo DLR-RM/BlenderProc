@@ -51,7 +51,6 @@ A very small config file could look like this:
 {
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81",
     "pip": [
       "h5py"
     ]
@@ -90,9 +89,8 @@ Such software related options are specified inside the `setup` section of a conf
 
 property | description
 ------------ | -------------
-`blender_version` | Specifies the exact blender version identifier which should be installed and used for running the pipeline. Look at https://download.blender.org/release/ to find the corresponding identifier to a specific version.
 `blender_install_path` | The directory where blender should be installed. Default: `blender/`.
-`custom_blender_path` | If you want to use an existing blender installation, you can set this option to the main directory of your blender installation which will then be used for running the blender pipeline. Therefore automatic blender installation is disabled and the options `blender_install_path` and `blender_version` are ignored. 
+`custom_blender_path` | If you want to use an existing blender installation, you can set this option to the main directory of your blender installation which will then be used for running the blender pipeline. Therefore, automatic blender installation is disabled and the option `blender_install_path` is ignored, we only support blender version 2.81 right now. 
 `pip` | A list of python packages which are required to run the configured pipeline. They are automatically installed inside the blender python environment via `pip install`.
 
 
