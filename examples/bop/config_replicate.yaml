@@ -18,11 +18,11 @@
   },
   "modules": [
     {
-      "name": "main.Initializer",
+      "module": "main.Initializer",
       "config": {}
     },
     {
-      "name": "loader.BopLoader",
+      "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>",
         "mm2m": True,
@@ -32,12 +32,12 @@
       }
     },
     {
-      "name": "lighting.LightSampler",
+      "module": "lighting.LightSampler",
       "config": {
         "lights": [
           {
             "location": {
-              "name": "sampler.Shell",
+              "provider": "sampler.Shell",
               "center": [0, 0, -0.8],
               "radius_min": 1,
               "radius_max": 4,
@@ -51,19 +51,19 @@
       }
     },
     {
-      "name": "renderer.RgbRenderer",
+      "module": "renderer.RgbRenderer",
       "config": {
         "samples": 150
       }
     },
     {
-      "name": "renderer.SegMapRenderer",
+      "module": "renderer.SegMapRenderer",
       "config": {
         "map_by": "instance"
       }
     },
     {
-      "name": "writer.Hdf5Writer",
+      "module": "writer.Hdf5Writer",
       "config": {
       }
     }

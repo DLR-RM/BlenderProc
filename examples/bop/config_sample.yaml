@@ -1,6 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -13,16 +13,16 @@
   "global": {
     "all": {
       "output_dir": "<args:1>",
-      "sys_paths": ["/path/to/bop_toolkit"]
+      "sys_paths": ["/home_local/sund_ma/src/foreign_packages/bop/bop_toolkit-1/"]
     },
   },
   "modules": [
     {
-      "name": "main.Initializer",
+      "module": "main.Initializer",
       "config": {}
     },
     {
-      "name": "loader.BopLoader",
+      "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>",
         "mm2m": True,
@@ -32,12 +32,12 @@
       }
     },
     {
-      "name": "lighting.LightSampler",
+      "module": "lighting.LightSampler",
       "config": {
         "lights": [
           {
             "location": {
-              "name": "sampler.Shell",
+              "provider": "sampler.Shell",
               "center": [0, 0, -0.8],
               "radius_min": 1,
               "radius_max": 4,
@@ -51,33 +51,33 @@
       }
     },
     {
-      "name": "composite.CameraObjectSampler",
+      "module": "composite.CameraObjectSampler",
       "config": {
         "total_noof_cams": 10,
         "noof_cams_per_scene": 5,
         "object_pose_sampler": {
-          "name": "object.ObjectPoseSampler",
+          "module": "object.ObjectPoseSampler",
           "config": {
             "max_iterations": 1000,
             "pos_sampler": {
-              "name": "sampler.Uniform3d",
+              "provider": "sampler.Uniform3d",
               "max": [0.5, 0.5, 0.5],
               "min": [-0.5, -0.5, -0.5]
             },
             "rot_sampler": {
-              "name": "sampler.Uniform3d",
+              "provider": "sampler.Uniform3d",
               "max": [0, 0, 0],
               "min": [6.28, 6.28, 6.28]
             }
           }
         },
         "camera_pose_sampler": {
-          "name": "camera.CameraSampler",
+          "module": "camera.CameraSampler",
           "config": {
             "cam_poses": [
               {
                 "location": {
-                  "name": "sampler.Shell",
+                  "provider": "sampler.Shell",
                   "center": [0, 0, 0],
                   "radius_min": 0.8,
                   "radius_max": 1.2,
@@ -87,7 +87,7 @@
                 "rotation": {
                   "format": "look_at",
                   "value": {
-                    "name": "getter.POI",
+                    "provider": "getter.POI",
                     "parameters": {}
                   }
                 }
@@ -98,24 +98,24 @@
       }
     },
     {
-      "name": "renderer.RgbRenderer",
+      "module": "renderer.RgbRenderer",
       "config": {
         "samples": 150
       }
     },
     {
-      "name": "renderer.SegMapRenderer",
+      "module": "renderer.SegMapRenderer",
       "config": {
         "map_by": "instance"
       }
     },
     {
-      "name": "writer.CocoAnnotationsWriter",
+      "module": "writer.CocoAnnotationsWriter",
       "config": {
       }
     },
     {
-      "name": "writer.Hdf5Writer",
+      "module": "writer.Hdf5Writer",
       "config": {
       }
     }

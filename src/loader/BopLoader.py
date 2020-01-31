@@ -80,6 +80,10 @@ class BopLoader(Module):
         cam = cam_ob.data
         cam['loaded_resolution'] = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y 
         cam['loaded_intrinsics'] = cam_p['K'] # load default intrinsics from camera.json
+        
+        config = Config({})
+        cm = CameraModule(config)
+        cm._set_cam_intrinsics(cam, config)
 
         #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
@@ -91,7 +95,6 @@ class BopLoader(Module):
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
             sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id':scene_id}))
 
-            cm = CameraModule(self.config)
 
             for i, (cam_id, insts) in enumerate(sc_gt.items()):
 
@@ -120,16 +123,25 @@ class BopLoader(Module):
 
                         cur_obj.matrix_world = Matrix(cam_H_m2w)
                         
-
                 cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
 
                 print('-----------------------------')
                 print("Cam: {}".format(cam_H_c2w))
                 print('-----------------------------')
 
-                config = {"location": [0,0,0], "rotation": list([0,0,0])}
-                cm._add_cam_pose(Config(config), Matrix(cam_H_c2w), cam_K)
+                # transform from OpenCV to blender coords
+                cam_H_c2w @= Matrix.Rotation(math.radians(180), 4, "X")
+                cam_H_c2w_list = list(cam_H_c2w.flatten())
 
+                config = Config({"cam2world_matrix": cam_H_c2w_list})
+
+                cm._set_cam_intrinsics(cam, config)
+                cm._set_cam_extrinsics(cam_ob, config)
+
+                # Store new cam pose as next frame
+                frame_id = bpy.context.scene.frame_end
+                cm._insert_key_frames(cam, cam_ob, frame_id)
+                bpy.context.scene.frame_end = frame_id + 1                
 
     def _try_duplicate_obj(self, model_path):
         """ If object with given model_path has already been loaded, duplicate this object

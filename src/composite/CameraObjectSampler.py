@@ -46,4 +46,3 @@ class CameraObjectSampler(Module):
 
             # sample new camera poses
             self._camera_pose_sampler.run()
-
