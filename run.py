@@ -9,7 +9,6 @@ if version_info.major == 3:
 else:
     from urllib import urlretrieve
 
-import progressbar
 
 from src.utility.ConfigParser import ConfigParser
 
@@ -63,21 +62,28 @@ if "custom_blender_path" not in setup_config:
             url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".dmg"
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
-        class DownloadProgressBar(object):
-            def __init__(self):
-                self.pbar = None
-            def __call__(self, block_num, block_size, total_size):
-                if not self.pbar:
-                    self.pbar = progressbar.ProgressBar(maxval=total_size)
-                    self.pbar.start()
-                downloaded = block_num * block_size
-                if downloaded < total_size:
-                    self.pbar.update(downloaded)
-                else:
-                    self.pbar.finish()
+        try:
+            import progressbar
+            class DownloadProgressBar(object):
+                def __init__(self):
+                    self.pbar = None
+                def __call__(self, block_num, block_size, total_size):
+                    if not self.pbar:
+                        self.pbar = progressbar.ProgressBar(maxval=total_size)
+                        self.pbar.start()
+                    downloaded = block_num * block_size
+                    if downloaded < total_size:
+                        self.pbar.update(downloaded)
+                    else:
+                        self.pbar.finish()
 
-        print("Downloading blender from " + url)
-        file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
+            print("Downloading blender from " + url)
+            file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
+        except ImportError:
+            print("Progressbar for downloading, can only been shown, "
+                  "when the python package \"progressbar\" is installed")
+            file_tmp = urlretrieve(url, None)[0]
+
 
         if platform == "linux" or platform == "linux2":
             tar = tarfile.open(file_tmp)
