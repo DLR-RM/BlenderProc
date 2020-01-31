@@ -19,8 +19,6 @@ else:
     raise Exception("This system is not supported yet: {}".format(platform))
 sys.path.append(packages_path)
 
-from src.utility.ConfigParser import ConfigParser
-
 # Read args
 argv = sys.argv
 batch_index_file = None
@@ -34,16 +32,6 @@ working_dir = os.path.dirname(os.path.abspath(__file__))
 from src.main.Pipeline import Pipeline
 
 config_path = argv[0]
-
-config_parser = ConfigParser()
-config = config_parser.parse(config_path, argv[1:])  # Don't parse placeholder args in batch mode.
-setup_config = config["setup"]
-
-if "bop_toolkit_path" in setup_config:
-    sys.path.append(setup_config["bop_toolkit_path"])
-else:
-    print('ERROR: Please download the bop_toolkit package and set bop_toolkit_path in config:')
-    print('https://github.com/thodan/bop_toolkit')
 
 if batch_index_file == None:
     pipeline = Pipeline(config_path, argv[1:], working_dir)
