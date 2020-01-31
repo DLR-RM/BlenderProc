@@ -46,6 +46,6 @@ For advanced usage which is not covered by these modules, own modules can easily
 
 Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get a gist about writing yor own modules!
 
-## Chane log
+## Change log
 
 See our [change log](change_log.md).
