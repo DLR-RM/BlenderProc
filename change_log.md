@@ -23,14 +23,18 @@
 - added UpperRegionSampler, which can sample on the up surface of the bounding box of an object
 - scripts now support execution with python3.x
 - physics are now saved with bool instead of active and passive
+- physics options for simulator added
+- remove version number -> only blender version 2.81 supported
 - the ObjectLoader can now load several objects at once and set their properties with `"add_properties"`
 - moved more functionality in the camera sampler instead of having in specific sampler to make writing a new one easier
 - added a SO3 Sampler for rotation sampling
 - change the "name" of modules in the config to "module" and "provider" depending on the case
+- added MacOS support (but only for CPUs, GPU support on MacOS is not available)
 - added this changelog
 - fixes:
   - fixed a problem that the check_bb_intersection did not work right in all cases (Bounding box check)
   - fixed a problem with the check_intersection fct., where the reference coordinate system was not always right.
+  - fixed a bug with the SUNCG lighting in RGB images
 
 ## Version 1.1.0: 16th January 2020
 
