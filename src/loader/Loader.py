@@ -15,7 +15,7 @@ class Loader(Module):
     def _set_properties(self, objects):
         """ Sets all custom properties of all given objects according to the configuration.
 
-        :parameter objects: A list of objects which should retrieve the custom properties
+        :parameter objects: A list of objects which should receive the custom properties
         """
 
         properties = self.config.get_raw_dict("add_properties", {})

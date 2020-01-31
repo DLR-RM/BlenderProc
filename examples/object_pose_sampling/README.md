@@ -6,7 +6,7 @@ The focus of this example is introducing the `object.ObjectPoseSampler` which al
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sampling/camera_positions examples/object_pose_sampling/scene.obj examples/object_pose_sampling/output

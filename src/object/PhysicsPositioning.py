@@ -17,6 +17,8 @@ class PhysicsPositioning(Module):
        "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped."
        "max_simulation_time", "The maximum number of seconds to simulate."
        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
+       "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
+       "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
     """
 
     def __init__(self, config):
@@ -27,9 +29,13 @@ class PhysicsPositioning(Module):
 
     def run(self):
         """ Performs physics simulation in the scene. """
-
         # Enable physics for all objects
         self._add_rigidbody()
+        # set custom animation settings
+        steps_per_sec = self.config.get_int("steps_per_sec", 60)
+        solver_iters = self.config.get_int("solver_iters", 10)
+        bpy.context.scene.rigidbody_world.steps_per_second = steps_per_sec
+        bpy.context.scene.rigidbody_world.solver_iterations = solver_iters
 
         # Run simulation and use the position of the objects at the end of the simulation as new initial position.
         obj_poses = self._do_simulation()

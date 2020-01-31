@@ -6,7 +6,7 @@ In this example we demonstrate how to select entities in the scene using `getter
 
 ## Usage
 
-Execute this in the Blender-Pipeline main directory:
+Execute this in the BlenderProc main directory:
 
 ```
 python run.py examples/entity_manipulation/config.yaml examples/entity_manipulation/scene.obj examples/entity_manipulation/output

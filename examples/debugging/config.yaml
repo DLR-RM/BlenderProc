@@ -31,7 +31,7 @@
           {
             "type": "POINT",
             "location": [5, -5, 5],
-            "energy": 1000 
+            "energy": 1000
           }
         ]
       }

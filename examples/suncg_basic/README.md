@@ -6,7 +6,7 @@ Renders a SUNCG scene using precomputed camera poses read from file.
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/suncg_basic/config.yaml <path to cam_pose file> <path to house.json> examples/suncg_basic/output

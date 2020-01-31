@@ -6,7 +6,7 @@ In this example we demonstrate the basic functionality of BlenderProc.
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output

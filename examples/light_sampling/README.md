@@ -6,7 +6,7 @@ In this example we are demonstrating the sampling features in relation to light 
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/light_sampling/config.yaml examples/light_sampling/camera_positions examples/light_sampling/scene.obj examples/light_sampling/output

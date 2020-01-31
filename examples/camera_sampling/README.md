@@ -6,7 +6,7 @@ In this example we are demonstrating the sampling features in relation to camera
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scene.obj examples/camera_sampling/output

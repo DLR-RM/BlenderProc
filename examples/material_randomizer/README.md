@@ -9,7 +9,7 @@ In this example we demonstrate how to switch materials
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/material_randomizer/config.yaml examples/material_randomizer/scene.obj examples/material_randomizer/output
