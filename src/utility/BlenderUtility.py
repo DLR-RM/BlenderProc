@@ -276,5 +276,3 @@ def load_image(file_path):
     img = np.array(img.pixels).reshape(size[0], size[1], channels)
     img = np.flip(img, axis=0)
     return img[:, :, :3]
-
-
