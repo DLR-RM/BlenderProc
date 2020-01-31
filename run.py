@@ -1,9 +1,15 @@
 import argparse
 import os
-import urllib
 import tarfile
 import subprocess
 import shutil
+from sys import platform, version_info
+if version_info.major == 3:
+    from urllib.request import urlretrieve
+else:
+    from urllib import urlretrieve
+
+import progressbar
 
 from src.utility.ConfigParser import ConfigParser
 
@@ -34,7 +40,14 @@ if "custom_blender_path" not in setup_config:
         
     # Determine configured version    
     blender_version = setup_config["blender_version"]
-    blender_path = os.path.join(blender_install_path, blender_version)
+    if platform == "linux" or platform == "linux2":
+        blender_version += "-linux-glibc217-x86_64"
+        blender_path = os.path.join(blender_install_path, blender_version)
+    elif platform == "darwin":
+        blender_version += "-macOS"
+        blender_path = os.path.join(blender_install_path, "Blender.app")
+    else:
+        raise Exception("This system is not supported yet: {}".format(platform))
     major_version = blender_version[len("blender-"):len("blender-") + 4]
 
     # If forced reinstall is demanded, remove existing files
@@ -44,13 +57,45 @@ if "custom_blender_path" not in setup_config:
 
     # Download blender if it not already exists
     if not os.path.exists(blender_path):
-        url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.bz2"
+        if platform == "linux" or platform == "linux2":
+            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.bz2"
+        elif platform == "darwin":
+            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".dmg"
+        else:
+            raise Exception("This system is not supported yet: {}".format(platform))
+        class DownloadProgressBar(object):
+            def __init__(self):
+                self.pbar = None
+            def __call__(self, block_num, block_size, total_size):
+                if not self.pbar:
+                    self.pbar = progressbar.ProgressBar(maxval=total_size)
+                    self.pbar.start()
+                downloaded = block_num * block_size
+                if downloaded < total_size:
+                    self.pbar.update(downloaded)
+                else:
+                    self.pbar.finish()
 
         print("Downloading blender from " + url)
-        file_tmp = urllib.urlretrieve(url, filename=None)[0]
+        file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
 
-        tar = tarfile.open(file_tmp)
-        tar.extractall(blender_install_path)
+        if platform == "linux" or platform == "linux2":
+            tar = tarfile.open(file_tmp)
+            tar.extractall(blender_install_path)
+        elif platform == "darwin":
+            if not os.path.exists(blender_install_path):
+                os.makedirs(blender_install_path)
+            os.rename(file_tmp, os.path.join(blender_install_path, blender_version + ".dmg"))
+            # installing the blender app by mounting it and extracting the information
+            subprocess.Popen(["hdiutil attach {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))],
+                             shell=True).wait()
+            subprocess.Popen(
+                ["cp -r {} {}".format(os.path.join("/", "Volumes", "Blender", "Blender.app"), blender_install_path)],
+                shell=True).wait()
+            subprocess.Popen(["diskutil unmount {}".format(os.path.join("/", "Volumes", "Blender"))], shell=True)
+            # removing the downloaded image again
+            subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
+            # add Blender.app path to it
 else:
     blender_path = setup_config["custom_blender_path"]
 
@@ -76,20 +121,31 @@ if "pip" in setup_config:
 
 # Install required packages
 if len(required_packages) > 0:
-    # Install pip    
-    subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+    # Install pip
+    if platform == "linux" or platform == "linux2":
+        python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
+        packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+    elif platform == "darwin":
+        python_bin_folder = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "bin")
+        packages_path = os.path.abspath(os.path.join(blender_path, "Contents", "Resources", "custom-python-packages"))
+    else:
+        raise Exception("This system is not supported yet: {}".format(platform))
+    subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
     # Make sure pip is up-to-date
-    subprocess.Popen(["./python3.7m", "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH=""), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+    subprocess.Popen(["./python3.7m", "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
     
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
-    packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
 
+    used_env = dict(os.environ, PYTHONPATH=packages_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
-    installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=os.path.join(blender_path, major_version, "python", "bin"))
+    installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze"], env=used_env, cwd=python_bin_folder)
+
     # Split up strings into two lists (names and versions)
     installed_packages_name, installed_packages_versions = zip(*[str(line).lower().split('==') for line in installed_packages.splitlines()])
+    installed_packages_name = [ele[2:] if ele.startswith("b'") else ele for ele in installed_packages_name]
+    installed_packages_versions = [ele[:-1] if ele.endswith("'") else ele for ele in installed_packages_versions]
 
     # Install all packages
     for package in required_packages:
@@ -106,21 +162,29 @@ if len(required_packages) > 0:
         if package_version is not None and already_installed:
             # Check if the correct version is installed
             already_installed = (package_version == installed_packages_versions[installed_packages_name.index(package_name)])
+            print("{}:{} was installed: {}".format(package_name, package_version, already_installed))
 
             # If there is already a different version installed
             if not already_installed:
                 # Remove the old version (We have to do this manually, as we are using --target with pip install. There old version are not removed)
-                subprocess.Popen(["./python3.7m", "-m", "pip", "uninstall", package_name, "-y"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+                subprocess.Popen(["./python3.7m", "-m", "pip", "uninstall", package_name, "-y"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=python_bin_folder).wait()
 
         # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
         if not already_installed or args.reinstall_packages:
-            subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=os.path.join(blender_path, major_version, "python", "bin")).wait()
+            subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=python_bin_folder).wait()
 
 # Run script
+if platform == "linux" or platform == "linux2":
+    blender_run_path = os.path.join(blender_path, "blender")
+elif platform == "darwin":
+    blender_run_path = os.path.join(blender_path, "Contents", "MacOS", "Blender")
+else:
+    raise Exception("This system is not supported yet: {}".format(platform))
+
 if not args.batch_process:
-    p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--", args.config] + args.args, env=dict(os.environ, PYTHONPATH=""))
+    p = subprocess.Popen([blender_run_path, "--background", "--python", "src/run.py", "--", args.config] + args.args, env=dict(os.environ, PYTHONPATH=""))
 else: # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
-    p = subprocess.Popen([os.path.join(blender_path, "blender"), "--background", "--python", "src/run.py", "--",  args.config, "--batch-process", args.batch_process], env=dict(os.environ, PYTHONPATH=""))    
+    p = subprocess.Popen([blender_run_path, "--background", "--python", "src/run.py", "--",  args.config, "--batch-process", args.batch_process], env=dict(os.environ, PYTHONPATH=""))
 try:
     p.wait()
 except KeyboardInterrupt:
