@@ -35,7 +35,6 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 ```yaml
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81",
     "pip": [
       "h5py"
     ]
