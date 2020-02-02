@@ -25,15 +25,19 @@ class MaterialManipulator(Module):
         materials = sel_conf.get_list("selector")
 
         op_mode = self.config.get_string("mode", "once_for_each")
-        print(params_conf.data)
         for key in params_conf.data.keys():
+            result = None
+            if op_mode == "once_for_all":
+                # get raw value from the set parameters if it is to be sampled anew for each selected entity
+                result = params_conf.get_raw_value(key)
 
             for material in materials:
                 if op_mode == "once_for_each":
                     # get raw value from the set parameters if it is to be sampled anew for each selected entity
                     result = params_conf.get_raw_value(key)
+                if result is None:
+                    raise Exception("This mode is unknown: {}".format(op_mode))
                 # if an attribute with such name exists for this entity
-                print(key)
                 if key == "color_link_to_displacement":
                     nodes = material.node_tree.nodes
                     output = Utility.get_nodes_with_type(nodes, "OutputMaterial")
