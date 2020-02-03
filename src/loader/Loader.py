@@ -21,8 +21,7 @@ class Loader(Module):
         properties = self.config.get_raw_dict("add_properties", {})
 
         for obj in objects:
-          for key, value in properties.items():
-            if hasattr(obj, key):
-                setattr(obj, key, value)
-            else:
+            for key, value in properties.items():
                 obj[key] = value
+
+

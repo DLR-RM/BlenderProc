@@ -31,9 +31,20 @@
           "path": "<args:2>",
           "add_properties": {
             "replace": "chair",
-            "hide_render": True
           }
         },
+    },
+    {
+     "module": "object.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "replace": "chair",
+          }
+        },
+        "hide_render": True
+      }
     },
     {
       "module": "manipulators.ObjectSwitcher",
