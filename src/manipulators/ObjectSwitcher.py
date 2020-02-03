@@ -5,7 +5,7 @@ import random
 import numpy as np
 import math
 from collections import defaultdict
-from src.utility.BlenderUtility import check_bb_intersection, check_intersection
+from src.utility.BlenderUtility import check_intersection, duplicate_objects
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 
@@ -77,13 +77,14 @@ class ObjectSwitcher(Module):
         # Switch between a ratio of the objects in the scene with the list of the provided ikea objects randomly
         indices = np.random.choice(len(self._objects_to_replace_with), int(self._switch_ratio * len(self._objects_to_be_replaced)))
         for idx, new_obj_idx in enumerate(indices):
+            # More than one original object could be replaced by just one object
             original_object = self._objects_to_be_replaced[idx]
             new_object = self._objects_to_replace_with[new_obj_idx]
+
             if self._can_replace(original_object, new_object):
                 # Duplicate the added object to be able to add it again.
                 new_object['category_id'] = original_object['category_id']
-                bpy.ops.object.duplicate_move()
-                self._objects_to_replace_with[new_obj_idx] = bpy.context.selected_objects[0]
+                self._objects_to_replace_with[new_obj_idx] = duplicate_objects(new_object)[0]
 
                 # Update the scene
                 original_object.hide_render = True
