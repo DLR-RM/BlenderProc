@@ -235,5 +235,63 @@ class Config:
         """
         return self.get_vector(name, fallback, 4)
 
+    def get_matrix(self, name, fallback=None, dimensions=None):
+        """ Returns the matrix stored at the given parameter path.
+
+        If the value cannot be converted to mathutils matrix, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :param dimensions: If not None, specifies the required number of dimensions. If the configured matrix has not exactly this dimensional, an error is thrown.
+        :return: The matrix.
+        """
+        value = self.get_raw_value(name, fallback)
+
+        if dimensions < 2 or dimensions > 4:
+            raise TypeError('Matrix dimensions must be 2x2, 3x3, or 4x4!')
+
+        if dimensions is not None and (len(value) != dimensions or not all(len(item) == dimensions for item in value)):
+            raise TypeError(str(value) + "' must be exactly " + str(dimensions) + "x" + str(dimensions) + " dimensional!")
+
+        try:
+            value = mathutils.Matrix(value)
+        except ValueError:
+            raise TypeError("Cannot convert '" + str(value) + "' to a mathutils matrix!")
+
+        return value
+
+    def get_matrix_2x2(self, name, fallback=None):
+        """ Returns the 2x2 matrix stored at the given parameter path.
+
+        If the value cannot be converted to an mathutils matrix, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The matrix.
+        """
+        return self.get_matrix(name, fallback, 2)
+
+    def get_matrix_3x3(self, name, fallback=None):
+        """ Returns the 3x3 matrix stored at the given parameter path.
+
+        If the value cannot be converted to an mathutils matrix, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The matrix.
+        """
+        return self.get_matrix(name, fallback, 3)
+
+    def get_matrix_4x4(self, name, fallback=None):
+        """ Returns the 3x3 matrix stored at the given parameter path.
+
+        If the value cannot be converted to an mathutils matrix, an error is thrown.
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
+        :param fallback: The fallback value, returned if the parameter does not exist.
+        :return: The matrix.
+                """
+        return self.get_matrix(name, fallback, 4)
+
 class NotFoundError(Exception):
     pass
