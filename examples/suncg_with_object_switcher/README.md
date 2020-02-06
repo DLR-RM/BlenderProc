@@ -1,5 +1,7 @@
 # SUNCG scene with object switching
 
+This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects
+
 ## Usage
 
 Execute in the Blender-Proc main directory:
@@ -18,16 +20,13 @@ python run.py examples/suncg_with_object_switcher/config.yaml <path to house.jso
 ## Explanation of specific parts of the config file
 
 
-* This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects
-
-
-### ObjectSwitcher
+### ObjectReplacer
 
 ```yaml
     {
-      "module": "manipulators.ObjectSwitcher",
+      "module": "manipulators.ObjectReplacer",
       "config": {
-        "switch_ratio": 1,
+        "replace_ratio": 1,
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
@@ -37,11 +36,12 @@ python run.py examples/suncg_with_object_switcher/config.yaml <path to house.jso
         "objects_to_replace_with": {
             "provider": "getter.Entity",
             "conditions": {
-              "replace": "chair"
+              "replace": "chair",
+              "type": "MESH"
             }
         }
       }
     },
 ```
 
-* This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects with with probability of `switch_probability` if no collision happens between `objects_to_replace_with` and objects in the scene.
+* This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects, which the module get using a `getter.Entity`, with probability of `switch_probability` if no collision happens between `objects_to_replace_with` and objects in the scene.
