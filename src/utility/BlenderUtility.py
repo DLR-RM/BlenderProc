@@ -220,7 +220,7 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
 
 def add_cube_based_on_bb(bouding_box, name='NewCube'):
     """
-    Generates a cube based on the given boundinhome/elba_mh/ws/repos/BlenderProc/.git/index.lockg box, the bounding_box can be generated with our get_bounds(obj) fct.
+    Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
 
     :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
     :param name: name of the new cube
@@ -291,4 +291,6 @@ def duplicate_objects(objects):
     for obj in objects:
         obj.select_set(True)
     bpy.ops.object.duplicate()
-    return bpy.context.selected_objects
+    duplicates = bpy.context.selected_objects
+    bpy.ops.object.select_all(action='DESELECT')
+    return duplicates

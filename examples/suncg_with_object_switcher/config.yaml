@@ -3,10 +3,9 @@
   "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
-    "blender_version": "blender-2.81-linux-glibc217-x86_64",
+    "blender_version": "blender-2.81",
     "pip": [
-      "h5py",
-      "imageio"
+      "h5py"
     ]
   },
   "global": {
@@ -41,6 +40,7 @@
           "provider": "getter.Entity",
           "conditions": {
             "replace": "chair",
+            "type": "MESH"
           }
         },
         "hide_render": True
@@ -53,13 +53,15 @@
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
-              "coarse_grained_class": "chair"
+              "coarse_grained_class": "chair",
+              "type": "MESH"
             }
         },
         "objects_to_replace_with": {
             "provider": "getter.Entity",
             "conditions": {
-              "replace": "chair"
+              "replace": "chair",
+              "type": "MESH"
             }
         }
       }

@@ -1,15 +1,11 @@
 # BlenderProc
 
-<<<<<<< HEAD
 ![](readme.png)
 
 A procedural blender pipeline for image generation for deep learning.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
-=======
-The corresponding arxiv paper: https://arxiv.org/abs/1911.01911
->>>>>>> Update README.md
 
 ## General
 

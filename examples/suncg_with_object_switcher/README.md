@@ -11,9 +11,7 @@ python run.py examples/suncg_with_object_switcher/config.yaml <path to house.jso
 ## Steps
 
 * Loads a SUNCG scene
-* Loads ikea objects using IkeaObjectLoader
-* Switch objects in the scene with loaded ikea objects
-* Automatically adds light sources inside each room
+* Switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
 * Renders color, normal, segmentation and a depth images
 * Merges all into an `.hdf5` file
 
