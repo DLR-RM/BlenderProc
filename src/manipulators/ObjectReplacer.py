@@ -16,6 +16,7 @@ class ObjectReplacer(Module):
        :header: "Parameter", "Description"
 
        "replace_ratio", "Ratio of objects in the orginal scene to try replacing."
+       "copy_properties", "Copies the properties of the objects_to_be_replaced to the objects_to_replace_with."
        "objects_to_be_replaced", "Provider (Getter) in order to select objects to try to remove from the scene, gets list of object on a certain condition"
        "objects_to_replace_with", "Provider (Getter) in order to select objects to try to add to the scene, gets list of object on a certain condition"
     """
@@ -23,6 +24,7 @@ class ObjectReplacer(Module):
     def __init__(self, config):
         Module.__init__(self, config)
         self._replace_ratio = self.config.get_float("replace_ratio", 1)
+        self._copy_properties = self.config.get_float("copy_properties", 1)
 
     def _two_points_distance(self, point1, point2):
         """
@@ -92,8 +94,13 @@ class ObjectReplacer(Module):
             new_object = self._objects_to_replace_with[new_obj_idx]
 
             if self._can_replace(original_object, new_object):
+
+                # Copy properties
+                if self._copy_properties:
+                    for key, value in original_object.items():
+                        new_object[key] = value
+
                 # Duplicate the added object to be able to add it again.
-                new_object['category_id'] = original_object['category_id']
                 duplicates = duplicate_objects(new_object) 
                 if len(duplicates) > 0:
                     self._objects_to_replace_with[new_obj_idx] = duplicates[0]

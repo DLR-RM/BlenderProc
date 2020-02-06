@@ -49,6 +49,7 @@
       "module": "manipulators.ObjectReplacer",
       "config": {
         "replace_ratio": 1,
+        "copy_properties": True,
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
