@@ -53,8 +53,7 @@
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
-              "coarse_grained_class": "chair",
-              "type": "MESH"
+              "coarse_grained_class": "chair"
             }
         },
         "objects_to_replace_with": {
@@ -105,13 +104,8 @@
       "config": {}
     },
     {
-      "module": "renderer.SegMapRenderer",
-      "config": {}
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
-        "render_depth": true
       }
     },
     {

@@ -46,4 +46,4 @@ python run.py examples/suncg_with_object_switcher/config.yaml <path to house.jso
 ```
 
 * This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects, which the module get using a `getter.Entity`, with probability of `switch_probability` if no collision happens between `objects_to_replace_with` and objects in the scene.
-* When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the proprites that the `objects_to_be_replaced` used to have.
+* When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the custom proprites that the `objects_to_be_replaced` used to have.
