@@ -10,6 +10,10 @@ class EntityManipulator(Module):
     attribute or custom property or a name of a custom property to create, while the attr_value is an according value
     for such attribute or custom property (this value can be sampled).
 
+    In order to set a custom property, which is also an attribute, add before the key a "cp_".
+    For example: Setting a custom property of type is not possible as it will change the attribute type, so
+    adding a "cp_" before the key -> "cp_type" will make it possible to set the custom property "type".
+
     **Configuration**:
 
     .. csv-table::

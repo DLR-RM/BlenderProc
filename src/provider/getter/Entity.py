@@ -34,7 +34,12 @@ class Entity(Provider):
         }
 
     This means: conditions, which are in one {...} are connected with AND, conditions which are in the
-    list are connected with or
+    list are connected with or.
+
+    In the event that a custom property has the same name as an attribute of the object, the attribute is always
+    evaluated first. In order to change let the key start with "cp_". For example there is a custom property with the
+    key "type", so checking "type": "MESH" will lead to a problem, because the attribute will be checked.
+    To avoid this change the key: "type" to "cp_type".
 
     **Configuration**:
 
