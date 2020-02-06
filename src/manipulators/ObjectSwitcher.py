@@ -5,7 +5,7 @@ import random
 import numpy as np
 import math
 from collections import defaultdict
-from src.utility.BlenderUtility import check_intersection, duplicate_objects
+from src.utility.BlenderUtility import check_intersection, duplicate_objects, check_bb_intersection
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 
@@ -34,18 +34,18 @@ class ObjectReplacer(Module):
         """
         return np.linalg.norm(np.array(point1) - np.array(point2))
         
-    def _bb_ratio(self, bb1, bb2):
+    def _bb_volume_ratio(self, bb1, bb2):
         """
-        Ratios between two bounding boxes 3 sides
+        Ratios between two bounding boxes volumes
 
         :param bb1: bounding box 1
         :param bb2: bounding box 2
         returns a list of floats.
         """
-        ratio_a = self._two_points_distance(bb1[0], bb1[3]) / self._two_points_distance(bb2[0], bb2[3])
-        ratio_b = self._two_points_distance(bb1[0], bb1[4]) / self._two_points_distance(bb2[0], bb2[4])
-        ratio_c = self._two_points_distance(bb1[0], bb1[1]) / self._two_points_distance(bb2[0], bb2[1])
-        return [ratio_a, ratio_b, ratio_c]
+        # Multiply the three sides of the bb
+        v1 = self._two_points_distance(bb1[0], bb1[3]) * self._two_points_distance(bb1[0], bb1[4]) * self._two_points_distance(bb1[0], bb1[1])
+        v2 = self._two_points_distance(bb2[0], bb2[3]) * self._two_points_distance(bb2[0], bb2[4]) * self._two_points_distance(bb2[0], bb2[1])
+        return v1/v2
 
     def _can_replace(self, obj1, obj2, scale=True):
         """
@@ -61,15 +61,17 @@ class ObjectReplacer(Module):
         obj2.location = obj1.location
         obj2.rotation_euler = obj1.rotation_euler
         if scale:
-            obj2.scale = self._bb_ratio(obj1.bound_box, obj2.bound_box)
+            obj2.scale = [self._bb_volume_ratio(obj1.bound_box, obj2.bound_box)] * 3
 
         # Check for collision between the new object and other objects in the scene
         intersection = False
         for obj in BlenderUtility.get_all_mesh_objects():
-            if obj != obj2 and obj1 != obj and "Floor" not in obj.name:
-                intersection = check_intersection(obj, obj2)[0]
+            if obj != obj2 and obj1 != obj:
+                intersection = check_bb_intersection(obj, obj2)
                 if intersection:
-                    break
+                    intersection = check_intersection(obj, obj2)[0]
+                    if intersection:
+                        break
         return not intersection
 
     def run(self):
