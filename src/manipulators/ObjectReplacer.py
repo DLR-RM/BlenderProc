@@ -5,7 +5,7 @@ import random
 import numpy as np
 import math
 from collections import defaultdict
-from src.utility.BlenderUtility import check_intersection, duplicate_objects, check_bb_intersection, get_all_mesh_objects
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_mesh_objects
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 
@@ -30,8 +30,8 @@ class ObjectReplacer(Module):
         """
         Eclidian distance between two points
 
-        :param point1: Point 1
-        :param point2: Point 2
+        :param point1: Point 1 as a list of three floats
+        :param point2: Point 2 as a list of three floats
         returns a float.
         """
         return np.linalg.norm(np.array(point1) - np.array(point2))
@@ -49,7 +49,7 @@ class ObjectReplacer(Module):
         
         def _bb_ratio(bb1, bb2):
             """
-            Rough estimation of the eatios between two bounding boxes sides, not axis aligned
+            Rough estimation of the ratios between two bounding boxes sides, not axis aligned
 
             :param bb1: bounding box 1
             :param bb2: bounding box 2
@@ -60,6 +60,7 @@ class ObjectReplacer(Module):
             ratio_c = self._two_points_distance(bb1[0], bb1[1]) / self._two_points_distance(bb2[0], bb2[1])
             return [ratio_a, ratio_b, ratio_c]
         
+        # New object takes location, rotation and rough scale of original object
         bpy.ops.object.select_all(action='DESELECT')
         obj2.select_set(True)
         obj2.location = obj1.location
@@ -70,6 +71,7 @@ class ObjectReplacer(Module):
         # Check for collision between the new object and other objects in the scene
         intersection = False
         for obj in get_all_mesh_objects(): # for each object
+
             # Not checking for collision with the floor speeds up the module by 40%
             if obj != obj2 and obj1 != obj and "Floor" not in obj.name:
                 intersection = check_bb_intersection(obj, obj2)
@@ -82,13 +84,12 @@ class ObjectReplacer(Module):
     def run(self):
         self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced")
         self._objects_to_replace_with = self.config.get_list("objects_to_replace_with")
-        print(self._objects_to_be_replaced)
-        print(self._objects_to_replace_with)
         
         # Now we have two lists to do the replacing
         # Replace a ratio of the objects in the scene with the list of the provided ikea objects randomly
         indices = np.random.choice(len(self._objects_to_replace_with), int(self._replace_ratio * len(self._objects_to_be_replaced)))
         for idx, new_obj_idx in enumerate(indices):
+
             # More than one original object could be replaced by just one object
             original_object = self._objects_to_be_replaced[idx]
             new_object = self._objects_to_replace_with[new_obj_idx]
@@ -108,9 +109,8 @@ class ObjectReplacer(Module):
                 # Update the scene
                 original_object.hide_render = True
                 new_object.hide_render = False
-
                 print('Replaced', original_object.name, ' by ', new_object.name)
-                
+
                 # Delete the original object
                 bpy.ops.object.select_all(action='DESELECT')
                 original_object.select_set(True)
