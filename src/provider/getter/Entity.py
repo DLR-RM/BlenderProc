@@ -34,7 +34,12 @@ class Entity(Provider):
         }
 
     This means: conditions, which are in one {...} are connected with AND, conditions which are in the
-    list are connected with or
+    list are connected with or.
+
+    In the event that a custom property has the same name as an attribute of the object, the attribute is always
+    evaluated first. In order to change let the key start with "cp_". For example there is a custom property with the
+    key "type", so checking "type": "MESH" will lead to a problem, because the attribute will be checked.
+    To avoid this change the key: "type" to "cp_type".
 
     **Configuration**:
 
@@ -65,22 +70,14 @@ class Entity(Provider):
             select_object = True
             # run over all conditions and check if any one of them holds, if one does not work -> go to next obj
             for key, value in and_condition.items():
-                # check if a custom property with this name exists
-                if key in obj:
-                    # check if the type of the value of such custom property matches desired
-                    if isinstance(obj[key], type(value)) or (isinstance(obj[key], int) and isinstance(value, bool)):
-                        # if is a string and if the whole string matches the given pattern
-                        if not ((isinstance(obj[key], str) and re.fullmatch(value, obj[key]) is not None) or
-                                obj[key] == value):
-                            select_object = False
-                            break
-                    # raise an exception if not
-                    else:
-                        raise Exception("Types are not matching: %s and %s !"
-                                        % (type(obj[key]), type(value)))
+                # check if the key is a requested custom property
+                requested_custom_property = False
+                if key.startswith('cp_'):
+                    requested_custom_property = True
+                    key = key[3:]
 
-                # check if an attribute with this name exists
-                elif hasattr(obj, key):
+                # check if an attribute with this name exists and the key was not a requested custom property
+                if hasattr(obj, key) and not requested_custom_property:
                     # check if the type of the value of attribute matches desired
                     if isinstance(getattr(obj, key), type(value)):
                         new_value = value
@@ -101,6 +98,19 @@ class Entity(Provider):
                             or getattr(obj, key) == new_value):
                         select_object = False
                         break
+                # check if a custom property with this name exists
+                elif key in obj:
+                    # check if the type of the value of such custom property matches desired
+                    if isinstance(obj[key], type(value)) or (isinstance(obj[key], int) and isinstance(value, bool)):
+                        # if is a string and if the whole string matches the given pattern
+                        if not ((isinstance(obj[key], str) and re.fullmatch(value, obj[key]) is not None) or
+                                obj[key] == value):
+                            select_object = False
+                            break
+                    # raise an exception if not
+                    else:
+                        raise Exception("Types are not matching: %s and %s !"
+                                        % (type(obj[key]), type(value)))
                 else:
                     select_object = False
                     break
