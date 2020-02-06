@@ -331,19 +331,19 @@ class Utility:
         return np.round(values)
 
     @staticmethod
-    def import_objects(filepath, cached_objects={}, **kwargs):
+    def import_objects(filepath, cached_objects=None, **kwargs):
         """ Import all objects for the given file and returns the loaded objects
 
         In .obj files a list of objects can be saved in.
         In .ply files only one object can saved so the list has always at most one element
 
         :param filepath: the filepath to the location where the data is stored
-        :param cached_objects: a list of filepath to objects, which have been loaded before, to avoid reloading (the dict is not updated in this function)
+        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is not updated in this function)
         :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
         :return: a list of all newly loaded objects, in the failure case an empty list is returned
         """
         if os.path.exists(filepath):
-            if len(cached_objects) > 0:
+            if cached_objects is not None and isinstance(cached_objects, dict):
                 if filepath in cached_objects.keys():
                     created_obj = []
                     for obj in cached_objects[filepath]:
@@ -355,6 +355,7 @@ class Utility:
                         if len(bpy.context.selected_objects) != 1:
                             raise Exception("The amount of objects after the copy was more than one!")
                         created_obj.append(bpy.context.selected_objects[0])
+                    cached_objects[filepath] = created_obj
                     return created_obj
                 else:
                     return import_objects(filepath, cached_objects={}, **kwargs)
