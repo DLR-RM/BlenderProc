@@ -5,7 +5,7 @@ import random
 import numpy as np
 import math
 from collections import defaultdict
-from src.utility.BlenderUtility import check_intersection, duplicate_objects, check_bb_intersection
+from src.utility.BlenderUtility import check_intersection, duplicate_objects, check_bb_intersection, get_all_mesh_objects
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 
@@ -33,40 +33,43 @@ class ObjectReplacer(Module):
         returns a float.
         """
         return np.linalg.norm(np.array(point1) - np.array(point2))
-        
-    def _bb_volume_ratio(self, bb1, bb2):
-        """
-        Ratios between two bounding boxes volumes
 
-        :param bb1: bounding box 1
-        :param bb2: bounding box 2
-        returns a list of floats.
-        """
-        # Multiply the three sides of the bb
-        v1 = self._two_points_distance(bb1[0], bb1[3]) * self._two_points_distance(bb1[0], bb1[4]) * self._two_points_distance(bb1[0], bb1[1])
-        v2 = self._two_points_distance(bb2[0], bb2[3]) * self._two_points_distance(bb2[0], bb2[4]) * self._two_points_distance(bb2[0], bb2[1])
-        return v1/v2
 
     def _can_replace(self, obj1, obj2, scale=True):
         """
         Scale, translate, rotate obj2 to match obj1 and check if there is a bounding box collision
+        returns a boolean.
 
         :param obj1: object to remove from the scene
         :param obj2: object to put in the scene instead of obj1
         :param scale: Scales obj2 to match obj1 dimensions
-        returns a boolean.
         """        
+        
+        def _bb_ratio(bb1, bb2):
+            """
+            Rough estimation of the eatios between two bounding boxes sides, not axis aligned
+
+            :param bb1: bounding box 1
+            :param bb2: bounding box 2
+            returns a list of floats.
+            """
+            ratio_a = self._two_points_distance(bb1[0], bb1[3]) / self._two_points_distance(bb2[0], bb2[3])
+            ratio_b = self._two_points_distance(bb1[0], bb1[4]) / self._two_points_distance(bb2[0], bb2[4])
+            ratio_c = self._two_points_distance(bb1[0], bb1[1]) / self._two_points_distance(bb2[0], bb2[1])
+            return [ratio_a, ratio_b, ratio_c]
+        
         bpy.ops.object.select_all(action='DESELECT')
         obj2.select_set(True)
         obj2.location = obj1.location
         obj2.rotation_euler = obj1.rotation_euler
         if scale:
-            obj2.scale = [self._bb_volume_ratio(obj1.bound_box, obj2.bound_box)] * 3
+            obj2.scale = _bb_ratio(obj1.bound_box, obj2.bound_box)
 
         # Check for collision between the new object and other objects in the scene
         intersection = False
-        for obj in BlenderUtility.get_all_mesh_objects():
-            if obj != obj2 and obj1 != obj:
+        for obj in get_all_mesh_objects(): # for each object
+            # Not checking for collision with the floor speeds up the module by 40%
+            if obj != obj2 and obj1 != obj and "Floor" not in obj.name:
                 intersection = check_bb_intersection(obj, obj2)
                 if intersection:
                     intersection = check_intersection(obj, obj2)[0]
@@ -77,7 +80,9 @@ class ObjectReplacer(Module):
     def run(self):
         self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced")
         self._objects_to_replace_with = self.config.get_list("objects_to_replace_with")
-
+        print(self._objects_to_be_replaced)
+        print(self._objects_to_replace_with)
+        
         # Now we have two lists to do the replacing
         # Replace a ratio of the objects in the scene with the list of the provided ikea objects randomly
         indices = np.random.choice(len(self._objects_to_replace_with), int(self._replace_ratio * len(self._objects_to_be_replaced)))
@@ -89,15 +94,16 @@ class ObjectReplacer(Module):
             if self._can_replace(original_object, new_object):
                 # Duplicate the added object to be able to add it again.
                 new_object['category_id'] = original_object['category_id']
-                if len(duplicate_objects(new_object)) > 0:
-                    self._objects_to_replace_with[new_obj_idx] = duplicate_objects(new_object)[0]
+                duplicates = duplicate_objects(new_object) 
+                if len(duplicates) > 0:
+                    self._objects_to_replace_with[new_obj_idx] = duplicates[0]
 
                 # Update the scene
                 original_object.hide_render = True
                 new_object.hide_render = False
-                
-                print('Replaced', original_object.name, ' by a ', new_object.name)
 
+                print('Replaced', original_object.name, ' by ', new_object.name)
+                
                 # Delete the original object
                 bpy.ops.object.select_all(action='DESELECT')
                 original_object.select_set(True)

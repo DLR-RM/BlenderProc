@@ -62,10 +62,11 @@ def get_bounds(obj):
 
 def check_bb_intersection(obj1,obj2):
     """
-    :param obj1: object 1  to check for intersection, must be a mesh
-    :param obj2: object 2  to check for intersection, must be a mesh
     Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
         The surrounding/including axis-aligned bounding box is calculated and used to check the intersection
+
+    :param obj1: object 1  to check for intersection, must be a mesh
+    :param obj2: object 2  to check for intersection, must be a mesh
     returns a boolean
     """
     b1w = get_bounds(obj1)

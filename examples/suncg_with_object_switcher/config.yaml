@@ -39,17 +39,16 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "replace": "chair",
-            "type": "MESH"
+            "replace": "chair"
           }
         },
         "hide_render": True
       }
     },
     {
-      "module": "manipulators.ObjectSwitcher",
+      "module": "manipulators.ObjectReplacer",
       "config": {
-        "switch_ratio": 1,
+        "replace_ratio": 1,
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
