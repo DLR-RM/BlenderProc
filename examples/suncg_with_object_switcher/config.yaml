@@ -53,7 +53,8 @@
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
-              "coarse_grained_class": "chair"
+              "coarse_grained_class": "chair",
+              "type": "MESH"
             }
         },
         "objects_to_replace_with": {
@@ -62,7 +63,14 @@
               "replace": "chair",
               "type": "MESH"
             }
-        }
+        },
+        "ignore_collision_with": {
+          "provider": "getter.Entity",
+            "conditions": {
+              "name": "Floor",
+              "type": "MESH"
+            }
+        },
       }
     },
     {

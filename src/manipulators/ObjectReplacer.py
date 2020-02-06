@@ -10,7 +10,7 @@ from src.utility.Utility import Utility
 from src.utility.Config import Config
 
 class ObjectReplacer(Module):
-    """ Replaces each MESH object with another object and scales it according to the bounding box, the replaced objects and the objects to replace with, can be selected over Selectors (getter.Entity).
+    """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the objects to replace with, can be selected over Selectors (getter.Entity).
     **Configuration**:
     .. csv-table::
        :header: "Parameter", "Description"
@@ -19,6 +19,7 @@ class ObjectReplacer(Module):
        "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with."
        "objects_to_be_replaced", "Provider (Getter) in order to select objects to try to remove from the scene, gets list of object on a certain condition"
        "objects_to_replace_with", "Provider (Getter) in order to select objects to try to add to the scene, gets list of object on a certain condition"
+       "ignore_collision_with", "Provider (Getter) in order to select objects to not check for collisions with"
     """
 
     def __init__(self, config):
@@ -72,8 +73,7 @@ class ObjectReplacer(Module):
         can_replace = True
         for obj in get_all_mesh_objects(): # for each object
 
-            # Not checking for collision with the floor speeds up the module by 40%
-            if obj != obj_to_add and obj_to_remove != obj and "Floor" not in obj.name:
+            if obj != obj_to_add and obj_to_remove != obj and obj not in self._ignore_collision_with:
                 if check_bb_intersection(obj, obj_to_add):
                     if check_intersection(obj, obj_to_add)[0]:
                         can_replace = False
@@ -83,7 +83,8 @@ class ObjectReplacer(Module):
     def run(self):
         self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced")
         self._objects_to_replace_with = self.config.get_list("objects_to_replace_with")
-        
+        self._ignore_collision_with = self.config.get_list("ignore_collision_with")
+
         # Now we have two lists to do the replacing
         # Replace a ratio of the objects in the scene with the list of the provided ikea objects randomly
         indices = np.random.choice(len(self._objects_to_replace_with), int(self._replace_ratio * len(self._objects_to_be_replaced)))
