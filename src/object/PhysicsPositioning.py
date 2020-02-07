@@ -19,6 +19,7 @@ class PhysicsPositioning(Module):
        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
        "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
+       "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'"
     """
 
     def __init__(self, config):
@@ -26,6 +27,7 @@ class PhysicsPositioning(Module):
         self.object_stopped_location_threshold = self.config.get_float("object_stopped_location_threshold", 0.01)
         self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
         self.collision_margin = self.config.get_float("collision_margin", 0.001)
+        self.collision_mesh_source = self.config.get_string('collision_mesh_source', 'FINAL')
 
     def run(self):
         """ Performs physics simulation in the scene. """
@@ -52,6 +54,7 @@ class PhysicsPositioning(Module):
             obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
             obj.rigid_body.collision_shape = "MESH"
             obj.rigid_body.collision_margin = self.collision_margin
+            obj.rigid_body.mesh_source = self.collision_mesh_source
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """
