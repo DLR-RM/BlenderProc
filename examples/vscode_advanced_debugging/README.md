@@ -2,12 +2,12 @@
 
 Contributor: [zhezh](https://github.com/zhezh/BlenderProc)
 
-In this example, we will describe how to debug the python code executed by Blender's python interpretor, e.g.  `src/run.py` which can not be debugged directly in PyCharm or other IDE. Although we focus on debugging with Blender, this method is general.
+In this example, we will describe how to debug the python code executed by Blender's python interpreter, e.g.  `src/run.py` which can not be debugged directly in PyCharm or an other IDE. Although, we focus on debugging with the Blender's python interpreter, this method is general.
 
 ## Preparation
-- [VSCode](https://code.visualstudio.com/Download)
-- [ptvsd](https://github.com/microsoft/ptvsd) We will illustrate how to install it in next step.
-- [examples/basic](https://github.com/DLR-RM/BlenderProc/tree/master/examples/basic) Make sure you have tried this example.
+- This tutorial is aimed for debugging in: [VSCode](https://code.visualstudio.com/Download)
+- [ptvsd](https://github.com/microsoft/ptvsd), the python package, which we are going to use, the installation is part of the tutorial.
+- [examples/basic](https://github.com/DLR-RM/BlenderProc/tree/master/examples/basic) Make sure you have run this example before.
 
 ## Steps
 Firstly, add `ptvsd` into `setup / pip` of `examples/basic/config.yaml`. The first few lines should be like below:
