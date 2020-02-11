@@ -19,7 +19,7 @@ class PhysicsPositioning(Module):
        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
        "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
-       "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'"
+       "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'. Available values: 'BASE', 'DEFORM', 'FINAl'."
     """
 
     def __init__(self, config):
