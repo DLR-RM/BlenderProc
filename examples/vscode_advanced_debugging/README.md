@@ -10,7 +10,7 @@ In this example, we will describe how to debug the python code executed by Blend
 - [examples/basic](https://github.com/DLR-RM/BlenderProc/tree/master/examples/basic) Make sure you have run this example before, our debugging example is based on this `basic` example.
 
 ## Steps
-Firstly, open VSCode and click `File->OpenFolder` to open this repo. Then take a look at `examples/basic/config.yaml`. We have added `ptvsd` into `setup / pip`.
+Firstly, open VSCode and click `File->OpenFolder` to open this repo. Then take a look at `examples/vscode_advanced_debugging/config.yaml`. We have added `ptvsd` into `setup / pip`.
 
 Secondly, insert below snippet at the 20th line of `src/run.py`, just below  `sys.path.append(packages_path)`, then add some breakpoints in `src/run.py`.
 ```python
@@ -19,7 +19,8 @@ ptvsd.enable_attach()
 ptvsd.wait_for_attach()
 ```
 
-Thirdly, locate to `Debug and Run` tab as below image and create a `launch.json`. Delete all content in `launch.json` and paste below content into it.
+Thirdly, locate to `Debug and Run` tab as below image and create a `launch.json`. Delete all content in `launch.json` (see Important Notice) and paste below content into it.
+
 ![](vscode_debug.png)
 
 ```json
@@ -53,6 +54,7 @@ python run.py examples/vscode_advanced_debugging/config.yaml examples/basic/came
 and then start the debugger client in VSCode, enjoy debugging~
 
 ## Important Notice
+- if you already have other debugger configuration in `launch.json`, you can add our remote debugging configuration into it rather than replacing it.
 - make sure the debugger is running, otherwise your app will halt
 - add breakpoints after setting up ptvsd, otherwise the breakpoints will not take effect
 - if error occurs when import ptvsd, check if you insert snippet in 2nd step correctly
