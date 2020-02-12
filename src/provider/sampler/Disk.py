@@ -57,8 +57,8 @@ class Disk(Provider):
         # Get Euler angles from up vector
         euler_angles = up_vector.to_track_quat('Z', 'Y').to_euler()
         # Get rotation
-        rot_mat = mathutils.Euler((euler_angles), 'XYZ')
+        rot_mat = mathutils.Euler(euler_angles, 'XYZ').to_matrix()
         # Get location on a rotated disk and add center
-        location = rot @ mathutils.Vector(sampled_point) + center
+        location = rot_mat @ mathutils.Vector(sampled_point) + center
 
         return location
