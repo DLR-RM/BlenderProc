@@ -6,10 +6,11 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, colormap, dataset_name):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, dataset_name):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
+        :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
         :param dataset_name: name of the dataset, a feature required by coco annotation format
         :return: dict containing coco annotations
@@ -36,12 +37,12 @@ class CocoUtility:
         images = []
         annotations = []
 
-        for segmentation_map_path in segmentation_map_paths:
+        for segmentation_map_path, image_path in zip(segmentation_map_paths, image_paths):
             segmentation_map = np.load(segmentation_map_path)
 
             # Add coco info for image
             image_id = len(images)
-            images.append(CocoUtility.create_image_info(image_id, segmentation_map_path, segmentation_map.shape))
+            images.append(CocoUtility.create_image_info(image_id, image_path, segmentation_map.shape))
 
             # Go through all objects visible in this image
             unique_objects = np.unique(segmentation_map)
