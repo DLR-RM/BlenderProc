@@ -247,11 +247,8 @@ class Config:
         """
         value = self.get_raw_value(name, fallback)
 
-        if dimensions < 2 or dimensions > 4:
-            raise TypeError('Matrix dimensions must be 2x2, 3x3, or 4x4!')
-
         if dimensions is not None and (len(value) != dimensions or not all(len(item) == dimensions for item in value)):
-            raise TypeError(str(value) + "' must be exactly " + str(dimensions) + "x" + str(dimensions) + " dimensional!")
+            raise TypeError(str(value) + "' must be exactly " + str(dimensions) + "x" + str(dimensions) + "-dimensional!")
 
         try:
             value = mathutils.Matrix(value)
@@ -290,8 +287,9 @@ class Config:
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param fallback: The fallback value, returned if the parameter does not exist.
         :return: The matrix.
-                """
+        """
         return self.get_matrix(name, fallback, 4)
+
 
 class NotFoundError(Exception):
     pass
