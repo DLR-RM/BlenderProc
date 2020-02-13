@@ -1,7 +1,5 @@
 # Advanced Debugging with VSCode
 
-Contributor: [zhezh](https://github.com/zhezh/BlenderProc)
-
 In this example, we will describe how to debug the python code executed by Blender's python interpreter, e.g.  `src/run.py` which can not be debugged directly in PyCharm or an other IDE. Although, we focus on debugging with the Blender's python interpreter, this method is general.
 
 ## Preparation
@@ -55,3 +53,6 @@ and then start the debugger client in VSCode, enjoy debugging~
 - make sure the debugger is running, otherwise your app will halt
 - add breakpoints after setting up ptvsd, otherwise the breakpoints will not take effect
 - if error occurs when import ptvsd, check if you insert snippet in 2nd step correctly
+
+
+Contributed by: [zhezh](https://github.com/zhezh/BlenderProc)
