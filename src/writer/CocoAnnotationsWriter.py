@@ -66,8 +66,6 @@ class CocoAnnotationsWriter(Module):
         
         new_coco_image_paths = []
         # copy images from temporary dir to output_dir/coco_data
-        print(image_paths)
-        print(100*'#')
         for image_path in image_paths:
             target_path = os.path.join(self._coco_data_dir, os.path.basename(image_path))
             shutil.copyfile(image_path, target_path)   
