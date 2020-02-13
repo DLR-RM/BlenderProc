@@ -69,10 +69,6 @@ class Hdf5Writer(Module):
                     # Write version number of current output at key_version
                     self._write_to_hdf_file(f, output_type["key"] + "_version", np.string_([output_type["version"]]))
 
-        # Remove temp data
-        if self.config.get_bool("delete_temporary_files_afterwards", True):
-            shutil.rmtree(self._temp_dir)
-
     def _write_to_hdf_file(self, file, key, data):
         """ Adds the given data as a new entry to the given hdf5 file.
 
