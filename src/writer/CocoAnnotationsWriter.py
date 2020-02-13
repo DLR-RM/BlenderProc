@@ -76,7 +76,3 @@ class CocoAnnotationsWriter(Module):
         print("Writing coco annotations to " + fname)
         with open(fname, 'w') as fp:
             json.dump(coco_output, fp)
-
-        # Remove temp data
-        if self.config.get_bool("delete_temporary_files_afterwards", True):
-            shutil.rmtree(self._temp_dir)

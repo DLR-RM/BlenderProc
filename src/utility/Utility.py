@@ -114,6 +114,16 @@ class Utility:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
+    def default_temporary_dir():
+        ''' returns default temporary directory, shared memory if it exists'''
+
+        # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
+        if os.path.exists("/dev/shm"):
+            return "/dev/shm"
+        else:
+            return "/tmp"
+    
+    @staticmethod
     def merge_dicts(source, destination):
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
 
