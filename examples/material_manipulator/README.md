@@ -45,8 +45,8 @@ python run.py examples/material_manipulation/config.yaml examples/material_manip
 },
 ```
 
-The focus of this example is the MaterialManipulator module and `getter.Material` which allow us to select multiple Materials based on a user-defined condition and change the attribute values of the selected materials.
-* `selector` - section of the `MaterialManipulator` for stating the `name` of the Getter and the `condition` to use for selecting.
+The focus of this example is the MaterialManipulator module and `getter.Material` which allow us to select multiple materials based on a user-defined condition and change the attribute values of the selected materials.
+* `selector` - section of the `MaterialManipulator` for stating the chosen `provider` and the `condition` to use for selecting.
 
 Our condition is: `"name": 'Material'`, which means that we want to select all the materials with `material.name == 'Material'`. In our case we have only one material which meets the requirement.
 Yet one may define any condition where `key` is the valid name of any attribute of entities present in the scene.
