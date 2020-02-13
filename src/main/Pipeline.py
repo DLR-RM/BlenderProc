@@ -18,12 +18,13 @@ class Pipeline:
         config_parser = ConfigParser(silent=True)
         config = config_parser.parse(Utility.resolve_path(config_path), args)
 
+        config_object = Config(config)
+        self._do_clean_up_temp_dir = config_object.get_bool("delete_temporary_files_afterwards", True)
+        self._temp_dir = Utility.get_temporary_directory(config_object)
+        os.makedirs(self._temp_dir, exist_ok=True)
+
         self.modules = Utility.initialize_modules(config["modules"], config["global"])
 
-        config_object = Config(config)
-        self._do_clean_up = config_object.get_bool("delete_temporary_files_afterwards", True)
-        self._temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", Utility.default_temporary_dir()),  "blender_proc_" + str(os.getpid())))
-        os.makedirs(self._temp_dir, exist_ok=True)
 
     def _cleanup(self):
         """ Cleanup the scene by removing objects, orphan data and custom properties """
@@ -63,9 +64,9 @@ class Pipeline:
         for key in bpy.context.scene.keys():
             del bpy.context.scene[key]
     
-    def _cleanup_temp_dir(self):
+    def _clean_up_temp_dir(self):
         """ Cleans up temporary directory """
-        if self._do_clean_up:
+        if self._do_clean_up_temp_dir:
             shutil.rmtree(self._temp_dir)
 
     def run(self):
@@ -74,4 +75,4 @@ class Pipeline:
             for module in self.modules:
                 with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
                     module.run()
-            self._cleanup_temp_dir()
+            self._clean_up_temp_dir()

@@ -114,14 +114,20 @@ class Utility:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
-    def default_temporary_dir():
-        ''' returns default temporary directory, shared memory if it exists'''
+    def get_temporary_directory(config_object):
+        ''' 
+        :return: default temporary directory, shared memory if it exists
+        '''
 
         # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
         if os.path.exists("/dev/shm"):
-            return "/dev/shm"
+            default_temp_dir = "/dev/shm"
         else:
-            return "/tmp"
+            default_temp_dir = "/tmp"
+
+        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + str(os.getpid())))
+
+        return temp_dir
     
     @staticmethod
     def merge_dicts(source, destination):

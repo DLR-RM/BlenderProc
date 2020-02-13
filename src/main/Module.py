@@ -19,10 +19,11 @@ class Module:
 
     def __init__(self, config):
         self.config = config
+
         self._output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
         os.makedirs(self._output_dir, exist_ok=True)
 
-        self._temp_dir = Utility.resolve_path(os.path.join(self.config.get_string("temp_dir", Utility.default_temporary_dir()),  "blender_proc_" + str(os.getpid())))
+        self._temp_dir = Utility.get_temporary_directory(config)
         os.makedirs(self._temp_dir, exist_ok=True)
 
     def _determine_output_dir(self, output_is_temp_default=True):
