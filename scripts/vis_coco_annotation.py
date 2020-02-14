@@ -24,10 +24,6 @@ with open(os.path.join(base_path, conf)) as f:
     categories = annotations['categories']
     annotations = annotations['annotations']
 
-# Read rgb image from hdf5 file
-# with h5py.File(os.path.join(base_path, str(image_idx) + ".hdf5"), 'r') as data:
-#     im = Image.fromarray(np.array(data["colors"]).astype('uint8'), 'RGB')
-#     draw = ImageDraw.Draw(im)
 im = Image.open(os.path.join(base_path, "rgb_{:04d}.png".format(image_idx)))
 draw = ImageDraw.Draw(im)
 
@@ -47,5 +43,4 @@ for idx, annotation in enumerate(annotations):
         im.paste(poly, mask=poly)
 if save:
     im.save(os.path.join(base_path,'coco_annotated_{}.png'.format(image_idx)), "PNG")
-an = Image.open(os.path.join(base_path,'coco_annotated_{}.png'.format(image_idx)))
-an.show()
+im.show()
