@@ -27,7 +27,7 @@ class ObjectReplacer(Module):
         self._replace_ratio = self.config.get_float("replace_ratio", 1)
         self._copy_properties = self.config.get_float("copy_properties", 1)
 
-    def _can_replace(self, obj_to_remove, obj_to_add, scale=True):
+    def _replace_and_edit(self, obj_to_remove, obj_to_add, scale=True):
         """
         Scale, translate, rotate obj_to_add to match obj_to_remove and check if there is a bounding box collision
         returns a boolean.
@@ -81,9 +81,9 @@ class ObjectReplacer(Module):
         return can_replace
 
     def run(self):
-        self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced")
-        self._objects_to_replace_with = self.config.get_list("objects_to_replace_with")
-        self._ignore_collision_with = self.config.get_list("ignore_collision_with")
+        self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced", [])
+        self._objects_to_replace_with = self.config.get_list("objects_to_replace_with", [])
+        self._ignore_collision_with = self.config.get_list("ignore_collision_with", [])
 
         # Now we have two lists to do the replacing
         # Replace a ratio of the objects in the scene with the list of the provided ikea objects randomly
@@ -94,7 +94,7 @@ class ObjectReplacer(Module):
             original_object = self._objects_to_be_replaced[idx]
             new_object = self._objects_to_replace_with[new_obj_idx]
 
-            if self._can_replace(original_object, new_object):
+            if self._replace_and_edit(original_object, new_object):
 
                 # Copy properties
                 if self._copy_properties:
@@ -109,7 +109,6 @@ class ObjectReplacer(Module):
                     raise Exception("No object to duplicate")
 
                 # Update the scene
-                original_object.hide_render = True
                 new_object.hide_render = False
                 print('Replaced ', original_object.name, ' by ', new_object.name)
 

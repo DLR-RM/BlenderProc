@@ -7,15 +7,18 @@ This module tries to switch between `objects_to_be_replaced` objects and `object
 Execute in the Blender-Proc main directory:
 
 ```
-python run.py examples/suncg_with_object_switcher/config.yaml <path to house.json> examples/suncg_with_object_switcher/output
+python run.py examples/suncg_with_object_replacer/config.yaml <path to house.json> <path to new objects> examples/suncg_with_object_replacer/output
 ```
+
+* `examples/suncg_with_object_replacer/config.yaml`: explanation
 
 ## Steps
 
 * Loads a SUNCG scene
-* Switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
-* Renders color, normal, segmentation and a depth images
-* Merges all into an `.hdf5` file
+* loader.ObjectLoader loades new objetcs
+* object.EntityManipulator hides the new loaded objects from the rederer
+* manipulators.ObjectReplacer switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
+* Rest of the modules are the same as the `suncg_with_cam_sampler` example
 
 ## Explanation of specific parts of the config file
 
@@ -31,6 +34,7 @@ python run.py examples/suncg_with_object_switcher/config.yaml <path to house.jso
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
+              "type": "MESH",
               "coarse_grained_class": "chair"
             }
         },
