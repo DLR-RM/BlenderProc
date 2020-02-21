@@ -6,7 +6,7 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, dataset_name):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, dataset_name, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
@@ -54,13 +54,47 @@ class CocoUtility:
                 # Add coco info for object in this image
                 annotations.append(CocoUtility.create_annotation_info(len(annotations), image_id, int(obj), binary_inst_mask))
 
-        return {
+        new_coco_annotations = {
             "info": info,
             "licenses": licenses,
             "categories": categories,
             "images": images,
             "annotations": annotations
         }
+
+        if existing_coco_annotations is not None:
+            new_coco_annotations = CocoUtility.merge_coco_annotations(existing_coco_annotations, new_coco_annotations)
+
+        return new_coco_annotations
+
+    @staticmethod
+    def merge_coco_annotations(existing_coco_annotations, new_coco_annotations):
+        """ Merges the two given coco annotation dicts into one.
+
+        Currently this requires both coco annotations to have the exact same categories/objects.
+        The "images" and "annotations" sections are concatenated and respective ids are adjusted.
+
+        :param existing_coco_annotations: A dict describing the first coco annotations.
+        :param new_coco_annotations: A dict describing the second coco annotations.
+        :return: A dict containing the merged coco annotations.
+        """
+        if existing_coco_annotations["categories"] != new_coco_annotations["categories"]:
+            raise NotImplementedError("The existing coco annotations file contains different categories/objects than the current scene. Merging the two lists is not implemented yet.")
+
+        # Concatenate images sections
+        image_id_offset = max([image["id"] for image in existing_coco_annotations["images"]]) + 1
+        for image in new_coco_annotations["images"]:
+            image["id"] += image_id_offset
+        existing_coco_annotations["images"].extend(new_coco_annotations["images"])
+
+        # Concatenate annotations sections
+        annotation_id_offset = max([annotation["id"] for annotation in existing_coco_annotations["annotations"]]) + 1
+        for annotation in new_coco_annotations["annotations"]:
+            annotation["id"] += annotation_id_offset
+            annotation["image_id"] += image_id_offset
+        existing_coco_annotations["annotations"].extend(new_coco_annotations["annotations"])
+
+        return existing_coco_annotations
 
     @staticmethod
     def create_image_info(image_id, file_name, image_size):
