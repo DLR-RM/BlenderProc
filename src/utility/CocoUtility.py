@@ -13,6 +13,7 @@ class CocoUtility:
         :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
         :param dataset_name: name of the dataset, a feature required by coco annotation format
+        :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
         """
         # Adds all objects from the color map to the coco output (skip background)
