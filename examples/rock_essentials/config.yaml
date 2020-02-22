@@ -1,16 +1,16 @@
-# Args: <rock_essential_folder> <cam_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
-      "h5py",
-      "scikit-image"
+      "h5py"
     ]
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>"
+      "output_dir": "<args:1>",
+      "append_to_existing_output": True
     }
   },
   "modules": [
@@ -19,48 +19,85 @@
       "config": {}
     },
     {
-      "module": "loader.RockEssentialsLoader",
+      "module": "loader.RockEssentialsRockLoader",
       "config": {
-        "rocks": [
+        "batches": [
         {
           "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-          "objects": ['Rock_1', 'Rock_2','Rock_3'],
+          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
           "physics": False,
           "render_levels": 2,
           "high_detail_mode": True,
+          "color_value": 0.1
         },
         {
           "path": "<args:0>/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
-          "amount": 20,
+          "amount": 10,
           "physics": True,
           "render_levels": 2,
-          "high_detail_mode": True
+          "high_detail_mode": False,
+          "scale": [1.5, 1.5, 1.5],
+          "color_value": 0.1
         },
         {
-          "path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
-          "amount": 20,
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Desert/Rocks_Desert_Medium.blend",
+          "amount": 15,
           "physics": True,
           "render_levels": 2,
-          "high_detail_mode": True
+          "high_detail_mode": False,
+          "scale": [1.5, 1.5, 1.5],
+          "color_value": 0.1
         },
-        ],
-        "ground": {
+        {
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Forest/Rocks_Forest_Large.blend",
+          "objects": ['Rock_Forest_Large002', 'Rock_Forest_Large012'],
+          "physics": False,
+          "render_levels": 2,
+          "high_detail_mode": False,
+          "color_value": 0.2
+        }
+        ]
+      }
+    },
+    {
+      "module": "constructor.RockEssentialsGroundConstructor",
+      "config": {
+        "tiles": [
+        {
           "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
-          "images": {
-            "image_path": "<args:0>/Rock Essentials/Ground Textures/Sand/RDTSandWavy001/",
-            "maps": {
-              "color": "RDTSandWavy001_COL_VAR1_3K.jpg",
-              "roughness": "RDTSandWavy001_GLOSS_3K.jpg",
-              "reflection": "RDTSandWavy001_REFL_3K.jpg",
-              "normal": "RDTSandWavy001_NRM_3K.jpg",
-              "displacement": "RDTSandWavy001_DISP16_3K.tif"
-            }
-          },
-          "plane_scale": [20, 20, 1],
+          "plane_scale": [50, 50, 1],
           "subdivision_cuts": 30,
           "subdivision_render_levels": 2,
-          "displacement_strength": 0.7
+          "displacement_strength": 0.7,
+          "AO": [0.5, 0.5, 0.5, 1],
+          "tile_name": "Gr_Plane_1"
         }
+        ]
+      }
+    },
+    {
+      "module": "materials.RockEssentialsTextureSampler",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Gr_Plane.*",
+            "type": "MESH"
+          }
+        },
+        "textures": [
+        {
+          "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
+          "uv_scaling": 9,
+          "images": {
+            "color": "RDTGravel001_COL_VAR1_3K.jpg",
+            "roughness": "RDTGravel001_GLOSS_3K.jpg",
+            "reflection": "RDTGravel001_REFL_3K.jpg",
+            "normal": "RDTGravel001_NRM_3K.jpg",
+            "displacement": "RDTGravel001_DISP16_3K.tif"
+          }
+        },
+        ]
       }
     },
     {
@@ -69,13 +106,13 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "name": 'Rock_Sea.*'
+            "name": '.*Large.*'
           }
         },
         "location": {
           "provider": "sampler.Uniform3d",
-          "max":[6, 6, 0],
-          "min":[-6, -6, 0]
+          "max":[5, 5, -0.1],
+          "min":[-5, -5, -0.1]
         }
       }
     },
@@ -91,8 +128,8 @@
         },
         "pos_sampler":{
           "provider":"sampler.Uniform3d",
-          "max":[5, 5, 5],
-          "min":[-5, -5, 6]
+          "max":[5, 5, 4],
+          "min":[-5, -5, 2]
         },
         "rot_sampler":{
           "provider":"sampler.Uniform3d",
@@ -102,13 +139,27 @@
       }
     },
     {
-      "module": "camera.CameraLoader",
+      "module": "camera.CameraSampler",
       "config": {
-        "path": "<args:1>",
-        "file_format": "location rotation/value",
-        "default_cam_param": {
-          "fov": 1
+        "cam_poses": [
+        {
+          "number_of_samples": 5,
+          "location": {
+            "provider": "sampler.Disk",
+            "center": [0, 0, 4],
+            "radius": 7,
+            "use_circle_only": True
+          },
+          "rotation": {
+            "format": "look_at",
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max": [4, 4, 0],
+              "min": [-4, -4, 0]
+            }
+          }
         }
+        ]
       }
     },
     {
@@ -117,10 +168,22 @@
         "lights": [
         {
           "type": "SUN",
-          "location": [15, -15, 5],
+          "location": {
+            "provider": "sampler.Shell",
+            "center": [0, 0, 0],
+            "radius_min": 6,
+            "radius_max": 12,
+            "elevation_min": 10,
+            "elevation_max": 80
+          },
           "rotation": [-0.063, 0.6177, -0.1985],
-          "energy": 10,
-          "color": [1, 0.978, 0.407]
+          "energy": {
+            "provider": "sampler.Value",
+            "type": "float",
+            "min": 10,
+            "max": 30
+          },
+          "color": [1, 1, 1]
         }
         ]
       }
@@ -129,31 +192,43 @@
       "module": "object.PhysicsPositioning",
       "config": {
         "min_simulation_time": 2,
-        "max_simulation_time": 4,
+        "max_simulation_time": 5,
         "check_object_interval": 1,
         "solver_iters": 25,
-        "steps_per_sec": 250
+        "steps_per_sec": 200
+      }
+    },
+    {
+      "module": "object.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Gr_Plane_1"
+          }
+        },
+        "location": [0, 0, 0.05]
       }
     },
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors"
+        "output_key": "colors",
+        "samples": 128,
+        "resolution_x": 640,
+        "resolution_y": 480
       }
     },
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "instance"
+        "map_by": "instance",
+        "resolution_x": 640,
+        "resolution_y": 480
       }
     },
     {
       "module": "writer.CocoAnnotationsWriter",
-      "config": {
-      }
-    },
-    {
-      "module": "writer.Hdf5Writer",
       "config": {
       }
     }
