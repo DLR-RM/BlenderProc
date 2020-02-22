@@ -280,4 +280,11 @@ def load_image(file_path):
         img = (img * 255).astype(np.uint8)
     return img[:, :, :3]
 
+def get_bound_volume(obj):
+    """ Gets a volume of a bounding box.
 
+    :param obj: Mesh object.
+    :return: volume of a bounding box.
+    """
+    bb = get_bounds(obj)
+    return (bb[1][2] - bb[0][2]) * (bb[2][1] - bb[1][1]) * (bb[7][0] - bb[0][0])
