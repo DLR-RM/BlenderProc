@@ -19,6 +19,7 @@ class CocoAnnotationsWriter(Module):
        "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the output_key of the RgbRenderer module."
        "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as the output_key of the SegMapRenderer module."
        "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was registered. Should be the same as the colormap_output_key of the SegMapRenderer module."
+       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output directory, the new coco annotations will be appended to the existing file. Also the rgb images will be named such that there are no collisions."
     """
 
     def __init__(self, config):
@@ -45,12 +46,6 @@ class CocoAnnotationsWriter(Module):
     
         # collect all segmaps
         segmentation_map_paths = []
-        # collect all RGB paths
-        image_paths = []
-        # for each rendered frame
-        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-            segmentation_map_paths.append(segmentation_map_output["path"] % frame)
-            image_paths.append(rgb_output["path"] % frame)
 
         # Find path of name class mapping csv file
         segcolormap_output = self._find_registered_output_by_key(self.segcolormap_output_key)
@@ -63,16 +58,31 @@ class CocoAnnotationsWriter(Module):
             reader = csv.DictReader(csvfile)
             for mapping in reader:
                 color_map.append(mapping)
-        
-        new_coco_image_paths = []
-        # copy images from temporary dir to output_dir/coco_data
-        for image_path in image_paths:
-            target_path = os.path.join(self._coco_data_dir, os.path.basename(image_path))
-            shutil.copyfile(image_path, target_path)   
-            new_coco_image_paths.append(os.path.basename(image_path))
 
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, "coco_annotations")
-        fname = os.path.join(self._coco_data_dir, "coco_annotations.json")
-        print("Writing coco annotations to " + fname)
-        with open(fname, 'w') as fp:
+        coco_annotations_path = os.path.join(self._coco_data_dir, "coco_annotations.json")
+        # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
+        if self.config.get_bool("append_to_existing_output", False) and os.path.exists(coco_annotations_path):
+            with open(coco_annotations_path, 'r') as fp:
+                existing_coco_annotations = json.load(fp)
+            image_offset = max([image["id"] for image in existing_coco_annotations["images"]]) + 1
+        else:
+            image_offset = 0
+            existing_coco_annotations = None
+
+        # collect all RGB paths
+        new_coco_image_paths = []
+        # for each rendered frame
+        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+            segmentation_map_paths.append(segmentation_map_output["path"] % frame)
+
+            source_path = rgb_output["path"] % frame
+            target_path = os.path.join(self._coco_data_dir, os.path.basename(rgb_output["path"] % (frame + image_offset)))
+
+            shutil.copyfile(source_path, target_path)
+            new_coco_image_paths.append(os.path.basename(target_path))
+
+        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, "coco_annotations", existing_coco_annotations)
+
+        print("Writing coco annotations to " + coco_annotations_path)
+        with open(coco_annotations_path, 'w') as fp:
             json.dump(coco_output, fp)
