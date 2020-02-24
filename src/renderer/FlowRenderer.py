@@ -38,7 +38,6 @@ class FlowRenderer(Renderer):
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("flow_output_file_prefix", "scene_flow_")
-        print('save path', self.config.get_string("flow_output_file_prefix", "scene_flow_"))
         # Link render layer to output file
         links.new(render_layer_node.outputs['Vector'], output_file.inputs['Image'])
 
@@ -54,7 +53,6 @@ class FlowRenderer(Renderer):
 
             # Determine pathes to convert the vector field after rendering
             temporary_vector_file_path = os.path.join(self._temp_dir, 'scene_flow_')
-            print('tmp file path', temporary_vector_file_path)
             self._render("scene_flow_", custom_file_path=temporary_vector_file_path)
 
             # After rendering: convert to optical flow or calculate hsv visualization, if desired
@@ -69,13 +67,11 @@ class FlowRenderer(Renderer):
                     fname = os.path.join(self._determine_output_dir(),
                                          self.config.get_string('output_file_prefix',
                                                                 'scene_flow_')) + '%04d' % frame
-                    print('PAAAAAAAAATH', self.config.get_string('output_file_prefix', 'scene_flow_'))
                     np.save(fname + '.npy', scene_flow)
                 if get_optical_flow:
                     optical_flow = scene_flow[:2, :, :]
                     fname = os.path.join(self._determine_output_dir(),
                                          self.config.get_string('output_file_prefix', 'optical_flow_')) + '%04d' % frame
-                    print('PAAAAAAAAATH', self.config.get_string('output_file_prefix', 'optical_flow_'))
                     np.save(fname + '.npy', optical_flow)
 
         # register desired outputs  # TODO: hardcoded unique_for_camposes
@@ -83,7 +79,6 @@ class FlowRenderer(Renderer):
         unique_for_camposes = True
 
         if get_optical_flow:
-            print('getting scene flow')
             self._add_output_entry({
                 "key": 'scene_flow',
                 "path": os.path.join(self._determine_output_dir(),
@@ -94,7 +89,6 @@ class FlowRenderer(Renderer):
             })
 
         if get_optical_flow:
-            print('getting optical flow')
             self._add_output_entry({
                 "key": 'optical_flow',
                 "path": os.path.join(self._determine_output_dir(),
