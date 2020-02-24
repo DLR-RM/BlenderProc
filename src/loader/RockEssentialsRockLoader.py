@@ -21,7 +21,7 @@ class RockEssentialsRockLoader(Loader):
        "reflection_roughness". "Roughness texture value. Type: float (min=0, max=1). Default value: rock-specific."
        "physics", "Custom property for physics/rigidbody state. Type: boolean. Optional. Default value: False."
        "scale", "Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. Optional. Type: mathutils Vector. Default value: [1, 1, 1]."
-       "value", "Value parameter of the Hue Saturation Value node. Type: float. Range: [0, 2]. Optional. Default value: rock-specific."
+       "HSV", "Hue-Saturation-Value parameters of the HSV node. Type: list (3 values). Range: H: [0, 1], S: [0, 2], V: [0, 2]. Optional. Default value: rock-specific."
     """
 
     def __init__(self, config):
@@ -102,10 +102,10 @@ class RockEssentialsRockLoader(Loader):
             reflection_roughness = batch_config.get_float("reflection_roughness")
         else:
             reflection_roughness = None
-        if batch_config.has_param("color_value"):
-            color_value = batch_config.get_float("color_value")
+        if batch_config.has_param("HSV"):
+            hsv = batch_config.get_list("HSV")
         else:
-            color_value = None
+            hsv = None
 
         for obj in objects:
             # set physics parameter
@@ -123,5 +123,7 @@ class RockEssentialsRockLoader(Loader):
                 obj["05) Reflection Amount"] = reflection_amount
             if reflection_roughness is not None:
                 obj["06) Reflection Roughness"] = reflection_roughness
-            if color_value is not None:
-                obj["04) Value"] = color_value
+            if hsv is not None:
+                obj["02) Saturation"] = hsv[1]
+                obj["03) Hue"] = hsv[0]
+                obj["04) Value"] = hsv[2]
