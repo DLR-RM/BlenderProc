@@ -1,7 +1,7 @@
 import bpy
 import os
 import re
-from random import randint
+from random import choice
 
 from src.loader.Loader import Loader
 from src.utility.Config import Config
@@ -9,7 +9,9 @@ from src.utility.Utility import Utility
 
 
 class RockEssentialsTextureSampler(Loader):
-    """ Samples a random texture data from the provided list and sets the images to each selected object if they have a RE-specific material applied.
+    """ Samples a random texture data from the provided list and sets the images to each selected object (ground tiles
+        created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material applied (they have
+        it applied by default if ground tile was constructed by aforementioned constructor module).
 
     **Ground plane config**:
 
@@ -63,8 +65,8 @@ class RockEssentialsTextureSampler(Loader):
         :param textures: List of dicts. Each dict is describing a texture data (path to images, images, etc.).
         :return: A config object of the selected texture dict.
         """
-        selected_idx = randint(0, len(textures) - 1)
-        selected_texture = Config(textures[selected_idx])
+        selected_dict = choice(textures)
+        selected_texture = Config(selected_dict)
 
         return selected_texture
 
