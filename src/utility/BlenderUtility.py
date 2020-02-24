@@ -287,4 +287,4 @@ def get_bound_volume(obj):
     :return: volume of a bounding box.
     """
     bb = get_bounds(obj)
-    return (bb[1][2] - bb[0][2]) * (bb[2][1] - bb[1][1]) * (bb[7][0] - bb[0][0])
+    return abs(bb[1][2] - bb[0][2]) * abs(bb[2][1] - bb[1][1]) * abs(bb[7][0] - bb[0][0])
