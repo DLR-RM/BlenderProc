@@ -26,7 +26,7 @@ python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} example
 * Samples camera positions: `camera.CameraSampler` module.
 * Creates a Sun light: `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
-* Dsiplaces a ground plane up: `object.EntityManipulator` module.
+* Displaces a ground plane up: `object.EntityManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.
@@ -58,8 +58,7 @@ python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} example
       "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
       "physics": False,
       "render_levels": 2,
-      "high_detail_mode": True,
-      "color_value": 0.1
+      "high_detail_mode": True
     },
     {
       "path": "<args:0>/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
@@ -67,8 +66,7 @@ python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} example
       "physics": True,
       "render_levels": 2,
       "high_detail_mode": False,
-      "scale": [1.5, 1.5, 1.5],
-      "color_value": 0.1
+      "scale": [1.5, 1.5, 1.5]
     },
     {
       "path": "<args:0>/Rock Essentials/Individual Rocks/Desert/Rocks_Desert_Medium.blend",
@@ -76,16 +74,14 @@ python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} example
       "physics": True,
       "render_levels": 2,
       "high_detail_mode": False,
-      "scale": [1.5, 1.5, 1.5],
-      "color_value": 0.1
+      "scale": [1.5, 1.5, 1.5]
     },
     {
       "path": "<args:0>/Rock Essentials/Individual Rocks/Forest/Rocks_Forest_Large.blend",
       "objects": ['Rock_Forest_Large002', 'Rock_Forest_Large012'],
       "physics": False,
       "render_levels": 2,
-      "high_detail_mode": False,
-      "color_value": 0.2
+      "high_detail_mode": False
     }
     ]
   }
@@ -98,7 +94,7 @@ In `batches` we are specifying batches of rocks to load by defining:
 * `amount` of rocks or the names (`objects`) to load, (or both to have multiple selected rocks loaded)
 * the `physics` state of the rocks of this batch,
 * number of subdivisions (`render_levels`) to perform while rendering,
-* scaling factor for X,Y,Z dimensions of rocks, HSV color-value, toggle HDM when possible, etc.
+* scaling factor for X,Y,Z dimensions of rocks, HSV values, toggle HDM when possible, etc.
 
 ### Rock Essentials Ground Constructor
 
