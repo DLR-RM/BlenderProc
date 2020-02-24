@@ -1,0 +1,68 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 2,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:2>"
+    }
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {}
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:1>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation/value",
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    },
+    {
+      "module": "renderer.FlowRenderer",
+      "config": {
+        "optical_flow": True,
+        "scene_flow": True
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}
