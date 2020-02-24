@@ -1,7 +1,7 @@
 import mathutils
 import bpy
 
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_mesh_objects, get_bound_volume
 from src.main.Module import Module
 import numpy as np
 
@@ -19,7 +19,9 @@ class PhysicsPositioning(Module):
        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
        "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
-       "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'. Available values: 'BASE', 'DEFORM', 'FINAl'."
+       "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'. Available values: 'BASE', 'DEFORM', 'FINAL'."
+       "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Optional. Type: boolean. Default value: False."
+       "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor (defines material density). Optional. Type: float. Default value: 1."
     """
 
     def __init__(self, config):
@@ -28,17 +30,17 @@ class PhysicsPositioning(Module):
         self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
         self.collision_margin = self.config.get_float("collision_margin", 0.001)
         self.collision_mesh_source = self.config.get_string('collision_mesh_source', 'FINAL')
+        self.steps_per_sec = self.config.get_int("steps_per_sec", 60)
+        self.solver_iters = self.config.get_int("solver_iters", 10)
+        self.mass_scaling = self.config.get_string("mass_scaling", False)
+        self.mass_factor = self.config.get_float("mass_factor", 1)
 
     def run(self):
         """ Performs physics simulation in the scene. """
         # Enable physics for all objects
         self._add_rigidbody()
-        # set custom animation settings
-        steps_per_sec = self.config.get_int("steps_per_sec", 60)
-        solver_iters = self.config.get_int("solver_iters", 10)
-        bpy.context.scene.rigidbody_world.steps_per_second = steps_per_sec
-        bpy.context.scene.rigidbody_world.solver_iterations = solver_iters
-
+        bpy.context.scene.rigidbody_world.steps_per_second = self.steps_per_sec
+        bpy.context.scene.rigidbody_world.solver_iterations = self.solver_iters
         # Run simulation and use the position of the objects at the end of the simulation as new initial position.
         obj_poses = self._do_simulation()
         self._set_pose(obj_poses)
@@ -55,6 +57,8 @@ class PhysicsPositioning(Module):
             obj.rigid_body.collision_shape = "MESH"
             obj.rigid_body.collision_margin = self.collision_margin
             obj.rigid_body.mesh_source = self.collision_mesh_source
+            if self.mass_scaling:
+                obj.rigid_body.mass = get_bound_volume(obj) * self.mass_factor
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """
