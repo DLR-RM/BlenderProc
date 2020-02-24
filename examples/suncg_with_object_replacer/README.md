@@ -1,9 +1,8 @@
 # SUNCG scene with object switching
 
-![](before_replacing_a_chair.png)
-![](after_replacing_a_chair.png)
+![](result.png)
 
-This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects
+The ObjectReplacer tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects
 
 ## Usage
 
@@ -13,7 +12,10 @@ Execute in the Blender-Proc main directory:
 python run.py examples/suncg_with_object_replacer/config.yaml <path to house.json> <path to new objects> examples/suncg_with_object_replacer/output
 ```
 
-* `examples/suncg_with_object_replacer/config.yaml`: explanation
+* `examples/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
+* `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
+* `<path to new objects>`: path to the `objects_to_replace_with`.
+* `examples/suncg_with_object_replacer/output`: path to the output directory.
 
 ## Steps
 
@@ -68,5 +70,10 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py example/suncg_with_object_replacer/0.hdf5
+python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
 ```
+
+## More examples
+
+* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
+* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
