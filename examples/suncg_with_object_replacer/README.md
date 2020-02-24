@@ -1,5 +1,8 @@
 # SUNCG scene with object switching
 
+![](before_replacing_a_chair.png)
+![](after_replacing_a_chair.png)
+
 This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects
 
 ## Usage
@@ -14,7 +17,7 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 
 ## Steps
 
-* Loads a SUNCG scene
+* loader.SuncgLoader Loads a SUNCG scene
 * loader.ObjectLoader loades new objetcs
 * object.EntityManipulator hides the new loaded objects from the rederer
 * manipulators.ObjectReplacer switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
@@ -59,3 +62,11 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 * This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects, which the module get using a `getter.Entity`, with probability of `switch_probability` if no collision happens between `objects_to_replace_with` and objects in the scene.
 * When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the custom proprites that the `objects_to_be_replaced` used to have.
 * This module doesn't do collision checking between `objects_to_replace_with` and object provided by the `getter.Entity` `ignore_collision_with`.
+
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py example/suncg_with_object_replacer/0.hdf5
+```
