@@ -69,6 +69,15 @@
       }
     },
     {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_depth": true,
+        "vertex_colours": true
+      }
+    },
+    {
       "module": "writer.Hdf5Writer",
       "config": {
       }

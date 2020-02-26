@@ -12,10 +12,12 @@ class RgbRenderer(Renderer):
        :header: "Parameter", "Description"
 
        "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission materials, default: False (off)."
+       "vertex_colours", "use vertex colours instead of texture, default: False (off)."
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
         self._texture_less_mode = config.get_bool('render_texture_less', False)
+        self._vertex_colours = config.get_bool('vertex_colours', False)
 
     def change_to_texture_less_render(self):
         """
@@ -53,6 +55,22 @@ class RgbRenderer(Renderer):
                     else:
                         slot.material = new_mat
 
+    def change_to_vertex_colours(self):
+        new_mat = bpy.data.materials.new(name="VertexColor")
+        new_mat.use_nodes = True
+        nodes = new_mat.node_tree.nodes
+
+        mat_links = new_mat.node_tree.links
+
+        bsdf = nodes.get("Principled BSDF")
+        vcol = nodes.new(type="ShaderNodeVertexColor")
+        vcol.layer_name = "Col"
+        mat_links.new(vcol.outputs['Color'], bsdf.inputs['Base Color'])
+
+        for ob in bpy.data.objects:
+            if ob.type == 'MESH':
+                ob.active_material = new_mat
+
     def run(self):
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_denoiser="Intel")
@@ -65,6 +83,9 @@ class RgbRenderer(Renderer):
             # check if texture less render mode is active
             if self._texture_less_mode:
                 self.change_to_texture_less_render()
+
+            if self._vertex_colours:
+                self.change_to_vertex_colours()
 
             if self._use_alpha_channel:
                 self.add_alpha_channel_to_textures(blurry_edges=True)
