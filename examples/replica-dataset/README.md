@@ -109,7 +109,7 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
+python scripts/visHdf5Files.py examples/replica-dataset/output/0.hdf5
 ```
 
 ## More examples
