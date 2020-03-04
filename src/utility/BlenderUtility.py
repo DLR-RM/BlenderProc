@@ -273,7 +273,7 @@ def load_image(file_path):
     # convert image to proper size
     size = img.size
     channels = img.channels
-    img = np.array(img.pixels).reshape(size[0], size[1], channels)
+    img = np.array(img.pixels).reshape(size[1], size[0], channels)
     img = np.flip(img, axis=0)
     if file_path.endswith('.png') or file_path.endswith('.jpg'):
         # convert the 0 to 1 space to 0 ... 255 and save it as uint8
