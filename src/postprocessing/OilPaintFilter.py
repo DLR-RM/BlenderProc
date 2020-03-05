@@ -6,6 +6,13 @@ import cv2
 
 
 def get_neighbors_stacked(img, filter_size=3):
+    """ Returns a tensor, where for each element, the neighbors of this element according to the input image
+     are stacked depth to it.
+
+       :param img: Input image.
+       :param filter_size: The size of the kernel that represents the neighbor area.
+       :return: Neighbor tensor
+    """
     _min = -int(filter_size / 2)
     _max = _min + filter_size
 

@@ -1,4 +1,6 @@
 from src.main.Module import Module
+from src.utility.BlenderUtility import load_image
+
 from scipy import stats
 from PIL import Image
 from math import tan
@@ -7,7 +9,6 @@ import os
 import bpy
 import cv2
 import numpy as np
-import imageio
 
 
 def resize(img, new_size, method="nearest"):
@@ -80,7 +81,7 @@ DIAMOND_KERNEL_7 = np.asarray(
         [0, 0, 0, 1, 0, 0, 0],
     ], dtype=np.uint8)
 
-
+# https://github.com/kujason/ip_basic/blob/master/ip_basic/depth_map_utils.py
 def fill_in_fast(depth_map, max_depth=100.0, custom_kernel=DIAMOND_KERNEL_5,
                  extrapolate=False, blur_type='bilateral'):
     """Fast, in-place depth completion.
@@ -175,10 +176,10 @@ class StereoGlobalMatchingWriter(Module):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
+    # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
     def sgm(self, imgL, imgR):
-        # wsize default 3; 5; 7 for SGBM reduced size image; 15 for SGBM full size image (1300px and above); 5 Works nicely
         window_size = self.config.get_int("window_size", 7)
-        if not (window_size & 1):
+        if window_size % 2 == 0:
             raise Exception("Window size must be an odd number")
 
         numDisparities = self.config.get_int("num_disparities", 32)
@@ -205,7 +206,6 @@ class StereoGlobalMatchingWriter(Module):
 
             lmbda = 80000
             sigma = 1.2
-            visual_multiplier = 1.0
 
             wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=left_matcher)
             wls_filter.setLambda(lmbda)
@@ -269,8 +269,8 @@ class StereoGlobalMatchingWriter(Module):
             path_l = "{}_L.{}".format(path_split[0], path_split[1])
             path_r = "{}_R.{}".format(path_split[0], path_split[1])
 
-            imgL = imageio.imread(path_l % frame)
-            imgR = imageio.imread(path_r % frame)
+            imgL = load_image(path_l % frame)
+            imgR = load_image(path_r % frame)
 
             depth = self.sgm(imgL, imgR)
 
