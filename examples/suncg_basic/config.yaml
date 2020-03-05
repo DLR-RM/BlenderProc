@@ -4,15 +4,20 @@
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
-      "h5py"
+      "h5py",
+      "opencv-python",
+      "numpy",
+      "imageio",
+      "Pillow",
+      "opencv-contrib-python",
+      "scipy"
     ]
   },
   "global": {
     "all": {
-      "output_dir": "<args:2>"
-    },
-    "renderer": {
-      "pixel_aspect_x": 1.333333333
+      "output_dir": "<args:2>",
+      "resolution_x": 1280,
+      "resolution_y": 720
     }
   },
   "modules": [
@@ -36,8 +41,14 @@
           "rotation": {
             "format": "forward_vec"
           },
-          "fov_is_half": true
-        }
+          "fov_is_half": true,
+          "interocular_distance": 0.05,
+          "stereo_convergence_mode": "PARALLEL",
+          "convergence_distance": 0.00001,
+          "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
+          "resolution_x": 1280,
+          "resolution_y": 720
+        },
       }
     },
     {
@@ -55,7 +66,16 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "render_depth": true
+        "render_depth": true,
+        "stereo": true,
+        "samples": 8
+      }
+    },
+    {
+      "module": "writer.StereoGlobalMatchingWriter",
+      "config": {
+        "focal_length": 650.018,
+        "enable_disparity_filter": false
       }
     },
     {

@@ -33,8 +33,8 @@ class CameraModule(Module):
        "clip_start", "Near clipping"
        "clip_end", "Far clipping"
        "stereo_convergence_mode", "How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the convergence plane, or parallel where they do not converge and are parallel)."
-       "stereo_convergence_dist", "The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen)."
-       "stereo_interocular_dist", "Distance between the camera pair."
+       "convergence_distance", "The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen)."
+       "interocular_distance", "Distance between the camera pair."
     """
 
     def __init__(self, config):
