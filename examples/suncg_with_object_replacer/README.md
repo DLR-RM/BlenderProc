@@ -23,7 +23,13 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 * loader.ObjectLoader loades new objetcs
 * object.EntityManipulator hides the new loaded objects from the rederer
 * manipulators.ObjectReplacer switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
-* Rest of the modules are the same as the `suncg_with_cam_sampler` example
+* Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
+* Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
+* Writes sampled camera poses to file: `writer.CameraStateWriter` module.
+* Renders normals: `renderer.NormalRenderer` module.
+* Renders semantic segmentation map: `renderer.SegMapRenderer` module.
+* Renders rgb and depth: `renderer.RgbRenderer` module.
+* Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 
 ## Explanation of specific parts of the config file
 
