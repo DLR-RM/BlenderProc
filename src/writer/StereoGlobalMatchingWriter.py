@@ -1,25 +1,14 @@
 from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
+from src.utility.BlenderUtility import resize
 
 from scipy import stats
-from PIL import Image
 from math import tan
 
 import os
 import bpy
 import cv2
 import numpy as np
-
-
-def resize(img, new_size, method="nearest"):
-    method = method.lower()
-    if "lanczos" in method:
-        return np.asarray(Image.fromarray(img).resize(new_size, Image.LANCZOS))
-    elif "nearest" in method:
-        return np.asarray(Image.fromarray(img).resize(new_size, Image.NEAREST))
-    else:
-        print("UNKNOWN RESIZING METHOD")
-        exit(-1)
 
 
 # Full kernels
@@ -274,4 +263,4 @@ class StereoGlobalMatchingWriter(Module):
 
             depth = self.sgm(imgL, imgR)
 
-            imageio.imwrite(os.path.join(self.output_dir, "stereo-depth_%04d.exr") % frame, depth)
+            np.savez_compressed(os.path.join(self.output_dir, "stereo-depth_%04d") % frame, depth=depth)

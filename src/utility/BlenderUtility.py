@@ -3,6 +3,7 @@ import bmesh
 from mathutils import Vector
 
 import numpy as np
+from PIL import Image
 
 
 def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
@@ -288,3 +289,14 @@ def get_bound_volume(obj):
     """
     bb = get_bounds(obj)
     return abs(bb[1][2] - bb[0][2]) * abs(bb[2][1] - bb[1][1]) * abs(bb[7][0] - bb[0][0])
+
+
+def resize(img, new_size, method="nearest"):
+    method = method.lower()
+    if "lanczos" in method:
+        return np.asarray(Image.fromarray(img).resize(new_size, Image.LANCZOS))
+    elif "nearest" in method:
+        return np.asarray(Image.fromarray(img).resize(new_size, Image.NEAREST))
+    else:
+        print("UNKNOWN RESIZING METHOD")
+        exit(-1)
