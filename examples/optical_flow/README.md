@@ -37,7 +37,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
 * Renders normals: `renderer.NormalRenderer` module.
 * Renders rgb: `renderer.RgbRenderer` module.
-* Renders scene / optical flow: `renderer.FlowRenderer` module.
+* Renders forward / backward optical flow: `renderer.FlowRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
