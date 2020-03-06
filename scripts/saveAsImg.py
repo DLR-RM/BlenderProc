@@ -5,6 +5,7 @@ import argparse
 import numpy as np
 import scipy.misc
 import matplotlib.pyplot as plt
+import cv2
 
 parser = argparse.ArgumentParser("Script to save images out of a hdf5 files")
 
@@ -27,7 +28,30 @@ def process_img(img, key):
 			img /= np.max(img[img != np.inf])
 		if len(img.shape) == 3:
 			img = img[:,:,0]
+	elif 'flow' in key:
+		img = flow_to_rgb(img)
 	return img
+
+def flow_to_rgb(flow):
+	"""
+	Visualizes optical flow in hsv space and converts it to rgb space.
+	:param flow: (np.array (h, w, c)) optical flow
+	:return: (np.array (h, w, c)) rgb data
+	"""
+
+	im1 = flow[:, :, 0]
+	im2 = flow[:, :, 1]
+
+	h, w = flow.shape[:2]
+
+	# Use Hue, Saturation, Value colour model
+	hsv = np.zeros((h, w, 3), dtype=np.uint8)
+	hsv[..., 1] = 255
+
+	mag, ang = cv2.cartToPolar(im1, im2)
+	hsv[..., 0] = ang * 180 / np.pi / 2
+	hsv[..., 2] = cv2.normalize(mag, None, 0, 255, cv2.NORM_MINMAX)
+	return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
 def visFile(filePath):
 	if os.path.exists(filePath):
