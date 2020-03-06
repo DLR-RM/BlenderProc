@@ -260,12 +260,13 @@ def get_all_mesh_objects():
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
-def load_image(file_path):
+def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.
 
     The alpha channel is neglected.
 
     :param file_path: The path to the image.
+    :param num_channels: Number of channels to return.
     :return: The numpy array
     """
     # load image with blender function
@@ -278,27 +279,4 @@ def load_image(file_path):
     if file_path.endswith('.png') or file_path.endswith('.jpg'):
         # convert the 0 to 1 space to 0 ... 255 and save it as uint8
         img = (img * 255).astype(np.uint8)
-    return img[:, :, :3]
-
-
-def load_flow(file_path):
-    """ Load the image at the given path returns its pixels as a numpy array.
-
-    The alpha channel is neglected.
-
-    :param file_path: The path to the image.
-    :return: The numpy array
-    """
-    # load image with blender function
-    img = bpy.data.images.load(file_path, check_existing=False)
-    # convert image to proper size
-    size = img.size
-    channels = img.channels
-    img = np.array(img.pixels).reshape(size[0], size[1], channels)
-    img = np.flip(img, axis=0)
-    if file_path.endswith('.png') or file_path.endswith('.jpg'):
-        # convert the 0 to 1 space to 0 ... 255 and save it as uint8
-        img = (img * 255).astype(np.uint8)
-    return img[:, :, :]
-
-
+    return img[:, :, :num_channels]
