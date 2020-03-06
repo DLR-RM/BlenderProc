@@ -48,8 +48,10 @@
     {
       "module": "renderer.FlowRenderer",
       "config": {
-        "optical_flow": True,
-        "scene_flow": True
+        "forward_flow_output_key": "forward_flow",
+        "backward_flow_output_key": "backward_flow",
+        "forward_flow": True,
+        "backward_flow": True
       }
     },
     {
