@@ -4,7 +4,7 @@ import numpy as np
 
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
-from src.utility.BlenderUtility import load_flow
+from src.utility.BlenderUtility import load_image
 
 
 class FlowRenderer(Renderer):
@@ -33,43 +33,75 @@ class FlowRenderer(Renderer):
         # Use existing render layer
         render_layer_node = tree.nodes.get('Render Layers')
 
-        # Create output file
-        output_file = tree.nodes.new('CompositorNodeOutputFile')
-        output_file.base_path = self._determine_output_dir()
-        output_file.format.file_format = "OPEN_EXR"
-        output_file.file_slots.values()[0].path = self.config.get_string("flow_output_file_prefix", "flow_")
-        # Link render layer to output file
-        links.new(render_layer_node.outputs['Vector'], output_file.inputs['Image'])
+        separate_rgba = tree.nodes.new('CompositorNodeSepRGBA')
+        links.new(render_layer_node.outputs['Vector'], separate_rgba.inputs['Image'])
+
+        if self.config.get_bool('forward_flow', False):
+            combine_fwd_flow = tree.nodes.new('CompositorNodeCombRGBA')
+            links.new(separate_rgba.outputs['B'], combine_fwd_flow.inputs['R'])
+            links.new(separate_rgba.outputs['A'], combine_fwd_flow.inputs['G'])
+            fwd_flow_output_file = tree.nodes.new('CompositorNodeOutputFile')
+            fwd_flow_output_file.base_path = self._determine_output_dir()
+            fwd_flow_output_file.format.file_format = "OPEN_EXR"
+            fwd_flow_output_file.file_slots.values()[0].path = "fwd_flow_"
+            links.new(combine_fwd_flow.outputs['Image'], fwd_flow_output_file.inputs['Image'])
+
+        if self.config.get_bool('backward_flow', False):
+            # actually need to split - otherwise the A channel of the image is getting weird, no idea why
+            combine_bwd_flow = tree.nodes.new('CompositorNodeCombRGBA')
+            links.new(separate_rgba.outputs['R'], combine_bwd_flow.inputs['R'])
+            links.new(separate_rgba.outputs['G'], combine_bwd_flow.inputs['G'])
+            bwd_flow_output_file = tree.nodes.new('CompositorNodeOutputFile')
+            bwd_flow_output_file.base_path = self._determine_output_dir()
+            bwd_flow_output_file.format.file_format = "OPEN_EXR"
+            bwd_flow_output_file.file_slots.values()[0].path = "bwd_flow_"
+            links.new(combine_bwd_flow.outputs['Image'], bwd_flow_output_file.inputs['Image'])
 
     def run(self):
         # determine whether to get optical flow or scene flow - get scene flow per default
         get_forward_flow = self.config.get_bool('forward_flow', False)
-        get_backward_flow = (self.config.get_bool('backward_flow', False) if get_forward_flow is True else True)
+        get_backward_flow = self.config.get_bool('backward_flow', False)
+
+        if get_forward_flow is False and get_backward_flow is False:
+            raise Exception("Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
 
         with Utility.UndoAfterExecution():
             self._configure_renderer()
 
             self._output_vector_field()
 
-            # Determine pathes to convert the vector field after rendering
-            temporary_vector_file_path = os.path.join(self._temp_dir, 'flow_')
-            self._render("flow_", custom_file_path=temporary_vector_file_path)
+            # only need to render once; both fwd and bwd flow will be saved
+            temporary_fwd_flow_file_path = os.path.join(self._temp_dir, 'fwd_flow_')
+            temporary_bwd_flow_file_path = os.path.join(self._temp_dir, 'bwd_flow_')
+            self._render("bwd_flow_", custom_file_path=temporary_bwd_flow_file_path)
 
             # After rendering: convert to optical flow or calculate hsv visualization, if desired
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-                file_path = temporary_vector_file_path + "%04d" % frame + ".exr"
-                vector_field = load_flow(file_path).astype(np.float32)
-
                 # temporarily save respective vector fields
                 if get_forward_flow:
+
+                    file_path = temporary_fwd_flow_file_path + "%04d" % frame + ".exr"
+                    fwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
+
+                    if not self.config.get_bool('y_origin_bot', False):
+                        fwd_flow_field[:, :, 1] = fwd_flow_field[:, :, 1] * -1
+
                     fname = os.path.join(self._determine_output_dir(),
                                          self.config.get_string('forward_flow_output_file_prefix',
                                                                 'forward_flow_')) + '%04d' % frame
-                    np.save(fname + '.npy', vector_field[:, :, 2:])
+                    forward_flow = fwd_flow_field * -1  # invert forward flow to point at next frame
+                    np.save(fname + '.npy', forward_flow[:, :, :2])
+
                 if get_backward_flow:
+                    file_path = temporary_bwd_flow_file_path + "%04d" % frame + ".exr"
+                    bwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
+
+                    if not self.config.get_bool('y_origin_bot', False):
+                        bwd_flow_field[:, :, 1] = bwd_flow_field[:, :, 1] * -1
+
                     fname = os.path.join(self._determine_output_dir(),
                                          self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_')) + '%04d' % frame
-                    np.save(fname + '.npy', vector_field[:, :, :2])
+                    np.save(fname + '.npy', bwd_flow_field[:, :, :2])
 
         # register desired outputs  # TODO: hardcoded unique_for_camposes
         use_stereo = self.config.get_bool("stereo", False)
