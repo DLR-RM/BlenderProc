@@ -8,7 +8,7 @@ This example shows how to load BOP objects and alternatingly sample light poses,
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-In [examples/bop_sampling/config.yaml](examples/bop_sampling/config.yaml) add the path to your bop_toolkit clone to `sys_paths` and set the `blender_install_path` where Blender should be installed.
+In [examples/bop_sampling/config.yaml](config.yaml) add the path to your bop_toolkit clone to `sys_paths` and set the `blender_install_path` where Blender should be installed.
 
 Finally, execute in the BlenderProc main directory:  
 (replace `/path/to/bop/dataset` and `/path/to/output_dir`)
