@@ -273,9 +273,18 @@ def load_image(file_path):
     # convert image to proper size
     size = img.size
     channels = img.channels
-    img = np.array(img.pixels).reshape(size[0], size[1], channels)
+    img = np.array(img.pixels).reshape(size[1], size[0], channels)
     img = np.flip(img, axis=0)
     if file_path.endswith('.png') or file_path.endswith('.jpg'):
         # convert the 0 to 1 space to 0 ... 255 and save it as uint8
         img = (img * 255).astype(np.uint8)
     return img[:, :, :3]
+
+def get_bound_volume(obj):
+    """ Gets a volume of a bounding box.
+
+    :param obj: Mesh object.
+    :return: volume of a bounding box.
+    """
+    bb = get_bounds(obj)
+    return abs(bb[1][2] - bb[0][2]) * abs(bb[2][1] - bb[1][1]) * abs(bb[7][0] - bb[0][0])
