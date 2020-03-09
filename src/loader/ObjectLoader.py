@@ -30,9 +30,12 @@ class ObjectLoader(Loader):
         elif self.config.has_param('paths'):
             file_paths = self.config.get_list('paths')
             loaded_objects = []
+            # the file paths are mapped here to object names
+            cache_objects = {}
             for file_path in file_paths:
                 resolved_file_path = Utility.resolve_path(file_path)
-                loaded_objects.extend(Utility.import_objects(filepath=resolved_file_path))
+                current_objects = Utility.import_objects(filepath=resolved_file_path, cached_objects=cache_objects)
+                loaded_objects.extend(current_objects)
         else:
             raise Exception("Loader module needs either a path or paths config value")
 

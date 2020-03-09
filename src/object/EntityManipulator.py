@@ -10,6 +10,10 @@ class EntityManipulator(Module):
     attribute or custom property or a name of a custom property to create, while the attr_value is an according value
     for such attribute or custom property (this value can be sampled).
 
+    In order to set a custom property, which is also an attribute, add before the key a "cp_".
+    For example: Setting a custom property of type is not possible as it will change the attribute type, so
+    adding a "cp_" before the key -> "cp_type" will make it possible to set the custom property "type".
+
     **Configuration**:
 
     .. csv-table::
@@ -55,8 +59,14 @@ class EntityManipulator(Module):
                     # get raw value from the set parameters if it is to be sampled anew for each selected entity
                     result = params_conf.get_raw_value(key)
 
+                # check if the key is a requested custom property
+                requested_custom_property = False
+                if key.startswith('cp_'):
+                    requested_custom_property = True
+                    key = key[3:]
+
                 # if an attribute with such name exists for this entity
-                if hasattr(entity, key):
+                if hasattr(entity, key) and not requested_custom_property:
                     # set the value
                     setattr(entity, key, result)
                 # if not, then treat it as a custom property. Values will be overwritten for existing custom

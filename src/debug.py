@@ -10,12 +10,12 @@ if not working_dir in sys.path:
     sys.path.append(working_dir)
 
 # Add path to custom packages inside the blender main directory
-if platform == "linux" or platform == "linux2":
+if sys.platform == "linux" or sys.platform == "linux2":
     packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
-elif platform == "darwin":
+elif sys.platform == "darwin":
     packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "Resources", "custom-python-packages"))
 else:
-    raise Exception("This system is not supported yet: {}".format(platform))
+    raise Exception("This system is not supported yet: {}".format(sys.platform))
 sys.path.append(packages_path)
 
 # Delete all loaded models inside src/, as they are cached inside blender
