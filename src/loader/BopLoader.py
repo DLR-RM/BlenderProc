@@ -26,16 +26,15 @@ class BopLoader(Module):
        :header: "Parameter", "Description"
 
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless"
-       "mm2m", "Specify whether to convert poses to meters"
+       "mm2m", "Specify whether to convert poses and models to meters"
        "split", "Optionally, test or val split depending on BOP dataset"
-       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1 means no scene is replicated, only BOP Objects are loaded)"
-       "obj_ids", "If scene_id is not specified (scene_id: -1): List of object ids to load (default: All objects from the BOP dataset)"
-       "model_type", "Type of BOP model, e.g. reconstruction or CAD"
+       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is replicated, only BOP Objects are loaded)"
+       "obj_ids", "Iff scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects from the given BOP dataset)"
+       "model_type", "Optionally, type of BOP model, e.g. reconst, cad or eval"
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
-        print(self.config.has_param("sys_paths"))
         for sys_path in self.config.get_list("sys_paths"):
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
@@ -81,9 +80,9 @@ class BopLoader(Module):
         cam['loaded_resolution'] = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y 
         cam['loaded_intrinsics'] = cam_p['K'] # load default intrinsics from camera.json
         
-        config = Config({})
-        cm = CameraModule(config)
-        cm._set_cam_intrinsics(cam, config)
+        dummy_config = Config({})
+        cm = CameraModule(dummy_config)
+        cm._set_cam_intrinsics(cam, dummy_config)
 
         #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
@@ -94,7 +93,6 @@ class BopLoader(Module):
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
             sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id':scene_id}))
-
 
             for i, (cam_id, insts) in enumerate(sc_gt.items()):
 
@@ -134,7 +132,6 @@ class BopLoader(Module):
                 cam_H_c2w_list = list(cam_H_c2w.flatten())
 
                 config = Config({"cam2world_matrix": cam_H_c2w_list})
-
                 cm._set_cam_intrinsics(cam, config)
                 cm._set_cam_extrinsics(cam_ob, config)
 
