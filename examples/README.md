@@ -33,6 +33,14 @@ Here are examples for camera, light and object pose sampling:
 
 * [entity manipulation](entity_manipulation): Changing various parameters of entities via selecting them through config file.
 
+## Benchmark for 6D Object Pose Estimation (BOP)
+
+We provide two example configs that interface with the BOP datasets. 
+
+* [bop_scene_replication](bop_scene_replication): Replicates whole scenes (object poses, camera intrinsics and extrinsics) from BOP
+* [bop_sampling](bop_sampling):
+ Loads BOP objects and samples object, camera and light poses
+
 ## Dataset related examples
 
 We provided limited dataset support, for example for SUNCG, Replica, CoCo Annotations and others.
@@ -45,7 +53,7 @@ These can be found in:
 
 # Config file example
 
-A very small config file could look like this:
+A minimal config file could look like this:
 
 ```yaml
 {

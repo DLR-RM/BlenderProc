@@ -8,7 +8,6 @@ Note: This library is under active development. We are open for new contributors
 
 The corresponding arxiv paper: https://arxiv.org/abs/1911.01911
 
-
 <!-- 
 Citation: 
 ```
@@ -32,34 +31,33 @@ Using this package you can
 - sample and render new object poses using a variety of samplers
 - use collision detection and physics to generate realistic object poses
 - place objects in synthetic scenes like SunCG or real scenes like Replica
-This runs all modules specified in the config file in a step-by-step fashion in the configured order.
 
-## Functionality
+Render normals, RGB, stereo and depth. Extract class and instance segmentation labels and pose annotations. All generated data and labels are saved in compressed hdf5 files or automatically converted into COCO annotations.
 
-The following modules are already implemented and ready to use:
+You can parametrize a variety of loaders and samplers for  
+- object poses
+- lights
+- cameras
+- materials
 
-* Loading: *.obj, SunCG, Replica scenes.
-* Lighting: Set, sample lights, automatic lighting of SunCG scenes.
-* Cameras: set, sample or load camera poses from file.
-* Rendering: RGB, depth, normal and segmentation images.
-* Merging: .hdf5 containers.
+Because of the modularity of this package and the sole dependency on the Blender API, it is very simple to insert your own module. Also, any new feature introduced in Blender can be utilized here.
 
-For advanced usage which is not covered by these modules, own modules can easily be implemented.
+## Usage with BOP
 
-## Examples
+First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-* [Basic scene](examples/basic/): Basic example 
-* [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a depth images.
-* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a depth images.
-* [Replica dataset](examples/replica-dataset): Load a replica room, sample camera poses and render normal images.
-* [COCO annotations](examples/coco_annotations): Write to a .json file containing COCO annotations for the objects in the scene.
+We provide two example configs that interface with the BOP datasets:
 
-... And much more!
+* [bop_scene_replication](examples/bop_scene_replication/README.md): Replicates whole scenes (object poses, camera intrinsics and extrinsics) of BOP datasets
+* [bop_sampling](examples/bop_sampling/README.md):
+ Loads BOP objects and samples object, camera and light poses
 
-## First step
+## Customize and write new modules
 
-Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get a gist about writing yor own modules!
+You can create realistic synthetic data and labels by combining and parametrizing existing modules. Use the documented [examples](examples/README.md) to build your own config.
 
-## Chane log
+Parametrize lighting.LightSampler, camera.CameraSampler, or object.ObjectPoseSampler with existing sampling functions (e.g. uniform shell, sphere or cube). Use loaders like lighting.LightLoader and camera.CameraLoader to load poses and other parameters from a file or from the config directly. Sample object poses using physics like in [examples/physics_positioning](examples/physics_positioning). Sample objects in synthetic or real scene environments like SunCG or Replica.
 
-See our [change log](change_log.md).
+Besides parametrizing existing modules, you can also create your own modules (see [Writing Modules](https://github.com/DLR-RM/BlenderProc#writing-modules)). New modules can either combine existing modules with some logic (e.g. [composite/CameraObjectSampler](composite/CameraObjectSampler)) or create completely new functionality based on the Blender API.
+
+
