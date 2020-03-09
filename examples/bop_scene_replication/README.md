@@ -1,4 +1,4 @@
-## Benchmark for 6D Object Pose Estimation (BOP) <br/> Scene Recreation
+## Benchmark for 6D Object Pose Estimation (BOP) <br/> Scene Replication
 
 <img src=hb.png width="240" height="180"> <img src=icbin.png width="240" height="180"> <img src=tless.png width="240" height="180">
 
