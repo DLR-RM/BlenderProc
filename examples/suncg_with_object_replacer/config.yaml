@@ -1,4 +1,4 @@
-# Args: <obj_file> <output_dir>
+# Args: <obj_file> <obj_file> <output_dir>
 {
   "version": 2,
   "setup": {
@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:1>"
+      "output_dir": "<args:2>"
     }
   },
   "modules": [
@@ -27,7 +27,7 @@
     {
       "module": "loader.ObjectLoader",
       "config": {
-          "path": "<args:2>",
+          "path": "<args:1>",
           "add_properties": {
             "replace": "chair",
           }

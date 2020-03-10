@@ -15,11 +15,11 @@ class ObjectReplacer(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "replace_ratio", "Ratio of objects in the orginal scene to try replacing."
-       "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with."
-       "objects_to_be_replaced", "Provider (Getter) in order to select objects to try to remove from the scene, gets list of object on a certain condition"
-       "objects_to_replace_with", "Provider (Getter) in order to select objects to try to add to the scene, gets list of object on a certain condition"
-       "ignore_collision_with", "Provider (Getter) in order to select objects to not check for collisions with"
+       "replace_ratio", "Ratio of objects in the orginal scene to try replacing. Type: float. Default value: 1."
+       "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. Type: boolean. Default value: True."
+       "objects_to_be_replaced", "Provider (Getter) in order to select objects to try to remove from the scene, gets list of object on a certain condition. Type: Getter. Default value: []."
+       "objects_to_replace_with", "Provider (Getter) in order to select objects to try to add to the scene, gets list of object on a certain condition. Type Getter. Default value: []"
+       "ignore_collision_with", "Provider (Getter) in order to select objects to not check for collisions with. Type：Getter. Default value: []."
     """
 
     def __init__(self, config):
