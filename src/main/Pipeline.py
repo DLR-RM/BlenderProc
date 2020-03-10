@@ -1,7 +1,10 @@
 
-from src.utility.ConfigParser import ConfigParser
-from src.utility.Utility import Utility
+import shutil
+import os
 import bpy
+
+from src.utility.ConfigParser import ConfigParser
+from src.utility.Utility import Utility, Config
 
 class Pipeline:
 
@@ -10,12 +13,18 @@ class Pipeline:
 
         # Clean up example scene or scene created by last run when debugging pipeline inside blender
         if should_perform_clean_up:
-            self._cleanup()
+            self._cleanup() 
 
         config_parser = ConfigParser(silent=True)
         config = config_parser.parse(Utility.resolve_path(config_path), args)
 
+        config_object = Config(config)
+        self._do_clean_up_temp_dir = config_object.get_bool("delete_temporary_files_afterwards", True)
+        self._temp_dir = Utility.get_temporary_directory(config_object)
+        os.makedirs(self._temp_dir, exist_ok=True)
+
         self.modules = Utility.initialize_modules(config["modules"], config["global"])
+
 
     def _cleanup(self):
         """ Cleanup the scene by removing objects, orphan data and custom properties """
@@ -54,6 +63,11 @@ class Pipeline:
         """ Remove all custom properties registered at global entities like the scene. """
         for key in bpy.context.scene.keys():
             del bpy.context.scene[key]
+    
+    def _clean_up_temp_dir(self):
+        """ Cleans up temporary directory """
+        if self._do_clean_up_temp_dir:
+            shutil.rmtree(self._temp_dir)
 
     def run(self):
         """ Runs each module and measuring their execution time. """
@@ -61,4 +75,4 @@ class Pipeline:
             for module in self.modules:
                 with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
                     module.run()
-
+            self._clean_up_temp_dir()

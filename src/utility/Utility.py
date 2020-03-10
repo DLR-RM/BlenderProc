@@ -114,6 +114,22 @@ class Utility:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
+    def get_temporary_directory(config_object):
+        ''' 
+        :return: default temporary directory, shared memory if it exists
+        '''
+
+        # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
+        if os.path.exists("/dev/shm"):
+            default_temp_dir = "/dev/shm"
+        else:
+            default_temp_dir = "/tmp"
+
+        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + str(os.getpid())))
+
+        return temp_dir
+    
+    @staticmethod
     def merge_dicts(source, destination):
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
 
@@ -331,27 +347,44 @@ class Utility:
         return np.round(values)
 
     @staticmethod
-    def import_objects(filepath, **kwargs):
+    def import_objects(filepath, cached_objects=None, **kwargs):
         """ Import all objects for the given file and returns the loaded objects
 
         In .obj files a list of objects can be saved in.
         In .ply files only one object can saved so the list has always at most one element
 
         :param filepath: the filepath to the location where the data is stored
+        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is not updated in this function)
         :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
         :return: a list of all newly loaded objects, in the failure case an empty list is returned
         """
         if os.path.exists(filepath):
-            # save all selected objects
-            previously_selected_objects = set(bpy.context.selected_objects)
-            if filepath.endswith('.obj'):
-                # load an .obj file:
-                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
-            elif filepath.endswith('.ply'):
-                # load a .ply mesh
-                bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
-            # return all currently selected objects
-            return list(set(bpy.context.selected_objects) - previously_selected_objects)
+            if cached_objects is not None and isinstance(cached_objects, dict):
+                if filepath in cached_objects.keys():
+                    created_obj = []
+                    for obj in cached_objects[filepath]:
+                        # deselect all objects and duplicate the object
+                        bpy.ops.object.select_all(action='DESELECT')
+                        obj.select_set(True)
+                        bpy.ops.object.duplicate()
+                        # save the duplicate in new list
+                        if len(bpy.context.selected_objects) != 1:
+                            raise Exception("The amount of objects after the copy was more than one!")
+                        created_obj.append(bpy.context.selected_objects[0])
+                    cached_objects[filepath] = created_obj
+                    return created_obj
+                else:
+                    return import_objects(filepath, cached_objects={}, **kwargs)
+            else:
+                # save all selected objects
+                previously_selected_objects = set(bpy.context.selected_objects)
+                if filepath.endswith('.obj'):
+                    # load an .obj file:
+                    bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+                elif filepath.endswith('.ply'):
+                    # load a .ply mesh
+                    bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+                # return all currently selected objects
+                return list(set(bpy.context.selected_objects) - previously_selected_objects)
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))
-        return []

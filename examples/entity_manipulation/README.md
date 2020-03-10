@@ -54,7 +54,7 @@ python run.py examples/entity_manipulation/config.yaml examples/entity_manipulat
 ```
 
 The focus of this example is the EntityManipulator module and `getter.Entity` which allow us to select multiple entities based on a user-defined condition and change the attribute and custom property values of the selected entities.
-* `selector` - section of the `EntityManipulator` for stating the `name` of the Getter and the `condition` to use for selecting.
+* `selector` - section of the `EntityManipulator` for stating the chosen `provider` and the `condition` to use for selecting.
 
 Our condition is: `"name": 'Suzanne'` *and* `"name": "MESH"`, which means that we want to select all the objects with `obj.name == 'Suzanne'` and which are of `"type": "MESH"`. In our case we have only one object which meets the requirement.
 Yet one may define any condition where `key` is the valid name of any attribute of entities present in the scene or the name of an existing custom property.

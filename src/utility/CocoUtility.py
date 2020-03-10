@@ -6,12 +6,14 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, colormap, dataset_name):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, dataset_name, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
+        :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
         :param dataset_name: name of the dataset, a feature required by coco annotation format
+        :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
         """
         # Adds all objects from the color map to the coco output (skip background)
@@ -36,12 +38,12 @@ class CocoUtility:
         images = []
         annotations = []
 
-        for segmentation_map_path in segmentation_map_paths:
+        for segmentation_map_path, image_path in zip(segmentation_map_paths, image_paths):
             segmentation_map = np.load(segmentation_map_path)
 
             # Add coco info for image
             image_id = len(images)
-            images.append(CocoUtility.create_image_info(image_id, segmentation_map_path, segmentation_map.shape))
+            images.append(CocoUtility.create_image_info(image_id, image_path, segmentation_map.shape))
 
             # Go through all objects visible in this image
             unique_objects = np.unique(segmentation_map)
@@ -53,13 +55,47 @@ class CocoUtility:
                 # Add coco info for object in this image
                 annotations.append(CocoUtility.create_annotation_info(len(annotations), image_id, int(obj), binary_inst_mask))
 
-        return {
+        new_coco_annotations = {
             "info": info,
             "licenses": licenses,
             "categories": categories,
             "images": images,
             "annotations": annotations
         }
+
+        if existing_coco_annotations is not None:
+            new_coco_annotations = CocoUtility.merge_coco_annotations(existing_coco_annotations, new_coco_annotations)
+
+        return new_coco_annotations
+
+    @staticmethod
+    def merge_coco_annotations(existing_coco_annotations, new_coco_annotations):
+        """ Merges the two given coco annotation dicts into one.
+
+        Currently this requires both coco annotations to have the exact same categories/objects.
+        The "images" and "annotations" sections are concatenated and respective ids are adjusted.
+
+        :param existing_coco_annotations: A dict describing the first coco annotations.
+        :param new_coco_annotations: A dict describing the second coco annotations.
+        :return: A dict containing the merged coco annotations.
+        """
+        if existing_coco_annotations["categories"] != new_coco_annotations["categories"]:
+            raise NotImplementedError("The existing coco annotations file contains different categories/objects than the current scene. Merging the two lists is not implemented yet.")
+
+        # Concatenate images sections
+        image_id_offset = max([image["id"] for image in existing_coco_annotations["images"]]) + 1
+        for image in new_coco_annotations["images"]:
+            image["id"] += image_id_offset
+        existing_coco_annotations["images"].extend(new_coco_annotations["images"])
+
+        # Concatenate annotations sections
+        annotation_id_offset = max([annotation["id"] for annotation in existing_coco_annotations["annotations"]]) + 1
+        for annotation in new_coco_annotations["annotations"]:
+            annotation["id"] += annotation_id_offset
+            annotation["image_id"] += image_id_offset
+        existing_coco_annotations["annotations"].extend(new_coco_annotations["annotations"])
+
+        return existing_coco_annotations
 
     @staticmethod
     def create_image_info(image_id, file_name, image_size):

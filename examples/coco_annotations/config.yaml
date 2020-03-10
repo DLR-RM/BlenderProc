@@ -63,10 +63,10 @@
       "config": {
       }
     },
-    {
-      "module": "writer.Hdf5Writer",
-      "config": {
-      }
-    }
+    # {
+    #   "module": "writer.Hdf5Writer",
+    #   "config": {
+    #   }
+    # }
   ]
 }
