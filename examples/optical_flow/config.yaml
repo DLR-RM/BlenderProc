@@ -52,7 +52,7 @@
         "backward_flow_output_key": "backward_flow",
         "forward_flow": True,
         "backward_flow": True,
-        "y_origin_bot": False  # per default, the coordinate system origin is in the top left of the image
+        "blender_image_coordinate_style": False  # per default, the coordinate system origin is in the top left of the image
       }
     },
     {
