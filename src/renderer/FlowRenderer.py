@@ -13,6 +13,11 @@ class FlowRenderer(Renderer):
     .. csv-table::
         :header: "Parameter", "Description"
 
+        "forward_flow_output_key", "The key which should be used for storing forward optical flow values."
+        "backward_flow_output_key", "The key which should be used for storing backward optical flow values."
+        "forward_flow", "Whether to render forward optical flow."
+        "backward_flow", "Whether to render backward optical flow."
+        "blender_image_coordinate_style", "Whether to specify the image coordinate system at the bottom left (blender default; True) or top left (standard convention; False). Default is False."
     """
 
     def __init__(self, config):
