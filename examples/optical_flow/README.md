@@ -51,7 +51,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
       "backward_flow_output_key": "backward_flow",
       "forward_flow": True,
       "backward_flow": True,
-      "y_origin_bot": False
+      "blender_image_coordinate_style": False
 }
 ```
 
@@ -59,7 +59,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 * The images are rendered using the `.exr` format which allows linear colorspace and higher precision, and then converted to numpy.float32 arrays
 * The output files are stored in the defined output directory (see [Global](#Global)) and, per default, are named like `{forward_flow, backward_flow}_i.npy` where `i` is the cam pose index
 * The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files.
-* Per default, Blender uses the bottom left corner as coordinate system origin. OpenCV and popular Flow datasets use the upper left corner instead - change the flag `"y_origin_bot": True` if you want the default Blender behaviour. Note that the colors in the visualization will be different!
+* Per default, Blender uses the bottom left corner as coordinate system origin. OpenCV and popular Flow datasets use the upper left corner instead - change the flag `"blender_image_coordinate_style": True` if you want the default Blender behaviour. Note that the colors in the visualization will be different!
 
 => Creates the files `forward_flow_000{0, 1, 2, 3, 4}.npy` and / or `backward_flow_000{0, 1, 2, 3, 4}.npy`.
 
