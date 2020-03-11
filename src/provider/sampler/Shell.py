@@ -41,7 +41,7 @@ class Shell(Provider):
         elevation_max = self.config.get_float("elevation_max")
         if elevation_max == 90:
             # behold! magic number
-            elevation_max = 0
+            elevation_max = 0.001
         # Height of a sampling cone
         H = 1
         

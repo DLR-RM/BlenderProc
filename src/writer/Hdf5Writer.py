@@ -22,6 +22,7 @@ class Hdf5Writer(Module):
        "compression", "The compression technique that should be used when storing data in a hdf5 file."
        "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging."
        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output to which the postprocessing modules should be applied. Every postprocessing module has to have a run function which takes in the raw data and returns the processed data."
+       "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that there are no collisions with already existing hdf5 files in the output directory."
     """
 
     def __init__(self, config):
@@ -33,11 +34,22 @@ class Hdf5Writer(Module):
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
 
     def run(self):
+        if self.config.get_bool("append_to_existing_output", False):
+            frame_offset = 0
+            # Look for hdf5 file with highest index
+            for path in os.listdir(self._determine_output_dir(False)):
+                if path.endswith(".hdf5"):
+                    index = path[:-len(".hdf5")]
+                    if index.isdigit():
+                        frame_offset = max(frame_offset, int(index) + 1)
+        else:
+            frame_offset = 0
+
         # Go through all frames
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
 
             # Create output hdf5 file
-            hdf5_path = os.path.join(self._determine_output_dir(False), str(frame) + ".hdf5")
+            hdf5_path = os.path.join(self._determine_output_dir(False), str(frame + frame_offset) + ".hdf5")
             with h5py.File(hdf5_path, "w") as f:
 
                 if 'output' not in bpy.context.scene:
