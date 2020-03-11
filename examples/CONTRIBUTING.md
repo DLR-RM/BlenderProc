@@ -1,0 +1,173 @@
+# Contributing to BlenderProc
+
+Thank you for your intrest in BlenderProc.
+
+The following is a short set of guidelines for contributing to BlenderProc. These are the set of mostly guidelines, not rules. If you feel like this set can be improved, feel free to propose changes in a PR.
+
+## Contents
+
+[Getting started](#getting-started)
+ * [BlenderProc Source Code](#blenderproc-source-code)
+ * [BlenderProc Design Decisions](#blenderproc-design-decisions)
+
+[Ways to contribute](#ways-to-contribute)
+ * [Reporting bugs](#reporting-bugs)
+ * [Suggesting enchancements](#suggesting-enchancements)
+ * [Pull Requests](#pull-requests)
+
+[Styleguides](#styleguides)
+ * [Git Commit Message](#git-commit-message)
+ * [Python Styleguide](#python-styleguide)
+ * [BlenderProc Module Documentation Styleguide](#blenderproc-module-documentation-styleguide)
+ * [BlenderProc Example Styleguide](#blenderproc-example-styleguide)
+
+## Getting started
+
+### BlenderProc Source Code
+
+BlenderProc is a small open source project: just one repository. So when you decide to contribute to our ongoing effort to improve this tool, it is expected that you are familiar with the [source code](src/) and made your way through the relevant [examples](examples/).
+
+### BlenderProc Design Decisions
+
+At this point BlenderProc has a well-established project-wide code structure with key elements like modules, composite-modules, providers, utilities, examples, configuration files, etc. with the intent of keeping BlenderProc easy as an to use and easy to extend pipeline tool. The way the majority of this elements are developed is goverened by the [styleguides](#styleguides). But yes, it may happen such that the current way of organizing and developing is not suitable for your case, so use your best judgement.
+
+## Ways to contribute
+
+### Reporting bugs
+
+Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/).
+Create an issue, explain the problem and include additional details to help maintainers reproduce the problem:
+* Use a clear and descriptive title.
+* Describe the exact steps which reproduce the problem in as many details as possible.
+* Provide specific examples to demonstrate the steps: part of the config file, copy/pasteable code snippets, etc.
+* Explain which behavior you expected to see instead and why.
+* Include screenshots if possible.
+
+### Suggesting enchancements
+
+Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com/features/issues/).
+Create an issue and provide the following information:
+* Use a clear and descriptive title.
+* Provide specific examples to demonstrate the steps: part of the config file, copy/pasteable code snippets, etc.
+* Describe the current behavior  and explain which behavior the enchancement will introduce.
+* Explain why this enhancement would be useful.
+
+### Pull Requests
+
+In order to increase a pace of project-wide decision-making and maintain of the BlenderProc, please follow these steps to have your contribution considered by the maintainers:
+* Follow the instructions in the [template](#PULL_REQUEST_TEMPLATE.md).
+* Follow the [styleguides](#styleguides).
+
+While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
+
+## Styleguides
+
+### Git Commit Message
+
+Following is a simple pattern for Git Commit messages:
+
+```
+<type>(<scope>): <subject> 
+
+<body>
+
+<footer>
+```
+* `type` - type of the change.
+
+| type | meaning |
+| ------ | ------- |
+| `doc` | changes to the external or internal documentation|
+| `feat` | new, removed or changed feature |
+| `fix` | bug fix |
+| `refactor` | refactoring/restructuring of the code |
+| `revert` | reverted commit or parts of it |
+| `style` | code cosmetica: formatting with no code change |
+
+* `subject` - the headline of the change.
+* `scope` - scope of the change.
+* `body` - optional text that describes your commit.
+* `footer` - optional referencing of the issues.
+
+that may look like this:
+
+```
+feat(loader): add wavefront object loader
+
+New module allows loading .obj files and setting custom properties like `physics` to the loaded objects.
+
+closes #123
+```
+
+### Python styleguide
+
+We are trying to write good python code, but we are not hardcore Python evangelists. So use your best judgement, but remember that [PEP8](https://www.python.org/dev/peps/pep-0008/) dictates how to do thing in general.
+
+### BlenderProc Module Documentation Styleguide
+
+We are using [Sphinx](https://www.sphinx-doc.org/en/master/index.html) for automatic generation of the API's documentation.
+This way you are required to apply the following patterns:
+
+* Pipeline Module Description
+
+Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide csv tables with parameter description/explanation along with general module description.
+For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the devault value of this parameter), and mention the range of applicable values.
+
+```python
+class MyNewPipelineModule(Loader):
+    """ This module is doing this, this, and this, while incorporating that.
+    
+    **Table for a part of config**:
+    
+    .. csv-table::
+       :header: "Keyword", "Description"
+       
+       "param_a", "Used for this/means this. Type: type. Oprional. Default value: value."
+       "param_b", "Used for that/means that. Type: type. Range: [min, max]."
+       
+     **Table for another part of config if needed**:
+
+    .. csv-table::
+       :header: "Keyword", "Description"
+       
+       "param_c", "Used for this. Contains that."
+       "param_c/param_d", "Used for this/means this. Type: type."
+       "param_c/param_e", "Used for that/means that. Type: type. Optional. Devault value: value. Range: [min, max]."
+    """
+```
+
+* Pipeline Module Method Description
+
+This one is pretty self-explanatory.
+
+```python
+def run(self):
+    """ Doing this big thing in the following steps:
+        1. Step 1
+        2. Step 2
+        ...
+        N. Profit!!!
+    """
+    pass
+
+def _foo(self, bar_a, bar_b):
+    """ Doing this thing.
+    
+    :param a: Used for this/means this. Type: type.
+    :param b: used for that/means that. Type: type.
+    :return: A sum of bar_a and bar_b.
+    """
+    return bar_a + bar_b
+```
+
+### BlenderProc Example Styleguide
+
+When you are proposing a new module or significant changes to the existing modules, new example as a part of your PR may be expected.
+To create a good example, please follow this steps:
+* Create a folder with a clear descriptive name in [examples](examples/) folder.
+* In this folder provide at least a configuration config.yaml file and a README.md file.
+* And any other files that may be necessary (like rendering images, .obj files, text files with some data required by the pipeline, etc), but keep it as clean as possible and **do not include any copyrighted materials**.
+
+For the README.md of the example, please follow the [template](EXAMPLE_README_TEMPLATE.md). if the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
+
+Also remember, that when making changes to the existing modules it is up to you to verify that existing examples that are using this module are valid and working. Fix the configuration files and update READMEs of these examples, if the example requires it.
