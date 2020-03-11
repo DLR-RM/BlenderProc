@@ -83,7 +83,7 @@ class FlowRenderer(Renderer):
                     file_path = temporary_fwd_flow_file_path + "%04d" % frame + ".exr"
                     fwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
 
-                    if not self.config.get_bool('y_origin_bot', False):
+                    if not self.config.get_bool('blender_image_coordinate_style', False):
                         fwd_flow_field[:, :, 1] = fwd_flow_field[:, :, 1] * -1
 
                     fname = os.path.join(self._determine_output_dir(),
