@@ -8,6 +8,12 @@ if version_info.major == 3:
     from urllib.request import urlretrieve
 else:
     from urllib import urlretrieve
+    import contextlib
+    try:
+        import lzma
+    except ImportError as e:
+        print("For decompressing \".xz\" files in python 2.x is it necessary to use lzma")
+        raise e # from import lzma -> pip install --user pyliblzma
 
 
 from src.utility.ConfigParser import ConfigParser
@@ -38,10 +44,10 @@ if "custom_blender_path" not in setup_config:
         blender_install_path = "blender"
         
     # Determine configured version
-    # right new only support blender-2.81
-    blender_version = "blender-2.81"
+    # right new only support blender-2.82
+    blender_version = "blender-2.82"
     if platform == "linux" or platform == "linux2":
-        blender_version += "-linux-glibc217-x86_64"
+        blender_version += "-linux64"
         blender_path = os.path.join(blender_install_path, blender_version)
     elif platform == "darwin":
         blender_version += "-macOS"
@@ -58,7 +64,7 @@ if "custom_blender_path" not in setup_config:
     # Download blender if it not already exists
     if not os.path.exists(blender_path):
         if platform == "linux" or platform == "linux2":
-            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.bz2"
+            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.xz"
         elif platform == "darwin":
             url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".dmg"
         else:
@@ -87,8 +93,14 @@ if "custom_blender_path" not in setup_config:
 
 
         if platform == "linux" or platform == "linux2":
-            tar = tarfile.open(file_tmp)
-            tar.extractall(blender_install_path)
+            
+            if version_info.major == 3:
+                with tarfile.open(file_tmp) as tar:
+                    tar.extractall(blender_install_path)
+            else:
+                with contextlib.closing(lzma.LZMAFile(file_tmp)) as xz:
+                    with tarfile.open(fileobj=xz) as f:
+                        f.extractall(blender_install_path)
         elif platform == "darwin":
             if not os.path.exists(blender_install_path):
                 os.makedirs(blender_install_path)
