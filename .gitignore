@@ -9,4 +9,3 @@ output/
 docs/build/
 !docs/source/index.rst
 docs/source/*rst
-examples/optical_flow/check_flow/
