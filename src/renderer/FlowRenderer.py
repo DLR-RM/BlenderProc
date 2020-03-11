@@ -103,26 +103,13 @@ class FlowRenderer(Renderer):
                                          self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_')) + '%04d' % frame
                     np.save(fname + '.npy', bwd_flow_field[:, :, :2])
 
-        # register desired outputs  # TODO: hardcoded unique_for_camposes
-        use_stereo = self.config.get_bool("stereo", False)
-        unique_for_camposes = True
-
+        # register desired outputs
         if get_forward_flow:
-            self._add_output_entry({
-                "key": self.config.get_string("forward_flow_output_key", "forward_flow"),
-                "path": os.path.join(self._determine_output_dir(),
-                                     self.config.get_string('forward_flow_output_file_prefix', 'forward_flow_')) + (
-                            "%04d" if unique_for_camposes else "") + '.npy',
-                "version": '2.0.0',
-                "stereo": use_stereo
-            })
-
+            self._register_output(default_prefix=self.config.get_string('forward_flow_output_file_prefix', 'forward_flow_'),
+                                  default_key=self.config.get_string("forward_flow_output_key", "forward_flow"),
+                                  suffix='.npy', version='2.0.0')
         if get_backward_flow:
-            self._add_output_entry({
-                "key": self.config.get_string("backward_flow_output_key", "backward_flow"),
-                "path": os.path.join(self._determine_output_dir(),
-                                     self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_')) + (
-                            "%04d" if unique_for_camposes else "") + '.npy',
-                "version": '2.0.0',
-                "stereo": use_stereo
-            })
+            self._register_output(default_prefix=self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_'),
+                                  default_key=self.config.get_string("backward_flow_output_key", "backward_flow"),
+                                  suffix='.npy', version='2.0.0')
+
