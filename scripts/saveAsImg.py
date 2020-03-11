@@ -5,6 +5,9 @@ import argparse
 import numpy as np
 import scipy.misc
 import matplotlib.pyplot as plt
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__)))
+from .utils import flow_to_rgb
 
 parser = argparse.ArgumentParser("Script to save images out of a hdf5 files")
 
@@ -27,6 +30,8 @@ def process_img(img, key):
 			img /= np.max(img[img != np.inf])
 		if len(img.shape) == 3:
 			img = img[:,:,0]
+	elif 'flow' in key:
+		img = flow_to_rgb(img)
 	return img
 
 def visFile(filePath):
