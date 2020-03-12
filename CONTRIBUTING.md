@@ -55,9 +55,16 @@ Create an issue and provide the following information:
 ### Pull Requests
 
 In order to increase a pace of project-wide decision-making and maintain of the BlenderProc, please follow these steps to have your contribution considered by the maintainers:
-* Follow the instructions in the [template](PULL_REQUEST_TEMPLATE.md).
-* Follow the [styleguides](#styleguides).
+* Link to the issue that your change relates to. If there is not yet an issue for your bug or issue for an enchancement request, please open a new issue and then link to that issue in your pull request.
+* Fix description: short walk-through the concept of the solution.
 
+If it is a bug fix PR:
+* Verify that examples that use the fixed modules are working and their READMEs are updated if that was needed.
+
+If it is an enchancement/feature PR:
+* Provide a new example if major feature or enchancement is introduced.
+
+The contents of the PR (i.e. code, documentation, examples) must follow the [styleguides](#styleguides).
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
 
 ## Styleguides
