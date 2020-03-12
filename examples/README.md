@@ -10,9 +10,9 @@ Each folder contains an example, some of those require external datasets.
 
 ## Examples overview
 
-Each example prvodes a valid configuration file that can be used for getting some sort of output, and a description.
+Each example provides a valid configuration file that can be used for getting some sort of output, and a description.
 
-When you are feeling brave enough to start with some actual examples, start with a [basic example](basic).
+We recommend to start with the [basic example](basic).
 It will give you an idea about how, why and when certain things happen.
 
 * [debugging](debugging): what happens during the execution of the pipeline and certain modules it is sometimes useful to use blender directly
