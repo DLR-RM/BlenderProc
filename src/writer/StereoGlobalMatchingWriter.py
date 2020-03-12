@@ -1,6 +1,7 @@
 from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
 from src.utility.BlenderUtility import resize
+from src.renderer.Renderer import Renderer
 
 from scipy import stats
 from math import tan
@@ -165,6 +166,8 @@ class StereoGlobalMatchingWriter(Module):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
+        self.depth_max = Renderer.DEPTH_END
+
     # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
     def sgm(self, imgL, imgR):
         window_size = self.config.get_int("window_size", 7)
@@ -221,11 +224,11 @@ class StereoGlobalMatchingWriter(Module):
         depth = (1.0 / disparity) * self.baseline * self.focal_length
 
         # Clip from depth map to 25 meters
-        depth[depth > 25.0] = 25.0
+        depth[depth > self.depth_max] = self.depth_max
         depth[depth < 0] = 0.0
 
         if self.config.get_bool("depth_completion", True):
-            depth = fill_in_fast(depth, 25.0)
+            depth = fill_in_fast(depth, self.depth_max)
 
         return depth
 

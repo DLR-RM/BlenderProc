@@ -12,7 +12,7 @@ def get_neighbors_stacked(img, filter_size=3, return_list=False):
     :param img: Input image.
     :param filter_size: Filter size.
     :param return_list: Instead of stacking in the output array, just return a list of the "neighbor" images along with the input image.
-    :return: Either a tensor with the "neighbor" images stacked in a separate dimension, or a list of images of the same dimension as the input images containing the shifted images (simulating the neighbors) and the input image.
+    :return: Either a tensor with the "neighbor" images stacked in a separate additional dimension, or a list of images of the same shape as the input image, containing the shifted images (simulating the neighbors) and the input image.
     """
     _min = -int(filter_size / 2)
     _max = _min + filter_size
