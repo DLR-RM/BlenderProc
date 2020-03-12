@@ -16,7 +16,7 @@ The following is a short set of guidelines for contributing to BlenderProc. Thes
  * [Pull Requests](#pull-requests)
 
 [Styleguides](#styleguides)
- * [Git Commit Message](#git-commit-message)
+ * [Git Commit Message and Branch Names](#git-commit-message-and-branch-names)
  * [Python Styleguide](#python-styleguide)
  * [BlenderProc Module Documentation Styleguide](#blenderproc-module-documentation-styleguide)
  * [BlenderProc Example Styleguide](#blenderproc-example-styleguide)
@@ -69,7 +69,7 @@ While the prerequisites above must be satisfied prior to having your pull reques
 
 ## Styleguides
 
-### Git Commit Message
+### Git Commit Message and Branch Names
 
 Following is a simple pattern for Git Commit messages:
 
@@ -80,7 +80,7 @@ Following is a simple pattern for Git Commit messages:
 
 <footer>
 ```
-* `type` - type of the change.
+* `type` - type of the change, lowercase.
 
 | type | meaning |
 | ------ | ------- |
@@ -91,19 +91,25 @@ Following is a simple pattern for Git Commit messages:
 | `revert` | reverted commit or parts of it |
 | `style` | code cosmetica: formatting with no code change |
 
-* `subject` - the headline of the change.
-* `scope` - scope of the change.
+* `subject` - the headline of the change, all lowercase.
+* `scope` - scope of the change, all lowercase.
 * `body` - optional text that describes your commit.
-* `footer` - optional referencing of the issues.
+* `footer` - optional referencing of the issues, also all lowercase.
 
 that may look like this:
 
 ```
-feat(loader): add wavefront object loader
+feat(loader): add wavefront object loader, all lower case
 
 New module allows loading .obj files and setting custom properties like `physics` to the loaded objects.
 
 closes #123
+```
+
+For branch names please stick to the ussie number pattern of:
+
+```
+iss_300_some_short_name
 ```
 
 ### Python styleguide
