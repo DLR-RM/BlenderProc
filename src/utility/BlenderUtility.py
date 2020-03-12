@@ -298,5 +298,4 @@ def resize(img, new_size, method="nearest"):
     elif "nearest" in method:
         return np.asarray(Image.fromarray(img).resize(new_size, Image.NEAREST))
     else:
-        print("UNKNOWN RESIZING METHOD")
-        exit(-1)
+        raise Exception("Unknown resizing method")
