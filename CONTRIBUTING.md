@@ -1,8 +1,8 @@
 # Contributing to BlenderProc
 
-Thank you for your intrest in BlenderProc.
+Thank you for your interest in BlenderProc.
 
-The following is a short set of guidelines for contributing to BlenderProc. These are the set of mostly guidelines, not rules. If you feel like this set can be improved, feel free to propose changes in a PR.
+The following is a short set of guidelines for contributing to BlenderProc. These are guidelines, not rules. If you feel like this set can be improved, feel free to propose changes in a PR.
 
 ## Contents
 
@@ -49,7 +49,7 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 Create an issue and provide the following information:
 * Use a clear and descriptive title.
 * Provide specific examples to demonstrate the steps: part of the config file, copy/pasteable code snippets, etc.
-* Describe the current behavior  and explain which behavior the enchancement will introduce.
+* Describe the current behavior and explain which behavior the enchancement will introduce.
 * Explain why this enhancement would be useful.
 
 ### Pull Requests
@@ -59,7 +59,7 @@ In order to increase a pace of project-wide decision-making and maintain of the 
 * Fix description: short walk-through the concept of the solution.
 
 If it is a bug fix PR:
-* Verify that examples that use the fixed modules are working and their READMEs are updated if that was needed.
+* Verify that examples that use the fixed modules are working and their READMEs are updated if that is needed.
 
 If it is an enchancement/feature PR:
 * Provide a new example if major feature or enchancement is introduced.
@@ -108,7 +108,7 @@ closes #123
 
 ### Python styleguide
 
-We are trying to write good python code, but we are not hardcore Python evangelists. So use your best judgement, but remember that [PEP8](https://www.python.org/dev/peps/pep-0008/) dictates how to do thing in general.
+We are trying to write good python code, but we are not hardcore Python evangelists. So use your best judgement, but remember that [PEP8](https://www.python.org/dev/peps/pep-0008/) dictates how to do things in general.
 
 ### BlenderProc Module Documentation Styleguide
 
@@ -118,7 +118,7 @@ This way you are required to apply the following patterns:
 * Pipeline Module Description
 
 Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide csv tables with parameter description/explanation along with general module description.
-For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the devault value of this parameter), and mention the range of applicable values.
+For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the default value of this parameter), and mention the range of applicable values.
 
 ```python
 class MyNewPipelineModule(Loader):
@@ -129,7 +129,7 @@ class MyNewPipelineModule(Loader):
     .. csv-table::
        :header: "Keyword", "Description"
        
-       "param_a", "Used for this/means this. Type: type. Oprional. Default value: value."
+       "param_a", "Used for this/means this. Type: type. Optional. Default value: value."
        "param_b", "Used for that/means that. Type: type. Range: [min, max]."
        
      **Table for another part of config if needed**:
@@ -139,7 +139,7 @@ class MyNewPipelineModule(Loader):
        
        "param_c", "Used for this. Contains that."
        "param_c/param_d", "Used for this/means this. Type: type."
-       "param_c/param_e", "Used for that/means that. Type: type. Optional. Devault value: value. Range: [min, max]."
+       "param_c/param_e", "Used for that/means that. Type: type. Optional. Default value: value. Range: [min, max]."
     """
 ```
 
@@ -158,7 +158,7 @@ def run(self):
     pass
 
 def _foo(self, bar_a, bar_b):
-    """ Doing this thing.
+    """ Sums bar_a and bar_b together and returns the result.
     
     :param a: Used for this/means this. Type: type.
     :param b: used for that/means that. Type: type.
@@ -175,6 +175,6 @@ To create a good example, please follow this steps:
 * In this folder provide at least a configuration config.yaml file and a README.md file.
 * And any other files that may be necessary (like rendering images, .obj files, text files with some data required by the pipeline, etc), but keep it as clean as possible and **do not include any copyrighted materials**.
 
-For the README.md of the example, please follow the [template](EXAMPLE_README_TEMPLATE.md). if the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
+For the README.md of the example, please follow the [template](EXAMPLE_README_TEMPLATE.md). If the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
 
 Also remember, that when making changes to the existing modules it is up to you to verify that existing examples that are using this module are valid and working. Fix the configuration files and update READMEs of these examples, if the example requires it.
