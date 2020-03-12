@@ -55,7 +55,7 @@ Create an issue and provide the following information:
 ### Pull Requests
 
 In order to increase a pace of project-wide decision-making and maintain of the BlenderProc, please follow these steps to have your contribution considered by the maintainers:
-* Follow the instructions in the [template](#PULL_REQUEST_TEMPLATE.md).
+* Follow the instructions in the [template](PULL_REQUEST_TEMPLATE.md).
 * Follow the [styleguides](#styleguides).
 
 While the prerequisites above must be satisfied prior to having your pull request reviewed, the reviewer(s) may ask you to complete additional design work, tests, or other changes before your pull request can be ultimately accepted.
