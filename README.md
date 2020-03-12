@@ -58,7 +58,7 @@ Now head on to the [examples](examples) and check the README there: get some bas
 
 ## Source Code
 
-Now it's good time to take a look at the [soruce code](src): all modules are there. Explore and look at the short guide about writing yor own modules.
+Now it's a good time to take a look at the [soruce code](src): all modules are there. Explore and look at the short guide about writing your own modules.
 
 ## Contributions
 
