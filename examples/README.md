@@ -5,8 +5,6 @@ Each folder contains an example, some of those require external datasets.
 ## Contents
 
 * [Examples overview](#examples-overview)
-* [Config file example](#config-file-example)
-* [Writing your own modules](#writing-your-own-modules)
 
 ## Examples overview
 
