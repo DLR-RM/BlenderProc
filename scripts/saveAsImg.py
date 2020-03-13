@@ -7,7 +7,7 @@ import scipy.misc
 import matplotlib.pyplot as plt
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__)))
-from .utils import flow_to_rgb
+from utils import flow_to_rgb
 
 parser = argparse.ArgumentParser("Script to save images out of a hdf5 files")
 
@@ -41,7 +41,7 @@ def visFile(filePath):
 				keys = [key for key in data.keys()]
 				for key in keys:
 					val = np.array(data[key])
-					file_path = '{}_{}.jpg'.format(key, str(os.path.basename(filePath)).split('.')[0]) 
+					file_path = '{}_{}.png'.format(key, str(os.path.basename(filePath)).split('.')[0])
 					if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 3:
 						val = process_img(val, key)
 						if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 1:
