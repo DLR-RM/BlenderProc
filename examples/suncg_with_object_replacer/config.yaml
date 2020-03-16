@@ -40,8 +40,7 @@
           "conditions": {
             "replace": "chair"
           }
-        },
-        "hide_render": True
+        }
       }
     },
     {
