@@ -1,9 +1,12 @@
 
-from src.main.Module import Module
-import bpy
 import random
-import numpy as np
 import math
+import copy
+
+import bpy
+import numpy as np
+
+from src.main.Module import Module
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_mesh_objects
 
 class ObjectReplacer(Module):
@@ -23,6 +26,10 @@ class ObjectReplacer(Module):
         Module.__init__(self, config)
         self._replace_ratio = self.config.get_float("replace_ratio", 1)
         self._copy_properties = self.config.get_float("copy_properties", 1)
+        self._max_tries = self.config.get_int("max_tries", 100000)
+        self._objects_to_be_replaced = []
+        self._objects_to_replace_with = []
+        self._ignore_collision_with = []
 
     def _replace_and_edit(self, obj_to_remove, obj_to_add, scale=True):
         """
@@ -82,38 +89,41 @@ class ObjectReplacer(Module):
         self._objects_to_replace_with = self.config.get_list("objects_to_replace_with", [])
         self._ignore_collision_with = self.config.get_list("ignore_collision_with", [])
 
-        # Now we have two lists to do the replacing
-        # Replace a ratio of the objects in the scene with the list of the provided objects randomly
-        indices = np.random.choice(len(self._objects_to_replace_with), int(self._replace_ratio * len(self._objects_to_be_replaced)))
-        for idx, new_obj_idx in enumerate(indices):
+        # amount of replacements depends on the amount of objects and the replace ratio
+        amount_of_replacements = int(len(self._objects_to_be_replaced) * self._replace_ratio)
+        if amount_of_replacements == 0:
+            print("Warning: The amount of objects, which should be replace is zero!")
+        amount_of_already_replaced = 0
+        tries = 0
 
-            # More than one original object could be replaced by just one object
-            original_object = self._objects_to_be_replaced[idx]
-            new_object = self._objects_to_replace_with[new_obj_idx]
+        # tries to replace objects until the amount of requested objects are replaced or the amount
+        # of maximum tries was reached
+        while amount_of_already_replaced < amount_of_replacements and tries < self._max_tries:
+            current_object_to_be_replaced = np.random.choice(self._objects_to_be_replaced)
+            current_object_to_replace_with = np.random.choice(self._objects_to_replace_with)
+            if self._replace_and_edit(current_object_to_be_replaced, current_object_to_replace_with):
 
-            if self._replace_and_edit(original_object, new_object):
-
-                # Copy properties
-                if self._copy_properties:
-                    for key, value in original_object.items():
-                        new_object[key] = value
-
-                # Duplicate the added object to be able to add it again.
-                duplicates = duplicate_objects(new_object) 
+                # Duplicate the added object to be able to add it again
+                duplicates = duplicate_objects(current_object_to_replace_with)
                 if len(duplicates) == 1:
-                    self._objects_to_replace_with[new_obj_idx] = duplicates[0]
+                    duplicate_new_object = duplicates[0]
                 else:
-                    raise Exception("No object to duplicate")
+                    raise Exception("The duplication failed, amount of objects are: {}".format(len(duplicates)))
 
-                # Update the scene
-                new_object.hide_render = False
-                print('Replaced ', original_object.name, ' by ', new_object.name)
+                # Copy properties to the newly duplicated object
+                if self._copy_properties:
+                    for key, value in current_object_to_be_replaced.items():
+                        duplicate_new_object[key] = value
 
-                # Delete the original object
+                print('Replaced ', current_object_to_replace_with.name, ' by ', duplicate_new_object.name)
+
+                # Delete the original object and remove it from the list
+                self._objects_to_replace_with.remove(current_object_to_replace_with)
                 bpy.ops.object.select_all(action='DESELECT')
-                original_object.select_set(True)
+                current_object_to_replace_with.select_set(True)
                 bpy.ops.object.delete()
-            else:
-                print('Collision happened while replacing an object, falling back to original one.')
 
+                amount_of_already_replaced += 1
+
+            tries += 1
         bpy.context.view_layer.update()

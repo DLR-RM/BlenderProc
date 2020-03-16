@@ -2,7 +2,10 @@
 
 ![](result.png)
 
-The ObjectReplacer tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects
+The ObjectReplacer tries to replace objects with other objects.
+First, you can specify the group of objects, which should be replaced: `objects_to_be_replaced` 
+and second you can select the objects you want to them to replace them with: `objects_to_replace_with`.
+Both groups of objects can be selected with the `getter.Entity`
 
 ## Usage
 
@@ -20,8 +23,8 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 ## Steps
 
 * loader.SuncgLoader Loads a SUNCG scene
-* loader.ObjectLoader loades new objetcs
-* object.EntityManipulator hides the new loaded objects from the rederer
+* loader.ObjectLoader loads new objects 
+* object.EntityManipulator hides the new loaded objects from the renderer 
 * manipulators.ObjectReplacer switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
 * Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
@@ -67,8 +70,9 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
     },
 ```
 
-* This module tries to switch between `objects_to_be_replaced` objects and `objects_to_replace_with` objects, which the module get using a `getter.Entity`, with probability of `switch_probability` if no collision happens between `objects_to_replace_with` and objects in the scene.
-* When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the custom proprites that the `objects_to_be_replaced` used to have.
+* This module replaces objects from `objects_to_be_replaced` with objects from `objects_to_replace_with`. The module uses for that the `getter.Entity` provider.
+* Furthermore, a probability of `switch_probability` can be set to make the switching probabilistic, if no collision happens between `objects_to_replace_with` and objects in the scene.
+* When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the custom properties that the `objects_to_be_replaced` used to have.
 * This module doesn't do collision checking between `objects_to_replace_with` and object provided by the `getter.Entity` `ignore_collision_with`.
 
 ## Visualization
