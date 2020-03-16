@@ -48,4 +48,4 @@ Now head on to the [examples](examples) and check the README there: get some bas
 
 ## Change log
 
-See our [change log](change_log.md).
+See our [change log](change_log.md). 
