@@ -36,20 +36,33 @@ def process_img(img, key):
     return img
 
 
-def visFile(filePath):
-    if os.path.exists(filePath):
-        if os.path.isfile(filePath):
-            with h5py.File(filePath, 'r') as data:
+def convert_array(array, key, file_path):
+    if len(array.shape) == 2 or len(array.shape) == 3 and array.shape[2] == 3:
+        val = process_img(array, key)
+        if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 1:
+            plt.imsave(file_path, val, cmap='jet')
+        else:
+            plt.imsave(file_path, val)
+
+
+def convert_hdf(base_file_path):
+    if os.path.exists(base_file_path):
+        if os.path.isfile(base_file_path):
+            with h5py.File(base_file_path, 'r') as data:
                 keys = [key for key in data.keys()]
                 for key in keys:
                     val = np.array(data[key])
-                    file_path = '{}_{}.png'.format(key, str(os.path.basename(filePath)).split('.')[0])
-                    if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 3:
-                        val = process_img(val, key)
-                        if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 1:
-                            plt.imsave(file_path, val, cmap='jet')
-                        else:
-                            plt.imsave(file_path, val)
+                    if len(val.shape) < 4:
+                        # mono image
+                        file_path = '{}_{}.png'.format(key, str(os.path.basename(base_file_path)).split('.')[0])
+                        convert_array(val, key, file_path)
+                    else:
+                        # stereo image
+                        for image_index in range(val.shape[0]):
+                            file_path = '{}_{}_{}.png'.format(key, str(os.path.basename(base_file_path)).split('.')[0],
+                                                              image_index)
+                            convert_array(val[image_index], key, file_path)
+
         else:
             print("The path is not a file")
     else:
@@ -57,9 +70,9 @@ def visFile(filePath):
 
 
 if isinstance(args.hdf5, str):
-    visFile(args.hdf5)
+    convert_hdf(args.hdf5)
 elif isinstance(args.hdf5, list):
     for file in args.hdf5:
-        visFile(file)
+        convert_hdf(file)
 else:
     print("Input must be a path")
