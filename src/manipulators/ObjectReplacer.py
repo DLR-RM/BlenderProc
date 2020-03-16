@@ -5,7 +5,6 @@ import random
 import numpy as np
 import math
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_mesh_objects
-from src.utility.Utility import Utility
 from src.utility.Config import Config
 
 class ObjectReplacer(Module):
