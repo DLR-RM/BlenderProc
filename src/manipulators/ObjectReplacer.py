@@ -47,7 +47,7 @@ class ObjectReplacer(Module):
 
             :param bb1: bounding box 1
             :param bb2: bounding box 2
-            returns a list of floats.
+            returns the ratio between each side of the bounding box as a list of floats.
             """
 
             def _two_points_distance(point1, point2):
@@ -66,8 +66,6 @@ class ObjectReplacer(Module):
             return [ratio_a, ratio_b, ratio_c]
         
         # New object takes location, rotation and rough scale of original object
-        bpy.ops.object.select_all(action='DESELECT')
-        obj_to_add.select_set(True)
         obj_to_add.location = obj_to_remove.location
         obj_to_add.rotation_euler = obj_to_remove.rotation_euler
         if scale:
@@ -85,9 +83,12 @@ class ObjectReplacer(Module):
     def run(self):
         self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced", [])
         self._objects_to_replace_with = self.config.get_list("objects_to_replace_with", [])
-        self._ignore_collision_with = self.config.get_list("ignore_collision_with", [])
+        self._ignore_collision_with = self.config.get_list("ignore_collision_with", [])        
+	# Hide new objects from renderers until they are added
+	for obj in self._objects_to_replace_with:
+		obj['hide_render'] = True
 
-        # amount of replacements depends on the amount of objects and the replace ratio
+	# amount of replacements depends on the amount of objects and the replace ratio
         amount_of_replacements = int(len(self._objects_to_be_replaced) * self._replace_ratio)
         if amount_of_replacements == 0:
             print("Warning: The amount of objects, which should be replace is zero!")
