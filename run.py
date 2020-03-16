@@ -40,6 +40,9 @@ if "custom_blender_path" not in setup_config:
     # Determine path where blender should be installed
     if "blender_install_path" in setup_config:
         blender_install_path = setup_config["blender_install_path"]
+        if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
+            print("Warning: Changed install path from /home_local/... to /home/..., there is no /home_local/ on this machine.")
+            blender_install_path = blender_install_path.replace("/home_local", "/home", 1)
     else:
         blender_install_path = "blender"
         
