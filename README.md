@@ -6,6 +6,16 @@ A procedural blender pipeline for image generation for deep learning.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
+## Contents
+
+* [General](#general)
+* [Functionality](#functionality)
+* [Examples](#examples)
+* [First step](#first-step)
+* [Source code](#source-code)
+* [Contributions](#contributions)
+* [Change log](#change-log)
+
 ## General
 
 In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and renders different types of images (rgb, depth, normals etc.) for each of them.
@@ -44,7 +54,15 @@ For advanced usage which is not covered by these modules, own modules can easily
 
 ## First step
 
-Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get a gist about writing yor own modules!
+Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get an idea about the power of BlenderProc.
+
+## Source Code
+
+Now it's a good time to take a look at the [soruce code](src): all modules are there. Explore and look at the short guide about writing your own modules.
+
+## Contributions
+
+Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Show it, then. Check the [contributions guidelines](#contributions-guidelines).
 
 ## Change log
 
