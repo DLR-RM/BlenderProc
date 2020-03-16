@@ -20,6 +20,7 @@ class ObjectReplacer(Module):
        "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets list of objects following a certain condition. Type: Getter. Default value: []."
        "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, gets list of objects following a certain condition. Type Getter. Default value: []"
        "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. Type：Getter. Default value: []."
+       "max_tries", "Amount of tries, which are performed while trying to replace the objects. Type: Int, Default value: 100000 "
     """
 
     def __init__(self, config):
