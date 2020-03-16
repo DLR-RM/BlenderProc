@@ -5,7 +5,6 @@ import random
 import numpy as np
 import math
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_mesh_objects
-from src.utility.Config import Config
 
 class ObjectReplacer(Module):
     """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the objects to replace with, can be selected over Selectors (getter.Entity).
