@@ -74,15 +74,13 @@ class ObjectReplacer(Module):
             obj_to_add.scale = _bb_ratio(obj_to_remove.bound_box, obj_to_add.bound_box)
 
         # Check for collision between the new object and other objects in the scene
-        can_replace = True
         for obj in get_all_mesh_objects(): # for each object
 
             if obj != obj_to_add and obj_to_remove != obj and obj not in self._ignore_collision_with:
                 if check_bb_intersection(obj, obj_to_add):
                     if check_intersection(obj, obj_to_add)[0]:
-                        can_replace = False
-                        break
-        return can_replace
+                        return False
+        return True
 
     def run(self):
         self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced", [])
