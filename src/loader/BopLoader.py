@@ -80,9 +80,9 @@ class BopLoader(Module):
         cam['loaded_resolution'] = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y 
         cam['loaded_intrinsics'] = cam_p['K'] # load default intrinsics from camera.json
         
-        dummy_config = Config({})
-        cm = CameraModule(dummy_config)
-        cm._set_cam_intrinsics(cam, dummy_config)
+        config = Config({})
+        camera_module = CameraModule(config)
+        camera_module._set_cam_intrinsics(cam, config)
 
         #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
@@ -93,52 +93,92 @@ class BopLoader(Module):
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
             sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id':scene_id}))
-
+            
             for i, (cam_id, insts) in enumerate(sc_gt.items()):
 
-                cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
-
-                cam_H_m2c_ref = np.eye(4)
-                cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
-                cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * mm2m
+                cam_K, cam_H_m2c_ref = self.get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, 
+                                                                                    insts, mm2m)
 
                 if i == 0:
                     # define world = first camera
                     cam_H_m2w_ref = cam_H_m2c_ref.copy()
                     
+                    # load scene objects
                     for inst in insts:
                         cur_obj = self._load_mesh(inst['obj_id'], model_p, mm2m=mm2m)
+                        self.set_object_pose(cur_obj, inst, mm2m)
+                
+                cam_H_c2w = self.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
+                config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), 
+                                 "camK": list(cam_K.flatten())})
 
-                        cam_H_m2c = np.eye(4)
-                        cam_H_m2c[:3,:3] = np.array(inst['cam_R_m2c']).reshape(3,3) 
-                        cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3) * mm2m
-
-                        # world = camera @ i=0
-                        cam_H_m2w = cam_H_m2c
-                        print('-----------------------------')
-                        print("Model: {}".format(cam_H_m2w))
-                        print('-----------------------------')
-
-                        cur_obj.matrix_world = Matrix(cam_H_m2w)
-                        
-                cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
-
-                print('-----------------------------')
-                print("Cam: {}".format(cam_H_c2w))
-                print('-----------------------------')
-
-                # transform from OpenCV to blender coords
-                cam_H_c2w @= Matrix.Rotation(math.radians(180), 4, "X")
-                cam_H_c2w_list = list(cam_H_c2w.flatten())
-
-                config = Config({"cam2world_matrix": cam_H_c2w_list})
-                cm._set_cam_intrinsics(cam, config)
-                cm._set_cam_extrinsics(cam_ob, config)
+                camera_module._set_cam_intrinsics(cam, config)
+                camera_module._set_cam_extrinsics(cam_ob, config)
 
                 # Store new cam pose as next frame
                 frame_id = bpy.context.scene.frame_end
-                cm._insert_key_frames(cam, cam_ob, frame_id)
+                camera_module._insert_key_frames(cam, cam_ob, frame_id)
                 bpy.context.scene.frame_end = frame_id + 1                
+
+
+    def compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
+        """ Returns camera to world transformation in blender coords.
+
+        :param cam_H_m2c_ref (ndarray): (4x4) homog trafo from object to world coords 
+        :param cam_H_m2w_ref (ndarray): (4x4) ndarray homog trafo from object to camera coords
+        :return: cam_H_c2w (Matrix): (4x4) homog trafo from camera to world coords
+        """
+
+        cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
+
+        print('-----------------------------')
+        print("Cam: {}".format(cam_H_c2w))
+        print('-----------------------------')
+
+        # transform from OpenCV to blender coords
+        cam_H_c2w = cam_H_c2w @ Matrix.Rotation(math.radians(180), 4, "X")
+
+        return cam_H_c2w
+
+    def set_object_pose(self, obj, inst, mm2m):
+        """ Set object pose for current obj
+
+        :param obj: blender object
+        :param inst (dict): instance from BOP scene_gt file  
+        :param mm2m (int): factor to transform set pose in mm or meters
+        """
+
+        cam_H_m2c = np.eye(4)
+        cam_H_m2c[:3,:3] = np.array(inst['cam_R_m2c']).reshape(3,3) 
+        cam_H_m2c[:3, 3] = np.array(inst['cam_t_m2c']).reshape(3) * mm2m
+
+        # world = camera @ i=0
+        cam_H_m2w = cam_H_m2c
+
+        print('-----------------------------')
+        print("Model: {}".format(cam_H_m2w))
+        print('-----------------------------')
+
+        obj.matrix_world = Matrix(cam_H_m2w)
+
+
+    def get_ref_cam_extrinsics_intrinsics(self, sc_camera, cam_id, insts, mm2m):
+        """ Get camK and transformation from object instance 0 to camera cam_id as reference
+        :param sc_camera (dict): BOP scene_camera file
+        :param cam_id (int): BOP camera id 
+        :param inst (dict): instance from BOP scene_gt file  
+        :param mm2m (int): factor to transform get pose in mm or meters
+        :return camK (ndarray): loaded camera matrix
+        :return cam_H_m2c_ref (ndarray): loaded object to camera transformation 
+        """
+
+        cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
+
+        cam_H_m2c_ref = np.eye(4)
+        cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
+        cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * mm2m
+
+        return (cam_K, cam_H_m2c_ref)
 
     def _try_duplicate_obj(self, model_path):
         """ If object with given model_path has already been loaded, duplicate this object
