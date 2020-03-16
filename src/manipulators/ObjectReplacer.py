@@ -16,7 +16,7 @@ class ObjectReplacer(Module):
        "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. Type: boolean. Default value: True."
        "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets list of objects following a certain condition. Type: Getter. Default value: []."
        "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, gets list of objects following a certain condition. Type Getter. Default value: []"
-       "ignore_collision_with", "Provider (Getter) in order to select objects to not check for collisions with. Type：Getter. Default value: []."
+       "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. Type：Getter. Default value: []."
     """
 
     def __init__(self, config):
