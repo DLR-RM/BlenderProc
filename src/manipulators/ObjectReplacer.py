@@ -86,7 +86,7 @@ class ObjectReplacer(Module):
         self._ignore_collision_with = self.config.get_list("ignore_collision_with", [])
 
         # Now we have two lists to do the replacing
-        # Replace a ratio of the objects in the scene with the list of the provided ikea objects randomly
+        # Replace a ratio of the objects in the scene with the list of the provided objects randomly
         indices = np.random.choice(len(self._objects_to_replace_with), int(self._replace_ratio * len(self._objects_to_be_replaced)))
         for idx, new_obj_idx in enumerate(indices):
 
