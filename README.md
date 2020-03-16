@@ -62,7 +62,7 @@ Now it's a good time to take a look at the [soruce code](src): all modules are t
 
 ## Contributions
 
-Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Show it, then. Check the [contributions guidelines](#contributions-guidelines).
+Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Show it, then. Check the [contributions guidelines](CONTRIBUTING.md).
 
 ## Change log
 
