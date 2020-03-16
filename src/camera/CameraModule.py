@@ -63,7 +63,11 @@ class CameraModule(Module):
            1. from config if defined
            2. custom property cam['loaded_intrinsics'] if set in Loader
            3. default config
-
+                resolution_x/y: 512 
+                pixel_aspect_x: 1
+                clip_start:   : 0.1
+                clip_end      : 1000
+                fov           : 0.691111
         :param config: A configuration object with cam intrinsics.
         """
 
