@@ -19,14 +19,15 @@ python run.py examples/bop_sampling/config.yaml /path/to/bop/dataset /path/to/ou
 
 ## Steps
 
-* Loads object models and camera intrinsics from specified BOP dataset
-* Creates a point light sampled inside a shell
-* Loops over
+* Loads object models and camera intrinsics from specified BOP dataset: `loader.BopLoader` module.
+* Creates a point light sampled inside a shell: `lighting.LightSampler` module.
+* Loops over: `composite.CameraObjectSampler` module.
     * Sample Object Poses inside a cube with collision checks
     * Sample Camera Poses inside a shell looking at objects
-    * Renders rgb
-    * Renders instance segmentation masks
-    * Writes labels and images to compressed hdf5 files in output_dir
+* Renders rgb: `renderer.RgbRenderer` module.
+* Renders instance segmentation masks: `renderer.SegMapRenderer` module.
+* Writes instance segmentation masks: `writer.CocoAnnotationsWriter` module.
+* Writes labels and images to compressed hdf5 files in output_dir: `writer.Hdf5Writer` module.
 
 ## Config file
 

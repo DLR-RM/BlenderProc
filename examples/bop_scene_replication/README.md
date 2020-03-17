@@ -19,11 +19,11 @@ python run.py examples/bop_scene_replication/config.yaml /path/to/bop/dataset /p
 
 ## Steps
 
-* Loads BOP scene with object models, object poses, camera poses and camera intrinsics
-* Creates a point light sampled inside a shell
-* Renders rgb
-* Renders instance segmentation masks
-* Writes labels and images to compressed hdf5 files in output_dir
+* Loads BOP scene with object models, object poses, camera poses and camera intrinsics: `loader.BopLoader` module.
+* Creates a point light sampled inside a shell: `lighting.LightSampler` module.
+* Renders rgb: `renderer.RgbRenderer` module.
+* Renders instance segmentation masks: `renderer.SegMapRenderer` module.
+* Writes labels and images to compressed hdf5 files in output_dir: `writer.Hdf5Writer` module.
 
 ## Config file
 
