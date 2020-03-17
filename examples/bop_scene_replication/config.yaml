@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <bop_dataset_path> <output_dir>
 {
   "version": 2,
   "setup": {
