@@ -47,6 +47,9 @@ class Renderer(Module):
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
        "use_alpha", "If true, the alpha channel stored in .png textures is used."
     """
+
+    DEPTH_END = 25.1
+
     def __init__(self, config):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
@@ -150,6 +153,7 @@ class Renderer(Module):
         # Mist settings
         depth_start = self.config.get_float("depth_start", 0.1)
         depth_range = self.config.get_float("depth_range", 25.0)
+        Renderer.DEPTH_END = depth_start + depth_range
         bpy.context.scene.world.mist_settings.start = depth_start
         bpy.context.scene.world.mist_settings.depth = depth_range
         bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")
@@ -169,7 +173,7 @@ class Renderer(Module):
         links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
         # map the values 0-1 to range depth_start to depth_range
         mapper_node.inputs['To Min'].default_value = depth_start
-        mapper_node.inputs['To Max'].default_value = depth_range
+        mapper_node.inputs['To Max'].default_value = depth_start + depth_range
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
