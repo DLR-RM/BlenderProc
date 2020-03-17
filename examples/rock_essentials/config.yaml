@@ -4,7 +4,8 @@
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
-      "h5py"
+      "h5py",
+      "scikit-image"
     ]
   },
   "global": {

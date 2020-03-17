@@ -23,7 +23,7 @@ python run.py examples/suncg_basic/config.yaml <path to cam_pose file> <path to 
 * Loads camera positions from a given file: `camera.CameraLoader` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
 * Renders normals: `renderer.NormalRenderer` module.
-* Renders semantic segmentation map: `renderer.RgbRenderer` module.
+* Renders semantic segmentation map: `renderer.SegMapRenderer` module.
 * Renders rgb and depth: `renderer.RgbRenderer` module.
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 

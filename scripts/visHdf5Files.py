@@ -4,7 +4,9 @@ import h5py
 import argparse
 import numpy as np
 from matplotlib import pyplot as plt
-
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__)))
+from utils import flow_to_rgb
 
 parser = argparse.ArgumentParser("Script to visualize hdf5 files")
 
@@ -40,6 +42,9 @@ def visFile(filePath, show=True):
 					keys = [key for key in data.keys()]
 				for key in keys:
 					val = np.array(data[key])
+					if 'flow' in key and 'version' not in key:
+						val = flow_to_rgb(val)
+
 					if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 3:
 						plt.figure()
 						plt.title("{} in {}".format(key, os.path.basename(filePath)))

@@ -109,10 +109,10 @@ class BopLoader(Module):
                         self.set_object_pose(cur_obj, inst, mm2m)
                 
                 cam_H_c2w = self.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
+                
+                #set camera intrinsics and extrinsics 
                 config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), 
                                  "camK": list(cam_K.flatten())})
-
-                #set intrinsics and extrinsics 
                 camera_module._set_cam_intrinsics(cam, config)
                 camera_module._set_cam_extrinsics(cam_ob, config)
 
