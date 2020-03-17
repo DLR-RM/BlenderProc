@@ -1,0 +1,76 @@
+# Args: <bop_dataset_path> <output_dir>
+{
+  "version": 2,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py",
+      "scikit-image",
+      "pypng==0.0.18",
+      "scipy==1.2.2"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:1>",
+      "sys_paths": ["/path/to/bop_toolkit"]
+    },
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {}
+    },
+    {
+      "module": "loader.BopLoader",
+      "config": {
+        "bop_dataset_path": "<args:0>",
+        "mm2m": True,
+        "split": "val",
+        "scene_id": 3,
+        "model_type": ""
+      }
+    },
+    {
+      "module": "lighting.LightSampler",
+      "config": {
+        "lights": [
+          {
+            "location": {
+              "provider": "sampler.Shell",
+              "center": [0, 0, -0.8],
+              "radius_min": 2,
+              "radius_max": 4,
+              "elevation_min": 40,
+              "elevation_max": 89
+            },
+            "type": "POINT",
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "samples": 150
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": "instance"
+      }
+    },
+    {
+      "module": "writer.ObjectStateWriter",
+      "config": {
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}

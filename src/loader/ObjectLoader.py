@@ -1,4 +1,3 @@
-
 import bpy
 
 from src.loader.Loader import Loader

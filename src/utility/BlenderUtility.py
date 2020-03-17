@@ -63,10 +63,11 @@ def get_bounds(obj):
 
 def check_bb_intersection(obj1,obj2):
     """
+    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
+        The surrounding/including axis-aligned bounding box is calculated and used to check the intersection
+
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
-        The enclosing axis-aligned bounding box is calculated and used to check the intersection
     returns a boolean
     """
     b1w = get_bounds(obj1)
@@ -162,7 +163,6 @@ def check_intersection(obj, obj2, cache = None):
         # plus the average direction of the normal to get away from the object itself
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
-
 
         t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
@@ -261,12 +261,13 @@ def get_all_mesh_objects():
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
-def load_image(file_path):
+def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.
 
     The alpha channel is neglected.
 
     :param file_path: The path to the image.
+    :param num_channels: Number of channels to return.
     :return: The numpy array
     """
     # load image with blender function
@@ -279,17 +280,15 @@ def load_image(file_path):
     if file_path.endswith('.png') or file_path.endswith('.jpg'):
         # convert the 0 to 1 space to 0 ... 255 and save it as uint8
         img = (img * 255).astype(np.uint8)
-    return img[:, :, :3]
+    return img[:, :, :num_channels]
 
 def get_bound_volume(obj):
     """ Gets a volume of a bounding box.
-
     :param obj: Mesh object.
     :return: volume of a bounding box.
     """
     bb = get_bounds(obj)
     return abs(bb[1][2] - bb[0][2]) * abs(bb[2][1] - bb[1][1]) * abs(bb[7][0] - bb[0][0])
-
 
 def resize(img, new_size, method="nearest"):
     method = method.lower()
@@ -299,3 +298,21 @@ def resize(img, new_size, method="nearest"):
         return np.asarray(Image.fromarray(img).resize(new_size, Image.NEAREST))
     else:
         raise Exception("Unknown resizing method")
+
+def duplicate_objects(objects):
+    """
+    Creates duplicates of objects, first duplicates are given name <orignial_object_name>.001
+    
+    :param objects: an object or a list of objects to be duplicated
+    :return: a list of objects
+    """
+    if not isinstance(objects, list):
+        objects = [objects]
+
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in objects:
+        obj.select_set(True)
+    bpy.ops.object.duplicate()
+    duplicates = bpy.context.selected_objects
+    bpy.ops.object.select_all(action='DESELECT')
+    return duplicates

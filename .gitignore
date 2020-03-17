@@ -4,6 +4,8 @@ blender
 .idea/
 .vscode/
 output/
+debug/
+.vscode
 *.pyc
 *.swp
 docs/build/
