@@ -153,6 +153,8 @@ class StereoGlobalMatchingWriter(Module):
        "window_size", "Semi-global matching kernel size. Should be an odd number. Type: int. Optional. Default value: 7"
        "num_disparities", "Semi-global matching number of disparities. Should be > 0 and divisible by 16. Type: int. Optional. Default value: 32"
        "min_disparity", "Semi-global matching minimum disparity. Type: int. Optional. Default value: 0"
+
+       "output_disparity", "Additionally outputs the disparity map. Type: bool. Optional. Default value: False"
     """
 
     def __init__(self, config):
@@ -230,7 +232,9 @@ class StereoGlobalMatchingWriter(Module):
         if self.config.get_bool("depth_completion", True):
             depth = fill_in_fast(depth, self.depth_max)
 
-        return depth
+        
+        disparity = np.int16(disparity)
+        return depth, disparity
 
     def run(self):
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
@@ -264,6 +268,9 @@ class StereoGlobalMatchingWriter(Module):
             imgL = load_image(path_l % frame)
             imgR = load_image(path_r % frame)
 
-            depth = self.sgm(imgL, imgR)
+            depth, disparity = self.sgm(imgL, imgR)
 
             np.savez_compressed(os.path.join(self.output_dir, "stereo-depth_%04d") % frame, depth=depth)
+
+            if self.config.get_bool("output_disparity", False):
+                np.savez_compressed(os.path.join(self.output_dir, "disparity_%04d") % frame, disparity=disparity)                
