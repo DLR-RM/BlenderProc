@@ -9,7 +9,7 @@ import numpy as np
 from src.utility.SGMUtility import fill_in_fast
 from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
-from src.utility.BlenderUtility import resize
+from src.utility.SGMUtility import resize
 from src.renderer.Renderer import Renderer
 
 
