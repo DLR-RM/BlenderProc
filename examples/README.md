@@ -25,7 +25,7 @@ It will give you an idea about how, why and when certain things happen.
 * [optical_flow](optical_flow): obtaining forward/backward flow values between consecutive key frames.
 
 ### Benchmark for 6D Object Pose Estimation (BOP)
-We provide two example configs that interface with the BOP datasets. 
+We provide two example configs that interface with the BOP datasets.
 
 * [bop_scene_replication](bop_scene_replication): Replicates whole scenes (object poses, camera intrinsics and extrinsics) from BOP
 * [bop_sampling](bop_sampling): Loads BOP objects and samples object, camera and light poses

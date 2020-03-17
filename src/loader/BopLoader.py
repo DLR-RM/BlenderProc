@@ -258,4 +258,4 @@ class BopLoader(Module):
 
         principled_node = nodes.get("Principled BSDF")
 
-        links.new(attr_node.outputs['Color'], principled_node.inputs[0])
+        links.new(attr_node.outputs['Color'], principled_node.inputs['Color'])
