@@ -1,0 +1,121 @@
+# Args: <obj_file> <obj_file> <output_dir>
+{
+  "version": 2,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "<args:2>"
+    }
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {}
+    },
+    {
+      "module": "loader.SuncgLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+          "path": "<args:1>",
+          "add_properties": {
+            "replace": "chair",
+          }
+        },
+    },
+    {
+     "module": "object.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "replace": "chair"
+          }
+        }
+      }
+    },
+    {
+      "module": "manipulators.ObjectReplacer",
+      "config": {
+        "replace_ratio": 1,
+        "copy_properties": True,
+        "objects_to_be_replaced": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "coarse_grained_class": "chair",
+              "type": "MESH"
+            }
+        },
+        "objects_to_replace_with": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "replace": "chair",
+              "type": "MESH"
+            }
+        },
+        "ignore_collision_with": {
+          "provider": "getter.Entity",
+            "conditions": {
+              "name": "Floor",
+              "type": "MESH"
+            }
+        },
+      }
+    },
+    {
+      "module": "camera.SuncgCameraSampler",
+      "config": {
+        "cam_poses": [{
+          "number_of_samples": 10,
+          "proximity_checks": {
+            "min": 1.0
+          },
+          "min_interest_score": 0.4,
+          "location": {
+            "provider":"sampler.Uniform3d",
+            "max":[0, 0, 2],
+            "min":[0, 0, 0.5]
+          },
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.2217, 0, 6.283185307],
+              "min":[1.2217, 0, 0]
+            }
+          },
+        }]
+      }
+    },
+    {
+      "module": "lighting.SuncgLighting",
+      "config": {}
+    },
+    {
+      "module": "writer.CameraStateWriter",
+      "config": {
+        "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y", "customprop_room_id"]
+      }
+    },
+    {
+      "module": "renderer.NormalRenderer",
+      "config": {}
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+    }
+  ]
+}
