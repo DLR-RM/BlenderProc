@@ -122,3 +122,8 @@ Finally, we add the module responsible for stereo matching. This module has the 
     * These are usually the most important parameters that need to be tuned. It is advisable that you try the `StereoGlobalMatchingWriter` externally on a few test images 
     to tune the parameters, and then apply it in BlenderProc.
   
+## Visualizaton
+Visualize the generated data:
+```
+python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
+```
