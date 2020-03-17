@@ -235,7 +235,7 @@ class BopLoader(Module):
         
         if mat is None:
             # create material
-            mat = bpy.data.materials.new(name="Material")
+            mat = bpy.data.materials.new(name="bop_vertex_col_material")
 
         mat.use_nodes = True
 
