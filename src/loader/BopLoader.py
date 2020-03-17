@@ -40,6 +40,7 @@ class BopLoader(Module):
                 sys.path.append(sys_path)
         
     def run(self):
+        """ Load BOP data """ 
         
         bop_dataset_path = self.config.get_string("bop_dataset_path")
         scene_id = self.config.get_int("scene_id", -1)
