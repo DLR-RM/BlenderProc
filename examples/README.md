@@ -24,6 +24,12 @@ It will give you an idea about how, why and when certain things happen.
 * [coco annotations](coco_annotations): generating COCO annotations.
 * [optical_flow](optical_flow): obtaining forward/backward flow values between consecutive key frames.
 
+### Benchmark for 6D Object Pose Estimation (BOP)
+We provide two example configs that interface with the BOP datasets.
+
+* [bop_scene_replication](bop_scene_replication): Replicates whole scenes (object poses, camera intrinsics and extrinsics) from BOP
+* [bop_sampling](bop_sampling): Loads BOP objects and samples object, camera and light poses
+
 ### Dataset related examples
 
 We are providing limited dataset support, for example for SUNCG, Replica, Rock Essentials and others.
@@ -32,3 +38,4 @@ These can be found in:
 * [suncg_basic](suncg_basic)
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
 * [rock_essentials](rock_essentials)
+

@@ -1,6 +1,6 @@
 import bpy
 
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
 from src.main.Module import Module
 
 
@@ -25,7 +25,7 @@ class ObjectPoseSampler(Module):
         placed = []
         # After this many tries we give up on current object and continue with the rest
         max_tries = self.config.get_int("max_iterations", 1000)
-        objects = self.config.get_list("objects_to_sample")
+        objects = self.config.get_list("objects_to_sample", get_all_mesh_objects())
 
         # cache to fasten collision detection
         cache = {}

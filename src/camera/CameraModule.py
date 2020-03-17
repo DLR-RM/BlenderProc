@@ -60,18 +60,23 @@ class CameraModule(Module):
     def _set_cam_intrinsics(self, cam, config):
         """ Sets camera intrinsics from a source with following priority
 
-           1. cam_K if defined in config file
-           2. function argument cam_K if not None
-           3. constant cam['loaded_intrinsics'] if set in Loader
-           4. default/config FOV
-
+           1. from config if defined
+           2. custom property cam['loaded_intrinsics'] if set in Loader
+           3. default config
+                resolution_x/y: 512 
+                pixel_aspect_x: 1
+                clip_start:   : 0.1
+                clip_end      : 1000
+                fov           : 0.691111
         :param config: A configuration object with cam intrinsics.
         """
+
         width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
         if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
             width, height = cam['loaded_resolution']
         else:
             bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
 
@@ -113,6 +118,7 @@ class CameraModule(Module):
         cam.stereo.convergence_distance = config.get_float("convergence_distance", 1.95)
         # Distance between the camera pair (Default value is the same as the default blender value)
         cam.stereo.interocular_distance = config.get_float("interocular_distance", 0.065)
+
 
     def _set_cam_extrinsics(self, cam_ob, config):
         """ Sets camera extrinsics according to the config.
@@ -156,4 +162,3 @@ class CameraModule(Module):
         else:
             cam2world_matrix = Matrix(np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32))
         return cam2world_matrix
-

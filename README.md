@@ -34,7 +34,7 @@ This runs all modules specified in the config file in a step-by-step fashion in 
 
 The following modules are already implemented and ready to use:
 
-* Loading: *.obj, SunCG, Replica scenes.
+* Loading: *.obj, SunCG, Replica scenes, BOP datasets.
 * Lighting: Set, sample lights, automatic lighting of SunCG scenes.
 * Cameras: set, sample or load camera poses from file.
 * Rendering: RGB, depth, normal and segmentation images.
@@ -58,7 +58,7 @@ Now head on to the [examples](examples) and check the README there: get some bas
 
 ## Source Code
 
-Now it's a good time to take a look at the [soruce code](src): all modules are there. Explore and look at the short guide about writing your own modules.
+Now it's a good time to take a look at the [source code](src): all modules are there. Explore and look at the short guide about writing your own modules.
 
 ## Contributions
 
@@ -66,4 +66,4 @@ Found a bug? help us by reporting it. Want a new feature in the next BlenderProc
 
 ## Change log
 
-See our [change log](change_log.md).
+See our [change log](change_log.md). 
