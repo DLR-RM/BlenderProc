@@ -1,6 +1,6 @@
 # Args: <bop_dataset_path> <output_dir>
 {
-  "version": 3,
+  "version": 2,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -111,6 +111,11 @@
     },
     {
       "module": "writer.CocoAnnotationsWriter",
+      "config": {
+      }
+    },
+    {
+      "module": "writer.ObjectStateWriter",
       "config": {
       }
     },

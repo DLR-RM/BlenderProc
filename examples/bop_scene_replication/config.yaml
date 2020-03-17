@@ -63,6 +63,11 @@
       }
     },
     {
+      "module": "writer.ObjectStateWriter",
+      "config": {
+      }
+    },
+    {
       "module": "writer.Hdf5Writer",
       "config": {
       }
