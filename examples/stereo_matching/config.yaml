@@ -7,7 +7,6 @@
       "h5py",
       "opencv-python",
       "numpy",
-      "imageio",
       "Pillow",
       "opencv-contrib-python",
       "scipy"

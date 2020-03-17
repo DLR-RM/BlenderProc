@@ -38,7 +38,6 @@ python run.py examples/stereo_matching/config.yaml <path to cam_pose file> <path
       "h5py",
       "opencv-python",
       "numpy",
-      "imageio",
       "Pillow",
       "opencv-contrib-python",
       "scipy"
