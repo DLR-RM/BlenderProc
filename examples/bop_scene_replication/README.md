@@ -25,14 +25,6 @@ python run.py examples/bop_scene_replication/config.yaml /path/to/bop/dataset /p
 * Renders instance segmentation masks
 * Writes labels and images to compressed hdf5 files in output_dir
 
-## Visualization
-
-Visualize the generated data and labels:
-
-```
-python scripts/visHdf5Files.py /path/to/output_dir/0.hdf5
-```
-
 ## Config file
 
 ### BopLoader
@@ -54,6 +46,13 @@ If `scene_id` is specified, BopLoader recreates the specified scene of the BOP d
 Be careful to choose a `split` that is actually present in the given BOP dataset and that has ground truth.  
 For some BOP datasets you can choose the `model_type`, e.g. `reconst` or `cad` in T-LESS. 
 
+## Visualization
+
+Visualize the generated data and labels:
+
+```
+python scripts/visHdf5Files.py /path/to/output_dir/0.hdf5
+```
 
 ## More examples
 

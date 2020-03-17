@@ -28,19 +28,6 @@ python run.py examples/bop_sampling/config.yaml /path/to/bop/dataset /path/to/ou
     * Renders instance segmentation masks
     * Writes labels and images to compressed hdf5 files in output_dir
 
-## Visualization
-
-Visualize the generated data and labels:
-```
-python scripts/visHdf5Files.py /path/to/output_dir/0.hdf5
-```
-
-Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:
-```
-python scripts/vis_coco_annotation.py /path/to/output_dir
-``` 
-
-
 ## Config file
 
 ### BopLoader
@@ -66,6 +53,18 @@ Following modules handle the sampling.
 
 - `noof_cams_per_scene` after which the object poses are resampled
 - `total_noof_cams` to generate
+
+## Visualization
+
+Visualize the generated data and labels:
+```
+python scripts/visHdf5Files.py /path/to/output_dir/0.hdf5
+```
+
+Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:
+```
+python scripts/vis_coco_annotation.py /path/to/output_dir
+``` 
 
 ## More examples
 
