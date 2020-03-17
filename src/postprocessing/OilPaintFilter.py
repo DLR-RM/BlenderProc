@@ -45,9 +45,9 @@ class OilPaintFilter(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "filter_size", "Mode filter size."
-       "edges_only", "If true, applies the filter on the edges only. For RGB images, they should be represented in uint8 arrays"
-       "rgb", "Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated).
+       "filter_size", "Mode filter size, should be an odd number. Type: int. Optional. Default value: 5"
+       "edges_only", "If true, applies the filter on the edges only. For RGB images, they should be represented in uint8 arrays. Type: bool. Optional. Default value: True"
+       "rgb", "Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated). Type: bool. Default value: False" 
     """
 
     def __init__(self, config):

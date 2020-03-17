@@ -102,7 +102,7 @@ We enable stereo rendering here. Also notice the order of the modules, where the
       "module": "writer.StereoGlobalMatchingWriter",
       "config": {
         "focal_length": 650.018,
-        "enable_disparity_filter": false
+        "disparity_filter": false
       }
     },
 ```
@@ -110,7 +110,7 @@ Finally, we add the module responsible for stereo matching. This module has the 
 * It is based on OpenCV's implementation of [stereo semi global matching](https://elib.dlr.de/73119/1/180Hirschmueller.pdf).
 * Its pipeline runs as follows:
     * Compute the disparity map between the two images. After specifying the required parameters.
-    * Optional use of a disparity filter (namely `wls_filter`). Enabled by setting `disparity_filter` 
+    * Optional use of a disparity filter (namely `wls_filter`). Enabled by setting `disparity_filter` (Enabling it could possibly lead to less accurate depth values. One should experiment with this parameter).
     * Triangulate the depth values using the focal length and disparity.
     * Clip the depth map from 0 to `depth_max`, where this value is retrieved from `renderer.Renderer`.
     * Apply an optional [depth completion routine](https://github.com/kujason/ip_basic/blob/master/ip_basic/depth_map_utils.py), based on simple image processing techniques. This is enabled by setting `depth_completion`.
