@@ -105,13 +105,14 @@ class BopLoader(Module):
                     
                     # load scene objects
                     for inst in insts:
-                        cur_obj = self._load_mesh(inst['obj_id'], model_p, mm2m=mm2m)
+                        cur_obj = self._load_mesh(inst['obj_id'], model_p)
                         self.set_object_pose(cur_obj, inst, mm2m)
                 
                 cam_H_c2w = self.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
                 config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), 
                                  "camK": list(cam_K.flatten())})
 
+                #set intrinsics and extrinsics 
                 camera_module._set_cam_intrinsics(cam, config)
                 camera_module._set_cam_extrinsics(cam_ob, config)
 
@@ -160,6 +161,7 @@ class BopLoader(Module):
         print('-----------------------------')
 
         obj.matrix_world = Matrix(cam_H_m2w)
+        obj.scale = Vector((mm2m, mm2m, mm2m))
 
 
     def get_ref_cam_extrinsics_intrinsics(self, sc_camera, cam_id, insts, mm2m):
@@ -194,13 +196,11 @@ class BopLoader(Module):
                 return True
         return False
 
-    def _load_mesh(self, obj_id, model_p, mm2m=1):
+    def _load_mesh(self, obj_id, model_p):
         """ Loads or copies BOP mesh and sets category_id
 
         :param obj_id: The obj_id of the BOP Object (int)
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit
-        :param mm2m: "Specify whether to convert object scale from mm to meter"
-
         """
 
         model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
@@ -212,7 +212,6 @@ class BopLoader(Module):
             bpy.ops.import_mesh.ply(filepath = model_path)
 
         cur_obj = bpy.context.selected_objects[-1]
-        cur_obj.scale = Vector((mm2m, mm2m, mm2m))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path
 

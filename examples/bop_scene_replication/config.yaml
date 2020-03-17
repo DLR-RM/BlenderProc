@@ -1,4 +1,4 @@
-# Args: <bop_dataset_path> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "version": 2,
   "setup": {
@@ -6,7 +6,7 @@
     "pip": [
       "h5py",
       "scikit-image",
-      "pypng==0.0.20",
+      "pypng==0.0.18",
       "scipy==1.2.2"
     ]
   },
@@ -39,7 +39,7 @@
             "location": {
               "provider": "sampler.Shell",
               "center": [0, 0, -0.8],
-              "radius_min": 1,
+              "radius_min": 2,
               "radius_max": 4,
               "elevation_min": 40,
               "elevation_max": 89
