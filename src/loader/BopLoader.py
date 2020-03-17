@@ -196,7 +196,7 @@ class BopLoader(Module):
                 return True
         return False
 
-    def _load_mesh(self, obj_id, model_p):
+    def _load_mesh(self, obj_id, model_p, mm2m = 1):
         """ Loads or copies BOP mesh and sets category_id
 
         :param obj_id: The obj_id of the BOP Object (int)
@@ -213,6 +213,7 @@ class BopLoader(Module):
             bpy.ops.import_mesh.ply(filepath = model_path)
 
         cur_obj = bpy.context.selected_objects[-1]
+        cur_obj.scale = Vector((mm2m, mm2m, mm2m))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path
 
@@ -259,4 +260,4 @@ class BopLoader(Module):
 
         principled_node = nodes.get("Principled BSDF")
 
-        links.new(attr_node.outputs['Color'], principled_node.inputs['Color'])
+        links.new(attr_node.outputs['Color'], principled_node.inputs['Base Color'])
