@@ -96,7 +96,7 @@ class BopLoader(Module):
             
             for i, (cam_id, insts) in enumerate(sc_gt.items()):
 
-                cam_K, cam_H_m2c_ref = self.get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, 
+                cam_K, cam_H_m2c_ref = self._get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, 
                                                                                     insts, mm2m)
 
                 if i == 0:
@@ -108,7 +108,7 @@ class BopLoader(Module):
                         cur_obj = self._load_mesh(inst['obj_id'], model_p)
                         self.set_object_pose(cur_obj, inst, mm2m)
                 
-                cam_H_c2w = self.compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
+                cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
                 
                 #set camera intrinsics and extrinsics 
                 config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), 
@@ -122,7 +122,7 @@ class BopLoader(Module):
                 bpy.context.scene.frame_end = frame_id + 1                
 
 
-    def compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
+    def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
 
         :param cam_H_m2c_ref (ndarray): (4x4) homog trafo from object to world coords 
@@ -141,10 +141,10 @@ class BopLoader(Module):
 
         return cam_H_c2w
 
-    def set_object_pose(self, obj, inst, mm2m):
+    def set_object_pose(self, cur_obj, inst, mm2m):
         """ Set object pose for current obj
 
-        :param obj: blender object
+        :param cur_obj: blender object
         :param inst (dict): instance from BOP scene_gt file  
         :param mm2m (int): factor to transform set pose in mm or meters
         """
@@ -160,11 +160,11 @@ class BopLoader(Module):
         print("Model: {}".format(cam_H_m2w))
         print('-----------------------------')
 
-        obj.matrix_world = Matrix(cam_H_m2w)
-        obj.scale = Vector((mm2m, mm2m, mm2m))
+        cur_obj.matrix_world = Matrix(cam_H_m2w)
+        cur_obj.scale = Vector((mm2m, mm2m, mm2m))
 
 
-    def get_ref_cam_extrinsics_intrinsics(self, sc_camera, cam_id, insts, mm2m):
+    def _get_ref_cam_extrinsics_intrinsics(self, sc_camera, cam_id, insts, mm2m):
         """ Get camK and transformation from object instance 0 to camera cam_id as reference
         :param sc_camera (dict): BOP scene_camera file
         :param cam_id (int): BOP camera id 
@@ -201,6 +201,7 @@ class BopLoader(Module):
 
         :param obj_id: The obj_id of the BOP Object (int)
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit
+        :return 
         """
 
         model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
@@ -224,7 +225,7 @@ class BopLoader(Module):
         """ Loads / defines materials, e.g. vertex colors 
         
         :param object: The object to use.
-        return: material with vertex color (bpy.data.materials)
+        :return: material with vertex color (bpy.data.materials)
 
         """
 
