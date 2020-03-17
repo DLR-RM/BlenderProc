@@ -106,7 +106,7 @@ We enable stereo rendering here. Also notice the order of the modules, where the
     },
 ```
 Finally, we add the module responsible for stereo matching. This module has the following attributes and configurations:
-* It is based on OpenCV's implementation of [stereo semi global matching](https://elib.dlr.de/73119/1/180Hirschmueller.pdf).
+* It is based on OpenCV's [implementation](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html?highlight=sgbm#stereosgbm-stereosgbm) of [stereo semi global matching](https://elib.dlr.de/73119/1/180Hirschmueller.pdf).
 * Its pipeline runs as follows:
     * Compute the disparity map between the two images. After specifying the required parameters.
     * Optional use of a disparity filter (namely `wls_filter`). Enabled by setting `disparity_filter` (Enabling it could possibly lead to less accurate depth values. One should experiment with this parameter).
