@@ -36,7 +36,7 @@ def process_img(img, key):
     return img
 
 
-def convert_array(array, key, file_path):
+def save_array_as_image(array, key, file_path):
     if len(array.shape) == 2 or len(array.shape) == 3 and array.shape[2] == 3:
         val = process_img(array, key)
         if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 1:
@@ -48,20 +48,20 @@ def convert_array(array, key, file_path):
 def convert_hdf(base_file_path):
     if os.path.exists(base_file_path):
         if os.path.isfile(base_file_path):
+            base_name = str(os.path.basename(base_file_path)).split('.')[0]
             with h5py.File(base_file_path, 'r') as data:
                 keys = [key for key in data.keys()]
                 for key in keys:
                     val = np.array(data[key])
                     if len(val.shape) < 4:
                         # mono image
-                        file_path = '{}_{}.png'.format(key, str(os.path.basename(base_file_path)).split('.')[0])
-                        convert_array(val, key, file_path)
+                        file_path = '{}_{}.png'.format(key, base_name)
+                        save_array_as_image(val, key, file_path)
                     else:
                         # stereo image
-                        for image_index in range(val.shape[0]):
-                            file_path = '{}_{}_{}.png'.format(key, str(os.path.basename(base_file_path)).split('.')[0],
-                                                              image_index)
-                            convert_array(val[image_index], key, file_path)
+                        for image_index, image_value in enumerate(val):
+                            file_path = '{}_{}_{}.png'.format(key, base_name, image_index)
+                            save_array_as_image(image_value, key, file_path)
 
         else:
             print("The path is not a file")
