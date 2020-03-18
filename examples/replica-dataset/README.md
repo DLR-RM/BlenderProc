@@ -103,6 +103,26 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 ```
 
 `camera.ReplicaCameraSampler` samples multiple camera poses per every imported room with camera-object collision check and obstacle check.
+## Material Manipulator 
+
+```yaml
+{
+  "module": "materials.MaterialManipulator",
+  "config": {
+    "selector": {
+      "provider": "getter.Material",
+      "conditions": {
+        "name": "ReplicaMaterial"
+      }
+    },
+    change_to_vertex_color: "Col"
+  }
+},
+``` 
+The `materials.Manipulator` changes the material of the Replica objects so that the vertex color is renderer, this makes it possible to render colors on Replica scenes.
+##### Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.
+
+If you are in need of high-res color images, do we propose that you, yourself can try to implement the texture importer for the replica dataset.
 
 ## Visualization
 
