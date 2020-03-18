@@ -207,16 +207,18 @@ repo_root_directory = os.path.dirname(os.path.realpath(__file__))
 path_src_run = os.path.join(repo_root_directory, "src/run.py")
 
 if not args.batch_process:
-    p = subprocess.Popen([blender_run_path, "--background", "--python", path_src_run, "--", args.config] + args.args,
+    p = subprocess.Popen([blender_run_path, "--background", "--python-exit-code", "2", "--python", path_src_run, "--", args.config] + args.args,
                          env=dict(os.environ, PYTHONPATH=""), cwd=repo_root_directory)
 else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
-    p = subprocess.Popen([blender_run_path, "--background", "--python", path_src_run, "--",  args.config, "--batch-process", args.batch_process],
+    p = subprocess.Popen([blender_run_path, "--background", "--python-exit-code", "2", "--python", path_src_run, "--",  args.config, "--batch-process", args.batch_process],
                          env=dict(os.environ, PYTHONPATH=""), cwd=repo_root_directory)
 try:
     p.wait()
 except KeyboardInterrupt:
     try:
-       p.terminate()
+        p.terminate()
     except OSError:
-       pass
+        pass
     p.wait()
+
+exit(p.returncode)
