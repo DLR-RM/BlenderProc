@@ -20,6 +20,12 @@ python run.py examples/stereo_matching/config.yaml <path to cam_pose file> <path
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.
 * `examples/stereo_matching/output`: path to the output directory.
 
+## Visualizaton
+Visualize the generated data:
+```
+python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
+```
+
 ## Steps
 
 * Loads a SUNCG scene: `loader.SuncgLoader` module.
@@ -121,9 +127,3 @@ Finally, we add the module responsible for stereo matching. This module has the 
     * `min_disparity`
     * These are usually the most important parameters that need to be tuned. It is advisable that you try the `StereoGlobalMatchingWriter` externally on a few test images 
     to tune the parameters, and then apply it in BlenderProc.
-  
-## Visualizaton
-Visualize the generated data:
-```
-python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
-```
