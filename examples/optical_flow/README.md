@@ -24,11 +24,17 @@ python run.py examples/optical_flow/config.yaml examples/optical_flow/camera_pos
 ```
 
 * `examples/optical_flow/config.yaml`: path to the configuration file with pipeline configuration.
-
-The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `examples/optical_flow/camera_positions`: text file with parameters of camera positions.
 * `examples/optical_flow/scene.obj`: path to the object file with the basic scene.
 * `examples/optical_flow/output`: path to the output directory.
+
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
+```
 
 ## Steps
 
@@ -62,14 +68,6 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 * Per default, Blender uses the bottom left corner as coordinate system origin. OpenCV and popular Flow datasets use the upper left corner instead - change the flag `"blender_image_coordinate_style": True` if you want the default Blender behaviour. Note that the colors in the visualization will be different!
 
 => Creates the files `forward_flow_000{0, 1, 2, 3, 4}.npy` and / or `backward_flow_000{0, 1, 2, 3, 4}.npy`.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
-```
 
 ## More examples
 
