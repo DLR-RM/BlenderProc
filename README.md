@@ -1,9 +1,8 @@
 # BlenderProc
 
-
-<div style="text-align:center">
+<p align="center">
 <img src="readme.jpg" alt="Front readme image" width=430>
-</div>
+</p>
 
 A procedural blender pipeline for image generation for deep learning.
 
