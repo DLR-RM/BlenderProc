@@ -19,6 +19,14 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 * `examples/basic/scene.obj`: path to the object file with the basic scene.
 * `examples/basic/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/basic/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
@@ -202,14 +210,6 @@ The file `0.h5py` would therefore look like the following:
 * If you want to keep them, put `"output_is_temp": False` into the config of the corresponding module or in the `Global` section.
 
 => Creates the files `0.h5py` and `1.h5py`
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/basic/output/0.hdf5
-```
 
 ## More examples
 

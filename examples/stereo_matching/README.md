@@ -1,6 +1,7 @@
 # Stereo Matching
 ![](stereo_pair.png)
 ![](stereo_depth.png)
+
 In the first row we can see the rendered stereo RGB images, left and right respectively, and beneath them we can view
 the computed depth image using stereo matching. Note that due to a high discrepancy between the TV and the rest
 of the rendered scene, the visualization is not descriptive enough. This discrepancy or high depth values at the TV
@@ -19,6 +20,12 @@ python run.py examples/stereo_matching/config.yaml <path to cam_pose file> <path
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.
 * `examples/stereo_matching/output`: path to the output directory.
+
+## Visualizaton
+Visualize the generated data:
+```
+python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
+```
 
 ## Steps
 
@@ -121,9 +128,3 @@ Finally, we add the module responsible for stereo matching. This module has the 
     * `min_disparity`
     * These are usually the most important parameters that need to be tuned. It is advisable that you try the `StereoGlobalMatchingWriter` externally on a few test images 
     to tune the parameters, and then apply it in BlenderProc.
-  
-## Visualizaton
-Visualize the generated data:
-```
-python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
-```

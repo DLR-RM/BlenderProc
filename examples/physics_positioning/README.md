@@ -18,6 +18,14 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
 * `examples/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.
 * `examples/physics_positioning/passive.obj`: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `active.obj` (6 spheres) with `"physics" = True`: `loader.ObjectLoader` module.
@@ -107,14 +115,6 @@ Nevertheless the simulation is run at least for 4 seconds and at most for 20 sec
 
 At the end of the simulation the position of all spheres is made fixed again.
 In this way we can easily sample random positions of the spheres on top of the bumpy plane.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
-```
 
 ## More examples
 

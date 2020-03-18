@@ -9,12 +9,16 @@ The focus of this example is the `loader.RockEssentialsRockLoader`, `constructor
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} examples/rock_essentials/output
+python run.py examples/rock_essentials/config.yaml <re_dataset> examples/rock_essentials/output
 ``` 
 
 * `examples/rock_essentials/config.yaml`: path to the configuration file with pipeline configuration.
-* `${PATH_TO_RE_DATASET}`: path to the downloaded rock essential dataset 
+* `<re_dataset>`: path to the downloaded Rock Essentials dataset 
 * `examples/rock_essentials/output`: path to the output directory.
+
+## Visualization
+
+In the output folder you will find a `coco_data/` folder with a `coco_annotations.json` file and a series of rgb images. Note, that due to the configuration of `global` section of the config, output of multiple consecutive BlenderProc runs will be appended.
 
 ## Steps
 
@@ -180,10 +184,6 @@ To counter this, we are setting two new parameters to `object.PhysicsPositioning
 * `"steps_per_sec"`: Number of simulation steps taken per second. 
 
 Which usually helps.
-
-## Visualization
-
-In the output folder you will find a `coco_data/` folder with a `coco_annotations.json` file and a series of rgb images. Note, that due to the configuration of `global` section of the config, output of multiple consecutive BlenderProc runs will be appended.
 
 ## More examples
 

@@ -20,6 +20,14 @@ python run.py examples/material_manipulation/config.yaml examples/material_manip
 * `examples/material_manipulation/scene.obj`: path to the object file with the basic scene.
 * `examples/material_manipulation/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
@@ -68,14 +76,6 @@ The <float> value is used to scale the color input the texture up or down to inc
 
 If one wants to have values sampled once and have them set to defined attribute/properties, set `"mode": "once_for_all"` at the end of this section. 
 By the default it is `"once_for_each"`.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
-```
 
 ## More examples
 

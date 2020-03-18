@@ -16,6 +16,14 @@ python run.py ...
 * `examples/basic/camera_positions`: explanation
 * ...
 
+## Visualization
+
+Visualize the generated data if it is stored in a container.
+
+```
+python scripts/visHdf5Files.py path/to/output/0.hdf5
+```
+
 ## Steps
 
 * Some step: list module(s) that are doing this step.
@@ -39,14 +47,6 @@ Always end the description of the config section with short description of the o
 
 ...
 
-
-## Visualization
-
-Visualize the generated data if it is stored in a container.
-
-```
-python scripts/visHdf5Files.py path/to/output/0.hdf5
-```
 
 ## More examples
 
