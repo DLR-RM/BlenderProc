@@ -1,6 +1,7 @@
 # Stereo Matching
 ![](stereo_pair.png)
 ![](stereo_depth.png)
+
 In the first row we can see the rendered stereo RGB images, left and right respectively, and beneath them we can view
 the computed depth image using stereo matching. Note that due to a high discrepancy between the TV and the rest
 of the rendered scene, the visualization is not descriptive enough. This discrepancy or high depth values at the TV
