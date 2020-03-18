@@ -235,21 +235,9 @@ class Renderer(Module):
                     if texture_node is not None:
                         nodes = slot.material.node_tree.nodes
                         links = slot.material.node_tree.links
+                        node_connected_to_the_output, material_output = \
+                            Utility.get_node_connected_to_the_output_and_unlink_it(slot.material)
 
-
-                        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-                        if output and len(output) == 1:
-                            material_output = output[0]
-                        else:
-                            raise Exception("This material: {} has not one material output!".format(slot.name))
-                        # find the node, which is connected to the output
-                        node_connected_to_the_output = None
-                        for link in links:
-                            if link.to_node == material_output:
-                                node_connected_to_the_output = link.from_node
-                                # remove this link
-                                links.remove(link)
-                                break
                         if node_connected_to_the_output is not None:
                             mix_node = nodes.new(type='ShaderNodeMixShader')
 

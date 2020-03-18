@@ -208,7 +208,6 @@ class Utility:
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
-        print(material.name)
 
         output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
         if output and len(output) == 1:
