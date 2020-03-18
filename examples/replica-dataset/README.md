@@ -14,6 +14,14 @@ python run.py examples/replica-dataset/config.yaml <path_to_the_replica_data_fol
 * `<path_to_the_replica_data_folder>`: Path to the replica dataset directory.
 * `examples/replica-dataset/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
+```
+
 ## Steps
 
 * Load replica room: `loader.ReplicaLoader` module.
@@ -103,14 +111,6 @@ Note that `"data_set_name": "office_1"` is a replica room you want to render. Th
 ```
 
 `camera.ReplicaCameraSampler` samples multiple camera poses per every imported room with camera-object collision check and obstacle check.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
-```
 
 ## More examples
 
