@@ -1,6 +1,9 @@
 # BlenderProc
 
-![](readme.png)
+
+<div style="text-align:center">
+<img src="readme.jpg" alt="Front readme image" width=430>
+</div>
 
 A procedural blender pipeline for image generation for deep learning.
 
