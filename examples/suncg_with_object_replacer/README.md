@@ -16,9 +16,18 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 ```
 
 * `examples/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
-* `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
+* `<path to house.json>`: path to the house.json file of the SUNCG scene you want to render.
 * `<path to new objects>`: path to the `objects_to_replace_with`.
 * `examples/suncg_with_object_replacer/output`: path to the output directory.
+
+
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
+```
 
 ## Steps
 
@@ -34,8 +43,7 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 * Renders rgb and depth: `renderer.RgbRenderer` module.
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 
-## Explanation of specific parts of the config file
-
+## Config file
 
 ### ObjectReplacer
 
@@ -74,14 +82,6 @@ python run.py examples/suncg_with_object_replacer/config.yaml <path to house.jso
 * Furthermore, a probability of `switch_probability` can be set to make the switching probabilistic, if no collision happens between `objects_to_replace_with` and objects in the scene.
 * When `copy_properties` is set to `True`, the `objects_to_replace_with` gets all the custom properties that the `objects_to_be_replaced` used to have.
 * This module doesn't do collision checking between `objects_to_replace_with` and object provided by the `getter.Entity` `ignore_collision_with`.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
-```
 
 ## More examples
 
