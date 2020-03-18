@@ -203,7 +203,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 * The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose.
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before.
-* The module can also apply some post-processing routines based on two parameters, the `output_key` (in this case `depth`) and the post-processor module, which is in this case `postprocessing.TrimRedundantChannels.py`. This makes the output depth map has one channel only, instead of 3.
+* The module can also apply some post-processing routines based on two parameters, the `output_key` (in this case `depth`) and the post-processor module, which is in this case `postprocessing.TrimRedundantChannels.py`. This reduces the depth map from 3 channels to a single channel (the other channels exist for internal reasons). 
 
 
 The file `0.h5py` would therefore look like the following:
