@@ -19,7 +19,7 @@ python run.py examples/coco_annotations/config.yaml examples/coco_annotations/ca
 
 ### Visualizing Annotations
 
-You can use vis_coco_annotation.py like following to visualize annotation over a rendered rgb image:
+You can use vis_coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:
 
 ```
 python scripts/vis_coco_annotation.py [-i <image index>] [-c <coco annotations json>] [-b <base folder of coco json and image files>]
