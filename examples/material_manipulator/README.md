@@ -1,8 +1,9 @@
 # Material selection and manipulation
 
-<div style="text-align:center">
+
+<p align="center">
 <img src="readme.png" alt="Front readme image" width=430>
-</div>
+</p>
 
 
 In this example we demonstrate how to select materials in the scene using `getter.Material` and then manipulate them using the `MaterialManipulator` module.
