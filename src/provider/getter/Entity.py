@@ -4,6 +4,7 @@ import re
 
 from src.main.Provider import Provider
 
+
 class Entity(Provider):
     """ Returns a list of objects in accordance to a condition.
     Specify a desired condition in the format {attribute_name: attribute_value}, note that attribute_value for a custom
@@ -29,7 +30,13 @@ class Entity(Provider):
             },{
                 "name": "Cube.*",   # this checks if the name of the object starts with Cube (treated as a regular expr.)
                 "category": "is_cube" # both have to be true
-            }
+            },{
+                "INSIDE": {         # this checks if the object is inside the bounding box
+                    "x_min": 0,
+                    "x_max": 5.5,
+                    "z_min": -1,
+                    # Missing arguments extend the bounding box to infinity in that direction
+                },
             ]
         }
 
@@ -50,6 +57,7 @@ class Entity(Provider):
     "condition/attribute_name", "Name of any valid object's attribute or custom property. Type: string."
     "condition/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
     """
+
     def __init__(self, config):
         Provider.__init__(self, config)
 
@@ -111,6 +119,23 @@ class Entity(Provider):
                     else:
                         raise Exception("Types are not matching: %s and %s !"
                                         % (type(obj[key]), type(value)))
+                elif key == "INSIDE" or key == "OUTSIDE":
+                    is_inside = True
+                    for axis_index in range(3):
+                        axis_name = "xyz"[axis_index]
+
+                        for direction in ["min", "max"]:
+                            key_name = "{}_{}".format(axis_name, direction)
+                            if key_name in value:
+                                real_position = obj.location[axis_index]
+                                border_position = float(value[key_name])
+                                if (direction == "max" and real_position > border_position) or (
+                                        direction == "min" and real_position < border_position):
+                                    is_inside = False
+
+                    if (key == "INSIDE" and not is_inside) or (key == "OUTSIDE" and is_inside):
+                        select_object = False
+                        break
                 else:
                     select_object = False
                     break
