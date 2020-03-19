@@ -42,6 +42,7 @@ class SuncgLoader(Loader):
         for level in config["levels"]:
             # Build empty level object which acts as a parent for all rooms on the level
             level_obj = bpy.data.objects.new("Level#" + level["id"], None)
+            level_obj["type"] = "Level"
             if "bbox" in level:
                 level_obj["bbox"] = self._correct_bbox_frame(level["bbox"])
             else:
