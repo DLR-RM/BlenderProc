@@ -221,13 +221,11 @@ class SuncgLoader(Loader):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
+            loaded_objects = Utility.import_objects(filepath=path, cached_objects=self._collection_of_loaded_objs)
             if path not in self._collection_of_loaded_objs:
-                loaded_objects = Utility.import_objects(filepath=path)
-                leave_material = False
                 self._collection_of_loaded_objs[path] = loaded_objects
             else:
                 print("Duplicate object: {}".format(path))
-                loaded_objects = duplicate_objects(self._collection_of_loaded_objs[path])
                 for object in loaded_objects:
                     # the original object matrix from the .obj loader -> is not an identity matrix
                     object.matrix_world = Matrix([[1, 0, 0, 0], [0, 0, -1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
@@ -235,18 +233,17 @@ class SuncgLoader(Loader):
                     keys = object.keys()
                     for key in keys:
                         del object[key]
-                leave_material = True
             # Go through all imported objects
             for object in loaded_objects:
                 for key in metadata.keys():
                     object[key] = metadata[key]
 
-                self._transform_and_colorize_object(object, material_adjustments, transform, parent, leave_material)
+                self._transform_and_colorize_object(object, material_adjustments, transform, parent)
 
             # Set the physics property of all imported objects
             self._set_properties(bpy.context.selected_objects)
 
-    def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None, leave_material=False):
+    def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None):
         """ Applies the given transformation to the object and refactors its materials.
 
         This will replace all material nodes with only a diffuse and a texturing node (to speedup rendering).
@@ -256,7 +253,6 @@ class SuncgLoader(Loader):
         :param material_adjustments: A list of adjustments to make. (Each element i corresponds to material_i)
         :param transform: The transformation matrix to apply
         :param parent: The parent object to which the object should be linked
-        :param leave_material: If this is true the material stays the same and is not changed
         """
         if parent is not None:
             object.parent = parent
@@ -265,20 +261,19 @@ class SuncgLoader(Loader):
             # Apply transformation
             object.matrix_world @= transform
 
-        if not leave_material:
-            for mat_slot in object.material_slots:
-                mat = mat_slot.material
+        for mat_slot in object.material_slots:
+            mat = mat_slot.material
 
-                index = mat.name[mat.name.find("_") + 1:]
-                if "." in index:
-                    index = index[:index.find(".")]
-                index = int(index)
+            index = mat.name[mat.name.find("_") + 1:]
+            if "." in index:
+                index = index[:index.find(".")]
+            index = int(index)
 
-                force_texture = index < len(material_adjustments) and "texture" in material_adjustments[index]
-                self._recreate_material_nodes(mat, force_texture)
+            force_texture = index < len(material_adjustments) and "texture" in material_adjustments[index]
+            self._recreate_material_nodes(mat, force_texture)
 
-                if index < len(material_adjustments):
-                    self._adjust_material_nodes(mat, material_adjustments[index])
+            if index < len(material_adjustments):
+                self._adjust_material_nodes(mat, material_adjustments[index])
 
     def _recreate_material_nodes(self, mat, force_texture):
         """ Remove all nodes and recreate a diffuse node, optionally with texture.
