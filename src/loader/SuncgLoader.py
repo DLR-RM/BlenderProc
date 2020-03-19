@@ -194,8 +194,7 @@ class SuncgLoader(Loader):
         bpy.ops.mesh.primitive_cube_add(location=(0, 0, 0))
         box = bpy.context.object
         box.name = "Box#" + node["id"]
-        # Rotate cube to match objects loaded from .obj
-        box.matrix_world @= Matrix.Rotation(math.radians(90), 4, "X")
+        box.matrix_world = Matrix.Identity(4)
         # Scale the cube to the required dimensions
         box.matrix_world @= Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) @ Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) @ Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0))
 
@@ -213,6 +212,8 @@ class SuncgLoader(Loader):
         self._transform_and_colorize_object(box, material_adjustments, transform, parent)
         # set class to void
         box["category_id"] = self.label_index_map["void"]
+        # Rotate cube to match objects loaded from .obj, has to be done after transformations have been applied
+        box.matrix_world = Matrix.Rotation(math.radians(90), 4, "X") @ box.matrix_world
 
     def _load_obj(self, path, metadata, material_adjustments, transform=None, parent=None):
         """ Load the wavefront object file from the given path and adjust according to the given arguments.
