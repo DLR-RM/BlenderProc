@@ -7,13 +7,11 @@ import cv2
 import numpy as np
 
 from src.utility.SGMUtility import fill_in_fast
-from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
 from src.utility.SGMUtility import resize
 from src.renderer.Renderer import Renderer
 
-
-class StereoGlobalMatchingWriter(Module):
+class StereoGlobalMatchingWriter(Renderer):
     """ Writes depth image generated from the stereo global matching algorithm to file
 
     **Configuration**:
@@ -33,13 +31,13 @@ class StereoGlobalMatchingWriter(Module):
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        Renderer.__init__(self, config)
 
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
         if self.rgb_output_key is None:
             raise Exception("RGB output is not registered, please register the RGB renderer before this module.")
 
-        self.output_dir = self._determine_output_dir(False)
+        self.output_dir = self._determine_output_dir()
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
@@ -145,7 +143,12 @@ class StereoGlobalMatchingWriter(Module):
 
             depth, disparity = self.sgm(imgL, imgR)
 
-            np.savez_compressed(os.path.join(self.output_dir, "stereo-depth_%04d") % frame, depth=depth)
+            np.save(os.path.join(self.output_dir, "stereo-depth_%04d") % frame, depth)
 
             if self.config.get_bool("output_disparity", False):
-                np.savez_compressed(os.path.join(self.output_dir, "disparity_%04d") % frame, disparity=disparity)                
+                np.save(os.path.join(self.output_dir, "disparity_%04d") % frame, disparity)
+        self._register_output("stereo-depth_", "stereo-depth", ".npy", "1.0.0")
+        if self.config.get_bool("output_disparity", False):
+            self._register_output("disparity_", "disparity", ".npy", "1.0.0")
+
+
