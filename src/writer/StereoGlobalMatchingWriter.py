@@ -112,10 +112,19 @@ class StereoGlobalMatchingWriter(Renderer):
     def run(self):
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
 
-        cam = bpy.context.scene.camera.data
+        # Collect camera and camera object
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
 
-        self.width = bpy.context.scene.render.resolution_x
-        self.height = bpy.context.scene.render.resolution_y
+        if not 'loaded_resolution' in cam:
+            self.width = self.config.get_int("resolution_x", 512)
+            self.height = self.config.get_int("resolution_y", 512)
+            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+        elif 'loaded_resolution' in cam:
+            self.width, self.height = cam['loaded_resolution']
+        else:
+            raise Exception("Resolution missing in stereo global matching!")
+        print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
 
         self.baseline = cam.stereo.interocular_distance
         if not self.baseline:
