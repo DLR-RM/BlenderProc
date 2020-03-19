@@ -224,10 +224,9 @@ class SuncgLoader(Loader):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
+            object_already_loaded = path in self._collection_of_loaded_objs
             loaded_objects = Utility.import_objects(filepath=path, cached_objects=self._collection_of_loaded_objs)
-            if path not in self._collection_of_loaded_objs:
-                self._collection_of_loaded_objs[path] = loaded_objects
-            else:
+            if object_already_loaded:
                 print("Duplicate object: {}".format(path))
                 for object in loaded_objects:
                     # the original object matrix from the .obj loader -> is not an identity matrix
