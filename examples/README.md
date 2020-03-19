@@ -23,6 +23,7 @@ It will give you an idea about how, why and when certain things happen.
 * [material_randomizer](): object's material randomization.
 * [coco annotations](coco_annotations): generating COCO annotations.
 * [optical_flow](optical_flow): obtaining forward/backward flow values between consecutive key frames.
+* [stereo_matching](stereo_matching): compute depth image using stereo matching.
 
 ### Benchmark for 6D Object Pose Estimation (BOP)
 We provide two example configs that interface with the BOP datasets.
@@ -37,5 +38,6 @@ These can be found in:
 * [replica-dataset](replica-dataset)
 * [suncg_basic](suncg_basic)
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
+* [suncg_with_object_replacer](suncg_with_object_replacer)
 * [rock_essentials](rock_essentials)
 

@@ -16,6 +16,14 @@ python run.py examples/entity_manipulation/config.yaml examples/entity_manipulat
 * `examples/entity_manipulation/scene.obj`: path to the object file with the basic scene.
 * `examples/entity_manipulation/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
@@ -72,15 +80,6 @@ If attribute_name is not a valid name of any attribute nor it is a name of an ex
 In our case we sample the `location` attribute's value of the selected object using `Uniform3d` sampler, set the value of the `rotation_euler` attribute to `[1, 1, 0]`, and create new custom property `physics` and set it's value to `True`.
 By default for each selected object defined samplers will be called. 
 If one wants to have values sampled once and have them set to defined attribute/properties, set `"mode": "all"` at the end of this section. 
-
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
-```
 
 ## More examples
 

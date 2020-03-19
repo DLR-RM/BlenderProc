@@ -19,6 +19,14 @@ python run.py examples/material_randomizer/config.yaml examples/material_randomi
 * `examples/material_randomizer/scene.obj`: path to the object file with the basic scene.
 * `examples/material_randomizer/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/material_randomizer/output/*.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
@@ -50,14 +58,6 @@ The focus of this example is the MaterialRandomizer module, which allow us to ch
 It is also possible to use selectors to select the group of objects, which materials should be changed and another selector to select the objects, which materials should be used.
 
 Check [object_manipulation](../object_manipulation) for more information about selectors.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/material_randomizer/output/*.hdf5
-```
 
 ## More examples
 

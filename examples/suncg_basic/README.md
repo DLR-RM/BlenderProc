@@ -17,6 +17,14 @@ python run.py examples/suncg_basic/config.yaml <path to cam_pose file> <path to 
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
 * `examples/suncg_basic/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
+```
+
 ## Steps
 
 * Loads a SUNCG scene: `loader.SuncgLoader` module.
@@ -100,14 +108,7 @@ Also `fov_is_half` has to be activated, as SUNCG describes the FOV as the angle 
 
 This module automatically sets light sources inside the loaded house.
 Therefore each window, lamp or lampshade gets an emissive material and also the ceiling is made to slowly emit light to make sure even rooms without lights or windows are not completely dark.
- 
-## Visualization
 
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
-```
 
 ## More examples
 

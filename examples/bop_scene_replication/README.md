@@ -10,11 +10,21 @@ First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.c
 
 In [examples/bop_scene_replication/config.yaml](config.yaml) add the path to your bop_toolkit clone to `sys_paths` and set the `blender_install_path` where Blender should be installed.
 
-Finally, execute in the BlenderProc main directory: 
-(replace `/path/to/bop/dataset` and `/path/to/output_dir`)
+Execute in the BlenderProc main directory: 
 
 ```
-python run.py examples/bop_scene_replication/config.yaml /path/to/bop/dataset /path/to/output_dir
+python run.py examples/bop_scene_replication/config.yaml <path_to_bop_data> examples/bop_replication/output
+```
+* `examples/bop_replication/config.yaml`: path to the pipeline configuration file.
+* `<path_to_bop_data>`: path to a BOP dataset
+* `examples/bop_sampling/output`: path to the output directory.
+
+## Visualization
+
+Visualize the generated data and labels:
+
+```
+python scripts/visHdf5Files.py example/bop_replication/0.hdf5
 ```
 
 ## Steps
@@ -45,14 +55,6 @@ python run.py examples/bop_scene_replication/config.yaml /path/to/bop/dataset /p
 If `scene_id` is specified, BopLoader recreates the specified scene of the BOP dataset specified by `bop_dataset_path`. All camera poses and intrinsics from the specified scene are also loaded.  
 Be careful to choose a `split` that is actually present in the given BOP dataset and that has ground truth.  
 For some BOP datasets you can choose the `model_type`, e.g. `reconst` or `cad` in T-LESS. 
-
-## Visualization
-
-Visualize the generated data and labels:
-
-```
-python scripts/visHdf5Files.py /path/to/output_dir/0.hdf5
-```
 
 ## More examples
 

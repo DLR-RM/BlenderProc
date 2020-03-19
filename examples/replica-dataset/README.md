@@ -14,6 +14,14 @@ python run.py examples/replica-dataset/config.yaml <path_to_the_replica_data_fol
 * `<path_to_the_replica_data_folder>`: Path to the replica dataset directory.
 * `examples/replica-dataset/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
+```
+
 ## Steps
 
 * Load replica room: `loader.ReplicaLoader` module.
@@ -123,14 +131,6 @@ The `materials.Manipulator` changes the material of the Replica objects so that 
 ##### Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.
 
 If you are in need of high-res color images, do we propose that you, yourself can try to implement the texture importer for the replica dataset.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
-```
 
 ## More examples
 

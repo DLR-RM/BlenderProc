@@ -16,6 +16,14 @@ python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scen
 * `examples/camera_sampling/scene.obj`: path to the object file with the basic scene.
 * `examples/camera_sampling/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
@@ -68,14 +76,6 @@ Note that here we are using a [getter.POI](../../src/provider/getter) Provider w
 They also have a well-defined config structure, but `getter.POI`, for example, has no input arguments since it's output is fully dependent on the current state of the objects in the scene.
 The POI is calculated from the position of all objects.
  
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
-```
-
 ## More examples
 
 * [light_sampling](../light_sampling): More on sampling for lights.

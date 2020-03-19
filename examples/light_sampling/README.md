@@ -17,6 +17,14 @@ python run.py examples/light_sampling/config.yaml examples/light_sampling/camera
 * `examples/light_sampling/scene.obj`: path to the object file with the basic scene.
 * `examples/light_sampling/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/light_sampling/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
@@ -61,14 +69,6 @@ The focus of this example is `light.LightSampler` module which allows one to sam
 Note that for this we are using [sampler.Shell](../../src/provider/sampler) Provider which is not a part of a module, but a useful tool for introducing some "controlled randomness" into the process.
 To call a sampler for some attribute of a camera, specify a `name` of a desired sampler and define some input arguments for it, e.g. `center`, `radius_min`, `radius_max`, etc.
 Sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.
- 
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/light_sampling/output/0.hdf5
-```
 
 ## More examples
 
