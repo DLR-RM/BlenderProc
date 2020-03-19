@@ -35,6 +35,7 @@ class StereoGlobalMatchingWriter(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
+        self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
         if self.rgb_output_key is None:
             raise Exception("RGB output is not registered, please register the RGB renderer before this module.")
@@ -112,6 +113,10 @@ class StereoGlobalMatchingWriter(Module):
         return depth, disparity
 
     def run(self):
+        if self._avoid_rendering:
+            print("Avoid rendering is on, no output produced!")
+            return
+
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
 
         cam = bpy.context.scene.camera.data

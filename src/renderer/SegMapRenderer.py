@@ -156,18 +156,19 @@ class SegMapRenderer(Renderer):
                     break
 
             # After rendering
-            for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
-                file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
-                segmentation = load_image(file_path)
+            if not self._avoid_rendering:
+                for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
+                    file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
+                    segmentation = load_image(file_path)
 
-                segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
-                segmap = segmap.astype(optimal_dtype)
+                    segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
+                    segmap = segmap.astype(optimal_dtype)
 
-                fname = final_segmentation_file_path + "%04d" % frame
-                np.save(fname, segmap)
+                    fname = final_segmentation_file_path + "%04d" % frame
+                    np.save(fname, segmap)
 
             # write color mappings to file
-            if color_map is not None:
+            if color_map is not None and not self._avoid_rendering:
                 with open(os.path.join(self._determine_output_dir(), self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map") + ".csv"), 'w', newline='') as csvfile:
                     fieldnames = list(color_map[0].keys())
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)

@@ -25,6 +25,7 @@ class CocoAnnotationsWriter(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
+        self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
         self.segmap_output_key = self.config.get_string("segmap_output_key", "segmap")
         self.segcolormap_output_key = self.config.get_string("segcolormap_output_key", "segcolormap")
@@ -33,6 +34,9 @@ class CocoAnnotationsWriter(Module):
             os.makedirs(self._coco_data_dir)
 
     def run(self):
+        if self._avoid_rendering:
+            print("Avoid rendering is on, no output produced!")
+            return
 
         # Find path pattern of segmentation images
         segmentation_map_output = self._find_registered_output_by_key(self.segmap_output_key)

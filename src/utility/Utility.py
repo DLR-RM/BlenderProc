@@ -229,18 +229,21 @@ class Utility:
 
         Usage: with UndoAfterExecution():
         """
-        def __init__(self, check_point_name=None):
+        def __init__(self, check_point_name=None, perform_undo_op=True):
             if check_point_name is None:
                 check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
             self.check_point_name = check_point_name
+            self._perform_undo_op = perform_undo_op
 
         def __enter__(self):
-            bpy.ops.ed.undo_push(message="before " + self.check_point_name)
+            if self._perform_undo_op:
+                bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
         def __exit__(self, type, value, traceback):
-            bpy.ops.ed.undo_push(message="after " + self.check_point_name)
-            # The current state points to "after", now by calling undo we go back to "before"
-            bpy.ops.ed.undo()
+            if self._perform_undo_op:
+                bpy.ops.ed.undo_push(message="after " + self.check_point_name)
+                # The current state points to "after", now by calling undo we go back to "before"
+                bpy.ops.ed.undo()
 
     @staticmethod
     def build_provider(name, parameters):
@@ -374,7 +377,7 @@ class Utility:
                     cached_objects[filepath] = created_obj
                     return created_obj
                 else:
-                    return import_objects(filepath, cached_objects={}, **kwargs)
+                    return Utility.import_objects(filepath, cached_objects=None, **kwargs)
             else:
                 # save all selected objects
                 previously_selected_objects = set(bpy.context.selected_objects)

@@ -44,6 +44,26 @@
           "fov": 1
         }
       }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
+      }
     }
   ]
 }
