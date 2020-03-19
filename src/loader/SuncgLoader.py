@@ -211,6 +211,8 @@ class SuncgLoader(Loader):
         box.data.materials.append(mat)
 
         self._transform_and_colorize_object(box, material_adjustments, transform, parent)
+        # set class to void
+        box["category_id"] = self.label_index_map["void"]
 
     def _load_obj(self, path, metadata, material_adjustments, transform=None, parent=None):
         """ Load the wavefront object file from the given path and adjust according to the given arguments.
