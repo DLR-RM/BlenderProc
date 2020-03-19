@@ -137,7 +137,7 @@ class PhysicsPositioning(Module):
         objects_poses = {}
         for obj in get_all_mesh_objects():
             if obj.rigid_body.type == 'ACTIVE':
-                location = bpy.context.scene.objects[obj.name].matrix_world.translation
+                location = bpy.context.scene.objects[obj.name].matrix_world.translation.copy()
                 rotation = mathutils.Vector(bpy.context.scene.objects[obj.name].matrix_world.to_euler())
                 objects_poses.update({obj.name: {'location': location, 'rotation': rotation}})
 
