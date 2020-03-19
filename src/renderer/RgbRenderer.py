@@ -54,9 +54,7 @@ class RgbRenderer(Renderer):
                         slot.material = new_mat
 
     def run(self):
-        # if the rendering is not performed -> it is probably the debug case.
-        do_undo = not self._avoid_rendering
-        with Utility.UndoAfterExecution(perform_undo_op=do_undo):
+        with Utility.UndoAfterExecution():
             self._configure_renderer(default_denoiser="Intel")
 
             # In case a previous renderer changed these settings
@@ -72,5 +70,4 @@ class RgbRenderer(Renderer):
                 self.add_alpha_channel_to_textures(blurry_edges=True)
 
             self._render("rgb_")
-
         self._register_output("rgb_", "colors", ".png", "1.0.0")

@@ -27,17 +27,13 @@ class Hdf5Writer(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
-        self._avoid_rendering = config.get_bool("avoid_rendering", False)
+
         self.postprocessing_modules_per_output = {}
         module_configs = config.get_raw_dict("postprocessing_modules", {})
         for output_key in module_configs:
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
 
     def run(self):
-        if self._avoid_rendering:
-            print("Avoid rendering is on, no output produced!")
-            return
-
         if self.config.get_bool("append_to_existing_output", False):
             frame_offset = 0
             # Look for hdf5 file with highest index

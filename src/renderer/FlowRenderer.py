@@ -81,33 +81,32 @@ class FlowRenderer(Renderer):
             self._render("bwd_flow_", custom_file_path=temporary_bwd_flow_file_path)
 
             # After rendering: convert to optical flow or calculate hsv visualization, if desired
-            if not self._avoid_rendering:
-                for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-                    # temporarily save respective vector fields
-                    if get_forward_flow:
+            for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+                # temporarily save respective vector fields
+                if get_forward_flow:
 
-                        file_path = temporary_fwd_flow_file_path + "%04d" % frame + ".exr"
-                        fwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
+                    file_path = temporary_fwd_flow_file_path + "%04d" % frame + ".exr"
+                    fwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
 
-                        if not self.config.get_bool('blender_image_coordinate_style', False):
-                            fwd_flow_field[:, :, 1] = fwd_flow_field[:, :, 1] * -1
+                    if not self.config.get_bool('blender_image_coordinate_style', False):
+                        fwd_flow_field[:, :, 1] = fwd_flow_field[:, :, 1] * -1
 
-                        fname = os.path.join(self._determine_output_dir(),
-                                             self.config.get_string('forward_flow_output_file_prefix',
-                                                                    'forward_flow_')) + '%04d' % frame
-                        forward_flow = fwd_flow_field * -1  # invert forward flow to point at next frame
-                        np.save(fname + '.npy', forward_flow[:, :, :2])
+                    fname = os.path.join(self._determine_output_dir(),
+                                         self.config.get_string('forward_flow_output_file_prefix',
+                                                                'forward_flow_')) + '%04d' % frame
+                    forward_flow = fwd_flow_field * -1  # invert forward flow to point at next frame
+                    np.save(fname + '.npy', forward_flow[:, :, :2])
 
-                    if get_backward_flow:
-                        file_path = temporary_bwd_flow_file_path + "%04d" % frame + ".exr"
-                        bwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
+                if get_backward_flow:
+                    file_path = temporary_bwd_flow_file_path + "%04d" % frame + ".exr"
+                    bwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
 
-                        if not self.config.get_bool('y_origin_bot', False):
-                            bwd_flow_field[:, :, 1] = bwd_flow_field[:, :, 1] * -1
+                    if not self.config.get_bool('y_origin_bot', False):
+                        bwd_flow_field[:, :, 1] = bwd_flow_field[:, :, 1] * -1
 
-                        fname = os.path.join(self._determine_output_dir(),
-                                             self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_')) + '%04d' % frame
-                        np.save(fname + '.npy', bwd_flow_field[:, :, :2])
+                    fname = os.path.join(self._determine_output_dir(),
+                                         self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_')) + '%04d' % frame
+                    np.save(fname + '.npy', bwd_flow_field[:, :, :2])
 
         # register desired outputs
         if get_forward_flow:
