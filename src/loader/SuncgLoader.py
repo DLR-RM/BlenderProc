@@ -8,6 +8,7 @@ from mathutils import Matrix
 
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
+from src.utility.BlenderUtility import duplicate_objects
 
 
 class SuncgLoader(Loader):
@@ -30,6 +31,7 @@ class SuncgLoader(Loader):
         Loader.__init__(self, config)
         self.house_path = self.config.get_string("path")
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
+        self._collection_of_loaded_objs = {}
 
     def run(self):
         with open(Utility.resolve_path(self.house_path), "r") as f:
@@ -222,8 +224,17 @@ class SuncgLoader(Loader):
         if not os.path.exists(path):
             print("Warning: " + path + " is missing")
         else:
-            loaded_objects = Utility.import_objects(filepath=path)
-
+            object_already_loaded = path in self._collection_of_loaded_objs
+            loaded_objects = Utility.import_objects(filepath=path, cached_objects=self._collection_of_loaded_objs)
+            if object_already_loaded:
+                print("Duplicate object: {}".format(path))
+                for object in loaded_objects:
+                    # the original object matrix from the .obj loader -> is not an identity matrix
+                    object.matrix_world = Matrix([[1, 0, 0, 0], [0, 0, -1, 0], [0, 1, 0, 0], [0, 0, 0, 1]])
+                    # remove all custom properties
+                    keys = object.keys()
+                    for key in keys:
+                        del object[key]
             # Go through all imported objects
             for object in loaded_objects:
                 for key in metadata.keys():

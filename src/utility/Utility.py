@@ -357,7 +357,7 @@ class Utility:
         In .ply files only one object can saved so the list has always at most one element
 
         :param filepath: the filepath to the location where the data is stored
-        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is not updated in this function)
+        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is updated in this function)
         :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
         :return: a list of all newly loaded objects, in the failure case an empty list is returned
         """
@@ -374,10 +374,11 @@ class Utility:
                         if len(bpy.context.selected_objects) != 1:
                             raise Exception("The amount of objects after the copy was more than one!")
                         created_obj.append(bpy.context.selected_objects[0])
-                    cached_objects[filepath] = created_obj
                     return created_obj
                 else:
-                    return Utility.import_objects(filepath, cached_objects=None, **kwargs)
+                    loaded_objects = Utility.import_objects(filepath, cached_objects=None, **kwargs)
+                    cached_objects[filepath] = loaded_objects
+                    return loaded_objects
             else:
                 # save all selected objects
                 previously_selected_objects = set(bpy.context.selected_objects)
