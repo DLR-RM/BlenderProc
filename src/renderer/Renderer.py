@@ -52,6 +52,7 @@ class Renderer(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
+        self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
 
     def _configure_renderer(self, default_samples=256, default_denoiser="Blender"):
@@ -203,7 +204,8 @@ class Renderer(Module):
                                 "please load an object before invoking the renderer.")
             # As frame_end is pointing to the next free frame, decrease it by one, as blender will render all frames in [frame_start, frame_ned]
             bpy.context.scene.frame_end -= 1
-            bpy.ops.render.render(animation=True, write_still=True)
+            if not self._avoid_rendering:
+                bpy.ops.render.render(animation=True, write_still=True)
             # Revert changes
             bpy.context.scene.frame_end += 1
 

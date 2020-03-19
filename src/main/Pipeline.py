@@ -8,7 +8,7 @@ from src.utility.Utility import Utility, Config
 
 class Pipeline:
 
-    def __init__(self, config_path, args, working_dir, should_perform_clean_up=True):
+    def __init__(self, config_path, args, working_dir, should_perform_clean_up=True, avoid_rendering=False):
         Utility.working_dir = working_dir
 
         # Clean up example scene or scene created by last run when debugging pipeline inside blender
@@ -19,6 +19,12 @@ class Pipeline:
         config = config_parser.parse(Utility.resolve_path(config_path), args)
 
         config_object = Config(config)
+        if not config_object.get_bool("avoid_rendering", False) and avoid_rendering:
+            # avoid rendering is not already on, but should be:
+            if "all" in config["global"].keys():
+                config["global"]["all"] = {}
+            config["global"]["all"]["avoid_rendering"] = True
+
         self._do_clean_up_temp_dir = config_object.get_bool("delete_temporary_files_afterwards", True)
         self._temp_dir = Utility.get_temporary_directory(config_object)
         os.makedirs(self._temp_dir, exist_ok=True)
