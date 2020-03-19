@@ -43,7 +43,10 @@ class SuncgLoader(Loader):
             # Build empty level object which acts as a parent for all rooms on the level
             level_obj = bpy.data.objects.new("Level#" + level["id"], None)
             level_obj["type"] = "Level"
-            level_obj["bbox"] = self._correct_bbox_frame(level["bbox"])
+            if "bbox" in level:
+                level_obj["bbox"] = self._correct_bbox_frame(level["bbox"])
+            else:
+                print("Warning: The level with id " + level["id"] + " is missing the bounding box attribute in the given house.json file!")
             bpy.context.scene.collection.objects.link(level_obj)
 
             room_per_object = {}
