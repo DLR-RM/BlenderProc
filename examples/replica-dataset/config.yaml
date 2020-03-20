@@ -64,14 +64,25 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
+      "module": "materials.MaterialManipulator",
       "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "ReplicaMaterial"
+          }
+        },
+        change_to_vertex_color: "Col"
       }
     },
     {
+      "module": "renderer.NormalRenderer",
+    },
+    {
+      "module": "renderer.RgbRenderer",
+    },
+    {
       "module": "writer.Hdf5Writer",
-      "config": {
-      }
     }
   ]
 }

@@ -33,6 +33,12 @@ class ReplicaLoader(Loader):
         # Set the physics property of all imported objects
         self._set_properties(loaded_objects)
 
+        # add a default material to all imported objects
+        mat = bpy.data.materials.new(name="ReplicaMaterial")
+        mat.use_nodes = True
+        for obj in loaded_objects:
+            obj.data.materials.append(mat)
+
         if self.config.get_bool('use_ambient_occlusion', False):
             bpy.context.scene.world.light_settings.use_ambient_occlusion = True  # turn AO on
             bpy.context.scene.world.light_settings.ao_factor = 0.9  # set it to 0.5

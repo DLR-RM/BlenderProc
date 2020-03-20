@@ -197,7 +197,33 @@ class Utility:
                 links.remove(l)
 
         links.new(source_socket, new_node_dest_socket)
-        links.new(new_node_src_socket, dest_socket)
+        links.new(new_node_src_socket, dest_socket)\
+
+    @staticmethod
+    def get_node_connected_to_the_output_and_unlink_it(material):
+        """
+        Searches for the OutputMaterial in the given material and finds the connected node to it,
+        removes the connection between this node and the output and returns this node and the material_output
+        :param material_slot: material slot (
+        """
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+
+        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
+        if output and len(output) == 1:
+            material_output = output[0]
+        else:
+            raise Exception("This material: {} has not one material output!".format(material.name))
+        # find the node, which is connected to the output
+        node_connected_to_the_output = None
+        for link in links:
+            if link.to_node == material_output:
+                node_connected_to_the_output = link.from_node
+                # remove this link
+                links.remove(link)
+                break
+        return node_connected_to_the_output, material_output
+
 
     @staticmethod
     def get_nodes_with_type(nodes, node_type):
