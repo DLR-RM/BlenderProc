@@ -76,7 +76,7 @@
         "selector": {
           "provider": "getter.Material",
           "conditions": {
-            "name": "Material.006"
+            "name": "Material.*"
           }
         },
         "mode": "once_for_each",

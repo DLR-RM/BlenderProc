@@ -13,12 +13,12 @@ In this example we demonstrate how to select materials in the scene using `gette
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/material_manipulation/config.yaml examples/material_manipulation/scene.obj examples/material_manipulation/sample_textures/*.png examples/material_manipulation/output
+python run.py examples/material_manipulation/config.yaml examples/material_manipulation/scene.obj examples/material_manipulation examples/material_manipulation/output
 ```
 
 * `examples/material_manipulation/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/material_manipulation/scene.obj`: path to the object file with the basic scene.
-* `examples/material_manipulation/*.jpg`: path to a folder with .jpg textures to be used in the sampling process.
+* `examples/material_manipulation`: path to a folder with .jpg textures to be used in the sampling process.
 * `examples/material_manipulation/output`: path to the output directory.
 
 ## Visualization
@@ -34,8 +34,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Sets two camera positions: `camera.CameraLoader` module.
-* Selects objects based on the condition: `material.MaterialManipulator` module.
-* Change some parameters of the selected entities: `material.MaterilManipulator` module.
+* Selects materials based on the condition and changes some parameters of the selected materials: `material.MaterialManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
@@ -96,7 +95,7 @@ The <float> value is used to scale the color input the texture up or down to inc
 If one wants to have values sampled once and have them set to defined attribute/properties, set `"mode": "once_for_all"` at the end of this section. 
 By the default it is `"once_for_each"`.
 
-The second `MaterialManipulator` module is yet again selecting a material: `Material.006`, but this time it uses a `sampler.Path` to randomly choose one `color` image texture from the `sample_textures` folder to assign to the chosen material.
+The second `MaterialManipulator` module is yet again selecting a material: `Material.*` which equals to selecting all the materials in the scene, but this time it uses a `sampler.Path` to randomly choose one `color` .jpg image texture from the example folder to assign to the chosen material.
 
 ## More examples
 
