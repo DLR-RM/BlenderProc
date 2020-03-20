@@ -1,0 +1,89 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 2,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "/tmp/test_output_shape_net"
+    }
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {}
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "<args:0>"
+        "used_synsetId": "02801938"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [
+          {
+            "number_of_samples": 5,
+            "location": {
+              "provider":"sampler.Sphere",
+              "center":[0, 0, 0],
+              "radius": 2,
+              "mode": "SURFACE"
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "provider": "getter.POI"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_depth": true
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
