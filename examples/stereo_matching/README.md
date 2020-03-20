@@ -120,7 +120,7 @@ Finally, we add the module responsible for stereo matching. This module has the 
     * Triangulate the depth values using the focal length and disparity.
     * Clip the depth map from 0 to `depth_max`, where this value is retrieved from `renderer.Renderer`.
     * Apply an optional [depth completion routine](https://github.com/kujason/ip_basic/blob/master/ip_basic/depth_map_utils.py), based on simple image processing techniques. This is enabled by setting `depth_completion`.
-    * Finally, save the resulting depth map in a numpy compressed format, with filename prefix: `stereo-depth`.
+    * Finally, save the resulting depth map and optionally the disparity map in the .hdf5 file that contains the rendered outputs with keys: `stereo-depth` and `disparity` respectively. This is handled by the module: `writer.Hdf5Writer`.
 * The focal length can be either set manually, or inferred from the field of view angle that in this case should be supplied to the CameraModule. To specify how it should be retrieved, use this config parameter: `infer_focal_length_from_fov`
 * There are some stereo semi global matching parameters that can be configured from the config file, such as:
     * `window_size`
