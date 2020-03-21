@@ -3,6 +3,7 @@ import mathutils
 import re
 
 from src.main.Provider import Provider
+from src.utility.Config import Config
 
 
 class Entity(Provider):
@@ -31,11 +32,9 @@ class Entity(Provider):
                 "name": "Cube.*",   # this checks if the name of the object starts with Cube (treated as a regular expr.)
                 "category": "is_cube" # both have to be true
             },{
-                "INSIDE": {         # this checks if the object is inside the bounding box
-                    "x_min": 0,
-                    "x_max": 5.5,
-                    "z_min": -1,
-                    # Missing arguments extend the bounding box to infinity in that direction
+                "inside": {         # this checks if the object is inside the bounding box defined by min and max points
+                    "min": "[-5, -5, -5]", # or use "outside" for checking whether the obj is outside of b box
+                    "max": "[5, 5, 5]"
                 },
             ]
         }
@@ -119,21 +118,17 @@ class Entity(Provider):
                     else:
                         raise Exception("Types are not matching: %s and %s !"
                                         % (type(obj[key]), type(value)))
-                elif key == "INSIDE" or key == "OUTSIDE":
-                    is_inside = True
-                    for axis_index in range(3):
-                        axis_name = "xyz"[axis_index]
-
-                        for direction in ["min", "max"]:
-                            key_name = "{}_{}".format(axis_name, direction)
-                            if key_name in value:
-                                real_position = obj.location[axis_index]
-                                border_position = float(value[key_name])
-                                if (direction == "max" and real_position > border_position) or (
-                                        direction == "min" and real_position < border_position):
-                                    is_inside = False
-
-                    if (key == "INSIDE" and not is_inside) or (key == "OUTSIDE" and is_inside):
+                elif key == "inside" or key == "outside":
+                    is_inside = None
+                    cond = Config(value)
+                    bb_min = cond.get_vector3d("min")
+                    bb_max = cond.get_vector3d("max")
+                    obj_pos = obj.location
+                    if bb_min[0] < obj_pos[0] < bb_max[0] and bb_min[1] < obj_pos[1] < bb_max[1] and bb_min[2] < obj_pos[2] < bb_max[2]:
+                        is_inside = True
+                    else:
+                        is_inside = False
+                    if (key == "inside" and not is_inside) or (key == "outside" and is_inside):
                         select_object = False
                         break
                 else:
