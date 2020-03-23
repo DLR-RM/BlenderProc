@@ -36,6 +36,12 @@ class Entity(Provider):
                     "min": "[-5, -5, -5]", # or use "outside" for checking whether the obj is outside of b box
                     "max": "[5, 5, 5]"
                 },
+            },{
+                "inside": {         # alternative syntax for inside/outside, cannot be mixed with min/max vector syntax
+                    "z_min": -1,    # any object with a z position greater than -1
+                    # supported keys: [xyz]_{min,max}
+                    # missing arguments extend the bounding box to infinity in that direction
+                },
             ]
         }
 
@@ -119,15 +125,32 @@ class Entity(Provider):
                         raise Exception("Types are not matching: %s and %s !"
                                         % (type(obj[key]), type(value)))
                 elif key == "inside" or key == "outside":
-                    is_inside = None
-                    cond = Config(value)
-                    bb_min = cond.get_vector3d("min")
-                    bb_max = cond.get_vector3d("max")
-                    obj_pos = obj.location
-                    if bb_min[0] < obj_pos[0] < bb_max[0] and bb_min[1] < obj_pos[1] < bb_max[1] and bb_min[2] < obj_pos[2] < bb_max[2]:
-                        is_inside = True
+                    conditions = Config(value)
+                    if conditions.has_param("min") and conditions.has_param("max"):
+                        if any(conditions.has_param(key) for key in
+                               ["x_min", "x_max", "y_min", "y_max", "z_min", "z_max"]):
+                            raise RuntimeError("An inside/outside condition cannot mix the min/max vector syntax with "
+                                               "the x_min/x_max/y_min/... syntax.")
+
+                        bb_min = conditions.get_vector3d("min")
+                        bb_max = conditions.get_vector3d("max")
+                        is_inside = all(bb_min[i] < obj.location[i] < bb_max[i] for i in range(3))
                     else:
-                        is_inside = False
+                        if any(conditions.has_param(key) for key in ["min", "max"]):
+                            raise RuntimeError("An inside/outside condition cannot mix the min/max syntax with "
+                                               "the x_min/x_max/y_min/... syntax.")
+                        is_inside = True
+                        for axis_index in range(3):
+                            axis_name = "xyz"[axis_index]
+                            for direction in ["min", "max"]:
+                                key_name = "{}_{}".format(axis_name, direction)
+                                if key_name in value:
+                                    real_position = obj.location[axis_index]
+                                    border_position = float(value[key_name])
+                                    if (direction == "max" and real_position > border_position) or (
+                                            direction == "min" and real_position < border_position):
+                                        is_inside = False
+
                     if (key == "inside" and not is_inside) or (key == "outside" and is_inside):
                         select_object = False
                         break
