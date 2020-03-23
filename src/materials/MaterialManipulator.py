@@ -121,10 +121,9 @@ class MaterialManipulator(Module):
         links = material.node_tree.links
         # for each Image Texture node set a texture (image) if one was loaded
         for key in loaded_textures.keys():
-            nodes.new('ShaderNodeTexImage')
-            nodes[-1].label = key
-            node = nodes.get(nodes[-1].name)
-            a = nodes.get(nodes[-1].name).outputs['Color']
+            node = nodes.new('ShaderNodeTexImage')
+            node.label = key
+            a = node.outputs['Color']
             b = nodes["Principled BSDF"].inputs[key]
             node.image = loaded_textures[key]
             links.new(a, b)
