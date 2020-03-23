@@ -72,7 +72,7 @@ class MaterialManipulator(Module):
                 #else:
                 #    raise Exception("This attribute: {} is not there!".format(key))
 
-    def _get_set_params(self, params_conf):
+    def _get_the_set_params(self, params_conf):
         """ Extracts actual values to set from a Config object.
 
         :param params_conf: Object with all user-defined data. Type: Config.
