@@ -1,4 +1,4 @@
-# Args: <obj_file> <output_dir>
+# Args: <obj_file> <path_to_textures> <output_dir>
 {
   "version": 2,
   "setup": {
@@ -10,7 +10,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "<args:1>"
+      "output_dir": "<args:2>"
     }
   },
   "modules": [
@@ -64,10 +64,28 @@
         "selector": {
           "provider": "getter.Material",
           "conditions": {
-            "name": "Material"
+            "name": "Material.001"
           }
         },
-        color_link_to_displacement: 1.5
+        "color_link_to_displacement": 1.5
+      }
+    },
+    {
+      "module": "materials.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "Material.*"
+          }
+        },
+        "mode": "once_for_each",
+        "textures": {
+          "Base Color": {
+            "provider": "sampler.Path",
+            "path": "<args:1>/*.jpg"
+          }
+        }
       }
     },
     {

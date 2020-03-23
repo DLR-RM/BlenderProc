@@ -2,7 +2,7 @@
 
 
 <p align="center">
-<img src="readme.png" alt="Front readme image" width=430>
+<img src="rendering.png" alt="Front readme image" width=430>
 </p>
 
 
@@ -13,11 +13,12 @@ In this example we demonstrate how to select materials in the scene using `gette
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/material_manipulation/config.yaml examples/material_manipulation/scene.obj examples/material_manipulation/output
+python run.py examples/material_manipulation/config.yaml examples/material_manipulation/scene.obj examples/material_manipulation examples/material_manipulation/output
 ```
 
 * `examples/material_manipulation/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/material_manipulation/scene.obj`: path to the object file with the basic scene.
+* `examples/material_manipulation`: path to a folder with .jpg textures to be used in the sampling process.
 * `examples/material_manipulation/output`: path to the output directory.
 
 ## Visualization
@@ -33,8 +34,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Sets two camera positions: `camera.CameraLoader` module.
-* Selects objects based on the condition: `material.MaterialManipulator` module.
-* Change some parameters of the selected entities: `material.MaterilManipulator` module.
+* Selects materials based on the condition and changes some parameters of the selected materials: `material.MaterialManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
@@ -43,24 +43,42 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
 ### MaterialManipulator
 
 ```yaml
- {
+{
   "module": "materials.MaterialManipulator",
   "config": {
     "selector": {
       "provider": "getter.Material",
       "conditions": {
-        "name": "Material"
+        "name": "Material.001"
       }
     },
-    color_link_to_displacement: 1.5
+    "color_link_to_displacement": 1.5
+  }
+},
+{
+  "module": "materials.MaterialManipulator",
+  "config": {
+    "selector": {
+      "provider": "getter.Material",
+      "conditions": {
+        "name": "Material.*"
+      }
+    },
+    "mode": "once_for_each",
+    "textures": {
+      "Base Color": {
+        "provider": "sampler.Path",
+        "path": "<args:1>/*.png"
+      }
+    }
   }
 },
 ```
 
-The focus of this example is the MaterialManipulator module and `getter.Material` which allow us to select multiple materials based on a user-defined condition and change the attribute values of the selected materials.
+The focus of this example is the `MaterialManipulator` module and `getter.Material` which allow us to select multiple materials based on a user-defined condition and change the attribute values of the selected materials.
 * `selector` - section of the `MaterialManipulator` for stating the chosen `provider` and the `condition` to use for selecting.
 
-Our condition is: `"name": 'Material'`, which means that we want to select all the materials with `material.name == 'Material'`. In our case we have only one material which meets the requirement.
+Our condition is: `"name": 'Material.001'`, which means that we want to select all the materials with `material.name == 'Material'`. In our case we have only one material which meets the requirement.
 Yet one may define any condition where `key` is the valid name of any attribute of entities present in the scene.
 This way it is possible to select multiple materials. 
 
@@ -76,6 +94,8 @@ The <float> value is used to scale the color input the texture up or down to inc
 
 If one wants to have values sampled once and have them set to defined attribute/properties, set `"mode": "once_for_all"` at the end of this section. 
 By the default it is `"once_for_each"`.
+
+The second `MaterialManipulator` module is yet again selecting a material: `Material.*` which equals to selecting all the materials in the scene, but this time it uses a `sampler.Path` to randomly choose one `color` .jpg image texture from the example folder to assign to the chosen material.
 
 ## More examples
 
