@@ -123,10 +123,10 @@ class MaterialManipulator(Module):
         for key in loaded_textures.keys():
             node = nodes.new('ShaderNodeTexImage')
             node.label = key
-            a = node.outputs['Color']
-            b = nodes["Principled BSDF"].inputs[key]
+            out_point = node.outputs['Color']
+            in_point = nodes["Principled BSDF"].inputs[key]
             node.image = loaded_textures[key]
-            links.new(a, b)
+            links.new(out_point, in_point)
 
     @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
