@@ -45,7 +45,7 @@ class MaterialManipulator(Module):
 
         if op_mode == "once_for_all":
             # get values to set if they are to be set/sampled once for all selected materials
-            params = self._get_set_params(params_conf)
+            params = self._get_the_set_params(params_conf)
 
         for material in materials:
             if not material.use_nodes:
@@ -53,20 +53,20 @@ class MaterialManipulator(Module):
 
             if op_mode == "once_for_each":
                 # get values to set if they are to be set/sampled anew for each selected entity
-                params = self._get_set_params(params_conf)
+                params = self._get_the_set_params(params_conf)
 
-            for key in params.keys():
+            for key, value in params.iteritems():
                 # if an attribute with such name exists for this entity
                 if key == "color_link_to_displacement":
-                    MaterialManipulator._link_color_to_displacement_for_mat(material, params[key])
+                    MaterialManipulator._link_color_to_displacement_for_mat(material, value)
                 elif key == "change_to_vertex_color":
-                    MaterialManipulator._map_vertex_color(material, params[key])
+                    MaterialManipulator._map_vertex_color(material, value)
                 elif key == "textures":
-                    loaded_textures = self._load_textures(params[key])
+                    loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
                 elif hasattr(material, key):
                     # set the value
-                    setattr(material, key, params[key])
+                    setattr(material, key, value)
 
                 # TODO exclude global settings to raise exception if attribute not found
                 #else:
