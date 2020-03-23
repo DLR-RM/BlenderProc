@@ -11,6 +11,7 @@ from src.main.Module import Module
 from src.utility.Utility import Utility
 from src.utility.BlenderUtility import load_image
 
+
 class Hdf5Writer(Module):
     """ For each key frame merges all registered output files into one hdf5 file
 
@@ -23,6 +24,7 @@ class Hdf5Writer(Module):
        "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging."
        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output to which the postprocessing modules should be applied. Every postprocessing module has to have a run function which takes in the raw data and returns the processed data."
        "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that there are no collisions with already existing hdf5 files in the output directory."
+       "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Default: false, stereo images are combined into one np.array (2, ...).
     """
 
     def __init__(self, config):
@@ -76,11 +78,15 @@ class Hdf5Writer(Module):
                         img_l = self._load_and_postprocess(path_l, output_type["key"])
                         img_r = self._load_and_postprocess(path_r, output_type["key"])
 
-                        data = np.array([img_l, img_r])
+                        if self.config.get_bool("stereo_separate_keys", False):
+                            self._write_to_hdf_file(f, output_type["key"] + "_0", img_l)
+                            self._write_to_hdf_file(f, output_type["key"] + "_1", img_r)
+                        else:
+                            data = np.array([img_l, img_r])
+                            self._write_to_hdf_file(f, output_type["key"], data)
                     else:
                         data = self._load_and_postprocess(file_path, output_type["key"])
-
-                    self._write_to_hdf_file(f, output_type["key"], data)
+                        self._write_to_hdf_file(f, output_type["key"], data)
 
                     # Write version number of current output at key_version
                     self._write_to_hdf_file(f, output_type["key"] + "_version", np.string_([output_type["version"]]))
