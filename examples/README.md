@@ -19,7 +19,7 @@ It will give you an idea about how, why and when certain things happen.
 * [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
 * [physics_positioning](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
 * [entity manipulation](entity_manipulation): Changing various parameters of entities via selecting them through config file.
-* [material_manipulatior](material_manipulator): material selecting and manipulation.
+* [material_manipulation](material_manipulation): material selecting and manipulation.
 * [material_randomizer](): object's material randomization.
 * [coco annotations](coco_annotations): generating COCO annotations.
 * [optical_flow](optical_flow): obtaining forward/backward flow values between consecutive key frames.

@@ -50,18 +50,24 @@ def convert_hdf(base_file_path):
         if os.path.isfile(base_file_path):
             base_name = str(os.path.basename(base_file_path)).split('.')[0]
             with h5py.File(base_file_path, 'r') as data:
+                print("{}:".format(base_file_path))
                 keys = [key for key in data.keys()]
                 for key in keys:
                     val = np.array(data[key])
-                    if len(val.shape) < 4:
-                        # mono image
-                        file_path = '{}_{}.png'.format(key, base_name)
-                        save_array_as_image(val, key, file_path)
+                    if len(val.shape) == 1:
+                        pass  # metadata
                     else:
-                        # stereo image
-                        for image_index, image_value in enumerate(val):
-                            file_path = '{}_{}_{}.png'.format(key, base_name, image_index)
-                            save_array_as_image(image_value, key, file_path)
+                        print("key: {}  {} {}".format(key, val.shape, val.dtype.name))
+
+                        if val.shape[0] != 2:
+                            # mono image
+                            file_path = '{}_{}.png'.format(base_name, key)
+                            save_array_as_image(val, key, file_path)
+                        else:
+                            # stereo image
+                            for image_index, image_value in enumerate(val):
+                                file_path = '{}_{}_{}.png'.format(base_name, key, image_index)
+                                save_array_as_image(image_value, key, file_path)
 
         else:
             print("The path is not a file")
