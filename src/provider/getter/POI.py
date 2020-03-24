@@ -6,7 +6,13 @@ from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds, get_all_mesh_objects
 
 class POI(Provider):
-    """ Computes a point of interest in the scene. """
+    """ Computes a point of interest in the scene.
+
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+       "selector", "Instead of all objects a group of objects can be selected with the `getter.Entity` class default: all_mesh_objects"
+    """
 
     def __init__(self, config):
         Provider.__init__(self, config)
@@ -18,7 +24,8 @@ class POI(Provider):
         # Init matrix for all points of all bounding boxes
         mean_bb_points = []
         # For every object in the scene
-        for obj in get_all_mesh_objects():
+        selected_objects = self.config.get_list("selector", get_all_mesh_objects())
+        for obj in selected_objects:
             # Get bounding box corners
             bb_points = get_bounds(obj)
             # Compute mean coords of bounding box
