@@ -192,6 +192,9 @@ class Renderer(Module):
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
+        if self.config.get_bool("render_normal", False):
+            self._write_normal_to_file()
+
         if custom_file_path is None:
             bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
         else:
@@ -288,6 +291,47 @@ class Renderer(Module):
             return new_mat_alpha
         return new_material
 
+    def _write_normal_to_file(self):
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+        tree = bpy.context.scene.node_tree
+        links = tree.links
+
+        # Use existing render layer
+        render_layer_node = tree.nodes.get('Render Layers')
+
+        separate_rgba = tree.nodes.new("CompositorNodeSepRGBA")
+        links.new(render_layer_node.outputs["Normal"], separate_rgba.inputs["Image"])
+
+        combine_rgba = tree.nodes.new("CompositorNodeCombRGBA")
+
+        for channel in ["R", "G", "B"]:
+            multiply = tree.nodes.new("CompositorNodeMath")
+            multiply.operation = "MULTIPLY"
+            links.new(separate_rgba.outputs[channel], multiply.inputs[0])
+            if channel == "G":
+                multiply.inputs[1].default_value = -0.5
+            else:
+                multiply.inputs[1].default_value = 0.5
+            add = tree.nodes.new("CompositorNodeMath")
+            add.operation = "ADD"
+            links.new(multiply.outputs["Value"], add.inputs[0])
+            add.inputs[1].default_value = 0.5
+            output_channel = channel
+            if channel == "G":
+                output_channel = "B"
+            elif channel == "B":
+                output_channel = "G"
+
+            links.new(add.outputs["Value"], combine_rgba.inputs[output_channel])
+
+        output_file = tree.nodes.new("CompositorNodeOutputFile")
+        output_file.base_path = self._determine_output_dir()
+        output_file.format.file_format = "OPEN_EXR"
+        output_file.file_slots.values()[0].path = self.config.get_string("normal_output_file_prefix", "normal_")
+        links.new(combine_rgba.outputs["Image"], output_file.inputs["Image"])
+
+
     def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes=True, output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix"):
         """ Registers new output type using configured key and file prefix.
 
@@ -310,6 +354,13 @@ class Renderer(Module):
                 "key": self.config.get_string("depth_output_key", "depth"),
                 "path": os.path.join(self._determine_output_dir(), self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
                 "version": "2.0.0",
+                "stereo": use_stereo
+            })
+        if self.config.get_bool("render_normal", False):
+            self._add_output_entry({
+                "key": self.config.get_string("normal_output_key", "normal"),
+                "path": os.path.join(self._determine_output_dir(), self.config.get_string("normal_output_file_prefix", "normal_")) + "%04d" + ".exr",
+                "version": "1.0.0",
                 "stereo": use_stereo
             })
 
