@@ -24,7 +24,8 @@ class Entity(Provider):
     Another more complex example:
     Here all objects which are either named Suzanne or (the name starts with Cube and belong to the category "is_cube")
         "name_of_selector": {
-            "provider": "getter.Entity"
+            "provider": "getter.Entity",
+            "index": 0,             # only returns the first match
             "conditions": [{
                 "name": "Suzanne",  # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
                 "type": "MESH"      # this will make sure that the object is a mesh
@@ -61,6 +62,7 @@ class Entity(Provider):
     "condition", "Dict with one entry of format {attribute_name: attribute_value}. Type: dict."
     "condition/attribute_name", "Name of any valid object's attribute or custom property. Type: string."
     "condition/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
+    "index", "If set, after the conditions are applied only the entity with the specified index is returned. Type: int"
     """
 
     def __init__(self, config):
@@ -176,4 +178,8 @@ class Entity(Provider):
         else:
             # only one condition was given, treat it as and condition
             objects = self.perform_and_condition_check(conditions, [])
+
+        if self.config.has_param("index"):
+            objects = [objects[self.config.get_int("index")]]
+
         return objects
