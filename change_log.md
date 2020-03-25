@@ -10,6 +10,43 @@
 
 # Version History
 
+
+## Version 1.3.0: 25th March 2020
+- added Optical Flow Renderer 
+- added Stereo Global Matching Renderer (SGM) -> which takes two color images and produces "non-perfect" depth images
+- added option for SGM to also write disparities
+- added a new material manipulator 
+- added a material getter to select materials based on certain conditions
+- combined BOP with this repo -> now the only difference is the readme
+- added contribution guidelines -> which include commit message guidelines and branch name guidelines and much more
+- matrices can now be read via the config file
+- added a cached options to the import objects
+- added request custom property for the entity getter (to ensure that a custom property is changed)
+- added ReplaceObject
+- added option that in debugging the RgbRenderer get executed except for the actual rendering part all others are executed and then undon
+- added collision mesh source to the physics module
+- added option to coco annotations to append the output to an existing coco file
+- added bounding box selection to getter.Entity and also just axis aligned hyper plane checks
+- added a 1D sampler for float/int/bool
+- added postprocessing to the example to reduce the amount of channels in the depth image
+- added visualization for stereo and optical flow
+- added an oil filter for the SGM result
+- added a path sampler
+- added a blender collection loader
+- added the RockEssentialLoader based on the RockEssential dataset
+- added index to getter.Entity to request only a certain element of the selection
+- fix three bugs in the physics module, where the mass_scaling was always used and the location not properly updated
+- fixed a bug where color images where wrongly saved in float now back to uint8
+- fixed a bug in the coco annotations writer + adapting of the example
+- fixed bug in load_image, where the dimensions where switched
+- fixed a bug when "home_local" is not available than "home" is used
+- fixed bug where run.py can only be run from the main folder
+- fixed pypng version in bop example
+- fixed bug where the volume calculation for bounding boxes did not work as expected
+- refactored the disc sampler 
+- cleaned up all readmes
+
+
 ## Version 1.2.0: 31th January 2020
 
 - added more detailed examples to most of the important modules
