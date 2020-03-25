@@ -282,12 +282,24 @@ def load_image(file_path, num_channels=3):
     return img[:, :, :num_channels]
 
 def get_bound_volume(obj):
-    """ Gets a volume of a bounding box.
+    """ Gets the volume of a possible orientated bounding box.
     :param obj: Mesh object.
     :return: volume of a bounding box.
     """
     bb = get_bounds(obj)
-    return abs(bb[1][2] - bb[0][2]) * abs(bb[2][1] - bb[1][1]) * abs(bb[7][0] - bb[0][0])
+    # Search for the point which is the maximum distance away from the first point
+    # we call this first point min and the furthest away point max
+    # the vector between the two is a diagonal of the bounding box
+    min_point, max_point = bb[0], None
+    max_dist = -1
+    for point in bb:
+        dist = (point - min_point).length
+        if dist > max_dist:
+            max_point = point
+            max_dist = dist
+    diag = max_point - min_point
+    # use the diagonal to calculate the volume of the box
+    return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
 
 def duplicate_objects(objects):
     """
