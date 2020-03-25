@@ -1,0 +1,135 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 2,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "global": {
+    "all": {
+      "output_dir": "/tmp/test_output",
+      "output_is_temp": False
+    }
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {}
+    },
+    {
+      "module": "loader.SuncgLoader",
+      "config": {
+        "path": "/media/max/Peach/original_data_save/original_data/house/10368278e4562ae08f20c3c9fb692c54/house.json",
+        "add_properties": {
+          "physics": False
+        }
+      }
+    },
+    {
+      "module": "lighting.SuncgLighting",
+      "config": {}
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "/media/max/volume/linux_data/ShapeNetCore.v2",
+        "used_synsetId": "02801938",
+        "add_properties": {
+          "shape_net_object": True
+        }
+      }
+    },
+    {
+      "module": "object.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "shape_net_object": True,
+            "type": "MESH"
+          }
+        },
+        "location": # [45.39, -37.278, 1.86],
+        {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 0.75,
+          "to_sample_on": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "category_id": 30,
+                "type": "MESH"
+              }
+
+          }
+        },
+        "physics": True
+      }
+    },
+    {
+      "module": "object.PhysicsPositioning",
+      "config": {
+        "min_simulation_time": 0.5,
+        "max_simulation_time": 4,
+        "check_object_interval": 0.25,
+        "mass_scaling": True,
+        "mass_factor": 2000,
+        "collision_margin": 0.0001
+      }
+    },
+    #{
+    #  "module": "camera.CameraSampler",
+    #  "config": {
+    #    "cam_poses": [
+    #    {
+    #      "number_of_samples": 5,
+    #      "location": {
+    #        "provider":"sampler.PartZSphere",
+    #        "center": {
+    #          "provider": "getter.POI",
+    #          "selector": {
+    #            "provider": "getter.Entity",
+    #            "conditions": {
+    #              "shape_net_object": True,
+    #              "type": "MESH"
+    #            }
+    #          }
+    #        },
+    #        "z_above_center": 0.5,
+    #        "radius": 2,
+    #        "mode": "SURFACE"
+    #      },
+    #      "rotation": {
+    #        "format": "look_at",
+    #        "value": {
+    #          "provider": "getter.POI",
+    #          "selector": {
+    #            "provider": "getter.Entity",
+    #            "conditions": {
+    #              "shape_net_object": True,
+    #              "type": "MESH"
+    #            }
+    #          }
+    #        }
+    #      }
+    #    }
+    #    ]
+    #  }
+    #},
+    {
+      "module": "renderer.NormalRenderer",
+      "config": {
+        "output_key": "normals"
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_depth": true
+      }
+    }
+  ]
+}
