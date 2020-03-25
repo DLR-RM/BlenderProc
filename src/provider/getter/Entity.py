@@ -62,7 +62,7 @@ class Entity(Provider):
     "condition", "Dict with one entry of format {attribute_name: attribute_value}. Type: dict."
     "condition/attribute_name", "Name of any valid object's attribute or custom property. Type: string."
     "condition/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
-    "index", "If set, after the conditions are applied only the entity with the specified index is returned."
+    "index", "If set, after the conditions are applied only the entity with the specified index is returned. Type: int"
     """
 
     def __init__(self, config):
