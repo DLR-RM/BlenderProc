@@ -25,7 +25,7 @@ class Entity(Provider):
     Here all objects which are either named Suzanne or (the name starts with Cube and belong to the category "is_cube")
         "name_of_selector": {
             "provider": "getter.Entity",
-            "index": 0,             # only return the first match
+            "index": 0,             # only returns the first match
             "conditions": [{
                 "name": "Suzanne",  # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
                 "type": "MESH"      # this will make sure that the object is a mesh
