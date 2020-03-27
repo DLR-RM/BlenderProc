@@ -8,6 +8,9 @@ from src.main.Module import Module
 class OnSurfaceSampler(Module):
     """ Places objects on a surface. The object are positioned slightly above the surface, it is recommended to run PhysicsPositioning afterwards to make sure the objects are not hovering.
 
+    For best results "up_direction" should be aligned with an axis in the local coordinate frame of "surface".
+    Otherwise the bounding box used will not be aligned properly which may lead to floating objects.
+
     .. csv-table::
        :header: "Parameter", "Description"
 
@@ -64,14 +67,14 @@ class OnSurfaceSampler(Module):
         return closest_distance is None or (self.min_distance <= closest_distance <= self.max_distance)
 
     @staticmethod
-    def collision(a, b):
+    def collision(obj_a, obj_b):
         """
         Check if a and b intersect
         """
-        intersection = check_bb_intersection(a, b)
+        intersection = check_bb_intersection(obj_a, obj_b)
         if intersection:
             # check for more refined collisions
-            intersection, cache = check_intersection(a, b)
+            intersection, cache = check_intersection(obj_a, obj_b)
 
         return intersection
 
@@ -87,13 +90,13 @@ class OnSurfaceSampler(Module):
 
     def drop(self, obj):
         """
-        Move object "down" until its bounding box touches the bounding box of the surface (not precise)
+        Move object "down" until its bounding box touches the bounding box of the surface.
+        This uses bounding boxes which are not aligned optimally, this will cause objects to be placed slightly to high.
         """
         obj_bounds = get_bounds(obj)
         obj_height = min([self.up_direction.dot(corner) for corner in obj_bounds])
 
-        obj.location = obj.location - self.up_direction * (obj_height - self.surface_height)
-        bpy.context.view_layer.update()
+        obj.location -= self.up_direction * (obj_height - self.surface_height)
 
     def run(self):
         max_tries = self.config.get_int("max_iterations", 100)
@@ -108,7 +111,7 @@ class OnSurfaceSampler(Module):
 
                 print("Trying to put ", obj.name)
 
-                places_successfully = False
+                placed_successfully = False
 
                 for i in range(max_tries):
                     position = self.config.get_vector3d("pos_sampler")
@@ -116,15 +119,12 @@ class OnSurfaceSampler(Module):
 
                     obj.location = position
                     obj.rotation_euler = rotation
-                    bpy.context.view_layer.update()
-
-                    good_position = True
 
                     if not self.check_collision_free(obj):
                         print("Collision detected, retrying!")
                         continue
 
-                    if good_position and not self.check_above_surface(obj):
+                    if not self.check_above_surface(obj):
                         print("Not above surface, retrying!")
                         continue
 
@@ -142,15 +142,17 @@ class OnSurfaceSampler(Module):
                         print("Collision detected after drop, retrying!")
                         continue
 
-                    print("Placed object \"{}\" successfully at {} after {} iterations!".format(obj.name, obj.location, i+1))
+                    print("Placed object \"{}\" successfully at {} after {} iterations!".format(obj.name, obj.location,
+                                                                                                i + 1))
                     self.placed_objects.append(obj)
 
-                    places_successfully = True
+                    placed_successfully = True
                     break
 
-                if not places_successfully:
+                if not placed_successfully:
                     print("Giving up on {}, deleting...".format(obj.name))
                     bpy.ops.object.select_all(action='DESELECT')
                     obj.select_set(True)
                     bpy.ops.object.delete()
-                    bpy.context.view_layer.update()
+
+        bpy.context.view_layer.update()
