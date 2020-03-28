@@ -14,16 +14,16 @@ class Disk(Provider):
 
        "center", "Center of a disk. Type: mathutils.Vector."
        "radius", "The radius of the disk. Type: float."
-       "up_vector", "An up vector which specifies a local coordinate system of the disk. Optional."
+       "up_vector", "An up vector which specifies a local coordinate system of the disk."
                     "Type: mathutils.Vector. Default value: [0, 0, 0]"
        "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample"
                       "from. Type: string. Default value: "disk". Available values: "disk", "circle", "sector", "arc"."
        "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller"
-                      "than end_angle. Arc's/sector's inner angle must be less or equal than 180 degrees. Type: float."
-                      "Optional. Default value: 0."
+                      "than end_angle. Arc's/sector's inner angle must be less or equal than 180 degrees. Angle"
+                      "increases in the counterclockwise direction from X axis. Type: float. Default value: 0."
        "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than"
-                    "start_angle. Arc's/sector's inner angle must be less or equal than 180 degrees. Type: float."
-                    "Optional. Default value: 180."
+                    "start_angle. Arc's/sector's inner angle must be less or equal than 180 degrees. Angle increases in"
+                    "the counterclockwise direction from X axis. Type: float. Default value: 180."
     """
 
     def __init__(self, config):
