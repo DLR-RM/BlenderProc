@@ -207,6 +207,7 @@ class Renderer(Module):
             if len(get_all_mesh_objects()) == 0:
                 raise Exception("There are no mesh-objects to render, "
                                 "please load an object before invoking the renderer.")
+
             # As frame_end is pointing to the next free frame, decrease it by one, as blender will render all frames in [frame_start, frame_ned]
             bpy.context.scene.frame_end -= 1
             if not self._avoid_rendering:
