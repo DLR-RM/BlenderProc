@@ -4,7 +4,7 @@ import mathutils
 import bpy
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import load_image, get_3x4_RT_matrix_from_blender, get_calibration_matrix_K_from_blender
+from src.utility.BlenderUtility import load_image
 from src.utility.BlenderUtility import add_object_only_with_direction_vectors
 from src.utility.Utility import Utility
 
@@ -24,13 +24,10 @@ class VisNormalImage(Module):
 
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
-        K_mat = get_calibration_matrix_K_from_blender(cam_ob.data)
-        K_mat.invert()
         cam_matrix = cam_ob.matrix_world
 
         x_angle = cam.angle_x * 0.5
         y_angle = cam.angle_x * 0.5
-        print(math.degrees(x_angle), math.degrees(y_angle))
         spacing = 1
         vertices = []
         normals = []
@@ -54,11 +51,7 @@ class VisNormalImage(Module):
                     normal = rot_mat_camera @ normal
                     normals.append(normal)
 
-        import numpy as np
-
         add_object_only_with_direction_vectors(vertices, normals, radius=0.1, name='NewVertexObject')
-        normals = np.array(normals)
-        print(np.min(normals, axis=0), np.max(normals, axis=0))
 
 
 
