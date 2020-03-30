@@ -7,7 +7,9 @@ from src.utility.Utility import Utility
 
 
 class BlendLoader(Loader):
-    """ Loads entities from a specified .blend file's section/datablock.
+    """ Loads entities (everything that can be stored in a .blend file, see Blender's documentation for bpy.types.ID)
+        that match a name pattern from a specified .blend file's section/datablock.
+
 
         Example:
 
