@@ -7,8 +7,8 @@ from src.utility.Utility import Utility
 
 
 class BlendLoader(Loader):
-    """ Loads entities (everything that can be stored in a .blend file, see Blender's documentation for bpy.types.ID)
-        that match a name pattern from a specified .blend file's section/datablock.
+    """ Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
+        bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
 
 
         Example:
@@ -16,9 +16,9 @@ class BlendLoader(Loader):
             {
               "module": "loader.BlendLoader",
               "config": {
-                "path": "/path/file.blend",     <--------- path to a .blend file
-                "load_from": "/Object",         <--------- folder name/ID: `/Collection`, `/Texture`, `/Material`, etc.
-                "entities": ".*abc.*"           <--------- regular expression, load everything in the dict if not given
+                "path": "/path/file.blend",     <-------- path to a .blend file
+                "load_from": "/Object",         <-------- folder name/ID: `/Collection`, `/Texture`, `/Material`, etc.
+                "entities": ".*abc.*"           <-------- regular expression, load everything in the folder if not given
               }
             }
             
@@ -30,8 +30,11 @@ class BlendLoader(Loader):
        :header: "Parameter", "Description"
 
        "path", "Path to a .blend file. Type: string."
-       "load_from", "Name of the datablock/folder inside .blend file. Always start with '/' Type: string. See known_datablock_names for supported folder names/type IDs."
-       "entities", "Regular expression representing a name pattern of entities' names. Optional. Type: string."
+       "load_from", "Name of the datablock/folder inside .blend file. Always start with '/'. See known_datablock_names "
+                    "for supported folder names/type IDs. Type: string. "
+       "entities", "Regular expression representing a name pattern of entities' (everything that can be stored in a "
+                   ".blend file's folders, see Blender's documentation for bpy.types.ID for more info) names. "
+                   "Optional. Type: string."
     """
 
     def __init__(self, config):
