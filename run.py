@@ -9,11 +9,6 @@ if version_info.major == 3:
 else:
     from urllib import urlretrieve
     import contextlib
-    try:
-        import lzma
-    except ImportError as e:
-        print("For decompressing \".xz\" files in python 2.x is it necessary to use lzma")
-        raise e # from import lzma -> pip install --user pyliblzma
 
 
 from src.utility.ConfigParser import ConfigParser
@@ -66,6 +61,12 @@ if "custom_blender_path" not in setup_config:
 
     # Download blender if it not already exists
     if not os.path.exists(blender_path):
+        if version_info.major != 3:
+            try:
+                import lzma
+            except ImportError as e:
+                print("For decompressing \".xz\" files in python 2.x is it necessary to use lzma")
+                raise e  # from import lzma -> pip install --user pyliblzma
         if platform == "linux" or platform == "linux2":
             url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.xz"
         elif platform == "darwin":
