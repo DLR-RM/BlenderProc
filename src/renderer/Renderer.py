@@ -1,9 +1,11 @@
 import os
 from sys import platform
 import multiprocessing
+import math
 
 import addon_utils
 import bpy
+import mathutils
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
@@ -301,20 +303,74 @@ class Renderer(Module):
         render_layer_node = tree.nodes.get('Render Layers')
 
         separate_rgba = tree.nodes.new("CompositorNodeSepRGBA")
+        space_between_nodes_x = 200
+        space_between_nodes_y = -300
+        separate_rgba.location.x = space_between_nodes_x
+        separate_rgba.location.y = space_between_nodes_y
         links.new(render_layer_node.outputs["Normal"], separate_rgba.inputs["Image"])
 
         combine_rgba = tree.nodes.new("CompositorNodeCombRGBA")
+        combine_rgba.location.x = space_between_nodes_x * 14
 
-        for channel in ["R", "G", "B"]:
+        c_channels = ["R", "G", "B"]
+        offset = space_between_nodes_x * 2
+        multiplication_values = [[],[],[]]
+        channel_results = {}
+        for row_index, channel in enumerate(c_channels):
+            # matrix multiplication
+            mulitpliers = []
+            for column in range(3):
+                multiply = tree.nodes.new("CompositorNodeMath")
+                multiply.operation = "MULTIPLY"
+                multiply.inputs[1].default_value = 0 # setting at the end for all frames
+                multiply.location.x = column * space_between_nodes_x + offset
+                multiply.location.y = row_index * space_between_nodes_y
+                links.new(separate_rgba.outputs[c_channels[column]], multiply.inputs[0])
+                mulitpliers.append(multiply)
+                multiplication_values[row_index].append(multiply)
+
+            first_add = tree.nodes.new("CompositorNodeMath")
+            first_add.operation = "ADD"
+            first_add.location.x = space_between_nodes_x * 5 + offset
+            first_add.location.y = row_index * space_between_nodes_y
+            links.new(mulitpliers[0].outputs["Value"], first_add.inputs[0])
+            links.new(mulitpliers[1].outputs["Value"], first_add.inputs[1])
+
+            second_add = tree.nodes.new("CompositorNodeMath")
+            second_add.operation = "ADD"
+            second_add.location.x = space_between_nodes_x * 6 + offset
+            second_add.location.y = row_index * space_between_nodes_y
+            links.new(first_add.outputs["Value"], second_add.inputs[0])
+            links.new(mulitpliers[2].outputs["Value"], second_add.inputs[1])
+
+            channel_results[channel] = second_add
+
+        # set the matrix accordingly
+        rot_around_x_axis = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X')
+        cam_ob = bpy.context.scene.camera
+        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+            bpy.context.scene.frame_set(frame)
+            used_rotation_matrix = cam_ob.matrix_world @ rot_around_x_axis
+            for row_index in range(3):
+                for column_index in range(3):
+                    current_multiply = multiplication_values[row_index][column_index]
+                    current_multiply.inputs[1].default_value = used_rotation_matrix[column_index][row_index]
+                    current_multiply.inputs[1].keyframe_insert(data_path='default_value', frame=frame)
+        offset = 8 * space_between_nodes_x
+        for index, channel in enumerate(c_channels):
             multiply = tree.nodes.new("CompositorNodeMath")
             multiply.operation = "MULTIPLY"
-            links.new(separate_rgba.outputs[channel], multiply.inputs[0])
+            multiply.location.x = space_between_nodes_x * 2 + offset
+            multiply.location.y = index * space_between_nodes_y
+            links.new(channel_results[channel].outputs["Value"], multiply.inputs[0])
             if channel == "G":
                 multiply.inputs[1].default_value = -0.5
             else:
                 multiply.inputs[1].default_value = 0.5
             add = tree.nodes.new("CompositorNodeMath")
             add.operation = "ADD"
+            add.location.x = space_between_nodes_x * 3 + offset
+            add.location.y = index * space_between_nodes_y
             links.new(multiply.outputs["Value"], add.inputs[0])
             add.inputs[1].default_value = 0.5
             output_channel = channel
@@ -322,13 +378,13 @@ class Renderer(Module):
                 output_channel = "B"
             elif channel == "B":
                 output_channel = "G"
-
             links.new(add.outputs["Value"], combine_rgba.inputs[output_channel])
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("normal_output_file_prefix", "normal_")
+        output_file.location.x = space_between_nodes_x * 15
         links.new(combine_rgba.outputs["Image"], output_file.inputs["Image"])
 
 
