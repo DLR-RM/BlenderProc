@@ -5,26 +5,26 @@ from src.main.Provider import Provider
 
 class Disk(Provider):
     """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
-        with an inner angle less than 180 degrees. Returns a 3d mathutils.Vector sampled point.
+        with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
 
     **Configuration**:
 
     .. csv-table::
        :header:, "Parameter", "Description"
 
-       "center", "Center of a disk. Type: mathutils.Vector."
+       "center", "Center (in 3d space) of a 2d geometrical shape to sample from. Type: mathutils.Vector."
        "radius", "The radius of the disk. Type: float."
-       "up_vector", "An up vector which specifies a local coordinate system of the disk."
-                    "Type: mathutils.Vector. Default value: [0, 0, 0]"
-       "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample"
+       "rotation", "List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used "
+                   "for sampling in 3d space. Type: mathutils.Vector. Default value: [0, 0, 0]."
+       "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample "
                       "from. Type: string. Default value: "disk". Available values: "disk", "circle", "sector", "arc"."
-       "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller"
-                      "than end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than"
-                      "180 degrees. Angle increases in the counterclockwise direction from the positive direction of X"
+       "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller "
+                      "than end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than "
+                      "180 degrees. Angle increases in the counterclockwise direction from the positive direction of X "
                       "axis. Type: float. Default value: 0."
-       "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than"
-                    "start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180"
-                    "degrees. Angle increases in the counterclockwise direction from the positive direction of X axis."
+       "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than "
+                    "start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 "
+                    "degrees. Angle increases in the counterclockwise direction from the positive direction of X axis. "
                     "Type: float. Default value: 180."
     """
 
@@ -33,11 +33,11 @@ class Disk(Provider):
 
     def run(self):
         """
-        :return: A random point sampled point on a 1-sphere (circle) or on a 2-ball (disk). Type: Mathutils vector.
+        :return: A random point sampled point on a circle/disk/arc/sector. Type: mathutils.Vector.
         """
         center = self.config.get_vector3d("center")
         radius = self.config.get_float("radius")
-        up_vector = self.config.get_vector3d("up_vector", [0, 0, 0])
+        euler_angles = self.config.get_vector3d("rotation", [0, 0, 0])
         sample_from = self.config.get_string("sample_from", "disk")
         # check if the mode/sampling structure is supported
         if sample_from not in ["disk", "circle", "sector", "arc"]:
@@ -68,8 +68,6 @@ class Disk(Provider):
             while not all([not self._is_clockwise(start_vec, sampled_point), self._is_clockwise(end_vec, sampled_point)]):
                 sampled_point = self._sample_point(magnitude)
 
-        # get Euler angles from up vector
-        euler_angles = up_vector.to_track_quat('Z', 'Y').to_euler()
         # get rotation
         rot_mat = mathutils.Euler(euler_angles, 'XYZ').to_matrix()
         # apply rotation and add center
