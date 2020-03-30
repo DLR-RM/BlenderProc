@@ -15,10 +15,12 @@ class BlendLoader(Loader):
               "module": "loader.BlendLoader",
               "config": {
                 "path": "/path/file.blend",     <--------- path to a .blend file
-                "load_from": "objects",         <--------- folder name/ID: `/Collection`, `/Object`, `/Material`, etc.
+                "load_from": "/Object",         <--------- folder name/ID: `/Collection`, `/Texture`, `/Material`, etc.
                 "entities": ".*abc.*"           <--------- regular expression, load everything in the dict if not given
               }
             }
+            
+            Result: loading all objects from folder /Object of file.blend that match the pattern.
 
     **Configuration**:
 
