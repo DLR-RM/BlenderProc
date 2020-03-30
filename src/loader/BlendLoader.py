@@ -9,6 +9,17 @@ from src.utility.Utility import Utility
 class BlendLoader(Loader):
     """ Loads entities from a specified .blend file's section/datablock.
 
+        Example:
+
+            {
+              "module": "loader.BlendLoader",
+              "config": {
+                "path": "/path/file.blend",     <--------- path to a .blend file
+                "load_from": "objects",         <--------- folder name/ID: `/Collection`, `/Object`, `/Material`, etc.
+                "entities": ".*abc.*"           <--------- regular expression, load everything in the dict if not given
+              }
+            }
+
     **Configuration**:
 
     .. csv-table::
