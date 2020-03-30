@@ -33,7 +33,6 @@ class Module:
         :return: The output directory to use
         """
         if self.config.get_bool("output_is_temp", output_is_temp_default):
-            return self._output_dir
             return self._temp_dir
         else:
             return self._output_dir

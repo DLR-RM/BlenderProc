@@ -9,8 +9,7 @@
   },
   "global": {
     "all": {
-      "output_dir": "examples/debugging/output",
-      "output_is_temp": False
+      "output_dir": "examples/debugging/output"
     }
   },
   "modules": [
@@ -47,23 +46,23 @@
       }
     },
     {
-      "module": "loader.VisNormalImage",
-      "config": {
-        "path_to_normal_image": "examples/debugging/output/gen_normal_0000.exr",
-        "path_to_depth_image": "depth_0000.exr"
-      }
-    },
-    {
-      "module": "renderer.NormalRenderer",
-      "config": {
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350,
-        "render_normal": true
+        "samples": 350
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
       }
     }
   ]
