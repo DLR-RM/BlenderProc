@@ -19,11 +19,13 @@ class Disk(Provider):
        "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample"
                       "from. Type: string. Default value: "disk". Available values: "disk", "circle", "sector", "arc"."
        "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller"
-                      "than end_angle. Arc's/sector's inner angle must be less or equal than 180 degrees. Angle"
-                      "increases in the counterclockwise direction from X axis. Type: float. Default value: 0."
+                      "than end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than"
+                      "180 degrees. Angle increases in the counterclockwise direction from the positive direction of X"
+                      "axis. Type: float. Default value: 0."
        "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than"
-                    "start_angle. Arc's/sector's inner angle must be less or equal than 180 degrees. Angle increases in"
-                    "the counterclockwise direction from X axis. Type: float. Default value: 180."
+                    "start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180"
+                    "degrees. Angle increases in the counterclockwise direction from the positive direction of X axis."
+                    "Type: float. Default value: 180."
     """
 
     def __init__(self, config):
@@ -53,10 +55,9 @@ class Disk(Provider):
             start_vec = [np.cos(np.deg2rad(start_angle)), np.sin(np.deg2rad(start_angle))]
             end_vec = [np.cos(np.deg2rad(end_angle)), np.sin(np.deg2rad(end_angle))]
 
-        # if sampling from the circle or arc set magnitude to radius
+        # if sampling from the circle or arc set magnitude to radius, if not - to the scaled radius
         if sample_from in ["circle", "arc"]:
             magnitude = radius
-        # if sampling from a disk or sector set it to scaled radius
         elif sample_from in ["disk", "sector"]:
             magnitude = radius * np.sqrt(np.random.uniform())
 
