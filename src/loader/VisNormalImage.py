@@ -94,11 +94,3 @@ class VisNormalImage(Module):
                     normals.append(normal)
 
         add_object_only_with_direction_vectors(vertices, normals, radius=normal_len, name='NewVertexObject')
-
-
-
-
-
-
-
-
