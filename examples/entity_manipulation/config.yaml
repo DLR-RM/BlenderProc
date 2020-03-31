@@ -78,16 +78,11 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350
+        "samples": 350,
+        "render_normals": True
       }
     },
     {
