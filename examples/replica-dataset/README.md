@@ -27,7 +27,7 @@ python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
 * Load replica room: `loader.ReplicaLoader` module.
 * Extracts a floor in the room: `object.FloorExtractor` module.
 * Samples multiples cameras in the room: `camera.ReplicaCameraSampler` module.
-* Renders normals: `renderer.NormalRenderer` module.
+* Renders rgb plus normals: `renderer.RgbRenderer` module.
 * Writes output to .hdf5 container: `writer.Hdf5Writer` module.
 
 ## Config file

@@ -76,10 +76,10 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-    },
-    {
       "module": "renderer.RgbRenderer",
+      "config": {
+        "render_normals": True
+      }
     },
     {
       "module": "writer.Hdf5Writer",
