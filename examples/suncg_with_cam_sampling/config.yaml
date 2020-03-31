@@ -59,13 +59,16 @@
     },
     {
       "module": "renderer.SegMapRenderer",
+      "config": {
+        "use_alpha": True
+      }
     },
     {
       "module": "renderer.RgbRenderer",
       "config": {
         "render_depth": True,
-        "render_normals": True
-
+        "render_normals": True,
+        "use_alpha": True
       }
     },
     {
