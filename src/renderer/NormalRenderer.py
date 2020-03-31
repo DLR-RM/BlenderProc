@@ -4,10 +4,16 @@ from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
 
 class NormalRenderer(Renderer):
-    """  Renders normal images for each registered keypoint.
+    """  Renders normal images for each registered key point.
 
-    Every object's materials are replaced with an imported normal material to render normals.
-    The rendering is stored using the .exr filetype and a color depth of 32bit to achieve high precision.
+    Be aware that this can also be done by setting in any other renderer the `render_normals` to true.
+
+    The key difference here is that this renderer replaces every object's materials with an imported normal
+    material to render normals. The rendering is stored using the .exr file type and a color depth of 32bit
+    to achieve high precision. Furthermore, the `render_normals` mode supports anti-aliasing, while this
+    renderer does not.
+
+    This is only useful if you only want normals and no color.
     """
 
     def __init__(self, config):
