@@ -106,12 +106,11 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {}
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
+        "render_normals": True,
+        "render_depth": True,
+        "use_alpha": True
       }
     },
     {
