@@ -15,7 +15,6 @@
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
     },
     {
       "module": "loader.ObjectLoader",
@@ -57,22 +56,15 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350
+        "samples": 350,
+        "render_normals": True
       }
     },
     {
       "module": "writer.Hdf5Writer",
-      "config": {
-      }
     }
   ]
 }
