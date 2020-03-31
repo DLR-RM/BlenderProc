@@ -35,7 +35,7 @@ We provide two example configs that interface with the BOP datasets.
 
 We are providing limited dataset support, for example for SUNCG, Replica, Rock Essentials and others.
 These can be found in:
-* [replica-dataset](replica-dataset)
+* [replica_dataset](replica_dataset)
 * [suncg_basic](suncg_basic)
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
 * [suncg_with_object_replacer](suncg_with_object_replacer)

@@ -32,9 +32,8 @@ python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
 * Loads a SUNCG scene: `loader.SuncgLoader` module.
 * Loads camera positions from a given file: `camera.CameraLoader` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
-* Renders normals: `renderer.NormalRenderer` module.
 * Renders semantic segmentation map: `renderer.SegMapRenderer` module.
-* Renders rgb and depth in stereo mode: `renderer.RgbRenderer` module.
+* Renders rgb, depth and normals in stereo mode: `renderer.RgbRenderer` module.
 * Computes depth based on stereo matching: `writer.StereoGlobalMatchingWriter` module
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 
@@ -97,7 +96,8 @@ Here we specify the camera parameters, some notable points are:
       "module": "renderer.RgbRenderer",
       "config": {
         "render_depth": true,
-        "stereo": true,
+        "render_normals": true,
+        "stereo": true
       }
     },
 ```
