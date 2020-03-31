@@ -206,7 +206,6 @@ The file `0.h5py` would therefore look like the following:
   "colors": #<numpy array with pixel values read in from rgb_0000.png>,
   "depth": #<numpy array with pixel values read in from depth_0000.exr>,
   "normals": #<numpy array with pixel values read in from normals_0000.exr>,
-  "campose": #<numpy array with cam pose read in from campose_0000.npy>
 }
 ``` 
 
