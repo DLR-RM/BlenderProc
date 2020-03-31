@@ -76,12 +76,11 @@ Every module has a name which specifies the python path to the corresponding cla
 ```yaml
  {
   "module": "main.Initializer",
-  "config": {}
 }
 ```
 
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
-* We are using the default parameters here, so `config` is empty.
+* We are using the default parameters here, so we can omit `config` altogether.
 
 #### ObjectLoader
 
@@ -188,7 +187,6 @@ In this example all of these are temporary and are used in the next module.
       "depth": [
         {
           "module": "postprocessing.TrimRedundantChannels",
-          "config": {}
         }
       ]
     }

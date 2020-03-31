@@ -15,7 +15,6 @@
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
     },
     {
       "module": "loader.ObjectLoader",
@@ -63,7 +62,6 @@
           "depth": [
             {
               "module": "postprocessing.TrimRedundantChannels",
-              "config": {}
             }
           ]
         }
