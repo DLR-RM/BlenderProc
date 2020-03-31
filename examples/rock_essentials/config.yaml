@@ -143,9 +143,9 @@
           "number_of_samples": 5,
           "location": {
             "provider": "sampler.Disk",
+            "sample_from": "circle",
             "center": [0, 0, 4],
-            "radius": 7,
-            "use_circle_only": True
+            "radius": 7
           },
           "rotation": {
             "format": "look_at",
