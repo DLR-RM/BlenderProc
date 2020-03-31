@@ -46,17 +46,14 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
         "samples": 350,
-        "render_depth": true
+        "render_normals": True,
+        "normals_output_key": "normals",
+        "render_depth": True,
+        "depth_output_key": "depth"
       }
     },
     {
