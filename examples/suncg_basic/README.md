@@ -30,9 +30,8 @@ python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
 * Loads a SUNCG scene: `loader.SuncgLoader` module.
 * Loads camera positions from a given file: `camera.CameraLoader` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
-* Renders normals: `renderer.NormalRenderer` module.
 * Renders semantic segmentation map: `renderer.SegMapRenderer` module.
-* Renders rgb and depth: `renderer.RgbRenderer` module.
+* Renders rgb, depth and normals: `renderer.RgbRenderer` module.
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -102,13 +101,11 @@ Also `fov_is_half` has to be activated, as SUNCG describes the FOV as the angle 
 ```yaml
 {
   "module": "lighting.SuncgLighting",
-  "config": {}
 },
 ```
 
 This module automatically sets light sources inside the loaded house.
 Therefore each window, lamp or lampshade gets an emissive material and also the ceiling is made to slowly emit light to make sure even rooms without lights or windows are not completely dark.
-
 
 ## More examples
 
