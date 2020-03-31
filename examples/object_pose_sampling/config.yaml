@@ -72,23 +72,16 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
         "samples": 50,
+        "render_normal": True,
         "output_is_temp": False
       }
     },
     {
       "module": "writer.Hdf5Writer",
-      "config": {
-      }
     }
   ]
 }

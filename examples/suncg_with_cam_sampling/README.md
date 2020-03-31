@@ -30,9 +30,8 @@ python scripts/visHdf5Files.py examples/suncg_with_cam_sampling/output/0.hdf5
 * Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
 * Writes sampled camera poses to file: `writer.CameraStateWriter` module.
-* Renders normals: `renderer.NormalRenderer` module.
 * Renders semantic segmentation map: `renderer.SegMapRenderer` module.
-* Renders rgb and depth: `renderer.RgbRenderer` module.
+* Renders rgb, depth and normals: `renderer.RgbRenderer` module.
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 
 ## Config file

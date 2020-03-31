@@ -55,10 +55,6 @@
       "config": {}
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {}
-    },
-    {
       "module": "renderer.SegMapRenderer",
       "config": {}
     },
@@ -66,7 +62,8 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "render_depth": true,
-        "stereo": true,
+        "render_normals": true,
+        "stereo": true
       }
     },
     {

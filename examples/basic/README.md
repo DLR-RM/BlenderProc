@@ -32,8 +32,7 @@ python scripts/visHdf5Files.py examples/basic/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders normals: `renderer.NormalRenderer` module.
-* Renders rgb: `renderer.RgbRenderer` module.
+* Renders rgb: `renderer.RgbRenderer` module and normals plus depth.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -77,12 +76,11 @@ Every module has a name which specifies the python path to the corresponding cla
 ```yaml
  {
   "module": "main.Initializer",
-  "config": {}
 }
 ```
 
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
-* We are using the default parameters here, so `config` is empty.
+* We are using the default parameters here, so we can omit `config` altogether.
 
 #### ObjectLoader
 
@@ -147,24 +145,6 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 => Creates the files `campose_0000.npy` and `campose_0001.npy` 
 
-#### NormalRenderer
-
-```yaml
-{
-  "module": "renderer.NormalRenderer",
-  "config": {
-      "output_key": "normals"
-  }
-}
-```
-
-* This module just goes through all cam poses which were defined in the previous model and renders a normal image for each of them
-* The images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* The output files are stored in the defined output directory (see [Global](#Global)) and are named like `i.exr` where `i` is the cam pose index
-* The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files.
-
-=> Creates the files `normal_0000.exr` and `normal_0001.exr`.
-
 #### RgbRenderer
 
 ```yaml
@@ -172,16 +152,30 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
   "module": "renderer.RgbRenderer",
   "config": {
      "output_key": "colors",
-     "samples": 350
+     "samples": 350,
+     "render_normals": True,
+     "normal_output_key": "normals",
+     "render_depth": True,
+     "depth_output_key": "depth"
   }
 }
 ```
 
 * This module just goes through all cam poses and renders a rgb image for each of them.
 * In this case we increase the number of samples used for raytracing which increases the rendering quality.
-* We again set the `output_key`, here to `colors`.
+* The output files are stored in the defined output directory (see [Global](#Global)) and are named like `i.png` where `i` is the cam pose index
+* The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files, we set the `output_key`, here to `colors`.
 
-=> Creates the files `rgb_0001.png` and `rgb_0002.png`.
+=> Creates the files `rgb_0000.png` and `rgb_0001.png`.
+
+It also creates the normals and depth 
+
+* The normal and depth images are rendered using the `.exr` format which allows linear colorspace and higher precision
+* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `depth_output_key`.
+
+=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `depth_0000.exr` and `depth_0001.exr`.
+
+In this example all of these are temporary and are used in the next module.
 
 #### Hdf5Writer
 
@@ -193,7 +187,6 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
       "depth": [
         {
           "module": "postprocessing.TrimRedundantChannels",
-          "config": {}
         }
       ]
     }
@@ -210,9 +203,9 @@ The file `0.h5py` would therefore look like the following:
 
 ```yaml
 {
-  "normals": #<numpy array with pixel values read in from normal_0000.exr>,
   "colors": #<numpy array with pixel values read in from rgb_0000.png>,
-  "campose": #<numpy array with cam pose read in from campose_0000.npy>
+  "depth": #<numpy array with pixel values read in from depth_0000.exr>,
+  "normals": #<numpy array with pixel values read in from normals_0000.exr>,
 }
 ``` 
 

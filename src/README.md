@@ -69,7 +69,7 @@ Config file:
   },
   "modules": [
     {
-      "module": "renderer.NormalRenderer",
+      "module": "renderer.NewRenderer",
       "config": {
         "auto_tile_size": true,
         "cycles": {
@@ -81,7 +81,7 @@ Config file:
 }
 ```
 
-Inside the `renderer.NormalRenderer` module:
+Inside the `renderer.NewRenderer` module:
 
 ```python
 self.get_int("cycles/samples", 42)  

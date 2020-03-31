@@ -41,7 +41,6 @@ python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders normals: `renderer.NormalRenderer` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders forward / backward optical flow: `renderer.FlowRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
