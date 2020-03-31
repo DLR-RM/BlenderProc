@@ -194,7 +194,7 @@ class Renderer(Module):
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
-        if self.config.get_bool("render_normal", False):
+        if self.config.get_bool("render_normals", False):
             self._write_normal_to_file()
 
         if custom_file_path is None:
@@ -383,7 +383,7 @@ class Renderer(Module):
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
-        output_file.file_slots.values()[0].path = self.config.get_string("normal_output_file_prefix", "normal_")
+        output_file.file_slots.values()[0].path = self.config.get_string("normals_output_file_prefix", "normals_")
         output_file.location.x = space_between_nodes_x * 15
         links.new(combine_rgba.outputs["Image"], output_file.inputs["Image"])
 
@@ -412,11 +412,11 @@ class Renderer(Module):
                 "version": "2.0.0",
                 "stereo": use_stereo
             })
-        if self.config.get_bool("render_normal", False):
+        if self.config.get_bool("render_normals", False):
             self._add_output_entry({
-                "key": self.config.get_string("normal_output_key", "normal"),
-                "path": os.path.join(self._determine_output_dir(), self.config.get_string("normal_output_file_prefix", "normal_")) + "%04d" + ".exr",
-                "version": "1.0.0",
+                "key": self.config.get_string("normals_output_key", "normals"),
+                "path": os.path.join(self._determine_output_dir(), self.config.get_string("normals_output_file_prefix", "normals_")) + "%04d" + ".exr",
+                "version": "2.0.0",
                 "stereo": use_stereo
             })
 
