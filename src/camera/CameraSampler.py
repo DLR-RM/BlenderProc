@@ -31,7 +31,7 @@ class CameraSampler(CameraModule):
        "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min. The operators are combined in conjunction (i.e boolean and).
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
        "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera poses. Type: float. Optional. Default value: min_interest_score"
-       "interest_score_step", "Step size for the list of interest scores that would be tried in the range from min_interest_score to"interest_score_range. Type: float. Optional. Default value: 0.1"
+       "interest_score_step", "Step size for the list of interest scores that would be tried in the range from min_interest_score to"interest_score_range. Must be bigger than 0. Type: float. Optional. Default value: 0.1"
        Interest score range example: min_interest_score = 0.8, interest_score_range = 1.0, interest_score_step = 0.1
        interest score list = [1.0, 0.9, 0.8]. The sampler would reject any pose with score less than 1.0. If max tries is reached, it would switch to 0.9 and so on.
        min_interest_score = 0.8, interest_score_range = 0.8, interest_score_step = 0.1 (or any value bigger than 0)
@@ -70,6 +70,9 @@ class CameraSampler(CameraModule):
         self.interest_score_step = config.get_float("interest_score_step", 0.1)
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
+
+        if self.interest_score_step <= 0.0:
+            raise Exception("Must have an interest score step size bigger than 0")
 
         # Determine the number of camera poses to sample
         number_of_poses = config.get_int("number_of_samples", 1)
