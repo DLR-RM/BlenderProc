@@ -22,7 +22,7 @@ class Attribute(Provider):
             }
           },
           "get": "location"
-          # add "output_type": "sum" to get one value that represents the sum of those locations.
+          # add "transform_by": "sum" to get one value that represents the sum of those locations.
         }
 
 
@@ -51,10 +51,8 @@ class Attribute(Provider):
             }
           },
           "get": "cn_bounding_box_means"
-          # add "output_type": "avg" to get one value that represents the average coordinates of those bounding boxes
+          # add "transform_by": "avg" to get one value that represents the average coordinates of those bounding boxes
         }
-
-        add "output_type": "avg" to get one value that represents the average coordinates of those bounding boxes
 
         **Configuration**:
 
@@ -67,7 +65,7 @@ class Attribute(Provider):
                "imported) in this module. Every entity selected must have this attribute, custom prop, or must be "
                "usable in a custom method, otherwise an exception will be thrown. Type: string. See table below for "
                "supported custom names."
-        "output_type", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
+        "transform_by", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
                        "Type: string. Supported input types: (list of) int, float, mathutils.Vector. See below for "
                        "supported operation names."
 
@@ -124,17 +122,17 @@ class Attribute(Provider):
             else:
                 raise RuntimeError("Unknown parameter name: " + look_for)
 
-        if self.config.has_param("output_type"):
-            output_type = self.config.get_string("output_type")
+        if self.config.has_param("transform_by"):
+            transform_by = self.config.get_string("transform_by")
             if self._check_compatibility(raw_result):
-                if output_type == "sum":
+                if transform_by == "sum":
                     ref_result = self._sum(raw_result)
-                elif output_type == "avg":
+                elif transform_by == "avg":
                     ref_result = self._avg(raw_result)
                 else:
-                    raise RuntimeError("Unknown output_type: " + output_type)
+                    raise RuntimeError("Unknown transform_by: " + transform_by)
             else:
-                raise RuntimeError("Performing " + str(output_type) + " on " + str(look_for) + " " +
+                raise RuntimeError("Performing " + str(transform_by) + " on " + str(look_for) + " " +
                                    str(type(raw_result[0])) + " type is not allowed!")
             result = ref_result
         else:
