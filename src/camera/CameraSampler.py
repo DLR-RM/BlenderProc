@@ -26,10 +26,12 @@ class CameraSampler(CameraModule):
        :header: "Parameter", "Description"
 
        "number_of_samples", "The number of camera poses that should be sampled."
-       "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses."
+       "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses per interest score."
        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
        "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min. The operators are combined in conjunction (i.e boolean and).
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
+       "interest_score_range", "Largest interest score to try. Type: float. Optional. Default value: min_interest_score"
+       "interest_score_step", "Step size for the interest scores that would be tried in the range from min_interest_score to"interest_score_range. Type: float. Optional. Default value: 0.1"
        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
     """
