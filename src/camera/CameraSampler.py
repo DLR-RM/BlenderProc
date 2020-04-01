@@ -32,6 +32,10 @@ class CameraSampler(CameraModule):
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
        "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera poses. Type: float. Optional. Default value: min_interest_score"
        "interest_score_step", "Step size for the list of interest scores that would be tried in the range from min_interest_score to"interest_score_range. Type: float. Optional. Default value: 0.1"
+       Interest score range example: min_interest_score = 0.8, interest_score_range = 1.0, interest_score_step = 0.1
+       interest score list = [1.0, 0.9, 0.8]. The sampler would reject any pose with score less than 1.0. If max tries is reached, it would switch to 0.9 and so on.
+       min_interest_score = 0.8, interest_score_range = 0.8, interest_score_step = 0.1 (or any value bigger than 0)
+       interest score list = [0.8].
        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
     """
