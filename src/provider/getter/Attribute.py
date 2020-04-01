@@ -8,7 +8,7 @@ from src.utility.BlenderUtility import get_bounds
 class Attribute(Provider):
     """ Returns a value that is the result of selecting entities using getter.Entity Provider, getting the list of
         values of selected entities attributes/custom properties/custom-processed data based on the provided name of
-        the parameter/custom property/custom name, and of the optional custom operations on this list.
+        the parameter/custom property/custom function name, and of the optional operations on this list.
 
 
         Example 1: Get a list of locations of objects (which names match the pattern).
@@ -50,7 +50,7 @@ class Attribute(Provider):
               "name": "Cube.*"
             }
           },
-          "get": "cn_bounding_box_means"
+          "get": "cf_bounding_box_means"
           # add "transform_by": "avg" to get one value that represents the average coordinates of those bounding boxes
         }
 
@@ -60,25 +60,29 @@ class Attribute(Provider):
         :header: "Parameter", "Description"
 
         "entities", "List of objects selected by the getter.Entity Provider. Type: list."
-        "get", "Attribute/Custom property/custom name on which the return value is based. Must be a valid name of "
-               "selected entities' attribute/custom property, or a custom name for a special case/method defined (or "
-               "imported) in this module. Every entity selected must have this attribute, custom prop, or must be "
-               "usable in a custom method, otherwise an exception will be thrown. Type: string. See table below for "
-               "supported custom names."
+        "get", "Attribute/Custom property/custom function name on which the return value is based. Must be a valid "
+               "name of selected entities' attribute/custom property, or a custom function name. Every entity selected "
+               "must have this attribute, custom prop, or must be usable in a custom function, otherwise an exception "
+               "will be thrown. Type: string."
+               "In order to specify, what exactly one want to modify (e.g. attribute, custom property, etc.):"
+               "For attribute: key of the pair must be a valid attribute name of the all selected entities."
+               "For custom property: key of the pair must start with `cp_` prefix."
+               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
+               "supported cf names."
         "transform_by", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
-                       "Type: string. Supported input types: (list of) int, float, mathutils.Vector. See below for "
-                       "supported operation names."
+                        "Type: string. Supported input types: (list of) int, float, mathutils.Vector. See below for "
+                        "supported operation names."
 
-        **Custom names for `get` parameter**
+        **Custom function names for `get` parameter**
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "cn_bounding_box_means", "Custom name for `get` parameter. Invokes a chain of operations which returns a list "
-                                 "of arithmetic means of coordinates of object aligned bounding boxes' of selected "
-                                 "objects in world coordinates format."
+        "cf_bounding_box_means", "Custom function name for `get` parameter. Invokes a chain of operations which "
+                                 "returns a list of arithmetic means of coordinates of object aligned bounding boxes' "
+                                 "of selected objects in world coordinates format."
 
-        **Operation names for `output_format` parameter**
+        **Operation names for `transform_by` parameter**
 
     .. csv-table::
         :header: "Parameter", "Description"
@@ -102,13 +106,13 @@ class Attribute(Provider):
         look_for = self.config.get_string("get")
 
         cp_search = False
-        cn_search = False
+        cf_search = False
         if look_for.startswith('cp_'):
             look_for = look_for[3:]
             cp_search = True
-        elif look_for.startswith('cn_'):
+        elif look_for.startswith('cf_'):
             look_for = look_for[3:]
-            cn_search = True
+            cf_search = True
 
         raw_result = []
         for obj in objects:
@@ -116,7 +120,7 @@ class Attribute(Provider):
                 raw_result.append(getattr(obj, look_for))
             elif look_for in obj and cp_search:
                 raw_result.append(obj[look_for])
-            elif look_for == "bounding_box_means" and cn_search:
+            elif look_for == "bounding_box_means" and cf_search:
                 bb_mean = np.mean(get_bounds(obj), axis=0)
                 raw_result.append(mathutils.Vector(bb_mean))
             else:
