@@ -114,7 +114,8 @@ class Attribute(Provider):
             elif look_for in obj and cp_search:
                 raw_result.append(obj[look_for])
             elif look_for == "bounding_box_means" and cn_search:
-                raw_result.append(mathutils.Vector(np.mean(get_bounds(obj), axis=0)))
+                bb_mean = np.mean(get_bounds(obj), axis=0)
+                raw_result.append(mathutils.Vector(bb_mean))
             else:
                 raise RuntimeError("Unknown parameter name: " + look_for)
 
