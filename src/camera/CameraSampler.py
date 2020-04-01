@@ -40,6 +40,7 @@ class CameraSampler(CameraModule):
 
         self.poses = []
         self.var   = 0.0
+        self.check_pose_novelty = self.config.get_bool("check_pose_novelty", False)
         self.min_var_diff = self.config.get_float("min_var_diff", sys.float_info.min)
         if self.min_var_diff == -1.0:
             self.min_var_diff = sys.float_info.min
@@ -131,7 +132,7 @@ class CameraSampler(CameraModule):
         if self.min_interest_score > 0 and self._scene_coverage_score(cam, cam2world_matrix) < self.min_interest_score:
             return False
 
-        if not self._check_novel_pose(cam2world_matrix):
+        if self.check_pose_novelty and (not self._check_novel_pose(cam2world_matrix)):
             return False
 
         return True
