@@ -21,8 +21,8 @@ class WorldManipulator(Module):
         {
           "module": "manipulators.WorldManipulator",
           "config": {
-            "cn_bg_surface_color": [1, 1, 1, 1],
-            "cn_bg_surface_strength": 100
+            "cf_bg_surface_color": [1, 1, 1, 1],
+            "cf_bg_surface_strength": 100
           }
         }
 
@@ -45,8 +45,8 @@ class WorldManipulator(Module):
                "In order to specify, what exactly one want to modify (e.g. attribute, custom property, etc.):"
                "For attribute: key of the pair must be a valid attribute name of the world."
                "For custom property: key of the pair must start with `cp_` prefix."
-               "For calling custom method: key of the pair must start with `cn_` prefix. See table below for supported"
-               "cn names."
+               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for supported"
+               "cf names."
         "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
 
     **Custom names**:
@@ -65,28 +65,28 @@ class WorldManipulator(Module):
         world = bpy.context.scene.world
         for key in self.config.data.keys():
             requested_cp = False
-            requested_cn = False
+            requested_cf = False
 
             value = self.config.get_raw_value(key)
 
             if key.startswith('cp_'):
                 requested_cp = True
                 key = key[3:]
-            elif key.startswith('cn_'):
-                requested_cn = True
+            elif key.startswith('cf_'):
+                requested_cf = True
                 key = key[3:]
-            if hasattr(world, key) and all([not requested_cp, not requested_cn]):
+            if hasattr(world, key) and all([not requested_cp, not requested_cf]):
                 setattr(world, key, value)
             elif requested_cp:
                 world[key] = value
-            elif requested_cn:
+            elif requested_cf:
 
                 if key == "bg_surface_color":
                     self._set_bg_surface_color(world, value)
                 elif key == "bg_surface_strength":
                     self._set_bg_surface_strength(world, value)
                 else:
-                    raise RuntimeError('Unknown cn_ parameter: ' + key)
+                    raise RuntimeError('Unknown cf_ parameter: ' + key)
 
             else:
                 raise RuntimeError('Unknown parameter: ' + key)
