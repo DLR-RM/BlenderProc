@@ -8,6 +8,8 @@ import sys
 import numbers
 from collections import defaultdict
 
+import numpy as np
+
 class CameraSampler(CameraModule):
     """ A general camera sampler.
 
@@ -57,7 +59,9 @@ class CameraSampler(CameraModule):
         self.sqrt_number_of_rays = config.get_int("sqrt_number_of_rays", 10)
         self.max_tries = config.get_int("max_tries", 10000)
         self.proximity_checks = config.get_raw_dict("proximity_checks", [])
-        self.min_interest_score = config.get_float("min_interest_score", 0)
+        self.min_interest_score = config.get_float("min_interest_score", 0.0)
+        self.interest_score_range = config.get_float("interest_score_range", self.min_interest_score)
+        self.interest_score_step = config.get_float("interest_score_step", 0.1)
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
 
@@ -65,11 +69,25 @@ class CameraSampler(CameraModule):
         number_of_poses = config.get_int("number_of_samples", 1)
         print("Sampling " + str(number_of_poses) + " cam poses")
 
+        if self.min_interest_score == self.interest_score_range:
+            step_size = 1
+        else:    
+            step_size = (self.interest_score_range - self.min_interest_score) / self.interest_score_step
+            step_size += 1  # To include last value
+
+        interest_scores = np.linspace(self.interest_score_range, self.min_interest_score, step_size)  # Decreasing order
+        score_index = 0
+
+        all_tries = 0  # max_tries is now applied per each score
         tries = 0
+
+        self.min_interest_score = interest_scores[score_index]
+        print("Trying a min_interest_score value: %f" % self.min_interest_score)
         for i in range(number_of_poses):
             # Do until a valid pose has been found or the max number of tries has been reached
             while tries < self.max_tries:
                 tries += 1
+                all_tries += 1
                 # Sample a new cam pose and check if its valid
                 if self.sample_and_validate_cam_pose(cam, cam_ob, config):
                     # Store new cam pose as next frame
@@ -79,10 +97,16 @@ class CameraSampler(CameraModule):
                     break
 
             if tries >= self.max_tries:
-                print("Maximum number of tries reached!")
-                break
+                if score_index == len(interest_scores) - 1:  # If we tried all score values
+                    print("Maximum number of tries reached!")
+                    break
+                # Otherwise, try a different lower score and reset the number of trials
+                score_index += 1
+                self.min_interest_score = interest_scores[score_index]
+                print("Trying a different min_interest_score value: %f" % self.min_interest_score)
+                tries = 0
 
-        print(str(tries) + " tries were necessary")
+        print(str(all_tries) + " tries were necessary")
 
     def sample_and_validate_cam_pose(self, cam, cam_ob, config):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
