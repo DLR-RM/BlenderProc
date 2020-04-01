@@ -1,6 +1,5 @@
 import bpy
 
-from src.utility.Utility import Utility
 from src.main.Module import Module
 
 
@@ -98,7 +97,7 @@ class WorldManipulator(Module):
         :param world: World to modify. Type: World.
         :param color: Color of the emitted light. Type: RGBA vector.
         """
-        world.node_tree.nodes["Background"].inputs[0].default_value = color
+        world.node_tree.nodes["Background"].inputs['Color'].default_value = color
 
     def _set_bg_surface_strength(self, world, strength):
         """ Sets the strength of the emitted light by the background surface.
@@ -106,4 +105,4 @@ class WorldManipulator(Module):
         :param world: World to modify. Type: World.
         :param strength: Strength of the emitted light. Type: float.
         """
-        world.node_tree.nodes["Background"].inputs[1].default_value = strength
+        world.node_tree.nodes["Background"].inputs['Strength'].default_value = strength
