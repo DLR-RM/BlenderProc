@@ -323,14 +323,14 @@ class CameraSampler(CameraModule):
 
         if len(self.poses) != 0:  # First pose is always novel
             self.poses.append(pose)
-            _var = np.var(self.poses)
+            var = np.var(self.poses)
 
-            if _var < self.var:  # Check if pose decreased the variance
+            if var < self.var:  # Check if pose decreased the variance
                 self.poses.pop()
                 return False
 
 
-            diff = ((_var - self.var) / self.var) * 100.0
+            diff = ((var - self.var) / self.var) * 100.0
 
             if diff < self.min_var_diff:  # Check if the variance increased sufficiently
                 self.poses.pop()
