@@ -33,7 +33,7 @@
         },
     },
     {
-     "module": "object.EntityManipulator",
+     "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
