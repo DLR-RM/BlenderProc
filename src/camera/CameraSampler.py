@@ -8,6 +8,8 @@ import sys
 import numbers
 from collections import defaultdict
 
+import numpy as np
+
 class CameraSampler(CameraModule):
     """ A general camera sampler.
 
@@ -35,6 +37,13 @@ class CameraSampler(CameraModule):
     def __init__(self, config):
         CameraModule.__init__(self, config)
         self.bvh_tree = None
+
+        self.poses = []
+        self.var   = 0.0
+        self.min_var_diff = self.config.get_float("min_var_diff", sys.float_info.min)
+        if self.min_var_diff == -1.0:
+            self.min_var_diff = sys.float_info.min
+
         self.cam_pose_collection = ItemCollection(self._sample_cam_poses, self.config.get_raw_dict("default_cam_param", {}))
 
     def run(self):
@@ -120,6 +129,9 @@ class CameraSampler(CameraModule):
             return False
 
         if self.min_interest_score > 0 and self._scene_coverage_score(cam, cam2world_matrix) < self.min_interest_score:
+            return False
+
+        if not self._check_novel_pose(cam2world_matrix):
             return False
 
         return True
@@ -297,3 +309,29 @@ class CameraSampler(CameraModule):
 
         score = scene_variance * (score / num_of_rays)
         return score
+
+    def _check_novel_pose(self, cam2world_matrix):
+
+        pose = np.ravel((cam2world_matrix.to_euler(), cam2world_matrix.to_translation()))
+
+        if len(self.poses) != 0:  # First pose is always novel
+            self.poses.append(pose)
+            _var = np.var(self.poses)
+
+            if _var < self.var:  # Check if pose decreased the variance
+                self.poses.pop()
+                return False
+
+
+            diff = ((_var - self.var) / self.var) * 100.0
+
+            if diff < self.min_var_diff:  # Check if the variance increased sufficiently
+                self.poses.pop()
+                return False
+
+        else:
+            self.poses.append(pose)
+
+        self.var = np.var(self.poses)
+
+        return True 
