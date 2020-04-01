@@ -32,6 +32,8 @@ class CameraSampler(CameraModule):
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
+       "check_pose_novelty", "Checks that a sampled new pose is novel. Type: bool. Optional. Default value: True"
+       "min_var_diff", "Considers a pose novel if it increases the variance of all poses sampled by this parameter's value in percentage. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
     """
 
     def __init__(self, config):
@@ -312,6 +314,10 @@ class CameraSampler(CameraModule):
         return score
 
     def _check_novel_pose(self, cam2world_matrix):
+        """ Checks if a newly sampled pose is novel based on variance checks.
+
+        :param cam2world_matrix: camera pose to check
+        """
 
         pose = np.ravel((cam2world_matrix.to_euler(), cam2world_matrix.to_translation()))
 
