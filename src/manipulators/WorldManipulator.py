@@ -5,7 +5,7 @@ from src.main.Module import Module
 
 class WorldManipulator(Module):
     """ Allows manipulation of the current World in the scene via specifying one or more {attr name/custom prop. name/
-        custom name: value} pairs.
+        custom function name: value} pairs.
 
         Example 1: Sets the World's custom property `category_id` to 123
 
@@ -49,7 +49,7 @@ class WorldManipulator(Module):
                "cf names."
         "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
 
-    **Custom names**:
+    **Custom function names**:
 
     .. csv-table::
         :header: "Parameter", "Description"
