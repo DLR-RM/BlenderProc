@@ -22,9 +22,10 @@ class Attribute(Provider):
             }
           },
           "get": "location"
+          # add "output_type": "sum" to get one value that represents the sum of those locations.
         }
 
-        ---> add "output_type": "sum" to get one value that represents the sum of those locations.
+
 
         Example 2: Get a list of custom property "id" values of objects (which "physics" cp value is True).
 
@@ -50,9 +51,10 @@ class Attribute(Provider):
             }
           },
           "get": "cn_bounding_box_means"
+          # add "output_type": "avg" to get one value that represents the average coordinates of those bounding boxes
         }
 
-        ---> add "output_type": "avg" to get one value that represents the average coordinates of those bounding boxes
+        add "output_type": "avg" to get one value that represents the average coordinates of those bounding boxes
 
         **Configuration**:
 
@@ -62,7 +64,9 @@ class Attribute(Provider):
         "entities", "List of objects selected by the getter.Entity Provider. Type: list."
         "get", "Attribute/Custom property/custom name on which the return value is based. Must be a valid name of "
                "selected entities' attribute/custom property, or a custom name for a special case/method defined (or "
-               "imported) in this module. Type: string. See table below for supported custom names."
+               "imported) in this module. Every entity selected must have this attribute, custom prop, or must be "
+               "usable in a custom method, otherwise an exception will be thrown. Type: string. See table below for "
+               "supported custom names."
         "output_type", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
                        "Type: string. Supported input types: (list of) int, float, mathutils.Vector. See below for "
                        "supported operation names."
@@ -74,7 +78,7 @@ class Attribute(Provider):
 
         "cn_bounding_box_means", "Custom name for `get` parameter. Invokes a chain of operations which returns a list "
                                  "of arithmetic means of coordinates of object aligned bounding boxes' of selected "
-                                 "objects in world coordinates format. Type: string."
+                                 "objects in world coordinates format."
 
         **Operation names for `output_format` parameter**
 
@@ -93,7 +97,8 @@ class Attribute(Provider):
         """ Selects objects, gets a list of appropriate values of objects' attributes, custom properties, or some
             processed custom data and optionally performs some operation of this list.
 
-        :return: List of values or a singular int, float, or mathutils.Vector.
+        :return: List of values (if only `get` was specified)
+                 or a singular int, float, or mathutils.Vector (if some operation was applied).
         """
         objects = self.config.get_list("entities")
         look_for = self.config.get_string("get")
@@ -153,7 +158,7 @@ class Attribute(Provider):
         :return: The sum of all values of the input list.
         """
         if isinstance(raw_result[0], mathutils.Vector):
-            ref_result = mathutils.Vector([0, 0, 0])
+            ref_result = mathutils.Vector([0] * len(raw_result[0]))
         else:
             ref_result = 0
         for item in raw_result:
@@ -167,6 +172,6 @@ class Attribute(Provider):
         :return: The average value of all values of the input list.
         """
         ref_result = self._sum(raw_result)
-        ref_result = ref_result/len(raw_result)
+        ref_result = ref_result/float(len(raw_result))
 
         return ref_result
