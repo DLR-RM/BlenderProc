@@ -5,6 +5,7 @@ import bpy
 
 from src.utility.ConfigParser import ConfigParser
 from src.utility.Utility import Utility, Config
+from src.main.GlobalStorage import GlobalStorage
 
 class Pipeline:
 
@@ -18,18 +19,15 @@ class Pipeline:
         config_parser = ConfigParser(silent=True)
         config = config_parser.parse(Utility.resolve_path(config_path), args)
 
-        config_object = Config(config)
-        if not config_object.get_bool("avoid_rendering", False) and avoid_rendering:
-            # avoid rendering is not already on, but should be:
-            if "all" in config["global"].keys():
-                config["global"]["all"] = {}
-            config["global"]["all"]["avoid_rendering"] = True
+        if avoid_rendering:
+            GlobalStorage.add_to_config_before_init("avoid_rendering", True)
 
+        config_object = Config(config)
         self._do_clean_up_temp_dir = config_object.get_bool("delete_temporary_files_afterwards", True)
         self._temp_dir = Utility.get_temporary_directory(config_object)
         os.makedirs(self._temp_dir, exist_ok=True)
 
-        self.modules = Utility.initialize_modules(config["modules"], config["global"])
+        self.modules = Utility.initialize_modules(config["modules"])
 
 
     def _cleanup(self):
