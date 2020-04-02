@@ -17,6 +17,7 @@
           "append_to_existing_output": True
         }
       }
+    },
     {
       "module": "loader.RockEssentialsRockLoader",
       "config": {
