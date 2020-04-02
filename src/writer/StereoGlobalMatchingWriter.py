@@ -90,8 +90,8 @@ class StereoGlobalMatchingWriter(Renderer):
             filteredImg = wls_filter.filter(displ, imgL, None, dispr).astype(np.float32)
             filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
 
-        disparity = np.float64(filteredImg) / 16.0 if self.config.get_bool("disparity_filter", True) else \
-            np.float64(displ) / 16.0
+        disparity_to_be_written = filteredImg if self.config.get_bool("disparity_filter", True) else displ
+        disparity = np.float64(np.copy(disparity_to_be_written)) / 16.0
 
         # Crop and resize, due to baseline, a part of the image on the left can't be matched with the one on the right
         disparity = resize(disparity[:, numDisparities:], (self.width, self.height))
@@ -106,9 +106,7 @@ class StereoGlobalMatchingWriter(Renderer):
         if self.config.get_bool("depth_completion", True):
             depth = fill_in_fast(depth, self.depth_max)
 
-        
-        disparity = np.int16(disparity)
-        return depth, disparity
+        return depth, disparity_to_be_written
 
     def run(self):
         if self._avoid_rendering:
