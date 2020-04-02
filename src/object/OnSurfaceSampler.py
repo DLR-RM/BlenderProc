@@ -6,22 +6,30 @@ from src.main.Module import Module
 
 
 class OnSurfaceSampler(Module):
-    """ Places objects on a surface. The object are positioned slightly above the surface, it is recommended to run PhysicsPositioning afterwards to make sure the objects are not hovering.
+    """ Places objects on a surface. The object are positioned slightly above the surface, it is recommended to run
+        PhysicsPositioning afterwards to make sure the objects are not hovering.
 
-    For best results "up_direction" should be aligned with an axis in the local coordinate frame of "surface".
-    Otherwise the bounding box used will not be aligned properly which may lead to floating objects.
+        For best results "up_direction" should be aligned with an axis in the local coordinate frame of "surface".
+        Otherwise the bounding box used will not be aligned properly which may lead to floating objects.
 
     .. csv-table::
        :header: "Parameter", "Description"
 
        "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects."
-       "max_iterations", "Amount of tries before giving up on an object (deleting it) and moving to the next one. Optional. Type: int. Default value: 100."
-       "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each object. UpperRegionSampler recommended."
-       "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) for each object."
-       "surface", "Object to place objects_to_sample on, if multiple are given only the first one is used."
-       "min_distance", "Minimum distance to the closest other object. Center to center. Only objects placed by this Module considered. Type: float. Default value: 0.25"
-       "max_distance", "Maximum distance to the closest other object. Center to center. Only objects placed by this Module considered. Type: float. Default value: 0.6"
-       "up_direction", "Normal vector of the side of surface the objects should be placed on. Type: mathutils.Vector, Default value: Vector([0., 0., 1.])"
+       "max_iterations", "Amount of tries before giving up on an object (deleting it) and moving to the next one. "
+                         "Optional. Type: int. Default value: 100."
+       "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each "
+                      "object. UpperRegionSampler recommended."
+       "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) "
+                      "for each object."
+       "surface", "Object to place objects_to_sample on, here call an appropriate Provider (getter) which is configured "
+                  "such that it returns only one object."
+       "min_distance", "Minimum distance to the closest other object. Center to center. Only objects placed by this "
+                       "Module considered. Type: float. Default value: 0.25"
+       "max_distance", "Maximum distance to the closest other object. Center to center. Only objects placed by this "
+                       "Module considered. Type: float. Default value: 0.6"
+       "up_direction", "Normal vector of the side of surface the objects should be placed on. Type: mathutils.Vector. "
+                       "Default value: Vector([0., 0., 1.])"
     """
 
     def __init__(self, config):
@@ -37,8 +45,10 @@ class OnSurfaceSampler(Module):
         self.surface_height = None
 
     def check_above_surface(self, obj):
-        """
-        Check if all corner of the bounding box are "above" the surface
+        """ Check if all corners of the bounding box are "above" the surface
+
+        :param obj: Object for which the check is carried out.
+        :return: True if the bounding box is above the surface, False - if not.
         """
         inv_world_matrix = self.surface.matrix_world.inverted()
 
@@ -54,8 +64,10 @@ class OnSurfaceSampler(Module):
         return True
 
     def check_spacing(self, obj):
-        """
-        Check if object is not too close or too far from previous objects
+        """ Check if object is not too close or too far from previous objects.
+
+        :param obj: Object for which the check is carried out.
+        :return:
         """
         closest_distance = None
 
@@ -68,8 +80,11 @@ class OnSurfaceSampler(Module):
 
     @staticmethod
     def collision(obj_a, obj_b):
-        """
-        Check if a and b intersect
+        """ Checks if two object intersect.
+
+        :param obj_a: The first object for which the check is carried out.
+        :param obj_b: The second object for which the check is carried out.
+        :return: True if objects are intersecting, if not - False.
         """
         intersection = check_bb_intersection(obj_a, obj_b)
         if intersection:
@@ -79,8 +94,10 @@ class OnSurfaceSampler(Module):
         return intersection
 
     def check_collision_free(self, obj):
-        """
-        Check if object collides with none of the previous objects
+        """ Checks if the object collides with none of the previously placed objects.
+
+        :param obj: Object for which the check is carried out.
+        :return: True if object is collision free, if not - False.
         """
         for already_placed in self.placed_objects:
             if self.collision(obj, already_placed):
@@ -89,9 +106,10 @@ class OnSurfaceSampler(Module):
         return True
 
     def drop(self, obj):
-        """
-        Move object "down" until its bounding box touches the bounding box of the surface.
-        This uses bounding boxes which are not aligned optimally, this will cause objects to be placed slightly to high.
+        """ Moves object "down" until its bounding box touches the bounding box of the surface. This uses bounding boxes
+            which are not aligned optimally, this will cause objects to be placed slightly to high.
+
+        :param obj: Object to move.
         """
         obj_bounds = get_bounds(obj)
         obj_height = min([self.up_direction.dot(corner) for corner in obj_bounds])
@@ -99,9 +117,14 @@ class OnSurfaceSampler(Module):
         obj.location -= self.up_direction * (obj_height - self.surface_height)
 
     def run(self):
+        """ Samples the selected objects poses on a selected surface. """
         max_tries = self.config.get_int("max_iterations", 100)
         objects = self.config.get_list("objects_to_sample")
-        self.surface = self.config.get_list("surface")[0]
+        self.surface = self.config.get_list("surface")
+        if len(self.surface) > 1:
+            raise Exception("Module operates with only one `surface` object. Please, configure the corresponding "
+                            "Provider's `conditions` accordingly such that it returns only one object! "
+                            "Tip: use getter.Entity's 'index' parameter.")
 
         surface_bounds = get_bounds(self.surface)
         self.surface_height = max([self.up_direction.dot(corner) for corner in surface_bounds])
