@@ -33,7 +33,7 @@ class Hdf5Writer(Module):
         self.postprocessing_modules_per_output = {}
         module_configs = config.get_raw_dict("postprocessing_modules", {})
         for output_key in module_configs:
-            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
+            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
 
     def run(self):
         if self._avoid_rendering:
