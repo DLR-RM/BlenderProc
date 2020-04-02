@@ -17,7 +17,7 @@ class Initializer(Module):
        "compute_device_type", "Device to use for computation. Available options are 'CUDA', 'OPTIX', 'OPENCL' and 'NONE'. 'OPTIX' requires a driver version of >=435.12!
     """
 
-    def __int__(self, config):
+    def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
