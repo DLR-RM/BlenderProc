@@ -32,20 +32,30 @@ class CameraSampler(CameraModule):
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
-       "check_pose_novelty", "Checks that a sampled new pose is novel. Type: bool. Optional. Default value: True"
-       "min_var_diff", "Considers a pose novel if it increases the variance of all poses sampled by this parameter's value in percentage. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
+       "check_pose_novelty_rot", "Checks that a sampled new pose is novel with respect to the rotation component. Type: bool. Optional. Default value: True"
+       "check_pose_novelty_translation", "Checks that a sampled new pose is novel with respect to the translation component. Type: bool. Optional. Default value: True"
+       "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses sampled by this parameter's value in percentage. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
+       "min_var_diff_translation", "Same as min_var_diff_rot but for translation. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
     """
 
     def __init__(self, config):
         CameraModule.__init__(self, config)
         self.bvh_tree = None
 
-        self.poses = []
-        self.var   = 0.0
-        self.check_pose_novelty = self.config.get_bool("check_pose_novelty", False)
-        self.min_var_diff = self.config.get_float("min_var_diff", sys.float_info.min)
-        if self.min_var_diff == -1.0:
-            self.min_var_diff = sys.float_info.min
+        self.rotations = []
+        self.translations = []
+
+        self.var_rot, self.var_translation   = 0.0, 0.0
+        self.check_pose_novelty_rot = self.config.get_bool("check_pose_novelty_rot", False)
+        self.check_pose_novelty_translation = self.config.get_bool("check_pose_novelty_translation", False)
+
+        self.min_var_diff_rot = self.config.get_float("min_var_diff_rot", sys.float_info.min)
+        if self.min_var_diff_rot == -1.0:
+            self.min_var_diff_rot = sys.float_info.min
+
+        self.min_var_diff_translation = self.config.get_float("min_var_diff_translation", sys.float_info.min)
+        if self.min_var_diff_translation == -1.0:
+            self.min_var_diff_translation = sys.float_info.min
 
         self.cam_pose_collection = ItemCollection(self._sample_cam_poses, self.config.get_raw_dict("default_cam_param", {}))
 
@@ -134,7 +144,8 @@ class CameraSampler(CameraModule):
         if self.min_interest_score > 0 and self._scene_coverage_score(cam, cam2world_matrix) < self.min_interest_score:
             return False
 
-        if self.check_pose_novelty and (not self._check_novel_pose(cam2world_matrix)):
+        if (self.check_pose_novelty_rot or self.check_pose_novelty_translation) and \
+        (not self._check_novel_pose(cam2world_matrix)):
             return False
 
         return True
@@ -319,26 +330,40 @@ class CameraSampler(CameraModule):
         :param cam2world_matrix: camera pose to check
         """
 
-        pose = np.ravel((cam2world_matrix.to_euler(), cam2world_matrix.to_translation()))
+        def _variance_constraint(array, new_val, old_var, diff_threshold):
+            array.append(new_val)
+            var = np.var(array)
 
-        if len(self.poses) != 0:  # First pose is always novel
-            self.poses.append(pose)
-            var = np.var(self.poses)
-
-            if var < self.var:  # Check if pose decreased the variance
-                self.poses.pop()
+            if var < old_var:
+                array.pop()
                 return False
 
+            diff = ((var - old_var) / old_var) * 100.0
 
-            diff = ((var - self.var) / self.var) * 100.0
-
-            if diff < self.min_var_diff:  # Check if the variance increased sufficiently
-                self.poses.pop()
+            if diff < diff_threshold:  # Check if the variance increased sufficiently
+                array.pop()
                 return False
 
+            return True
+
+        translation = cam2world_matrix.to_translation()
+        rotation    = cam2world_matrix.to_euler()
+
+        if len(self.translations) != 0 and len(self.rotations) != 0:  # First pose is always novel
+
+            if self.check_pose_novelty_rot:
+                if not _variance_constraint(self.rotations, rotation, self.var_rot, self.min_var_diff_rot):
+                    return False
+
+            if self.check_pose_novelty_translation:
+                if not _variance_constraint(self.translations, translation, self.var_translation, 
+                    self.min_var_diff_translation):
+                    return False
         else:
-            self.poses.append(pose)
+            self.translations.append(translation)
+            self.rotations.append(rotation)
 
-        self.var = np.var(self.poses)
+        self.var_rot = np.var(self.rotations)
+        self.var_translation = np.var(self.translations)
 
         return True 
