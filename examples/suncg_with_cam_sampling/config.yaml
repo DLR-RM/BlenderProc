@@ -7,15 +7,14 @@
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
     },
     {
       "module": "loader.SuncgLoader",

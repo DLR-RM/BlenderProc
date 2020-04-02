@@ -7,15 +7,14 @@
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "examples/debugging/output"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "examples/debugging/output"
+        }
+      }
     },
     {
       "module": "loader.ObjectLoader",

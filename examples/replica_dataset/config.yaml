@@ -7,20 +7,17 @@
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>",
-      "data_set_name": "office_1",
-      "data_path": "<args:0>"
-    },
-    "renderer": {
-      "pixel_aspect_x": 1.333333333
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "data_set_name": "office_1",
+          "data_path": "<args:0>",
+          "pixel_aspect_x": 1.333333333
+        }
+      }
     },
     {
       "module": "loader.ReplicaLoader",

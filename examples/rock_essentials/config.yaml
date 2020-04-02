@@ -8,17 +8,15 @@
       "scikit-image"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>",
-      "append_to_existing_output": True
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
-    },
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "append_to_existing_output": True
+        }
+      }
     {
       "module": "loader.RockEssentialsRockLoader",
       "config": {

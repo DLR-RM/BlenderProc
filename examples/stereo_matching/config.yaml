@@ -12,17 +12,16 @@
       "scipy"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>",
-      "resolution_x": 1280,
-      "resolution_y": 720
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:2>",
+          "resolution_x": 1280,
+          "resolution_y": 720
+        }
+      }
     },
     {
       "module": "loader.SuncgLoader",
