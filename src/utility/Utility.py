@@ -23,14 +23,8 @@ class Utility:
 
         Here the name contains the path to the module class, starting from inside the src directory.
 
-        Example for global_config:
-        {"base": {
-            param: 42
-        }}
-
-        In this way all modules with prefix "base" will inherit "param" into their configuration.
-        Local config always overwrites global.
-        Parameters specified under "all" in the global config are inherited by all modules.
+        Be aware that all attributes stored in the GlobalStorage are also accessible here, even though
+        they are not copied into the new config.
 
         :param module_configs: A list of dicts, each one describing one module.
         :return:
