@@ -122,9 +122,11 @@ class OnSurfaceSampler(Module):
         objects = self.config.get_list("objects_to_sample")
         self.surface = self.config.get_list("surface")
         if len(self.surface) > 1:
-            raise Exception("Module operates with only one `surface` object. Please, configure the corresponding "
-                            "Provider's `conditions` accordingly such that it returns only one object! "
-                            "Tip: use getter.Entity's 'index' parameter.")
+            raise Exception("This module operates with only one `surface` object while more than one was returned by "
+                            "the Provider. Please, configure the corresponding Provider's `conditions` accordingly such "
+                            "that it returns only one object! Tip: use getter.Entity's 'index' parameter.")
+        else:
+            self.surface = self.surface[0]
 
         surface_bounds = get_bounds(self.surface)
         self.surface_height = max([self.up_direction.dot(corner) for corner in surface_bounds])
