@@ -80,10 +80,8 @@ class StereoGlobalMatchingWriter(Renderer):
             wls_filter.setSigmaColor(sigma)
 
             dispr = right_matcher.compute(imgR, imgL)
-            dispr = np.int16(dispr)
 
         displ = left_matcher.compute(imgL, imgR)
-        displ = np.int16(displ)
 
         filteredImg = None
         if self.config.get_bool("disparity_filter", True):
