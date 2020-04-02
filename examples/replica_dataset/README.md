@@ -35,13 +35,12 @@ python scripts/visHdf5Files.py example/replica_dataset/0.hdf5
 ### Global
 
 ```yaml
-"global": {
-  "all": {
+"module": "main.Initializer",
+"config": {
+  "global": {
     "output_dir": "<args:1>",
     "data_set_name": "office_1",
-    "data_path": "<args:0>"
-  },
-  "renderer": {
+    "data_path": "<args:0>",
     "pixel_aspect_x": 1.333333333
   }
 },
@@ -49,6 +48,8 @@ python scripts/visHdf5Files.py example/replica_dataset/0.hdf5
 
 Note that `"data_set_name": "office_1"` is a replica room you want to render. This line can be replace with:
 `"data_set_name": "<args:X>>"`, i.e. with an appropriate placeholder where `X` is a number of a placeholder.
+
+As before all these values are stored in the GlobalStorage and are only used if no value is defined in the module itself.
 
 ### Replica loader
 

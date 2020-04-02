@@ -52,13 +52,13 @@ python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
 Make sure these python packages are included.
 
 ```
-"all": {
-      "output_dir": "<args:2>",
-      "resolution_x": 1280,
-      "resolution_y": 720
-    }
+"global": {
+  "output_dir": "<args:2>",
+  "resolution_x": 1280,
+  "resolution_y": 720
+}
 ```
-Indicate the desired output image resolution globally (in this case to the renderer).
+Indicate the desired output image resolution globally inside of the settings of the `"main.Initializer"`.
 
 ```
 {
