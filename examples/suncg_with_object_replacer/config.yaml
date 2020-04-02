@@ -32,7 +32,7 @@
         },
     },
     {
-     "module": "object.EntityManipulator",
+     "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
@@ -43,7 +43,7 @@
       }
     },
     {
-      "module": "manipulators.ObjectReplacer",
+      "module": "object.ObjectReplacer",
       "config": {
         "replace_ratio": 1,
         "copy_properties": True,

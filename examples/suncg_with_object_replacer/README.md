@@ -31,10 +31,10 @@ python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
 
 ## Steps
 
-* loader.SuncgLoader Loads a SUNCG scene
-* loader.ObjectLoader loads new objects 
-* object.EntityManipulator hides the new loaded objects from the renderer 
-* manipulators.ObjectReplacer switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config
+* Loads a SUNCG scene: `loader.SuncgLoader` module
+* Loads new objects: `loader.ObjectLoader` module
+* Hides the new loaded objects from the renderer: `manipulators.EntityManipulator` module
+* Switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config: `object.ObjectReplacer` module
 * Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
 * Writes sampled camera poses to file: `writer.CameraStateWriter` module.
@@ -47,7 +47,7 @@ python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
 
 ```yaml
     {
-      "module": "manipulators.ObjectReplacer",
+      "module": "object.ObjectReplacer",
       "config": {
         "replace_ratio": 1,
         "copy_properties": True,

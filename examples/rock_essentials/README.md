@@ -25,12 +25,12 @@ In the output folder you will find a `coco_data/` folder with a `coco_annotation
 * Loads 4 batches of RE rocks: `loader.RockEssentialsRockLoader` module.
 * Constructs a blank ground tile wirh RE material: `constructor.RockEssentialsGroundConstructor` module.
 * Samples a texture for a ground's plane material: `materials.RockEssentialsTextureSampler` module.
-* Samples positions on the ground plane for large rocks: `lobject.EntityManipulator` module.
+* Samples positions on the ground plane for large rocks: `manipulators.EntityManipulator` module.
 * Sample positions for rocks: `object.ObjectPoseSampler` module.
 * Samples camera positions: `camera.CameraSampler` module.
 * Creates a Sun light: `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
-* Displaces a ground plane up: `object.EntityManipulator` module.
+* Displaces a ground plane up: `manipulators.EntityManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.
