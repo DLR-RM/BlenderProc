@@ -87,8 +87,8 @@ class Attribute(Provider):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "sum", "Operation name. Returns the sum of all values of the input list. Type: string."
-        "avg", "Operation name. Returns the average value of all values of the input list. Type: string."
+        "sum", "Operation name. Returns the sum of all values of the input list."
+        "avg", "Operation name. Returns the average value of all values of the input list. "
 
     """
 
