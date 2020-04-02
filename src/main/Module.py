@@ -9,6 +9,17 @@ class Module:
     """
     **Configuration**:
 
+    All of these values can be set per Module or of the global config defined in the main.Initializer:
+
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:X>"
+        }
+      }
+
+    If they are set globally all modules will inherit them, if there is no module defined key available.
+
     .. csv-table::
        :header: "Parameter", "Description"
 
