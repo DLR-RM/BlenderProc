@@ -116,6 +116,16 @@ class GlobalStorage(object):
         else:
             raise RuntimeError("The key: {} is not in the global storage!".format(key))
 
+
+    @staticmethod
+    def is_in_storage(key):
+        """
+        Checks if a key is in the GlobalStorage
+        :param key for which a value is searched
+        :return True if the key is in the storage
+        """
+        return key in GlobalStorage._storage_dict
+
     @staticmethod
     def has_param(key):
         """
