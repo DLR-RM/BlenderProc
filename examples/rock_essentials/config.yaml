@@ -1,6 +1,6 @@
 # Args: <path_to_re_dataset> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -8,16 +8,15 @@
       "scikit-image"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>",
-      "append_to_existing_output": True
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "append_to_existing_output": True
+        }
+      }
     },
     {
       "module": "loader.RockEssentialsRockLoader",

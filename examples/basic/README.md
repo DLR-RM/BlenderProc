@@ -52,20 +52,6 @@ python scripts/visHdf5Files.py examples/basic/output/0.hdf5
 * we want to use blender 2.8 (installation is done automatically on the first run).
 * inside the blender python environment the python package `h5py` should be automatically installed. These are not provided per default, but are required in order to make the `writer.Hdf5Writer` module work.
 
-### Global
-
-```yaml
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    }
-  }
-```
-
-* In the `global` section, we just specify the `output_dir` which defines where the final files should be stored.
-* As this configuration is defined in `global/all`, it is inherited by all modules. This is equivalent to just putting the `output_dir` configuration into the `config` block of each single module.
-* As we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
-
 ### Modules
 
 Under `modules` we list all modules we want the pipeline to execute. The order also defines the order in which they are executed.
@@ -75,12 +61,21 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
  {
-  "module": "main.Initializer",
+  "module": "main.Initializer", 
+  "config": {
+    "global": {
+      "output_dir": "<args:2>"
+    }
+  }
 }
 ```
 
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
-* We are using the default parameters here, so we can omit `config` altogether.
+It also initializes the GlobalStorage, which contains two parts:
+* The first one is the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
+* These values are provided to all modules, but can be overwritten by the config in any module.
+* The second part of the GlobalStorage is a container, which can store information over the boundaries over single modules.
+* For more information on the GlobalStorage read the documentation in the class.
 
 #### ObjectLoader
 

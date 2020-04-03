@@ -1,6 +1,6 @@
 # Args: <bop_dataset_path> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -10,16 +10,15 @@
       "scipy==1.2.2"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>",
-      "sys_paths": ["/path/to/bop_toolkit"]
-    },
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "sys_paths": ["/path/to/bop_toolkit"]
+        }
+      }
     },
     {
       "module": "loader.BopLoader",

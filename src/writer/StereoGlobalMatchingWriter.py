@@ -10,6 +10,7 @@ from src.utility.SGMUtility import fill_in_fast
 from src.utility.BlenderUtility import load_image
 from src.utility.SGMUtility import resize
 from src.renderer.Renderer import Renderer
+from src.main.GlobalStorage import GlobalStorage
 
 class StereoGlobalMatchingWriter(Renderer):
     """ Writes depth image generated from the stereo global matching algorithm to file
@@ -42,7 +43,11 @@ class StereoGlobalMatchingWriter(Renderer):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-        self.depth_max = Renderer.DEPTH_END
+        if GlobalStorage.has_param("renderer_depth_end"):
+            self.depth_max = GlobalStorage.get("renderer_depth_end")
+        else:
+            raise RuntimeError("A depth rendering has to be executed before this module is executed, "
+                               "else the depth_end value is not set!")
 
     # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
     def sgm(self, imgL, imgR):

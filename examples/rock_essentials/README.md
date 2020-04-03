@@ -40,12 +40,13 @@ In the output folder you will find a `coco_data/` folder with a `coco_annotation
 ### Global
 
 ```yaml
-"global": {
-  "all": {
+"module": "main.Initializer",
+"config": {
+  "global": {
     "output_dir": "<args:1>",
     "append_to_existing_output": True
   }
-},
+}
 ```
 
 `"append_to_existing_output": True` conditions all the modules (e.g. `writer.CocoAnnotationsWriter`) to append it's output to the existing output of the pipeline. It is useful when generating a coco annotation data for training.

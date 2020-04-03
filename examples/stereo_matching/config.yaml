@@ -1,6 +1,6 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -12,17 +12,16 @@
       "scipy"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>",
-      "resolution_x": 1280,
-      "resolution_y": 720
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:2>",
+          "resolution_x": 1280,
+          "resolution_y": 720
+        }
+      }
     },
     {
       "module": "loader.SuncgLoader",

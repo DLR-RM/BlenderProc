@@ -10,6 +10,7 @@ import mathutils
 from src.main.Module import Module
 from src.utility.Utility import Utility
 from src.utility.BlenderUtility import get_all_mesh_objects
+from src.main.GlobalStorage import GlobalStorage
 
 
 class Renderer(Module):
@@ -49,8 +50,6 @@ class Renderer(Module):
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
        "use_alpha", "If true, the alpha channel stored in .png textures is used."
     """
-
-    DEPTH_END = 25.1
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -156,7 +155,7 @@ class Renderer(Module):
         # Mist settings
         depth_start = self.config.get_float("depth_start", 0.1)
         depth_range = self.config.get_float("depth_range", 25.0)
-        Renderer.DEPTH_END = depth_start + depth_range
+        GlobalStorage.add("renderer_depth_end", depth_start + depth_range)
         bpy.context.scene.world.mist_settings.start = depth_start
         bpy.context.scene.world.mist_settings.depth = depth_range
         bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")

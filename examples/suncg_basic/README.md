@@ -38,18 +38,17 @@ python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
 
 ### Global settings
 
+There are set in the main.Initializer
 ```yaml
-"global": {
-  "all": {
-    "output_dir": "<args:2>"
-  },
-  "renderer": {
+"config": {
+  "global": {
+    "output_dir": "<args:2>",
     "pixel_aspect_x": 1.333333333
   }
-},
+}
 ```
 
-Next to setting the output directory for all modules, we also set the `pixel_aspect_x` parameter for all rendering modules.
+Next to setting the output directory for all modules, we also set the `pixel_aspect_x` parameter for all modules.
 This is necessary to coincide with the aspect ratio assumed by the `scn2cam` script which generated the camera poses.  
 
 ### SuncgLoader
