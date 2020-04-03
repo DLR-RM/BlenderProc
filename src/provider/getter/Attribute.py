@@ -70,8 +70,8 @@ class Attribute(Provider):
                "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
                "supported cf names."
         "transform_by", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
-                        "Type: string. Supported input types: (list of) int, float, mathutils.Vector. See below for "
-                        "supported operation names."
+                        "Type: string. Supported input types: (list of) int (and/or) float, mathutils.Vector. See below
+                        "for supported operation names."
 
         **Custom function names for `get` parameter**
 
@@ -88,7 +88,7 @@ class Attribute(Provider):
         :header: "Parameter", "Description"
 
         "sum", "Operation name. Returns the sum of all values of the input list."
-        "avg", "Operation name. Returns the average value of all values of the input list. "
+        "avg", "Operation name. Returns the average value of all values of the input list."
 
     """
 
@@ -148,22 +148,18 @@ class Attribute(Provider):
         """ Checks if the list of values contains appropriate data of int, float, or mathutils.Vector type.
 
         :param raw_result: list of selected objects' attribute/custom prop./or custom data values. Type: List
-        :return: True if list is of homogeneous data type of int, float, or mathutils.Vector. False if not.
+        :return: True if list is of int (and or) float, or mathutils.Vector data type. False if not.
         """
         return any([all(isinstance(item, mathutils.Vector) for item in raw_result),
-                    all(isinstance(item, int) for item in raw_result),
-                    all(isinstance(item, float) for item in raw_result)])
+                    all(isinstance(item, (float, int)) for item in raw_result)])
 
     def _sum(self, raw_result):
         """ Sums up the values of the list.
 
         :return: The sum of all values of the input list.
         """
-        if isinstance(raw_result[0], mathutils.Vector):
-            ref_result = mathutils.Vector([0] * len(raw_result[0]))
-        else:
-            ref_result = 0
-        for item in raw_result:
+        ref_result = raw_result[0].copy()
+        for item in raw_result[1:]:
             ref_result += item
 
         return ref_result

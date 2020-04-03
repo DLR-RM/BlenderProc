@@ -28,8 +28,8 @@ class AttributeMerger(Provider):
           "transform_by": "avg"
         }
 
-        Example 2: Get a value which is a sum of a point sampled by sampler.Uniform3d and an average location of all
-                   objects with names matching the pattern.
+        Example 2: Get a value which is a sum of a point sampled by sampler.Uniform3d, of an average location of all
+                   objects with names matching the pattern, and of a constant location.
 
         {
           "provider": "getter.AttributeMerger",
@@ -49,7 +49,8 @@ class AttributeMerger(Provider):
             },
           "get": "location",
           "transform_by": "avg"
-          }
+          },
+            [1, 2, 3]
           ],
           "transform_by": "sum"
         }
@@ -61,8 +62,8 @@ class AttributeMerger(Provider):
 
         "elements", "List of user-configured Provider calls. Type: list."
         "transform_by", "Name of the operation to perform on the list of Provider return values. Type: string. "
-                        "Supported input types: (list of) int, float, mathutils.Vector. See below for supported "
-                        "operation names."
+                        "Supported input types: (list of) int (and/or) float, or mathutils.Vector. See below for "
+                        "supported operation names."
 
         **Operation names for `transform_by` parameter**
 
@@ -77,53 +78,50 @@ class AttributeMerger(Provider):
         Provider.__init__(self, config)
 
     def run(self):
-        """
-
-        :return:
-        """
+        """ Returns the result of processing of the list of values. """
         transform_by = self.config.get_string("transform_by")
         elements = self.config.get_list("elements")
 
         raw_result = []
         for element in elements:
-            if "provider" in element:
-                element_conf = Config({"element": element})
+            element_conf = Config({"element": element})
+            if isinstance(element, list):
+                raw_result.append(element_conf.get_vector3d("element"))
+            else:
                 raw_result.append(element_conf.get_raw_value("element"))
-            else:
-                raise RuntimeError("Each cell of the of `elements` list must contain a configured Provider call.")
 
-        if self._check_compatibility(raw_result):
-            if transform_by == "sum":
-                ref_result = self._sum(raw_result)
-            elif transform_by == "avg":
-                ref_result = self._avg(raw_result)
+        if len(raw_result) > 0:
+            if self._check_compatibility(raw_result):
+                if transform_by == "sum":
+                    ref_result = self._sum(raw_result)
+                elif transform_by == "avg":
+                    ref_result = self._avg(raw_result)
+                else:
+                    raise RuntimeError("Unknown 'transform_by' operation: " + transform_by)
             else:
-                raise RuntimeError("Unknown 'transform_by' operation: " + transform_by)
+                raise RuntimeError("Provider output types don't match. All must either int, float, or mathutils.Vector.")
         else:
-            raise RuntimeError("Provider output types don't match. All must either int, float, or mathutils.Vector.")
+            raise RuntimeError("List of resulting values of `elements` is empty. Please, check Provider configuration.")
 
         return ref_result
 
-    def _check_compatibility(self, raw_result):
-        """ Checks if the list of values contains appropriate data of int, float, or mathutils.Vector type.
+    @staticmethod
+    def _check_compatibility(raw_result):
+        """ Checks if the list of values contains appropriate data of int/float, or mathutils.Vector type.
 
         :param raw_result: list of provider output values. Type: List
-        :return: True if list is of homogeneous data type of int, float, or mathutils.Vector. False if not.
+        :return: True if list is of of int (and/or) float, or mathutils.Vector data type. False if not.
         """
         return any([all(isinstance(item, mathutils.Vector) for item in raw_result),
-                    all(isinstance(item, int) for item in raw_result),
-                    all(isinstance(item, float) for item in raw_result)])
+                    all(isinstance(item, (int, float)) for item in raw_result)])
 
     def _sum(self, raw_result):
         """ Sums up the values of the list.
 
         :return: The sum of all values of the input list.
         """
-        if isinstance(raw_result[0], mathutils.Vector):
-            ref_result = mathutils.Vector([0] * len(raw_result[0]))
-        else:
-            ref_result = 0
-        for item in raw_result:
+        ref_result = raw_result[0].copy()
+        for item in raw_result[1:]:
             ref_result += item
 
         return ref_result
