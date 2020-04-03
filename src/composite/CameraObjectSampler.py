@@ -24,8 +24,8 @@ class CameraObjectSampler(Module):
         object_pose_sampler_config = config.get_raw_dict("object_pose_sampler", {})
         camera_pose_sampler_config = config.get_raw_dict("camera_pose_sampler", {})
 
-        self._object_pose_sampler = Utility.initialize_modules([object_pose_sampler_config], {})[0]
-        self._camera_pose_sampler = Utility.initialize_modules([camera_pose_sampler_config], {})[0]
+        self._object_pose_sampler = Utility.initialize_modules([object_pose_sampler_config])[0]
+        self._camera_pose_sampler = Utility.initialize_modules([camera_pose_sampler_config])[0]
     
     def run(self):
         total_noof_cams = self.config.get_int("total_noof_cams", 10)
