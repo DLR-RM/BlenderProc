@@ -55,14 +55,17 @@
     },
     {
       "module": "renderer.SegMapRenderer",
-      "config": {}
+      "config": {
+        "use_alpha": true
+      }
     },
     {
       "module": "renderer.RgbRenderer",
       "config": {
         "render_depth": true,
         "render_normals": true,
-        "stereo": true
+        "stereo": true,
+        "use_alpha": true,
       }
     },
     {
