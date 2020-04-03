@@ -43,11 +43,6 @@ class StereoGlobalMatchingWriter(Renderer):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-        if GlobalStorage.has_param("renderer_depth_end"):
-            self.depth_max = GlobalStorage.get("renderer_depth_end")
-        else:
-            raise RuntimeError("A depth rendering has to be executed before this module is executed, "
-                               "else the depth_end value is not set!")
 
     # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
     def sgm(self, imgL, imgR):
@@ -115,6 +110,12 @@ class StereoGlobalMatchingWriter(Renderer):
         if self._avoid_rendering:
             print("Avoid rendering is on, no output produced!")
             return
+
+        if GlobalStorage.is_in_storage("renderer_depth_end"):
+            self.depth_max = GlobalStorage.get("renderer_depth_end")
+        else:
+            raise RuntimeError("A depth rendering has to be executed before this module is executed, "
+                               "else the depth_end value is not set!")
 
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
 
