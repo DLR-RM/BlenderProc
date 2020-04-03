@@ -15,8 +15,8 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:1>",
-          "sys_paths": ["/path/to/bop_toolkit"]
+          "output_dir": "<args:2>",
+          "sys_paths": ["<args:1>"] # path to the bop toolkit
         }
       }
     },
@@ -25,7 +25,7 @@
       "config": {
         "bop_dataset_path": "<args:0>",
         "mm2m": True,
-        "split": "val",
+        "split": "test",
         "scene_id": 3,
         "model_type": ""
       }
