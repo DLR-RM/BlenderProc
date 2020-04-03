@@ -71,7 +71,8 @@ Every module has a name which specifies the python path to the corresponding cla
 ```
 
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
-* It also initializes the GlobalStorage, it contains two parts first the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
+It also initializes the GlobalStorage, which contains two parts:
+* The first one is the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
 * These values are provided to all modules, but can be overwritten by the config in any module.
 * The second part of the GlobalStorage is a container, which can store information over the boundaries over single modules.
 * For more information on the GlobalStorage read the documentation in the class.

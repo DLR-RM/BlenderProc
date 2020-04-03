@@ -75,7 +75,7 @@ class ConfigParser:
                 if version < self.current_version:
                     exception_text = "The given configuration file might not be up to date. The version of the config is %d while the currently most recent version is %d." % (version, self.current_version)
                     if version == 2:
-                        exception_text += " Above version 2 the global config was moved to the main.Initializer!"
+                        exception_text += " Since version 3 the global config was moved to the main.Initializer!"
             else:
                 exception_text = "The given configuration file has an invalid version number. Cannot check if the config is still up to date."
         else:
