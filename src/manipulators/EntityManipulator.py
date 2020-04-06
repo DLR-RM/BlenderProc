@@ -78,7 +78,7 @@ class EntityManipulator(Module):
                 if hasattr(entity, key) and not requested_custom_property:
                     # set the value
                     setattr(entity, key, result)
-                # if not key had a cp_ prefix - treat it as a custom property. Values will be overwritten for existing
+                # if key had a cp_ prefix - treat it as a custom property. Values will be overwritten for existing
                 # custom property, but if the name is new then new custom property will be created
                 elif requested_custom_property:
                     entity[key] = result
