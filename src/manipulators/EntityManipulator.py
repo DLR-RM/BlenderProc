@@ -19,12 +19,21 @@ class EntityManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-    "selector", "getter.entity (Provider) specific dict."
-    "selector/name", "Name of the getter.entity: Name of the getter to use. Type: string."
-    "selector/condition", "Condition of the getter.entity: Condition to use for selecting. Type: dict."
+    "selector", "Here call an appropriate Provider so select objects to manipulate."
     "mode", "Mode of operation. Optional. Type: string. Available values: "once_for_each" (if samplers are called,
              new sampled value is set to each selected entity) and "once_for_all" (if samplers are called, value
              is sampled once and set to all selected entities)."
+
+    **Values to set**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "key": "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
+               "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.):"
+               "For attribute: key of the pair must be a valid attribute name of the seelcted object."
+               "For custom property: key of the pair must start with `cp_` prefix."
+        "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
     """
 
     def __init__(self, config):
@@ -69,9 +78,9 @@ class EntityManipulator(Module):
                 if hasattr(entity, key) and not requested_custom_property:
                     # set the value
                     setattr(entity, key, result)
-                # if not, then treat it as a custom property. Values will be overwritten for existing custom
-                # property, but if the name is new then new custom property will be created
-                else:
+                # if not key had a cp_ prefix - treat it as a custom property. Values will be overwritten for existing
+                # custom property, but if the name is new then new custom property will be created
+                elif requested_custom_property:
                     entity[key] = result
         # update all entities matrices
         bpy.context.view_layer.update()
