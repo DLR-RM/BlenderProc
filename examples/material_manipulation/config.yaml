@@ -13,8 +13,7 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-            "output_dir": "<args:2>",
-            "output_is_temp": False
+            "output_dir": "<args:2>"
           }
       }
     },
