@@ -101,6 +101,22 @@ class SuncgLoader(Loader):
                     self._load_object(node, metadata, material_adjustments, transform, parent)
                 elif node["type"] == "Box":
                     self._load_box(node, material_adjustments, transform, parent)
+        self._rename_materials()
+
+    def _rename_materials(self):
+        """
+        Rename all materials based on their texture if they have one
+
+        This makes the accessing later on easier
+        """
+
+        for material in bpy.data.materials:
+            if material.use_nodes:
+                nodes = material.node_tree.nodes
+                textures = Utility.get_nodes_with_type(nodes, "TexImage")
+                if len(textures) == 1:
+                    material.name = textures[0].image.name
+
 
     def _load_room(self, node, metadata, material_adjustments, transform, house_id, parent, room_per_object):
         """ Load the room specified in the given node.
