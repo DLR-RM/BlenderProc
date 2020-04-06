@@ -40,7 +40,7 @@
         "objects_to_sample": {
           "provider": "getter.Entity",
           "conditions": {
-            "physics": True,
+            "cp_physics": True,
             "type": "MESH"
           }
         },

@@ -54,7 +54,7 @@
         "objects_to_sample": {
           "provider": "getter.Entity",
           "conditions": {
-            "sample_pose": True,
+            "cp_sample_pose": True,
             "type": "MESH"
           }
         },
