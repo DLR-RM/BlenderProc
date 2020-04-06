@@ -79,17 +79,17 @@ class OnSurfaceSampler(Module):
         return closest_distance is None or (self.min_distance <= closest_distance <= self.max_distance)
 
     @staticmethod
-    def collision(obj_a, obj_b):
+    def collision(first_obj, second_obj):
         """ Checks if two object intersect.
 
-        :param obj_a: The first object for which the check is carried out.
-        :param obj_b: The second object for which the check is carried out.
+        :param first_obj: The first object for which the check is carried out.
+        :param second_obj: The second object for which the check is carried out.
         :return: True if objects are intersecting, if not - False.
         """
-        intersection = check_bb_intersection(obj_a, obj_b)
+        intersection = check_bb_intersection(first_obj, second_obj)
         if intersection:
             # check for more refined collisions
-            intersection, cache = check_intersection(obj_a, obj_b)
+            intersection, cache = check_intersection(first_obj, second_obj)
 
         return intersection
 
