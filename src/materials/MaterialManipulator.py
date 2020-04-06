@@ -11,16 +11,36 @@ class MaterialManipulator(Module):
     This class can manipulate materials, for now you can set the attribute of a material with it or:
         * link the color of an image to the displacement as seen in the example
         * map the vertex colors of an object to a material
+
     **Configuration**:
 
     .. csv-table::
        :header: "Parameter", "Description"
+
        "selector" "Materials to be modified (selection via getter.Material Provider). Type: list."
-       "mode" "Mode of operation. Available values: 'once_for_each' (sampling the values for each selected material anew), 'once_for_all' (sampling once for all of the selected materials). Optional. Default value: 'once_for_each'. Type: string."
-       "color_link_to_displacement" "Factor that determining the strength of the displacement via linking the output of the texture image to the displacement Type: float"
-       "change_to_vertex_color" "The name of the vertex color layer, used for changing the material to a vertex coloring mode. Type: string"
-       "textures", "Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.): texture_path} pairs. Texture_type should be equal to the Shaderinput name in order to be assigned to a ShaderTexImage node that will be linked to this input. Label represents to which shader input this node is aconnected. Type: dict."
-       "textures/texture_path", "Path to a texture image. Type: string."
+       "mode" "Mode of operation. Available values: 'once_for_each' (sampling the values for each selected material "
+              "anew), 'once_for_all' (sampling once for all of the selected materials). Optional. Default value: "
+              "'once_for_each'. Type: string."
+       "key": "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
+              "In order to specify, what exactly one want to modify:"
+              "For calling custom function: key of the pair must start with `cf_` prefix. See table below for supported"
+              "cf names."
+       "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
+
+    **Available custom functions**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "cf_color_link_to_displacement" "Factor that determining the strength of the displacement via linking the output "
+                                       "of the texture image to the displacement Type: float"
+       "cf_change_to_vertex_color" "The name of the vertex color layer, used for changing the material to a vertex "
+                                   "coloring mode. Type: string"
+       "cf_textures", "Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.): "
+                      "texture_path} pairs. Texture_type should be equal to the Shader input name in order to be assigned "
+                      "to a ShaderTexImage node that will be linked to this input. Label represents to which shader "
+                      "input this node is connected. Type: dict."
+       "cf_textures/texture_path", "Path to a texture image. Type: string."
     """
 
     def __init__(self, config):
@@ -56,12 +76,18 @@ class MaterialManipulator(Module):
                 params = self._get_the_set_params(params_conf)
 
             for key, value in params.items():
+
+                requested_cf = False
+                if key.startswith('cf_'):
+                    requested_cf = True
+                    key = key[3:]
+
                 # if an attribute with such name exists for this entity
-                if key == "color_link_to_displacement":
+                if key == "color_link_to_displacement" and requested_cf:
                     MaterialManipulator._link_color_to_displacement_for_mat(material, value)
-                elif key == "change_to_vertex_color":
+                elif key == "change_to_vertex_color" and requested_cf:
                     MaterialManipulator._map_vertex_color(material, value)
-                elif key == "textures":
+                elif key == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
                 elif hasattr(material, key):
@@ -81,11 +107,11 @@ class MaterialManipulator(Module):
         params = {}
         for key in params_conf.data.keys():
             result = None
-            if key == "color_link_to_displacement":
+            if key == "cf_color_link_to_displacement":
                 result = params_conf.get_float(key)
-            elif key == "change_to_vertex_color":
+            elif key == "cf_change_to_vertex_color":
                 result = params_conf.get_string(key)
-            elif key == "textures":
+            elif key == "cf_textures":
                 result = {}
                 paths_conf = Config(params_conf.get_raw_dict(key))
                 for text_key in paths_conf.data.keys():

@@ -69,7 +69,7 @@
             "name": "ReplicaMaterial"
           }
         },
-        change_to_vertex_color: "Col"
+        "cf_change_to_vertex_color": "Col"
       }
     },
     {

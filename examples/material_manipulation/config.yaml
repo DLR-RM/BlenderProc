@@ -13,7 +13,8 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-            "output_dir": "<args:2>"
+            "output_dir": "<args:2>",
+            "output_is_temp": False
           }
       }
     },
@@ -66,7 +67,7 @@
             "name": "Material.001"
           }
         },
-        "color_link_to_displacement": 1.5
+        "cf_color_link_to_displacement": 1.5
       }
     },
     {
@@ -79,7 +80,7 @@
           }
         },
         "mode": "once_for_each",
-        "textures": {
+        "cf_textures": {
           "Base Color": {
             "provider": "sampler.Path",
             "path": "<args:1>/*.jpg"
