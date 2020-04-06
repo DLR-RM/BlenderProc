@@ -27,7 +27,7 @@
       "config": {
           "path": "<args:1>",
           "add_properties": {
-            "replace": "chair",
+            "cp_replace": "chair",
           }
         },
     },

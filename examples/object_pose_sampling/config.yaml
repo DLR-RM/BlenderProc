@@ -21,7 +21,7 @@
       "config": {
         "path": "<args:1>",
         "add_properties": {
-          "sample_pose": True
+          "cp_sample_pose": True
         }
       }
     },

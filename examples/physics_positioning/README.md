@@ -45,7 +45,7 @@ python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
   "config": {
     "path": "<args:0>",
     "add_properties": {
-      "physics": True 
+      "cp_physics": True 
       }
     }
 },
@@ -54,7 +54,7 @@ python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
   "config": {
     "path": "<args:1>",
     "add_properties": {
-      "physics": False 
+      "cp_physics": False 
       }
     }
   }

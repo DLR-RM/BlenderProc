@@ -21,7 +21,7 @@
       "config": {
         "path": "<args:0>",
         "add_properties": {
-           "physics": True
+           "cp_physics": True
         }
       }
     },
@@ -30,7 +30,7 @@
       "config": {
         "path": "<args:1>",
         "add_properties": {
-          "physics": False
+          "cp_physics": False
         }
       }
     },
