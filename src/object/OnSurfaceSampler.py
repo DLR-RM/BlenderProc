@@ -6,11 +6,12 @@ from src.main.Module import Module
 
 
 class OnSurfaceSampler(Module):
-    """ Places objects on a surface. The object are positioned slightly above the surface, it is recommended to run
-        PhysicsPositioning afterwards to make sure the objects are not hovering.
-
-        For best results "up_direction" should be aligned with an axis in the local coordinate frame of "surface".
-        Otherwise the bounding box used will not be aligned properly which may lead to floating objects.
+    """ Samples objects poses on a surface.
+        The objects are positioned slightly above the surface due to the non-axis aligned nature of used bounding boxes
+        and possible non-alignment of the sampling surface (i.e. on the X-Y hyperplane, can be somewhat mitigated with
+        precise "up_direction" value), which leads to the objects hovering slightly above the surface. So it is
+        recommended to use the PhysicsPositioning module afterwards for realistically looking placements of objects on 
+        the sampling surface.
 
     .. csv-table::
        :header: "Parameter", "Description"
