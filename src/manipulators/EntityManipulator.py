@@ -69,18 +69,18 @@ class EntityManipulator(Module):
                     result = params_conf.get_raw_value(key)
 
                 # check if the key is a requested custom property
-                requested_custom_property = False
+                demanded_custom_property = False
                 if key.startswith('cp_'):
-                    requested_custom_property = True
+                    demanded_custom_property = True
                     key = key[3:]
 
                 # if an attribute with such name exists for this entity
-                if hasattr(entity, key) and not requested_custom_property:
+                if hasattr(entity, key) and not demanded_custom_property:
                     # set the value
                     setattr(entity, key, result)
                 # if key had a cp_ prefix - treat it as a custom property. Values will be overwritten for existing
                 # custom property, but if the name is new then new custom property will be created
-                elif requested_custom_property:
+                elif demanded_custom_property:
                     entity[key] = result
         # update all entities matrices
         bpy.context.view_layer.update()
