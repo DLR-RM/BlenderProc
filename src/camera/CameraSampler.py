@@ -8,6 +8,8 @@ import sys
 import numbers
 from collections import defaultdict
 
+import numpy as np
+
 class CameraSampler(CameraModule):
     """ A general camera sampler.
 
@@ -24,10 +26,16 @@ class CameraSampler(CameraModule):
        :header: "Parameter", "Description"
 
        "number_of_samples", "The number of camera poses that should be sampled."
-       "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses."
+       "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses per interest score."
        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
        "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min. The operators are combined in conjunction (i.e boolean and).
        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
+       "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera poses. Type: float. Optional. Default value: min_interest_score"
+       "interest_score_step", "Step size for the list of interest scores that would be tried in the range from min_interest_score to"interest_score_range. Must be bigger than 0. Type: float. Optional. Default value: 0.1"
+       Interest score range example: min_interest_score = 0.8, interest_score_range = 1.0, interest_score_step = 0.1
+       interest score list = [1.0, 0.9, 0.8]. The sampler would reject any pose with score less than 1.0. If max tries is reached, it would switch to 0.9 and so on.
+       min_interest_score = 0.8, interest_score_range = 0.8, interest_score_step = 0.1 (or any value bigger than 0)
+       interest score list = [0.8].
        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
     """
@@ -57,19 +65,38 @@ class CameraSampler(CameraModule):
         self.sqrt_number_of_rays = config.get_int("sqrt_number_of_rays", 10)
         self.max_tries = config.get_int("max_tries", 10000)
         self.proximity_checks = config.get_raw_dict("proximity_checks", [])
-        self.min_interest_score = config.get_float("min_interest_score", 0)
+        self.min_interest_score = config.get_float("min_interest_score", 0.0)
+        self.interest_score_range = config.get_float("interest_score_range", self.min_interest_score)
+        self.interest_score_step = config.get_float("interest_score_step", 0.1)
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
+
+        if self.interest_score_step <= 0.0:
+            raise Exception("Must have an interest score step size bigger than 0")
 
         # Determine the number of camera poses to sample
         number_of_poses = config.get_int("number_of_samples", 1)
         print("Sampling " + str(number_of_poses) + " cam poses")
 
+        if self.min_interest_score == self.interest_score_range:
+            step_size = 1
+        else:    
+            step_size = (self.interest_score_range - self.min_interest_score) / self.interest_score_step
+            step_size += 1  # To include last value
+
+        interest_scores = np.linspace(self.interest_score_range, self.min_interest_score, step_size)  # Decreasing order
+        score_index = 0
+
+        all_tries = 0  # max_tries is now applied per each score
         tries = 0
+
+        self.min_interest_score = interest_scores[score_index]
+        print("Trying a min_interest_score value: %f" % self.min_interest_score)
         for i in range(number_of_poses):
             # Do until a valid pose has been found or the max number of tries has been reached
             while tries < self.max_tries:
                 tries += 1
+                all_tries += 1
                 # Sample a new cam pose and check if its valid
                 if self.sample_and_validate_cam_pose(cam, cam_ob, config):
                     # Store new cam pose as next frame
@@ -79,10 +106,16 @@ class CameraSampler(CameraModule):
                     break
 
             if tries >= self.max_tries:
-                print("Maximum number of tries reached!")
-                break
+                if score_index == len(interest_scores) - 1:  # If we tried all score values
+                    print("Maximum number of tries reached!")
+                    break
+                # Otherwise, try a different lower score and reset the number of trials
+                score_index += 1
+                self.min_interest_score = interest_scores[score_index]
+                print("Trying a different min_interest_score value: %f" % self.min_interest_score)
+                tries = 0
 
-        print(str(tries) + " tries were necessary")
+        print(str(all_tries) + " tries were necessary")
 
     def sample_and_validate_cam_pose(self, cam, cam_ob, config):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.

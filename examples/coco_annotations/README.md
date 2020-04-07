@@ -44,7 +44,6 @@ python scripts/vis_coco_annotation.py
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders normals: `renderer.NormalRenderer` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.

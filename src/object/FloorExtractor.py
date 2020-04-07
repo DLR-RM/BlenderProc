@@ -23,7 +23,7 @@ class FloorExtractor(Module):
             "compare_height", maximum difference in Z direction between the polygons median point and the specified height of the room
 
             "is_replica_object", in this instance the data_set_name key has to be set
-            "data_set_name", name of the data set only useful with replica-dataset
+            "data_set_name", name of the data set only useful with replica_dataset
         """
         obj_name = self.config.get_string('obj_name')
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
@@ -31,7 +31,7 @@ class FloorExtractor(Module):
         if not self.config.get_bool('is_replica_object', False):
             file_path = self.config.get_string('height_list_path')
         else:
-            file_folder = os.path.join('resources', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
+            file_folder = os.path.join('resources', 'replica_dataset', 'height_levels', self.config.get_string('data_set_name'))
             file_path = Utility.resolve_path(os.path.join(file_folder, 'height_list_values.txt'))
         with open(file_path) as file:
             import ast

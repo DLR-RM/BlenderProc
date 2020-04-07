@@ -1,13 +1,16 @@
 import os
 from sys import platform
 import multiprocessing
+import math
 
 import addon_utils
 import bpy
+import mathutils
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
 from src.utility.BlenderUtility import get_all_mesh_objects
+from src.main.GlobalStorage import GlobalStorage
 
 
 class Renderer(Module):
@@ -47,8 +50,6 @@ class Renderer(Module):
        "stereo", "If true, renders a pair of stereoscopic images for each camera position."
        "use_alpha", "If true, the alpha channel stored in .png textures is used."
     """
-
-    DEPTH_END = 25.1
 
     def __init__(self, config):
         Module.__init__(self, config)
@@ -154,7 +155,7 @@ class Renderer(Module):
         # Mist settings
         depth_start = self.config.get_float("depth_start", 0.1)
         depth_range = self.config.get_float("depth_range", 25.0)
-        Renderer.DEPTH_END = depth_start + depth_range
+        GlobalStorage.add("renderer_depth_end", depth_start + depth_range)
         bpy.context.scene.world.mist_settings.start = depth_start
         bpy.context.scene.world.mist_settings.depth = depth_range
         bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")
@@ -192,6 +193,9 @@ class Renderer(Module):
         if self.config.get_bool("render_depth", False):
             self._write_depth_to_file()
 
+        if self.config.get_bool("render_normals", False):
+            self._write_normal_to_file()
+
         if custom_file_path is None:
             bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
         else:
@@ -216,8 +220,8 @@ class Renderer(Module):
         :param blurry_edges: If True, the edges of the alpha channel might be blurry,
                              this causes errors if the alpha channel should only be 0 or 1
 
-        Be careful, when you replace the original texture with something else (Segmentation, Normals, ...),
-        the necessary texture node gets lost. By copying it into a new material as done in the NormalRenderer, you
+        Be careful, when you replace the original texture with something else (Segmentation, ...),
+        the necessary texture node gets lost. By copying it into a new material as done in the SegMapRenderer, you
         can keep the transparency even for those nodes.
 
         """
@@ -288,6 +292,101 @@ class Renderer(Module):
             return new_mat_alpha
         return new_material
 
+    def _write_normal_to_file(self):
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+        tree = bpy.context.scene.node_tree
+        links = tree.links
+
+        # Use existing render layer
+        render_layer_node = tree.nodes.get('Render Layers')
+
+        separate_rgba = tree.nodes.new("CompositorNodeSepRGBA")
+        space_between_nodes_x = 200
+        space_between_nodes_y = -300
+        separate_rgba.location.x = space_between_nodes_x
+        separate_rgba.location.y = space_between_nodes_y
+        links.new(render_layer_node.outputs["Normal"], separate_rgba.inputs["Image"])
+
+        combine_rgba = tree.nodes.new("CompositorNodeCombRGBA")
+        combine_rgba.location.x = space_between_nodes_x * 14
+
+        c_channels = ["R", "G", "B"]
+        offset = space_between_nodes_x * 2
+        multiplication_values = [[],[],[]]
+        channel_results = {}
+        for row_index, channel in enumerate(c_channels):
+            # matrix multiplication
+            mulitpliers = []
+            for column in range(3):
+                multiply = tree.nodes.new("CompositorNodeMath")
+                multiply.operation = "MULTIPLY"
+                multiply.inputs[1].default_value = 0 # setting at the end for all frames
+                multiply.location.x = column * space_between_nodes_x + offset
+                multiply.location.y = row_index * space_between_nodes_y
+                links.new(separate_rgba.outputs[c_channels[column]], multiply.inputs[0])
+                mulitpliers.append(multiply)
+                multiplication_values[row_index].append(multiply)
+
+            first_add = tree.nodes.new("CompositorNodeMath")
+            first_add.operation = "ADD"
+            first_add.location.x = space_between_nodes_x * 5 + offset
+            first_add.location.y = row_index * space_between_nodes_y
+            links.new(mulitpliers[0].outputs["Value"], first_add.inputs[0])
+            links.new(mulitpliers[1].outputs["Value"], first_add.inputs[1])
+
+            second_add = tree.nodes.new("CompositorNodeMath")
+            second_add.operation = "ADD"
+            second_add.location.x = space_between_nodes_x * 6 + offset
+            second_add.location.y = row_index * space_between_nodes_y
+            links.new(first_add.outputs["Value"], second_add.inputs[0])
+            links.new(mulitpliers[2].outputs["Value"], second_add.inputs[1])
+
+            channel_results[channel] = second_add
+
+        # set the matrix accordingly
+        rot_around_x_axis = mathutils.Matrix.Rotation(math.radians(-90.0), 4, 'X')
+        cam_ob = bpy.context.scene.camera
+        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+            bpy.context.scene.frame_set(frame)
+            used_rotation_matrix = cam_ob.matrix_world @ rot_around_x_axis
+            for row_index in range(3):
+                for column_index in range(3):
+                    current_multiply = multiplication_values[row_index][column_index]
+                    current_multiply.inputs[1].default_value = used_rotation_matrix[column_index][row_index]
+                    current_multiply.inputs[1].keyframe_insert(data_path='default_value', frame=frame)
+        offset = 8 * space_between_nodes_x
+        for index, channel in enumerate(c_channels):
+            multiply = tree.nodes.new("CompositorNodeMath")
+            multiply.operation = "MULTIPLY"
+            multiply.location.x = space_between_nodes_x * 2 + offset
+            multiply.location.y = index * space_between_nodes_y
+            links.new(channel_results[channel].outputs["Value"], multiply.inputs[0])
+            if channel == "G":
+                multiply.inputs[1].default_value = -0.5
+            else:
+                multiply.inputs[1].default_value = 0.5
+            add = tree.nodes.new("CompositorNodeMath")
+            add.operation = "ADD"
+            add.location.x = space_between_nodes_x * 3 + offset
+            add.location.y = index * space_between_nodes_y
+            links.new(multiply.outputs["Value"], add.inputs[0])
+            add.inputs[1].default_value = 0.5
+            output_channel = channel
+            if channel == "G":
+                output_channel = "B"
+            elif channel == "B":
+                output_channel = "G"
+            links.new(add.outputs["Value"], combine_rgba.inputs[output_channel])
+
+        output_file = tree.nodes.new("CompositorNodeOutputFile")
+        output_file.base_path = self._determine_output_dir()
+        output_file.format.file_format = "OPEN_EXR"
+        output_file.file_slots.values()[0].path = self.config.get_string("normals_output_file_prefix", "normals_")
+        output_file.location.x = space_between_nodes_x * 15
+        links.new(combine_rgba.outputs["Image"], output_file.inputs["Image"])
+
+
     def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes=True, output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix"):
         """ Registers new output type using configured key and file prefix.
 
@@ -309,6 +408,13 @@ class Renderer(Module):
             self._add_output_entry({
                 "key": self.config.get_string("depth_output_key", "depth"),
                 "path": os.path.join(self._determine_output_dir(), self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
+                "version": "2.0.0",
+                "stereo": use_stereo
+            })
+        if self.config.get_bool("render_normals", False):
+            self._add_output_entry({
+                "key": self.config.get_string("normals_output_key", "normals"),
+                "path": os.path.join(self._determine_output_dir(), self.config.get_string("normals_output_file_prefix", "normals_")) + "%04d" + ".exr",
                 "version": "2.0.0",
                 "stereo": use_stereo
             })

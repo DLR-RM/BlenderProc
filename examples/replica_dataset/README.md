@@ -7,19 +7,19 @@ This example introduces new tools for using replica dataset with BlenderProc.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/replica-dataset/config.yaml <path_to_the_replica_data_folder>  examples/replica-dataset/output
+python run.py examples/replica_dataset/config.yaml <path_to_the_replica_data_folder>  examples/replica_dataset/output
 ``` 
 
-* `examples/replica-dataset/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/replica_dataset/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path_to_the_replica_data_folder>`: Path to the replica dataset directory.
-* `examples/replica-dataset/output`: path to the output directory.
+* `examples/replica_dataset/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
+python scripts/visHdf5Files.py example/replica_dataset/0.hdf5
 ```
 
 ## Steps
@@ -27,7 +27,7 @@ python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
 * Load replica room: `loader.ReplicaLoader` module.
 * Extracts a floor in the room: `object.FloorExtractor` module.
 * Samples multiples cameras in the room: `camera.ReplicaCameraSampler` module.
-* Renders normals: `renderer.NormalRenderer` module.
+* Renders rgb and normals: `renderer.RgbRenderer` module.
 * Writes output to .hdf5 container: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -35,13 +35,12 @@ python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
 ### Global
 
 ```yaml
-"global": {
-  "all": {
+"module": "main.Initializer",
+"config": {
+  "global": {
     "output_dir": "<args:1>",
     "data_set_name": "office_1",
-    "data_path": "<args:0>"
-  },
-  "renderer": {
+    "data_path": "<args:0>",
     "pixel_aspect_x": 1.333333333
   }
 },
@@ -49,6 +48,8 @@ python scripts/visHdf5Files.py example/replica-dataset/0.hdf5
 
 Note that `"data_set_name": "office_1"` is a replica room you want to render. This line can be replace with:
 `"data_set_name": "<args:X>>"`, i.e. with an appropriate placeholder where `X` is a number of a placeholder.
+
+As before all these values are stored in the GlobalStorage and are only used if no value is defined in the module itself.
 
 ### Replica loader
 

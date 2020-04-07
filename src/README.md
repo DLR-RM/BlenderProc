@@ -58,20 +58,21 @@ This configuration object has the methods `get_int`, `get_float`, `get_bool`, `g
 Config file:
 ```yaml
 {
-  "global": {
-    "all": {
-      "output_dir": "/tmp/",
-      "auto_tile_size": false
-    },
-    "renderer": {
-      "pixel_aspect_x": 1.333333333
-    }
-  },
   "modules": [
     {
-      "module": "renderer.NormalRenderer",
+      "module": "main.Initializer",
       "config": {
-        "auto_tile_size": true,
+        "global": {
+          "output_dir": "/tmp/",
+          "auto_tile_size": False,
+          "pixel_aspect_x": 1.333333333
+        }
+      }
+    },
+    {
+      "module": "renderer.NewRenderer",
+      "config": {
+        "auto_tile_size": True,
         "cycles": {
           "samples": 255
         }
@@ -81,20 +82,20 @@ Config file:
 }
 ```
 
-Inside the `renderer.NormalRenderer` module:
+Inside the `renderer.NewRenderer` module:
 
 ```python
 self.get_int("cycles/samples", 42)  
 # -> 255
 
 self.get_float("pixel_aspect_x") 
-# -> 1.333333333
+# -> 1.333333333 this value is drawn from the GlobalStorage
 
 self.get_string("output_dir", "output/") 
-# -> /tmp/
+# -> /tmp/ this value is drawn from the GlobalStorage
 
 self.get_bool("auto_tile_size") 
-# -> True
+# -> True 
 
 self.config.get_int("resolution_x", 512)
 # ->  512

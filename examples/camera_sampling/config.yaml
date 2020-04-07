@@ -1,21 +1,20 @@
 # Args: <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
     },
     {
       "module": "loader.ObjectLoader",
@@ -57,22 +56,15 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350
+        "samples": 350,
+        "render_normals": True
       }
     },
     {
       "module": "writer.Hdf5Writer",
-      "config": {
-      }
     }
   ]
 }

@@ -25,12 +25,12 @@ In the output folder you will find a `coco_data/` folder with a `coco_annotation
 * Loads 4 batches of RE rocks: `loader.RockEssentialsRockLoader` module.
 * Constructs a blank ground tile wirh RE material: `constructor.RockEssentialsGroundConstructor` module.
 * Samples a texture for a ground's plane material: `materials.RockEssentialsTextureSampler` module.
-* Samples positions on the ground plane for large rocks: `lobject.EntityManipulator` module.
+* Samples positions on the ground plane for large rocks: `manipulators.EntityManipulator` module.
 * Sample positions for rocks: `object.ObjectPoseSampler` module.
 * Samples camera positions: `camera.CameraSampler` module.
 * Creates a Sun light: `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
-* Displaces a ground plane up: `object.EntityManipulator` module.
+* Displaces a ground plane up: `manipulators.EntityManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.
@@ -40,12 +40,13 @@ In the output folder you will find a `coco_data/` folder with a `coco_annotation
 ### Global
 
 ```yaml
-"global": {
-  "all": {
+"module": "main.Initializer",
+"config": {
+  "global": {
     "output_dir": "<args:1>",
     "append_to_existing_output": True
   }
-},
+}
 ```
 
 `"append_to_existing_output": True` conditions all the modules (e.g. `writer.CocoAnnotationsWriter`) to append it's output to the existing output of the pipeline. It is useful when generating a coco annotation data for training.

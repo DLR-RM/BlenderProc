@@ -1,6 +1,6 @@
 # Args: <path_to_re_dataset> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -8,16 +8,15 @@
       "scikit-image"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>",
-      "append_to_existing_output": True
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "append_to_existing_output": True
+        }
+      }
     },
     {
       "module": "loader.RockEssentialsRockLoader",
@@ -98,7 +97,7 @@
       }
     },
     {
-      "module": "object.EntityManipulator",
+      "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
@@ -143,9 +142,9 @@
           "number_of_samples": 5,
           "location": {
             "provider": "sampler.Disk",
+            "sample_from": "circle",
             "center": [0, 0, 4],
-            "radius": 7,
-            "use_circle_only": True
+            "radius": 7
           },
           "rotation": {
             "format": "look_at",
@@ -196,7 +195,7 @@
       }
     },
     {
-      "module": "object.EntityManipulator",
+      "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",

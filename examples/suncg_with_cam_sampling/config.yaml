@@ -1,21 +1,20 @@
 # Args: <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
     },
     {
       "module": "loader.SuncgLoader",
@@ -58,17 +57,17 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {}
-    },
-    {
       "module": "renderer.SegMapRenderer",
-      "config": {}
+      "config": {
+        "use_alpha": True
+      }
     },
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "render_depth": true
+        "render_depth": True,
+        "render_normals": True,
+        "use_alpha": True
       }
     },
     {

@@ -9,6 +9,17 @@ class Module:
     """
     **Configuration**:
 
+    All of these values can be set per Module or of the global config defined in the main.Initializer:
+
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:X>"
+        }
+      }
+
+    If they are set globally all modules will inherit them, if there is no module defined key available.
+
     .. csv-table::
        :header: "Parameter", "Description"
 
@@ -19,11 +30,16 @@ class Module:
 
     def __init__(self, config):
         self.config = config
+        self._default_init()
 
+    def _default_init(self):
+        """
+        These operations are called during all modules inits
+        """
         self._output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
         os.makedirs(self._output_dir, exist_ok=True)
 
-        self._temp_dir = Utility.get_temporary_directory(config)
+        self._temp_dir = Utility.get_temporary_directory(self.config)
         os.makedirs(self._temp_dir, exist_ok=True)
 
     def _determine_output_dir(self, output_is_temp_default=True):

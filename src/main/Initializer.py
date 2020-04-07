@@ -1,5 +1,8 @@
-from src.main.Module import Module
 import bpy
+
+from src.main.Module import Module
+from src.main.GlobalStorage import GlobalStorage
+from src.utility.Config import Config
 
 class Initializer(Module):
     """ Does some basic initialization of the blender project.
@@ -17,8 +20,15 @@ class Initializer(Module):
        "compute_device_type", "Device to use for computation. Available options are 'CUDA', 'OPTIX', 'OPENCL' and 'NONE'. 'OPTIX' requires a driver version of >=435.12!
     """
 
-    def __int__(self, config):
+    def __init__(self, config):
         Module.__init__(self, config)
+
+        # setting up the GlobalStorage
+        global_config = Config(self.config.get_raw_dict("global", {}))
+        GlobalStorage.init_global(global_config)
+
+        # call the init again to make sure all values from the global config where read correctly, too
+        self._default_init()
 
     def run(self):
         # Make sure to use the current GPU

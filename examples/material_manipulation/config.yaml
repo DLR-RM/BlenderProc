@@ -1,6 +1,6 @@
 # Args: <obj_file> <path_to_textures> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -8,15 +8,14 @@
       "imageio"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+            "output_dir": "<args:2>"
+          }
+      }
     },
     {
       "module": "loader.ObjectLoader",

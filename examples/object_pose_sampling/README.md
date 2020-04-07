@@ -31,8 +31,7 @@ python scripts/visHdf5Files.py examples/object_pose_sampling/output/0.hdf5
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
 * Sample object poses: `object.ObjectPoseSampler` module.
-* Renders normals: `renderer.NormalRenderer` module.
-* Renders rgb: `renderer.RgbRenderer` module.
+* Renders rgb: `renderer.RgbRenderer` module plus normals.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file

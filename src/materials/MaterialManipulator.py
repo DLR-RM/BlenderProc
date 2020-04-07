@@ -55,7 +55,7 @@ class MaterialManipulator(Module):
                 # get values to set if they are to be set/sampled anew for each selected entity
                 params = self._get_the_set_params(params_conf)
 
-            for key, value in params.iteritems():
+            for key, value in params.items():
                 # if an attribute with such name exists for this entity
                 if key == "color_link_to_displacement":
                     MaterialManipulator._link_color_to_displacement_for_mat(material, value)
