@@ -48,31 +48,31 @@ python scripts/visHdf5Files.py examples/on_surface_object_sampling/output/0.hdf5
     "objects_to_sample": {                      # mesh objects to sample on the surface
       "provider": "getter.Entity",
       "conditions": {
-        "name": ".*phere.*"                     # we select all UV spheres and Isospheres
+        "name": ".*phere.*"                     # we select all UV spheres and Icospheres
       }
     },
     "surface": {                                # the object to use as a surface to sample on
-      "provider": "getter.Entity",
-      "index": 0,
+      "provider": "getter.Entity",              
+      "index": 0,                               # make sure the Provider returns only one object
       "conditions": {
         "name": "Cube"                          # Cube in the scene is selected
       }
     },
     "pos_sampler": {
       "provider": "sampler.UpperRegionSampler",
-      "to_sample_on": {                         # select it again, but inside the sampler to define the upper region
-        "provider": "getter.Entity",            # the space above the Cube
+      "to_sample_on": {                         # select it again, but inside the sampler to define the upper region the space above the Cube
+        "provider": "getter.Entity",
         "index": 0,                             # returns only the first object to satisfy the conditions
         "conditions": {
-          "name": "Cube"
+          "name": "Cube"                        # same Cube is selected
         }
       },
-      "min_height": 1,                          # points sampled in this space will have height variying in this min max range
-      "max_height": 4,
+      "min_height": 1,                          # points sampled in this space will have height varying in this min-max range
+      "max_height": 4,                          # this range also helps the module to satisfy the non-intersecting bounding boxes checks for the sampled objects and the surface faster
       "use_ray_trace_check": False,
     },
     "min_distance": 0.1,                        # minimal distance between sampled objects
-    "max_distance": 10,                         # and a maximal distance. The smaller the min-max range, the more tries the module can take to sample the appropriate location.
+    "max_distance": 10,                         # and a maximal distance. The smaller the min-max range, the more tries the module can take to sample the appropriate location
     "rot_sampler": {                            # uniformly sample rotation
       "provider": "sampler.Uniform3d",
       "max": [0,0,0],
