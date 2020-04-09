@@ -46,7 +46,7 @@ python scripts/visHdf5Files.py examples/object_pose_sampling/output/0.hdf5
     "objects_to_sample": {
       "provider": "getter.Entity",
       "condition": {
-        "sample_pose": True 
+        "cp_sample_pose": True 
       }
     },
     "pos_sampler":{

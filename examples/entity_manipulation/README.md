@@ -55,7 +55,7 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
           "min":[0, 1, 2]
         },
         "rotation_euler": [1, 1, 0],
-        "physics": True
+        "cp_physics": True
       }
     },
 ```

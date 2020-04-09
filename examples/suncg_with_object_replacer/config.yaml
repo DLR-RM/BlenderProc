@@ -27,7 +27,7 @@
       "config": {
           "path": "<args:1>",
           "add_properties": {
-            "replace": "chair",
+            "cp_replace": "chair",
           }
         },
     },
@@ -37,7 +37,7 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "replace": "chair"
+            "cp_replace": "chair"
           }
         }
       }
@@ -50,14 +50,14 @@
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
-              "coarse_grained_class": "chair",
+              "cp_coarse_grained_class": "chair",
               "type": "MESH"
             }
         },
         "objects_to_replace_with": {
             "provider": "getter.Entity",
             "conditions": {
-              "replace": "chair",
+              "cp_replace": "chair",
               "type": "MESH"
             }
         },

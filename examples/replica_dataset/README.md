@@ -124,7 +124,7 @@ As before all these values are stored in the GlobalStorage and are only used if 
         "name": "ReplicaMaterial"
       }
     },
-    change_to_vertex_color: "Col"
+    "cf_change_to_vertex_color": "Col"
   }
 },
 ``` 

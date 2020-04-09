@@ -55,13 +55,13 @@ python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
             "provider": "getter.Entity",
             "conditions": {
               "type": "MESH",
-              "coarse_grained_class": "chair"
+              "cp_coarse_grained_class": "chair"
             }
         },
         "objects_to_replace_with": {
             "provider": "getter.Entity",
             "conditions": {
-              "replace": "chair",
+              "cp_replace": "chair",
               "type": "MESH"
             }
         },
