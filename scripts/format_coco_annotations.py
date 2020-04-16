@@ -6,7 +6,7 @@ segmentation mask and an annotation of wrong width/height. Those faulty annotati
 during training.
 
 When supplied with a path to a .json file, this script iterates through all annotations of this file, deletes ones with
-an empty segmentation masks, and then saves the formatted result a a new .json file.
+an empty segmentation masks, and then saves the formatted result as a new .json file.
 
 Input parameters:
     * -p, --path: path to a .json coco annotations file.
