@@ -1,27 +1,96 @@
 import bpy
 import os
+from random import choice
 
 from src.loader.Loader import Loader
 from src.utility.Config import Config
 
 
 class RockEssentialsRockLoader(Loader):
-    """
+    """ Loads rocks/cliffs from a specified .bled Rocks Essentials file.
+
+    Example 1: Load two rocks from the specified .blend file.
+
+    {
+      "module": "loader.RockEssentialsRockLoader",
+      "config": {
+        "batches": [
+        {
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003']
+        }
+        ]
+      }
+    }
+
+    Example 2: Load 5 copies of two specified rocks from the specified .blend file.
+
+    {
+      "module": "loader.RockEssentialsRockLoader",
+      "config": {
+        "batches": [
+        {
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
+          "amount": 5
+        }
+        ]
+      }
+    }
+
+    Example 3: Load 5 rocks, where each loaded rock is randomly selected out of a list of two rocks, from the specified
+               .blend file.
+
+    {
+      "module": "loader.RockEssentialsRockLoader",
+      "config": {
+        "batches": [
+        {
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
+          "amount": 5,
+          "sample_objects": True
+        }
+        ]
+      }
+    }
+
+    Example 4: Load 5 random rocks from the specified .blend file.
+
+    {
+      "module": "loader.RockEssentialsRockLoader",
+      "config": {
+        "batches": [
+        {
+          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+          "amount": 5,
+          "sample_objects": True
+        }
+        ]
+      }
+    }
+
     **Properties per rock batch**:
 
     .. csv-table::
        :header: "Keyword", "Description"
 
        "path", "Path to a .blend file containing desired rock/cliff objects in //Object// section. Type: string."
-       "objects", "List of rock-/cliff-object names to be loaded. Type: list. Optional. Default value: []. If not specified then `amount` property is used for consequential loading."
-       "amount", "Amount of rock-/cliff-object to load. Type: int. Optional. Default value: 0. If not specified amount will be set to the amount of suitable objects in the current section of a blend file."
+       "objects", "List of rock-/cliff-object names to be loaded. Type: list. Optional. Default value: []. If not "
+                  "specified then `amount` property is used for consequential loading."
+       "amount", "Amount of rock-/cliff-object to load. Type: int. Optional. If not specified, the amount will be set "
+                 "to the amount of suitable objects in the current section of a blend file. Must be bigger than 0."
+       "sample_objects": "Toggles the uniform sampling of objects to load. Takes into account `objects` and `amount` "
+                         "parameters. Type: bool. Optional. Default: False. Requires 'amount' param to be defined."
        "render_levels", "Number of subdivisions to perform when rendering. Type: int. Optional. Default value: 3."
        "high_detail_mode", "Flag for enabling HDM when possible. Type: boolean. Optional. Default value: False."
        "reflection_amount", "Reflection texture value. Type: float (min=0, max=1). Default value: rock-specific."
        "reflection_roughness". "Roughness texture value. Type: float (min=0, max=1). Default value: rock-specific."
        "physics", "Custom property for physics/rigidbody state. Type: boolean. Optional. Default value: False."
-       "scale", "Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. Optional. Type: mathutils Vector. Default value: [1, 1, 1]."
-       "HSV", "Hue-Saturation-Value parameters of the HSV node. Type: list (3 values). Range: H: [0, 1], S: [0, 2], V: [0, 2]. Optional. Default value: rock-specific."
+       "scale", "Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. Optional. "
+                "Type: mathutils Vector. Default value: [1, 1, 1]."
+       "HSV", "Hue-Saturation-Value parameters of the HSV node. Type: list (3 values). "
+              "Range: H: [0, 1], S: [0, 2], V: [0, 2]. Optional. Default value: rock-specific."
     """
 
     def __init__(self, config):
@@ -45,12 +114,13 @@ class RockEssentialsRockLoader(Loader):
         """
         loaded_objects = []
         obj_types = ["Rock", "Cliff"]
+        amount_defined = False
         # get path to .blend file
         path = batch_config.get_string("path")
         # get list of obj names, empty if not defined
         objects = batch_config.get_list("objects", [])
-        # get amount of rocks in this batch, 0 if not defined
-        amount = batch_config.get_int("amount", 0)
+        # toggle object sampling
+        sample_objects = batch_config.get_bool("sample_objects", False)
 
         obj_list = []
         with bpy.data.libraries.load(path) as (data_from, data_to):
@@ -62,13 +132,22 @@ class RockEssentialsRockLoader(Loader):
             else:
                 # if names are defined - get those that are available in this .blend file
                 obj_list = [obj for obj in data_from.objects if obj in objects]
-        # if amount of rocks to be loaded is zero (default value) - set amount such that every rock is loaded once
-        if amount == 0:
+
+        # get amount of rocks in this batch, set to all suitable if not defined
+        if batch_config.has_param("amount"):
+            amount = batch_config.get_int("amount")
+            amount_defined = True
+            if amount == 0:
+                raise RuntimeError('amount param cant be equal to zero!')
+        else:
             amount = len(obj_list)
 
         for i in range(amount):
-            # load rock
-            obj = obj_list[i % len(obj_list)]
+            # load rock: choose random from the list if sampling is True, go through list if not
+            if sample_objects and amount_defined:
+                obj = choice(obj_list)
+            else:
+                obj = obj_list[i % len(obj_list)]
             bpy.ops.wm.append(filepath=os.path.join(path, "/Object", obj), filename=obj,
                               directory=os.path.join(path + "/Object"))
             loaded_obj = bpy.context.scene.objects[obj]

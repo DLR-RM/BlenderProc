@@ -13,6 +13,50 @@ class RockEssentialsTextureSampler(Loader):
         created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material applied (they have
         it applied by default if ground tile was constructed by aforementioned constructor module).
 
+    Example 1: For all ground planes matching a name pattern select a random set of textures with custom AO,
+               displacements strength and UV map scaling fcator values.
+
+    {
+      "module": "materials.RockEssentialsTextureSampler",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Gr_Plane.*",
+            "type": "MESH"
+          }
+        },
+        "textures": [
+        {
+          "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
+          "uv_scaling": 2,
+          "AO": [0.5, 0.5, 0.5, 1],
+          "displacement_strength": 1.5,
+          "images": {
+            "color": "RDTGravel001_COL_VAR1_3K.jpg",
+            "roughness": "RDTGravel001_GLOSS_3K.jpg",
+            "reflection": "RDTGravel001_REFL_3K.jpg",
+            "normal": "RDTGravel001_NRM_3K.jpg",
+            "displacement": "RDTGravel001_DISP16_3K.tif"
+          }
+        },
+        {
+          "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGroundForest002/",
+          "uv_scaling": 4,
+          "AO": [0.7, 0.7, 0.7, 1],
+          "displacement_strength": 0.5,
+          "images": {
+            "color": "RDTGroundForest002_COL_VAR1_3K.jpg",
+            "roughness": "RDTGroundForest002_GLOSS_3K.jpg",
+            "reflection": "RDTGroundForest002_REFL_3K.jpg",
+            "normal": "RDTGroundForest002_NRM_3K.jpg",
+            "displacement": "RDTGroundForest002_DISP16_3K.tif"
+          }
+        }
+        ]
+      }
+    },
+
     **Ground plane config**:
 
     .. csv-table::

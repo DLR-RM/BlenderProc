@@ -7,7 +7,25 @@ from src.utility.Utility import Utility
 
 
 class RockEssentialsGroundConstructor(Loader):
-    """
+    """ Constructs a ground plane with a material using RE PBR Rock Shader.
+
+    Example 1: Construct a scaled ground plane with 30 subdivision cuts, custom name and subdiv level or rendering
+               using PBR Rock Shader from the specified .blend file.
+
+    {
+      "module": "constructor.RockEssentialsGroundConstructor",
+      "config": {
+        "tiles": [
+        {
+          "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+          "plane_scale": [50, 50, 1],
+          "subdivision_cuts": 30,
+          "subdivision_render_levels": 2,
+          "tile_name": "Gr_Plane_1"
+        }
+        ]
+      }
+    }
 
     **Ground plane properties**:
 
@@ -17,8 +35,10 @@ class RockEssentialsGroundConstructor(Loader):
        "shader_path", "Path to a .blend file that containing PBR Rock Shader in //NodeTree// section. Type: string."
        "plane_scale", "Scale of a ground plane. Type: mathutils Vector/list. Optional. Default value: [10, 10, 1]"
        "subdivision_cuts", "Amount of cuts along each plane axis. Type: int. Optional. Default value: 50."
-       "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Optional. Default value: 3."
-       "tile_name", "Name of the ground tile. Set one if you plan to use this module multiple times in one config. Optional. Type: string. Default_value: 'RE_ground_plane'."
+       "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Optional. "
+                                    "Default value: 3."
+       "tile_name", "Name of the ground tile. Set one if you plan to use this module multiple times in one config. "
+                    "Optional. Type: string. Default_value: 'RE_ground_plane'."
     """
 
     def __init__(self, config):
