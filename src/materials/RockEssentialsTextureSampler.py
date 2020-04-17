@@ -55,7 +55,7 @@ class RockEssentialsTextureSampler(Loader):
         }
         ]
       }
-    },
+    }
 
     **Ground plane config**:
 
