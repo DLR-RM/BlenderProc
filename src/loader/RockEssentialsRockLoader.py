@@ -138,7 +138,7 @@ class RockEssentialsRockLoader(Loader):
             amount = batch_config.get_int("amount")
             amount_defined = True
             if amount == 0:
-                raise RuntimeError('amount param cant be equal to zero!')
+                raise RuntimeError("Amount param can't be equal to zero!")
         else:
             amount = len(obj_list)
 

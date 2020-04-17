@@ -84,7 +84,7 @@
           "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
           "uv_scaling": 9,
           "displacement_strength": 0.7,
-          "AO": [0.5, 0.5, 0.5, 1],
+          "ambient_occlusion": [0.5, 0.5, 0.5, 1],
           "images": {
             "color": "RDTGravel001_COL_VAR1_3K.jpg",
             "roughness": "RDTGravel001_GLOSS_3K.jpg",

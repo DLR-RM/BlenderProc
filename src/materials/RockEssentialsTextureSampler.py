@@ -13,8 +13,8 @@ class RockEssentialsTextureSampler(Loader):
         created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material applied (they have
         it applied by default if ground tile was constructed by aforementioned constructor module).
 
-    Example 1: For all ground planes matching a name pattern select a random set of textures with custom AO,
-               displacements strength and UV map scaling fcator values.
+    Example 1: For all ground planes matching a name pattern select a random set of textures with custom ambient
+               occlusion, displacements strength and UV map scaling fcator values.
 
     {
       "module": "materials.RockEssentialsTextureSampler",
@@ -30,7 +30,7 @@ class RockEssentialsTextureSampler(Loader):
         {
           "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
           "uv_scaling": 2,
-          "AO": [0.5, 0.5, 0.5, 1],
+          "ambient_occlusion": [0.5, 0.5, 0.5, 1],
           "displacement_strength": 1.5,
           "images": {
             "color": "RDTGravel001_COL_VAR1_3K.jpg",
@@ -43,7 +43,7 @@ class RockEssentialsTextureSampler(Loader):
         {
           "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGroundForest002/",
           "uv_scaling": 4,
-          "AO": [0.7, 0.7, 0.7, 1],
+          "ambient_occlusion": [0.7, 0.7, 0.7, 1],
           "displacement_strength": 0.5,
           "images": {
             "color": "RDTGroundForest002_COL_VAR1_3K.jpg",
@@ -75,7 +75,8 @@ class RockEssentialsTextureSampler(Loader):
        :header: "Keyword", "Description"
 
        "path", "Path to a directory containing maps required for recreating texture. Type: string."
-       "AO", "AO color vector ([R, G, B, A]) for a ground shader. Optional. Type: list. Default value: [1, 1, 1, 1]."
+       "ambient_occlusion", "Ambient occlusion [R, G, B, A] color vector for a ground tile material's shader. Optional. "
+                            "Type: list. Default value: [1, 1, 1, 1]."
        "uv_scaling", "Scaling factor of the UV map. Type: float. Optional. Default value: 1."
        "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Optional. Default value: 1.
        "images/color", "Full name of a color map image. Optional. Type: string."
@@ -102,9 +103,9 @@ class RockEssentialsTextureSampler(Loader):
             # get a random texture
             selected_texture = self._get_random_texture(textures)
             # load the images
-            images, uv_scaling, ao, displacement_strength = self._load_images(selected_texture)
+            images, uv_scaling, ambient_occlusion, displacement_strength = self._load_images(selected_texture)
             # set images
-            self._set_textures(ground_tile, images, uv_scaling, ao, displacement_strength)
+            self._set_textures(ground_tile, images, uv_scaling, ambient_occlusion, displacement_strength)
 
     def _get_random_texture(self, textures):
         """ Chooses a random texture data from the provided list.
@@ -128,8 +129,8 @@ class RockEssentialsTextureSampler(Loader):
         path = selected_texture.get_string("path")
         # get uv layer scaling factor
         uv_scaling = selected_texture.get_float("uv_scaling", 1)
-        # get AO
-        ao = selected_texture.get_list("AO", [1, 1, 1, 1])
+        # get ambient occlusion vector
+        ambient_occlusion = selected_texture.get_list("ambient_occlusion", [1, 1, 1, 1])
         # get displacement modifier strength
         displacement_strength = selected_texture.get_float("displacement_strength", 1)
         # get dict of format {may type: full map name}
@@ -145,9 +146,9 @@ class RockEssentialsTextureSampler(Loader):
             # update return dict
             loaded_images.update({key: bpy.data.images.get(value)})
 
-        return loaded_images, uv_scaling, ao, displacement_strength
+        return loaded_images, uv_scaling, ambient_occlusion, displacement_strength
 
-    def _set_textures(self, ground_tile, images, uv_scaling, ao, displacement_strength):
+    def _set_textures(self, ground_tile, images, uv_scaling, ambient_occlusion, displacement_strength):
         """ Sets available loaded images to a texture of a current processed ground tile.
 
         :param ground_tile: Ground tile (plane) object.
@@ -178,8 +179,8 @@ class RockEssentialsTextureSampler(Loader):
         if "displacement" in images.keys():
             bpy.data.textures[texture_name].image = images['displacement']
 
-        # set AO
-        nodes.get("Group").inputs["AO"].default_value = ao
+        # set ambient occlusion
+        nodes.get("Group").inputs["AO"].default_value = ambient_occlusion
 
         # set displacement modifier strength
         bpy.context.object.modifiers["Displace"].strength = displacement_strength
