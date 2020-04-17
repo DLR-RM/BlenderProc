@@ -18,9 +18,7 @@ class RockEssentialsGroundConstructor(Loader):
        "plane_scale", "Scale of a ground plane. Type: mathutils Vector/list. Optional. Default value: [10, 10, 1]"
        "subdivision_cuts", "Amount of cuts along each plane axis. Type: int. Optional. Default value: 50."
        "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Optional. Default value: 3."
-       "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Optional. Default value: 1."
        "tile_name", "Name of the ground tile. Set one if you plan to use this module multiple times in one config. Optional. Type: string. Default_value: 'RE_ground_plane'."
-       "AO", "AO color vector ([R, G, B, A]) for a ground shader. Optional. Type: list. Default value: [1, 1, 1, 1]."
     """
 
     def __init__(self, config):
@@ -56,12 +54,8 @@ class RockEssentialsGroundConstructor(Loader):
         subdivision_cuts = ground_config.get_int("subdivision_cuts", 50)
         # get the amount of subdiv render levels, 2 if not defined
         subdivision_render_levels = ground_config.get_int("subdivision_render_levels", 3)
-        # get displacement strength, 1 if not defined
-        displacement_strength = ground_config.get_float("displacement_strength", 1)
         # get name, 'RE_ground_plane' if not defined
         tile_name = ground_config.get_string("tile_name", "RE_ground_plane")
-        # get AO color
-        ao = ground_config.get_list("AO", [1, 1, 1, 1])
 
         # create new plane, set its size
         bpy.ops.mesh.primitive_plane_add()
@@ -84,7 +78,6 @@ class RockEssentialsGroundConstructor(Loader):
         # create PBR Rock Shader, connect its output 'Shader' to the Material Output nodes input 'Surface'
         group_pbr = nodes.new("ShaderNodeGroup")
         group_pbr.node_tree = bpy.data.node_groups['PBR Rock Shader']
-        group_pbr.inputs["AO"].default_value = ao
         output_node = Utility.get_nodes_with_type(nodes, 'OutputMaterial')[0]
         links.new(group_pbr.outputs['Shader'], output_node.inputs['Surface'])
 
@@ -97,8 +90,8 @@ class RockEssentialsGroundConstructor(Loader):
         # create subsurface and displacement modifiers
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.subdivide(number_cuts=subdivision_cuts)
-        bpy.ops.object.modifier_add(type="SUBSURF")
         bpy.ops.object.modifier_add(type="DISPLACE")
+        bpy.ops.object.modifier_add(type="SUBSURF")
 
         # create new texture
         texture_name = tile_name + "_texture"
@@ -112,7 +105,6 @@ class RockEssentialsGroundConstructor(Loader):
         # scale, set render levels for subdivision, strength of displacement and set passive rigidbody state
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
         bpy.context.object.modifiers["Subdivision"].render_levels = subdivision_render_levels
-        bpy.context.object.modifiers["Displace"].strength = displacement_strength
         plane_obj["physics"] = False
 
     def _create_node(self, nodes, links, map_type, in_point):
