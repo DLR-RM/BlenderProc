@@ -31,6 +31,9 @@ class RockEssentialsTextureSampler(Loader):
        :header: "Keyword", "Description"
 
        "path", "Path to a directory containing maps required for recreating texture. Type: string."
+       "AO", "AO color vector ([R, G, B, A]) for a ground shader. Optional. Type: list. Default value: [1, 1, 1, 1]."
+       "uv_scaling", "Scaling factor of the UV map. Type: float. Optional. Default value: 1."
+       "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Optional. Default value: 1.
        "images/color", "Full name of a color map image. Optional. Type: string."
        "images/roughness", "Full name of a roughness map image. Optional. Type: string."
        "images/reflection", "Full name of a reflection map image. Optional. Type: string."
@@ -55,9 +58,9 @@ class RockEssentialsTextureSampler(Loader):
             # get a random texture
             selected_texture = self._get_random_texture(textures)
             # load the images
-            images, uv_scaling = self._load_images(selected_texture)
+            images, uv_scaling, ao, displacement_strength = self._load_images(selected_texture)
             # set images
-            self._set_textures(ground_tile, images, uv_scaling)
+            self._set_textures(ground_tile, images, uv_scaling, ao, displacement_strength)
 
     def _get_random_texture(self, textures):
         """ Chooses a random texture data from the provided list.
@@ -79,8 +82,12 @@ class RockEssentialsTextureSampler(Loader):
         loaded_images = {}
         # get path to image folder
         path = selected_texture.get_string("path")
-        # get uv layer scaling
+        # get uv layer scaling factor
         uv_scaling = selected_texture.get_float("uv_scaling", 1)
+        # get AO
+        ao = selected_texture.get_list("AO", [1, 1, 1, 1])
+        # get displacement modifier strength
+        displacement_strength = selected_texture.get_float("displacement_strength", 1)
         # get dict of format {may type: full map name}
         maps = selected_texture.get_raw_dict("images")
         # check if dict contains all required maps
@@ -94,9 +101,9 @@ class RockEssentialsTextureSampler(Loader):
             # update return dict
             loaded_images.update({key: bpy.data.images.get(value)})
 
-        return loaded_images, uv_scaling
+        return loaded_images, uv_scaling, ao, displacement_strength
 
-    def _set_textures(self, ground_tile, images, uv_scaling):
+    def _set_textures(self, ground_tile, images, uv_scaling, ao, displacement_strength):
         """ Sets available loaded images to a texture of a current processed ground tile.
 
         :param ground_tile: Ground tile (plane) object.
@@ -108,9 +115,10 @@ class RockEssentialsTextureSampler(Loader):
             if re.fullmatch(self.target_material, material[0]):
                 mat_obj = bpy.data.materials[material[0]]
             else:
-                raise Exception("No re material " + self.target_material + " found in selected objects. Check if "
-                                                                           "constructor.RockEssentialsGroundConstructor"
-                                                                           " module at least one ground tile!")
+                raise Exception("No RE material " + self.target_material + " found in selected objects. Check if "
+                                "constructor.RockEssentialsGroundConstructor module was run at least once and created "
+                                "at least one ground tile!")
+
         # get the node tree of the current material
         nodes = mat_obj.node_tree.nodes
         # get all Image Texture nodes in the tree
@@ -125,6 +133,12 @@ class RockEssentialsTextureSampler(Loader):
         # if displacement map (image) was provided and loaded - set it to the modifier
         if "displacement" in images.keys():
             bpy.data.textures[texture_name].image = images['displacement']
+
+        # set AO
+        nodes.get("Group").inputs["AO"].default_value = ao
+
+        # set displacement modifier strength
+        bpy.context.object.modifiers["Displace"].strength = displacement_strength
 
         # and scale the texture
         for point in ground_tile.data.uv_layers.active.data[:]:
