@@ -10,18 +10,18 @@ class Material(Provider):
     def __init__(self, config):
         Provider.__init__(self, config)
 
-    def perform_and_condition_check(self, and_condition, objects):
+    def perform_and_condition_check(self, and_condition, materials):
         """
         Checks for all objects in the scene if all given conditions are true, collects them in the return list
         See class description on how to set up AND and OR connections.
         :param and_condition: Given dictionary with conditions
-        :param objects: list of objects, which already have been used
+        :param materials: list of materials, which already have been used
         :return: list of objects, which full fill the conditions
         """
         new_materials = []
         # through every object
         for material in bpy.data.materials:
-            if material in new_materials:
+            if material in new_materials or materials in materials:
                 continue
 
             select_object = True
@@ -49,7 +49,6 @@ class Material(Provider):
                         break
             if select_object:
                 new_materials.append(material)
-        print("New materials: {}".format(new_materials))
         return new_materials
 
     def run(self):
@@ -57,5 +56,15 @@ class Material(Provider):
         :return: List of materials that met the conditional requirement.
         """
         conditions = self.config.get_raw_dict('conditions')
-        print(conditions)
-        return self.perform_and_condition_check(conditions, [])
+
+        # the list of conditions is treated as or condition
+        if isinstance(conditions, list):
+            materials = []
+            # each single condition is treated as and condition
+            for and_condition in conditions:
+                materials.extend(self.perform_and_condition_check(and_condition, materials))
+        else:
+            # only one condition was given, treat it as and condition
+            materials = self.perform_and_condition_check(conditions, [])
+
+        return materials
