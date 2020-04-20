@@ -5,6 +5,7 @@ import os
 
 from src.utility.Utility import Utility
 
+
 class SuncgLighting(Module):
     """ Adds emission shader to lamps, windows and ceilings.
 
@@ -176,7 +177,6 @@ class SuncgLighting(Module):
                     else:
                         raise Exception("This material: {} has not one material output!".format(m.name))
                 else:
-                    print("Has already emission!")
                     self._collection_of_mats["window"][mat_name] = m.material
 
     def _make_ceiling_emissive(self, obj):

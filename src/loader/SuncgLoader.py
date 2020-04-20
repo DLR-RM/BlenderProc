@@ -9,6 +9,7 @@ from mathutils import Matrix
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 
+
 class SuncgLoader(Loader):
     """ Loads a house.json file into blender.
 
