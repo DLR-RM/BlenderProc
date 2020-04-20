@@ -139,7 +139,7 @@ class Renderer(Module):
                 found = False
                 for device in preferences.devices:
                     if device.type == gpu_type:
-                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "OPTIX"
+                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
                         print('Device {} of type {} found and used.'.format(device.name, device.type))
                         found = True
                         break
