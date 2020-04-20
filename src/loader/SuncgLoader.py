@@ -32,6 +32,8 @@ class SuncgLoader(Loader):
         self.house_path = self.config.get_string("path")
         self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
         self._collection_of_loaded_objs = {}
+        # there are only two types of materials, textures and diffuse
+        self._collection_of_loaded_mats = {"texture": {}, "diffuse": {}}
 
     def run(self):
         with open(Utility.resolve_path(self.house_path), "r") as f:
@@ -266,19 +268,53 @@ class SuncgLoader(Loader):
             # Apply transformation
             object.matrix_world @= transform
 
+
         for mat_slot in object.material_slots:
             mat = mat_slot.material
 
+            # the material name of an object contains a nr, which is mentioned in the material_adjustments
             index = mat.name[mat.name.find("_") + 1:]
             if "." in index:
                 index = index[:index.find(".")]
             index = int(index)
 
+            # check if this index is mentioned in material_adjustments and if a texture is necessary
             force_texture = index < len(material_adjustments) and "texture" in material_adjustments[index]
             self._recreate_material_nodes(mat, force_texture)
 
             if index < len(material_adjustments):
                 self._adjust_material_nodes(mat, material_adjustments[index])
+            mat_type, value = self._get_type_and_value_from_mat(mat)
+            current_mats = self._collection_of_loaded_mats[mat_type]
+            if value in current_mats:
+                mat_slot.material = current_mats[value]
+            else:
+                # save the current material for later
+                current_mats[value] = mat
+
+
+    def _get_type_and_value_from_mat(self, mat):
+        nodes = mat.node_tree.nodes
+        image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
+        if len(image_node) == 1:
+            # there is an image node -> type texture
+            mat_type = "texture"
+            image_node = image_node[0]
+            if image_node.image is None:
+                raise Exception("The image does not have a texture for material: {}".format(mat.name))
+            value = image_node.image.name
+            if "." in value:
+                value = value[:value.find(".")]
+        else:
+            mat_type = "diffuse"
+            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+            if len(principled_node) == 1:
+                principled_node = principled_node[0]
+            else:
+                raise Exception("This material has not one principled shader node, mat: {}".format(mat.name))
+            color = principled_node.inputs["Base Color"].default_value
+            value = "_".join([str(int(255.*ele)) for ele in color])
+        return mat_type, value
 
     def _recreate_material_nodes(self, mat, force_texture):
         """ Remove all nodes and recreate a diffuse node, optionally with texture.
@@ -288,49 +324,24 @@ class SuncgLoader(Loader):
         :param mat: The blender material
         :param force_texture: True, if there always should be a texture node created even if the material has at the moment no texture
         """
-        links = mat.node_tree.links
         nodes = mat.node_tree.nodes
-
-        # Make sure we have not changed this material already (materials can be shared between objects)
-        if not Utility.get_nodes_with_type(nodes, "BsdfDiffuse"):
-
+        links = mat.node_tree.links
+        image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
+        # if there is no image no create one
+        if force_texture and len(image_node) == 0:
             # The principled BSDF node contains all imported material properties
             principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
             if len(principled_node) == 1:
                 principled_node = principled_node[0]
             else:
                 raise Exception("This material has not one principled shader node, mat: {}".format(mat.name))
-            diffuse_color = principled_node.inputs['Base Color'].default_value
-            image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
-            if len(image_node) == 1:
-                image_node = image_node[0]
-            elif len(image_node) > 1:
-                raise Exception("There is more than one texture node in this material: {}".format(mat.name))
 
-            texture = image_node.image if image_node else None
+            uv_node = nodes.new(type='ShaderNodeTexCoord')
+            # create an image node and link it
+            image_node = nodes.new(type='ShaderNodeTexImage')
+            links.new(uv_node.outputs['UV'], image_node.inputs['Vector'])
+            links.new(image_node.outputs['Color'], principled_node.inputs['Base Color'])
 
-            # Remove all nodes except the principled bsdf node (useful to lookup imported material properties in other modules)
-            for node in nodes:
-                if "BsdfPrincipled" not in node.bl_idname:
-                    nodes.remove(node)
-
-            # Build output, diffuse and texture nodes
-            output_node = nodes.new(type='ShaderNodeOutputMaterial')
-            diffuse_node = nodes.new(type='ShaderNodeBsdfDiffuse')
-            if texture is not None or force_texture:
-                uv_node = nodes.new(type='ShaderNodeTexCoord')
-                image_node = nodes.new(type='ShaderNodeTexImage')
-
-            # Link them
-            links.new(diffuse_node.outputs['BSDF'], output_node.inputs['Surface'])
-            if texture is not None or force_texture:
-                links.new(image_node.outputs['Color'], diffuse_node.inputs['Color'])
-                links.new(uv_node.outputs['UV'], image_node.inputs['Vector'])
-
-            # Set values from imported material properties
-            diffuse_node.inputs['Color'].default_value = diffuse_color
-            if texture is not None:
-                image_node.image = texture
 
     def _adjust_material_nodes(self, mat, adjustments):
         """ Adjust the material node of the given material according to the given adjustments.
@@ -343,12 +354,12 @@ class SuncgLoader(Loader):
         nodes = mat.node_tree.nodes
 
         if "diffuse" in adjustments:
-            diffuse_node = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
+            diffuse_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
             if len(diffuse_node) == 1:
                 diffuse_node = diffuse_node[0]
             else:
                 raise Exception("There is not one diffuse node in this material: {}".format(mat.name))
-            diffuse_node.inputs['Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
+            diffuse_node.inputs['Base Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
             image_path = os.path.join(self.suncg_dir, "texture", adjustments["texture"])
@@ -359,15 +370,16 @@ class SuncgLoader(Loader):
             else:
                 image_path += ".jpg"
 
+            image_node = Utility.get_nodes_with_type(nodes, "TexImage")
+            if image_node and len(image_node) == 1:
+                image_node = image_node[0]
+            else:
+                raise Exception("There is not one image node in this material: {}".format(mat.name))
             if os.path.exists(image_path):
-                image_node = Utility.get_nodes_with_type(nodes, "TexImage")
-                if image_node and len(image_node) == 1:
-                    image_node = image_node[0]
-                else:
-                    raise Exception("There is not one image node in this material: {}".format(mat.name))
                 image_node.image = bpy.data.images.load(image_path, check_existing=True)
             else:
-                print("Warning: Cannot load texture, path does not exist: " + image_path)
+                print("Warning: Cannot load texture, path does not exist: {}, remove image node again".format(image_path))
+                nodes.remove(image_node)
 
     def _read_model_category_mapping(self, path):
         """ Reads in the model category mapping csv.
