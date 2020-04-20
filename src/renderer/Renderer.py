@@ -35,9 +35,11 @@ class Renderer(Module):
        "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or set to 'Intel', if you want to use the Intel Open Image Denoiser.
        "max_bounces", "Total maximum number of bounces."
        "min_bounces", "Total minimum number of bounces."
+       "diffuse_bounces", "Maximum number of diffuse reflection bounces, bounded by total maximum."
        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
        "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the specified bounce."
        "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum."
+       "transparency_bounces", "Maximum number of transparency bounces, bounded by total maximum."
        "volume_bounces", "Maximum number of volumetric scattering events"
 
        "render_depth", "If true, the depth is also rendered to file."
@@ -130,11 +132,26 @@ class Renderer(Module):
             bpy.context.scene.render.threads = multiprocessing.cpu_count()
         else:
             bpy.context.scene.cycles.device = "GPU"
+            preferences = bpy.context.preferences.addons['cycles'].preferences
+            for device_type in preferences.get_device_types(bpy.context):
+                preferences.get_devices_for_type(device_type[0])
+            for gpu_type in ["OPTIX", "CUDA"]:
+                found = False
+                for device in preferences.devices:
+                    if device.type == gpu_type:
+                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "OPTIX"
+                        print('Device {} of type {} found and used.'.format(device.name, device.type))
+                        found = True
+                        break
+                if found:
+                    break
+        bpy.context.scene.cycles.diffuse_bounces = self.config.get_int("diffuse_bounces", 3)
         bpy.context.scene.cycles.glossy_bounces = self.config.get_int("glossy_bounces", 0)
         bpy.context.scene.cycles.ao_bounces_render = self.config.get_int("ao_bounces_render", 3)
         bpy.context.scene.cycles.max_bounces = self.config.get_int("max_bounces", 3)
         bpy.context.scene.cycles.min_bounces = self.config.get_int("min_bounces", 1)
         bpy.context.scene.cycles.transmission_bounces = self.config.get_int("transmission_bounces", 0)
+        bpy.context.scene.cycles.transparency_bounces = self.config.get_int("transparency_bounces", 8)
         bpy.context.scene.cycles.volume_bounces = self.config.get_int("volume_bounces", 0)
 
         bpy.context.scene.cycles.debug_bvh_type = "STATIC_BVH"
