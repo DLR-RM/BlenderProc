@@ -8,8 +8,6 @@ from mathutils import Matrix
 
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
-from src.utility.BlenderUtility import duplicate_objects
-
 
 class SuncgLoader(Loader):
     """ Loads a house.json file into blender.
@@ -253,8 +251,7 @@ class SuncgLoader(Loader):
     def _transform_and_colorize_object(self, object, material_adjustments, transform=None, parent=None):
         """ Applies the given transformation to the object and refactors its materials.
 
-        This will replace all material nodes with only a diffuse and a texturing node (to speedup rendering).
-        Also textures or diffuse colors will be changed according to the given material_adjustments.
+        Material is replaced with an existing material if possible or is changed according to the material_adjustments
 
         :param object: The object to use.
         :param material_adjustments: A list of adjustments to make. (Each element i corresponds to material_i)
@@ -294,6 +291,12 @@ class SuncgLoader(Loader):
 
 
     def _get_type_and_value_from_mat(self, mat):
+        """
+        Returns the type of the material -> either diffuse or with texture (there are only two in SUNCG)
+        :param mat: the material where the type and value should be determined
+        :return mat_type, value: mat_type is either "diffuse" or "texture", the value contains either name of the
+                                 image or the color mapped to an RGB string of the values
+        """
         nodes = mat.node_tree.nodes
         image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
         if len(image_node) == 1:
