@@ -4,6 +4,8 @@ import csv
 import os
 
 from src.utility.Utility import Utility
+# /home/max/Downloads/version_1.1.0/house/10f6e45f3654c9ff3a13877a3cdc01c9/house.json
+# für dieses sind die Henkel von Fenster beleuchtet nicht die eigentlichen Fenster
 
 
 class SuncgLighting(Module):
@@ -52,6 +54,7 @@ class SuncgLighting(Module):
             for row in reader:
                 if row["coarse_grained_class"] == "window":
                     self.windows.append(row["model_id"])
+        self._collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
 
     def _make_lamp_emissive(self, obj, light):
         """ Adds an emission shader to the object materials which are specified in the light list
@@ -63,8 +66,18 @@ class SuncgLighting(Module):
             mat_name = m.material.name
             if "." in mat_name:
                 mat_name = mat_name[:mat_name.find(".")]
-
             if mat_name in light[0] or mat_name in light[1]:
+                old_mat_name = m.material.name
+                if old_mat_name in self._collection_of_mats["lamp"]:
+                    # this material was used as a ceiling before use that one
+                    m.material = self._collection_of_mats["lamp"][old_mat_name]
+                    continue
+                # copy the material if more than one users is using it
+                if m.material.users > 1:
+                    new_mat = m.material.copy()
+                    m.material = new_mat
+                # rename the material
+                m.material.name += "_emission"
                 nodes = m.material.node_tree.nodes
                 links = m.material.node_tree.links
 
@@ -75,22 +88,22 @@ class SuncgLighting(Module):
                     raise Exception("This material: {} has not one material output!".format(m.name))
                 emission = Utility.get_nodes_with_type(nodes, "Emission")
                 if not emission:
-                    diffuse = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
-                    if diffuse:
-                        if len(diffuse) == 1:
-                            diffuse = diffuse[0]
+                    principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                    if principled:
+                        if len(principled) == 1:
+                            principled = principled[0]
                         else:
                             raise Exception("There is more than one Diffuse shader node in material: {}".format(m.name))
                         mix_node = nodes.new(type='ShaderNodeMixShader')
-                        Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
+                        Utility.insert_node_instead_existing_link(links, principled.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
                         # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
-                        # In this way the mix shader will use the diffuse shader for rendering the color of the lightbulb itself, while using the emission shader for lighting the scene.
+                        # In this way the mix shader will use the principled shader for rendering the color of the lightbulb itself, while using the emission shader for lighting the scene.
                         lightPath_node = nodes.new(type='ShaderNodeLightPath')
                         links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
                         emission_node = nodes.new(type='ShaderNodeEmission')
-                        emission_node.inputs['Color'].default_value = m.material.diffuse_color
+                        emission_node.inputs['Color'].default_value = m.material.principled_color
 
                         if mat_name in light[0]:
                             # If the material corresponds to light bulb
@@ -100,12 +113,15 @@ class SuncgLighting(Module):
                             emission_node.inputs['Strength'].default_value = self.config.get_float("lampshade_emission_strength", 7)
 
                         links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
+                        self._collection_of_mats["lamp"][old_mat_name] = m.material
+                    else:
+                        raise Exception("This material: {} has no principled node".format(mat_name))
 
     def _make_window_emissive(self, obj):
         """ Makes the given window object emissive.
 
         For each material with alpha < 1.
-        Uses a light path node to make it emit light, but at the same time look like a diffuse material.
+        Uses a light path node to make it emit light, but at the same time look like a principle material.
         Otherwise windows would be completely white.
 
         :param obj: A window object.
@@ -123,6 +139,19 @@ class SuncgLighting(Module):
             alpha = principled_node.inputs['Alpha'].default_value
 
             if alpha < 1:
+                mat_name = m.material.name
+                if mat_name in self._collection_of_mats["window"]:
+                    # this material was used as a ceiling before use that one
+                    m.material = self._collection_of_mats["window"][mat_name]
+                    continue
+                # copy the material if more than one users is using it
+                if m.material.users > 1:
+                    new_mat = m.material.copy()
+                    m.material = new_mat
+                    nodes = m.material.node_tree.nodes
+                    links = m.material.node_tree.links
+                # rename the material
+                m.material.name += "_emission"
                 emission = Utility.get_nodes_with_type(nodes, 'Emission')
                 if not emission:
                     output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
@@ -146,8 +175,12 @@ class SuncgLighting(Module):
 
                         emission_node.inputs['Color'].default_value = (1, 1, 1, 1)
                         emission_node.inputs['Strength'].default_value = 10  # strength of the windows
+                        self._collection_of_mats["window"][mat_name] = m.material
                     else:
                         raise Exception("This material: {} has not one material output!".format(m.name))
+                else:
+                    print("Has already emission!")
+                    self._collection_of_mats["window"][mat_name] = m.material
 
     def _make_ceiling_emissive(self, obj):
         """ Makes the given ceiling object emissive, s.t. there is always a little bit ambient light.
@@ -155,6 +188,21 @@ class SuncgLighting(Module):
         :param obj: The ceiling object.
         """
         for m in obj.material_slots:
+            mat_name = m.material.name
+            if mat_name in self._collection_of_mats["ceiling"]:
+                # this material was used as a ceiling before use that one
+                m.material = self._collection_of_mats["ceiling"][mat_name]
+                continue
+            # copy the material if more than one users is using it
+            if m.material.users > 1:
+                new_mat = m.material.copy()
+                m.material = new_mat
+            # rename the material
+            if "." in m.material.name:
+                # remove everything after the dot
+                m.material.name = m.material.name[:m.material.name.find(".")]
+            m.material.name += "_emission"
+
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
 
@@ -165,24 +213,25 @@ class SuncgLighting(Module):
                 raise Exception("This material: {} has not one material output!".format(m.name))
 
             if not Utility.get_nodes_with_type(nodes, "Emission"):
-                diffuse = Utility.get_nodes_with_type(nodes, "BsdfDiffuse")
-                if diffuse:
-                    if len(diffuse) == 1:
-                        diffuse = diffuse[0]
+                principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                if principled:
+                    if len(principled) == 1:
+                        principled = principled[0]
                     else:
                         raise Exception("This material: {} has more than one Diffuse Shader".format(m.name))
                     mix_node = nodes.new(type='ShaderNodeMixShader')
 
-                    Utility.insert_node_instead_existing_link(links, diffuse.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
+                    Utility.insert_node_instead_existing_link(links, principled.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
                     # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
-                    # In this way the mix shader will use the diffuse shader for rendering the color of the ceiling itself, while using the emission shader for lighting the scene.
+                    # In this way the mix shader will use the principled shader for rendering the color of the ceiling itself, while using the emission shader for lighting the scene.
                     lightPath_node = nodes.new(type='ShaderNodeLightPath')
                     links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
                     emission_node = nodes.new(type='ShaderNodeEmission')
                     emission_node.inputs['Strength'].default_value = self.config.get_float("ceiling_emission_strength", 1.5)
                     links.new(emission_node.outputs['Emission'], mix_node.inputs[1])
+                    self._collection_of_mats["ceiling"][mat_name] = m.material
 
     def run(self):
         # Make some objects emit lights
