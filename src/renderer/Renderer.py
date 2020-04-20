@@ -95,7 +95,7 @@ class Renderer(Module):
         bpy.context.scene.render.engine = 'CYCLES'
 
         denoiser = self.config.get_string("denoiser", default_denoiser)
-        if denoiser == "Intel":
+        if denoiser.upper() == "INTEL":
             # The intel denoiser is activated via the compositor
             bpy.context.view_layer.cycles.use_denoising = False
             bpy.context.scene.use_nodes = True
@@ -116,7 +116,7 @@ class Renderer(Module):
 
             links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
             links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
-        elif denoiser == "Blender":
+        elif denoiser.upper() == "BLENDER":
             bpy.context.view_layer.cycles.use_denoising = True
         else:
             raise Exception("No such denoiser: " + denoiser)
