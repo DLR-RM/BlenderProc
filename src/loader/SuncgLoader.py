@@ -358,12 +358,12 @@ class SuncgLoader(Loader):
         nodes = mat.node_tree.nodes
 
         if "diffuse" in adjustments:
-            diffuse_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-            if len(diffuse_node) == 1:
-                diffuse_node = diffuse_node[0]
+            principle_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+            if len(principle_node) == 1:
+                principle_node = principle_node[0]
             else:
                 raise Exception("There is not one diffuse node in this material: {}".format(mat.name))
-            diffuse_node.inputs['Base Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
+            principle_node.inputs['Base Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
             image_path = os.path.join(self.suncg_dir, "texture", adjustments["texture"])
