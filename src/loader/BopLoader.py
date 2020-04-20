@@ -44,7 +44,7 @@ class BopLoader(Module):
         
         bop_dataset_path = self.config.get_string("bop_dataset_path")
         scene_id = self.config.get_int("scene_id", -1)
-        obj_ids = self.config.get_list("obj_ids", [])
+        obj_ids = self.config.get_list("obj_ids", [])        
         split = self.config.get_string("split", "test")
         model_type = self.config.get_string("model_type", "")
         cam_type = self.config.get_string("cam_type", "")
@@ -103,12 +103,7 @@ class BopLoader(Module):
                 if i == 0:
                     # define world = first camera
                     cam_H_m2w_ref = cam_H_m2c_ref.copy()
-                    
-                    # load scene objects
-                    for inst in insts:
-                        cur_obj = self._load_mesh(inst['obj_id'], model_p)
-                        self.set_object_pose(cur_obj, inst, scale)
-                
+               
                 cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
                 
                 #set camera intrinsics and extrinsics 
@@ -119,6 +114,11 @@ class BopLoader(Module):
 
                 # Store new cam pose as next frame
                 frame_id = bpy.context.scene.frame_end
+                for inst in insts:                           
+                    cur_obj = self._load_mesh(inst['obj_id'], model_p)
+                    self.set_object_pose(cur_obj, inst, scale)
+                    self._insert_key_frames(cur_obj, frame_id)
+
                 camera_module._insert_key_frames(cam, cam_ob, frame_id)
                 bpy.context.scene.frame_end = frame_id + 1                
 
@@ -164,6 +164,14 @@ class BopLoader(Module):
         cur_obj.matrix_world = Matrix(cam_H_m2w)
         cur_obj.scale = Vector((scale, scale, scale))
 
+    def _insert_key_frames(self, obj, frame_id):
+        """ Insert key frames for given object pose
+        :param obj: Loaded object
+        :param frame_id: The frame number where key frames should be inserted.
+        """
+
+        obj.keyframe_insert(data_path='location', frame=frame_id)
+        obj.keyframe_insert(data_path='rotation_euler', frame=frame_id)
 
     def _get_ref_cam_extrinsics_intrinsics(self, sc_camera, cam_id, insts, scale):
         """ Get camK and transformation from object instance 0 to camera cam_id as reference
@@ -183,19 +191,17 @@ class BopLoader(Module):
 
         return (cam_K, cam_H_m2c_ref)
 
-    def _try_duplicate_obj(self, model_path):
-        """ If object with given model_path has already been loaded, duplicate this object
-
+    def _get_loaded_obj(self, model_path):
+        """ Returns the object if it has already been loaded
+ 
         :param model_path: model path of the new object
-        :return: True if object was duplicated else False
+        :return: object if found, else return None
 
         """
         for loaded_obj in bpy.context.scene.objects:
-            if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
-                print('duplicate obj: ', model_path)
-                bpy.ops.object.duplicate({"object" : loaded_obj, "selected_objects" : [loaded_obj]})
-                return True
-        return False
+           if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path: 
+                return loaded_obj
+        return
 
     def _load_mesh(self, obj_id, model_p, scale = 1):
         """ Loads or copies BOP mesh and sets category_id
@@ -206,18 +212,17 @@ class BopLoader(Module):
         """
 
         model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
-        
-        duplicated = self._try_duplicate_obj(model_path)
-        
-        if not duplicated:
-            print('load new mesh')
-            bpy.ops.import_mesh.ply(filepath = model_path)
 
-        cur_obj = bpy.context.selected_objects[-1]
+        # Gets the objects if it is already loaded         
+        cur_obj = self._get_loaded_obj(model_path)
+        
+        if cur_obj is None:
+            bpy.ops.import_mesh.ply(filepath = model_path)
+            cur_obj = bpy.context.selected_objects[-1]
+
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
-        cur_obj['model_path'] = model_path
-
+        cur_obj['model_path'] = model_path     
         mat = self._load_materials(cur_obj)
         self._link_col_node(mat)
 
@@ -228,7 +233,6 @@ class BopLoader(Module):
         
         :param object: The object to use.
         :return: material with vertex color (bpy.data.materials)
-
         """
 
         mat = cur_obj.data.materials.get("Material")
