@@ -144,7 +144,7 @@ In `tiles` we are defining a settings of one or multiple ground tiles by specify
       "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
       "uv_scaling": 9,
       "displacement_strength": 0.7,
-      "AO": [0.5, 0.5, 0.5, 1],
+      "ambient_occlusion": [0.5, 0.5, 0.5, 1],
       "images": {
         "color": "RDTGravel001_COL_VAR1_3K.jpg",
         "roughness": "RDTGravel001_GLOSS_3K.jpg",
@@ -161,7 +161,7 @@ In `tiles` we are defining a settings of one or multiple ground tiles by specify
 This module allows us to set a texture for selected ground planes which have a RE specific material which is set by `constructor.RockEssentialsGroundConstructor` (or sampled if more than one texture is defined) by specifying:
 * `selector` for selecting the ground planes created by the ground constructor by specifying the name in the `conditions`,
 * one or multiple `textures`,
-* `path` to a texture maps folder, `uv_scaling` for the maps `displacements_strength` of the displacements modifier, AO of the shader, and at least a `color` map file name.
+* `path` to a texture maps folder, `uv_scaling` for the maps `displacements_strength` of the displacements modifier, ambient_occlusion parameter of the shader, and at least a `color` map file name.
 
 ### Physics Positioning
 
