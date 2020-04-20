@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # set the download directory relative to this one
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures_2")
+    cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures")
 
     if not os.path.exists(cc_texture_dir):
         os.makedirs(cc_texture_dir)

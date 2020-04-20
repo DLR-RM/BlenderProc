@@ -5,6 +5,7 @@ blender
 .vscode/
 output/
 debug/
+resources/cctextures
 .vscode
 *.pyc
 *.swp
