@@ -4,9 +4,6 @@ import csv
 import os
 
 from src.utility.Utility import Utility
-# /home/max/Downloads/version_1.1.0/house/10f6e45f3654c9ff3a13877a3cdc01c9/house.json
-# für dieses sind die Henkel von Fenster beleuchtet nicht die eigentlichen Fenster
-
 
 class SuncgLighting(Module):
     """ Adds emission shader to lamps, windows and ceilings.
@@ -103,7 +100,7 @@ class SuncgLighting(Module):
                         links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
                         emission_node = nodes.new(type='ShaderNodeEmission')
-                        emission_node.inputs['Color'].default_value = m.material.principled_color
+                        emission_node.inputs['Color'].default_value = m.material.diffuse_color
 
                         if mat_name in light[0]:
                             # If the material corresponds to light bulb
