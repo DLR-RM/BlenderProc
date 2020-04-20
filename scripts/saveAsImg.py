@@ -33,6 +33,8 @@ def process_img(img, key):
             img = img[:, :, 0]
     elif 'flow' in key:
         img = flow_to_rgb(img)
+    elif "normals" in key:
+        img = np.clip(img, 0.0, 1.0)
     return img
 
 
