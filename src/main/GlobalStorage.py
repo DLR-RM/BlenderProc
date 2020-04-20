@@ -47,8 +47,8 @@ class GlobalStorage(object):
         """
         GlobalStorage._global_config = global_config
         for key, value in GlobalStorage._add_to_global_config_at_init.items():
-            if key not in GlobalStorage._global_config:
-                GlobalStorage._global_config[key] = value
+            if not GlobalStorage._global_config.has_param(key):
+                GlobalStorage._global_config.data[key] = value
             else:
                 raise RuntimeError("This key was already found in the global config: {} it is also used internally, "
                                    "please use another key!".format(key))
