@@ -170,17 +170,3 @@ class CCMaterialLoader(Module):
                         links.new(texture_coords.outputs["UV"], mapping_node.inputs["Vector"])
                         for texture_node in collection_of_texture_nodes:
                             links.new(mapping_node.outputs["Vector"], texture_node.inputs["Vector"])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
