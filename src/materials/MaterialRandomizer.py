@@ -45,4 +45,3 @@ class MaterialRandomizer(Module):
                     if np.random.uniform(0, 1) <= self.randomization_level:
                         # select a random material to replace the old one with
                         material.material = np.random.choice(self._materials_to_replace_with)
-
