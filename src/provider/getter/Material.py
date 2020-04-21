@@ -49,7 +49,7 @@ class Material(Provider):
 
     4.
 
-    It is also possible to use several OR conditions, by using a list of dirs:
+    It is also possible to use several OR conditions, by using a list of dicts:
 
     "selector": {
       "provider": "getter.Material",
