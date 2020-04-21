@@ -33,6 +33,8 @@ def process_img(img, key):
             img = img[:, :, 0]
     elif 'flow' in key:
         img = flow_to_rgb(img)
+    elif "normals" in key:
+        img = np.clip(img, 0.0, 1.0)
     return img
 
 
@@ -54,7 +56,7 @@ def convert_hdf(base_file_path):
                 keys = [key for key in data.keys()]
                 for key in keys:
                     val = np.array(data[key])
-                    if len(val.shape) == 1:
+                    if np.issubdtype(val.dtype, np.string_) or len(val.shape) == 1:
                         pass  # metadata
                     else:
                         print("key: {}  {} {}".format(key, val.shape, val.dtype.name))

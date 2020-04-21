@@ -12,7 +12,7 @@ class Utility:
     working_dir = ""
 
     @staticmethod
-    def initialize_modules(module_configs, global_config):
+    def initialize_modules(module_configs):
         """ Initializes the modules described in the given configuration.
 
         Example for module_configs:
@@ -23,35 +23,21 @@ class Utility:
 
         Here the name contains the path to the module class, starting from inside the src directory.
 
-        Example for global_config:
-        {"base": {
-            param: 42
-        }}
-
-        In this way all modules with prefix "base" will inherit "param" into their configuration.
-        Local config always overwrites global.
-        Parameters specified under "all" in the global config are inherited by all modules.
+        Be aware that all attributes stored in the GlobalStorage are also accessible here, even though
+        they are not copied into the new config.
 
         :param module_configs: A list of dicts, each one describing one module.
-        :param global_config: A dict containing the global configuration.
         :return:
         """
         modules = []
-        all_base_config = global_config["all"] if "all" in global_config else {}
 
         for module_config in module_configs:
             # If only the module name is given (short notation)
             if isinstance(module_config, str):
                 module_config = {"module": module_config}
 
-            # Merge global and local config (local overwrites global)
-            model_type = module_config["module"].split(".")[0]
-            base_config = global_config[model_type] if model_type in global_config else {}
-
-            # Initialize config with all_base_config
-            config = deepcopy(all_base_config)
-            # Overwrite with module type base config
-            Utility.merge_dicts(base_config, config)
+            # Initialize config with empty config
+            config = {}
             # Check if there is a module specific config
             if "config" in module_config:
                 # Overwrite with module specific config

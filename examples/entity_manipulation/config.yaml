@@ -1,6 +1,6 @@
 # Args: <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -8,15 +8,14 @@
       "imageio"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
     },
     {
       "module": "loader.ObjectLoader",
@@ -59,7 +58,7 @@
       }
     },
     {
-      "module": "object.EntityManipulator",
+      "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
@@ -74,20 +73,15 @@
           "min":[0, 1, 2]
         },
         "rotation_euler": [1, 1, 0],
-        "physics": True
-      }
-    },
-    {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
+        "cp_physics": True
       }
     },
     {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 350
+        "samples": 350,
+        "render_normals": True
       }
     },
     {

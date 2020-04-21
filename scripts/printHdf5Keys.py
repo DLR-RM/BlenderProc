@@ -16,7 +16,7 @@ if args.hdf5 is None:
 
 def processFile(file_path):
 	if os.path.exists(file_path):
-		with h5py.File(file_path) as data:
+		with h5py.File(file_path, "r") as data:
 			keys = [key for key in data.keys()]
 			if len(keys) > 0:
 				key_result_list = [(key, np.array(data[key]).shape if 'version' not in key else np.array(data[key])) for key in keys]

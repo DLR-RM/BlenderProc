@@ -10,6 +10,7 @@ from src.utility.SGMUtility import fill_in_fast
 from src.utility.BlenderUtility import load_image
 from src.utility.SGMUtility import resize
 from src.renderer.Renderer import Renderer
+from src.main.GlobalStorage import GlobalStorage
 
 class StereoGlobalMatchingWriter(Renderer):
     """ Writes depth image generated from the stereo global matching algorithm to file
@@ -42,7 +43,6 @@ class StereoGlobalMatchingWriter(Renderer):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-        self.depth_max = Renderer.DEPTH_END
 
     # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
     def sgm(self, imgL, imgR):
@@ -80,18 +80,16 @@ class StereoGlobalMatchingWriter(Renderer):
             wls_filter.setSigmaColor(sigma)
 
             dispr = right_matcher.compute(imgR, imgL)
-            dispr = np.int16(dispr)
 
         displ = left_matcher.compute(imgL, imgR)
-        displ = np.int16(displ)
 
         filteredImg = None
         if self.config.get_bool("disparity_filter", True):
             filteredImg = wls_filter.filter(displ, imgL, None, dispr).astype(np.float32)
             filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
 
-        disparity = np.float64(filteredImg) / 16.0 if self.config.get_bool("disparity_filter", True) else \
-            np.float64(displ) / 16.0
+        disparity_to_be_written = filteredImg if self.config.get_bool("disparity_filter", True) else displ
+        disparity = np.float64(np.copy(disparity_to_be_written)) / 16.0
 
         # Crop and resize, due to baseline, a part of the image on the left can't be matched with the one on the right
         disparity = resize(disparity[:, numDisparities:], (self.width, self.height))
@@ -106,14 +104,18 @@ class StereoGlobalMatchingWriter(Renderer):
         if self.config.get_bool("depth_completion", True):
             depth = fill_in_fast(depth, self.depth_max)
 
-        
-        disparity = np.int16(disparity)
-        return depth, disparity
+        return depth, disparity_to_be_written
 
     def run(self):
         if self._avoid_rendering:
             print("Avoid rendering is on, no output produced!")
             return
+
+        if GlobalStorage.is_in_storage("renderer_depth_end"):
+            self.depth_max = GlobalStorage.get("renderer_depth_end")
+        else:
+            raise RuntimeError("A depth rendering has to be executed before this module is executed, "
+                               "else the depth_end value is not set!")
 
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
 

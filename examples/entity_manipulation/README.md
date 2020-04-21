@@ -29,10 +29,9 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Sets two camera positions: `camera.CameraLoader` module.
-* Selects objects based on the condition: `object.EntityManipulator` module.
-* Change some parameters of the selected entities: `object.EntityManipulator` module.
-* Renders normals: `renderer.NormalRenderer` module.
-* Renders rgb: `renderer.RgbRenderer` module.
+* Selects objects based on the condition: `manipulators.EntityManipulator` module.
+* Change some parameters of the selected entities: `manipulators.EntityManipulator` module.
+* Renders rgb: `renderer.RgbRenderer` module plus normals.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -41,7 +40,7 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
 
 ```yaml
     {
-      "module": "object.EntityManipulator",
+      "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
@@ -56,7 +55,7 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
           "min":[0, 1, 2]
         },
         "rotation_euler": [1, 1, 0],
-        "physics": True
+        "cp_physics": True
       }
     },
 ```
