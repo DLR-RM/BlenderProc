@@ -8,6 +8,20 @@ from src.utility.Utility import Utility
 
 
 class ShapeNetLoader(Loader):
+    """
+    This loads an object from ShapeNet based on the given synset_id, which specifies the category of objects to use.
+
+    From these objects one is randomly sampled and loaded.
+
+    As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+       "data_path": "The path to the ShapeNetCore.v2 folder"
+       "use_synset_id": "The synset id for example: '02691156', check the data_path folder for more ids"
+    """
 
     def __init__(self, config):
         Loader.__init__(self, config)
@@ -43,6 +57,9 @@ class ShapeNetLoader(Loader):
             raise Exception("The taxonomy file could not be found: {}".format(path_to_taxonomy_file))
 
     def run(self):
+        """
+        Uses the loaded .obj files and picks one randomly and loads it
+        """
         selected_obj = random.choice(self._files_with_fitting_synset)
         loaded_obj = Utility.import_objects(selected_obj)
         self._set_properties(loaded_obj)
