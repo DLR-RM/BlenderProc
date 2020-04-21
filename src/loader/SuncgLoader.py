@@ -114,7 +114,7 @@ class SuncgLoader(Loader):
         for material in bpy.data.materials:
             if material.use_nodes:
                 nodes = material.node_tree.nodes
-                textures = Utility.get_nodes_with_type(nodes, "TexImage")
+                textures = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
                 if len(textures) == 1:
                     material.name = textures[0].image.name
 
@@ -390,7 +390,7 @@ class SuncgLoader(Loader):
             else:
                 image_path += ".jpg"
 
-            image_node = Utility.get_nodes_with_type(nodes, "TexImage")
+            image_node = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
             if image_node and len(image_node) == 1:
                 image_node = image_node[0]
             else:

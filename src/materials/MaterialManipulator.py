@@ -166,7 +166,7 @@ class MaterialManipulator(Module):
         """
         nodes = material.node_tree.nodes
         output = Utility.get_nodes_with_type(nodes, "OutputMaterial")
-        texture = Utility.get_nodes_with_type(nodes, "TexImage")
+        texture = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
         if output is not None and texture is not None:
             if len(output) == 1 and len(texture) == 1:
                 output = output[0]

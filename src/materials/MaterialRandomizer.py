@@ -76,7 +76,7 @@ class MaterialRandomizer(Module):
                 # Check if the material has a texture image
                 nodes = m.material.node_tree.nodes
 
-                if Utility.get_nodes_with_type(nodes, "TexImage"):
+                if Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage"):
                     self._pick_assign_random_material(m)
             else:
                 self._pick_assign_random_material(m)
