@@ -93,7 +93,7 @@ class Renderer(Module):
         bpy.context.scene.render.engine = 'CYCLES'
 
         denoiser = self.config.get_string("denoiser", default_denoiser)
-        if denoiser == "Intel":
+        if denoiser.upper() == "INTEL":
             # The intel denoiser is activated via the compositor
             bpy.context.view_layer.cycles.use_denoising = False
             bpy.context.scene.use_nodes = True
@@ -114,7 +114,7 @@ class Renderer(Module):
 
             links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
             links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
-        elif denoiser == "Blender":
+        elif denoiser.upper() == "BLENDER":
             bpy.context.view_layer.cycles.use_denoising = True
         else:
             raise Exception("No such denoiser: " + denoiser)
@@ -130,6 +130,19 @@ class Renderer(Module):
             bpy.context.scene.render.threads = multiprocessing.cpu_count()
         else:
             bpy.context.scene.cycles.device = "GPU"
+            preferences = bpy.context.preferences.addons['cycles'].preferences
+            for device_type in preferences.get_device_types(bpy.context):
+                preferences.get_devices_for_type(device_type[0])
+            for gpu_type in ["OPTIX", "CUDA"]:
+                found = False
+                for device in preferences.devices:
+                    if device.type == gpu_type:
+                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = "OPTIX"
+                        print('Device {} of type {} found and used.'.format(device.name, device.type))
+                        found = True
+                        break
+                if found:
+                    break
         bpy.context.scene.cycles.glossy_bounces = self.config.get_int("glossy_bounces", 0)
         bpy.context.scene.cycles.ao_bounces_render = self.config.get_int("ao_bounces_render", 3)
         bpy.context.scene.cycles.max_bounces = self.config.get_int("max_bounces", 3)
