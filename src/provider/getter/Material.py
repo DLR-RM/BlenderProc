@@ -90,7 +90,7 @@ class Material(Provider):
 
     "cf_texture_amount_{min,max,eq}", "Returns materials that have a certain amount of texture nodes inside of the"
                                       "material either min = less nodes or equal than specified,
-                                      "max = at least as many or eq = for this exact amount of textures nodes":w
+                                      "max = at least as many or eq = for this exact amount of textures nodes"
     """
 
     def __init__(self, config):
