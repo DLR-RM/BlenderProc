@@ -26,6 +26,7 @@ class CCMaterialLoader(Module):
                         continue
                     collection_of_texture_nodes = []
                     new_mat = bpy.data.materials.new(asset)
+                    new_mat["is_cc_texture"] = True
                     new_mat.use_nodes = True
                     nodes = new_mat.node_tree.nodes
                     links = new_mat.node_tree.links
