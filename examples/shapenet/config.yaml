@@ -1,27 +1,26 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "/tmp/test_output_shape_net"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config":{
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
     },
     {
       "module": "loader.ShapeNetLoader",
       "config": {
-        "data_path": "<args:0>"
-        "used_synsetId": "02801938"
+        "data_path": "<args:0>",
+        "used_synset_id": "02801938"
       }
     },
     {
@@ -59,15 +58,10 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {
-        "output_key": "normals"
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
+        "render_normals": True,
         "samples": 350,
         "render_depth": true
       }
