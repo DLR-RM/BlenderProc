@@ -6,6 +6,7 @@ from src.utility.Utility import Utility
 from src.utility.BlenderUtility import get_all_materials
 from src.main.Provider import Provider
 
+
 class Material(Provider):
     """
     Returns a list of materials in accordance to a condition.
@@ -82,8 +83,15 @@ class Material(Provider):
     "conditions/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
     "index", "If set, after the conditions are applied only the entity with the specified index is returned. Type: int."
 
-    """
+    **Available custom function names**
 
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+    "cf_texture_amount_{min,max,eq}", "Returns materials that have a certain amount of texture nodes inside of the"
+                                      "material either min = less nodes or equal than specified,
+                                      "max = at least as many or eq = for this exact amount of textures nodes":w
+    """
 
     def __init__(self, config):
         Provider.__init__(self, config)
