@@ -291,6 +291,13 @@ def get_all_mesh_objects():
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
+def get_all_materials():
+    """
+    Returns a list of all materials used and unused
+    :return: a list of all materials
+    """
+    return list(bpy.data.materials)
+
 def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.
 
