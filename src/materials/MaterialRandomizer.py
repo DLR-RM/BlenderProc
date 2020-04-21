@@ -11,6 +11,9 @@ class MaterialRandomizer(Module):
     The amount of randomization depends on the randomization level (0 - 1).
     Randomization level => Expected fraction of objects for which the texture should be randomized.
 
+    The selected objects will get materials, which can be selected by the materials_to_replace_with selector.
+    The default is all materials. If this selection is empty an exception is thrown.
+
     **Configuration**:
 
     .. csv-table::
@@ -37,6 +40,11 @@ class MaterialRandomizer(Module):
         self.randomization_level = self.config.get_float("randomization_level", 0.2)
         self._objects_to_manipulate = self.config.get_list('manipulated_objects', get_all_mesh_objects())
         self._materials_to_replace_with = self.config.get_list("materials_to_replace_with", get_all_materials())
+
+        # if there were no materials selected throw an exception
+        if not self._materials_to_replace_with:
+            raise Exception("There were no materials selected!")
+
         # walk over all objects
         for obj in self._objects_to_manipulate:
             if hasattr(obj, 'material_slots'):
