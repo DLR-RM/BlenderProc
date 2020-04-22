@@ -150,8 +150,7 @@ class Entity(Provider):
                             break
                     # raise an exception if not
                     else:
-                        raise Exception("Types are not matching: %s and %s !"
-                                        % (type(obj[key]), type(value)))
+                        raise Exception("Types are not matching: {} and {} for key: {}".format(type(obj[key]), type(value), key))
                 elif requested_custom_function and any([key == "inside", key == "outside"]):
                     conditions = Config(value)
                     if conditions.has_param("min") and conditions.has_param("max"):
