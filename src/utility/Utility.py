@@ -96,6 +96,8 @@ class Utility:
 
         if path.startswith("/"):
             return path
+        elif path.startswith("~"):
+            return path.replace("~", os.getenv("HOME"))
         else:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
