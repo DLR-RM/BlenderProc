@@ -1,7 +1,7 @@
 import numpy as np
-import mathutils
 
 from src.main.Provider import Provider
+from src.provider.sampler.Sphere import Sphere
 
 class PartZSphere(Provider):
     """ Samples a point from the surface or from the interior of solid sphere
@@ -40,29 +40,6 @@ class PartZSphere(Provider):
         if z_above_center >= radius:
             raise Exception("The z_above_center value is bigger or as big as the radius!")
         while True:
-            # Sample
-            direction = np.random.normal(size=3)
-
-            if np.count_nonzero(direction) == 0:  # Check no division by zero
-                direction[0] = 1e-5
-
-            # For normalization
-            norm = np.sqrt(direction.dot(direction))
-
-            # If sampling from the surface set magnitude to radius of the sphere
-            if mode == "SURFACE":
-                magnitude = radius
-            # If sampling from the interior set it to scaled radius
-            elif mode == "INTERIOR":
-                magnitude = radius * np.cbrt(np.random.unform())
-            else:
-                raise Exception("Unknown sampling mode: " + mode)
-
-            # Normalize
-            sampled_point = list(map(lambda x: magnitude*x/norm, direction))
-
-            # Add center
-            location = mathutils.Vector(np.array(sampled_point) + center)
-
+            location = Sphere.sample(center, radius, mode)
             if location[2] > center[2] + z_above_center:
                 return location

@@ -35,7 +35,18 @@ class Sphere(Provider):
         radius = self.config.get_float("radius")
         # Mode of operation.
         mode = self.config.get_string("mode")
-        
+
+        return Sphere.sample(center, radius, mode)
+
+    @staticmethod
+    def sample(center, radius, mode):
+        """
+        Samples a point according to the mode, the center and the radius.
+
+       :param center, A list of three values, describing the x, y and z coordinate of the center of the sphere.
+       :param radius, The radius of the sphere.
+       :param mode, Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball.
+        """
         # Sample
         direction = np.random.normal(size=3)
         
