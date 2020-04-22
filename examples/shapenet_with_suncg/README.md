@@ -167,7 +167,7 @@ The high mass factor and the small collision margin guarantee that the object do
   {
     "number_of_samples": 5,
     "location": {
-      "provider":"sampler.PartZSphere",
+      "provider":"sampler.PartSphere",
       "center": {
         "provider": "getter.POI",
         "selector": {
@@ -178,7 +178,7 @@ The high mass factor and the small collision margin guarantee that the object do
           }
         }
       },
-      "z_above_center": 0.5,
+      "distance_above_center": 0.5,
       "radius": 2,
       "mode": "SURFACE"
     },
