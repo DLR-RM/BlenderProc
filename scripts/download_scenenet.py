@@ -30,5 +30,8 @@ if __name__ == "__main__":
     cmd = "unzip {}".format(zip_file_path)
     subprocess.call(cmd, shell=True, cwd=os.path.dirname(zip_file_path))
 
-    print("Please also download the texture library from here: {}".fromat("http://tinyurl.com/zpc9ppb"))
+    os.remove(zip_file_path)
+    os.rename(os.path.join(scenenet_dir, "robotvault-downloadscenenet-cfe5ab85ddcc"), os.path.join(scenenet_dir, "SceneNetData"))
+
+    print("Please also download the texture library from here: http://tinyurl.com/zpc9ppb")
     print("This is a google drive folder downloading via script is tedious.")
