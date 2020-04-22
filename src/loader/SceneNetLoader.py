@@ -47,6 +47,9 @@ class SceneNetLoader(Loader):
         # set the category ids for each object
         self._set_category_ids(loaded_objects)
 
+        # add custom properties
+        self._set_properties(loaded_objects)
+
     def _random_sample_materials_for_each_obj(self, loaded_objects):
         # for each object add a material
         for obj in loaded_objects:
