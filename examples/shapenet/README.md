@@ -1,6 +1,8 @@
 # ShapeNet 
 
-![](rendering.png)
+<p align="center">
+<img src="rendering.jpg" alt="Front readme image" width=300>
+</p>
 
 The focus of this example is the `loader.ShapeNetLoader`, which can be used to load objects from the ShapeNet dataset.
 
