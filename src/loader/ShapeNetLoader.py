@@ -62,5 +62,40 @@ class ShapeNetLoader(Loader):
         """
         selected_obj = random.choice(self._files_with_fitting_synset)
         loaded_obj = Utility.import_objects(selected_obj)
+
+        self._correct_materials(loaded_obj)
+
         self._set_properties(loaded_obj)
+
+    def _correct_materials(self, objects):
+        """
+        If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
+        :param objects, objects where the material maybe wrong
+        """
+
+        for obj in objects:
+            for mat_slot in obj.material_slots:
+                material = mat_slot.material
+                nodes = material.node_tree.nodes
+                links = material.node_tree.links
+                texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
+                if texture_nodes and len(texture_nodes) > 1:
+                    principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                    if principled_bsdf and len(principled_bsdf) == 1:
+                        principled_bsdf = principled_bsdf[0]
+                    else:
+                        raise Exception("Warning: The generation of the material failed, it has more than one Prinicipled BSDF!")
+                    # find the image texture node which is connect to alpha
+                    node_connected_to_the_alpha = None
+                    for node_links in principled_bsdf.inputs["Alpha"].links:
+                        if "ShaderNodeTexImage" in node_links.from_node.bl_idname:
+                            node_connected_to_the_alpha = node_links.from_node
+                    # if a node was found which is connected to the alpha node, add an invert between the two
+                    if node_connected_to_the_alpha is not None:
+                        invert_node = nodes.new("ShaderNodeInvert")
+                        invert_node.inputs["Fac"].default_value = 1.0
+                        Utility.insert_node_instead_existing_link(links, node_connected_to_the_alpha.outputs["Color"],
+                                                                  invert_node.inputs["Color"],
+                                                                  invert_node.outputs["Color"],
+                                                                  principled_bsdf.inputs["Alpha"])
 
