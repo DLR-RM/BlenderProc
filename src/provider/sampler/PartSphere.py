@@ -21,13 +21,13 @@ class PartSphere(Provider):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere."
-       "radius", "The radius of the sphere."
-       "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball."
+       "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector"
+       "radius", "The radius of the sphere. Type: float"
+       "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str"
        "distance_above_center", "The distance above the center, which should be used, Type: float, default: 0.0 (half of the sphere)"
        "part_sphere_vector", "The direction in which the sphere should be split, the end point of the vector, will be"
-                             "in the middle of the sphere pointing towards the middle of the resulting surface.
-                             Type: mathutils.Vector, Default: [0,0,1]"
+                             "in the middle of the sphere pointing towards the middle of the resulting surface."
+                             "Type: mathutils.Vector, Default: [0,0,1]"
     """
 
     def __init__(self, config):
