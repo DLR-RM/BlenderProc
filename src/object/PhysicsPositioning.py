@@ -53,6 +53,8 @@ class PhysicsPositioning(Module):
         for obj in get_all_mesh_objects():
             bpy.context.view_layer.objects.active = obj
             bpy.ops.rigidbody.object_add()
+            if "physics" not in obj:
+                raise Exception("The obj: '{}' has no physics attribute, each object needs one.".format(obj.name))
             obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
             obj.rigid_body.collision_shape = "MESH"
             obj.rigid_body.collision_margin = self.collision_margin

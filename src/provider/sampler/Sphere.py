@@ -14,9 +14,9 @@ class Sphere(Provider):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere."
-       "radius", "The radius of the sphere."
-       "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball."
+       "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector"
+       "radius", "The radius of the sphere. Type: float"
+       "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str"
     """
 
     def __init__(self, config):
@@ -27,7 +27,7 @@ class Sphere(Provider):
     def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
-        :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
+        :return: A random point lying inside or on the surface of a solid sphere. Type: mathutils vector
         """
         # Center of the sphere.
         center = np.array(self.config.get_list("center"))
@@ -35,7 +35,18 @@ class Sphere(Provider):
         radius = self.config.get_float("radius")
         # Mode of operation.
         mode = self.config.get_string("mode")
-        
+
+        return Sphere.sample(center, radius, mode)
+
+    @staticmethod
+    def sample(center, radius, mode):
+        """
+        Samples a point according to the mode, the center and the radius.
+
+       :param center, A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
+       :param radius, The radius of the sphere. Type: float
+       :param mode, Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
+        """
         # Sample
         direction = np.random.normal(size=3)
         
