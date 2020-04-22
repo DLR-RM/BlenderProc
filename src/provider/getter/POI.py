@@ -22,7 +22,7 @@ class POI(Provider):
         """
         # Init matrix for all points of all bounding boxes
         mean_bb_points = []
-        # For every object in the scene
+         # For every selected object in the scene
         selected_objects = self.config.get_list("selector", get_all_mesh_objects())
         if len(selected_objects) == 0:
             raise Exception("No objects were selected!")
