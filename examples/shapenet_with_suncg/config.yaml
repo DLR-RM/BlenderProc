@@ -35,7 +35,9 @@
         "data_path": "<args:0>",
         "used_synset_id": "02801938",
         "add_properties": {
-          "cp_shape_net_object": True
+          "cp_shape_net_object": True,
+          # set the custom property physics to True
+          "cp_physics": True
         }
       }
     },
@@ -63,8 +65,6 @@
 
           }
         },
-        # set the custom property physics to True
-        "cp_physics": True,
         # by adding a modifier we avoid that the objects falls through other objects during the physics simulation
         "cf_add_modifier": {
           "provider": "getter.Content",
