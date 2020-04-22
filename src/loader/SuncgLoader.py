@@ -232,6 +232,9 @@ class SuncgLoader(Loader):
         # Rotate cube to match objects loaded from .obj, has to be done after transformations have been applied
         box.matrix_world = Matrix.Rotation(math.radians(90), 4, "X") @ box.matrix_world
 
+        # Set the physics property of all imported boxes
+        self._set_properties(bpy.context.selected_objects)
+
     def _load_obj(self, path, metadata, material_adjustments, transform=None, parent=None):
         """ Load the wavefront object file from the given path and adjust according to the given arguments.
 

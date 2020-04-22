@@ -29,11 +29,25 @@ class EntityManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "key": "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
+        "key", "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
                "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.):"
-               "For attribute: key of the pair must be a valid attribute name of the seelcted object."
+               "For attribute: key of the pair must be a valid attribute name of the selcted object."
                "For custom property: key of the pair must start with `cp_` prefix."
-        "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
+               "For custom functions: key of the pair must start with `cf_` prefix. See below for more information."
+        "value", "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "cf_add_modifier", "Adds a modifier to the selected object for now we only support the Solidify modifier"
+                          "Example:    "cf_add_modifier": {
+                                          # make sure to use this provider to avoid conflicts with the evaluation
+                                          "provider": "getter.Content",
+                                          "content": {
+                                            "name": "Solidify",  # name of the modifier
+                                            "thickness": 0.001   # attributes to be changed for this modifier
+                                          }
+                                        }"
     """
 
     def __init__(self, config):
@@ -57,11 +71,16 @@ class EntityManipulator(Module):
         entities = sel_conf.get_list("selector")
 
         op_mode = self.config.get_string("mode", "once_for_each")
+        if len(entities) == 0:
+            print("Warning: There were not entities in this selection, probably something went wrong.")
+        else:
+            print("Selected {} to change.".format(len(entities)))
 
         for key in params_conf.data.keys():
             # get raw value from the set parameters if it is to be sampled once for all selected entities
             if op_mode == "once_for_all":
                 result = params_conf.get_raw_value(key)
+
 
             for entity in entities:
                 if op_mode == "once_for_each":
@@ -73,14 +92,43 @@ class EntityManipulator(Module):
                 if key.startswith('cp_'):
                     demanded_custom_property = True
                     key = key[3:]
+                demanded_custom_function = False
+                if key.startswith('cf_'):
+                    demanded_custom_function = True
+                    key = key[3:]
 
                 # if an attribute with such name exists for this entity
                 if hasattr(entity, key) and not demanded_custom_property:
                     # set the value
                     setattr(entity, key, result)
+                # if key had a cf_ prefix - treat it as a custom function.
+                elif demanded_custom_function:
+                    self._apply_function(entity, key, result)
                 # if key had a cp_ prefix - treat it as a custom property. Values will be overwritten for existing
                 # custom property, but if the name is new then new custom property will be created
                 elif demanded_custom_property:
                     entity[key] = result
         # update all entities matrices
         bpy.context.view_layer.update()
+
+    def _apply_function(self, entity, key, result):
+        """
+        Applies a custom function to the selected entity
+
+        :param entity, the entity where the custom fct. should be applied
+        :param key, name of the custom function
+        :param result, content which should be used to apply the custom function, this value should be produced with a
+                       selector (getter.Content).
+        """
+        if key == "add_modifier":
+            result = Config(result)
+            name = result.get_string("name")  # the name of the modifier
+            if name.upper() == "SOLIDIFY":
+                thickness = result.get_float("thickness")
+                bpy.context.view_layer.objects.active = entity
+                bpy.ops.object.modifier_add(type=name.upper())
+                bpy.context.object.modifiers["Solidify"].thickness = thickness
+            else:
+                raise Exception("The name for the modifier is unknown: {}".format(name))
+        else:
+            raise Exception("This function is unknown: {}".format(key))
