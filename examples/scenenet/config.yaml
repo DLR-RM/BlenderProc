@@ -24,6 +24,9 @@
       }
     },
     {
+      "module": "lighting.SceneNetLighting"
+    },
+    {
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [{
@@ -63,12 +66,9 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors",
         "samples": 350,
         "render_normals": True,
-        "normals_output_key": "normals",
         "render_depth": True,
-        "depth_output_key": "depth"
       }
     },
     {

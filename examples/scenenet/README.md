@@ -65,6 +65,14 @@ This module loads the SceneNet data object, specified via the `file_path`.
 All objects included in this `.obj` file get a randomly selected texture from the `texture_folder`.
 The `category_id` of each object are set based on their name, check the [table](../../resources/scenenet/CategoryLabeling.csv) for more information on the labels.
 
+### SceneNetLighting
+
+```yaml
+"module": "lighting.SceneNetLighting"
+```
+
+We now have to light up the scene by making all lamps and the ceiling emit light.
+
 ### CameraSampler
 
 ```yaml
