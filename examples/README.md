@@ -40,6 +40,7 @@ These can be found in:
 * [shapenet_with_scenenet](shapenet_with_scenenet)
 * [shapenet_with_suncg](shapenet_with_suncg)
 * [scenenet](scenenet)
+* [scenenet_with_cctextures](scenenet_with_cctextures)
 * [suncg_basic](suncg_basic)
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
 * [suncg_with_object_replacer](suncg_with_object_replacer)
