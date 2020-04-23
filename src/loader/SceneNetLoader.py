@@ -10,6 +10,24 @@ from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 
 class SceneNetLoader(Loader):
+    """
+    Loads all SceneNet objects at the given "file_path".
+
+    The textures for each object are sampled based on the name of the object, if the name is not represented in the
+    texture folder the unknown folder is used.
+
+    All objects get "category_id" set based on the data in the "resources/scenenet/CategoryLabeling.csv"
+
+    Each object will have the custom property "is_scene_net_obj".
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+       "file_path": "The path to the .obj file from SceneNet"
+       "texture_folder": "The path to the texture folder used to sample the textures"
+       "category_labeling": "The path to the csv file used for the category labeling, default: resources/scenenet/CategoryLabeling.csv"
+    """
 
     def __init__(self, config):
         Loader.__init__(self, config)
@@ -36,6 +54,9 @@ class SceneNetLoader(Loader):
 
 
     def run(self):
+        """
+        Run the module, loads all the objects and set the properties correctly (including the category_id)
+        """
         # load the objects
         loaded_objects = Utility.import_objects(filepath=self._file_path)
         # sample materials for each object
@@ -51,6 +72,13 @@ class SceneNetLoader(Loader):
         self._set_properties(loaded_objects)
 
     def _random_sample_materials_for_each_obj(self, loaded_objects):
+        """
+        Random sample materials for each of the loaded objects
+
+        Based on the name the textures from the texture_folder will be selected
+
+        :param loaded_objects objects loaded from the .obj file
+        """
         # for each object add a material
         for obj in loaded_objects:
             for mat_slot in obj.material_slots:
@@ -92,6 +120,13 @@ class SceneNetLoader(Loader):
                     poly.use_smooth = False
 
     def _set_category_ids(self, loaded_objects):
+        """
+        Set the category ids for the objs based on the category_labeling .csv file
+
+        Each object will have a custom property with a label, can be used by the SegMapRenderer.
+
+        :param loaded_objects objects loaded from the .obj file
+        """
         if self._category_labels:
             for obj in loaded_objects:
                 obj_name = obj.name
