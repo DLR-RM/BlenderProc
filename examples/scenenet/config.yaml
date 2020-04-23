@@ -1,0 +1,93 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
+    },
+    {
+      "module": "loader.SceneNetLoader",
+      "config": {
+        "file_path": "<args:0>",
+        "texture_folder": "<args:1>"
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [{
+          "number_of_samples": 5,
+          "proximity_checks": {
+            "min": 1.0
+          },
+          "location": {
+            "provider": "sampler.UpperRegionSampler",
+            "min_height": 1.5,
+            "max_height": 1.8,
+            "to_sample_on": {
+              "provider": "getter.Entity",
+              "index": 0,
+              "conditions": {
+                "cp_category_id": 2
+              }
+            }
+          },
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.2217, 0, 6.283185307],
+              "min":[1.2217, 0, 0]
+            }
+          },
+          "check_if_pose_above_object_list": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "cp_category_id": 2,
+              "type": "MESH"
+            }
+          }
+        }]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_normals": True,
+        "normals_output_key": "normals",
+        "render_depth": True,
+        "depth_output_key": "depth"
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "use_alpha": true
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

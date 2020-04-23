@@ -1,7 +1,7 @@
 
 import os
 import csv
-from urllib.request import urlopen, Request, urlretrieve, build_opener, install_opener
+from urllib.request import urlretrieve, build_opener, install_opener
 import subprocess
 
 
