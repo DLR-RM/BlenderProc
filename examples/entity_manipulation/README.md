@@ -1,6 +1,8 @@
 # Object selection and manipulation
 
-![](rendering.jpg)
+<p align="center">
+<img src="rendering.jpg" alt="Front readme image" width=400>
+</p>
 
 In this example we demonstrate how to select entities in the scene using `getter.Entity` and then manipulate then using the `EntityManipulator` module.
 
