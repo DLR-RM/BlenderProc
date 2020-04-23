@@ -38,5 +38,8 @@ class ObjectLoader(Loader):
         else:
             raise Exception("Loader module needs either a path or paths config value")
 
+        if not loaded_objects:
+            raise Exception("No objects have been loaded here, check the config.")
+
         # Set the add_properties of all imported objects
         self._set_properties(loaded_objects)
