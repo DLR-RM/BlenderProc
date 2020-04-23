@@ -32,8 +32,8 @@ if __name__ == "__main__":
             if os.path.exists(seg_path):
                 final_img[2*border+img_size[0]:-border, border:border+img_size[1], :] = normal_img
                 semantic_img = plt.imread(image_path.replace("colors", "segmap"))
-                final_img[2*border+img_size[0]:-border, 2*border+img_size[1]:-border, :] = depth_img
-                final_img[border:img_size[0]+border, 2*border+img_size[1]:-border, :] = semantic_img
+                final_img[border:img_size[0]+border, 2*border+img_size[1]:-border, :] = depth_img
+                final_img[2*border+img_size[0]:-border, 2*border+img_size[1]:-border, :] = semantic_img
             else:
                 final_img[border:border+img_size[0], 2*border+img_size[1]:-border, :] = normal_img
                 start_val = int((img_size[1]+border+border*0.5)*0.5)
