@@ -2,15 +2,12 @@
 import os
 import glob
 import random
-
 import csv
 
 import bpy
 
-
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
-
 
 class SceneNetLoader(Loader):
 
@@ -47,6 +44,9 @@ class SceneNetLoader(Loader):
         # set the category ids for each object
         self._set_category_ids(loaded_objects)
 
+        for obj in loaded_objects:
+            obj["is_scene_net_obj"] = True
+
         # add custom properties
         self._set_properties(loaded_objects)
 
@@ -62,11 +62,6 @@ class SceneNetLoader(Loader):
                     principled_bsdf = principled_bsdf[0]
                 else:
                     raise Exception("Warning: The generation of the material failed, it has more than one Prinicipled BSDF!")
-                output_node = Utility.get_nodes_with_type(nodes, "OutputMaterial")
-                if output_node and len(output_node) == 1:
-                    output_node = output_node[0]
-                else:
-                    raise Exception("Warning: The generation of the material failed, it has more than one Output Material!")
                 texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
                 if not texture_nodes:
                     texture_node = nodes.new("ShaderNodeTexImage")
@@ -86,27 +81,6 @@ class SceneNetLoader(Loader):
                     else:
                         raise Exception("No image was found for this entity: {}, material name: {}".format(obj.name, mat_name))
                     links.new(texture_node.outputs["Color"], principled_bsdf.inputs["Base Color"])
-                    if "lamp" in mat_name or "ceiling" in mat_name:
-                        mix_node = nodes.new(type='ShaderNodeMixShader')
-                        Utility.insert_node_instead_existing_link(links, principled_bsdf.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output_node.inputs['Surface'])
-
-                        # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
-                        # In this way the mix shader will use the principled shader for rendering the color of the lightbulb itself, while using the emission shader for lighting the scene.
-                        lightPath_node = nodes.new(type='ShaderNodeLightPath')
-                        links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
-
-                        emission_node = nodes.new(type='ShaderNodeEmission')
-                        if "lamp" in mat_name:
-                            links.new(texture_node.outputs["Color"], emission_node.inputs["Color"])
-
-                        if "lamp" in mat_name:
-                            # If the material corresponds to a lampshade
-                            emission_node.inputs['Strength'].default_value = self.config.get_float("lampshade_emission_strength", 15)
-                        elif "ceiling" in mat_name:
-                            # If the material corresponds to a ceiling
-                            emission_node.inputs['Strength'].default_value = self.config.get_float("ceiling_emission_strength", 2)
-
-                        links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
         for obj in loaded_objects:
             obj_name = obj.name
             if "." in obj_name:
@@ -119,7 +93,6 @@ class SceneNetLoader(Loader):
 
     def _set_category_ids(self, loaded_objects):
         if self._category_labels:
-
             for obj in loaded_objects:
                 obj_name = obj.name
                 if "." in obj_name:
@@ -133,8 +106,5 @@ class SceneNetLoader(Loader):
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
                     obj["category_id"] = self._category_labels["other-structure".lower()]
-
-
-
 
 
