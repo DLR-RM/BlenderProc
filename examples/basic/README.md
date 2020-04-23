@@ -35,7 +35,7 @@ python scripts/visHdf5Files.py examples/basic/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb: `renderer.RgbRenderer` module and normals plus depth.
+* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file

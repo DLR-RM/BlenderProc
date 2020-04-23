@@ -60,7 +60,8 @@
       "config": {
         "output_key": "colors",
         "samples": 350,
-        "render_normals": True
+        "render_normals": True,
+        "render_depth": True
       }
     },
     {
