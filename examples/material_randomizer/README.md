@@ -45,19 +45,18 @@ python scripts/visHdf5Files.py examples/material_randomizer/output/*.hdf5
   "module": "materials.MaterialRandomizer",
   "config": {
     "randomization_level": 0.5,
-    "randomize_textures_only": False,
-    "output_textures_only": False
   }
 },
 ```
 
 The focus of this example is the MaterialRandomizer module, which allow us to change the material of the objects randomly. 
-  * Sets the `randomization_level` to 0.5, which means that a material has the change of 0.5 to be replaced with another one.
-  * Set the `randomize_texture_only` and `output_texture_only` to False, which means it uses all materials not just the once with textures
+ * Sets the `randomization_level` to 0.5, which means that a material has the change of 0.5 to be replaced with another one.
 
-It is also possible to use selectors to select the group of objects, which materials should be changed and another selector to select the objects, which materials should be used.
+It is also possible to use selectors to select the group of objects, which materials should be changed and another selector to select the materials, which should be used to replace them. 
 
 Check [object_manipulation](../object_manipulation) for more information about selectors.
+
+Check the [scenenet_with_cctextures](../scenenet_with_cctextures) for a more advanced example of the MaterialManipulator.
 
 ## More examples
 
