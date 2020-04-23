@@ -1,6 +1,9 @@
 # Basic scene
 
-![](rendering.jpg)
+<p align="center">
+<img src="rendering_0.jpg" alt="Front readme image" width=300>
+<img src="rendering_1.jpg" alt="Front readme image" width=300>
+</p>
 
 In this example we demonstrate the basic functionality of BlenderProc.
 
