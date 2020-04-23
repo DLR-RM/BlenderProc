@@ -223,6 +223,20 @@ class Utility:
         """
         return [node for node in nodes if node_type in node.bl_idname]
 
+    @staticmethod
+    def get_the_one_node_with_type(nodes, node_type):
+        """
+        Returns all nodes which are of the given node_type
+        :param nodes: list of nodes of the current material
+        :param node_type: node types
+        :return: list of nodes, which belong to the type
+        """
+        node = Utility.get_nodes_with_type(nodes, node_type)
+        if node and len(node) == 1:
+            return node[0]
+        else:
+            raise Exception("There is not only one node of this type: {}".format(node_type))
+
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.
 
