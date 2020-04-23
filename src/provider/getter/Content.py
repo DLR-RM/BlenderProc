@@ -3,7 +3,7 @@ from src.main.Provider import Provider
 
 class Content(Provider):
     """
-    Content provider this might be useful if you only want to get the content of something returned.
+    The Content provider might be useful if you only want to return the content of something in the config file.
     Instead of it being directly used as a provider value.
 
     Example:

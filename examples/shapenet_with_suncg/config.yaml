@@ -93,7 +93,7 @@
         {
           "number_of_samples": 5,
           "location": {
-            "provider":"sampler.PartZSphere",
+            "provider":"sampler.PartSphere",
             "center": {
               "provider": "getter.POI",
               "selector": {
@@ -104,7 +104,7 @@
                 }
               }
             },
-            "z_above_center": 0.5,
+            "distance_above_center": 0.5,
             "radius": 2,
             "mode": "SURFACE"
           },
