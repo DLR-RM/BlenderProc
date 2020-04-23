@@ -13,9 +13,9 @@
       "config": {
         "global": {
           "output_dir": "<args:1>",
+          "max_bounces": 200,
           "diffuse_bounces": 200,
           "glossy_bounces": 200,
-          "max_bounces": 200,
           "transmission_bounces": 200,
           "transparency_bounces": 200
         }
@@ -53,7 +53,6 @@
     },
     {
       "module": "lighting.SuncgLighting",
-      "config": {}
     },
     {
       "module": "materials.MaterialManipulator",
