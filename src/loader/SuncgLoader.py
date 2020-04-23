@@ -330,11 +330,7 @@ class SuncgLoader(Loader):
                 value = value[:value.find(".")]
         else:
             mat_type = "diffuse"
-            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-            if len(principled_node) == 1:
-                principled_node = principled_node[0]
-            else:
-                raise Exception("This material has not one principled shader node, mat: {}".format(mat.name))
+            principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
             color = principled_node.inputs["Base Color"].default_value
             value = "_".join([str(int(255.*ele)) for ele in color])
         return mat_type, value
@@ -353,11 +349,7 @@ class SuncgLoader(Loader):
         # if there is no image no create one
         if force_texture and len(image_node) == 0:
             # The principled BSDF node contains all imported material properties
-            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-            if len(principled_node) == 1:
-                principled_node = principled_node[0]
-            else:
-                raise Exception("This material has not one principled shader node, mat: {}".format(mat.name))
+            principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
 
             uv_node = nodes.new(type='ShaderNodeTexCoord')
             # create an image node and link it
@@ -377,11 +369,7 @@ class SuncgLoader(Loader):
         nodes = mat.node_tree.nodes
 
         if "diffuse" in adjustments:
-            principle_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-            if len(principle_node) == 1:
-                principle_node = principle_node[0]
-            else:
-                raise Exception("There is not one diffuse node in this material: {}".format(mat.name))
+            principle_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
             principle_node.inputs['Base Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
@@ -393,11 +381,7 @@ class SuncgLoader(Loader):
             else:
                 image_path += ".jpg"
 
-            image_node = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
-            if image_node and len(image_node) == 1:
-                image_node = image_node[0]
-            else:
-                raise Exception("There is not one image node in this material: {}".format(mat.name))
+            image_node = Utility.get_the_one_node_with_type(nodes, "ShaderNodeTexImage")
             if os.path.exists(image_path):
                 image_node.image = bpy.data.images.load(image_path, check_existing=True)
             else:

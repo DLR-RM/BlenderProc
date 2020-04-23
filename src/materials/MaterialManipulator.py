@@ -161,16 +161,12 @@ class MaterialManipulator(Module):
     @staticmethod
     def _set_principled_shader_value(material, shader_input_key, value):
         nodes = material.node_tree.nodes
-        principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-        if len(principled_bsdf) == 1:
-            principled_bsdf = principled_bsdf[0]
-            shader_input_key = shader_input_key.capitalize()
-            if shader_input_key in principled_bsdf.inputs:
-                principled_bsdf.inputs[shader_input_key].default_value = value
-            else:
-                raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key))
+        principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+        shader_input_key = shader_input_key.capitalize()
+        if shader_input_key in principled_bsdf.inputs:
+            principled_bsdf.inputs[shader_input_key].default_value = value
         else:
-            raise Exception("This material has more than Prinicpled bsdf shader node: {}".format(material.name))
+            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key))
 
     @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
@@ -183,13 +179,11 @@ class MaterialManipulator(Module):
         :param multiply_factor the factor with which the displacement is multiplied
         """
         nodes = material.node_tree.nodes
-        output = Utility.get_nodes_with_type(nodes, "OutputMaterial")
+        output = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
         texture = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
-        if output is not None and texture is not None:
-            if len(output) == 1 and len(texture) == 1:
-                output = output[0]
+        if texture is not None:
+            if len(texture) == 1:
                 texture = texture[0]
-
                 math_node = nodes.new(type='ShaderNodeMath')
                 math_node.operation = "MULTIPLY"
                 math_node.inputs[1].default_value = multiply_factor

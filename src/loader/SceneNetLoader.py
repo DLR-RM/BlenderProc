@@ -85,11 +85,7 @@ class SceneNetLoader(Loader):
                 material = mat_slot.material
                 nodes = material.node_tree.nodes
                 links = material.node_tree.links
-                principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-                if principled_bsdf and len(principled_bsdf) == 1:
-                    principled_bsdf = principled_bsdf[0]
-                else:
-                    raise Exception("Warning: The generation of the material failed, it has more than one Prinicipled BSDF!")
+                principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
                 texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
                 if not texture_nodes:
                     texture_node = nodes.new("ShaderNodeTexImage")
