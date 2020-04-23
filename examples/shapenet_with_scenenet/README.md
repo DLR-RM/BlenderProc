@@ -1,4 +1,4 @@
-# ShapeNet 
+# ShapeNet with Scenenet
 
 <p align="center">
 <img src="rendering.jpg" alt="Front readme image" width=550>
