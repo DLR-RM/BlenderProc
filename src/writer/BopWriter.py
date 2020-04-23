@@ -100,7 +100,7 @@ class BopWriter(StateWriter):
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             bpy.context.scene.frame_set(frame)
             frame += 1
-            scene_camera[frame] = {'cam_K': list(self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')), 'depth_scale': 0.1}
+            scene_camera[frame] = {'cam_K': list(self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')), 'depth_scale': 0.001}
             with open(os.path.join(self._determine_output_dir(), 'scene_camera.json'), 'w') as scene_camera_file:
                 json.dump(scene_camera, scene_camera_file)
 
@@ -123,4 +123,3 @@ class BopWriter(StateWriter):
             json.dump(camera, camera_file)
 
         return
-
