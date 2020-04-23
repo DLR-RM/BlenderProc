@@ -1,6 +1,11 @@
 # Camera sampling
 
-![](rendering.png)
+
+<p align="center">
+<img src="rendering_0.png" alt="Front readme image" width=200>
+<img src="rendering_1.jpg" alt="Front readme image" width=200>
+<img src="rendering_1.jpg" alt="Front readme image" width=200>
+</p>
 
 In this example we are demonstrating the sampling features in relation to camera objects.
 
