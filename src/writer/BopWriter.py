@@ -117,11 +117,10 @@ class BopWriter(StateWriter):
             width = bpy.context.scene.render.resolution_x
             height = bpy.context.scene.render.resolution_y
 
-        camera = {'cx': self._get_camera_attribute(self.cam_pose, 'shift_x'), 'cy': self._get_camera_attribute(self.cam_pose, 'shift_y'), 'depth_scale': 0.1, 'fx': self._get_camera_attribute(self.cam_pose, 'fov_x'), 'fy': self._get_camera_attribute(self.cam_pose, 'fov_y'), 'height': height, 'width': width}
+        camera = {'cx': self._get_camera_attribute(self.cam_pose, 'shift_x'), 'cy': self._get_camera_attribute(self.cam_pose, 'shift_y'), 'depth_scale': 0.001, 'fx': self._get_camera_attribute(self.cam_pose, 'fov_x'), 'fy': self._get_camera_attribute(self.cam_pose, 'fov_y'), 'height': height, 'width': width}
         print(camera)
         with open(os.path.join(self._determine_output_dir(), 'camera.json'), 'w') as camera_file:
             json.dump(camera, camera_file)
 
         return
-
 
