@@ -90,10 +90,12 @@ class MaterialManipulator(Module):
                 elif key == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
+                elif "set_" in key and requested_cf:
+                    # sets the value of the prinicipled shader
+                    self._set_principled_shader_value(material, key[len("set_"):], value)
                 elif hasattr(material, key):
                     # set the value
                     setattr(material, key, value)
-
                 # TODO exclude global settings to raise exception if attribute not found
                 #else:
                 #    raise Exception("This attribute: {} is not there!".format(key))
@@ -117,6 +119,8 @@ class MaterialManipulator(Module):
                 for text_key in paths_conf.data.keys():
                     text_path = paths_conf.get_string(text_key)
                     result.update({text_key: text_path})
+            elif "cf_set_" in key:
+                result = params_conf.get_float(key)
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -153,6 +157,20 @@ class MaterialManipulator(Module):
             in_point = nodes["Principled BSDF"].inputs[key]
             node.image = loaded_textures[key]
             links.new(out_point, in_point)
+
+    @staticmethod
+    def _set_principled_shader_value(material, shader_input_key, value):
+        nodes = material.node_tree.nodes
+        principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+        if len(principled_bsdf) == 1:
+            principled_bsdf = principled_bsdf[0]
+            shader_input_key = shader_input_key.capitalize()
+            if shader_input_key in principled_bsdf.inputs:
+                principled_bsdf.inputs[shader_input_key].default_value = value
+            else:
+                raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key))
+        else:
+            raise Exception("This material has more than Prinicpled bsdf shader node: {}".format(material.name))
 
     @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
