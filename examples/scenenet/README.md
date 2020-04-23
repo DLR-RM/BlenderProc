@@ -1,4 +1,4 @@
-# ShapeNet 
+# SceneNet 
 
 <p align="center">
 <img src="rendering.jpg" alt="Front readme image" width=300>
@@ -84,7 +84,7 @@ The `category_id` of each object are set based on their name, check the [table](
         "provider": "getter.Entity",
         "index": 0,
         "conditions": {
-          "cp_category_id": 2
+          "cp_category_id": 2  # 2 stands for floor
         }
       }
     },
