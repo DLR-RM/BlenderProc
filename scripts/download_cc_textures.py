@@ -1,7 +1,11 @@
 
+from sys import version_info
+if version_info.major == 2:
+    raise Exception("This script only works with python3.x!")
+
 import os
 import csv
-from urllib.request import urlopen, Request, urlretrieve, build_opener, install_opener
+from urllib.request import urlretrieve, build_opener, install_opener
 import subprocess
 
 

@@ -42,6 +42,7 @@ class CameraSampler(CameraModule):
        "check_pose_novelty_translation", "Checks that a sampled new pose is novel with respect to the translation component. Type: bool. Optional. Default value: True"
        "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses sampled by this parameter's value in percentage. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
        "min_var_diff_translation", "Same as min_var_diff_rot but for translation. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
+       "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor or a table, default: []"
     """
 
     def __init__(self, config):
@@ -90,6 +91,8 @@ class CameraSampler(CameraModule):
         self.interest_score_step = config.get_float("interest_score_step", 0.1)
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
+        self._above_objects = config.get_list("check_if_pose_above_object_list", [])
+
 
         if self.interest_score_step <= 0.0:
             raise Exception("Must have an interest score step size bigger than 0")
@@ -177,6 +180,12 @@ class CameraSampler(CameraModule):
 
         if (self.check_pose_novelty_rot or self.check_pose_novelty_translation) and \
         (not self._check_novel_pose(cam2world_matrix)):
+            return False
+
+        if self._above_objects:
+            for obj in self._above_objects:
+                if self._position_is_above_object(cam2world_matrix.to_translation(), obj):
+                    return True
             return False
 
         return True
