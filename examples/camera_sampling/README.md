@@ -1,6 +1,11 @@
 # Camera sampling
 
-![](rendering.png)
+
+<p align="center">
+<img src="rendering_0.png" alt="Front readme image" width=375>
+<img src="rendering_1.jpg" alt="Front readme image" width=375>
+<img src="rendering_1.jpg" alt="Front readme image" width=375>
+</p>
 
 In this example we are demonstrating the sampling features in relation to camera objects.
 
@@ -29,7 +34,7 @@ python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Samples camera positions randomly above the plane looking to the point of interest: `camera.CameraSampler` module.
-* Renders rgb: `renderer.RgbRenderer` module and normals.
+* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
