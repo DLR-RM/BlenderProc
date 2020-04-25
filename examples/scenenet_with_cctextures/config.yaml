@@ -65,9 +65,11 @@
       }
     },
     {
-      "module": "loader.CCMaterialLoader"
+      "module": "loader.CCMaterialLoader",
       # you can use the scripts/download_cc_textures.py to download them
-      "config": "<args:2>"
+      "config": {
+        "folder_path": "<args:2>"
+      }
     },
     {
       "module": "materials.MaterialRandomizer",
