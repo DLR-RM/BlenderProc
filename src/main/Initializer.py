@@ -1,3 +1,7 @@
+import os
+import random
+from numpy import random as np_random
+
 import bpy
 
 from src.main.Module import Module
@@ -52,3 +56,13 @@ class Initializer(Module):
 
         # Use cycles
         bpy.context.scene.render.engine = 'CYCLES'
+
+        random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
+        if random_seed:
+            print("Got random seed: {}".format(random_seed))
+            try:
+                random_seed = int(random_seed)
+            except ValueError as e:
+                raise e
+            random.seed(random_seed)
+            np_random.seed(random_seed)
