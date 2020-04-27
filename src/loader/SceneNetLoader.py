@@ -59,6 +59,7 @@ class SceneNetLoader(Loader):
         """
         # load the objects
         loaded_objects = Utility.import_objects(filepath=self._file_path)
+        loaded_objects.sort(key=lambda ele: ele.name)
         # sample materials for each object
         self._random_sample_materials_for_each_obj(loaded_objects)
 
@@ -99,6 +100,7 @@ class SceneNetLoader(Loader):
                     if not image_paths:
                         image_paths = glob.glob(os.path.join(self._texture_folder, "unknown", "*"))
                         print("Warning: The material {} was not found use unknown instead.".format(mat_name))
+                    image_paths.sort()
                     image_path = random.choice(image_paths)
                     if os.path.exists(image_path):
                         texture_node.image = bpy.data.images.load(image_path, check_existing=True)
