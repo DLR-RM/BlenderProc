@@ -43,11 +43,7 @@ class SegMapRenderer(Renderer):
         nodes = new_mat.node_tree.nodes
         links = new_mat.node_tree.links
         emission_node = nodes.new(type='ShaderNodeEmission')
-        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-        if output and len(output) == 1:
-            output = output[0]
-        else:
-            raise Exception("This material: {} has not one material output!".format(new_mat.name))
+        output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
 
         emission_node.inputs['Color'].default_value[:3] = color
         links.new(emission_node.outputs['Emission'], output.inputs['Surface'])

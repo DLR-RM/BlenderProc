@@ -48,11 +48,7 @@ class NormalRenderer(Renderer):
 
         emission_node = nodes.new(type='ShaderNodeEmission')
 
-        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-        if output and len(output) == 1:
-            output = output[0]
-        else:
-            raise Exception("This material: {} has not one material output!".format(new_mat.name))
+        output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
 
         links.new(texture_coord_node.outputs['Normal'], vector_transform_node.inputs['Vector'])
         links.new(vector_transform_node.outputs['Vector'], mapping_node.inputs['Vector'])

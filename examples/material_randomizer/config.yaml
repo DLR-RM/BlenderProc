@@ -61,8 +61,6 @@
       "module": "materials.MaterialRandomizer",
       "config": {
         "randomization_level": 0.5,
-        "randomize_textures_only": False,
-        "output_textures_only": False
       }
     },
     {

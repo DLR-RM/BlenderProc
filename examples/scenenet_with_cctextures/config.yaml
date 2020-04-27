@@ -1,4 +1,3 @@
-# Args: <cam_file> <obj_file> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -12,7 +11,12 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:2>"
+          "output_dir": "<args:3>",
+          "max_bounces": 200,
+          "diffuse_bounces": 200,
+          "glossy_bounces": 200,
+          "transmission_bounces": 200,
+          "transparency_bounces": 200
         }
       }
     },
@@ -22,9 +26,6 @@
         "file_path": "<args:0>",
         "texture_folder": "<args:1>"
       }
-    },
-    {
-      "module": "lighting.SceneNetLighting"
     },
     {
       "module": "camera.CameraSampler",
@@ -62,6 +63,28 @@
           }
         }]
       }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>"
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.4,
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True  # this will return all loaded cc textures
+          }
+        }
+      }
+    },
+    {
+      "module": "lighting.SceneNetLighting"
     },
     {
       "module": "renderer.RgbRenderer",
