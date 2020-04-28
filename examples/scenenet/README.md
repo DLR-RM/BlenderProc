@@ -65,6 +65,14 @@ This module loads the SceneNet data object, specified via the `file_path`.
 All objects included in this `.obj` file get a randomly selected texture from the `texture_folder`.
 The `category_id` of each object are set based on their name, check the [table](../../resources/scenenet/CategoryLabeling.csv) for more information on the labels.
 
+### SceneNetLighting
+
+```yaml
+"module": "lighting.SceneNetLighting"
+```
+
+We now have to light up the scene by making all lamps and the ceiling emit light.
+
 ### CameraSampler
 
 ```yaml
@@ -112,5 +120,7 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 
 ## More examples
 
+* [shapenet_with_scenenet](../shapenet_with_scenenet): Using shapenet combined with scenenet
+* [scenenet_with_cctextures](../scenenet_with_cctextures): An example on how to use CCTextures with scenenet.
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.

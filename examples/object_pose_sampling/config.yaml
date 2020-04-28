@@ -75,8 +75,7 @@
       "config": {
         "output_key": "colors",
         "samples": 50,
-        "render_normal": True,
-        "output_is_temp": False
+        "render_normal": True
       }
     },
     {
