@@ -28,6 +28,9 @@
       }
     },
     {
+      "module": "lighting.SceneNetLighting"
+    },
+    {
       "module": "loader.ShapeNetLoader",
       "config": {
         "data_path": "<args:2>",

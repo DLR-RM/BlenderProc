@@ -77,23 +77,28 @@ class MaterialManipulator(Module):
 
             for key, value in params.items():
 
+                # used so we don't modify original key when having more than one material
+                key_copy = key
+
                 requested_cf = False
                 if key.startswith('cf_'):
                     requested_cf = True
-                    key = key[3:]
+                    key_copy = key[3:]
 
                 # if an attribute with such name exists for this entity
-                if key == "color_link_to_displacement" and requested_cf:
+                if key_copy == "color_link_to_displacement" and requested_cf:
                     MaterialManipulator._link_color_to_displacement_for_mat(material, value)
-                elif key == "change_to_vertex_color" and requested_cf:
+                elif key_copy == "change_to_vertex_color" and requested_cf:
                     MaterialManipulator._map_vertex_color(material, value)
-                elif key == "textures" and requested_cf:
+                elif key_copy == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
+                elif "set_" in key and requested_cf:
+                    # sets the value of the prinicipled shader
+                    self._set_principled_shader_value(material, key[len("set_"):], value)
                 elif hasattr(material, key):
                     # set the value
                     setattr(material, key, value)
-
                 # TODO exclude global settings to raise exception if attribute not found
                 #else:
                 #    raise Exception("This attribute: {} is not there!".format(key))
@@ -117,6 +122,8 @@ class MaterialManipulator(Module):
                 for text_key in paths_conf.data.keys():
                     text_path = paths_conf.get_string(text_key)
                     result.update({text_key: text_path})
+            elif "cf_set_" in key:
+                result = params_conf.get_float(key)
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -155,6 +162,16 @@ class MaterialManipulator(Module):
             links.new(out_point, in_point)
 
     @staticmethod
+    def _set_principled_shader_value(material, shader_input_key, value):
+        nodes = material.node_tree.nodes
+        principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+        shader_input_key = shader_input_key.capitalize()
+        if shader_input_key in principled_bsdf.inputs:
+            principled_bsdf.inputs[shader_input_key].default_value = value
+        else:
+            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key))
+
+    @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
         """
         Link the output of the one texture image to the displacement
@@ -165,13 +182,11 @@ class MaterialManipulator(Module):
         :param multiply_factor the factor with which the displacement is multiplied
         """
         nodes = material.node_tree.nodes
-        output = Utility.get_nodes_with_type(nodes, "OutputMaterial")
+        output = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
         texture = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
-        if output is not None and texture is not None:
-            if len(output) == 1 and len(texture) == 1:
-                output = output[0]
+        if texture is not None:
+            if len(texture) == 1:
                 texture = texture[0]
-
                 math_node = nodes.new(type='ShaderNodeMath')
                 math_node.operation = "MULTIPLY"
                 math_node.inputs[1].default_value = multiply_factor

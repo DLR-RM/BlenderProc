@@ -31,18 +31,8 @@ class CCMaterialLoader(Module):
                     nodes = new_mat.node_tree.nodes
                     links = new_mat.node_tree.links
 
-                    principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-                    if principled_bsdf and len(principled_bsdf) == 1:
-                        principled_bsdf = principled_bsdf[0]
-                    else:
-                        print("Warning: The generation of the new texture failed, it has more than one Prinicipled BSDF!")
-
-                    output_node = Utility.get_nodes_with_type(nodes, "OutputMaterial")
-                    if output_node and len(output_node) == 1:
-                        output_node = output_node[0]
-                    else:
-                        print("Warning: The generation of the new texture failed, it has more than one Output Material!")
-
+                    principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                    output_node = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
 
                     base_color = nodes.new('ShaderNodeTexImage')
                     base_color.image = bpy.data.images.load(base_image_path, check_existing=True)

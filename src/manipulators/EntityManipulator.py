@@ -87,27 +87,30 @@ class EntityManipulator(Module):
                     # get raw value from the set parameters if it is to be sampled anew for each selected entity
                     result = params_conf.get_raw_value(key)
 
+                # used so we don't modify original key when having more than one entity
+                key_copy = key
+
                 # check if the key is a requested custom property
                 demanded_custom_property = False
                 if key.startswith('cp_'):
                     demanded_custom_property = True
-                    key = key[3:]
+                    key_copy = key[3:]
                 demanded_custom_function = False
                 if key.startswith('cf_'):
                     demanded_custom_function = True
-                    key = key[3:]
+                    key_copy = key[3:]
 
                 # if an attribute with such name exists for this entity
-                if hasattr(entity, key) and not demanded_custom_property:
+                if hasattr(entity, key_copy) and not demanded_custom_property:
                     # set the value
-                    setattr(entity, key, result)
+                    setattr(entity, key_copy, result)
                 # if key had a cf_ prefix - treat it as a custom function.
                 elif demanded_custom_function:
-                    self._apply_function(entity, key, result)
+                    self._apply_function(entity, key_copy, result)
                 # if key had a cp_ prefix - treat it as a custom property. Values will be overwritten for existing
                 # custom property, but if the name is new then new custom property will be created
                 elif demanded_custom_property:
-                    entity[key] = result
+                    entity[key_copy] = result
         # update all entities matrices
         bpy.context.view_layer.update()
 

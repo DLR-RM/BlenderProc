@@ -197,11 +197,7 @@ class Utility:
         nodes = material.node_tree.nodes
         links = material.node_tree.links
 
-        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-        if output and len(output) == 1:
-            material_output = output[0]
-        else:
-            raise Exception("This material: {} has not one material output!".format(material.name))
+        material_output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
         # find the node, which is connected to the output
         node_connected_to_the_output = None
         for link in links:
@@ -222,6 +218,23 @@ class Utility:
         :return: list of nodes, which belong to the type
         """
         return [node for node in nodes if node_type in node.bl_idname]
+
+    @staticmethod
+    def get_the_one_node_with_type(nodes, node_type):
+        """
+        Returns the one nodes which is of the given node_type
+
+        This function will only work if there is only one of the nodes of this type.
+
+        :param nodes: list of nodes of the current material
+        :param node_type: node types
+        :return: node of the node type
+        """
+        node = Utility.get_nodes_with_type(nodes, node_type)
+        if node and len(node) == 1:
+            return node[0]
+        else:
+            raise Exception("There is not only one node of this type: {}".format(node_type))
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.

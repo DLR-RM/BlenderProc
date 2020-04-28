@@ -79,41 +79,30 @@ class SuncgLighting(Module):
                 nodes = m.material.node_tree.nodes
                 links = m.material.node_tree.links
 
-                output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-                if output and len(output) == 1:
-                    output = output[0]
-                else:
-                    raise Exception("This material: {} has not one material output!".format(m.name))
+                output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
                 emission = Utility.get_nodes_with_type(nodes, "Emission")
                 if not emission:
-                    principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-                    if principled:
-                        if len(principled) == 1:
-                            principled = principled[0]
-                        else:
-                            raise Exception("There is more than one Diffuse shader node in material: {}".format(m.name))
-                        mix_node = nodes.new(type='ShaderNodeMixShader')
-                        Utility.insert_node_instead_existing_link(links, principled.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
+                    principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                    mix_node = nodes.new(type='ShaderNodeMixShader')
+                    Utility.insert_node_instead_existing_link(links, principled.outputs['BSDF'], mix_node.inputs[2], mix_node.outputs['Shader'], output.inputs['Surface'])
 
-                        # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
-                        # In this way the mix shader will use the principled shader for rendering the color of the lightbulb itself, while using the emission shader for lighting the scene.
-                        lightPath_node = nodes.new(type='ShaderNodeLightPath')
-                        links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
+                    # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
+                    # In this way the mix shader will use the principled shader for rendering the color of the lightbulb itself, while using the emission shader for lighting the scene.
+                    lightPath_node = nodes.new(type='ShaderNodeLightPath')
+                    links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
-                        emission_node = nodes.new(type='ShaderNodeEmission')
-                        emission_node.inputs['Color'].default_value = m.material.diffuse_color
+                    emission_node = nodes.new(type='ShaderNodeEmission')
+                    emission_node.inputs['Color'].default_value = m.material.diffuse_color
 
-                        if mat_name in light[0]:
-                            # If the material corresponds to light bulb
-                            emission_node.inputs['Strength'].default_value = self.config.get_float("lightbulb_emission_strength", 15)
-                        else:
-                            # If the material corresponds to a lampshade
-                            emission_node.inputs['Strength'].default_value = self.config.get_float("lampshade_emission_strength", 7)
-
-                        links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
-                        self._collection_of_mats["lamp"][old_mat_name] = m.material
+                    if mat_name in light[0]:
+                        # If the material corresponds to light bulb
+                        emission_node.inputs['Strength'].default_value = self.config.get_float("lightbulb_emission_strength", 15)
                     else:
-                        raise Exception("This material: {} has no principled node".format(mat_name))
+                        # If the material corresponds to a lampshade
+                        emission_node.inputs['Strength'].default_value = self.config.get_float("lampshade_emission_strength", 7)
+
+                    links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
+                    self._collection_of_mats["lamp"][old_mat_name] = m.material
 
     def _make_window_emissive(self, obj):
         """ Makes the given window object emissive.
@@ -129,11 +118,7 @@ class SuncgLighting(Module):
             links = m.material.node_tree.links
 
             # All parameters imported from the .mtl file are stored inside the principled bsdf node
-            principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-            if principled_node and len(principled_node) == 1:
-                principled_node = principled_node[0]
-            else:
-                raise Exception("The creation of material: {} failed".format(m.name))
+            principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
             alpha = principled_node.inputs['Alpha'].default_value
 
             if alpha < 1:
@@ -152,30 +137,26 @@ class SuncgLighting(Module):
                 m.material.name += "_emission"
                 emission = Utility.get_nodes_with_type(nodes, 'Emission')
                 if not emission:
-                    output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-                    if output and len(output) == 1:
-                        output = output[0]
-                        link = next(l for l in links if l.to_socket == output.inputs['Surface'])
-                        links.remove(link)
+                    output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
+                    link = next(l for l in links if l.to_socket == output.inputs['Surface'])
+                    links.remove(link)
 
-                        # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
-                        # In this way the mix shader will use the diffuse shader for rendering the color of the window itself, while using the emission shader for lighting the scene.
-                        mix_node = nodes.new(type='ShaderNodeMixShader')
-                        emission_node = nodes.new(type='ShaderNodeEmission')
-                        transparent_node = nodes.new(type='ShaderNodeBsdfDiffuse')
-                        transparent_node.inputs['Color'].default_value[:3] = (0.285, 0.5, 0.48)
-                        lightPath_node = nodes.new(type='ShaderNodeLightPath')
+                    # The light path node returns 1, if the material is hit by a ray coming from the camera, else it returns 0.
+                    # In this way the mix shader will use the diffuse shader for rendering the color of the window itself, while using the emission shader for lighting the scene.
+                    mix_node = nodes.new(type='ShaderNodeMixShader')
+                    emission_node = nodes.new(type='ShaderNodeEmission')
+                    transparent_node = nodes.new(type='ShaderNodeBsdfDiffuse')
+                    transparent_node.inputs['Color'].default_value[:3] = (0.285, 0.5, 0.48)
+                    lightPath_node = nodes.new(type='ShaderNodeLightPath')
 
-                        links.new(mix_node.outputs["Shader"], output.inputs['Surface'])
-                        links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
-                        links.new(emission_node.outputs['Emission'], mix_node.inputs[1])
-                        links.new(transparent_node.outputs['BSDF'], mix_node.inputs[2])
+                    links.new(mix_node.outputs["Shader"], output.inputs['Surface'])
+                    links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
+                    links.new(emission_node.outputs['Emission'], mix_node.inputs[1])
+                    links.new(transparent_node.outputs['BSDF'], mix_node.inputs[2])
 
-                        emission_node.inputs['Color'].default_value = (1, 1, 1, 1)
-                        emission_node.inputs['Strength'].default_value = 10  # strength of the windows
-                        self._collection_of_mats["window"][mat_name] = m.material
-                    else:
-                        raise Exception("This material: {} has not one material output!".format(m.name))
+                    emission_node.inputs['Color'].default_value = (1, 1, 1, 1)
+                    emission_node.inputs['Strength'].default_value = 10  # strength of the windows
+                    self._collection_of_mats["window"][mat_name] = m.material
                 else:
                     self._collection_of_mats["window"][mat_name] = m.material
 
@@ -203,11 +184,7 @@ class SuncgLighting(Module):
             nodes = m.material.node_tree.nodes
             links = m.material.node_tree.links
 
-            output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-            if output and len(output) == 1:
-                output = output[0]
-            else:
-                raise Exception("This material: {} has not one material output!".format(m.name))
+            output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
 
             if not Utility.get_nodes_with_type(nodes, "Emission"):
                 principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
