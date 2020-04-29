@@ -90,6 +90,8 @@ class MaterialManipulator(Module):
                 elif key == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
+                elif key == "switch_to_emission_shader":
+                    self._switch_to_emission_shader(material, value)
                 elif "set_" in key and requested_cf:
                     # sets the value of the prinicipled shader
                     self._set_principled_shader_value(material, key[len("set_"):], value)
@@ -119,6 +121,15 @@ class MaterialManipulator(Module):
                 for text_key in paths_conf.data.keys():
                     text_path = paths_conf.get_string(text_key)
                     result.update({text_key: text_path})
+            elif key == "cf_switch_to_emission_shader":
+                result = {}
+                emission_conf = Config(params_conf.get_raw_dict(key))
+                for emission_key in emission_conf.data.keys():
+                    if emission_key == "color":
+                        attr_val = emission_conf.get_list("color", [1, 1, 1, 1])
+                    elif emission_key == "strength":
+                        attr_val = emission_conf.get_float("strength", 1.0)
+                    result.update({emission_key: attr_val})
             elif "cf_set_" in key:
                 result = params_conf.get_float(key)
             else:
@@ -214,3 +225,17 @@ class MaterialManipulator(Module):
         else:
             raise Exception("The material: {} has no node connected to the output, "
                             "which has as an input Base Color".format(material.name))
+
+    def _switch_to_emission_shader(self, material, value):
+        """
+
+        :param material:
+        :param value:
+        :return:
+        """
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+        emission_node = nodes.new("ShaderNodeEmission")
+        nodes["Emission"].inputs["Color"].default_value = value["color"]
+        nodes["Emission"].inputs["Strength"].default_value = value["strength"]
+        links.new(nodes["Emission"].outputs["Emission"], nodes["Material Output"].inputs["Surface"])
