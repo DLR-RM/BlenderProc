@@ -41,6 +41,11 @@ class MaterialManipulator(Module):
                       "to a ShaderTexImage node that will be linked to this input. Label represents to which shader "
                       "input this node is connected. Type: dict."
        "cf_textures/texture_path", "Path to a texture image. Type: string."
+       "cf_switch_to_emission_shader", "Adds the Emission shader to the target material, sets it's color and strength "
+                                       "values, connects it to the Material Output node. Type: dict."
+       "cf_switch_to_emission_shader/color", "[R, G, B, A] vector representing the color of the emitted light. "
+                                             "Type: list."
+       "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
     """
 
     def __init__(self, config):
@@ -227,11 +232,11 @@ class MaterialManipulator(Module):
                             "which has as an input Base Color".format(material.name))
 
     def _switch_to_emission_shader(self, material, value):
-        """
+        """ Adds the Emission shader to the target material, sets it's color and strength values, connects it to
+            the Material Output node.
 
-        :param material:
-        :param value:
-        :return:
+        :param material: Target material to edit.
+        :param value: Dict containing {'color': color_value} and {'strength': strength_value} pairs.
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
