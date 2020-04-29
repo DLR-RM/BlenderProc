@@ -7,7 +7,8 @@ from src.utility.Config import Config
 class BasicMeshInitializer(Module):
     """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. For more precise
         and powerful mesh manipulation use manipulators.EntityManipulator module.
-        Can enable default Principled BSDF shader-based materils for those meshes.
+        Can enable default 'Principled BSDF' shader-based material for each of those meshes.
+
         Example 1: add a Plane mesh "Ground_plane" to the scene.
 
         {
@@ -56,7 +57,8 @@ class BasicMeshInitializer(Module):
        "meshes_to_add", "List that contains a mesh configuration data in each cell. See table below for available "
                         "parameters per cell. Type: list."
        "init_materials", "Flag that controls whether the added (if True) meshes will be assigned a default Principled "
-                         "BSDF shader-based material, or not (if False). Optional. Default value: True. Type: boolean."
+                         "BSDF shader-based material, or not (if False). Material name is derived from the object name "
+                         "(plus a "_material" suffix). Optional. Default value: True. Type: boolean."
 
     **meshes_to_add cell configuration**:
 
