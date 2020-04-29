@@ -7,7 +7,7 @@ from src.utility.Config import Config
 class BasicMeshInitializer(Module):
     """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. For more precise
         and powerful mesh manipulation use manipulators.EntityManipulator module.
-
+        Can enable default Principled BSDF shader-based materils for those meshes.
         Example 1: add a Plane mesh "Ground_plane" to the scene.
 
         {
@@ -55,6 +55,8 @@ class BasicMeshInitializer(Module):
 
        "meshes_to_add", "List that contains a mesh configuration data in each cell. See table below for available "
                         "parameters per cell. Type: list."
+       "init_materials", "Flag that controls whether the added (if True) meshes will be assigned a default Principled "
+                         "BSDF shader-based material, or not (if False). Optional. Default value: True. Type: boolean."
 
     **meshes_to_add cell configuration**:
 
@@ -74,8 +76,9 @@ class BasicMeshInitializer(Module):
         Module.__init__(self, config)
 
     def run(self):
-        """ Adds specified basic meshes to the scene and sets at keast their names to the user-defined ones. """
+        """ Adds specified basic meshes to the scene and sets at least their names to the user-defined ones. """
         meshes_to_add = self.config.get_list("meshes_to_add")
+        init_meshes_mats = self.config.get_bool("init_materials", True)
         for mesh in meshes_to_add:
             mesh_conf = Config(mesh)
             mesh_type = mesh_conf.get_string("type")
@@ -85,6 +88,8 @@ class BasicMeshInitializer(Module):
             mesh_scale = mesh_conf.get_vector3d("scale", [1, 1, 1])
             self._add_mesh(mesh_type)
             self._set_attrs(mesh_name, mesh_location, mesh_rotation, mesh_scale)
+            if init_meshes_mats:
+                self._init_material(mesh_name)
 
     def _add_mesh(self, mesh_type):
         """ Adds a mesh to the scene.
@@ -111,15 +116,21 @@ class BasicMeshInitializer(Module):
             raise RuntimeError('Unknown basic mesh type "{}"! Available types: "plane", "cube", "circle", "uvsphere", '
                                '"icosphere", "cylinder", "cone", "torus".'.format(type))
 
-    def _set_attrs(self, name, location, rotation, scale):
+    def _set_attrs(self, mesh_name, mesh_location, mesh_rotation, mesh_scale):
         """ Sets the attribute values of the added mesh.
 
-        :param name: Name of the mesh. Type: string.
-        :param location: XYZ location of the mesh. Type: mathutils.Vector.
-        :param rotation: Rotation (3 Euler angles) of the mesh. Type: mathutils.Vector.
-        :param scale: Scale of the mesh. Type: mathutils.Vector.
+        :param mesh_name: Name of the mesh. Type: string.
+        :param mesh_location: XYZ location of the mesh. Type: mathutils.Vector.
+        :param mesh_rotation: Rotation (3 Euler angles) of the mesh. Type: mathutils.Vector.
+        :param mesh_scale: Scale of the mesh. Type: mathutils.Vector.
         """
-        bpy.context.object.name = name
-        bpy.context.object.location = location
-        bpy.context.object.rotation_euler = rotation
-        bpy.context.object.scale = scale
+        bpy.context.object.name = mesh_name
+        bpy.context.object.location = mesh_location
+        bpy.context.object.rotation_euler = mesh_rotation
+        bpy.context.object.scale = mesh_scale
+
+    def _init_material(self, mesh_name):
+        """ Adds a new default material and assigns it to the added mesh object. """
+        mat_obj = bpy.data.materials.new(name=mesh_name+"_material")
+        mat_obj.use_nodes = True
+        bpy.context.object.data.materials.append(mat_obj)
