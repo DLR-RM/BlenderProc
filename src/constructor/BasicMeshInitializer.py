@@ -5,22 +5,77 @@ from src.utility.Config import Config
 
 
 class BasicMeshInitializer(Module):
-    """
+    """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. For more precise
+        and powerful mesh manipulation use manipulators.EntityManipulator module.
+
+        Example 1: add a Plane mesh "Ground_plane" to the scene.
+
+        {
+          "module": "constructor.BasicMeshInitializer",
+          "config": {
+            "meshes_to_add": [
+            {
+              "type": "plane",
+              "name": "Ground_plane"
+            }
+            ]
+          }
+        }
+
+        Example 2: add a rotated "Cube_1" Cube mesh, a displaced "Torus_2" Torus mesh, and a scaled "Cone_3" objects to
+                   the scene.
+
+        {
+          "module": "constructor.BasicMeshInitializer",
+          "config": {
+            "meshes_to_add": [
+            {
+              "type": "cube",
+              "name": "Cube_1",
+              "rotation": [1.1, 0.2, 0.2]
+            },
+            {
+              "type": "torus",
+              "name": "Torus_2",
+              "location": [0, 0, 3]
+            },
+            {
+              "type": "cone",
+              "name": "Cone_3",
+              "scale": [2, 3, 4]
+            }
+            ]
+          }
+        }
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Keyword", "Description"
+
+       "meshes_to_add", "List that contains a mesh configuration data in each cell. See table below for available "
+                        "parameters per cell. Type: list."
+
+    **meshes_to_add cell configuration**:
+
+    .. csv-table::
+       :header: "Keyword", "Description"
+
+       "type", "Type of mesh object to add. Available types: 'plane', 'cube', 'circle', 'uvsphere', 'icosphere', "
+               "'cylinder', 'cone', 'torus'. Type: string."
+       "name", "Name of the mesh object. Type: string."
+       "location", "Location of the mesh object. Optional. Default value: [0, 0, 0]. Type: mathutils.Vector."
+       "rotation", "Rotation (3 Euler angles) of the mesh object. Optional. Default value: [0, 0, 0]. "
+                   "Type: mathutils.Vector."
+       "scale", "Scale of the mesh object. Optional. Default value: [1, 1, 1]. Type: mathutils.Vector."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
-        #self.name = self.config.get_string("name")
-        #self.location = self.config.get_vector3d("location", [0, 0, 0])
-        #self.rotation = self.config.get_vector3d("rotation", [0, 0, 0])
-        #self.scale = self.config.get_vector3d("scale", [0, 0, 0])
 
     def run(self):
-        """
-
-        :return:
-        """
-        meshes_to_add = self.config.get_list("add", [])
+        """ Adds specified basic meshes to the scene and sets at keast their names to the user-defined ones. """
+        meshes_to_add = self.config.get_list("meshes_to_add")
         for mesh in meshes_to_add:
             mesh_conf = Config(mesh)
             mesh_type = mesh_conf.get_string("type")
@@ -31,40 +86,38 @@ class BasicMeshInitializer(Module):
             self._add_mesh(mesh_type)
             self._set_attrs(mesh_name, mesh_location, mesh_rotation, mesh_scale)
 
-    def _add_mesh(self, type):
-        """
+    def _add_mesh(self, mesh_type):
+        """ Adds a mesh to the scene.
 
-        :param type:
+        :param mesh_type: Type of the mesh to add. Type: string.
         """
-        if type == "plane":
+        if mesh_type == "plane":
             bpy.ops.mesh.primitive_plane_add()
-        elif type == "cube":
+        elif mesh_type == "cube":
             bpy.ops.mesh.primitive_cube_add()
-        elif type == "circle":
+        elif mesh_type == "circle":
             bpy.ops.mesh.primitive_circle_add()
-        elif type == "uvsphere":
+        elif mesh_type == "uvsphere":
             bpy.ops.mesh.primitive_uv_sphere_add()
-        elif type == "icosphere":
+        elif mesh_type == "icosphere":
             bpy.ops.mesh.primitive_ico_sphere_add()
-        elif type == "cylinder":
+        elif mesh_type == "cylinder":
             bpy.ops.mesh.primitive_cylinder_add()
-        elif type == "cone":
+        elif mesh_type == "cone":
             bpy.ops.mesh.primitive_cone_add()
-        elif type == "torus":
+        elif mesh_type == "torus":
             bpy.ops.mesh.primitive_torus_add()
         else:
             raise RuntimeError('Unknown basic mesh type "{}"! Available types: "plane", "cube", "circle", "uvsphere", '
-                               '"icosphere","cylinder", "cone", "torus".'.format(type))
+                               '"icosphere", "cylinder", "cone", "torus".'.format(type))
 
     def _set_attrs(self, name, location, rotation, scale):
-        """
+        """ Sets the attribute values of the added mesh.
 
-        :param obj:
-        :param name:
-        :param location:
-        :param rotation:
-        :param scale:
-        :return:
+        :param name: Name of the mesh. Type: string.
+        :param location: XYZ location of the mesh. Type: mathutils.Vector.
+        :param rotation: Rotation (3 Euler angles) of the mesh. Type: mathutils.Vector.
+        :param scale: Scale of the mesh. Type: mathutils.Vector.
         """
         bpy.context.object.name = name
         bpy.context.object.location = location
