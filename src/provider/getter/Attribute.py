@@ -72,6 +72,8 @@ class Attribute(Provider):
         "transform_by", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
                         "Type: string. Supported input types: (list of) int (and/or) float, mathutils.Vector. See below
                         "for supported operation names."
+        "index", "If set, after the conditions are applied only the corresponding value of entity with the specified "
+                 "index is returned. Type: int."
 
         **Custom function names for `get` parameter**
 
@@ -141,6 +143,9 @@ class Attribute(Provider):
             result = ref_result
         else:
             result = raw_result
+
+        if self.config.has_param("index"):
+            result = result[self.config.get_int("index")]
 
         return result
 
