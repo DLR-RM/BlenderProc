@@ -9,13 +9,13 @@ import sys
 from copy import deepcopy
 from random import choice
 
-from src.main.Module import Module
+from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 from src.camera.CameraModule import CameraModule
 
 
-class BopLoader(Module):
+class BopLoader(Loader):
     """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
     
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -31,15 +31,15 @@ class BopLoader(Module):
        "mm2m", "Specify whether to convert poses and models to meters (default: False)"
        "split", "Optionally, test or val split depending on BOP dataset (default: test)"
        "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is replicated, only BOP Objects are loaded)"
-       "sample_objects", ""
-       "amount_to_sample", ""
-       "obj_instances_limit", ""
+       "sample_objects", "Toggles object sampling from the specified dataset. optional. Default value: False. Type: boolean."
+       "amount_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is bigger than the dataset actually contains, then all objects will be loaded."
+       "obj_instances_limit", "Limits the amount of object copies when sampling. Optional. Default value: -1 (no limit)."
        "obj_ids", "Iff scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects from the given BOP dataset)"
        "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval"
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        Loader.__init__(self, config)
         for sys_path in self.config.get_list("sys_paths"):
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
@@ -237,7 +237,7 @@ class BopLoader(Module):
         :return: object if found, else return None
 
         """
-        if self.obj_instances_limit == -1:
+        if not self.sample_objects:
             for loaded_obj in bpy.context.scene.objects:
                 if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
                     return loaded_obj
