@@ -82,17 +82,20 @@ class MaterialManipulator(Module):
 
             for key, value in params.items():
 
+                # used so we don't modify original key when having more than one material
+                key_copy = key
+
                 requested_cf = False
                 if key.startswith('cf_'):
                     requested_cf = True
-                    key = key[3:]
+                    key_copy = key[3:]
 
                 # if an attribute with such name exists for this entity
-                if key == "color_link_to_displacement" and requested_cf:
+                if key_copy == "color_link_to_displacement" and requested_cf:
                     MaterialManipulator._link_color_to_displacement_for_mat(material, value)
-                elif key == "change_to_vertex_color" and requested_cf:
+                elif key_copy == "change_to_vertex_color" and requested_cf:
                     MaterialManipulator._map_vertex_color(material, value)
-                elif key == "textures" and requested_cf:
+                elif key_copy == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
                 elif key == "switch_to_emission_shader":

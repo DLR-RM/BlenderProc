@@ -14,12 +14,19 @@ from utils import flow_to_rgb
 def process_img(img, key):
     if 'depth' in key or 'seg' in key:
         img = img.astype(np.float)
-        img -= np.min(img)
+        if not "seg" in key:
+            min_val = np.min(img)
+            img -= min_val
         max_val = np.max(img)
+        if "seg" in key:
+            max_val = 36.0
+            print("Assuming, there are 36 total classes (NYU), if there are more this will cause a bug!")
         if max_val != np.inf:
             img /= max_val
         else:
-            img /= np.max(img[img != np.inf])
+            img /= np.max(img)
+        # clipping to avoid image errors
+        img = np.clip(img, 0.0, 1.0)
         if len(img.shape) == 3:
             img = img[:, :, 0]
     elif 'flow' in key:
@@ -33,7 +40,7 @@ def save_array_as_image(array, key, file_path):
     if len(array.shape) == 2 or len(array.shape) == 3 and array.shape[2] == 3:
         val = process_img(array, key)
         if len(val.shape) == 2 or len(val.shape) == 3 and val.shape[2] == 1:
-            plt.imsave(file_path, val, cmap='jet')
+            plt.imsave(file_path, val, cmap='jet', vmin=0.0, vmax=1.0)
         else:
             plt.imsave(file_path, val)
 
