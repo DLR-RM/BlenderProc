@@ -106,7 +106,7 @@ class BopLoader(Loader):
                 if self.obj_instances_limit == -1:
                     for i in range(self.amount_to_sample):
                         random_id = choice(obj_ids)
-                        self._load_mesh(random_id, model_p, scale=scale)
+                        self._load_mesh(random_id, model_p, dataset, scale=scale)
                         loaded_objects.append(bpy.context.object)
                 else:
                     loaded_ids = {}
@@ -121,7 +121,7 @@ class BopLoader(Loader):
                         if random_id not in loaded_ids:
                             loaded_ids.update({random_id: 0})
                         if loaded_ids[random_id] < self.obj_instances_limit:
-                            self._load_mesh(random_id, model_p, scale=scale)
+                            self._load_mesh(random_id, model_p, dataset, scale=scale)
                             loaded_ids[random_id] += 1
                             loaded_amount += 1
                             loaded_objects.append(bpy.context.object)
@@ -131,7 +131,7 @@ class BopLoader(Loader):
                                                            loaded_amount, self.amount_to_sample))
             else:
                 for obj_id in obj_ids:
-                    self._load_mesh(obj_id, model_p, scale=scale)
+                    self._load_mesh(obj_id, model_p, dataset, scale=scale)
                     loaded_objects.append(bpy.context.object)
 
             self._set_properties(loaded_objects)
@@ -161,7 +161,7 @@ class BopLoader(Loader):
                 # Store new cam pose as next frame
                 frame_id = bpy.context.scene.frame_end
                 for inst in insts:                           
-                    cur_obj = self._load_mesh(inst['obj_id'], model_p)
+                    cur_obj = self._load_mesh(inst['obj_id'], model_p, dataset)
                     self.set_object_pose(cur_obj, inst, scale)
                     self._insert_key_frames(cur_obj, frame_id)
 
@@ -251,7 +251,7 @@ class BopLoader(Loader):
                     return loaded_obj
         return
 
-    def _load_mesh(self, obj_id, model_p, scale = 1):
+    def _load_mesh(self, obj_id, model_p, dataset, scale = 1):
         """ Loads or copies BOP mesh and sets category_id
 
         :param obj_id: The obj_id of the BOP Object (int)
@@ -271,12 +271,12 @@ class BopLoader(Loader):
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path     
-        mat = self._load_materials(cur_obj)
+        mat = self._load_materials(cur_obj, dataset)
         self._link_col_node(mat)
 
         return cur_obj
 
-    def _load_materials(self, cur_obj):
+    def _load_materials(self, cur_obj, dataset):
         """ Loads / defines materials, e.g. vertex colors 
         
         :param object: The object to use.
@@ -287,7 +287,7 @@ class BopLoader(Loader):
         
         if mat is None:
             # create material
-            mat = bpy.data.materials.new(name="bop_vertex_col_material")
+            mat = bpy.data.materials.new(name="bop_" + dataset + "_vertex_col_material")
 
         mat.use_nodes = True
 
