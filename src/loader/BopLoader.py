@@ -95,16 +95,19 @@ class BopLoader(Loader):
         camera_module = CameraModule(config)
         camera_module._set_cam_intrinsics(cam, config)
 
+        loaded_objects = []
+
         #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
             # if sampling is enabled
             if self.sample_objects:
-                # but the instance limit is not - choose the requsted amount of objects randomly
+                # but the instance limit is not - load the requested amount of objects with repetitions
                 if self.obj_instances_limit == -1:
                     for i in range(self.amount_to_sample):
                         random_id = choice(obj_ids)
                         self._load_mesh(random_id, model_p, scale=scale)
+                        loaded_objects.append(bpy.context.object)
                 else:
                     loaded_ids = {}
                     loaded_amount = 0
@@ -121,6 +124,7 @@ class BopLoader(Loader):
                             self._load_mesh(random_id, model_p, scale=scale)
                             loaded_ids[random_id] += 1
                             loaded_amount += 1
+                            loaded_objects.append(bpy.context.object)
                         else:
                             print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
                                   "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
@@ -128,6 +132,10 @@ class BopLoader(Loader):
             else:
                 for obj_id in obj_ids:
                     self._load_mesh(obj_id, model_p, scale=scale)
+                    loaded_objects.append(bpy.context.object)
+
+            self._set_properties(loaded_objects)
+
         # replicate scene: load scene objects, object poses, camera intrinsics and camera poses
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
