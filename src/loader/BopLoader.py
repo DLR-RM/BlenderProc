@@ -7,11 +7,13 @@ import bpy
 import numpy as np
 import sys
 from copy import deepcopy
+from random import choice
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 from src.camera.CameraModule import CameraModule
+
 
 class BopLoader(Module):
     """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
@@ -29,6 +31,9 @@ class BopLoader(Module):
        "mm2m", "Specify whether to convert poses and models to meters (default: False)"
        "split", "Optionally, test or val split depending on BOP dataset (default: test)"
        "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is replicated, only BOP Objects are loaded)"
+       "sample_objects", ""
+       "amount_to_sample", ""
+       "obj_instances_limit", ""
        "obj_ids", "Iff scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects from the given BOP dataset)"
        "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval"
     """
@@ -38,6 +43,11 @@ class BopLoader(Module):
         for sys_path in self.config.get_list("sys_paths"):
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
+
+        self.sample_objects = self.config.get_bool("sample_objects", False)
+        if self.sample_objects:
+            self.amount_to_sample = self.config.get_int("amount_to_sample")
+            self.obj_instances_limit = self.config.get_int("obj_instances_limit", -1)
         
     def run(self):
         """ Load BOP data """ 
@@ -88,8 +98,36 @@ class BopLoader(Module):
         #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
-            for obj_id in obj_ids:
-                self._load_mesh(obj_id, model_p, scale=scale)
+            # if sampling is enabled
+            if self.sample_objects:
+                # but the instance limit is not - choose the requsted amount of objects randomly
+                if self.obj_instances_limit == -1:
+                    for i in range(self.amount_to_sample):
+                        random_id = choice(obj_ids)
+                        self._load_mesh(random_id, model_p, scale=scale)
+                else:
+                    loaded_ids = {}
+                    loaded_amount = 0
+                    if len(obj_ids) * self.obj_instances_limit < self.amount_to_sample:
+                        raise RuntimeError("{}'s {} split contains {} objects, {} object where requested to sample with "
+                                           "an instances limit of {}. Raise the limit amount or decrease the requested "
+                                           "amount of objects.".format(bop_dataset_path, split, len(obj_ids),
+                                                                       self.amount_to_sample, self.obj_instances_limit))
+                    while loaded_amount != self.amount_to_sample:
+                        random_id = choice(obj_ids)
+                        if random_id not in loaded_ids:
+                            loaded_ids.update({random_id: 0})
+                        if loaded_ids[random_id] < self.obj_instances_limit:
+                            self._load_mesh(random_id, model_p, scale=scale)
+                            loaded_ids[random_id] += 1
+                            loaded_amount += 1
+                        else:
+                            print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
+                                  "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
+                                                           loaded_amount, self.amount_to_sample))
+            else:
+                for obj_id in obj_ids:
+                    self._load_mesh(obj_id, model_p, scale=scale)
         # replicate scene: load scene objects, object poses, camera intrinsics and camera poses
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
@@ -192,15 +230,17 @@ class BopLoader(Module):
         return (cam_K, cam_H_m2c_ref)
 
     def _get_loaded_obj(self, model_path):
-        """ Returns the object if it has already been loaded
+        """ Returns the object if it has already been loaded if object sampling is enabled and instances limit is
+            disabled.
  
         :param model_path: model path of the new object
         :return: object if found, else return None
 
         """
-        for loaded_obj in bpy.context.scene.objects:
-           if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path: 
-                return loaded_obj
+        if self.obj_instances_limit == -1:
+            for loaded_obj in bpy.context.scene.objects:
+                if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
+                    return loaded_obj
         return
 
     def _load_mesh(self, obj_id, model_p, scale = 1):
