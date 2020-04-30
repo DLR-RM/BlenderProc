@@ -47,8 +47,8 @@ class MaterialManipulator(Module):
                                              "Type: list."
        "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
        "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
-                   "name of the input (use '_' if those are represented by multyple nodes, "
-                   "e.g. 'Base Color' -> 'base_color')."
+                   "name of the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> "
+                   "'base_color'). Also deletes any links to this shader's input point."
     """
 
     def __init__(self, config):
@@ -183,12 +183,15 @@ class MaterialManipulator(Module):
     @staticmethod
     def _set_principled_shader_value(material, shader_input_key, value):
         nodes = material.node_tree.nodes
+        links = material.node_tree.links
         principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-        shader_input_key = shader_input_key.replace("_", " ").title()
-        if shader_input_key in principled_bsdf.inputs:
-            principled_bsdf.inputs[shader_input_key].default_value = value
+        shader_input_key_copy = shader_input_key.replace("_", " ").title()
+        if principled_bsdf.inputs[shader_input_key_copy].links:
+            links.remove(principled_bsdf.inputs[shader_input_key_copy].links[0])
+        if shader_input_key_copy in principled_bsdf.inputs:
+            principled_bsdf.inputs[shader_input_key_copy].default_value = value
         else:
-            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key))
+            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key_copy))
 
     @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
