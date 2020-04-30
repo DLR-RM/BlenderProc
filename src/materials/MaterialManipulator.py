@@ -98,7 +98,7 @@ class MaterialManipulator(Module):
                 elif key_copy == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
-                elif key == "switch_to_emission_shader":
+                elif key_copy == "switch_to_emission_shader" and requested_cf:
                     self._switch_to_emission_shader(material, value)
                 elif "set_" in key and requested_cf:
                     # sets the value of the prinicipled shader
