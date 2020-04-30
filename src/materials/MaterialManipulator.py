@@ -46,6 +46,9 @@ class MaterialManipulator(Module):
        "cf_switch_to_emission_shader/color", "[R, G, B, A] vector representing the color of the emitted light. "
                                              "Type: list."
        "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
+       "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
+                   "name of the input (use '_' if those are represented by multyple nodes, "
+                   "e.g. 'Base Color' -> 'base_color')."
     """
 
     def __init__(self, config):
@@ -100,9 +103,9 @@ class MaterialManipulator(Module):
                     self._set_textures(loaded_textures, material)
                 elif key_copy == "switch_to_emission_shader" and requested_cf:
                     self._switch_to_emission_shader(material, value)
-                elif "set_" in key and requested_cf:
+                elif "set_" in key_copy and requested_cf:
                     # sets the value of the prinicipled shader
-                    self._set_principled_shader_value(material, key[len("set_"):], value)
+                    self._set_principled_shader_value(material, key_copy[len("set_"):], value)
                 elif hasattr(material, key):
                     # set the value
                     setattr(material, key, value)
@@ -139,7 +142,7 @@ class MaterialManipulator(Module):
                         attr_val = emission_conf.get_float("strength", 1.0)
                     result.update({emission_key: attr_val})
             elif "cf_set_" in key:
-                result = params_conf.get_float(key)
+                result = params_conf.get_raw_value(key)
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -181,7 +184,7 @@ class MaterialManipulator(Module):
     def _set_principled_shader_value(material, shader_input_key, value):
         nodes = material.node_tree.nodes
         principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-        shader_input_key = shader_input_key.capitalize()
+        shader_input_key = shader_input_key.replace("_", " ").title()
         if shader_input_key in principled_bsdf.inputs:
             principled_bsdf.inputs[shader_input_key].default_value = value
         else:
