@@ -84,7 +84,9 @@ class BopWriter(StateWriter):
                 for v in Euler(rotation_vector).to_matrix()[:]:
                     rot_matrix_as_list += list(v)
                 
-                scene_gt[frame].append({'cam_R_m2c': rot_matrix_as_list, 'cam_t_m2c': list(1000*self._get_object_attribute(obj, 'location')),'obj_id': self._get_object_attribute(obj, 'id')})
+                scene_gt[frame].append({'cam_R_m2c': rot_matrix_as_list,
+                                        'cam_t_m2c': list(1000*self._get_object_attribute(obj, 'location')),
+                                        'obj_id': self._get_object_attribute(obj, 'id')})
             with open(os.path.join(self._determine_output_dir(), 'scene_gt.json'), 'w') as scene_gt_file:
                 json.dump(scene_gt, scene_gt_file)
         
@@ -100,7 +102,8 @@ class BopWriter(StateWriter):
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             bpy.context.scene.frame_set(frame)
             frame += 1
-            scene_camera[frame] = {'cam_K': list(self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')), 'depth_scale': 0.001}
+            scene_camera[frame] = {'cam_K': list(self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')),
+                                   'depth_scale': 0.001}
             with open(os.path.join(self._determine_output_dir(), 'scene_camera.json'), 'w') as scene_camera_file:
                 json.dump(scene_camera, scene_camera_file)
 
@@ -117,7 +120,13 @@ class BopWriter(StateWriter):
             width = bpy.context.scene.render.resolution_x
             height = bpy.context.scene.render.resolution_y
 
-        camera = {'cx': self._get_camera_attribute(self.cam_pose, 'shift_x'), 'cy': self._get_camera_attribute(self.cam_pose, 'shift_y'), 'depth_scale': 0.001, 'fx': self._get_camera_attribute(self.cam_pose, 'fov_x'), 'fy': self._get_camera_attribute(self.cam_pose, 'fov_y'), 'height': height, 'width': width}
+        camera = {'cx': self._get_camera_attribute(self.cam_pose, 'shift_x'),
+                  'cy': self._get_camera_attribute(self.cam_pose, 'shift_y'),
+                  'depth_scale': 0.001,
+                  'fx': self._get_camera_attribute(self.cam_pose, 'fov_x'),
+                  'fy': self._get_camera_attribute(self.cam_pose, 'fov_y'),
+                  'height': height,
+                  'width': width}
         print(camera)
         with open(os.path.join(self._determine_output_dir(), 'camera.json'), 'w') as camera_file:
             json.dump(camera, camera_file)
