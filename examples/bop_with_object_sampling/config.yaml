@@ -17,23 +17,8 @@
         "global": {
           "output_dir": "<args:2>",
           "sys_paths": ["<args:1>"],
-          "resolution_x": 480,
-          "resolution_y": 640
-        }
-      }
-    },
-    {
-      "module": "loader.BopLoader",
-      "config": {
-        "bop_dataset_path": "<args:0>/lm",
-        "split": "val",
-        "mm2m": True,
-        "model_type": "",
-        "sample_objects": True,
-        "amount_to_sample": 10,
-        "obj_instances_limit": 1,
-        "add_properties" : {
-          "cp_physics": True
+          "resolution_x": 640,
+          "resolution_y": 480
         }
       }
     },
@@ -64,18 +49,17 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "loader.BopLoader",
       "config": {
-        "selector": {
-          "provider": "getter.Material",
-          "conditions": {
-            "name": "bop_lm_vertex_col_material.*"
-          }
-        },
-        "cf_set_base_color": {
-          "provider": "sampler.Color",
-          "min": [1, 0, 0, 1],
-          "max": [1, 1, 1, 1]
+        "bop_dataset_path": "<args:0>/lm",
+        "split": "val",
+        "mm2m": True,
+        "model_type": "",
+        "sample_objects": True,
+        "amount_to_sample": 8,
+        "obj_instances_limit": 1,
+        "add_properties": {
+          "cp_physics": True
         }
       }
     },
@@ -93,16 +77,40 @@
           }
           ]
         },
+        "cf_set_base_color": {
+          "provider": "sampler.Color",
+          "min": [0, 0, 0, 1],
+          "max": [1, 1, 1, 1]
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": [
+          {
+            "name": "bop_itodd_vertex_col_material.*"
+          },
+          {
+            "name": "bop_tless_vertex_col_material.*"
+          },
+          {
+            "name": "bop_lm_vertex_col_material.*"
+          }
+          ]
+        },
         "cf_set_specular": {
           "provider": "sampler.Value",
           "type": "float",
-          "min": 0,
-          "max": 0.2
+          "min": 0.1,
+          "max": 1
         },
         "cf_set_roughness": {
           "provider": "sampler.Value",
           "type": "float",
-          "min": 0.5,
+          "min": 0.1,
           "max": 1
         }
       }
@@ -134,7 +142,8 @@
             "name": '.*plane.*'
           }
         },
-        "cp_physics": False
+        "cp_physics": False,
+        "cp_category_id": 333
       }
     },
     {
@@ -155,8 +164,8 @@
           "strength": {
             "provider": "sampler.Value",
             "type": "float",
-            "min": 20,
-            "max": 50
+            "min": 5,
+            "max": 10
           }
         }
       }
@@ -238,7 +247,7 @@
       "config": {
         "cam_poses": [
         {
-          "number_of_samples": 1,
+          "number_of_samples": 3,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
@@ -256,7 +265,7 @@
                 "conditions": {
                   "cp_model_path": ".*/lm/.*",
                   "cf_inside": {
-                    "z_min": 0,
+                    "z_min": 0
                   }
                 }
               },
