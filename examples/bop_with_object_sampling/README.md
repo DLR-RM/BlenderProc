@@ -264,7 +264,7 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
 ```
 
 * Sample 3 camera poses, where camera's location is sampled using `sampler.Shell` Provider, and camera's rotation is based on the output of the `getter.Attribute` Provider.
-* `getter.Attribute` Provider returns a `location` (`"get": "location"`) of the first (`"index": 0`) LM dataset (`"cp_model_path": ".*/lm/.*"`) object that has Z-axis location coordinate bigger than 0 (`"cf_inside": {"z_min": 0}`), which ensures, that it did not fall off the ground plane during physics animation.
+* `getter.Attribute` Provider returns a `location` (`"get": "location"`) of the first (`"index": 0`) LM dataset (`"cp_model_path": ".*/lm/.*"`) object.
 
 ## More examples
 
