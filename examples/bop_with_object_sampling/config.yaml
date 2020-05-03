@@ -1,4 +1,4 @@
-# Args: <bop_dataset_path> <bop_toolkit_path> <output_dir>
+# Args: <bop_dataset_path> <bop_toolkit_path> <path_to_cc_textures> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -15,7 +15,7 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:2>",
+          "output_dir": "<args:3>",
           "sys_paths": ["<args:1>"],
           "resolution_x": 640,
           "resolution_y": 480
@@ -174,7 +174,7 @@
     {
       "module": "loader.CCMaterialLoader",
       "config": {
-        "folder_path": "resources/cctextures"
+        "folder_path": "<args:2>"
       }
     },
     {
@@ -221,7 +221,7 @@
         "max_simulation_time": 10,
         "check_object_interval": 1,
         "solver_iters": 25,
-        "steps_per_sec": 100,
+        "steps_per_sec": 100
       }
     },
     {

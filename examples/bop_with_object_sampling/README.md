@@ -9,7 +9,7 @@ This example presents some advanced BlenderProc features used for BOP data integ
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/bop_with_object_sampling/config.yaml <path_to_bop_data> <path_to_bop_toolkit> examples/bop_with_object_sampling/output
+python run.py examples/bop_with_object_sampling/config.yaml <path_to_bop_data> <path_to_bop_toolkit> <path_to_cc_textures> examples/bop_with_object_sampling/output
 ``` 
 
 * `examples/bop_with_object_sampling/config.yaml`: path to the pipeline configuration file.
@@ -119,7 +119,8 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
         },
         "cf_set_base_color": {
           "provider": "sampler.Color",
-          "min": [0, 0, 0, 1],
+          "grey": True,
+          "min": [0.25, 0.25, 0.25, 1],
           "max": [1, 1, 1, 1]
         }
       }
@@ -187,6 +188,19 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
     },
 ```
 
+### CC Textures
+
+```yaml
+    {
+      "module": "loader.CCMaterialLoader",
+      "config": {
+        "folder_path": "<args:2>"
+      }
+    }
+```
+* Use the [script](../../scripts/download_cc_textures.py) to download the textures. Default [path](../../resources), pass it to the Loader.
+
+### Material Randomizer
 * For a default material of a light plane which was created during object's initialization, switch to a Emission shader and sample `color` and `strength` values of the emitted light.
 
 ```yaml
@@ -224,10 +238,10 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 1.5,
-            "radius_max": 2.0,
-            "elevation_min": 40,
-            "elevation_max": 89
+            "radius_min": 0.7,
+            "radius_max": 1.3,
+            "elevation_min": 25,
+            "elevation_max": 89.9
           },
           "rotation": {
             "format": "look_at",
@@ -236,10 +250,7 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
               "entities": {
                 "provider": "getter.Entity",
                 "conditions": {
-                  "cp_model_path": ".*/lm/.*",
-                  "cf_inside": {
-                    "z_min": 0
-                  }
+                  "cp_model_path": ".*/lm/.*"
                 }
               },
               "index": 0,
