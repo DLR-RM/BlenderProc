@@ -102,33 +102,28 @@ class BopLoader(Loader):
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
             # if sampling is enabled
             if self.sample_objects:
-                # but the instance limit is not - load the requested amount of objects with repetitions
-                if self.obj_instances_limit == -1:
-                    for i in range(self.num_of_objs_to_sample):
-                        random_id = choice(obj_ids)
+                loaded_ids = {}
+                loaded_amount = 0
+                if self.obj_instances_limit != -1 and len(obj_ids) * self.obj_instances_limit < self.num_of_objs_to_sample:
+                    raise RuntimeError("{}'s {} split contains {} objects, {} object where requested to sample with "
+                                       "an instances limit of {}. Raise the limit amount or decrease the requested "
+                                       "amount of objects.".format(bop_dataset_path, split, len(obj_ids),
+                                                                   self.num_of_objs_to_sample,
+                                                                   self.obj_instances_limit))
+                while loaded_amount != self.num_of_objs_to_sample:
+                    random_id = choice(obj_ids)
+                    if random_id not in loaded_ids.keys():
+                        loaded_ids.update({random_id: 0})
+                    # if there is no limit or if there is one, but it is not reached for this particular object
+                    if self.obj_instances_limit == -1 or loaded_ids[random_id] < self.obj_instances_limit:
                         self._load_mesh(random_id, model_p, dataset, scale=scale)
+                        loaded_ids[random_id] += 1
+                        loaded_amount += 1
                         loaded_objects.append(bpy.context.object)
-                else:
-                    loaded_ids = {}
-                    loaded_amount = 0
-                    if len(obj_ids) * self.obj_instances_limit < self.num_of_objs_to_sample:
-                        raise RuntimeError("{}'s {} split contains {} objects, {} object where requested to sample with "
-                                           "an instances limit of {}. Raise the limit amount or decrease the requested "
-                                           "amount of objects.".format(bop_dataset_path, split, len(obj_ids),
-                                                                       self.num_of_objs_to_sample, self.obj_instances_limit))
-                    while loaded_amount != self.num_of_objs_to_sample:
-                        random_id = choice(obj_ids)
-                        if random_id not in loaded_ids:
-                            loaded_ids.update({random_id: 0})
-                        if loaded_ids[random_id] < self.obj_instances_limit:
-                            self._load_mesh(random_id, model_p, dataset, scale=scale)
-                            loaded_ids[random_id] += 1
-                            loaded_amount += 1
-                            loaded_objects.append(bpy.context.object)
-                        else:
-                            print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
-                                  "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
-                                                           loaded_amount, self.num_of_objs_to_sample))
+                    else:
+                        print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
+                              "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
+                                                       loaded_amount, self.num_of_objs_to_sample))
             else:
                 for obj_id in obj_ids:
                     self._load_mesh(obj_id, model_p, dataset, scale=scale)
@@ -238,21 +233,19 @@ class BopLoader(Loader):
         return (cam_K, cam_H_m2c_ref)
 
     def _get_loaded_obj(self, model_path):
-        """ Returns the object if it has already been loaded if object sampling is enabled and instances limit is
-            disabled.
+        """ Returns the object if it has already been loaded.
  
         :param model_path: model path of the new object
         :return: object if found, else return None
 
         """
-        if not self.sample_objects:
-            for loaded_obj in bpy.context.scene.objects:
-                if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
-                    return loaded_obj
+        for loaded_obj in bpy.context.scene.objects:
+            if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
+                return loaded_obj
         return
 
-    def _load_mesh(self, obj_id, model_p, dataset, scale = 1):
-        """ Loads or copies BOP mesh and sets category_id
+    def _load_mesh(self, obj_id, model_p, dataset, scale=1):
+        """ Loads BOP mesh and sets category_id
 
         :param obj_id: The obj_id of the BOP Object (int)
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit
@@ -263,8 +256,8 @@ class BopLoader(Loader):
 
         # Gets the objects if it is already loaded         
         cur_obj = self._get_loaded_obj(model_path)
-        
-        if cur_obj is None:
+        # if sampling is enabled or the object was not previously loaded
+        if self.sample_objects or cur_obj is None:
             bpy.ops.import_mesh.ply(filepath = model_path)
             cur_obj = bpy.context.selected_objects[-1]
 
