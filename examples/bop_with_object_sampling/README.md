@@ -188,7 +188,9 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
     },
 ```
 
-### CC Textures
+* For a default material of a light plane which was created during object's initialization, switch to a Emission shader and sample `color` and `strength` values of the emitted light.
+
+### CC Material Loader
 
 ```yaml
     {
@@ -198,10 +200,10 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
       }
     }
 ```
+
 * Use the [script](../../scripts/download_cc_textures.py) to download the textures. Default [path](../../resources), pass it to the Loader.
 
 ### Material Randomizer
-* For a default material of a light plane which was created during object's initialization, switch to a Emission shader and sample `color` and `strength` values of the emitted light.
 
 ```yaml
     {
