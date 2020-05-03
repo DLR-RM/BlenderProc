@@ -46,7 +46,7 @@ class BopLoader(Loader):
 
         self.sample_objects = self.config.get_bool("sample_objects", False)
         if self.sample_objects:
-            self.amount_to_sample = self.config.get_int("amount_to_sample")
+            self.num_of_objs_to_sample = self.config.get_int("num_of_objs_to_sample")
             self.obj_instances_limit = self.config.get_int("obj_instances_limit", -1)
         
     def run(self):
@@ -104,19 +104,19 @@ class BopLoader(Loader):
             if self.sample_objects:
                 # but the instance limit is not - load the requested amount of objects with repetitions
                 if self.obj_instances_limit == -1:
-                    for i in range(self.amount_to_sample):
+                    for i in range(self.num_of_objs_to_sample):
                         random_id = choice(obj_ids)
                         self._load_mesh(random_id, model_p, dataset, scale=scale)
                         loaded_objects.append(bpy.context.object)
                 else:
                     loaded_ids = {}
                     loaded_amount = 0
-                    if len(obj_ids) * self.obj_instances_limit < self.amount_to_sample:
+                    if len(obj_ids) * self.obj_instances_limit < self.num_of_objs_to_sample:
                         raise RuntimeError("{}'s {} split contains {} objects, {} object where requested to sample with "
                                            "an instances limit of {}. Raise the limit amount or decrease the requested "
                                            "amount of objects.".format(bop_dataset_path, split, len(obj_ids),
-                                                                       self.amount_to_sample, self.obj_instances_limit))
-                    while loaded_amount != self.amount_to_sample:
+                                                                       self.num_of_objs_to_sample, self.obj_instances_limit))
+                    while loaded_amount != self.num_of_objs_to_sample:
                         random_id = choice(obj_ids)
                         if random_id not in loaded_ids:
                             loaded_ids.update({random_id: 0})
@@ -128,7 +128,7 @@ class BopLoader(Loader):
                         else:
                             print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
                                   "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
-                                                           loaded_amount, self.amount_to_sample))
+                                                           loaded_amount, self.num_of_objs_to_sample))
             else:
                 for obj_id in obj_ids:
                     self._load_mesh(obj_id, model_p, dataset, scale=scale)
