@@ -79,7 +79,8 @@
         },
         "cf_set_base_color": {
           "provider": "sampler.Color",
-          "min": [0, 0, 0, 1],
+          "grey": True,
+          "min": [0.25, 0.25, 0.25, 1],
           "max": [1, 1, 1, 1]
         }
       }
@@ -122,13 +123,13 @@
         {
           "type": "plane",
           "name": "ground_plane",
-          "scale": [10, 10, 1]
+          "scale": [2, 2, 1]
         },
         {
           "type": "plane",
           "name": "light_plane",
           "location": [0, 0, 10],
-          "scale": [10, 10, 1]
+          "scale": [3, 3, 1]
         }
         ]
       }
@@ -205,8 +206,8 @@
         },
         "pos_sampler":{
           "provider":"sampler.Uniform3d",
-          "max":[0.3, 0.3, 1],
-          "min":[-0.3, -0.3, 0.5]
+          "max":[0.2, 0.2, 0.5],
+          "min":[-0.2, -0.2, 0.2]
         },
         "rot_sampler":{
           "provider":"sampler.UniformSO3"
@@ -216,11 +217,11 @@
     {
       "module": "object.PhysicsPositioning",
       "config": {
-        "min_simulation_time": 2,
-        "max_simulation_time": 3,
+        "min_simulation_time": 3,
+        "max_simulation_time": 10,
         "check_object_interval": 1,
         "solver_iters": 25,
-        "steps_per_sec": 100
+        "steps_per_sec": 100,
       }
     },
     {
@@ -230,10 +231,10 @@
         {
           "location": {
             "provider": "sampler.Shell",
-            "center": [0, 0, -0.8],
+            "center": [0, 0, 0],
             "radius_min": 2,
-            "radius_max": 4,
-            "elevation_min": 40,
+            "radius_max": 8,
+            "elevation_min": 1,
             "elevation_max": 89
           },
           "type": "POINT",
@@ -251,10 +252,10 @@
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 1.5,
-            "radius_max": 2.0,
-            "elevation_min": 40,
-            "elevation_max": 89
+            "radius_min": 0.7,
+            "radius_max": 1.3,
+            "elevation_min": 25,
+            "elevation_max": 89.9
           },
           "rotation": {
             "format": "look_at",
