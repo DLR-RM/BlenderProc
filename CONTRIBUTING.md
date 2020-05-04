@@ -124,12 +124,26 @@ This way you are required to apply the following patterns:
 * Pipeline Module Description
 
 Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide csv tables with parameter description/explanation along with general module description.
-For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the default value of this parameter), and mention the range of applicable values.
+After general description, give a couple of examples with short explanation, try to show off all parameters in them. For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the default value of this parameter), and mention the range of applicable values.
 
 ```python
 class MyNewPipelineModule(Loader):
     """ This module is doing this, this, and this, while incorporating that.
     
+        Example 1: Explain what happens
+
+        {
+          "some": "config",
+          "example": "here"
+        }
+
+        Example 2: Explain this more complex example
+        
+        {
+          "some": "more",
+          "complex": "example"
+        }
+
     **Table for a part of config**:
     
     .. csv-table::
