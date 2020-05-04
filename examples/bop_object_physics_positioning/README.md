@@ -9,20 +9,21 @@ This example presents some advanced BlenderProc features used for BOP data integ
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/bop_with_object_sampling/config.yaml <path_to_bop_data> <path_to_bop_toolkit> <path_to_cc_textures> examples/bop_with_object_sampling/output
+python run.py examples/bop_object_physics_positioning/config.yaml <path_to_bop_data> <path_to_bop_toolkit> <path_to_cc_textures> examples/bop_object_physics_positioning/output
 ``` 
 
-* `examples/bop_with_object_sampling/config.yaml`: path to the pipeline configuration file.
+* `examples/bop_object_physics_positioning/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
-* `examples/bop_with_object_sampling/output`: path to an output folder.
+* `<path_to_cc_textures>`: path to CCTextures folder.
+* `examples/bop_object_physics_positioning/output`: path to an output folder.
 
 ## Visualization
 
 Visualize the generated data if it is stored in a container.
 
 ```
-python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_data/0.hdf5
+python scripts/visHdf5Files.py examples/bop_object_physics_positioning/output/coco_data/0.hdf5
 ```
 
 ## Steps
