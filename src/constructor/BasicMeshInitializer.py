@@ -6,8 +6,8 @@ from src.utility.Config import Config
 
 class BasicMeshInitializer(Module):
     """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. For more precise
-        and powerful mesh manipulation use manipulators.EntityManipulator module.
-        Can enable default 'Principled BSDF' shader-based material for each of those meshes.
+        and powerful object manipulation use manipulators.EntityManipulator module.
+        Can enable default 'Principled BSDF' shader-based material for each of added objects.
 
         Example 1: add a Plane mesh "Ground_plane" to the scene.
 
@@ -56,7 +56,7 @@ class BasicMeshInitializer(Module):
 
        "meshes_to_add", "List that contains a mesh configuration data in each cell. See table below for available "
                         "parameters per cell. Type: list."
-       "init_materials", "Flag that controls whether the added (if True) meshes will be assigned a default Principled "
+       "init_materials", "Flag that controls whether the added (if True) objects will be assigned a default Principled "
                          "BSDF shader-based material, or not (if False). Material name is derived from the object name "
                          "(plus a "_material" suffix). Optional. Default value: True. Type: boolean."
 
@@ -80,67 +80,67 @@ class BasicMeshInitializer(Module):
     def run(self):
         """ Adds specified basic meshes to the scene and sets at least their names to the user-defined ones. """
         meshes_to_add = self.config.get_list("meshes_to_add")
-        init_meshes_mats = self.config.get_bool("init_materials", True)
+        init_objs_mats = self.config.get_bool("init_materials", True)
         for mesh in meshes_to_add:
             mesh_conf = Config(mesh)
-            mesh_type = mesh_conf.get_string("type")
-            mesh_name = mesh_conf.get_string("name")
-            mesh_location = mesh_conf.get_vector3d("location", [0, 0, 0])
-            mesh_rotation = mesh_conf.get_vector3d("rotation", [0, 0, 0])
-            mesh_scale = mesh_conf.get_vector3d("scale", [1, 1, 1])
-            new_mesh = self._add_mesh(mesh_type)
-            self._set_attrs(new_mesh, mesh_name, mesh_location, mesh_rotation, mesh_scale)
-            if init_meshes_mats:
-                self._init_material(mesh_name)
+            obj_type = mesh_conf.get_string("type")
+            obj_name = mesh_conf.get_string("name")
+            obj_location = mesh_conf.get_vector3d("location", [0, 0, 0])
+            obj_rotation = mesh_conf.get_vector3d("rotation", [0, 0, 0])
+            obj_scale = mesh_conf.get_vector3d("scale", [1, 1, 1])
+            new_obj = self._add_obj(obj_type)
+            self._set_attrs(new_obj, obj_name, obj_location, obj_rotation, obj_scale)
+            if init_objs_mats:
+                self._init_material(obj_name)
 
-    def _add_mesh(self, mesh_type):
+    def _add_obj(self, obj_type):
         """ Adds a mesh to the scene.
 
-        :param mesh_type: Type of the mesh to add. Type: string.
+        :param obj_type: Type of the object to add. Type: string.
         """
-        if mesh_type == "plane":
+        if obj_type == "plane":
             bpy.ops.mesh.primitive_plane_add()
-        elif mesh_type == "cube":
+        elif obj_type == "cube":
             bpy.ops.mesh.primitive_cube_add()
-        elif mesh_type == "circle":
+        elif obj_type == "circle":
             bpy.ops.mesh.primitive_circle_add()
-        elif mesh_type == "uvsphere":
+        elif obj_type == "uvsphere":
             bpy.ops.mesh.primitive_uv_sphere_add()
-        elif mesh_type == "icosphere":
+        elif obj_type == "icosphere":
             bpy.ops.mesh.primitive_ico_sphere_add()
-        elif mesh_type == "cylinder":
+        elif obj_type == "cylinder":
             bpy.ops.mesh.primitive_cylinder_add()
-        elif mesh_type == "cone":
+        elif obj_type == "cone":
             bpy.ops.mesh.primitive_cone_add()
-        elif mesh_type == "torus":
+        elif obj_type == "torus":
             bpy.ops.mesh.primitive_torus_add()
         else:
             raise RuntimeError('Unknown basic mesh type "{}"! Available types: "plane", "cube", "circle", "uvsphere", '
                                '"icosphere", "cylinder", "cone", "torus".'.format(type))
 
-        new_mesh = bpy.context.object
+        new_obj = bpy.context.object
 
-        return new_mesh
+        return new_obj
 
-    def _set_attrs(self, new_mesh, mesh_name, mesh_location, mesh_rotation, mesh_scale):
-        """ Sets the attribute values of the added mesh.
+    def _set_attrs(self, new_obj, obj_name, obj_location, obj_rotation, obj_scale):
+        """ Sets the attribute values of the added object.
 
-        :param new_mesh: New mesh object to modify.
-        :param mesh_name: Name of the mesh. Type: string.
-        :param mesh_location: XYZ location of the mesh. Type: mathutils.Vector.
-        :param mesh_rotation: Rotation (3 Euler angles) of the mesh. Type: mathutils.Vector.
-        :param mesh_scale: Scale of the mesh. Type: mathutils.Vector.
+        :param new_obj: New object to modify.
+        :param obj_name: Name of the object. Type: string.
+        :param obj_location: XYZ location of the object. Type: mathutils.Vector.
+        :param obj_rotation: Rotation (3 Euler angles) of the object. Type: mathutils.Vector.
+        :param obj_scale: Scale of the object. Type: mathutils.Vector.
         """
-        new_mesh.name = mesh_name
-        new_mesh.location = mesh_location
-        new_mesh.rotation_euler = mesh_rotation
-        new_mesh.scale = mesh_scale
+        new_obj.name = obj_name
+        new_obj.location = obj_location
+        new_obj.rotation_euler = obj_rotation
+        new_obj.scale = obj_scale
 
-    def _init_material(self, mesh_name):
+    def _init_material(self, obj_name):
         """ Adds a new default material and assigns it to the added mesh object.
 
-        :param mesh_name: Name of the mesh object. Type: string.
+        :param objname: Name of the object. Type: string.
         """
-        mat_obj = bpy.data.materials.new(name=mesh_name+"_material")
+        mat_obj = bpy.data.materials.new(name=obj_name+"_material")
         mat_obj.use_nodes = True
         bpy.context.object.data.materials.append(mat_obj)
