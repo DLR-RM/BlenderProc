@@ -41,6 +41,14 @@ class MaterialManipulator(Module):
                       "to a ShaderTexImage node that will be linked to this input. Label represents to which shader "
                       "input this node is connected. Type: dict."
        "cf_textures/texture_path", "Path to a texture image. Type: string."
+       "cf_switch_to_emission_shader", "Adds the Emission shader to the target material, sets it's color and strength "
+                                       "values, connects it to the Material Output node. Type: dict."
+       "cf_switch_to_emission_shader/color", "[R, G, B, A] vector representing the color of the emitted light. "
+                                             "Type: list."
+       "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
+       "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
+                   "name of the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> "
+                   "'base_color'). Also deletes any links to this shader's input point."
     """
 
     def __init__(self, config):
@@ -93,9 +101,11 @@ class MaterialManipulator(Module):
                 elif key_copy == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
-                elif "set_" in key and requested_cf:
+                elif key_copy == "switch_to_emission_shader" and requested_cf:
+                    self._switch_to_emission_shader(material, value)
+                elif "set_" in key_copy and requested_cf:
                     # sets the value of the prinicipled shader
-                    self._set_principled_shader_value(material, key[len("set_"):], value)
+                    self._set_principled_shader_value(material, key_copy[len("set_"):], value)
                 elif hasattr(material, key):
                     # set the value
                     setattr(material, key, value)
@@ -122,8 +132,17 @@ class MaterialManipulator(Module):
                 for text_key in paths_conf.data.keys():
                     text_path = paths_conf.get_string(text_key)
                     result.update({text_key: text_path})
+            elif key == "cf_switch_to_emission_shader":
+                result = {}
+                emission_conf = Config(params_conf.get_raw_dict(key))
+                for emission_key in emission_conf.data.keys():
+                    if emission_key == "color":
+                        attr_val = emission_conf.get_list("color", [1, 1, 1, 1])
+                    elif emission_key == "strength":
+                        attr_val = emission_conf.get_float("strength", 1.0)
+                    result.update({emission_key: attr_val})
             elif "cf_set_" in key:
-                result = params_conf.get_float(key)
+                result = params_conf.get_raw_value(key)
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -164,12 +183,15 @@ class MaterialManipulator(Module):
     @staticmethod
     def _set_principled_shader_value(material, shader_input_key, value):
         nodes = material.node_tree.nodes
+        links = material.node_tree.links
         principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-        shader_input_key = shader_input_key.capitalize()
-        if shader_input_key in principled_bsdf.inputs:
-            principled_bsdf.inputs[shader_input_key].default_value = value
+        shader_input_key_copy = shader_input_key.replace("_", " ").title()
+        if principled_bsdf.inputs[shader_input_key_copy].links:
+            links.remove(principled_bsdf.inputs[shader_input_key_copy].links[0])
+        if shader_input_key_copy in principled_bsdf.inputs:
+            principled_bsdf.inputs[shader_input_key_copy].default_value = value
         else:
-            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key))
+            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key_copy))
 
     @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
@@ -217,3 +239,17 @@ class MaterialManipulator(Module):
         else:
             raise Exception("The material: {} has no node connected to the output, "
                             "which has as an input Base Color".format(material.name))
+
+    def _switch_to_emission_shader(self, material, value):
+        """ Adds the Emission shader to the target material, sets it's color and strength values, connects it to
+            the Material Output node.
+
+        :param material: Target material to edit.
+        :param value: Dict containing {'color': color_value} and {'strength': strength_value} pairs.
+        """
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+        emission_node = nodes.new("ShaderNodeEmission")
+        nodes["Emission"].inputs["Color"].default_value = value["color"]
+        nodes["Emission"].inputs["Strength"].default_value = value["strength"]
+        links.new(nodes["Emission"].outputs["Emission"], nodes["Material Output"].inputs["Surface"])

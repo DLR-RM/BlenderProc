@@ -8,22 +8,22 @@ This example shows how to load BOP objects and alternatingly sample light poses,
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-In [examples/bop_sampling/config.yaml](config.yaml) add the path to your bop_toolkit clone to `sys_paths` and set the `blender_install_path` where Blender should be installed.
+In [examples/bop_object_pose_sampling/config.yaml](config.yaml) add the path to your bop_toolkit clone to `sys_paths` and set the `blender_install_path` where Blender should be installed.
 
 Execute in the BlenderProc main directory:  
 
 ```
-python run.py examples/bop_sampling/config.yaml <path_to_bop_data> examples/bop_sampling/output
+python run.py examples/bop_object_pose_sampling/config.yaml <path_to_bop_data> examples/bop_object_pose_sampling/output
 ```
-* `examples/bop_sampling/config.yaml`: path to the pipeline configuration file.
+* `examples/bop_object_pose_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a BOP dataset
-* `examples/bop_sampling/output`: path to the output directory.
+* `examples/bop_object_pose_sampling/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data and labels:
 ```
-python scripts/visHdf5Files.py examples/bop_sampling/output/0.hdf5
+python scripts/visHdf5Files.py examples/bop_object_pose_sampling/output/0.hdf5
 ```
 
 ## Steps

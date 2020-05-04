@@ -7,13 +7,15 @@ import bpy
 import numpy as np
 import sys
 from copy import deepcopy
+from random import choice
 
-from src.main.Module import Module
+from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 from src.camera.CameraModule import CameraModule
 
-class BopLoader(Module):
+
+class BopLoader(Loader):
     """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
     
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -29,15 +31,23 @@ class BopLoader(Module):
        "mm2m", "Specify whether to convert poses and models to meters (default: False)"
        "split", "Optionally, test or val split depending on BOP dataset (default: test)"
        "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is replicated, only BOP Objects are loaded)"
+       "sample_objects", "Toggles object sampling from the specified dataset. optional. Default value: False. Type: boolean."
+       "amount_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is bigger than the dataset actually contains, then all objects will be loaded."
+       "obj_instances_limit", "Limits the amount of object copies when sampling. Optional. Default value: -1 (no limit)."
        "obj_ids", "Iff scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects from the given BOP dataset)"
        "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval"
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        Loader.__init__(self, config)
         for sys_path in self.config.get_list("sys_paths"):
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
+
+        self.sample_objects = self.config.get_bool("sample_objects", False)
+        if self.sample_objects:
+            self.num_of_objs_to_sample = self.config.get_int("num_of_objs_to_sample")
+            self.obj_instances_limit = self.config.get_int("obj_instances_limit", -1)
         
     def run(self):
         """ Load BOP data """ 
@@ -85,11 +95,42 @@ class BopLoader(Module):
         camera_module = CameraModule(config)
         camera_module._set_cam_intrinsics(cam, config)
 
+        loaded_objects = []
+
         #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
-            for obj_id in obj_ids:
-                self._load_mesh(obj_id, model_p, scale=scale)
+            # if sampling is enabled
+            if self.sample_objects:
+                loaded_ids = {}
+                loaded_amount = 0
+                if self.obj_instances_limit != -1 and len(obj_ids) * self.obj_instances_limit < self.num_of_objs_to_sample:
+                    raise RuntimeError("{}'s {} split contains {} objects, {} object where requested to sample with "
+                                       "an instances limit of {}. Raise the limit amount or decrease the requested "
+                                       "amount of objects.".format(bop_dataset_path, split, len(obj_ids),
+                                                                   self.num_of_objs_to_sample,
+                                                                   self.obj_instances_limit))
+                while loaded_amount != self.num_of_objs_to_sample:
+                    random_id = choice(obj_ids)
+                    if random_id not in loaded_ids.keys():
+                        loaded_ids.update({random_id: 0})
+                    # if there is no limit or if there is one, but it is not reached for this particular object
+                    if self.obj_instances_limit == -1 or loaded_ids[random_id] < self.obj_instances_limit:
+                        self._load_mesh(random_id, model_p, dataset, scale=scale)
+                        loaded_ids[random_id] += 1
+                        loaded_amount += 1
+                        loaded_objects.append(bpy.context.object)
+                    else:
+                        print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
+                              "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
+                                                       loaded_amount, self.num_of_objs_to_sample))
+            else:
+                for obj_id in obj_ids:
+                    self._load_mesh(obj_id, model_p, dataset, scale=scale)
+                    loaded_objects.append(bpy.context.object)
+
+            self._set_properties(loaded_objects)
+
         # replicate scene: load scene objects, object poses, camera intrinsics and camera poses
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id':scene_id}))
@@ -115,7 +156,7 @@ class BopLoader(Module):
                 # Store new cam pose as next frame
                 frame_id = bpy.context.scene.frame_end
                 for inst in insts:                           
-                    cur_obj = self._load_mesh(inst['obj_id'], model_p)
+                    cur_obj = self._load_mesh(inst['obj_id'], model_p, dataset)
                     self.set_object_pose(cur_obj, inst, scale)
                     self._insert_key_frames(cur_obj, frame_id)
 
@@ -192,19 +233,19 @@ class BopLoader(Module):
         return (cam_K, cam_H_m2c_ref)
 
     def _get_loaded_obj(self, model_path):
-        """ Returns the object if it has already been loaded
+        """ Returns the object if it has already been loaded.
  
         :param model_path: model path of the new object
         :return: object if found, else return None
 
         """
         for loaded_obj in bpy.context.scene.objects:
-           if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path: 
+            if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
                 return loaded_obj
         return
 
-    def _load_mesh(self, obj_id, model_p, scale = 1):
-        """ Loads or copies BOP mesh and sets category_id
+    def _load_mesh(self, obj_id, model_p, dataset, scale=1):
+        """ Loads BOP mesh and sets category_id
 
         :param obj_id: The obj_id of the BOP Object (int)
         :param model_p: model parameters defined in dataset_params.py in bop_toolkit
@@ -215,20 +256,20 @@ class BopLoader(Module):
 
         # Gets the objects if it is already loaded         
         cur_obj = self._get_loaded_obj(model_path)
-        
-        if cur_obj is None:
+        # if sampling is enabled or the object was not previously loaded
+        if self.sample_objects or cur_obj is None:
             bpy.ops.import_mesh.ply(filepath = model_path)
             cur_obj = bpy.context.selected_objects[-1]
 
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path     
-        mat = self._load_materials(cur_obj)
+        mat = self._load_materials(cur_obj, dataset)
         self._link_col_node(mat)
 
         return cur_obj
 
-    def _load_materials(self, cur_obj):
+    def _load_materials(self, cur_obj, dataset):
         """ Loads / defines materials, e.g. vertex colors 
         
         :param object: The object to use.
@@ -239,7 +280,7 @@ class BopLoader(Module):
         
         if mat is None:
             # create material
-            mat = bpy.data.materials.new(name="bop_vertex_col_material")
+            mat = bpy.data.materials.new(name="bop_" + dataset + "_vertex_col_material")
 
         mat.use_nodes = True
 
