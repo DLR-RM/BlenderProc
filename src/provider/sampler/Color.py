@@ -35,7 +35,7 @@ class Color(Provider):
 
         color = mathutils.Vector([0, 0, 0, 0])
         for i in range(4):
-            if all([0 <= min[i] <= 1, 0 <= max[i] <= 1]):
+            if 0 <= min[i] <= 1 and 0 <= max[i] <= 1:
                 if grey and 0 < i < 3:
                     color[i] = color[i-1]
                 else:

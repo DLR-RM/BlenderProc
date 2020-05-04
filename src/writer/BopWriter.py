@@ -127,7 +127,7 @@ class BopWriter(StateWriter):
                   'fy': self._get_camera_attribute(self.cam_pose, 'fov_y'),
                   'height': height,
                   'width': width}
-        print(camera)
+
         with open(os.path.join(self._determine_output_dir(), 'camera.json'), 'w') as camera_file:
             json.dump(camera, camera_file)
 

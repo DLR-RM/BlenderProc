@@ -250,6 +250,7 @@ class MaterialManipulator(Module):
         nodes = material.node_tree.nodes
         links = material.node_tree.links
         emission_node = nodes.new("ShaderNodeEmission")
-        nodes["Emission"].inputs["Color"].default_value = value["color"]
-        nodes["Emission"].inputs["Strength"].default_value = value["strength"]
-        links.new(nodes["Emission"].outputs["Emission"], nodes["Material Output"].inputs["Surface"])
+        mat_output = Utility.get_the_one_node_with_type(nodes, "ShaderNodeOutputMaterial")
+        emission_node.inputs["Color"].default_value = value["color"]
+        emission_node.inputs["Strength"].default_value = value["strength"]
+        links.new(emission_node.outputs["Emission"], mat_output.inputs["Surface"])
