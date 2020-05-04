@@ -5,11 +5,11 @@ from src.utility.Config import Config
 
 
 class BasicMeshInitializer(Module):
-    """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. For more precise
-        and powerful object manipulation use manipulators.EntityManipulator module.
-        Can enable default 'Principled BSDF' shader-based material for each of added objects.
+    """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. Can initialize a
+        default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
+        manipulation use manipulators.EntityManipulator module.
 
-        Example 1: add a Plane mesh "Ground_plane" to the scene.
+        Example 1: add a Plane "Ground_plane" object to the scene.
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -23,8 +23,8 @@ class BasicMeshInitializer(Module):
           }
         }
 
-        Example 2: add a rotated "Cube_1" Cube mesh, a displaced "Torus_2" Torus mesh, and a scaled "Cone_3" objects to
-                   the scene.
+        Example 2: add a rotated "Cube_1" Cube object, a displaced "Torus_2" Torus object, and a scaled "Cone_3" Cone
+                   object to the scene.
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -54,11 +54,12 @@ class BasicMeshInitializer(Module):
     .. csv-table::
        :header: "Keyword", "Description"
 
-       "meshes_to_add", "List that contains a mesh configuration data in each cell. See table below for available "
+       "meshes_to_add", "List that contains object configuration data in each cell. See table below for available "
                         "parameters per cell. Type: list."
-       "init_materials", "Flag that controls whether the added (if True) objects will be assigned a default Principled "
-                         "BSDF shader-based material, or not (if False). Material name is derived from the object name "
-                         "(plus a "_material" suffix). Optional. Default value: True. Type: boolean."
+       "init_materials", "Flag that controls whether the added objects will be assigned a default Principled BSDF "
+                         "shader-based material (if value is True), or not (if value is False). Material name is "
+                         "derived from the object name (plus a "_material" suffix). Optional. Default value: True. "
+                         "Type: boolean."
 
     **meshes_to_add cell configuration**:
 
@@ -78,7 +79,12 @@ class BasicMeshInitializer(Module):
         Module.__init__(self, config)
 
     def run(self):
-        """ Adds specified basic meshes to the scene and sets at least their names to the user-defined ones. """
+        """ Adds specified basic mesh objects to the scene and sets at least their names to the user-defined ones.
+            1. Get configuration parameters' values.
+            2. Add an object.
+            3. Set attribute values.
+            4. Initialize a material, if needed.
+        """
         meshes_to_add = self.config.get_list("meshes_to_add")
         init_objs_mats = self.config.get_bool("init_materials", True)
         for mesh in meshes_to_add:
@@ -94,9 +100,10 @@ class BasicMeshInitializer(Module):
                 self._init_material(obj_name)
 
     def _add_obj(self, obj_type):
-        """ Adds a mesh to the scene.
+        """ Adds an object to the scene.
 
         :param obj_type: Type of the object to add. Type: string.
+        :return: Added object. Type: bpy.types.Object.
         """
         if obj_type == "plane":
             bpy.ops.mesh.primitive_plane_add()
@@ -125,7 +132,7 @@ class BasicMeshInitializer(Module):
     def _set_attrs(self, new_obj, obj_name, obj_location, obj_rotation, obj_scale):
         """ Sets the attribute values of the added object.
 
-        :param new_obj: New object to modify.
+        :param new_obj: New object to modify. Type: bpy.types.Object.
         :param obj_name: Name of the object. Type: string.
         :param obj_location: XYZ location of the object. Type: mathutils.Vector.
         :param obj_rotation: Rotation (3 Euler angles) of the object. Type: mathutils.Vector.
@@ -139,7 +146,7 @@ class BasicMeshInitializer(Module):
     def _init_material(self, obj_name):
         """ Adds a new default material and assigns it to the added mesh object.
 
-        :param objname: Name of the object. Type: string.
+        :param obj_name: Name of the object. Type: string.
         """
         mat_obj = bpy.data.materials.new(name=obj_name+"_material")
         mat_obj.use_nodes = True
