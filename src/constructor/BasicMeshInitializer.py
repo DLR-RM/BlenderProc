@@ -52,27 +52,27 @@ class BasicMeshInitializer(Module):
     **Configuration**:
 
     .. csv-table::
-       :header: "Keyword", "Description"
+        :header: "Keyword", "Description"
 
-       "meshes_to_add", "List that contains object configuration data in each cell. See table below for available "
-                        "parameters per cell. Type: list."
-       "init_materials", "Flag that controls whether the added objects will be assigned a default Principled BSDF "
-                         "shader-based material (if value is True), or not (if value is False). Material name is "
-                         "derived from the object name (plus a "_material" suffix). Optional. Default value: True. "
-                         "Type: boolean."
+        "meshes_to_add", "List that contains object configuration data in each cell. See table below for available "
+                         "parameters per cell. Type: list."
+        "init_materials", "Flag that controls whether the added objects will be assigned a default Principled BSDF "
+                          "shader-based material (if value is True), or not (if value is False). Material name is "
+                          "derived from the object name (plus a "_material" suffix). Optional. Default value: True. "
+                          "Type: boolean."
 
     **meshes_to_add cell configuration**:
 
     .. csv-table::
-       :header: "Keyword", "Description"
+        :header: "Keyword", "Description"
 
-       "type", "Type of mesh object to add. Available types: 'plane', 'cube', 'circle', 'uvsphere', 'icosphere', "
-               "'cylinder', 'cone', 'torus'. Type: string."
-       "name", "Name of the mesh object. Type: string."
-       "location", "Location of the mesh object. Optional. Default value: [0, 0, 0]. Type: mathutils.Vector."
-       "rotation", "Rotation (3 Euler angles) of the mesh object. Optional. Default value: [0, 0, 0]. "
-                   "Type: mathutils.Vector."
-       "scale", "Scale of the mesh object. Optional. Default value: [1, 1, 1]. Type: mathutils.Vector."
+        "type", "Type of mesh object to add. Available types: 'plane', 'cube', 'circle', 'uvsphere', 'icosphere', "
+                "'cylinder', 'cone', 'torus'. Type: string."
+        "name", "Name of the mesh object. Type: string."
+        "location", "Location of the mesh object. Optional. Default value: [0, 0, 0]. Type: mathutils.Vector."
+        "rotation", "Rotation (3 Euler angles) of the mesh object. Optional. Default value: [0, 0, 0]. "
+                    "Type: mathutils.Vector."
+        "scale", "Scale of the mesh object. Optional. Default value: [1, 1, 1]. Type: mathutils.Vector."
     """
 
     def __init__(self, config):
