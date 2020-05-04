@@ -88,8 +88,8 @@ class BasicMeshInitializer(Module):
             mesh_location = mesh_conf.get_vector3d("location", [0, 0, 0])
             mesh_rotation = mesh_conf.get_vector3d("rotation", [0, 0, 0])
             mesh_scale = mesh_conf.get_vector3d("scale", [1, 1, 1])
-            self._add_mesh(mesh_type)
-            self._set_attrs(mesh_name, mesh_location, mesh_rotation, mesh_scale)
+            new_mesh = self._add_mesh(mesh_type)
+            self._set_attrs(new_mesh, mesh_name, mesh_location, mesh_rotation, mesh_scale)
             if init_meshes_mats:
                 self._init_material(mesh_name)
 
@@ -118,18 +118,23 @@ class BasicMeshInitializer(Module):
             raise RuntimeError('Unknown basic mesh type "{}"! Available types: "plane", "cube", "circle", "uvsphere", '
                                '"icosphere", "cylinder", "cone", "torus".'.format(type))
 
-    def _set_attrs(self, mesh_name, mesh_location, mesh_rotation, mesh_scale):
+        new_mesh = bpy.context.object
+
+        return new_mesh
+
+    def _set_attrs(self, new_mesh, mesh_name, mesh_location, mesh_rotation, mesh_scale):
         """ Sets the attribute values of the added mesh.
 
+        :param new_mesh: New mesh object to modify.
         :param mesh_name: Name of the mesh. Type: string.
         :param mesh_location: XYZ location of the mesh. Type: mathutils.Vector.
         :param mesh_rotation: Rotation (3 Euler angles) of the mesh. Type: mathutils.Vector.
         :param mesh_scale: Scale of the mesh. Type: mathutils.Vector.
         """
-        bpy.context.object.name = mesh_name
-        bpy.context.object.location = mesh_location
-        bpy.context.object.rotation_euler = mesh_rotation
-        bpy.context.object.scale = mesh_scale
+        new_mesh.name = mesh_name
+        new_mesh.location = mesh_location
+        new_mesh.rotation_euler = mesh_rotation
+        new_mesh.scale = mesh_scale
 
     def _init_material(self, mesh_name):
         """ Adds a new default material and assigns it to the added mesh object. """
