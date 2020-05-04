@@ -99,6 +99,7 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
 * Here we are sampling BOP objects from 3 different datasets.
 * We load 2 random object for T-LESS and ITODD datasets, and 8 objects from LM dataset.
 * Note `"obj_instances_limit": 1` parameter for LM data which dictates that each sampled object from this dataset must be unique in this scene, while this parameter is omitted for T-LESS and ITODD, which means that potentially those objects may have duplicates due to the process of sampling.
+* Note that each loader loads the camera intrinsics of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, LM-dataset intrinsics are used when rendering.
 
 ### Material Manipulator
 
