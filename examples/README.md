@@ -29,7 +29,8 @@ It will give you an idea about how, why and when certain things happen.
 We provide two example configs that interface with the BOP datasets.
 
 * [bop_scene_replication](bop_scene_replication): Replicates whole scenes (object poses, camera intrinsics and extrinsics) from BOP
-* [bop_sampling](bop_sampling): Loads BOP objects and samples object, camera and light poses
+* [bop_object_pose_sampling](bop_object_pose_sampling): Loads BOP objects and samples object, camera and light poses
+* [bop_object_physics_positioning](bop_object_physics_positioning): BOP objects pose sampling and physics animation.
 
 ### Dataset related examples
 
@@ -45,4 +46,3 @@ These can be found in:
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
 * [suncg_with_object_replacer](suncg_with_object_replacer)
 * [rock_essentials](rock_essentials)
-

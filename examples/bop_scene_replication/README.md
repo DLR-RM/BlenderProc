@@ -13,18 +13,18 @@ In [examples/bop_scene_replication/config.yaml](config.yaml) add the path to you
 Execute in the BlenderProc main directory: 
 
 ```
-python run.py examples/bop_scene_replication/config.yaml <path_to_bop_data> examples/bop_replication/output
+python run.py examples/bop_scene_replication/config.yaml <path_to_bop_data> examples/bop_scene_replication/output
 ```
-* `examples/bop_replication/config.yaml`: path to the pipeline configuration file.
+* `examples/bop_scene_replication/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a BOP dataset
-* `examples/bop_sampling/output`: path to the output directory.
+* `examples/bop_scene_replication/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data and labels:
 
 ```
-python scripts/visHdf5Files.py example/bop_replication/0.hdf5
+python scripts/visHdf5Files.py example/bop_scene_replication/0.hdf5
 ```
 
 ## Steps
@@ -58,4 +58,4 @@ For some BOP datasets you can choose the `model_type`, e.g. `reconst` or `cad` i
 
 ## More examples
 
-* [bop_sampling](../bop_sampling): More on sampling objects, cameras and lights.
+* [bop_object_pose_sampling](../bop_object_pose_sampling): More on sampling objects, cameras and lights.

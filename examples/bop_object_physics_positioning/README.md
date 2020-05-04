@@ -1,4 +1,4 @@
-# BOP with object sampling
+# BOP with object pose sampling and physics positioning
 
 ![](rendering.png)
 
@@ -271,5 +271,5 @@ python scripts/visHdf5Files.py examples/bop_with_object_sampling/output/coco_dat
 
 ## More examples
 
-* [bop_sampling](../bop_sampling): Sample BOP object and camera poses.
+* [bop_object_pose_sampling](../bop_object_pose_sampling): Sample BOP object and camera poses.
 * [bop_scene_replication](../bop_scene_replication): Replicate the scenes and cameras from BOP datasets in simulation.
