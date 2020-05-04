@@ -137,7 +137,10 @@ class BasicMeshInitializer(Module):
         new_mesh.scale = mesh_scale
 
     def _init_material(self, mesh_name):
-        """ Adds a new default material and assigns it to the added mesh object. """
+        """ Adds a new default material and assigns it to the added mesh object.
+
+        :param mesh_name: Name of the mesh object. Type: string.
+        """
         mat_obj = bpy.data.materials.new(name=mesh_name+"_material")
         mat_obj.use_nodes = True
         bpy.context.object.data.materials.append(mat_obj)
