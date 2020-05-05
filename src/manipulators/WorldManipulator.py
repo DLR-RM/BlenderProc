@@ -41,13 +41,14 @@ class WorldManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "key": "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
+        "key": "Name of the attribute/custom property to change or a name of a custom function to perform on objects. "
+               "Type: string. "
                "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.): "
                "For attribute: key of the pair must be a valid attribute name of the world. "
                "For custom property: key of the pair must start with `cp_` prefix. "
                "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
                "supported custom function names."
-        "value": "Value of the attribute/custom prop, etc. to set."
+        "value": "Value of the attribute/custom prop. to set or input value(s) for a custom function."
 
     **Custom function names**:
 
