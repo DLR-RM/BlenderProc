@@ -104,14 +104,11 @@ class MaterialManipulator(Module):
                 elif key_copy == "switch_to_emission_shader" and requested_cf:
                     self._switch_to_emission_shader(material, value)
                 elif "set_" in key_copy and requested_cf:
-                    # sets the value of the prinicipled shader
+                    # sets the value of the principled shader
                     self._set_principled_shader_value(material, key_copy[len("set_"):], value)
-                elif hasattr(material, key):
+                elif hasattr(material, key_copy):
                     # set the value
-                    setattr(material, key, value)
-                # TODO exclude global settings to raise exception if attribute not found
-                #else:
-                #    raise Exception("This attribute: {} is not there!".format(key))
+                    setattr(material, key_copy, value)
 
     def _get_the_set_params(self, params_conf):
         """ Extracts actual values to set from a Config object.
