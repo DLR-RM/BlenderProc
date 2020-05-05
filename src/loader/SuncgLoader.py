@@ -144,19 +144,19 @@ class SuncgLoader(Loader):
 
         if "hideFloor" not in node or node["hideFloor"] != 1:
             metadata["type"] = "Floor"
-            metadata["category_id"] = self.label_index_map["floor"]
+            metadata["category_id"] = self.nyu_label_index_map["floor"]
             metadata["fine_grained_class"] = "floor"
             self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, room_obj)
 
         if "hideCeiling" not in node or node["hideCeiling"] != 1:
             metadata["type"] = "Ceiling"
-            metadata["category_id"] = self.label_index_map["ceiling"]
+            metadata["category_id"] = self.nyu_label_index_map["ceiling"]
             metadata["fine_grained_class"] = "ceiling"
             self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "c.obj"), metadata, material_adjustments, transform, room_obj)
 
         if "hideWalls" not in node or node["hideWalls"] != 1:
             metadata["type"] = "Wall"
-            metadata["category_id"] = self.label_index_map["wall"]
+            metadata["category_id"] = self.nyu_label_index_map["wall"]
             metadata["fine_grained_class"] = "wall"
             self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
 
@@ -171,7 +171,7 @@ class SuncgLoader(Loader):
         :param parent: The parent object to which the ground should be linked
         """
         metadata["type"] = "Ground"
-        metadata["category_id"] = self.label_index_map["floor"]
+        metadata["category_id"] = self.nyu_label_index_map["floor"]
         metadata["fine_grained_class"] = "ground"
         self._load_obj(os.path.join(self.suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
 
@@ -228,7 +228,7 @@ class SuncgLoader(Loader):
 
         self._transform_and_colorize_object(box, material_adjustments, transform, parent)
         # set class to void
-        box["category_id"] = self.label_index_map["void"]
+        box["category_id"] = self.nyu_label_index_map["void"]
         # Rotate cube to match objects loaded from .obj, has to be done after transformations have been applied
         box.matrix_world = Matrix.Rotation(math.radians(90), 4, "X") @ box.matrix_world
 
@@ -393,26 +393,21 @@ class SuncgLoader(Loader):
 
         :param path: The path to the csv file.
         """
-        self.labels = set()     
         self.windows = []       
         self.object_label_map = {}      
         self.object_fine_grained_label_map = {}
-        self.object_coarse_grained_label_map = {}          
-        self.label_index_map = {}       
+        self.object_coarse_grained_label_map = {}              
         
         with open(Utility.resolve_path(path), 'r') as csvfile:      
             reader = csv.DictReader(csvfile)        
             for row in reader:      
-                self.labels.add(row["nyuv2_40class"])       
                 self.object_label_map[row["model_id"]] = row["nyuv2_40class"]       
                 self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]     
                 self.object_coarse_grained_label_map[row["model_id"]] = row["coarse_grained_class"]     
         
-        self.labels = sorted(list(self.labels))
-        bpy.data.scenes["Scene"]["num_labels"] = len(self.labels)
-        self.label_index_map = {self.labels[i]:i for i in range(len(self.labels))}
+        bpy.data.scenes["Scene"]["num_labels"] = len(self.nyu_label_index_map.keys())
         # Use the void category as label for the world background
-        bpy.context.scene.world["category_id"] = self.label_index_map["void"]
+        bpy.context.scene.world["category_id"] = self.nyu_label_index_map["void"]
 
     def _get_label_id(self, obj_id):
         """ Returns the label id for an object with the given model_id.
@@ -420,4 +415,4 @@ class SuncgLoader(Loader):
         :param obj_id: The model_id of the object.
         :return: The corresponding label index.
         """
-        return self.label_index_map[self.object_label_map[obj_id]]
+        return self.nyu_label_index_map[self.object_label_map[obj_id]]
