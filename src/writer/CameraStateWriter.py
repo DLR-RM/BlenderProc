@@ -6,17 +6,17 @@ from src.writer.StateWriter import StateWriter
 
 
 class CameraStateWriter(StateWriter):
-    """ Writes the state of all camera poses to a file.
+    """ Writes the state of all camera poses to a numpy file, if there was no hdf5 file to add them to.
 
     **Attributes per object**:
 
     .. csv-table::
        :header: "Keyword", "Description"
 
-       "fov_x", "The horizontal FOV."
-       "fov_y", "The vertical FOV."
-       "half_fov_x", "Half of the horizontal FOV."
-       "half_fov_y", "Half of the vertical FOV."
+       "fov_x", "The horizontal FOV. Type: float."
+       "fov_y", "The vertical FOV. Type: float."
+       "half_fov_x", "Half of the horizontal FOV. Type: float."
+       "half_fov_y", "Half of the vertical FOV. Type: float."
     """
 
     def __init__(self, config):
@@ -24,7 +24,7 @@ class CameraStateWriter(StateWriter):
         self.object_writer = ItemWriter(self._get_attribute)
 
     def run(self):
-        # Collect camera and camera object
+        """ Collect camera and camera object and write them to a file."""
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
         cam_pose = (cam, cam_ob)
