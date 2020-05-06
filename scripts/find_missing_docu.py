@@ -97,10 +97,29 @@ class ConfigElement(object):
         if "Default:" in line:
             default_val = line[line.find("Default:") + len("Default:"):]
             default_val = default_val.strip()
-            poses = [max([default_val.find(". "), default_val.find("."), default_val.find(".\"")]), default_val.find("\""), default_val.find(" "), default_val.find(", ")]
-            poses = [ele for ele in poses if ele > 0]
-            if poses:
-                end_pos = min(poses)
+            float_mode = default_val[0].isnumeric()
+            list_mode = default_val[0] == "["
+            end_pos = -1
+            first_point = True
+            if float_mode or list_mode:
+                for index, ele in enumerate(default_val):
+                    end_pos = index
+                    if float_mode and ele.isnumeric():
+                        continue
+                    if float_mode and ele == "." and first_point:
+                        first_point = False
+                        continue
+                    elif float_mode:
+                        break
+                    elif list_mode and ele == "]":
+                        end_pos += 1
+                        break
+            else:
+                poses = [max([default_val.find(". "), default_val.find("."), default_val.find(".\"")]), default_val.find("\""), default_val.find(" "), default_val.find(", ")]
+                poses = [ele for ele in poses if ele > 0]
+                if poses:
+                    end_pos = min(poses)
+            if end_pos != -1:
                 default_val = default_val[:end_pos]
             if default_val:
                 self.default_value = default_val
