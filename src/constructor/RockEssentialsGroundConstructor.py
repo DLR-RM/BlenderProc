@@ -33,12 +33,11 @@ class RockEssentialsGroundConstructor(Loader):
         :header: "Keyword", "Description"
 
         "shader_path", "Path to a .blend file that containing PBR Rock Shader in //NodeTree// section. Type: string."
-        "plane_scale", "Scale of a ground plane. Type: mathutils Vector/list. Optional. Default value: [10, 10, 1]"
-        "subdivision_cuts", "Amount of cuts along each plane axis. Type: int. Optional. Default value: 50."
-        "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Optional. "
-                                     "Default value: 3."
+        "plane_scale", "Scale of a ground plane. Type: mathutils Vector/list. Default: [10, 10, 1]."
+        "subdivision_cuts", "Amount of cuts along each plane axis. Type: int. Default: 50."
+        "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Default: 3."
         "tile_name", "Name of the ground tile. Set one if you plan to use this module multiple times in one config. "
-                     "Optional. Type: string. Default_value: 'RE_ground_plane'."
+                     "Type: string. Default: 'RE_ground_plane'."
     """
 
     def __init__(self, config):
