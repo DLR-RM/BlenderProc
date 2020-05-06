@@ -31,9 +31,9 @@ class StereoGlobalMatchingWriter(Renderer):
        "avoid_rendering", "If true, exit. Type: bool. Optional. Defaut value: False."
        "output_disparity", "Additionally outputs the disparity map. Type: bool. Default value: False"
        "rgb_output_key", "The key for the rgb data in the output. Type: string. Optional. default: colors."
-       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera.Type: int. Default value: 512."
-       "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Default value: 512."
-       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera. Type: float. Default value: 1."
+       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Optional. Default value: 512."
+       "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Optional. Default value: 512."
+       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera. Type: float. Optional. Default value: 1."
 
     """
 
