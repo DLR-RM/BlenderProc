@@ -14,8 +14,8 @@ class ObjectLoader(Loader):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "path", "The path to the 3D data file to load. Can be either path or paths not both."
-       "paths", "A list of paths of 3D data files to load. Can be either path or paths not both."
+       "path", "The path to the 3D data file to load. Can be either path or paths not both. Type: string."
+       "paths", "A list of paths of 3D data files to load. Can be either path or paths not both. Type: list."
     """
     def __init__(self, config):
         Loader.__init__(self, config)
