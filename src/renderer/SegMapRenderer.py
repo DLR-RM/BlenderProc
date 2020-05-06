@@ -18,9 +18,11 @@ class SegMapRenderer(Renderer):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "map_by", "Method to be used for color mapping. Allowed values: instance, class"
-       "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in a merged file."
-       "segcolormap_output_file_prefix", "The file prefix that should be used when writing the class instance to color mapping to file."
+       "map_by", "Method to be used for color mapping. Type: string. Default: "class" Available: [instance, class]"
+       "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in"
+                                 "a merged file. Type: string. Default: "segcolormap""
+       "segcolormap_output_file_prefix", "The file prefix that should be used when writing the class instance to"
+                                         "color mapping to file. Type: string. Default: class_inst_col_map"
        "output_file_prefix", "The file prefix that should be used when writing semantic information to a file."
                              "Type: string, Default: "segmap_""
     """
