@@ -7,13 +7,16 @@ from src.writer.StateWriter import StateWriter
 from mathutils import Euler, Matrix
 
 class BopWriter(StateWriter):
-    """ Writes camera-object transformations for each frame to the hdf5 file.
+    """ Writes objects and camera details for each frame according to the bop datasets format.
+        For more details about the bop datasets visit the bop toolkit docs
+        https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md
 
     **Attributes per object**:
 
     .. csv-table::
        :header: "Keyword", "Description"
-       "append_to_existing_output", "If true and if there is already a scene_gt.json and scene_camera.json files in the output directory, the new frames will be appended to the existing files."  
+
+       "append_to_existing_output", "If true and if there is already a scene_gt.json and scene_camera.json files in the output directory, the new frames will be appended to the existing files. Type: bool. Optional. Default value: False"  
     """
 
     def __init__(self, config):
@@ -23,7 +26,8 @@ class BopWriter(StateWriter):
         self._scene_camera_path = os.path.join(output_dir, 'scene_camera.json') 
         self._camera_path = os.path.join(output_dir, 'camera.json')        
 
-    def run(self): 
+    def run(self):
+        """ Collects the camera and camera object then for each file to be written excutes its function"""
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         self.cam = cam_ob.data

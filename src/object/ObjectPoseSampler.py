@@ -10,16 +10,21 @@ class ObjectPoseSampler(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects."
+       "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects. Type: Provider. Optional. Default: all mesh objects."
        "max_tries", "Amount of tries before giving up on an object and moving to the next one. Optional. Type: int. Default value: 1000."
-       "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each object."
-       "rot_sampler", "Here call an appropriate Provider (Sampler )in order to sample rotation (Euler angles 3d vector) for each object."
+       "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each object. Type: Provider."
+       "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) for each object. Type: Provider."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
+        """
+        Samples positions and rotations of selected object inside the sampling volume while performing mesh and bounding box collision checks in the following steps:
+        1. While we have objects remaining and have not run out of tries - sample a point. 
+        2. If no collisions are found keep the point.
+        """
         # While we have objects remaining and have not run out of tries - sample a point
         # List of successfully placed objects
         placed = []
@@ -84,8 +89,8 @@ class ObjectPoseSampler(Module):
     def insert_key_frames(self, obj, frame_id):
         """ Insert key frames for given object pose
 
-        :param obj: Loaded object
-        :param frame_id: The frame number where key frames should be inserted.
+        :param obj: Loaded object. Type: blender object.
+        :param frame_id: The frame number where key frames should be inserted. Type: int.
         """
 
         obj.keyframe_insert(data_path='location', frame=frame_id)

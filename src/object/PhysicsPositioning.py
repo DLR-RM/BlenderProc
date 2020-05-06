@@ -12,12 +12,12 @@ class PhysicsPositioning(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'."
-       "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'."
-       "min_simulation_time", "The minimum number of seconds to simulate."
-       "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped."
-       "max_simulation_time", "The maximum number of seconds to simulate."
-       "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
+       "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'. Type: float. Optional. Default value: 0.01"
+       "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'. Type: float. Optional. Default value: 0.1"
+       "min_simulation_time", "The minimum number of seconds to simulate. Type: int."
+       "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped. Type: int."
+       "max_simulation_time", "The maximum number of seconds to simulate. Type: int."
+       "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit. Type: float. Optional. Default value: 0.001"
        "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
        "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'. Available values: 'BASE', 'DEFORM', 'FINAL'."
@@ -118,16 +118,16 @@ class PhysicsPositioning(Module):
     def _seconds_to_frames(self, seconds):
         """ Converts the given number of seconds into the corresponding number of blender animation frames.
 
-        :param seconds: The number of seconds
-        :return: The number of frames
+        :param seconds: The number of seconds. Type: int.
+        :return: The number of frames. Type: int.
         """
         return int(seconds * bpy.context.scene.render.fps)
 
     def _frames_to_seconds(self, frames):
         """ Converts the given number of frames into the corresponding number of seconds.
 
-        :param frames: The number of frames
-        :return: The number of seconds
+        :param frames: The number of frames. Type: int.
+        :return: The number of seconds: Type: int.
         """
         return float(frames) / bpy.context.scene.render.fps
 
@@ -205,8 +205,8 @@ class PhysicsPositioning(Module):
     def _have_objects_stopped_moving(self, last_poses, new_poses):
         """ Check if the difference between the two given poses per object is smaller than the configured threshold.
 
-        :param last_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
-        :param new_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
+        :param last_poses. Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
+        :param new_poses: Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :return: True, if no objects are moving anymore.
         """
         stopped = True
