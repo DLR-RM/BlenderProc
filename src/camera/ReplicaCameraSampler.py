@@ -23,7 +23,14 @@ class ReplicaCameraSampler(CameraSampler):
         - The configured z coordinate of the configured camera location is used as relative to the floor
         - All sampled camera locations need to lie straight above the room's floor to be valid
         - Using the scene coverage/interestingness score in the ReplicaCameraSampler does not make much sense, as the 3D mesh is not split into individual objects.
+        
+    **Configuration**:
 
+    .. csv-table::
+       :header: "Parameter", "Description"
+       "is_replica_object", "Whether it's a Replica object. Type: bool. Optional. Default value: False."
+       "height_list_path", "Path to height list. Type: string."
+       "data_set_name", "Dataset name in case is_replica_object is set to false. Type: string."
         """
         CameraSampler.__init__(self, config)
 
