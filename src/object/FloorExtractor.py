@@ -8,22 +8,26 @@ import bmesh
 from src.utility.Utility import Utility
 
 class FloorExtractor(Module):
+    """Will search for the specified object and splits the surfaces which point upwards at a specified level away 
+
+    **Configuration**:
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "obj_name", "Name of the object where the floor gets extracted. Type: string."
+        "compare_angle_degrees", "Maximum difference between the up vector and the current polygon normal in degrees. Type: float."
+        "compare_height", "Maximum difference in Z direction between the polygons median point and the specified height of the room. Type: float."
+        "is_replica_object", "In this instance the data_set_name key has to be set. Type: bool."
+        "data_set_name", "Name of the data set only useful with replica_dataset. Type: string."
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
-        """Will search for the specified object and splits the surfaces which point upwards at a specified level away 
-
-        **Configuration**:
-        .. csv-table::
-            :header: "Parameter", "Description"
-            "obj_name", name of the object were the floor gets extracted
-            "compare_angle_degrees", maximum difference between the up vector and the current polygon normal in degrees
-            "compare_height", maximum difference in Z direction between the polygons median point and the specified height of the room
-
-            "is_replica_object", in this instance the data_set_name key has to be set
-            "data_set_name", name of the data set only useful with replica_dataset
+        """ Exctract floors in the following steps:
+        1. Searchs for the specified object.
+        2. Splits the surfaces which point upwards at a specified level away.
         """
         obj_name = self.config.get_string('obj_name')
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
