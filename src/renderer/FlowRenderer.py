@@ -17,7 +17,13 @@ class FlowRenderer(Renderer):
         "backward_flow_output_key", "The key which should be used for storing backward optical flow values. Type: str, default: 'backward_flow'."
         "forward_flow", "Whether to render forward optical flow. Type: bool, default: True."
         "backward_flow", "Whether to render backward optical flow. Type: bool, default: True."
-        "blender_image_coordinate_style", "Whether to specify the image coordinate system at the bottom left (blender default; True) or top left (standard convention; False). Type: bool, default: False."
+        "blender_image_coordinate_style", "Whether to specify the image coordinate system at the bottom left "
+                                          "(blender default; True) or top left (standard convention; False). "
+                                          "Type: bool. Default: False"
+        "forward_flow_output_file_prefix", "The file prefix that should be used when writing forward flow to a file."
+                                           "Type: string, Default: "forward_flow_""
+        "backward_flow_output_file_prefix", "The file prefix that should be used when writing backward flow to a file."
+                                            "Type: string, Default: "backward_flow_""
     """
 
     def __init__(self, config):
