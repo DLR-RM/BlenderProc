@@ -53,7 +53,6 @@ if __name__ == "__main__":
                             line = line[:line.find("\"")].strip()
                             if line:
                                 found_config_values.append(line)
-
                 if found_config_values:
                     # checks if there are config values not defined at the top
                     for line_nr, line in enumerate(lines):
@@ -75,7 +74,7 @@ if __name__ == "__main__":
                         start_csv_table = True
                     elif start_csv_table and "__init__" in line:
                         if current_keyword:
-                            print("In {}: This key {} does not have a Type".format(
+                            print("In {}: This key '{}' does not have a Type".format(
                                 os.path.basename(py_file), current_keyword))
                         break
                     if start_csv_table:
@@ -83,13 +82,13 @@ if __name__ == "__main__":
                         if keyword and " " not in keyword and keyword != "key":
                             # found a new keyword
                             if current_keyword:
-                                print("In {}: This key {} does not have a Type".format(os.path.basename(py_file), current_keyword))
+                                print("In {}: This key '{}' does not have a Type".format(os.path.basename(py_file), current_keyword))
                                 current_keyword = None
-                            if "Type" not in line:
+                            if "Type:" not in line:
                                 current_keyword = keyword
                         elif current_keyword:
                             # there is no new key found, and there was an old key found
-                            if "Type" in line:
+                            if "Type:" in line:
                                 # check if the old key is ended here
                                 current_keyword = None
                                 continue
