@@ -24,7 +24,7 @@ class CameraLoader(CameraModule):
       }
     }
 
-    Example 2: More examples for parameters in "default_cam_param". Here cam_K is a camera matrix.
+    Example 2: More examples for parameters in "default_cam_param". Here cam_K is a camera matrix. Check CameraModule for more info on "default_cam_param".
     "default_cam_param": {
       "fov_is_half": true,
       "interocular_distance": 0.05,
