@@ -92,7 +92,7 @@ class Renderer(Module):
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples=256, default_denoiser="Blender"):
+    def _configure_renderer(self, default_samples=256, default_denoiser="Intel"):
         """
         Sets many different render parameters which can be adjusted via the config.
 
