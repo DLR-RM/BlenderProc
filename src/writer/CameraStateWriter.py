@@ -35,7 +35,7 @@ class CameraStateWriter(StateWriter):
         """ Returns the value of the requested attribute for the given object.
 
         :param cam_pose: The mesh object.
-        :param attribute_name: The attribute name.
+        :param attribute_name: The attribute name. Type: string.
         :return: The attribute value.
         """
         cam, cam_ob = cam_pose
