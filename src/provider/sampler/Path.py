@@ -8,11 +8,12 @@ from src.utility.Utility import Utility
 class Path(Provider):
     """ Samples a path to one of the files in folder defined by a path.
 
-    Example:
+        Example 1: return a path to a random .obj file in the defined folder.
 
-    /home/path/to/folder/*.obj
-
-    Will return a path to a random .obj file in this folder.
+        {
+          "provider": "sampler.Path",
+          "path": "/home/path/to/folder/*.obj"
+        }
 
     **Configuration**:
 

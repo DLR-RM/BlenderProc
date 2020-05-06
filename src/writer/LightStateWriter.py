@@ -21,7 +21,7 @@ class LightStateWriter(StateWriter):
         self.light_writer = ItemWriter(self._get_attribute)
 
     def run(self):
-        # Collection all lights
+        """ Collection all lights and writes them to a numpy file if no hdf5 file was available"""
         lights = []
         for object in bpy.context.scene.objects:
             if object.type == 'LIGHT':
@@ -32,8 +32,8 @@ class LightStateWriter(StateWriter):
     def _get_attribute(self, light, attribute_name):
         """ Returns the value of the requested attribute for the given light.
 
-        :param light: The light.
-        :param attribute_name: The attribute name.
+        :param light: The light. Type: blender scene object of type light.
+        :param attribute_name: The attribute name. Type: string.
         :return: The attribute value.
         """
         if attribute_name == "energy":

@@ -19,6 +19,7 @@ class StereoGlobalMatchingWriter(Renderer):
 
     .. csv-table::
        :header: "Parameter", "Description"
+
        "infer_focal_length_from_fov", "If true, then focal length would be calculated from the field of view angle, otherwise the value of the focal length would be read from the config parameter: "focal_length". Type: bool. Optional. Default value: False"
        "disparity_filter", "Applies post-processing of the generated disparity map using WLS filter. Type: bool. Optional. Default value: True"
        "depth_completion", "Applies basic depth completion using image processing techniques. Type: bool. Optional. Default value: True"
@@ -43,9 +44,15 @@ class StereoGlobalMatchingWriter(Renderer):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-
-    # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
+ 
     def sgm(self, imgL, imgR):
+        """ Semi global matching funciton, for more details on what this function does check the original paper
+        https://elib.dlr.de/73119/1/180Hirschmueller.pdf
+        
+        :param imgL: Left image. Type: blender image type object.
+        :param imgR: Right image. Type: blender image type object.
+        :return: depth, disparity
+         """
         window_size = self.config.get_int("window_size", 7)
         if window_size % 2 == 0:
             raise Exception("Window size must be an odd number")
@@ -107,6 +114,11 @@ class StereoGlobalMatchingWriter(Renderer):
         return depth, disparity_to_be_written
 
     def run(self):
+        """ Does the stereo global matching in the following steps:
+        1. Collect camera object and its state,
+        2. For each frame, load left and right images and call the `sgm()` methode.
+        3. Write the results to a numpy file.
+        """
         if self._avoid_rendering:
             print("Avoid rendering is on, no output produced!")
             return

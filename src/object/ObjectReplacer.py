@@ -15,12 +15,12 @@ class ObjectReplacer(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "replace_ratio", "Ratio of objects in the original scene, which are tried to be replaced. Type: float. Default value: 1."
-       "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. Type: boolean. Default value: True."
-       "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets list of objects following a certain condition. Type: Getter. Default value: []."
-       "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, gets list of objects following a certain condition. Type Getter. Default value: []"
-       "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. Type：Getter. Default value: []."
-       "max_tries", "Amount of tries, which are performed while trying to replace the objects. Type: Int, Default value: 100000 "
+       "replace_ratio", "Ratio of objects in the original scene, which are tried to be replaced. Type: float. Optiona. Default value: 1."
+       "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. Type: boolean. Optional. Default value: True."
+       "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets list of objects following a certain condition. Optional. Type: provider."
+       "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, gets list of objects following a certain condition. Type: provider."
+       "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. Type: provider. Optional. Default value: []."
+       "max_tries", "Amount of tries, which are performed while trying to replace the objects. Type: Int. Optional. Default value: 100000 "
     """
 
     def __init__(self, config):
@@ -37,26 +37,26 @@ class ObjectReplacer(Module):
         Scale, translate, rotate obj_to_add to match obj_to_remove and check if there is a bounding box collision
         returns a boolean.
 
-        :param obj_to_remove: object to remove from the scene
-        :param obj_to_add: object to put in the scene instead of obj_to_remove
-        :param scale: Scales obj_to_add to match obj_to_remove dimensions
+        :param obj_to_remove: object to remove from the scene. Type: blender object.
+        :param obj_to_add: object to put in the scene instead of obj_to_remove. Type: blender object.
+        :param scale: Scales obj_to_add to match obj_to_remove dimensions. Type: bool.
         """        
         
         def _bb_ratio(bb1, bb2):
             """
             Rough estimation of the ratios between two bounding boxes sides, not axis aligned
 
-            :param bb1: bounding box 1
-            :param bb2: bounding box 2
-            returns the ratio between each side of the bounding box as a list of floats.
+            :param bb1: bounding box 1. Type: float multi-dimensional array of 8 * 3.
+            :param bb2: bounding box 2. Type: float multi-dimensional array of 8 * 3.
+            returns the ratio between each side of the bounding box. Type: a list of floats.
             """
 
             def _two_points_distance(point1, point2):
                 """
                 Eclidian distance between two points
 
-                :param point1: Point 1 as a list of three floats
-                :param point2: Point 2 as a list of three floats
+                :param point1: Point 1 as a list of three floats. Type: list.
+                :param point2: Point 2 as a list of three floats. Type: list.
                 returns a float.
                 """
                 return np.linalg.norm(np.array(point1) - np.array(point2))
@@ -82,6 +82,12 @@ class ObjectReplacer(Module):
         return True
 
     def run(self):
+        """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the objects to replace with in following steps:
+        1. Find which object to replace.
+        2. Place the new object in place of the object to be replaced and scale accordingly.
+        2. If there is no collision, between that object and the objects in the scene, then do replace and delete the original object.
+
+        """
         self._objects_to_be_replaced = self.config.get_list("objects_to_be_replaced", [])
         self._objects_to_replace_with = self.config.get_list("objects_to_replace_with", [])
         self._ignore_collision_with = self.config.get_list("ignore_collision_with", [])

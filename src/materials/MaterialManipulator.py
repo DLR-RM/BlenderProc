@@ -7,44 +7,99 @@ from src.utility.Utility import Utility
 
 
 class MaterialManipulator(Module):
-    """
-    This class can manipulate materials, for now you can set the attribute of a material with it or:
-        * link the color of an image to the displacement as seen in the example
-        * map the vertex colors of an object to a material
+    """ Performs manipulation os selected materials.
+
+        Example 1: Link image texture output of the 'Material.001' material to displacement input of the shader with a
+                   strength factor of 1.5.
+
+        {
+          "module": "materials.MaterialManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Material",
+              "conditions": {
+                "name": "Material.001"
+              }
+            },
+            "cf_color_link_to_displacement": 1.5
+          }
+        }
+
+        Example 2: Set base color of all materials matching the name pattern to white.
+
+        {
+          "module": "materials.MaterialManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Material",
+              "conditions": {
+                "name": ".*material.*"
+              }
+            },
+            "cf_set_base_color": [1, 1, 1, 1]
+          }
+        }
+
+        Example 3: For all materials matching the name pattern switch to the Emission shader with emitted light of red
+                   color of energy 15.
+
+        {
+          "module": "materials.MaterialManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Material",
+              "conditions": {
+                "name": ".*material.*"
+              }
+            },
+            "cf_switch_to_emission_shader": {
+              "color": [1, 0, 0, 1],
+              "strength": 15
+            }
+          }
+        }
 
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "selector" "Materials to be modified (selection via getter.Material Provider). Type: list."
-       "mode" "Mode of operation. Available values: 'once_for_each' (sampling the values for each selected material "
-              "anew), 'once_for_all' (sampling once for all of the selected materials). Optional. Default value: "
-              "'once_for_each'. Type: string."
-       "key": "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
-              "In order to specify, what exactly one want to modify:"
-              "For calling custom function: key of the pair must start with `cf_` prefix. See table below for supported"
-              "cf names."
-       "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
+        "selector" "Materials to become subjects of manipulation. Type: Provider."
+        "mode" "Mode of operation. Type: string. Default: 'once_for_each'. Available: 'once_for_each' (if samplers are "
+               "called, new sampled value is set to each selected material), 'once_for_all' (sampling once for all "
+               "of the selected materials)."
+
+    **Values to set**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "key", "Name of the attribute to change or a name of a custom function to perform on materials. "
+               "Type: string. "
+               "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.): "
+               "For attribute: key of the pair must be a valid attribute name of the selected material. "
+               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
+               "supported custom function names."
+        "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function."
 
     **Available custom functions**:
 
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "cf_color_link_to_displacement" "Factor that determining the strength of the displacement via linking the output "
-                                       "of the texture image to the displacement Type: float"
+       "cf_color_link_to_displacement" "Factor that determines the strength of the displacement via linking the "
+                                       "output of the texture image to the displacement Type: float"
        "cf_change_to_vertex_color" "The name of the vertex color layer, used for changing the material to a vertex "
                                    "coloring mode. Type: string"
        "cf_textures", "Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.): "
-                      "texture_path} pairs. Texture_type should be equal to the Shader input name in order to be assigned "
-                      "to a ShaderTexImage node that will be linked to this input. Label represents to which shader "
-                      "input this node is connected. Type: dict."
+                      "texture_path} pairs. Texture_type should be equal to the Shader input name in order to be "
+                      "assigned to a ShaderTexImage node that will be linked to this input. Label represents to which "
+                      "shader input this node is connected. Type: dict."
        "cf_textures/texture_path", "Path to a texture image. Type: string."
-       "cf_switch_to_emission_shader", "Adds the Emission shader to the target material, sets it's color and strength "
-                                       "values, connects it to the Material Output node. Type: dict."
+       "cf_switch_to_emission_shader", "Adds the Emission shader to the target material, sets it's 'color' and "
+                                       "'strength' values, connects it to the Material Output node. Type: dict."
        "cf_switch_to_emission_shader/color", "[R, G, B, A] vector representing the color of the emitted light. "
-                                             "Type: list."
+                                             "Type: mathutils.Vector."
        "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
        "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
                    "name of the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> "
@@ -55,6 +110,10 @@ class MaterialManipulator(Module):
         Module.__init__(self, config)
 
     def run(self):
+        """ Sets according values of defined attributes or applies custom functions to the selected materials.
+            1. Select materials.
+            2. For each parameter to modify, set it's value to all selected objects.
+        """
         set_params = {}
         sel_objs = {}
         for key in self.config.data.keys():
@@ -104,14 +163,11 @@ class MaterialManipulator(Module):
                 elif key_copy == "switch_to_emission_shader" and requested_cf:
                     self._switch_to_emission_shader(material, value)
                 elif "set_" in key_copy and requested_cf:
-                    # sets the value of the prinicipled shader
+                    # sets the value of the principled shader
                     self._set_principled_shader_value(material, key_copy[len("set_"):], value)
-                elif hasattr(material, key):
+                elif hasattr(material, key_copy):
                     # set the value
-                    setattr(material, key, value)
-                # TODO exclude global settings to raise exception if attribute not found
-                #else:
-                #    raise Exception("This attribute: {} is not there!".format(key))
+                    setattr(material, key_copy, value)
 
     def _get_the_set_params(self, params_conf):
         """ Extracts actual values to set from a Config object.
@@ -153,8 +209,8 @@ class MaterialManipulator(Module):
     def _load_textures(self, text_paths):
         """ Loads textures.
 
-        :param text_paths: Texture data as {texture type (image/map type, i.e. color, roughness, reflection, etc.): texture path} pairs. Type: dict.
-        :return: Loaded texture data as {texture type (image/map type, i.e. color, roughness, reflection, etc.): texture object} pairs. Type: dict.
+        :param text_paths: Texture data. Type: dict.
+        :return: Loaded texture data. Type: dict.
         """
         loaded_textures = {}
         for key in text_paths.keys():
@@ -164,10 +220,11 @@ class MaterialManipulator(Module):
         return loaded_textures
 
     def _set_textures(self, loaded_textures, material):
-        """ Creates a ShaderNodeTexImage node, assigns a loaded image to it and connects to the shader of the selected materials.
+        """ Creates a ShaderNodeTexImage node, assigns a loaded image to it and connects it to the shader of the
+            selected material.
 
-        :param loaded_textures: Loaded texture data as {texture type: texture object} pairs. Type: dict.
-        :param material: Material to be modified. Type: bpy.material.
+        :param loaded_textures: Loaded texture data. Type: dict.
+        :param material: Material to be modified. Type: bpy.types.Material.
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
@@ -182,6 +239,12 @@ class MaterialManipulator(Module):
 
     @staticmethod
     def _set_principled_shader_value(material, shader_input_key, value):
+        """
+
+        :param material: Material to be modified. Type: bpy.types.Material.
+        :param shader_input_key: Name of the shader's input. Type: string.
+        :param value: Value to set.
+        """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
         principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
@@ -191,17 +254,14 @@ class MaterialManipulator(Module):
         if shader_input_key_copy in principled_bsdf.inputs:
             principled_bsdf.inputs[shader_input_key_copy].default_value = value
         else:
-            raise Exception("The chosen shader input key: {} is not part of the principle shader.".format(shader_input_key_copy))
+            raise Exception("Shader input key '{}' is not a part of the shader.".format(shader_input_key_copy))
 
     @staticmethod
     def _link_color_to_displacement_for_mat(material, multiply_factor):
-        """
-        Link the output of the one texture image to the displacement
+        """ Link the output of the texture image to the displacement. Fails if there is more than one texture image.
 
-        Fails if there is more than one texture image
-
-        :param material input material, which will be changed
-        :param multiply_factor the factor with which the displacement is multiplied
+        :param material: Material to be modified. Type: bpy.types.Material.
+        :param multiply_factor: Multiplication factor of the displacement. Type: float.
         """
         nodes = material.node_tree.nodes
         output = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
@@ -215,15 +275,15 @@ class MaterialManipulator(Module):
                 material.node_tree.links.new(texture.outputs["Color"], math_node.inputs[0])
                 material.node_tree.links.new(math_node.outputs["Value"], output.inputs["Displacement"])
             else:
-                raise Exception("The amount of output nodes and texture nodes does not work with the option.")
+                raise Exception("The amount of output and texture nodes of the material '{}' is not supported by "
+                                "this custom function.".format(material))
 
     @staticmethod
     def _map_vertex_color(material, layer_name):
-        """
-        Replace the material with a mapping of the vertex color to a background color node.
-            These nodes are unable to be effected by light or shadow.
-        :param material the material which should be changed
-        :param layer_name the name of the vertex color layer
+        """ Replaces the material with a mapping of the vertex color to a background color node.
+
+        :param material: Material to be modified. Type: bpy.types.Material.
+        :param layer_name: Name of the vertex color layer. Type: string.
         """
         nodes = material.node_tree.nodes
         mat_links = material.node_tree.links
@@ -237,15 +297,15 @@ class MaterialManipulator(Module):
             mat_links.new(vcol.outputs['Color'], background_color_node.inputs['Color'])
             mat_links.new(background_color_node.outputs["Background"], material_output.inputs["Surface"])
         else:
-            raise Exception("The material: {} has no node connected to the output, "
-                            "which has as an input Base Color".format(material.name))
+            raise Exception("Material '{}' has no node connected to the output, "
+                            "which has as a 'Base Color' input.".format(material.name))
 
     def _switch_to_emission_shader(self, material, value):
         """ Adds the Emission shader to the target material, sets it's color and strength values, connects it to
             the Material Output node.
 
-        :param material: Target material to edit.
-        :param value: Dict containing {'color': color_value} and {'strength': strength_value} pairs.
+        :param material: Material to be modified. Type: bpy.types.Material.
+        :param value: Light color and strength data. Type: dict.
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links

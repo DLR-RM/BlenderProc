@@ -55,9 +55,8 @@ class WorldManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "bg_surface_color", "Sets the RGBA color of the light emitted by the background. "
-                            "Input value type: mathutils.Vector."
-        "bg_surface_strength", "Sets the strength of the light emitted by the background. Input value type: float."
+        "bg_surface_color", "Sets the RGBA color of the light emitted by the background. Type: mathutils.Vector."
+        "bg_surface_strength", "Sets the strength of the light emitted by the background. Type: float."
     """
 
     def __init__(self, config):

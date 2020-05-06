@@ -6,14 +6,30 @@ from src.main.Provider import Provider
 class Value(Provider):
     """ Sampling 1-d value of bool, int, or float type.
 
+        Example 1: Sample a float value from [10, 30) range.
+
+        {
+          "provider": "sampler.Value",
+          "type": "float",
+          "min": 10,
+          "max": 30
+        }
+
+        Example 2: Sample a boolean value.
+
+        {
+          "provider": "sampler.Value",
+          "type": "bool"
+        }
+
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "type", "The type of a value to sample. Type: string. Available options: float, int, boolean.
-       "min", "The minimum value. Optional. Type: float. int."
-       "max", "The maximum value (excluded frm the defined range of values). Type: float, int."
+        "type", "The type of a value to sample. Type: string. Available: 'float', 'int', 'boolean'."
+        "min", "The minimum value. Optional. Type: float/int."
+        "max", "The maximum value (excluded frm the defined range of values). Type: float/int."
     """
 
     def __init__(self, config):

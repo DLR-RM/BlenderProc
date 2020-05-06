@@ -82,11 +82,10 @@ class EntityManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "selector", "Here call getter.Entity to get a list of entities. Type: Provider."
-        "mode", "Mode of operation. Optional. Type: string. Available values: "once_for_each" (if samplers are called, "
-                "new sampled value is set to each selected entity) and "once_for_all" (if samplers are called, value "
-                "is sampled once and set to all selected entities). Optional. Type: string. "
-                "Default value: 'once_for_each'."
+        "selector", "Objects to become subjects of manipulation. Type: Provider."
+        "mode", "Mode of operation. Type: string. Default: 'once_for_each'. Available: 'once_for_each' (if samplers "
+                "are called, new sampled value is set to each selected entity), 'once_for_all' (if samplers are "
+                "called, value is sampled once and set to all selected entities)."
 
     **Values to set**:
 
@@ -117,8 +116,8 @@ class EntityManipulator(Module):
         Module.__init__(self, config)
 
     def run(self):
-        """ 'Selects' entities and sets according values for defined attributes/custom properties or applies custom
-            functions to them.
+        """ Sets according values of defined attributes/custom properties or applies custom functions to the selected
+            entities.
             1. Select objects.
             2. For each parameter to modify, set it's value to all selected objects.
         """

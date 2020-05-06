@@ -11,7 +11,8 @@ class RgbRenderer(Renderer):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission materials, default: False (off)."
+       "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
+                              "materials, Type: bool. Default: False."
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
