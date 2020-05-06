@@ -23,9 +23,13 @@ class Module:
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "output_is_temp", "If True, all files created in this module will be written into the temp_dir. If False, the output_dir is used."
-       "output_dir", "The path to a directory where all persistent output files should be stored. If it doesn't exist, it is created automatically."
-       "temp_dir", "The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically."
+       "output_is_temp", "If True, all files created in this module will be written into the temp_dir. If False,"
+                         "the output_dir is used. Type: bool."
+       "output_dir", "The path to a directory where all persistent output files should be stored. If it doesn't exist,"
+                     "it is created automatically. Type: string. Default: ""."
+       "temp_dir", "The path to a directory where all temporary output files should be stored. If it doesn't exist,"
+                   "it is created automatically. Type: string. Default: "/dev/shm" or "/tmp/" depending on what"
+                   "is available."
     """
 
     def __init__(self, config):
