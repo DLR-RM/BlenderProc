@@ -1,5 +1,6 @@
 
 import os
+import argparse
 
 def find_all_py_files(folder_path):
     res = []
@@ -154,8 +155,14 @@ def check_if_element_is_correct(current_element):
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser("Finds missing documentation in BlenderProc")
+    parser.add_argument("-s", "--src", help="You can specify a certain source folder to see only modules from this folder", type=str)
+    args = parser.parse_args()
+
     all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))
     for py_file in all_py_files:
+        if args.src and args.src not in py_file:
+            continue
         if "scripts" not in os.path.abspath(py_file):
             with open(py_file, "r") as file:
                 errors = []
