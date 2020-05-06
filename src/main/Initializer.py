@@ -37,7 +37,34 @@ class Initializer(Module):
     def run(self):
         # Make sure to use the current GPU
         prefs = bpy.context.preferences.addons['cycles'].preferences
-        prefs.compute_device_type = self.config.get_string("compute_device_type", 'CUDA')
+        # Use cycles
+        bpy.context.scene.render.engine = 'CYCLES'
+
+        if platform == "darwin":
+            # there is no gpu support in mac os so use the cpu with maximum power
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.scene.render.threads = multiprocessing.cpu_count()
+        else:
+            bpy.context.scene.cycles.device = "GPU"
+            preferences = bpy.context.preferences.addons['cycles'].preferences
+            for device_type in preferences.get_device_types(bpy.context):
+                preferences.get_devices_for_type(device_type[0])
+            for gpu_type in ["OPTIX", "CUDA"]:
+                found = False
+                for device in preferences.devices:
+                    if device.type == gpu_type:
+                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
+                        print('Device {} of type {} found and used.'.format(device.name, device.type))
+                        found = True
+                        break
+                if found:
+                    break
+            # make sure that all visible GPUs are used
+            for group in prefs.get_devices():
+                for d in group:
+                    d.use = True
+
+        # setting the frame end, will be changed by the camera loader modules
         bpy.context.scene.frame_end = 0
         print(prefs.compute_device_type, prefs.get_devices())
         for group in prefs.get_devices():

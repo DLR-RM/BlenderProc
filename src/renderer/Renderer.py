@@ -1,6 +1,4 @@
 import os
-from sys import platform
-import multiprocessing
 import math
 
 import addon_utils
@@ -160,25 +158,6 @@ class Renderer(Module):
             bpy.context.scene.render.use_simplify = True
             bpy.context.scene.render.simplify_subdivision_render = simplify_subdivision_render
 
-        if platform == "darwin":
-            # there is no gpu support in mac os so use the cpu with maximum power
-            bpy.context.scene.cycles.device = "CPU"
-            bpy.context.scene.render.threads = multiprocessing.cpu_count()
-        else:
-            bpy.context.scene.cycles.device = "GPU"
-            preferences = bpy.context.preferences.addons['cycles'].preferences
-            for device_type in preferences.get_device_types(bpy.context):
-                preferences.get_devices_for_type(device_type[0])
-            for gpu_type in ["OPTIX", "CUDA"]:
-                found = False
-                for device in preferences.devices:
-                    if device.type == gpu_type:
-                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
-                        print('Device {} of type {} found and used.'.format(device.name, device.type))
-                        found = True
-                        break
-                if found:
-                    break
         bpy.context.scene.cycles.diffuse_bounces = self.config.get_int("diffuse_bounces", 3)
         bpy.context.scene.cycles.glossy_bounces = self.config.get_int("glossy_bounces", 0)
         bpy.context.scene.cycles.ao_bounces_render = self.config.get_int("ao_bounces_render", 3)
