@@ -113,7 +113,6 @@ def check_if_element_is_correct(current_element):
                         f_default_v = f_default_v.replace(".", "")
                         current_def_val = current_def_val.replace(".", "")
                     if f_default_v.isnumeric() and current_def_val.isnumeric():
-                        print(current_element, f_default_v, current_element.default_value)
                         errors.append("The default value does not match the value in the docu for key: {} "
                                       "({}!={})".format(current_element.key_word,
                                                         current_element.default_value, found_value.default_value))
@@ -124,8 +123,6 @@ if __name__ == "__main__":
 
     all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))
     for py_file in all_py_files:
-        if "lightin" not in py_file:
-            continue
         if "scripts" not in os.path.abspath(py_file):
             with open(py_file, "r") as file:
                 errors = []
