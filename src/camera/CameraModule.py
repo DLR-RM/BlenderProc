@@ -9,13 +9,31 @@ import numpy as np
 import os
 
 class CameraModule(Module):
-    """
+    """ A super class for camera related modules. Holding key information like camera intrinsics and extrinsics, in addition to setting stereo parameters.
+
+    Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config parameters here, it has to be in a child class of CameraModule.
+
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "path": "<args:0>",
+        "file_format": "location rotation/value _ _ _ fov _ _",
+        "source_frame": ["X", "-Z", "Y"],
+        "default_cam_param": {
+          "rotation": {
+            "format": "forward_vec"
+          },
+          "fov_is_half": true
+        }
+      }
+    }
+
     **Configuration**:
 
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the blender frame. Has to be a list of three strings (Allowed values: 'X', 'Y', 'Z', '-X', '-Y', '-Z'). Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed to (1, -3, 2)."
+       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the blender frame. Has to be a list of three strings (Allowed values: 'X', 'Y', 'Z', '-X', '-Y', '-Z'). Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed to (1, -3, 2). Optional. Default value: ["X", "Y", "Z"]. Type: list"
        "default_cam_param", "A dict which can be used to specify properties across all cam poses. See the next table for which properties can be set."
 
     **Properties per cam pose**:
@@ -29,6 +47,9 @@ class CameraModule(Module):
        "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension"
        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
        "cam_K", "Camera Matrix K"
+       "resolution_x", "Width resolution of the camera. Optional. Default value: 512. Type: int."
+       "resolution_y", "height resolution of the camera. Optional. Default value: 512. Type: int."
+       "cam2world_matrix", "4x4 camera extrinsic matrix. Optional. Default value: []. Type: list of floats."
        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the frustum"
        "clip_start", "Near clipping"
        "clip_end", "Far clipping"
