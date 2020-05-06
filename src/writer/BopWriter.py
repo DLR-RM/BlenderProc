@@ -18,7 +18,7 @@ class BopWriter(StateWriter):
 
     def __init__(self, config):
         StateWriter.__init__(self, config)
-        output_dir = self._determine_output_dir()
+        output_dir = self._determine_output_dir(output_is_temp_default=False)
         self._scene_gt_path = os.path.join(output_dir, 'scene_gt.json') 
         self._scene_camera_path = os.path.join(output_dir, 'scene_camera.json') 
         self._camera_path = os.path.join(output_dir, 'camera.json')        
