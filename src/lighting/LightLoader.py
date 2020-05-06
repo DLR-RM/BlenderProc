@@ -15,9 +15,13 @@ class LightLoader(LightModule):
     .. csv-table::
        :header: "Parameter", "Description"
     
-       "lights", "A list of dicts, where each entry describes one light. See next table for which properties can be used."
-       "path", "Optionally, a path to a file which specifies one light source position, type, etc. per line. The lines has to be formatted as specified in 'file_format'."
-       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain the keywords of the corresponding properties separated by a space. See LightModule for allowed properties."
+       "lights", "A list of dicts, where each entry describes one light. See the LightModule, for more information."
+                 "Type: list. Default: []"
+       "path", "Optionally, a path to a file which specifies one light source position, type, etc. per line.
+               "The lines have to be formatted as specified in 'file_format'. Type: string. Default: ""."
+       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain"
+                      "the keywords of the corresponding properties separated by a space. "
+                      "See LightModule for allowed properties. Type: string. Default: ""."
     """
 
     def __init__(self, config):
