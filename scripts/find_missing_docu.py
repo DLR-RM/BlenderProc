@@ -29,8 +29,10 @@ def get_config_element_from_line(line, line_nr):
     key_word = key_word.strip()
     if "\"" in key_word:
         sep = "\""
-    else:
+    elif "\'" in key_word:
         sep = "'"
+    else:
+        return None
     key_word = key_word.replace(sep, "")
     if key_word:
         return ConfigElement(key_word, ele_type, line, line_nr, default_val)
