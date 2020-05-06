@@ -92,11 +92,40 @@ class ConfigElement(object):
                 self.default_value = default_val
 
 
+def check_if_element_is_correct(current_element):
+    errors = []
+    if current_element.ele_type is None:
+        if current_element.found_usage:
+            errors.append(
+                "This key '{}' does not have a Type, used type in code: {}".format(current_element.key_word,
+                                                                                   [ele.ele_type for ele in
+                                                                                    current_element.found_usage]))
+        else:
+            errors.append("This key '{}' does not have a Type".format(current_element.key_word))
+    if current_element.default_value and current_element.found_usage:
+        for found_value in current_element.found_usage:
+            f_default_v = found_value.default_value
+            if f_default_v != current_element.default_value:
+                ele_type = current_element.ele_type.lower()
+                if ele_type == "int" or ele_type == "float":
+                    current_def_val = current_element.default_value
+                    if ele_type == "float":
+                        f_default_v = f_default_v.replace(".", "")
+                        current_def_val = current_def_val.replace(".", "")
+                    if f_default_v.isnumeric() and current_def_val.isnumeric():
+                        print(current_element, f_default_v, current_element.default_value)
+                        errors.append("The default value does not match the value in the docu for key: {} "
+                                      "({}!={})".format(current_element.key_word,
+                                                        current_element.default_value, found_value.default_value))
+    return errors
+
 
 if __name__ == "__main__":
 
     all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))
     for py_file in all_py_files:
+        if "lightin" not in py_file:
+            continue
         if "scripts" not in os.path.abspath(py_file):
             with open(py_file, "r") as file:
                 errors = []
@@ -143,9 +172,8 @@ if __name__ == "__main__":
                     if "csv-table" in line:
                         start_csv_table = True
                     elif start_csv_table and ("__init__" in line or line.strip() == '"""'):
-                        if current_element and current_element.ele_type is None:
-                            errors.append("This key '{}' does not have a Type".format(
-                                current_element.key_word))
+                        if current_element:
+                            errors.extend(check_if_element_is_correct(current_element))
                         break
                     if start_csv_table:
                         config_element = get_config_value_from_csv_line(line, line_nr)
@@ -153,28 +181,10 @@ if __name__ == "__main__":
                             found_values = [ele for ele in list_of_used_config_get if
                                             ele.key_word == config_element.key_word]
                             if found_values:
-                                config_element.found_usage = found_values
+                                config_element.found_usage = found_values.copy()
                             if current_element:
                                 # found a new key_word, check the last one
-                                if current_element.ele_type is None:
-                                    if current_element.found_usage:
-                                        errors.append(
-                                            "This key '{}' does not have a Type, used type in code: {}".format(current_element.key_word, [ele.ele_type for ele in current_element.found_usage]))
-                                    else:
-                                        errors.append("This key '{}' does not have a Type".format(current_element.key_word))
-                                if current_element.default_value:
-                                    if current_element.found_usage:
-                                        for found_value in current_element.found_usage:
-                                            f_default_v = found_value.default_value
-                                            if f_default_v != current_element.default_value:
-                                                ele_type = current_element.ele_type.lower()
-                                                if ele_type == "int" or ele_type == "float":
-                                                    if f_default_v.isnumeric() and current_element.default_value.isnumeric():
-                                                        errors.append("The default value does not match the value in the " \
-                                                                      "docu for key: {} ({}!={})".format(
-                                                                                                 current_element.key_word,
-                                                                                                 current_element.default_value,
-                                                                                             f_default_v))
+                                errors.extend(check_if_element_is_correct(current_element))
                             current_element = config_element
                         if current_element:
                             # there is no new key found, and there was an old key there
