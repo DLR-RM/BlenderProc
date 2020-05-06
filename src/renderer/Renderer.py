@@ -49,8 +49,18 @@ class Renderer(Module):
        "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range"
        "depth_falloff", "Type of transition used to fade depth. Default=Linear. [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
-       "stereo", "If true, renders a pair of stereoscopic images for each camera position."
        "use_alpha", "If true, the alpha channel stored in .png textures is used."
+       "stereo", "If true, renders a pair of stereoscopic images for each camera position."
+       "avoid_rendering", "This mode is only used during debugging, when all settings should be executed but the actual"
+                          "rendering call is omitted. Type: bool Default: False"
+       "cpu_threads", "Set number of cpu cores used for rendering (1 thread is always used for coordination
+                      "if more than one cpu thread means GPU-only rendering). Type: int, Default: 1"
+
+       "render_normals", "If true, the normals are also rendered. Type: bool, Default: False"
+       "normals_output_file_prefix", "The file prefix that should be used when writing normals."
+                                     "Type: string, Default: "normals_""
+       "normals_output_key", "The key which is used for storing the normal in a merged file."
+                             "Type: string, Default: "normal""
     """
 
     def __init__(self, config):
@@ -60,9 +70,9 @@ class Renderer(Module):
 
     def _configure_renderer(self, default_samples=256, default_denoiser="Blender"):
         """
-         Sets many different render parameters which can be adjusted via the config.
+        Sets many different render parameters which can be adjusted via the config.
 
-         :param default_samples: Default number of samples to render for each pixel
+        :param default_samples: Default number of samples to render for each pixel
         """
         bpy.context.scene.cycles.samples = self.config.get_int("samples", default_samples)
 
