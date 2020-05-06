@@ -1,6 +1,8 @@
 import os
 import random
 from numpy import random as np_random
+from sys import platform
+import multiprocessing
 
 import bpy
 
@@ -14,6 +16,10 @@ class Initializer(Module):
      - Sets background color
      - Configures computing device
      - Creates camera
+     - sets the device type to the fastest option possible -> OPTIX > CUDA > OPEN_CL
+
+     If you want deterministic outputs use the environment variable: "BLENDER_PROC_RANDOM_SEED" and set it to
+     the desired seed. (random and numpy random are effected by this)
 
     **Configuration**:
 
@@ -21,7 +27,9 @@ class Initializer(Module):
        :header: "Parameter", "Description"
 
        "horizon_color", "A list of three elements specifying rgb of the world's horizon/background color."
-       "compute_device_type", "Device to use for computation. Available options are 'CUDA', 'OPTIX', 'OPENCL' and 'NONE'. 'OPTIX' requires a driver version of >=435.12!
+                        "Type: list. Default: [0.535, 0.633, 0.608]."
+       "global", "A dictionary of all global set attributes, which are used if a module does not provide a certain "
+                 "key. Type: dict. Default: {}."
     """
 
     def __init__(self, config):
@@ -35,7 +43,6 @@ class Initializer(Module):
         self._default_init()
 
     def run(self):
-        # Make sure to use the current GPU
         prefs = bpy.context.preferences.addons['cycles'].preferences
         # Use cycles
         bpy.context.scene.render.engine = 'CYCLES'
@@ -66,23 +73,16 @@ class Initializer(Module):
 
         # setting the frame end, will be changed by the camera loader modules
         bpy.context.scene.frame_end = 0
-        print(prefs.compute_device_type, prefs.get_devices())
-        for group in prefs.get_devices():
-            for d in group:
-                d.use = True
 
-        # Set background color
+        # Sets background color
         world = bpy.data.worlds['World']
         world.color[:3] = self.config.get_list("horizon_color", [0.535, 0.633, 0.608])
 
-        # Create the cam
+        # Create the camera
         cam = bpy.data.cameras.new("Camera")
         cam_ob = bpy.data.objects.new("Camera", cam)
         bpy.context.scene.collection.objects.link(cam_ob)
         bpy.context.scene.camera = cam_ob
-
-        # Use cycles
-        bpy.context.scene.render.engine = 'CYCLES'
 
         random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
         if random_seed:
