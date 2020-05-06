@@ -5,12 +5,35 @@ from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds, get_all_mesh_objects
 
 class POI(Provider):
-    """ Computes a point of interest in the scene.
+    """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
+        that is the closest one to the mean location of the bboxes of the selected objects.
 
+        Example 1: Return a location of the object that is the closest one to the mean bbox location of all MESH objects.
+
+        {
+          "provider": "getter.POI"
+        }
+
+        Example 2: Return a location of the object that is the closest one to the mean bbox location of MESH objects
+                   that have their custom property set to True.
+
+        {
+          "provider": "getter.POI",
+          "selector": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "cp_shape_net_object": True,
+              "type": "MESH"
+            }
+          }
+        }
+
+    **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
-       "selector", "Instead of all objects a group of objects can be selected with the `getter.Entity` class default: all_mesh_objects"
+        :header: "Parameter", "Description"
+
+        "selector", "Objects to take part in the POI computation. Type: Provider. Default: all mesh objects."
     """
 
     def __init__(self, config):
