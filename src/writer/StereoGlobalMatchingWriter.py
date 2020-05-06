@@ -34,7 +34,7 @@ class StereoGlobalMatchingWriter(Renderer):
        "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera.Type: int. Default value: 512."
        "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Default value: 512."
        "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera. Type: float. Default value: 1."
- 
+
     """
 
     def __init__(self, config):

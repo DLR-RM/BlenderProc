@@ -1,9 +1,4 @@
-import mathutils
-import bpy
-import random
-
 from src.lighting.LightModule import LightModule
-from src.utility.Utility import Utility
 
 
 class LightSampler(LightModule):
@@ -14,7 +9,8 @@ class LightSampler(LightModule):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "path", "A path to a file where values used for setting a ligt source(s) (like position, type, color, etc.) are written, onelight source per line."
+       "lights", "List of lights, which contain all the information to create new lights. See the LightModule for
+                 "more information. Type: list. Default: []."
     """
 
     def __init__(self, config):

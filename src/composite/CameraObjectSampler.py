@@ -12,10 +12,10 @@ class CameraObjectSampler(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "total_noof_cams", "Total number of sampled cameras"
-       "noof_cams_per_scene", "Number of sampled cameras after which object poses are re-sampled"
-       "object_pose_sampler", "object.ObjectPoseSampler"
-       "camera_pose_sampler", "camera.CameraSampler"
+       "total_noof_cams", "Total number of sampled cameras. Type: int. Default: 10"
+       "noof_cams_per_scene", "Number of sampled cameras after which object poses are re-sampled. Type: int. Default: 5"
+       "object_pose_sampler", "The config module based on the object.ObjectPoseSampler Type: dict. Default: {}"
+       "camera_pose_sampler", "The config module based on the camera.CameraSampler Type: dict. Default: {}"
     """
 
     def __init__(self, config):
