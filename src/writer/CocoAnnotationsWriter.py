@@ -15,11 +15,12 @@ class CocoAnnotationsWriter(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging."
-       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the output_key of the RgbRenderer module."
-       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as the output_key of the SegMapRenderer module."
-       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was registered. Should be the same as the colormap_output_key of the SegMapRenderer module."
-       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output directory, the new coco annotations will be appended to the existing file. Also the rgb images will be named such that there are no collisions."
+       
+       "delete_temporary_files_afterwards", "Deleting all temporary files after merging. Type: bool. Optional. Default value: True."
+       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the output_key of the RgbRenderer module. Type: string. Optional. Default value: colors"
+       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as the output_key of the SegMapRenderer module. Type: string. Optional. Default value: segmap."
+       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was registered. Should be the same as the colormap_output_key of the SegMapRenderer module. Type: string. Optional. Default value: segcolormap."
+       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output directory, the new coco annotations will be appended to the existing file. Also the rgb images will be named such that there are no collisions. Type: bool. Optional. Default value: False."
     """
 
     def __init__(self, config):
@@ -34,6 +35,13 @@ class CocoAnnotationsWriter(Module):
             os.makedirs(self._coco_data_dir)
 
     def run(self):
+        """ Writes coco annotations in the following steps:
+        1. Locat the seg images
+        2. Locat the rgb maps
+        3. Locat the seg maps
+        4. Read color mappings
+        5. For each frame write the coco annotation
+        """
         if self._avoid_rendering:
             print("Avoid rendering is on, no output produced!")
             return
