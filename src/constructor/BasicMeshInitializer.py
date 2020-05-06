@@ -9,7 +9,7 @@ class BasicMeshInitializer(Module):
         default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
         manipulation use manipulators.EntityManipulator module.
 
-        Example 1: add a Plane "Ground_plane" object to the scene.
+        Example 1: Add a Plane "Ground_plane" object to the scene.
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -23,7 +23,7 @@ class BasicMeshInitializer(Module):
           }
         }
 
-        Example 2: add a rotated "Cube_1" Cube object, a displaced "Torus_2" Torus object, and a scaled "Cone_3" Cone
+        Example 2: Add a rotated "Cube_1" Cube object, a displaced "Torus_2" Torus object, and a scaled "Cone_3" Cone
                    object to the scene.
 
         {
@@ -57,9 +57,8 @@ class BasicMeshInitializer(Module):
         "meshes_to_add", "List that contains object configuration data in each cell. See table below for available "
                          "parameters per cell. Type: list."
         "init_materials", "Flag that controls whether the added objects will be assigned a default Principled BSDF "
-                          "shader-based material (if value is True), or not (if value is False). Material name is "
-                          "derived from the object name (plus a "_material" suffix). Optional. Default value: True. "
-                          "Type: boolean."
+                          "shader-based material (if value is True), or not (if value is False). Material's name is "
+                          "derived from the object's name. Type: boolean. Default: True."
 
     **meshes_to_add cell configuration**:
 
@@ -69,10 +68,9 @@ class BasicMeshInitializer(Module):
         "type", "Type of mesh object to add. Available types: 'plane', 'cube', 'circle', 'uvsphere', 'icosphere', "
                 "'cylinder', 'cone', 'torus'. Type: string."
         "name", "Name of the mesh object. Type: string."
-        "location", "Location of the mesh object. Optional. Default value: [0, 0, 0]. Type: mathutils.Vector."
-        "rotation", "Rotation (3 Euler angles) of the mesh object. Optional. Default value: [0, 0, 0]. "
-                    "Type: mathutils.Vector."
-        "scale", "Scale of the mesh object. Optional. Default value: [1, 1, 1]. Type: mathutils.Vector."
+        "location", "Location of the mesh object. Type: mathutils.Vector. Default: [0, 0, 0]. "
+        "rotation", "Rotation (3 Euler angles) of the mesh object. Type: mathutils.Vector. Default: [0, 0, 0]."
+        "scale", "Scale of the mesh object. Type: mathutils.Vector. Default: [1, 1, 1]."
     """
 
     def __init__(self, config):
