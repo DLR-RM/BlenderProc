@@ -97,12 +97,18 @@ class ConfigElement(object):
         if "Default:" in line:
             default_val = line[line.find("Default:") + len("Default:"):]
             default_val = default_val.strip()
-            poses = [max([default_val.find(". "), default_val.find(".")]), default_val.find(" "), default_val.find(", ")]
+            poses = [max([default_val.find(". "), default_val.find("."), default_val.find(".\"")]), default_val.find("\""), default_val.find(" "), default_val.find(", ")]
+            poses = [ele for ele in poses if ele > 0]
             if poses:
                 end_pos = min(poses)
                 default_val = default_val[:end_pos]
             if default_val:
                 self.default_value = default_val
+
+def convert_element_to_type(element, ele_type):
+    convert_str = "{}({})".format(ele_type, element)
+    return eval(convert_str)
+
 
 def check_if_element_is_of_type(element, ele_type):
     try:
@@ -136,13 +142,14 @@ def check_if_element_is_correct(current_element):
                 ele_type = current_element.ele_type.lower()
                 if ele_type == "int" or ele_type == "float":
                     current_def_val = current_element.default_value
-                    if ele_type == "float":
-                        f_default_v = f_default_v.replace(".", "")
-                        current_def_val = current_def_val.replace(".", "")
-                    if f_default_v.isnumeric() and current_def_val.isnumeric():
-                        errors.append("The default value does not match the value in the docu for key: {} "
-                                      "({}!={})".format(current_element.key_word,
-                                                        current_element.default_value, found_value.default_value))
+                    if check_if_element_is_of_type(f_default_v, found_value.ele_type) and \
+                       check_if_element_is_of_type(current_def_val, current_element.ele_type):
+                        found_val = convert_element_to_type(f_default_v, found_value.ele_type)
+                        current_val = convert_element_to_type(current_def_val, current_element.ele_type)
+                        if found_val != current_val:
+                            errors.append("The default value does not match the value in the docu for key: {} "
+                                          "({}!={})".format(current_element.key_word,
+                                                            current_element.default_value, found_value.default_value))
 
     elif current_element.found_usage:
         for found_value in current_element.found_usage:
@@ -156,7 +163,8 @@ def check_if_element_is_correct(current_element):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser("Finds missing documentation in BlenderProc")
-    parser.add_argument("-s", "--src", help="You can specify a certain source folder to see only modules from this folder", type=str)
+    parser.add_argument("-s", "--src", help="You can specify a certain source folder to see only modules "
+                                            "from this folder", type=str)
     args = parser.parse_args()
 
     all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))
