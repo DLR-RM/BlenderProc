@@ -1,4 +1,3 @@
-import mathutils
 import bpy
 
 from src.camera.CameraModule import CameraModule

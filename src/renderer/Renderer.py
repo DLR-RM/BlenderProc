@@ -67,7 +67,7 @@ class Renderer(Module):
                            "Type: string. Default: "depth""
        "depth_start", "Starting distance of the depth, measured from the camera. Type: float. Default: 0.1"
        "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range."
-                      "Type: float. Default 25.0"
+                      "Type: float. Default: 25.0"
        "depth_falloff", "Type of transition used to fade depth. Type: string. Default: "Linear". "
                         "Available=[LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
