@@ -17,7 +17,18 @@ def get_config_element_from_line(line, line_nr):
     ele_type = config_ele[1:config_ele.find("(")]
     if not ele_type:
         return None
-    between_parenthesis = config_ele[config_ele.find("(")+1: config_ele.find(")")]
+    if config_ele.count("(") == 1:
+        between_parenthesis = config_ele[config_ele.find("(")+1: config_ele.find(")")]
+    else:
+        between_parenthesis = config_ele[config_ele.find("("):]
+        if ")" in between_parenthesis:
+            next_closing_pos, next_opening_pos = 0, 0
+            for _ in range(config_ele.count("(")):
+                next_closing_pos = between_parenthesis.find(")", next_closing_pos+1)
+                next_opening_pos = between_parenthesis.find("(", next_opening_pos+1)
+                if next_closing_pos < next_opening_pos:
+                    between_parenthesis = between_parenthesis[1:next_closing_pos]
+                    break
     default_val = None
     if "," in between_parenthesis:
         # has a default value
@@ -72,7 +83,8 @@ class ConfigElement(object):
                 poses = [ele_type.find("Default"), ele_type.find(".Default"), ele_type.find(". Default"),
                          ele_type.find(",Default"), ele_type.find(", Default")]
             else:
-                poses = [ele_type.find("."), ele_type.find(" "), ele_type.find(", ")]
+                poses = [max([ele_type.find(". "), ele_type.find("."), ele_type.find(".\"")]),
+                         ele_type.find(" "), ele_type.find(", ")]
             poses = [ele for ele in poses if ele > 0]
             if poses:
                 end_pos = min(poses)
@@ -84,13 +96,27 @@ class ConfigElement(object):
         if "Default:" in line:
             default_val = line[line.find("Default:") + len("Default:"):]
             default_val = default_val.strip()
-            poses = [default_val.find("."), default_val.find(" "), default_val.find(", ")]
+            poses = [max([default_val.find(". "), default_val.find(".")]), default_val.find(" "), default_val.find(", ")]
             if poses:
                 end_pos = min(poses)
                 default_val = default_val[:end_pos]
             if default_val:
                 self.default_value = default_val
 
+def check_if_element_is_of_type(element, ele_type):
+    try:
+        convert_str = "{}({})".format(ele_type, element)
+        eval(convert_str)
+    except ValueError as e:
+        return False
+    except NameError as e:
+        return False
+    except TypeError as e:
+        return False
+    except SyntaxError as e:
+        print(convert_str, ele_type, element)
+        raise e
+    return True
 
 def check_if_element_is_correct(current_element):
     errors = []
@@ -116,6 +142,13 @@ def check_if_element_is_correct(current_element):
                         errors.append("The default value does not match the value in the docu for key: {} "
                                       "({}!={})".format(current_element.key_word,
                                                         current_element.default_value, found_value.default_value))
+
+    elif current_element.found_usage:
+        for found_value in current_element.found_usage:
+            if check_if_element_is_of_type(found_value.default_value, found_value.ele_type):
+                errors.append("The key '{}' misses the default value used in "
+                              "the code: {}".format(current_element.key_word, found_value.default_value))
+
     return errors
 
 
