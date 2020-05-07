@@ -2,6 +2,7 @@ import numpy as np
 
 from src.main.Module import Module
 
+
 class NoiseRemoval(Module):
     """Removes noise pixels.
 

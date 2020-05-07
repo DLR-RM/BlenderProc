@@ -3,8 +3,8 @@ import os
 
 import bpy
 
-from src.utility.Utility import Utility
 from src.main.Module import Module
+from src.utility.Utility import Utility
 
 
 class SuncgLighting(Module):

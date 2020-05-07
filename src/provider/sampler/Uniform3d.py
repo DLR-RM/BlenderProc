@@ -1,7 +1,9 @@
-import mathutils
 import random
 
+import mathutils
+
 from src.main.Provider import Provider
+
 
 class Uniform3d(Provider):
     """ Uniformly samples a 3-dimensional vector.

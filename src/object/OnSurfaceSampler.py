@@ -1,8 +1,8 @@
 import bpy
 import mathutils
 
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_bounds
 from src.main.Module import Module
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_bounds
 
 
 class OnSurfaceSampler(Module):

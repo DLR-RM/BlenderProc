@@ -6,6 +6,7 @@ import bpy
 from src.main.Module import Module
 from src.utility.Utility import Utility
 
+
 class CCMaterialLoader(Module):
 
     def __init__(self, config):

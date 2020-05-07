@@ -1,14 +1,15 @@
-import os
 import math
-import bpy
-import numpy as np
+import os
 import sys
 from random import choice
-from mathutils import Matrix, Vector, Euler
 
+import bpy
+import numpy as np
+from mathutils import Matrix, Vector
+
+from src.camera.CameraModule import CameraModule
 from src.loader.Loader import Loader
 from src.utility.Config import Config
-from src.camera.CameraModule import CameraModule
 
 
 class BopLoader(Loader):

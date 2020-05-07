@@ -6,11 +6,12 @@ import bpy
 import cv2
 import numpy as np
 
-from src.utility.SGMUtility import fill_in_fast
-from src.utility.BlenderUtility import load_image
-from src.utility.SGMUtility import resize
-from src.renderer.Renderer import Renderer
 from src.main.GlobalStorage import GlobalStorage
+from src.renderer.Renderer import Renderer
+from src.utility.BlenderUtility import load_image
+from src.utility.SGMUtility import fill_in_fast
+from src.utility.SGMUtility import resize
+
 
 class StereoGlobalMatchingWriter(Renderer):
     """ Writes depth image generated from the stereo global matching algorithm to file

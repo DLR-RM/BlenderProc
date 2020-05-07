@@ -1,6 +1,7 @@
-import mathutils
-import random
 import math
+import random
+
+import mathutils
 
 from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds

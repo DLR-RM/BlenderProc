@@ -1,7 +1,7 @@
 import bpy
 
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
 from src.main.Module import Module
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
 
 
 class ObjectPoseSampler(Module):

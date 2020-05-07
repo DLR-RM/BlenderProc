@@ -1,7 +1,8 @@
-import numpy as np
 import mathutils
+import numpy as np
 
 from src.main.Provider import Provider
+
 
 class Shell(Provider):
     """ Samples a point from the space in between two spheres with a a double spherical angle with apex in the center

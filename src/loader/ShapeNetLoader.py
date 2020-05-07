@@ -1,7 +1,7 @@
+import glob
+import json
 import os
 import random
-import json
-import glob
 
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility

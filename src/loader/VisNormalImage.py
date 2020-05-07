@@ -1,9 +1,9 @@
 import math
 
-import mathutils
 import bpy
-import numpy as np
 import h5py
+import mathutils
+import numpy as np
 
 from src.main.Module import Module
 from src.utility.BlenderUtility import add_object_only_with_direction_vectors

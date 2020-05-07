@@ -1,6 +1,5 @@
-from src.utility.ItemWriter import ItemWriter
 from src.utility.BlenderUtility import get_all_mesh_objects
-
+from src.utility.ItemWriter import ItemWriter
 from src.writer.StateWriter import StateWriter
 
 

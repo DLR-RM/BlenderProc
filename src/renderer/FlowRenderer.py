@@ -1,10 +1,11 @@
-import bpy
 import os
+
+import bpy
 import numpy as np
 
 from src.renderer.Renderer import Renderer
-from src.utility.Utility import Utility
 from src.utility.BlenderUtility import load_image
+from src.utility.Utility import Utility
 
 
 class FlowRenderer(Renderer):
