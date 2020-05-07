@@ -64,8 +64,8 @@ class MaterialManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "selector" "Materials to become subjects of manipulation. Type: Provider."
-        "mode" "Mode of operation. Type: string. Default: "once_for_each". Available: 'once_for_each' (if samplers are "
+        "selector", "Materials to become subjects of manipulation. Type: Provider."
+        "mode", "Mode of operation. Type: string. Default: "once_for_each". Available: 'once_for_each' (if samplers are "
                "called, new sampled value is set to each selected material), 'once_for_all' (sampling once for all "
                "of the selected materials)."
 
@@ -86,25 +86,25 @@ class MaterialManipulator(Module):
     **Available custom functions**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "cf_color_link_to_displacement" "Factor that determines the strength of the displacement via linking the "
-                                       "output of the texture image to the displacement Type: float"
-       "cf_change_to_vertex_color" "The name of the vertex color layer, used for changing the material to a vertex "
-                                   "coloring mode. Type: string"
-       "cf_textures", "Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.): "
-                      "texture_path} pairs. Texture_type should be equal to the Shader input name in order to be "
-                      "assigned to a ShaderTexImage node that will be linked to this input. Label represents to which "
-                      "shader input this node is connected. Type: dict."
-       "cf_textures/texture_path", "Path to a texture image. Type: string."
-       "cf_switch_to_emission_shader", "Adds the Emission shader to the target material, sets it's 'color' and "
-                                       "'strength' values, connects it to the Material Output node. Type: dict."
-       "cf_switch_to_emission_shader/color", "[R, G, B, A] vector representing the color of the emitted light. "
-                                             "Type: mathutils.Vector."
-       "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
-       "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
-                   "name of the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> "
-                   "'base_color'). Also deletes any links to this shader's input point. Type: int, float, list, Vector."
+        "cf_color_link_to_displacement" "Factor that determines the strength of the displacement via linking the "
+                                        "output of the texture image to the displacement Type: float"
+        "cf_change_to_vertex_color" "The name of the vertex color layer, used for changing the material to a vertex "
+                                    "coloring mode. Type: string"
+        "cf_textures", "Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.): "
+                       "texture_path} pairs. Texture_type should be equal to the Shader input name in order to be "
+                       "assigned to a ShaderTexImage node that will be linked to this input. Label represents to which "
+                       "shader input this node is connected. Type: dict."
+        "cf_textures/texture_path", "Path to a texture image. Type: string."
+        "cf_switch_to_emission_shader", "Adds the Emission shader to the target material, sets it's 'color' and "
+                                        "'strength' values, connects it to the Material Output node. Type: dict."
+        "cf_switch_to_emission_shader/color", "[R, G, B, A] vector representing the color of the emitted light. "
+                                              "Type: mathutils.Vector."
+        "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
+        "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
+                    "name of the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> "
+                    "'base_color'). Also deletes any links to this shader's input point. Type: int, float, list, Vector."
     """
 
     def __init__(self, config):
