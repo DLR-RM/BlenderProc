@@ -99,7 +99,8 @@ class EntityManipulator(Module):
                "For custom property: key of the pair must start with `cp_` prefix. "
                "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
                "supported custom function names."
-        "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function."
+        "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function. Type: string, "
+                 "int, bool or float, list/Vector."
 
     **Custom functions**
 
