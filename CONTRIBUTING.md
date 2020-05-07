@@ -124,7 +124,7 @@ This way you are required to apply the following patterns:
 * Pipeline Module Description
 
 Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide csv tables with parameter description/explanation along with general module description.
-After general description, give a couple of examples with short explanation, try to show off all parameters in them. For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the default value of this parameter), and mention the range of applicable values.
+After general description, give a couple of examples with short explanation, try to show off all parameters in them. For every parameter give a short explanation of it, it's type, it's default value, it's range or available values, if applicable. The exact order is represented below.
 
 ```python
 class MyNewPipelineModule(Loader):
@@ -149,8 +149,8 @@ class MyNewPipelineModule(Loader):
     .. csv-table::
        :header: "Keyword", "Description"
        
-       "param_a", "Used for this/means this. Type: type. Optional. Default value: value."
-       "param_b", "Used for that/means that. Type: type. Range: [min, max]."
+       "param_a", "Used for this/means this. Type: type. Default: value. Available: some_value, value, another_value."
+       "param_b", "Used for that/means that. Type: type. Range: [min, max]. Default: B."
        
      **Table for another part of config if needed**:
 
@@ -159,7 +159,7 @@ class MyNewPipelineModule(Loader):
        
        "param_c", "Used for this. Contains that."
        "param_c/param_d", "Used for this/means this. Type: type."
-       "param_c/param_e", "Used for that/means that. Type: type. Optional. Default value: value. Range: [min, max]."
+       "param_c/param_e", "Used for that/means that. Type: type. Default: value. Available: value, value1, value2. ."
     """
 ```
 
