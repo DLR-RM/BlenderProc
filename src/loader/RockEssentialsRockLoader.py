@@ -75,18 +75,21 @@ class RockEssentialsRockLoader(Loader):
     .. csv-table::
        :header: "Keyword", "Description"
 
+       "batches", 
+       "sample_objects",
+       "reflection_roughness",
        "path", "Path to a .blend file containing desired rock/cliff objects in //Object// section. Type: string."
-       "objects", "List of rock-/cliff-object names to be loaded. Type: list. Optional. Default value: []. If not "
-                  "specified then `amount` property is used for consequential loading."
+       "objects", "List of rock-/cliff-object names to be loaded. If not "
+                  "specified then `amount` property is used for consequential loading. Type: list. Default: []."
        "amount", "Amount of rock-/cliff-object to load. Type: int. Optional. If not specified, the amount will be set "
                  "to the amount of suitable objects in the current section of a blend file. Must be bigger than 0."
        "sample_objects": "Toggles the uniform sampling of objects to load. Takes into account `objects` and `amount` "
                          "parameters. Type: bool. Optional. Default: False. Requires 'amount' param to be defined."
-       "render_levels", "Number of subdivisions to perform when rendering. Type: int. Optional. Default value: 3."
-       "high_detail_mode", "Flag for enabling HDM when possible. Type: boolean. Optional. Default value: False."
+       "render_levels", "Number of subdivisions to perform when rendering. Type: int. Default: 3."
+       "high_detail_mode", "Flag for enabling HDM when possible. Type: boolean. Default: False."
        "reflection_amount", "Reflection texture value. Type: float (min=0, max=1). Default value: rock-specific."
        "reflection_roughness". "Roughness texture value. Type: float (min=0, max=1). Default value: rock-specific."
-       "physics", "Custom property for physics/rigidbody state. Type: boolean. Optional. Default value: False."
+       "physics", "Custom property for physics/rigidbody state. Type: boolean. Optional. Default: False."
        "scale", "Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. Optional. "
                 "Type: mathutils Vector. Default value: [1, 1, 1]."
        "HSV", "Hue-Saturation-Value parameters of the HSV node. Type: list (3 values). "
