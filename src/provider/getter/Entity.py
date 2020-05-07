@@ -69,7 +69,7 @@ class Entity(Provider):
                                      "For custom property: key of the pair must start with `cp_` prefix. "
                                      "For calling custom function: key of the pair must start with `cf_` prefix. See "
                                      "table below for supported custom functions."
-        "conditions/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
+        "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
         "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
                  "Type: int."
 
