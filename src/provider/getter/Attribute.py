@@ -78,15 +78,15 @@ class Attribute(Provider):
 
         "cf_bounding_box_means", "Custom function name for `get` parameter. Invokes a chain of operations which "
                                  "returns a list of arithmetic means of coordinates of object aligned bounding boxes' "
-                                 "of selected objects in world coordinates format."
+                                 "of selected objects in world coordinates format. Type: list (return)."
 
     **Operations**
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "sum", "Returns the sum of all values of the input list."
-        "avg", "Returns the average value of all values of the input list."
+        "sum", "Returns the sum of all values of the input list. Type: float (return)."
+        "avg", "Returns the average value of all values of the input list. Type: float (return)."
 
     """
 
