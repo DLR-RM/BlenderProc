@@ -40,7 +40,7 @@ class BopLoader(Loader):
        "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Default: -1 (no limit)."
        "obj_ids", "If scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects "
                   "from the given BOP dataset). Type: list. Default: []."
-       "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval. Type: string."
+       "model_type", "Optionally, specify type of BOP model. Type: string. Default: "". Available: [reconst, cad or eval]."
     """
 
     def __init__(self, config):
