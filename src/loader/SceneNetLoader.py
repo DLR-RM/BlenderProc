@@ -24,9 +24,10 @@ class SceneNetLoader(Loader):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "file_path": "The path to the .obj file from SceneNet"
-       "texture_folder": "The path to the texture folder used to sample the textures"
-       "category_labeling": "The path to the csv file used for the category labeling, default: resources/scenenet/CategoryLabeling.csv"
+
+       "file_path": "The path to the .obj file from SceneNet. Type: string."
+       "texture_folder": "The path to the texture folder used to sample the textures. Type: string."
+       "category_labeling": "The path to the csv file used for the category labeling. Type: string. Default: resources/scenenet/CategoryLabeling.csv"
     """
 
     def __init__(self, config):
