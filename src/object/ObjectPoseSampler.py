@@ -51,7 +51,8 @@ class ObjectPoseSampler(Module):
 
     def run(self):
         """
-        Samples positions and rotations of selected object inside the sampling volume while performing mesh and bounding box collision checks in the following steps:
+        Samples positions and rotations of selected object inside the sampling volume while performing mesh and
+        bounding box collision checks in the following steps:
         1. While we have objects remaining and have not run out of tries - sample a point. 
         2. If no collisions are found keep the point.
         """
