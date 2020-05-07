@@ -45,7 +45,7 @@ class CameraLoader(CameraModule):
                "formatted as specified in 'file_format'. Type: string. Default: ""."
        "file_format", "A string which specifies how each line of the given file is formatted. The string should contain "
                       "the keywords of the corresponding properties separated by a space. See next table for allowed "
-                      "properties. Type: string. Default: empty string."
+                      "properties. Type: string. Default: ""."
        "default_cam_param", "A dictionary containing camera intrinsic parameters. Type: dict. Default: {}."
     """
 
