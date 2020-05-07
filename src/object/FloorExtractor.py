@@ -1,23 +1,39 @@
-
-from src.main.Module import Module
 import bpy
 import mathutils
-from math import radians, fabs, acos
 import os
 import bmesh
+from math import radians, fabs, acos
+
+from src.main.Module import Module
 from src.utility.Utility import Utility
 
+
 class FloorExtractor(Module):
-    """Will search for the specified object and splits the surfaces which point upwards at a specified level away 
+    """ Will search for the specified object and splits the surfaces which point upwards at a specified level away
+
+        Example 1:
+
+        {
+          "module": "object.FloorExtractor",
+          "config": {
+            "is_replica_object": "True",
+            "obj_name": "mesh",
+            "compare_angle_degrees" : 7.5,
+            "compare_height": 0.15
+          }
+        }
 
     **Configuration**:
     .. csv-table::
         :header: "Parameter", "Description"
 
         "obj_name", "Name of the object where the floor gets extracted. Type: string."
-        "compare_angle_degrees", "Maximum difference between the up vector and the current polygon normal in degrees. Type: float."
-        "compare_height", "Maximum difference in Z direction between the polygons median point and the specified height of the room. Type: float."
-        "is_replica_object", "In this instance the data_set_name key has to be set. Type: bool."
+        "compare_angle_degrees", "Maximum difference between the up vector and the current polygon normal in degrees. "
+                                 "Type: float. Default: 7.5."
+        "compare_height", "Maximum difference in Z direction between the polygons median point and the specified height "
+                          "of the room. Type: float. Default: 0.15."
+        "is_replica_object", "In this instance the data_set_name key has to be set. Type: bool. Default: False."
+        "height_list_path", "Path to a file with height values. Specify one if is_replica_object == False. Type: string."
         "data_set_name", "Name of the data set only useful with replica_dataset. Type: string."
     """
 
