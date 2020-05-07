@@ -20,20 +20,20 @@ class StereoGlobalMatchingWriter(Renderer):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "infer_focal_length_from_fov", "If true, then focal length would be calculated from the field of view angle, otherwise the value of the focal length would be read from the config parameter: "focal_length". Type: bool. Optional. Default value: False"
-       "disparity_filter", "Applies post-processing of the generated disparity map using WLS filter. Type: bool. Optional. Default value: True"
-       "depth_completion", "Applies basic depth completion using image processing techniques. Type: bool. Optional. Default value: True"
-       "focal_length", "Focal length used in the depth calculation step, should be set if 'infer_focal_length_from_fov' is set to false. Type: float. Optional. Default value: 0.0"
+       "infer_focal_length_from_fov", "If true, then focal length would be calculated from the field of view angle, otherwise the value of the focal length would be read from the config parameter: "focal_length". Type: bool. Default: False"
+       "disparity_filter", "Applies post-processing of the generated disparity map using WLS filter. Type: bool. Default: True"
+       "depth_completion", "Applies basic depth completion using image processing techniques. Type: bool. Default: True"
+       "focal_length", "Focal length used in the depth calculation step, should be set if 'infer_focal_length_from_fov' is set to false. Type: float. Default: 0.0"
 
-       "window_size", "Semi-global matching kernel size. Should be an odd number. Type: int. Optional. Default value: 7"
-       "num_disparities", "Semi-global matching number of disparities. Should be > 0 and divisible by 16. Type: int. Optional. Default value: 32"
-       "min_disparity", "Semi-global matching minimum disparity. Type: int. Optional. Default value: 0"
-       "avoid_rendering", "If true, exit. Type: bool. Optional. Defaut value: False."
-       "output_disparity", "Additionally outputs the disparity map. Type: bool. Default value: False"
+       "window_size", "Semi-global matching kernel size. Should be an odd number. Type: int. Optional. Default: 7"
+       "num_disparities", "Semi-global matching number of disparities. Should be > 0 and divisible by 16. Type: int. Optional. Default: 32"
+       "min_disparity", "Semi-global matching minimum disparity. Type: int. Optional. Default: 0"
+       "avoid_rendering", "If true, exit. Type: bool. Optional. Default: False."
+       "output_disparity", "Additionally outputs the disparity map. Type: bool. Default: False"
        "rgb_output_key", "The key for the rgb data in the output. Type: string. Optional. default: colors."
-       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Optional. Default value: 512."
-       "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Optional. Default value: 512."
-       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera. Type: float. Optional. Default value: 1."
+       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Optional. Default: 512."
+       "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles in front of the camera. Type: int. Optional. Default: 512."
+       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera. Type: float. Optional. Default: 1."
 
     """
 
