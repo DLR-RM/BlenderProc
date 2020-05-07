@@ -48,7 +48,7 @@ class MaterialRandomizer(Module):
                                "Type: float. Range: [0, 1]. Default: 0.2."
         "manipulated_objects", "Objects to have their material randomized. Type: Provider. Default: all mesh objects."
         "materials_to_replace_with", "Materials to participate in randomization. Type: Provider. Default: all materials."
-        "mode", "Mode of operation. Type: string. Default: 'once_for_each'. Available: 'once_for_each' (sampling the "
+        "mode", "Mode of operation. Type: string. Default: "once_for_each". Available: 'once_for_each' (sampling the "
                 "material once for each object), 'once_for_all' (sampling once for all of the objects)."
     """
 
