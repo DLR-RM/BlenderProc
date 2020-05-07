@@ -71,7 +71,7 @@ class Attribute(Provider):
         "index", "If set, after the conditions are applied only the corresponding value of entity with the specified "
                  "index is returned. Type: int."
 
-    **Custom functions**
+    **Custom functions**:
 
     .. csv-table::
         :header: "Parameter", "Description"
@@ -80,14 +80,13 @@ class Attribute(Provider):
                                  "returns a list of arithmetic means of coordinates of object aligned bounding boxes' "
                                  "of selected objects in world coordinates format. Type: list (return)."
 
-    **Operations**
+    **Operations**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
         "sum", "Returns the sum of all values of the input list. Type: float (return)."
         "avg", "Returns the average value of all values of the input list. Type: float (return)."
-
     """
 
     def __init__(self, config):

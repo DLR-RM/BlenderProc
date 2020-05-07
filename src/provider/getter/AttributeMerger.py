@@ -64,7 +64,7 @@ class AttributeMerger(Provider):
         "transform_by", "Name of the operation to perform on the list of Provider return values. See table below for "
                         "supported operation names. Type: string."
 
-    **Operations**
+    **Operations**:
 
     .. csv-table::
         :header: "Parameter", "Description"
