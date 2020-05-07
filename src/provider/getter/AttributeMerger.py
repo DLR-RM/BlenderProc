@@ -69,8 +69,8 @@ class AttributeMerger(Provider):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "sum", "Returns the sum of all values of the input list."
-        "avg", "Returns the average value of all values of the input list."
+        "sum", "Returns the sum of all values of the input list. Type: float (return)."
+        "avg", "Returns the average value of all values of the input list. Type: float (return)."
     """
 
     def __init__(self, config):
