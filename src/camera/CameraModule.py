@@ -1,61 +1,74 @@
-from src.main.Module import Module
-from src.utility.ItemCollection import ItemCollection
-from src.utility.Utility import Utility
-
-from mathutils import Matrix, Vector, Euler
-import math
 import bpy
 import numpy as np
-import os
+from mathutils import Matrix, Vector, Euler
+
+from src.main.Module import Module
+from src.utility.Utility import Utility
+
 
 class CameraModule(Module):
-    """ A super class for camera related modules. Holding key information like camera intrinsics and extrinsics, in addition to setting stereo parameters.
+    """ A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,
+        in addition to setting stereo parameters.
 
-    Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config parameters here, it has to be in a child class of CameraModule.
+        Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config
+                   parameters here, it has to be in a child class of CameraModule.
 
-    {
-      "module": "camera.CameraLoader",
-      "config": {
-        "path": "<args:0>",
-        "file_format": "location rotation/value _ _ _ fov _ _",
-        "source_frame": ["X", "-Z", "Y"],
-        "default_cam_param": {
-          "rotation": {
-            "format": "forward_vec"
-          },
-          "fov_is_half": true
+        {
+          "module": "camera.CameraLoader",
+          "config": {
+            "path": "<args:0>",
+            "file_format": "location rotation/value _ _ _ fov _ _",
+            "source_frame": ["X", "-Z", "Y"],
+            "default_cam_param": {
+              "rotation": {
+                "format": "forward_vec"
+              },
+            "fov_is_half": true
+            }
+          }
         }
-      }
-    }
 
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the blender frame. Has to be a list of three strings (Allowed values: 'X', 'Y', 'Z', '-X', '-Y', '-Z'). Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed to (1, -3, 2). Optional. Default value: ["X", "Y", "Z"]. Type: list"
-       "default_cam_param", "A dict which can be used to specify properties across all cam poses. See the next table for which properties can be set."
+        "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
+                        "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
+                        "will be transformed to (1, -3, 2). Type: list. Default: ["X", "Y", "Z"]. "
+                        "Available: 'X', 'Y', 'Z', '-X', '-Y', '-Z'."
+        "default_cam_param", "Properties across all cam poses. See the next table for details. Type: dict."
 
     **Properties per cam pose**:
 
     .. csv-table::
-       :header: "Keyword", "Description"
+        :header: "Keyword", "Description"
 
-       "location", "The position of the camera, specified as a list of three values (xyz)."
-       "rotation/value", "Specifies the rotation of the camera. rotation/format describes the form in which the rotation is specified. Per default rotations are specified as three euler angles."
-       "rotation/format", "Describes the form in which the rotation is specified. Possible values: 'euler': three euler angles, 'forward_vec': Specified with a forward vector (The Y-Axis is assumed as Up-Vector), 'look_at': Camera will be turned such as it looks at 'value' location, which can be defined as a fixed or sampled XYZ location."
-       "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension"
-       "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is true than its assumed to be the angle between forward vector and one side of the frustum)"
-       "cam_K", "Camera Matrix K"
-       "resolution_x", "Width resolution of the camera. Optional. Default value: 512. Type: int."
-       "resolution_y", "height resolution of the camera. Optional. Default value: 512. Type: int."
-       "cam2world_matrix", "4x4 camera extrinsic matrix. Optional. Default value: []. Type: list of floats."
-       "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the frustum"
-       "clip_start", "Near clipping"
-       "clip_end", "Far clipping"
-       "stereo_convergence_mode", "How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the convergence plane, or parallel where they do not converge and are parallel)."
-       "convergence_distance", "The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen)."
-       "interocular_distance", "Distance between the camera pair."
+        "location", "The position of the camera, specified as a list of three values (xyz). Type: mathutils.Vector."
+        "rotation/value", "Specifies the rotation of the camera. Per default rotations are specified as three euler "
+                          "angles. Type: mathutils.Vector."
+        "rotation/format", "Describes the form in which the rotation is specified. Type: string. Available: 'euler' "
+                           "(three Euler angles), 'forward_vec'(specified with a forward vector: the Y-Axis is assumed "
+                           "as Up-Vector), 'look_at' (camera will be turned such as it looks at 'value' location, which "
+                           "can be defined as a fixed or sampled XYZ location)."
+        "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float."
+        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed "
+               "to be the angle between forward vector and one side of the frustum). Type: float. Default: 0.691111."
+        "cam_K", "Camera Matrix K. Type: list. Default: []."
+        "resolution_x", "Width resolution of the camera. Type: int. Default: 512. "
+        "resolution_y", "Height resolution of the camera. Type: int. Default: 512. "
+        "cam2world_matrix", "4x4 camera extrinsic matrix. Type: list of floats. Default: []."
+        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the "
+                       "frustum. Type: bool. Default: False."
+        "pixel_aspect_x", "Pixel aspect ratio. Type: float. Default: 1."
+        "clip_start", "Near clipping. Type: float. Default: 0.1."
+        "clip_end", "Far clipping. Type: float. Default: 1000."
+        "stereo_convergence_mode", "How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards "
+                                   "to converge in the convergence plane, or parallel where they do not converge and "
+                                   "are parallel). Type: string. Default: "OFFAXIS"."
+        "convergence_distance", "The convergence point for the stereo cameras (i.e. distance from the projector to the "
+                                "projection screen). Type: float. Default: 1.95."
+        "interocular_distance", "Distance between the camera pair. Type: float. Default: 0.065."
     """
 
     def __init__(self, config):
