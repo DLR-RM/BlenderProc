@@ -58,8 +58,6 @@ class BopLoader(Loader):
     def run(self):
         """ Load BOP data """
         cam_type = self.config.get_string("cam_type", "")
-        resolution_x = self.config.get_int("resolution_x", split_p['im_size'][0])
-        resolution_y = self.config.get_int("resolution_y", split_p['im_size'][1])
         bop_dataset_path = self.config.get_string("bop_dataset_path")
         scene_id = self.config.get_int("scene_id", -1)
         obj_ids = self.config.get_list("obj_ids", [])        
@@ -89,8 +87,8 @@ class BopLoader(Loader):
             raise Exception("Wrong path or {} split does not exist in {}.".format(split, dataset))
         
         bpy.context.scene.world["category_id"] = 0
-        bpy.context.scene.render.resolution_x = resolution_x
-        bpy.context.scene.render.resolution_y = resolution_y
+        bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", split_p['im_size'][0])
+        bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", split_p['im_size'][1])
 
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
