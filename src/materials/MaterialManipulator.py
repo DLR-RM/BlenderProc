@@ -65,7 +65,7 @@ class MaterialManipulator(Module):
         :header: "Parameter", "Description"
 
         "selector" "Materials to become subjects of manipulation. Type: Provider."
-        "mode" "Mode of operation. Type: string. Default: 'once_for_each'. Available: 'once_for_each' (if samplers are "
+        "mode" "Mode of operation. Type: string. Default: once_for_each. Available: 'once_for_each' (if samplers are "
                "called, new sampled value is set to each selected material), 'once_for_all' (sampling once for all "
                "of the selected materials)."
 
@@ -80,7 +80,8 @@ class MaterialManipulator(Module):
                "For attribute: key of the pair must be a valid attribute name of the selected material. "
                "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
                "supported custom function names."
-        "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function."
+        "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function. Type: string, "
+                 "int, bool or float, list/Vector."
 
     **Available custom functions**:
 
@@ -103,7 +104,7 @@ class MaterialManipulator(Module):
        "cf_switch_to_emission_shader/strength", "Strength of the emitted light. Must be >0. Type: float."
        "cf_set_*", "Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case "
                    "name of the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> "
-                   "'base_color'). Also deletes any links to this shader's input point."
+                   "'base_color'). Also deletes any links to this shader's input point. Type: int, float, list, Vector."
     """
 
     def __init__(self, config):
