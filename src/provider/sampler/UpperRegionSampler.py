@@ -36,7 +36,7 @@ class UpperRegionSampler(Provider):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "to_sample_on": "Objects, which are used to sample on. Type: Provider."
+        "to_sample_on", "Objects, which are used to sample on. Type: Provider."
         "min_height", "Minimum distance to the bounding box that a point is sampled on. Type: float. Default: 0.0."
         "max_height", "Maximum distance to the bounding box that a point is sampled on. Type: float. Default: 1.0."
         "upper_dir", "The 'up' direction of the sampling box. Type: list. Default: [0.0, 0.0, 1.0]."
