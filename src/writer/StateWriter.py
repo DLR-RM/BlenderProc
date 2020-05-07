@@ -14,7 +14,7 @@ class StateWriter(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-
+       "destination_frame", "Used to transform point to blender coordinate frame. Type: list. Default: ["X", "Y", "Z"]"
        "attributes_to_write", "A list of attribute names that should written to file. The next table lists all attributes that can be used here. Type: list."
        "output_file_prefix", "The prefix of the file that should be created. Type: string."
        "output_key", "The key which should be used for storing the output in a merged file. Type: string."
