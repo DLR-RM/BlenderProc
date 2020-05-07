@@ -48,15 +48,16 @@ class WorldManipulator(Module):
                "For custom property: key of the pair must start with `cp_` prefix. "
                "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
                "supported custom function names."
-        "value": "Value of the attribute/custom prop. to set or input value(s) for a custom function."
+        "value": "Value of the attribute/custom prop. to set or input value(s) for a custom function. Type: string, "
+                 "int, bool or float, list/Vector."
 
-    **Custom function names**:
+    **Custom functions**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "bg_surface_color", "Sets the RGBA color of the light emitted by the background. Type: mathutils.Vector."
-        "bg_surface_strength", "Sets the strength of the light emitted by the background. Type: float."
+        "cf_bg_surface_color", "Sets the RGBA color of the light emitted by the background. Type: mathutils.Vector."
+        "cf_bg_surface_strength", "Sets the strength of the light emitted by the background. Type: float."
     """
 
     def __init__(self, config):
