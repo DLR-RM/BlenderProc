@@ -1,10 +1,11 @@
-import mathutils
-import bpy
-import bmesh
-import sys
 import numbers
-import numpy as np
+import sys
 from collections import defaultdict
+
+import bmesh
+import bpy
+import mathutils
+import numpy as np
 
 from src.camera.CameraModule import CameraModule
 from src.utility.BlenderUtility import get_all_mesh_objects

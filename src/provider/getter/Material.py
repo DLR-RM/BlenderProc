@@ -1,9 +1,10 @@
-import mathutils
 import re
 
-from src.utility.Utility import Utility
-from src.utility.BlenderUtility import get_all_materials
+import mathutils
+
 from src.main.Provider import Provider
+from src.utility.BlenderUtility import get_all_materials
+from src.utility.Utility import Utility
 
 
 class Material(Provider):

@@ -1,8 +1,8 @@
 import bpy
 
 from src.main.Module import Module
-from src.utility.Utility import Utility
 from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.Utility import Utility
 
 
 class CameraObjectSampler(Module):

@@ -6,6 +6,7 @@ import bpy
 from src.main.Module import Module
 from src.utility.Utility import Utility
 
+
 class CCMaterialLoader(Module):
     """
     This modules loads all textures obtained from https://cc0textures.com, use the script

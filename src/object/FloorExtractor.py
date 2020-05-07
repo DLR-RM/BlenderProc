@@ -1,8 +1,9 @@
+import os
+from math import radians, fabs, acos
+
+import bmesh
 import bpy
 import mathutils
-import os
-import bmesh
-from math import radians, fabs, acos
 
 from src.main.Module import Module
 from src.utility.Utility import Utility

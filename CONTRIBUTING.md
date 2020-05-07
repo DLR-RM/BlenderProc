@@ -157,9 +157,9 @@ class MyNewPipelineModule(Loader):
     .. csv-table::
        :header: "Keyword", "Description"
        
-       "param_c", "Used for this. Contains that."
+       "param_c", "Used for this. Contains that. Type: type."
        "param_c/param_d", "Used for this/means this. Type: type."
-       "param_c/param_e", "Used for that/means that. Type: type. Default: value. Available: value, value1, value2. ."
+       "param_c/param_e", "Used for that/means that. Type: type. Default: value. Available: value, value1, value2."
     """
 ```
 

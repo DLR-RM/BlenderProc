@@ -1,10 +1,11 @@
-import random
-import bpy
-import os
 import ast
+import os
+import random
 
-from src.utility.Utility import Utility
+import bpy
+
 from src.camera.CameraSampler import CameraSampler
+from src.utility.Utility import Utility
 
 
 class ReplicaCameraSampler(CameraSampler):

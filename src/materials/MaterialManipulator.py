@@ -1,5 +1,6 @@
-import bpy
 import os
+
+import bpy
 
 from src.main.Module import Module
 from src.utility.Config import Config

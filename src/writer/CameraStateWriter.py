@@ -1,6 +1,5 @@
 import bpy
 
-
 from src.utility.ItemWriter import ItemWriter
 from src.writer.StateWriter import StateWriter
 

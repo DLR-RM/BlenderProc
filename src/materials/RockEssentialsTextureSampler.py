@@ -1,7 +1,8 @@
-import bpy
 import os
 import re
 from random import choice
+
+import bpy
 
 from src.loader.Loader import Loader
 from src.utility.Config import Config

@@ -1,6 +1,7 @@
+import re
+
 import bpy
 import mathutils
-import re
 
 from src.main.Provider import Provider
 from src.utility.Config import Config

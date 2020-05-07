@@ -1,11 +1,12 @@
 import csv
 import json
-import shutil
 import os
+import shutil
+
 import bpy
 
-from src.utility.CocoUtility import CocoUtility
 from src.main.Module import Module
+from src.utility.CocoUtility import CocoUtility
 
 
 class CocoAnnotationsWriter(Module):

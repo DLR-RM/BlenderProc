@@ -1,5 +1,6 @@
-import mathutils
 import random
+
+import mathutils
 
 from src.main.Provider import Provider
 

@@ -3,6 +3,7 @@ import numpy as np
 from src.main.Provider import Provider
 from src.provider.sampler.Sphere import Sphere
 
+
 class PartSphere(Provider):
     """ Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 

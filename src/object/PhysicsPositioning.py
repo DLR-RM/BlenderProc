@@ -1,9 +1,9 @@
-import mathutils
 import bpy
+import mathutils
 import numpy as np
 
-from src.utility.BlenderUtility import get_all_mesh_objects, get_bound_volume
 from src.main.Module import Module
+from src.utility.BlenderUtility import get_all_mesh_objects, get_bound_volume
 
 
 class PhysicsPositioning(Module):

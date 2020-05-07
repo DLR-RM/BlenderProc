@@ -1,5 +1,5 @@
-import numpy as np
 import mathutils
+import numpy as np
 
 from src.main.Provider import Provider
 

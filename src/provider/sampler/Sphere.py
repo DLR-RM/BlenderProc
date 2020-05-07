@@ -1,7 +1,8 @@
-import numpy as np
 import mathutils
+import numpy as np
 
 from src.main.Provider import Provider
+
 
 class Sphere(Provider):
     """ Samples a point from the surface or from the interior of solid sphere

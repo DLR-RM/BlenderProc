@@ -4,6 +4,7 @@ import numpy as np
 from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds, get_all_mesh_objects
 
+
 class POI(Provider):
     """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
         that is the closest one to the mean location of the bboxes of the selected objects.

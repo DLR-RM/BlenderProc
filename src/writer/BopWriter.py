@@ -1,10 +1,11 @@
-import bpy
-import os
 import json
+import os
+
+import bpy
+from mathutils import Euler
 
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.writer.StateWriter import StateWriter
-from mathutils import Euler, Matrix
 
 
 class BopWriter(StateWriter):
