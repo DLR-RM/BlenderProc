@@ -98,7 +98,7 @@ class RockEssentialsTextureSampler(Loader):
         textures = self.config.get_list("textures")
         # get objects to set textures to. It is implied that one is selecting the ground planes by the name that was
         # defined in the config of the constructor.RockEssentialsGroundConstructor config
-        ground_tiles = self.config.get_list("selector", [])
+        ground_tiles = self.config.get_list("selector")
         # for each selected ground tile (plane)
         for ground_tile in ground_tiles:
             # get a random texture
