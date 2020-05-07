@@ -83,7 +83,7 @@ class EntityManipulator(Module):
         :header: "Parameter", "Description"
 
         "selector", "Objects to become subjects of manipulation. Type: Provider."
-        "mode", "Mode of operation. Type: string. Default: 'once_for_each'. Available: 'once_for_each' (if samplers "
+        "mode", "Mode of operation. Type: string. Default: "once_for_each". Available: 'once_for_each' (if samplers "
                 "are called, new sampled value is set to each selected entity), 'once_for_all' (if samplers are "
                 "called, value is sampled once and set to all selected entities)."
 
