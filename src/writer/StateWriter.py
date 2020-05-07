@@ -1,9 +1,7 @@
-from src.main.Module import Module
-from src.utility.ItemWriter import ItemWriter
-import bpy
 import os
 import mathutils
 
+from src.main.Module import Module
 from src.utility.Utility import Utility
 
 
@@ -15,18 +13,10 @@ class StateWriter(Module):
     .. csv-table::
        :header: "Parameter", "Description"
        "destination_frame", "Used to transform point to blender coordinate frame. Type: list. Default: ["X", "Y", "Z"]"
-       "attributes_to_write", "A list of attribute names that should written to file. The next table lists all attributes that can be used here. Type: list."
+       "attributes_to_write", "A list of attribute names that should written to file. The next table lists all "
+                              "attributes that can be used here. Type: list."
        "output_file_prefix", "The prefix of the file that should be created. Type: string."
        "output_key", "The key which should be used for storing the output in a merged file. Type: string."
-
-    **Attributes per object**:
-
-    .. csv-table::
-       :header: "Keyword", "Description"
-
-       "id", "A unique id."
-       "location", "The location of the item (x, y and z coordinate)."
-       "rotation_euler", "The rotation of the item written as three euler angles."
     """
 
     def __init__(self, config):
