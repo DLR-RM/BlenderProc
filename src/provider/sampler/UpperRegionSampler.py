@@ -38,10 +38,10 @@ class UpperRegionSampler(Provider):
 
         "to_sample_on": "Objects, which are used to sample on. Type: Provider."
         "min_height", "Minimum distance to the bounding box that a point is sampled on. Type: float. Default: 0.0."
-        "max_height", "Maximum distance to the bounding box that a point is sampled on. Type: float. DefaultL 1.0."
+        "max_height", "Maximum distance to the bounding box that a point is sampled on. Type: float. Default: 1.0."
         "upper_dir", "The 'up' direction of the sampling box. Type: list. Default: [0.0, 0.0, 1.0]."
-        "use_upper_dir", "the sampling above the selected surface, can be done with the upper_dir or
-                            with the face normal, if this is true the upper_dir is used: default: True"
+        "use_upper_dir", "Toggles the sampling above the selected surface, can be done with the upper_dir or with the "
+                         "face normal, if this is true the upper_dir is used. Type: bool. Default: True."
         "use_ray_trace_check", "Toggles using a ray casting towards the sampled object (if the object is directly below "
                                "the sampled position is the position accepted). Type: bool. Default: False."
     """
