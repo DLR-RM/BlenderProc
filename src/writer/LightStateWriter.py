@@ -1,7 +1,6 @@
-from src.utility.ItemWriter import ItemWriter
 import bpy
-import os
 
+from src.utility.ItemWriter import ItemWriter
 from src.writer.StateWriter import StateWriter
 
 
@@ -13,7 +12,7 @@ class LightStateWriter(StateWriter):
     .. csv-table::
      :header: "Keyword", "Description"
 
-     "energy", "The energy of the light"
+
     """
 
     def __init__(self, config):
@@ -27,7 +26,8 @@ class LightStateWriter(StateWriter):
             if object.type == 'LIGHT':
                 lights.append(object)
 
-        self.write_attributes_to_file(self.light_writer, lights, "light_states_", "light_states", ["id", "location", "rotation_euler", "energy"])
+        self.write_attributes_to_file(self.light_writer, lights, "light_states_", "light_states",
+                                      ["id", "location", "rotation_euler", "energy"])
 
     def _get_attribute(self, light, attribute_name):
         """ Returns the value of the requested attribute for the given light.
