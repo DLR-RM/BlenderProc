@@ -27,6 +27,13 @@ class RockEssentialsGroundConstructor(Loader):
           }
         }
 
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Keyword", "Description"
+
+        "tiles", "Ground tiles to create, each cell contains a separate tile configuration. Type: list."
+
     **Ground plane properties**:
 
     .. csv-table::
@@ -50,7 +57,7 @@ class RockEssentialsGroundConstructor(Loader):
             3. Construct ground plane and it's material node tree.
         """
 
-        tiles = self.config.get_list("tiles", [])
+        tiles = self.config.get_list("tiles")
         for tile in tiles:
             if tile:
                 ground_config = Config(tile)
