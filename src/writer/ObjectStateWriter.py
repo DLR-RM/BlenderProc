@@ -1,19 +1,11 @@
 from src.utility.ItemWriter import ItemWriter
 from src.utility.BlenderUtility import get_all_mesh_objects
-import bpy
-import os
 
 from src.writer.StateWriter import StateWriter
 
 
 class ObjectStateWriter(StateWriter):
-    """ Writes the state of all objects for each frame to a numpy file if no hfd5 file is available.
-
-    **Attributes per object**:
-
-    .. csv-table::
-       :header: "Keyword", "Description"
-    """
+    """ Writes the state of all objects for each frame to a numpy file if no hfd5 file is available. """
 
     def __init__(self, config):
         StateWriter.__init__(self, config)
@@ -25,7 +17,8 @@ class ObjectStateWriter(StateWriter):
         for object in get_all_mesh_objects():
             objects.append(object)
 
-        self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states", ["id", "location", "rotation_euler"])
+        self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states",
+                                      ["id", "location", "rotation_euler"])
 
     def _get_attribute(self, object, attribute_name):
         """ Returns the value of the requested attribute for the given object.
