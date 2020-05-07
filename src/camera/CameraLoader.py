@@ -42,7 +42,7 @@ class CameraLoader(CameraModule):
        "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See the next table for which "
                     "properties can be set. Type: list of dicts. Default: []."
        "path", "Optionally, a path to a file which specifies one camera position per line. The lines has to be "
-               "formatted as specified in 'file_format'. Type: string. Default: empty string."
+               "formatted as specified in 'file_format'. Type: string. Default: ""."
        "file_format", "A string which specifies how each line of the given file is formatted. The string should contain "
                       "the keywords of the corresponding properties separated by a space. See next table for allowed "
                       "properties. Type: string. Default: empty string."
