@@ -20,8 +20,8 @@ class ShapeNetLoader(Loader):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "data_path": "The path to the ShapeNetCore.v2 folder. Type: string."
-       "use_synset_id": "The synset id for example: '02691156', check the data_path folder for more ids. Type: int."
+       "data_path", "The path to the ShapeNetCore.v2 folder. Type: string."
+       "used_synset_id", "The synset id for example: '02691156', check the data_path folder for more ids. Type: int."
     """
 
     def __init__(self, config):
