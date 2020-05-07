@@ -16,8 +16,8 @@ class SceneNetLighting(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "lampshade_emission_strength": "The strength of the lamp emission shader. Type: float Default: 15"
-       "ceiling_emission_strength": "The strength of the ceiling emission shader. Type: float Default: 2"
+       "lampshade_emission_strength", "The strength of the lamp emission shader. Type: float Default: 15"
+       "ceiling_emission_strength", "The strength of the ceiling emission shader. Type: float Default: 2"
     """
 
     def __init__(self, config):
@@ -84,8 +84,8 @@ class SceneNetLighting(Module):
                             links.new(node_connected_to_the_base_color.outputs[0], emission_node.inputs["Color"])
 
                         # If the material corresponds to a lampshade
-                        emission_node.inputs['Strength'].default_value = self.config.get_float("lampshade_emission_strength",
-                                                                                               15)
+                        emission_node.inputs['Strength'].default_value = \
+                            self.config.get_float("lampshade_emission_strength", 15)
                     elif "ceiling" in obj_name:
                         # If the material corresponds to a ceiling
                         emission_node.inputs['Strength'].default_value = self.config.get_float("ceiling_emission_strength", 2)
