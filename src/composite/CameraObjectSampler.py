@@ -1,8 +1,9 @@
+import bpy
+
 from src.main.Module import Module
 from src.utility.Utility import Utility
 from src.utility.BlenderUtility import get_all_mesh_objects
 
-import bpy
 
 class CameraObjectSampler(Module):
     """ Alternates between sampling new cameras using camera.CameraSampler and sampling new object poses using object.ObjectPoseSampler

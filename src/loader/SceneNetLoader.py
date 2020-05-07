@@ -27,7 +27,8 @@ class SceneNetLoader(Loader):
 
        "file_path": "The path to the .obj file from SceneNet. Type: string."
        "texture_folder": "The path to the texture folder used to sample the textures. Type: string."
-       "category_labeling": "The path to the csv file used for the category labeling. Type: string. Default: resources/scenenet/CategoryLabeling.csv"
+       "category_labeling": "The path to the csv file used for the category labeling. Type: string. "
+                            "Default: resources/scenenet/CategoryLabeling.csv"
     """
 
     def __init__(self, config):

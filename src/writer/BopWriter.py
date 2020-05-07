@@ -1,10 +1,11 @@
 import bpy
 import os
 import json
-from src.utility.ItemWriter import ItemWriter
+
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.writer.StateWriter import StateWriter
 from mathutils import Euler, Matrix
+
 
 class BopWriter(StateWriter):
     """ Writes objects and camera details for each frame according to the bop datasets format.
@@ -16,7 +17,9 @@ class BopWriter(StateWriter):
     .. csv-table::
        :header: "Keyword", "Description"
 
-       "append_to_existing_output", "If true and if there is already a scene_gt.json and scene_camera.json files in the output directory, the new frames will be appended to the existing files. Type: bool. Default: False" 
+       "append_to_existing_output", "If true and if there is already a scene_gt.json and scene_camera.json files in "
+                                    "the output directory, the new frames will be appended to the existing files. "
+                                    "Type: bool. Default: False"
     """
 
     def __init__(self, config):

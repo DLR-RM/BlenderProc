@@ -17,16 +17,16 @@ class ReplicaLoader(Loader):
 
        "data_path", "The path to the data folder, where all rooms are saved. Type: string."
        "data_set_name", "Name of the room (for example: apartment_0). Type: string."
-       "use_ambient_occlusion", "Use ambient occlusion to lighten up the scene, if the RgbRenderer is used. Type: bool. Default: False."
-       "use_smooth_shading", "Enable smooth shading on all surfaces, instead of flat shading. Type: bool. Default: False."
+       "use_ambient_occlusion", "Use ambient occlusion to lighten up the scene, if the RgbRenderer is used. "
+                                "Type: bool. Default: False."
+       "use_smooth_shading", "Enable smooth shading on all surfaces, instead of flat shading. "
+                             "Type: bool. Default: False."
     """
     def __init__(self, config):
         Loader.__init__(self, config)
 
     def run(self):
-        """Just imports the configured .ply file straight into blender for the replica case
-
-        """
+        """ Just imports the configured .ply file straight into blender for the replica case. """
         file_path = os.path.join(self.config.get_string('data_path'), self.config.get_string('data_set_name'), 'mesh.ply')
         loaded_objects = Utility.import_objects(file_path)
 

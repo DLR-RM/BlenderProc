@@ -126,4 +126,3 @@ class FlowRenderer(Renderer):
             self._register_output(default_prefix=self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_'),
                                   default_key=self.config.get_string("backward_flow_output_key", "backward_flow"),
                                   suffix='.npy', version='2.0.0')
-

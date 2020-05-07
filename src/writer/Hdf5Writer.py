@@ -1,7 +1,6 @@
 import csv
 import json
 import os
-import shutil
 
 import bpy
 import h5py
@@ -18,15 +17,21 @@ class Hdf5Writer(Module):
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that there are no collisions with already existing hdf5 files in the output directory. Type: bool. Default: False"
-"compression", "The compression technique that should be used when storing data in a hdf5 file. Type: string."
-       "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging. Type: bool. Optional. Default value: True."
-       "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output to which the postprocessing modules should be applied. Every postprocessing module has to have a run function which takes in the raw data and returns the processed data. Type: dict."
-       "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Optional. Default: false, stereo images are combined into one np.array (2, ...). Type: bool. Optional. Default: False.
-       "avoid_rendering", "If true, exit. Type: bool. Default: False."
-
+        "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that "
+                                    "there are no collisions with already existing hdf5 files in the output directory. "
+                                    "Type: bool. Default: False"
+        "compression", "The compression technique that should be used when storing data in a hdf5 file. Type: string."
+        "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging. "
+                                             "Type: bool. Default value: True."
+        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
+                                  "to which the postprocessing modules should be applied. Every postprocessing module "
+                                  "has to have a run function which takes in the raw data and returns the processed "
+                                  "data. Type: dict."
+        "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Type: bool. "
+                                "Default: False (stereo images are combined into one np.array (2, ...))."
+        "avoid_rendering", "If true, exit. Type: bool. Default: False."
     """
 
     def __init__(self, config):

@@ -1,7 +1,7 @@
-from src.utility.ItemWriter import ItemWriter
 import bpy
-import os
 
+
+from src.utility.ItemWriter import ItemWriter
 from src.writer.StateWriter import StateWriter
 
 

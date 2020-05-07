@@ -1,16 +1,12 @@
-import json
 import os
-from mathutils import Matrix, Vector, Euler
 import math
-import csv
 import bpy
 import numpy as np
 import sys
-from copy import deepcopy
 from random import choice
+from mathutils import Matrix, Vector, Euler
 
 from src.loader.Loader import Loader
-from src.utility.Utility import Utility
 from src.utility.Config import Config
 from src.camera.CameraModule import CameraModule
 
@@ -35,12 +31,15 @@ class BopLoader(Loader):
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
        "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
-       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is replicated, only BOP Objects are loaded). Type: int. Default: -1."
-       "sample_objects", "Toggles object sampling from the specified dataset. optional. Default value: False. Type: boolean. Default: False."
-       "amount_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is bigger than the dataset actually contains, then all objects will be loaded. Type: int."
-       "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Optional. Default: -1 (no limit)."
-       "obj_ids", "Iff scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects from the given BOP dataset). Type: list. Default: []."
-       "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval. Type: String."
+       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is "
+                   "replicated, only BOP Objects are loaded). Type: int. Default: -1."
+       "sample_objects", "Toggles object sampling from the specified dataset. Type: boolean. Default: False."
+       "amount_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is bigger "
+                           "than the dataset actually contains, then all objects will be loaded. Type: int."
+       "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Default: -1 (no limit)."
+       "obj_ids", "If scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects "
+                  "from the given BOP dataset). Type: list. Default: []."
+       "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval. Type: string."
     """
 
     def __init__(self, config):
@@ -104,7 +103,8 @@ class BopLoader(Loader):
 
         loaded_objects = []
 
-        #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
+        # only load all/selected objects here, use other modules for setting poses
+        # e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
             # if sampling is enabled

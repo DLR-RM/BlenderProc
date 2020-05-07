@@ -1,8 +1,8 @@
+import cv2
+import numpy as np
+
 from src.main.Module import Module
 from scipy import stats
-
-import numpy as np
-import cv2
 
 
 def get_neighbors_stacked(img, filter_size=3, return_list=False):

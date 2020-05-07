@@ -17,10 +17,17 @@ class CocoAnnotationsWriter(Module):
        :header: "Parameter", "Description"
        
        "avoid_rendering", "If true, no output is produced. Type: bool. Default: False"
-       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the output_key of the RgbRenderer module. Type: string. Optional. Default value: colors"
-       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as the output_key of the SegMapRenderer module. Type: string. Optional. Default value: segmap."
-       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was registered. Should be the same as the colormap_output_key of the SegMapRenderer module. Type: string. Optional. Default value: segcolormap."
-       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output directory, the new coco annotations will be appended to the existing file. Also the rgb images will be named such that there are no collisions. Type: bool. Default: False."
+       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the "
+                         "output_key of the RgbRenderer module. Type: string.Default: colors."
+       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as "
+                            "the output_key of the SegMapRenderer module. Type: string. Default: segmap."
+       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was "
+                                 "registered. Should be the same as the colormap_output_key of the SegMapRenderer "
+                                 "module. Type: string. Default: segcolormap."
+       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output "
+                                    "directory, the new coco annotations will be appended to the existing file. Also "
+                                    "the rgb images will be named such that there are no collisions. Type: bool. "
+                                    "Default: False."
     """
 
     def __init__(self, config):

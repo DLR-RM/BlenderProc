@@ -1,11 +1,8 @@
-import mathutils
 import bpy
-import numpy as np
-import os
 
 from src.main.Module import Module
 from src.utility.ItemCollection import ItemCollection
-from src.utility.Utility import Utility
+
 
 class LightModule(Module):
     """ 
@@ -55,4 +52,3 @@ class LightModule(Module):
         light_data.energy = config.get_float("energy", 10.)
         light_data.color = config.get_list("color", [1, 1, 1])
         light_data.distance = config.get_float("distance", 0)
-

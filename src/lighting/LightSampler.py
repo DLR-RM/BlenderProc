@@ -7,10 +7,10 @@ class LightSampler(LightModule):
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "lights", "List of lights, which contain all the information to create new lights. See the LightModule for
-                 "more information. Type: list. Default: []."
+        "lights", "List of lights, which contain all the information to create new lights. See the LightModule for
+                  "more information. Type: list. Default: []."
     """
 
     def __init__(self, config):
