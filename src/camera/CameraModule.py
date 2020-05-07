@@ -36,7 +36,7 @@ class CameraModule(Module):
         "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
                         "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
                         "will be transformed to (1, -3, 2). Type: list. Default: ["X", "Y", "Z"]. "
-                        "Available: 'X', 'Y', 'Z', '-X', '-Y', '-Z'."
+                        "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
         "default_cam_param", "Properties across all cam poses. See the next table for details. Type: dict."
 
     **Properties per cam pose**:

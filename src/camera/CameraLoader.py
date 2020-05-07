@@ -6,9 +6,9 @@ from src.utility.ItemCollection import ItemCollection
 
 class CameraLoader(CameraModule):
     """ Loads camera poses from the configuration and sets them as separate keypoints.
-        Camera poses can be specified either directly inside a the config or in an extra file.
+        Camera poses can be specified either directly inside the config or in an extra file.
 
-        Example 1: Loads camera poses from file <args:0>, followed by the pose file format and setting the fov.
+        Example 1: Loads camera poses from file <args:0>, followed by the pose file format and setting the fov in radians.
 
         {
           "module": "camera.CameraLoader",
@@ -42,10 +42,10 @@ class CameraLoader(CameraModule):
        "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See the next table for which "
                     "properties can be set. Type: list of dicts. Default: []."
        "path", "Optionally, a path to a file which specifies one camera position per line. The lines has to be "
-               "formatted as specified in 'file_format'. Type: string. Default: empty string."
+               "formatted as specified in 'file_format'. Type: string. Default: ""."
        "file_format", "A string which specifies how each line of the given file is formatted. The string should contain "
                       "the keywords of the corresponding properties separated by a space. See next table for allowed "
-                      "properties. Type: string. Default: empty string."
+                      "properties. Type: string. Default: ""."
        "default_cam_param", "A dictionary containing camera intrinsic parameters. Type: dict. Default: {}."
     """
 
