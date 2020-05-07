@@ -22,8 +22,8 @@ class SuncgLoader(Loader):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "path", "The path to the house.json file which should be loaded."
-       "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures etc."
+       "path", "The path to the house.json file which should be loaded. Type: string."
+       "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures etc. Type: string."
     """
 
     def __init__(self, config):
