@@ -14,6 +14,8 @@ def find_all_py_files(folder_path):
 
 def get_config_element_from_line(line, line_nr):
     line = line.strip()
+    if "own_config" in line:
+        return None
     config_ele = line[line.find("config.get") + len("config.get"):]
     ele_type = config_ele[1:config_ele.find("(")]
     if not ele_type:
@@ -21,7 +23,7 @@ def get_config_element_from_line(line, line_nr):
     if config_ele.count("(") == 1:
         between_parenthesis = config_ele[config_ele.find("(")+1: config_ele.find(")")]
     else:
-        between_parenthesis = config_ele[config_ele.find("("):]
+        between_parenthesis = config_ele[config_ele.find("(")+1:]
         if ")" in between_parenthesis:
             next_closing_pos, next_opening_pos = 0, 0
             for _ in range(config_ele.count("(")):
@@ -52,6 +54,8 @@ def get_config_element_from_line(line, line_nr):
         return None
 
 def get_config_value_from_csv_line(line, line_nr):
+    if line.count("\"") < 2:
+        return None
     line = line.strip()
     key_word = line[line.find("\"") + 1:]
     key_word = key_word[:key_word.find("\"")].strip()
@@ -115,7 +119,8 @@ class ConfigElement(object):
                         end_pos += 1
                         break
             else:
-                poses = [max([default_val.find(". "), default_val.find("."), default_val.find(".\"")]), default_val.find("\""), default_val.find(" "), default_val.find(", ")]
+                poses = [max([default_val.find(". "), default_val.find("."), default_val.find(".\"")]),
+                         default_val.find("\""), default_val.find(" "), default_val.find(", ")]
                 poses = [ele for ele in poses if ele > 0]
                 if poses:
                     end_pos = min(poses)
@@ -186,14 +191,22 @@ if __name__ == "__main__":
                                             "from this folder", type=str)
     args = parser.parse_args()
 
+    exempt_files = ["Utility.py"]
+
     all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), ".."))
     for py_file in all_py_files:
+        base_name = os.path.basename(py_file)
         if args.src and args.src not in py_file:
+            continue
+        skip_this_file = False
+        for exempt_file in exempt_files:
+            if exempt_file in base_name:
+                skip_this_file = True
+        if skip_this_file:
             continue
         if "scripts" not in os.path.abspath(py_file):
             with open(py_file, "r") as file:
                 errors = []
-                base_name = os.path.basename(py_file)
                 lines = file.read().split("\n")
                 found_config_values = []
                 start_csv_table = False
@@ -210,22 +223,20 @@ if __name__ == "__main__":
                             if line:
                                 found_config_values.append(line)
                 list_of_used_config_get = []
-                if found_config_values:
-                    # checks if there are config values not defined at the top
-                    for line_nr, line in enumerate(lines):
-                        org_line = line
-                        if "config.get" in line:
-                            org_line = org_line[org_line.find("config.get"):]
-                            org_line = org_line[:org_line.find(")")+1]
-                            config_element = get_config_element_from_line(line, line_nr)
-                            if config_element:
-                                key_word = config_element.key_word
-                                if " " not in key_word and key_word != "key":
-                                    list_of_used_config_get.append(config_element)
-                                    if key_word not in found_config_values:
-                                        errors.append("Not found at the top: '{}' " \
-                                                      "in L:{} '{}'".format(config_element.key_word,
-                                                                        line_nr, org_line.strip()))
+                # checks if there are config values not defined at the top
+                for line_nr, line in enumerate(lines):
+                    org_line = line
+                    if "config.get" in line:
+                        org_line = org_line[org_line.find("config.get"):]
+                        org_line = org_line[:org_line.find(")")+1]
+                        config_element = get_config_element_from_line(line, line_nr)
+                        if config_element:
+                            key_word = config_element.key_word
+                            if " " not in key_word and key_word != "key":
+                                list_of_used_config_get.append(config_element)
+                                if key_word not in found_config_values:
+                                    errors.append("Not found at the top: '{}' " \
+                                                  "in L:{} '{}'".format(key_word, line_nr, org_line.strip()))
                 start_csv_table = False
                 start_new_config_value = False
                 current_element = None
