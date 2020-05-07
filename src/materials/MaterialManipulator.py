@@ -65,7 +65,7 @@ class MaterialManipulator(Module):
         :header: "Parameter", "Description"
 
         "selector" "Materials to become subjects of manipulation. Type: Provider."
-        "mode" "Mode of operation. Type: string. Default: once_for_each. Available: 'once_for_each' (if samplers are "
+        "mode" "Mode of operation. Type: string. Default: "once_for_each". Available: 'once_for_each' (if samplers are "
                "called, new sampled value is set to each selected material), 'once_for_all' (sampling once for all "
                "of the selected materials)."
 
