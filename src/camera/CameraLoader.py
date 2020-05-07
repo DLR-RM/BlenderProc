@@ -6,7 +6,7 @@ from src.utility.ItemCollection import ItemCollection
 
 class CameraLoader(CameraModule):
     """ Loads camera poses from the configuration and sets them as separate keypoints.
-        Camera poses can be specified either directly inside a the config or in an extra file.
+        Camera poses can be specified either directly inside the config or in an extra file.
 
         Example 1: Loads camera poses from file <args:0>, followed by the pose file format and setting the fov.
 
