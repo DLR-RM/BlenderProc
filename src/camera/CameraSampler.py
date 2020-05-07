@@ -97,7 +97,7 @@ class CameraSampler(CameraModule):
                                           "component. Type: bool. Default: True."
         "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses "
                             "sampled by this parameter's value in percentage. If set to -1, then it would only check "
-                            "that the variance is increased. Type: float. Optional. Default: sys.float_info.min."
+                            "that the variance is increased. Type: float. Default: sys.float_info.min."
         "min_var_diff_translation", "Same as min_var_diff_rot but for translation. If set to -1, then it would only "
                                     "check that the variance is increased. Type: float. Default: sys.float_info.min."
         "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor "
