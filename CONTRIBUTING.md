@@ -195,6 +195,6 @@ To create a good example, please follow this steps:
 * In this folder provide at least a configuration config.yaml file and a README.md file.
 * And any other files that may be necessary (like rendering images, .obj files, text files with some data required by the pipeline, etc), but keep it as clean as possible and **do not include any copyrighted materials**.
 
-For the README.md of the example, please follow the [template](EXAMPLE_README_TEMPLATE.md). If the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
+For the README.md of the example, please follow the [template](examples/EXAMPLE_README_TEMPLATE.md). If the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
 
 Also remember, that when making changes to the existing modules it is up to you to verify that existing examples that are using this module are valid and working. Fix the configuration files and update READMEs of these examples, if the example requires it.
