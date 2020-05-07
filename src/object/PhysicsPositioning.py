@@ -9,21 +9,33 @@ from src.main.Module import Module
 class PhysicsPositioning(Module):
     """ Performs physics simulation in the scene, assigns new poses for all objects that participated.
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    **Configuration**:
 
-       "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'. Type: float. Optional. Default value: 0.01"
-       "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'. Type: float. Optional. Default value: 0.1"
-       "min_simulation_time", "The minimum number of seconds to simulate. Type: int."
-       "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped. Type: int."
-       "max_simulation_time", "The maximum number of seconds to simulate. Type: int."
-       "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit. Type: float. Optional. Default value: 0.001"
-       "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
-       "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
-       "collision_mesh_source", "Source of the mesh used to create collision shape. Optional. Type: string. Default value: 'FINAL'. Available values: 'BASE', 'DEFORM', 'FINAL'."
-       "collision_shape", "Collision shape of object in simulation. Optional. Type: string. Available values: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'. Default value: 'CONVEX_HULL'."
-       "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Optional. Type: boolean. Default value: False."
-       "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor (defines material density). Optional. Type: float. Default value: 1."
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location "
+                                             "vector that is allowed, such that an object is still recognized as "
+                                             "'stopped moving'. Type: float. Default: 0.01"
+        "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation "
+                                             "Euler vector that is allowed. such that an object is still recognized as "
+                                             "'stopped moving'. Type: float. Default: 0.1"
+        "min_simulation_time", "The minimum number of seconds to simulate. Type: float. Default: 4.0"
+        "check_object_interval", "The interval in seconds at which all objects should be checked if they are still "
+                                 "moving. If all objects have stopped moving, than the simulation will be stopped. "
+                                 "Type: float. Default: 2.0"
+        "max_simulation_time", "The maximum number of seconds to simulate. Type: int. Default: 40.0"
+        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve "
+                            "stability, but also make objects hover a bit. Type: float. Default: 0.001."
+        "steps_per_sec", "Number of simulation steps taken per second. Type: int. Default: 60."
+        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Default: 10."
+        "collision_mesh_source", "Source of the mesh used to create collision shape. Type: string. Default: 'FINAL'. "
+                                 "Available: 'BASE', 'DEFORM', 'FINAL'."
+        "collision_shape", "Collision shape of object in simulation. Type: string. Default: 'CONVEX_HULL'. "
+                           "Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'."
+        "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Type: bool. Default: False."
+        "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor "
+                       "(defines material density). Type: float. Default: 1."
     """
 
     def __init__(self, config):

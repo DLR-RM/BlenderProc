@@ -1,26 +1,30 @@
-
-import random
-import math
-import copy
-
 import bpy
 import numpy as np
 
 from src.main.Module import Module
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_mesh_objects
 
-class ObjectReplacer(Module):
-    """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the objects to replace with, can be selected over Selectors (getter.Entity).
-    **Configuration**:
-    .. csv-table::
-       :header: "Parameter", "Description"
 
-       "replace_ratio", "Ratio of objects in the original scene, which are tried to be replaced. Type: float. Optiona. Default value: 1."
-       "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. Type: boolean. Optional. Default value: True."
-       "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets list of objects following a certain condition. Optional. Type: provider."
-       "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, gets list of objects following a certain condition. Type: provider."
-       "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. Type: provider. Optional. Default value: []."
-       "max_tries", "Amount of tries, which are performed while trying to replace the objects. Type: Int. Optional. Default value: 100000 "
+class ObjectReplacer(Module):
+    """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the
+        objects to replace with, can be selected over Selectors (getter.Entity).
+
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "replace_ratio", "Ratio of objects in the original scene, which will be replaced. Type: float. Default: 1."
+        "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. "
+                           "Type: bool. Default: True."
+        "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets "
+                                  "list of objects following a certain condition. Type: Provider. Default: []."
+        "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, "
+                                   "gets list of objects following a certain condition. Type: Provider. Default: []."
+        "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. "
+                                 "Type: Provider. Default: []."
+        "max_tries", "Amount of tries, which are performed while trying to replace the objects. Type: int. "
+                     "Default: 100000."
     """
 
     def __init__(self, config):
