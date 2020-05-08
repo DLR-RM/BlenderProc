@@ -27,7 +27,7 @@ It will give you an idea about how, why and when certain things happen.
 * [on_surface_object_sampling](on_surface_object_sampling): object pose sampling on a surface.
 
 ### Benchmark for 6D Object Pose Estimation (BOP)
-We provide two example configs that interface with the BOP datasets.
+We provide three example configs that interface with the BOP datasets.
 
 * [bop_scene_replication](bop_scene_replication): Replicates whole scenes (object poses, camera intrinsics and extrinsics) from BOP
 * [bop_object_pose_sampling](bop_object_pose_sampling): Loads BOP objects and samples object, camera and light poses
