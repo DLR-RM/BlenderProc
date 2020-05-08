@@ -14,7 +14,7 @@ class GlobalStorage(object):
     .. csv-table::
        :header: "Key", "Description"
        "renderer_depth_end", "This key is saved by the Renderer during depth rendering and is used in
-                              the StereoGlobalMatchingWriter"
+                              the StereoGlobalMatchingWriter. Type: string."
 
     Please add all new keys you create to this list.
 

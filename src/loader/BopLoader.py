@@ -1,18 +1,15 @@
-import json
-import os
-from mathutils import Matrix, Vector, Euler
 import math
-import csv
-import bpy
-import numpy as np
+import os
 import sys
-from copy import deepcopy
 from random import choice
 
-from src.loader.Loader import Loader
-from src.utility.Utility import Utility
-from src.utility.Config import Config
+import bpy
+import numpy as np
+from mathutils import Matrix, Vector
+
 from src.camera.CameraModule import CameraModule
+from src.loader.Loader import Loader
+from src.utility.Config import Config
 
 
 class BopLoader(Loader):
@@ -27,20 +24,29 @@ class BopLoader(Loader):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless"
-       "mm2m", "Specify whether to convert poses and models to meters (default: False)"
-       "split", "Optionally, test or val split depending on BOP dataset (default: test)"
-       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. (default = -1: No scene is replicated, only BOP Objects are loaded)"
-       "sample_objects", "Toggles object sampling from the specified dataset. optional. Default value: False. Type: boolean."
-       "amount_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is bigger than the dataset actually contains, then all objects will be loaded."
-       "obj_instances_limit", "Limits the amount of object copies when sampling. Optional. Default value: -1 (no limit)."
-       "obj_ids", "Iff scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects from the given BOP dataset)"
-       "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval"
+       "cam_type", "Camera type. Type: string. Optional. Default value: ''."
+       "sys_paths", "System paths to append. Type: list."
+       "resolution_x", "Image width. Type: int."
+       "resolution_y", "Image height. Type: int."
+       "num_of_objs_to_sample", "Number of the objects to sample. Type: int."
+       "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
+       "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
+       "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
+       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. Type: int. Default: -1 (no scene "
+                   "is replicated, only BOP Objects are loaded)."
+       "sample_objects", "Toggles object sampling from the specified dataset. Type: boolean. Default: False."
+       "num_of_objs_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is "
+                                "bigger than the dataset actually contains, then all objects will be loaded. Type: int."
+       "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Default: -1 (no limit)."
+       "obj_ids", "List of object ids to load. Type: list. Default: [] (all objects from the given BOP dataset if "
+                  "scene_id is not specified)."
+       "model_type", "Optionally, specify type of BOP model. Type: string. Default: "". Available: [reconst, cad or eval]."
     """
 
     def __init__(self, config):
         Loader.__init__(self, config)
-        for sys_path in self.config.get_list("sys_paths"):
+        sys_paths = self.config.get_list("sys_paths")
+        for sys_path in sys_paths:
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
 
@@ -50,14 +56,13 @@ class BopLoader(Loader):
             self.obj_instances_limit = self.config.get_int("obj_instances_limit", -1)
         
     def run(self):
-        """ Load BOP data """ 
-        
+        """ Load BOP data """
+        cam_type = self.config.get_string("cam_type", "")
         bop_dataset_path = self.config.get_string("bop_dataset_path")
         scene_id = self.config.get_int("scene_id", -1)
         obj_ids = self.config.get_list("obj_ids", [])        
         split = self.config.get_string("split", "test")
-        model_type = self.config.get_string("model_type", "")
-        cam_type = self.config.get_string("cam_type", "")
+        model_type = self.config.get_string("model_type", "") 
         scale = 0.001 if self.config.get_bool("mm2m", False) else 1
         datasets_path = os.path.dirname(bop_dataset_path)
         dataset = os.path.basename(bop_dataset_path)
@@ -97,7 +102,8 @@ class BopLoader(Loader):
 
         loaded_objects = []
 
-        #only load all/selected objects here, use other modules for setting poses, e.g. camera.CameraSampler / object.ObjectPoseSampler
+        # only load all/selected objects here, use other modules for setting poses
+        # e.g. camera.CameraSampler / object.ObjectPoseSampler
         if scene_id == -1:
             obj_ids = obj_ids if obj_ids else model_p['obj_ids']
             # if sampling is enabled
@@ -167,9 +173,9 @@ class BopLoader(Loader):
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
 
-        :param cam_H_m2c_ref (ndarray): (4x4) homog trafo from object to world coords 
-        :param cam_H_m2w_ref (ndarray): (4x4) ndarray homog trafo from object to camera coords
-        :return: cam_H_c2w (Matrix): (4x4) homog trafo from camera to world coords
+        :param cam_H_m2c_ref (ndarray): (4x4) homog trafo from object to world coord. Type: array. 
+        :param cam_H_m2w_ref (ndarray): (4x4) ndarray homog trafo from object to camera coords. Type: array.
+        :return: cam_H_c2w (Matrix): (4x4) homog trafo from camera to world coords. Type: blender Matrix.
         """
 
         cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
@@ -186,7 +192,7 @@ class BopLoader(Loader):
     def set_object_pose(self, cur_obj, inst, scale):
         """ Set object pose for current obj
 
-        :param cur_obj: blender object
+        :param cur_obj. Type: blender object.
         :param inst (dict): instance from BOP scene_gt file  
         :param scale (int): factor to transform set pose in mm or meters
         """

@@ -5,8 +5,8 @@ import bpy
 import numpy as np
 
 from src.renderer.Renderer import Renderer
-from src.utility.Utility import Utility
 from src.utility.BlenderUtility import load_image
+from src.utility.Utility import Utility
 
 
 class SegMapRenderer(Renderer):
@@ -18,21 +18,27 @@ class SegMapRenderer(Renderer):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "map_by", "Method to be used for color mapping. Allowed values: instance, class"
-       "segcolormap_output_key": "The key which should be used for storing the class instance to color mapping in a merged file."
-       "segcolormap_output_file_prefix": "The file prefix that should be used when writing the class instance to color mapping to file."
+       "map_by", "Method to be used for color mapping. Type: string. Default: "class" Available: [instance, class]"
+       "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in"
+                                 "a merged file. Type: string. Default: "segcolormap""
+       "segcolormap_output_file_prefix", "The file prefix that should be used when writing the class instance to"
+                                         "color mapping to file. Type: string. Default: class_inst_col_map"
+       "output_file_prefix", "The file prefix that should be used when writing semantic information to a file."
+                             "Type: string, Default: "segmap_""
     """
 
     def __init__(self, config):
         Renderer.__init__(self, config)
-        # As we use float16 for storing the rendering, the interval of integers which can be precisely stored is [-2048, 2048].
-        # As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our color space which allows ~8 billion different colors/labels. This should be enough.
+        # As we use float16 for storing the rendering, the interval of integers which can be precisely
+        # stored is [-2048, 2048]. As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our
+        # color space which allows ~8 billion different colors/labels. This should be enough.
         self.render_colorspace_size_per_dimension = 2048
 
     def _colorize_object(self, obj, color):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
 
-        This is done by replacing all nodes just with an emission node, which emits the color corresponding to the category of the object.
+        This is done by replacing all nodes just with an emission node, which emits the color corresponding to the
+        category of the object.
 
         :param obj: The object to use.
         :param color: RGB array of a color.
@@ -73,9 +79,11 @@ class SegMapRenderer(Renderer):
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
         if "num_labels" not in bpy.context.scene:
-            raise Exception("The scene is missing the custom property 'num_labels'. For generating semantic segmentation maps, this needs to contain the total number classes!")
+            raise Exception("The scene is missing the custom property 'num_labels'. For generating semantic segmentation "
+                            "maps, this needs to contain the total number classes!")
 
-        colors, num_splits_per_dimension = Utility.generate_equidistant_values(bpy.context.scene["num_labels"] + 1, self.render_colorspace_size_per_dimension)
+        colors, num_splits_per_dimension = Utility.generate_equidistant_values(bpy.context.scene["num_labels"] + 1,
+                                                                               self.render_colorspace_size_per_dimension)
 
         for obj in objects:
             if "category_id" not in obj:
@@ -97,7 +105,8 @@ class SegMapRenderer(Renderer):
         :param objects: A list of objects.
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
-        colors, num_splits_per_dimension = Utility.generate_equidistant_values(len(objects) + 1, self.render_colorspace_size_per_dimension)
+        colors, num_splits_per_dimension = Utility.generate_equidistant_values(len(objects) + 1,
+                                                                               self.render_colorspace_size_per_dimension)
 
         color_map = []
 
@@ -140,7 +149,8 @@ class SegMapRenderer(Renderer):
 
             # Determine path for temporary and for final output
             temporary_segmentation_file_path = os.path.join(self._temp_dir, "seg_")
-            final_segmentation_file_path = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", "segmap_"))
+            final_segmentation_file_path = os.path.join(self._determine_output_dir(),
+                                                        self.config.get_string("output_file_prefix", "segmap_"))
 
             # Render the temporary output
             self._render("seg_", custom_file_path=temporary_segmentation_file_path)
@@ -157,7 +167,9 @@ class SegMapRenderer(Renderer):
                     file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
                     segmentation = load_image(file_path)
 
-                    segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation, num_splits_per_dimension, self.render_colorspace_size_per_dimension)
+                    segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation,
+                                                                                     num_splits_per_dimension,
+                                                                                     self.render_colorspace_size_per_dimension)
                     segmap = segmap.astype(optimal_dtype)
 
                     fname = final_segmentation_file_path + "%04d" % frame
@@ -165,7 +177,9 @@ class SegMapRenderer(Renderer):
 
             # write color mappings to file
             if color_map is not None and not self._avoid_rendering:
-                with open(os.path.join(self._determine_output_dir(), self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map") + ".csv"), 'w', newline='') as csvfile:
+                with open(os.path.join(self._determine_output_dir(),
+                                       self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map") +
+                                       ".csv"), 'w', newline='') as csvfile:
                     fieldnames = list(color_map[0].keys())
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
@@ -174,4 +188,10 @@ class SegMapRenderer(Renderer):
 
         self._register_output("segmap_", "segmap", ".npy", "1.0.0")
         if color_map is not None:
-            self._register_output("class_inst_col_map", "segcolormap", ".csv", "1.0.0", unique_for_camposes=False, output_key_parameter_name="segcolormap_output_key", output_file_prefix_parameter_name="segcolormap_output_file_prefix")
+            self._register_output("class_inst_col_map",
+                                  "segcolormap",
+                                  ".csv",
+                                  "1.0.0",
+                                  unique_for_camposes=False,
+                                  output_key_parameter_name="segcolormap_output_key",
+                                  output_file_prefix_parameter_name="segcolormap_output_file_prefix")

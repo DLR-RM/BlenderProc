@@ -3,6 +3,7 @@ import bpy
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
 
+
 class NormalRenderer(Renderer):
     """  Renders normal images for each registered key point.
 

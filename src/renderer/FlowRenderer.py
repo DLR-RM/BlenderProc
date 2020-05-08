@@ -1,10 +1,11 @@
-import bpy
 import os
+
+import bpy
 import numpy as np
 
 from src.renderer.Renderer import Renderer
-from src.utility.Utility import Utility
 from src.utility.BlenderUtility import load_image
+from src.utility.Utility import Utility
 
 
 class FlowRenderer(Renderer):
@@ -13,11 +14,19 @@ class FlowRenderer(Renderer):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "forward_flow_output_key", "The key which should be used for storing forward optical flow values. Type: str, default: 'forward_flow'."
-        "backward_flow_output_key", "The key which should be used for storing backward optical flow values. Type: str, default: 'backward_flow'."
-        "forward_flow", "Whether to render forward optical flow. Type: bool, default: True."
-        "backward_flow", "Whether to render backward optical flow. Type: bool, default: True."
-        "blender_image_coordinate_style", "Whether to specify the image coordinate system at the bottom left (blender default; True) or top left (standard convention; False). Type: bool, default: False."
+        "forward_flow_output_key", "The key which should be used for storing forward optical flow values. Type: string."
+                                   "Default: 'forward_flow'."
+        "backward_flow_output_key", "The key which should be used for storing backward optical flow values. "
+                                    "Type: string."Default: 'backward_flow'."
+        "forward_flow", "Whether to render forward optical flow. Type: bool, Default: True."
+        "backward_flow", "Whether to render backward optical flow. Type: bool, Default: True."
+        "blender_image_coordinate_style", "Whether to specify the image coordinate system at the bottom left "
+                                          "(blender default; True) or top left (standard convention; False). "
+                                          "Type: bool. Default: False"
+        "forward_flow_output_file_prefix", "The file prefix that should be used when writing forward flow to a file."
+                                           "Type: string, Default: "forward_flow_""
+        "backward_flow_output_file_prefix", "The file prefix that should be used when writing backward flow to a file."
+                                            "Type: string, Default: "backward_flow_""
     """
 
     def __init__(self, config):
@@ -102,7 +111,7 @@ class FlowRenderer(Renderer):
                         file_path = temporary_bwd_flow_file_path + "%04d" % frame + ".exr"
                         bwd_flow_field = load_image(file_path, num_channels=4).astype(np.float32)
 
-                        if not self.config.get_bool('y_origin_bot', False):
+                        if not self.config.get_bool('blender_image_coordinate_style', False):
                             bwd_flow_field[:, :, 1] = bwd_flow_field[:, :, 1] * -1
 
                         fname = os.path.join(self._determine_output_dir(),
@@ -118,4 +127,3 @@ class FlowRenderer(Renderer):
             self._register_output(default_prefix=self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_'),
                                   default_key=self.config.get_string("backward_flow_output_key", "backward_flow"),
                                   suffix='.npy', version='2.0.0')
-

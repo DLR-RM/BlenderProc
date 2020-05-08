@@ -12,21 +12,9 @@ class SuncgCameraSampler(CameraSampler):
     - Always sets the x and y coordinate of the camera location to a value uniformly sampled inside a rooms bounding box
     - The configured z coordinate of the configured camera location is used as relative to the floor
     - All sampled camera locations need to lie straight above the room's floor to be valid
+    
+    See parent class CameraSampler for more details.
 
-    **Configuration**:
-
-    .. csv-table::
-       :header: "Parameter", "Description"
-
-       "position_range_x, position_range_y, position_range_z", "The interval in which the camera positions should be sampled. The interval is specified as a list of two values (min and max value). The values are used relative to the bbox, so e.q. a z-interval of [1, 2] means between 1 and 2 meter above the floor."
-       "cams_per_square_meter", "Used to calculate the number of cams that should be sampled in a given room. total_cams = cams_per_square_meter * room_size"
-       "max_tries_per_room", "The maximum number of tries that should be made to sample the requested number of cam poses for a given room."
-       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles in front of the camera."
-       "resolution_y", "The resolution of the camera in y-direction.Necessary when checking, if there are obstacles in front of the camera."
-       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles in front of the camera."
-       "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
-       "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
-       "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
     """
     def __init__(self, config):
         CameraSampler.__init__(self, config)

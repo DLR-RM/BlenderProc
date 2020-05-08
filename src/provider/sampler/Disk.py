@@ -1,5 +1,5 @@
-import numpy as np
 import mathutils
+import numpy as np
 
 from src.main.Provider import Provider
 
@@ -8,25 +8,45 @@ class Disk(Provider):
     """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
         with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
 
+        Example 1: Sample a point from a 1-sphere.
+
+        {
+          "provider": "sampler.Disk",
+          "sample_from": "circle",
+          "center": [0, 0, 4],
+          "radius": 7
+        }
+
+        Example 1: Sample a point from a sector.
+
+        {
+          "provider": "sampler.Disk",
+          "sample_from": "sector",
+          "center": [0, 0, 4],
+          "radius": 7,
+          "start_angle": 0,
+          "end_angle": 90
+        }
+
     **Configuration**:
 
     .. csv-table::
-       :header:, "Parameter", "Description"
+        :header:, "Parameter", "Description"
 
-       "center", "Center (in 3d space) of a 2d geometrical shape to sample from. Type: mathutils.Vector."
-       "radius", "The radius of the disk. Type: float."
-       "rotation", "List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used "
-                   "for sampling in 3d space. Type: mathutils.Vector. Default value: [0, 0, 0]."
-       "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample "
-                      "from. Type: string. Default value: "disk". Available values: "disk", "circle", "sector", "arc"."
-       "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller "
+        "center", "Center (in 3d space) of a 2d geometrical shape to sample from. Type: mathutils.Vector."
+        "radius", "The radius of the disk. Type: float."
+        "rotation", "List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used "
+                   "for sampling in 3d space. Type: mathutils.Vector. Default: [0, 0, 0]."
+        "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample "
+                      "from. Type: string. Default: "disk". Available: "disk", "circle", "sector", "arc"."
+        "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller "
                       "than end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than "
                       "180 degrees. Angle increases in the counterclockwise direction from the positive direction of X "
-                      "axis. Type: float. Default value: 0."
-       "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than "
+                      "axis. Type: float. Default: 0."
+        "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than "
                     "start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 "
                     "degrees. Angle increases in the counterclockwise direction from the positive direction of X axis. "
-                    "Type: float. Default value: 180."
+                    "Type: float. Default: 180."
     """
 
     def __init__(self, config):

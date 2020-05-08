@@ -1,18 +1,17 @@
 import math
 
-import mathutils
 import bpy
-import numpy as np
 import h5py
+import mathutils
+import numpy as np
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import load_image
 from src.utility.BlenderUtility import add_object_only_with_direction_vectors
 from src.utility.Utility import Utility
 
+
 class VisNormalImage(Module):
-    """
-        This module can visualize a .hdf5 container containing a normal and a depth image and also the campose,
+    """ This module can visualize a .hdf5 container containing a normal and a depth image and also the campose,
         this can be used while debugging to make sure that the resulting depth and normal image are as intended.
 
         Necessary keys in the .hdf5 container are:
@@ -20,16 +19,18 @@ class VisNormalImage(Module):
             * normal: (X, Y, 3)
             * campose: string written by the CameraStateWriter
 
-        .. csv-table::
-            :header: "Parameter", "Description"
-            "path_to_hdf5", "The file path to the hdf5 container."
-            "max_depth", "Maximum depth to be considered, Type: float, default: 24"
-            "normal_len", "Length of the normal edge in the scene: float, default: 0.1"
+    *8Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "path_to_hdf5", "The file path to the hdf5 container. Type: string."
+        "max_depth", "Maximum depth to be considered. Type: float. Default: 24."
+        "normal_length", "Length of the normal edge in the scene. Type: float. Default: 0.1."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
-
 
     def run(self):
 

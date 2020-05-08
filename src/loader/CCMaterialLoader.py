@@ -6,7 +6,25 @@ import bpy
 from src.main.Module import Module
 from src.utility.Utility import Utility
 
+
 class CCMaterialLoader(Module):
+    """
+    This modules loads all textures obtained from https://cc0textures.com, use the script
+    (scripts/download_cc_textures.py) to download all the textures to your pc.
+
+    All textures here support Physically based rendering (PBR), which makes the textures more realistic.
+
+    All materials will have the custom property "is_cc_texture": True, which will make the selection later on easier.
+
+    See the example section on how to use this in combination with a dataset: examples/shapenet_with_cctextures.
+
+    **Configuration**:
+
+    .. csv-table::
+       :header: "Parameter", "Description"
+
+       "folder_path", "The path to the downloaded cc0textures. Type: string. Default: resources/cctextures."
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)

@@ -1,8 +1,9 @@
-from src.main.Module import Module
-import bpy
 import csv
 import os
 
+import bpy
+
+from src.main.Module import Module
 from src.utility.Utility import Utility
 
 
@@ -15,7 +16,11 @@ class SuncgLighting(Module):
        :header: "Parameter", "Description"
 
        "lightbulb_emission_strength", "The emission strength that should be used for light bulbs."
+                                      "Type: float. Default: 15"
        "lampshade_emission_strength", "The emission strength that should be used for lamp shades."
+                                      "Type: float. Default: 7"
+       "ceiling_emission_strength", "The emission strength that should be used for the ceiling. "
+                                    "Type: float. Default: 1.5"
     """
     def __init__(self, config):
         Module.__init__(self, config)

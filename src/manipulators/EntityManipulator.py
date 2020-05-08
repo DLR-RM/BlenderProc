@@ -1,60 +1,127 @@
 import bpy
+
 from src.main.Module import Module
 from src.utility.Config import Config
 
 
 class EntityManipulator(Module):
-    """ Allows basic manipulator for all entities, including Meshes, Cameras, lights, and more.
-    Specify a desired getter for selecting entities in 'selector' section, then specify any desired {key: value} pairs.
-    Each pair is treated like a {attribute_name:attribute_value} where attr_name is any valid name for an existing
-    attribute or custom property or a name of a custom property to create, while the attr_value is an according value
-    for such attribute or custom property (this value can be sampled).
+    """ Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
+        objects, Light objects, etc.
 
-    In order to set a custom property, which is also an attribute, add before the key a "cp_".
-    For example: Setting a custom property of type is not possible as it will change the attribute type, so
-    adding a "cp_" before the key -> "cp_type" will make it possible to set the custom property "type".
+        Example 1: For all 'MESH' type objects with a name matching a 'Cube.*' pattern set rotation Euler vector and set
+                   custom property `physics`.
+
+        {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": 'Cube.*',
+                "type": "MESH"
+              }
+            },
+            "rotation_euler": [1, 1, 0],
+            "cp_physics": True
+          }
+        }
+
+        Example 2: Set a shared (sampled once and set for all selected objects) location for all 'MESH' type objects
+                   with a name matching a 'Cube.*' pattern.
+
+        {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": 'Cube.*',
+                "type": "MESH"
+              }
+            },
+            "mode": "once_for_all",
+            "location": {
+              "provider": "sampler.Uniform3d",
+              "max":[1, 2, 3],
+              "min":[0, 1, 2]
+            }
+          }
+        }
+
+        Example 3: Set a unique (sampled once for each selected object) location and apply a 'Solidify' object modifier
+                   with custom 'thickness' attribute value to all 'MESH' type objects with a name matching a 'Cube.*'
+                   pattern.
+
+        {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": 'Cube.*',
+                "type": "MESH"
+              }
+            },
+            "mode": "once_for_each",    # can be omitted, `once_for_each` is a default value of `mode` parameter
+            "location": {
+              "provider": "sampler.Uniform3d",
+              "max":[1, 2, 3],
+              "min":[0, 1, 2]
+            },
+            "cf_add_modifier": {
+              "provider": "getter.Content",
+              "content": {
+                "name": "Solidify",
+                "thickness": 0.001
+            }
+          }
+        }
 
     **Configuration**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-    "selector", "Here call an appropriate Provider so select objects to manipulate."
-    "mode", "Mode of operation. Optional. Type: string. Available values: "once_for_each" (if samplers are called,
-             new sampled value is set to each selected entity) and "once_for_all" (if samplers are called, value
-             is sampled once and set to all selected entities)."
+        "selector", "Objects to become subjects of manipulation. Type: Provider."
+        "mode", "Mode of operation. Type: string. Default: "once_for_each". Available: 'once_for_each' (if samplers "
+                "are called, new sampled value is set to each selected entity), 'once_for_all' (if samplers are "
+                "called, value is sampled once and set to all selected entities)."
 
     **Values to set**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "key", "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
-               "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.):"
-               "For attribute: key of the pair must be a valid attribute name of the selcted object."
-               "For custom property: key of the pair must start with `cp_` prefix."
-               "For custom functions: key of the pair must start with `cf_` prefix. See below for more information."
-        "value", "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
+        "key", "Name of the attribute/custom property to change or a name of a custom function to perform on entities. "
+               "Type: string. "
+               "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.): "
+               "For attribute: key of the pair must be a valid attribute name of the selected object. "
+               "For custom property: key of the pair must start with `cp_` prefix. "
+               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
+               "supported custom function names."
+        "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function. Type: string, "
+                 "int, bool or float, list/Vector."
+
+    **Custom functions**
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "cf_add_modifier", "Adds a modifier to the selected object for now we only support the Solidify modifier"
-                          "Example:    "cf_add_modifier": {
-                                          # make sure to use this provider to avoid conflicts with the evaluation
-                                          "provider": "getter.Content",
-                                          "content": {
-                                            "name": "Solidify",  # name of the modifier
-                                            "thickness": 0.001   # attributes to be changed for this modifier
-                                          }
-                                        }"
+        "cf_add_modifier", "Adds a modifier to the selected object. Pass configuration parameters via calling a "
+                           "getter.Content Provider. Type: Provider."
+        "cf_add_modifier/name", "Name of the modifier to add. Type: string. Available values: 'Solidify'."
+        "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
-        """ 'Selects' entities and sets according values for defined attributes/custom properties."""
+        """ Sets according values of defined attributes/custom properties or applies custom functions to the selected
+            entities.
+            1. Select objects.
+            2. For each parameter to modify, set it's value to all selected objects.
+        """
         # separating defined part with the selector from ambiguous part with attribute names and their values to set
         set_params = {}
         sel_objs = {}
@@ -72,15 +139,14 @@ class EntityManipulator(Module):
 
         op_mode = self.config.get_string("mode", "once_for_each")
         if len(entities) == 0:
-            print("Warning: There were not entities in this selection, probably something went wrong.")
+            raise RuntimeError("No objects are returned by Provider. Check defined conditions.")
         else:
-            print("Selected {} to change.".format(len(entities)))
+            print("Amount of objects to modify: {}.".format(len(entities)))
 
         for key in params_conf.data.keys():
             # get raw value from the set parameters if it is to be sampled once for all selected entities
             if op_mode == "once_for_all":
                 result = params_conf.get_raw_value(key)
-
 
             for entity in entities:
                 if op_mode == "once_for_each":
@@ -115,13 +181,11 @@ class EntityManipulator(Module):
         bpy.context.view_layer.update()
 
     def _apply_function(self, entity, key, result):
-        """
-        Applies a custom function to the selected entity
+        """ Applies a custom function to the selected entity.
 
-        :param entity, the entity where the custom fct. should be applied
-        :param key, name of the custom function
-        :param result, content which should be used to apply the custom function, this value should be produced with a
-                       selector (getter.Content).
+        :param entity: Entity to be modified via the application of the custom function. Type: bpy.types.Object.
+        :param key: Name of the custom function. Type: string.
+        :param result: Configuration parameters of the custom function. Type: dict.
         """
         if key == "add_modifier":
             result = Config(result)
@@ -132,6 +196,6 @@ class EntityManipulator(Module):
                 bpy.ops.object.modifier_add(type=name.upper())
                 bpy.context.object.modifiers["Solidify"].thickness = thickness
             else:
-                raise Exception("The name for the modifier is unknown: {}".format(name))
+                raise Exception("Unknown modifier name: {}.".format(name))
         else:
-            raise Exception("This function is unknown: {}".format(key))
+            raise Exception("Unknown custom function name: {}.".format(key))

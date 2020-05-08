@@ -1,48 +1,109 @@
+import numbers
+import sys
+from collections import defaultdict
+
+import bmesh
+import bpy
+import mathutils
+import numpy as np
+
 from src.camera.CameraModule import CameraModule
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.ItemCollection import ItemCollection
-import mathutils
-import bpy
-import bmesh
-import sys
-import numbers
-from collections import defaultdict
 
-import numpy as np
 
 class CameraSampler(CameraModule):
     """ A general camera sampler.
 
-    First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.
-    If that's not the case a new camera pose is sampled instead.
+        First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.
+        If that's not the case a new camera pose is sampled instead.
 
-    Supported cam pose validation methods:
-    - Checking if the distance to objects is in a configured range
-    - Checking if the scene coverage/interestingness score is above a configured threshold
+        Supported cam pose validation methods:
+        - Checking if the distance to objects is in a configured range
+        - Checking if the scene coverage/interestingness score is above a configured threshold
+        - Checking if a candidate pose is sufficiently different than the sampled poses so far
+
+        Example 1: Sampling 10 camera poses.
+
+        {
+          "module": "camera.SuncgCameraSampler",
+          "config": {
+            "cam_poses": [
+            {
+              "number_of_samples": 10,
+              "proximity_checks": {
+                "min": 1.0
+              },
+              "min_interest_score": 0.4,
+              "location": {
+                "provider":"sampler.Uniform3d",
+                "max":[0, 0, 2],
+                "min":[0, 0, 0.5]
+              },
+              "rotation": {
+                "value": {
+                  "provider":"sampler.Uniform3d",
+                  "max":[1.2217, 0, 6.283185307],
+                  "min":[1.2217, 0, 0]
+                }
+              }
+            }
+            ]
+          }
+        }
+
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "cam_poses", "Camera poses configuration list. Each cell contains a separate config data. Type: list."
 
     **Properties per cam pose**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "number_of_samples", "The number of camera poses that should be sampled."
-       "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses per interest score."
-       "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an obstacle in front of the camera."
-       "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min. The operators are combined in conjunction (i.e boolean and).
-       "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views."
-       "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera poses. Type: float. Optional. Default value: min_interest_score"
-       "interest_score_step", "Step size for the list of interest scores that would be tried in the range from min_interest_score to"interest_score_range. Must be bigger than 0. Type: float. Optional. Default value: 0.1"
-       Interest score range example: min_interest_score = 0.8, interest_score_range = 1.0, interest_score_step = 0.1
-       interest score list = [1.0, 0.9, 0.8]. The sampler would reject any pose with score less than 1.0. If max tries is reached, it would switch to 0.9 and so on.
-       min_interest_score = 0.8, interest_score_range = 0.8, interest_score_step = 0.1 (or any value bigger than 0)
-       interest score list = [0.8].
-       "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, uses the coarse_grained_class."
-       "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of the scene."
-       "check_pose_novelty_rot", "Checks that a sampled new pose is novel with respect to the rotation component. Type: bool. Optional. Default value: True"
-       "check_pose_novelty_translation", "Checks that a sampled new pose is novel with respect to the translation component. Type: bool. Optional. Default value: True"
-       "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses sampled by this parameter's value in percentage. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
-       "min_var_diff_translation", "Same as min_var_diff_rot but for translation. If set to -1, then it would only check that the variance is increased. Type: float. Optional. Default value: float min"
-       "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor or a table, default: []"
+        "number_of_samples", "The number of camera poses that should be sampled. Note depending on some constraints "
+                             "(e.g. interest scores), the sampler might not return all of the camera poses if the "
+                             "number of tries exceeded the configured limit. Type: int. Default: 1."
+        "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses per "
+                     "interest score. Type: int. Default: 100000000."
+        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an "
+                               "obstacle in front of the camera. Type: int. Default: 10."
+        "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries "
+                            "containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical "
+                            "threshold in case of max or min. The operators are combined in conjunction (i.e boolean "
+                            "AND). Type: dict. Defaul: [].
+        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views. Type: float. "
+                              "Default: 0.0."
+        "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera "
+                                "poses. Interest score range example: min_interest_score = 0.8, interest_score_range = "
+                                "1.0, interest_score_step = 0.1 interest score list = [1.0, 0.9, 0.8]. The sampler "
+                                "would reject any pose with score less than 1.0. If max tries is reached, it would "
+                                "switch to 0.9 and so on. min_interest_score = 0.8, interest_score_range = 0.8, "
+                                "interest_score_step = 0.1 (or any value bigger than 0) interest score list = [0.8]. "
+                                "Type: float. Default: min_interest_score."
+        "interest_score_step", "Step size for the list of interest scores that would be tried in the range from "
+                               "min_interest_score to interest_score_range. Must be bigger than 0. Type: float. "
+                               "Default: 0.1."
+        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, "
+                           "uses the coarse_grained_class. Type: list. Default: []."
+        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of "
+                                  "the scene. Type: float. Default: 2.0."
+        "check_pose_novelty_rot", "Checks that a sampled new pose is novel with respect to the rotation component. "
+                                  "Type: bool. Default: True"
+        "check_pose_novelty_translation", "Checks that a sampled new pose is novel with respect to the translation "
+                                          "component. Type: bool. Default: True."
+        "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses "
+                            "sampled by this parameter's value in percentage. If set to -1, then it would only check "
+                            "that the variance is increased. Type: float. Default: sys.float_info.min."
+        "min_var_diff_translation", "Same as min_var_diff_rot but for translation. If set to -1, then it would only "
+                                    "check that the variance is increased. Type: float. Default: sys.float_info.min."
+        "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor "
+                                           "or a table. Type: list. Default: []."
+        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraModule "
+                             "for more info. Type: dict. Default: {}."
     """
 
     def __init__(self, config):
@@ -84,7 +145,7 @@ class CameraSampler(CameraModule):
 
         # Set global parameters
         self.sqrt_number_of_rays = config.get_int("sqrt_number_of_rays", 10)
-        self.max_tries = config.get_int("max_tries", 10000)
+        self.max_tries = config.get_int("max_tries", 100000000)
         self.proximity_checks = config.get_raw_dict("proximity_checks", [])
         self.min_interest_score = config.get_float("min_interest_score", 0.0)
         self.interest_score_range = config.get_float("interest_score_range", self.min_interest_score)
@@ -106,8 +167,8 @@ class CameraSampler(CameraModule):
         else:    
             step_size = (self.interest_score_range - self.min_interest_score) / self.interest_score_step
             step_size += 1  # To include last value
-
-        interest_scores = np.linspace(self.interest_score_range, self.min_interest_score, step_size)  # Decreasing order
+        # Decreasing order
+        interest_scores = np.linspace(self.interest_score_range, self.min_interest_score, step_size)
         score_index = 0
 
         all_tries = 0  # max_tries is now applied per each score
@@ -198,7 +259,9 @@ class CameraSampler(CameraModule):
         :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
         """
         # Send a ray straight down and check if the first hit object is the query object
-        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, mathutils.Vector([0, 0, -1]))
+        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer,
+                                                                 position,
+                                                                 mathutils.Vector([0, 0, -1]))
         return hit and hit_object == object
 
 
@@ -223,7 +286,8 @@ class CameraSampler(CameraModule):
         self.bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
 
     def _perform_obstacle_in_view_check(self, cam, cam2world_matrix):
-        """ Check if there is an obstacle in front of the camera which is less than the configured "min_dist_to_obstacle" away from it.
+        """ Check if there is an obstacle in front of the camera which is less than the configured
+            "min_dist_to_obstacle" away from it.
 
         :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
@@ -251,8 +315,10 @@ class CameraSampler(CameraModule):
                 raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
             if operator == "avg" or operator == "var":
                 if "min" not in self.proximity_checks[operator] or "max" not in self.proximity_checks[operator]:
-                    raise Exception("please specify the accepted interval for the avg and var operators in perform_obstacle_in_view_check")
-                if not isinstance(self.proximity_checks[operator]["min"], numbers.Number) or not isinstance(self.proximity_checks[operator]["max"], numbers.Number):
+                    raise Exception("Please specify the accepted interval for the avg and var operators "
+                                    "in perform_obstacle_in_view_check")
+                if not isinstance(self.proximity_checks[operator]["min"], numbers.Number) \
+                        or not isinstance(self.proximity_checks[operator]["max"], numbers.Number):
                     raise Exception("Threshold must be a number in perform_obstacle_in_view_check")
 
 
@@ -355,10 +421,12 @@ class CameraSampler(CameraModule):
                         score += 1
 
 
-        # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for each object more/less, excluding floor, ceiling and walls
+        # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for
+        # each object more/less, excluding floor, ceiling and walls
         scene_variance = len(objects_hit.keys()) / 3
         for object_hit in objects_hit.keys():
-            # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even distribution of the objects in the scene
+            # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even
+            # distribution of the objects in the scene
             scene_variance *= 1 - objects_hit[object_hit] / num_of_rays
 
         score = scene_variance * (score / num_of_rays)
@@ -396,8 +464,8 @@ class CameraSampler(CameraModule):
                     return False
 
             if self.check_pose_novelty_translation:
-                if not _variance_constraint(self.translations, translation, self.var_translation, 
-                    self.min_var_diff_translation):
+                if not _variance_constraint(self.translations, translation, self.var_translation,
+                                            self.min_var_diff_translation):
                     return False
         else:
             self.translations.append(translation)

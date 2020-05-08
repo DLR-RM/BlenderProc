@@ -1,5 +1,5 @@
-import numpy as np
 import mathutils
+import numpy as np
 
 from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds
@@ -7,9 +7,8 @@ from src.utility.BlenderUtility import get_bounds
 
 class Attribute(Provider):
     """ Returns a value that is the result of selecting entities using getter.Entity Provider, getting the list of
-        values of selected entities attributes/custom properties/custom-processed data based on the provided name of
-        the parameter/custom property/custom function name, and of the optional operations on this list.
-
+        values of selected entities' attributes/custom properties/custom-processed data, and of the optional operations
+        on this list.
 
         Example 1: Get a list of locations of objects (which names match the pattern).
 
@@ -24,8 +23,6 @@ class Attribute(Provider):
           "get": "location"
           # add "transform_by": "sum" to get one value that represents the sum of those locations.
         }
-
-
 
         Example 2: Get a list of custom property "id" values of objects (which "physics" cp value is True).
 
@@ -54,7 +51,7 @@ class Attribute(Provider):
           # add "transform_by": "avg" to get one value that represents the average coordinates of those bounding boxes
         }
 
-        **Configuration**:
+    **Configuration**:
 
     .. csv-table::
         :header: "Parameter", "Description"
@@ -63,35 +60,33 @@ class Attribute(Provider):
         "get", "Attribute/Custom property/custom function name on which the return value is based. Must be a valid "
                "name of selected entities' attribute/custom property, or a custom function name. Every entity selected "
                "must have this attribute, custom prop, or must be usable in a custom function, otherwise an exception "
-               "will be thrown. Type: string."
-               "In order to specify, what exactly one want to modify (e.g. attribute, custom property, etc.):"
-               "For attribute: key of the pair must be a valid attribute name of the all selected entities."
-               "For custom property: key of the pair must start with `cp_` prefix."
+               "will be thrown. Type: string. "
+               "In order to specify, what exactly one wants to get (e.g. attribute, custom property, etc.): "
+               "For attribute: key of the pair must be a valid attribute name of the all selected entities. "
+               "For custom property: key of the pair must start with `cp_` prefix. "
                "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
-               "supported cf names."
+               "supported custom function names."
         "transform_by", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
-                        "Type: string. Supported input types: (list of) int (and/or) float, mathutils.Vector. See below
-                        "for supported operation names."
+                        "Type: string. See table below for supported operation names."
         "index", "If set, after the conditions are applied only the corresponding value of entity with the specified "
                  "index is returned. Type: int."
 
-        **Custom function names for `get` parameter**
+    **Custom functions**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
         "cf_bounding_box_means", "Custom function name for `get` parameter. Invokes a chain of operations which "
                                  "returns a list of arithmetic means of coordinates of object aligned bounding boxes' "
-                                 "of selected objects in world coordinates format."
+                                 "of selected objects in world coordinates format. Type: list (return)."
 
-        **Operation names for `transform_by` parameter**
+    **Operations**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "sum", "Operation name. Returns the sum of all values of the input list."
-        "avg", "Operation name. Returns the average value of all values of the input list."
-
+        "sum", "Returns the sum of all values of the input list. Type: float (return)."
+        "avg", "Returns the average value of all values of the input list. Type: float (return)."
     """
 
     def __init__(self, config):
@@ -101,8 +96,8 @@ class Attribute(Provider):
         """ Selects objects, gets a list of appropriate values of objects' attributes, custom properties, or some
             processed custom data and optionally performs some operation of this list.
 
-        :return: List of values (if only `get` was specified)
-                 or a singular int, float, or mathutils.Vector (if some operation was applied).
+        :return: List of values (only if `get` was specified or a custom function was called)
+                 or a singular int, float, or mathutils.Vector value (if some operation was applied).
         """
         objects = self.config.get_list("entities")
         look_for = self.config.get_string("get")
@@ -153,7 +148,7 @@ class Attribute(Provider):
         """ Checks if the list of values contains appropriate data of int, float, or mathutils.Vector type.
 
         :param raw_result: list of selected objects' attribute/custom prop./or custom data values. Type: List
-        :return: True if list is of int (and or) float, or mathutils.Vector data type. False if not.
+        :return: True if list is of int (and or) float, or mathutils.Vector data type. False if not. Type: bool.
         """
         return any([all(isinstance(item, mathutils.Vector) for item in raw_result),
                     all(isinstance(item, (float, int)) for item in raw_result)])

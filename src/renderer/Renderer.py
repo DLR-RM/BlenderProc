@@ -1,16 +1,14 @@
-import os
-from sys import platform
-import multiprocessing
 import math
+import os
 
 import addon_utils
 import bpy
 import mathutils
 
-from src.main.Module import Module
-from src.utility.Utility import Utility
-from src.utility.BlenderUtility import get_all_mesh_objects
 from src.main.GlobalStorage import GlobalStorage
+from src.main.Module import Module
+from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.Utility import Utility
 
 
 class Renderer(Module):
@@ -20,37 +18,71 @@ class Renderer(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "output_file_prefix", "The file prefix that should be used when writing the rendering to file."
-       "output_key", "The key which should be used for storing the rendering in a merged file."
+       "output_file_prefix", "The file prefix that should be used when writing the rendering to file. Type: String."
+       "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
 
-       "auto_tile_size", "If true, then the number of render tiles is set automatically using the render_auto_tile_size addon."
-       "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true."
-       "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true."
-       "resolution_x", "The render image width."
-       "resolution_y", "The render image height."
-       "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution aspect ratio to distort the image."
+       "resolution_x", "The render image width. Type: int. Default: 512, except the CameraModule loaded something else"
+       "resolution_y", "The render image height. Type: int. Default: 512, except the CameraModule loaded something else"
+
+       "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in
+                  "dark areas. Type: int. Default: 256, (not true for all Renderes)"
+
+       "auto_tile_size", "If true, then the number of render tiles is set automatically using the
+                         "render_auto_tile_size addon. Type: bool. Default: True"
+       "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set"
+                 "to true. Type: int."
+       "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set"
+                 "to true. Type: int."
+       "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution"
+                         "aspect ratio to distort the image. Type: float. Default: 1.0"
        "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
+                                      "Type: int. Default: 3"
 
-       "samples", "Number of samples to render for each pixel."
-       "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or set to 'Intel', if you want to use the Intel Open Image Denoiser.
-       "max_bounces", "Total maximum number of bounces."
-       "min_bounces", "Total minimum number of bounces."
+       "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or "
+                   "set to 'Intel', if you want to use the Intel Open Image Denoiser, performs much better."
+                   "Type: string. Default: "Intel" Available: ["Intel", "Blender"]."
+       "max_bounces", "Total maximum number of bounces. Type: int. Default: 3"
+       "min_bounces", "Total minimum number of bounces. Type: int. Default: 1"
        "diffuse_bounces", "Maximum number of diffuse reflection bounces, bounded by total maximum."
+                          "Type: int. Default: 3"
        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
-       "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the specified bounce."
-       "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum."
+                         "Be careful the default is set to zero to improve rendering time, but it removes all glossy"
+                         "surfaces from the rendering process"
+                         "Type: int. Default: 0"
+       "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the"
+                            "specified bounce. Type: int. Default: 3"
+       "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum. "
+                               "Be careful the default is set to zero to improve rendering time, but it removes all"
+                               "transmission surfaces from the rendering process.
+                               "Type: int. Default: 0"
        "transparency_bounces", "Maximum number of transparency bounces, bounded by total maximum."
-       "volume_bounces", "Maximum number of volumetric scattering events"
+                               "A higher value helps if a lot of transparency objects are stacked after each other."
+                               "Type: int. Default: 8"
+       "volume_bounces", "Maximum number of volumetric scattering events. Type: int. Default: 0"
 
-       "render_depth", "If true, the depth is also rendered to file."
+       "render_depth", "If true, the depth is also rendered to file. Type: bool. Default: False"
        "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
-       "depth_output_key", "The key which should be used for storing the depth in a merged file."
-       "depth_start", "Starting distance of the depth, measured from the camera."
-       "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range"
-       "depth_falloff", "Type of transition used to fade depth. Default=Linear. [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
+                                   "Type: string. Default: "depth_""
+       "depth_output_key", "The key which should be used for storing the depth in a merged file.
+                           "Type: string. Default: "depth""
+       "depth_start", "Starting distance of the depth, measured from the camera. Type: float. Default: 0.1"
+       "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range."
+                      "Type: float. Default: 25.0"
+       "depth_falloff", "Type of transition used to fade depth. Type: string. Default: "Linear". "
+                        "Available=[LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
-       "stereo", "If true, renders a pair of stereoscopic images for each camera position."
-       "use_alpha", "If true, the alpha channel stored in .png textures is used."
+       "use_alpha", "If true, the alpha channel stored in .png textures is used. Type: bool. Default: False"
+       "stereo", "If true, renders a pair of stereoscopic images for each camera position. Type: bool. Default: False"
+       "avoid_rendering", "This mode is only used during debugging, when all settings should be executed but the actual"
+                          "rendering call is omitted. Type: bool Default: False"
+       "cpu_threads", "Set number of cpu cores used for rendering (1 thread is always used for coordination
+                      "if more than one cpu thread means GPU-only rendering). Type: int, Default: 1"
+
+       "render_normals", "If true, the normals are also rendered. Type: bool, Default: False"
+       "normals_output_file_prefix", "The file prefix that should be used when writing normals."
+                                     "Type: string, Default: "normals_""
+       "normals_output_key", "The key which is used for storing the normal in a merged file."
+                             "Type: string, Default: "normal""
     """
 
     def __init__(self, config):
@@ -58,11 +90,11 @@ class Renderer(Module):
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples=256, default_denoiser="Blender"):
+    def _configure_renderer(self, default_samples=256, default_denoiser="Intel"):
         """
-         Sets many different render parameters which can be adjusted via the config.
+        Sets many different render parameters which can be adjusted via the config.
 
-         :param default_samples: Default number of samples to render for each pixel
+        :param default_samples: Default number of samples to render for each pixel
         """
         bpy.context.scene.cycles.samples = self.config.get_int("samples", default_samples)
 
@@ -126,25 +158,6 @@ class Renderer(Module):
             bpy.context.scene.render.use_simplify = True
             bpy.context.scene.render.simplify_subdivision_render = simplify_subdivision_render
 
-        if platform == "darwin":
-            # there is no gpu support in mac os so use the cpu with maximum power
-            bpy.context.scene.cycles.device = "CPU"
-            bpy.context.scene.render.threads = multiprocessing.cpu_count()
-        else:
-            bpy.context.scene.cycles.device = "GPU"
-            preferences = bpy.context.preferences.addons['cycles'].preferences
-            for device_type in preferences.get_device_types(bpy.context):
-                preferences.get_devices_for_type(device_type[0])
-            for gpu_type in ["OPTIX", "CUDA"]:
-                found = False
-                for device in preferences.devices:
-                    if device.type == gpu_type:
-                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
-                        print('Device {} of type {} found and used.'.format(device.name, device.type))
-                        found = True
-                        break
-                if found:
-                    break
         bpy.context.scene.cycles.diffuse_bounces = self.config.get_int("diffuse_bounces", 3)
         bpy.context.scene.cycles.glossy_bounces = self.config.get_int("glossy_bounces", 0)
         bpy.context.scene.cycles.ao_bounces_render = self.config.get_int("ao_bounces_render", 3)

@@ -1,8 +1,8 @@
 import bpy
 import mathutils
 
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_bounds
 from src.main.Module import Module
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_bounds
 
 
 class OnSurfaceSampler(Module):
@@ -16,21 +16,21 @@ class OnSurfaceSampler(Module):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects."
+       "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects. Type: provider."
        "max_iterations", "Amount of tries before giving up on an object (deleting it) and moving to the next one. "
-                         "Optional. Type: int. Default value: 100."
+                         "Type: int. Default: 100."
        "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each "
-                      "object. UpperRegionSampler recommended."
+                      "object. UpperRegionSampler recommended. Type: Provider."
        "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) "
-                      "for each object."
+                      "for each object. Type: Provider."
        "surface", "Object to place objects_to_sample on, here call an appropriate Provider (getter) which is configured "
-                  "such that it returns only one object."
+                  "such that it returns only one object. Type: Provider."
        "min_distance", "Minimum distance to the closest other object. Center to center. Only objects placed by this "
-                       "Module considered. Type: float. Default value: 0.25"
+                       "Module considered. Type: float. Default: 0.25"
        "max_distance", "Maximum distance to the closest other object. Center to center. Only objects placed by this "
-                       "Module considered. Type: float. Default value: 0.6"
+                       "Module considered. Type: float. Default: 0.6"
        "up_direction", "Normal vector of the side of surface the objects should be placed on. Type: mathutils.Vector. "
-                       "Default value: Vector([0., 0., 1.])"
+                       "Default: [0., 0., 1.]."
     """
 
     def __init__(self, config):
@@ -48,7 +48,7 @@ class OnSurfaceSampler(Module):
     def check_above_surface(self, obj):
         """ Check if all corners of the bounding box are "above" the surface
 
-        :param obj: Object for which the check is carried out.
+        :param obj: Object for which the check is carried out. Type: blender object.
         :return: True if the bounding box is above the surface, False - if not.
         """
         inv_world_matrix = self.surface.matrix_world.inverted()
@@ -67,7 +67,7 @@ class OnSurfaceSampler(Module):
     def check_spacing(self, obj):
         """ Check if object is not too close or too far from previous objects.
 
-        :param obj: Object for which the check is carried out.
+        :param obj: Object for which the check is carried out. Type: blender object.
         :return:
         """
         closest_distance = None
@@ -83,8 +83,8 @@ class OnSurfaceSampler(Module):
     def collision(first_obj, second_obj):
         """ Checks if two object intersect.
 
-        :param first_obj: The first object for which the check is carried out.
-        :param second_obj: The second object for which the check is carried out.
+        :param first_obj: The first object for which the check is carried out. Type: blender object.
+        :param second_obj: The second object for which the check is carried out. Type: blender Object.
         :return: True if objects are intersecting, if not - False.
         """
         intersection = check_bb_intersection(first_obj, second_obj)
@@ -97,7 +97,7 @@ class OnSurfaceSampler(Module):
     def check_collision_free(self, obj):
         """ Checks if the object collides with none of the previously placed objects.
 
-        :param obj: Object for which the check is carried out.
+        :param obj: Object for which the check is carried out. Type: blender object.
         :return: True if object is collision free, if not - False.
         """
         for already_placed in self.placed_objects:
@@ -110,7 +110,7 @@ class OnSurfaceSampler(Module):
         """ Moves object "down" until its bounding box touches the bounding box of the surface. This uses bounding boxes
             which are not aligned optimally, this will cause objects to be placed slightly to high.
 
-        :param obj: Object to move.
+        :param obj: Object to move. Type: blender object.
         """
         obj_bounds = get_bounds(obj)
         obj_height = min([self.up_direction.dot(corner) for corner in obj_bounds])

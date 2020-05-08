@@ -3,38 +3,43 @@ import numpy as np
 from src.main.Provider import Provider
 from src.provider.sampler.Sphere import Sphere
 
+
 class PartSphere(Provider):
-    """ Samples a point from the surface or from the interior of solid sphere
+    """ Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 
-    Gaussian is spherically symmetric. Sample from three independent Gaussian distributions
-    the direction of the vector inside the sphere. Then calculate magnitude based on the operation mode.
+        https://math.stackexchange.com/a/87238
+        https://math.stackexchange.com/a/1585996
 
-    The Sphere is split along the part_sphere_vector, this gives two sphere parts. The distance is used to define
-    the half, which is used.
+        Example 1: Sample a point from the surface of the sphere that is split by a plane with displacement of 0.5
+                   above center and a normal of [1, 0, 0].
 
-    For example:
-
-    If the vector is parallel to the z-axis, the distance check is: sampled_location[2] > distance_above_center.
+        {
+          "provider":"sampler.PartSphere",
+          "center": [0, 0, 0],
+          "part_sphere_vector": [1, 0, 0],
+          "mode": "SURFACE",
+          "distance_above_center": 0.5
+        }
 
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "center", "A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector"
-       "radius", "The radius of the sphere. Type: float"
-       "mode", "Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str"
-       "distance_above_center", "The distance above the center, which should be used, Type: float, default: 0.0 (half of the sphere)"
-       "part_sphere_vector", "The direction in which the sphere should be split, the end point of the vector, will be"
-                             "in the middle of the sphere pointing towards the middle of the resulting surface."
-                             "Type: mathutils.Vector, Default: [0,0,1]"
+        "center", "Location of the center of the sphere. Type: mathutils.Vector. Type: mathutils.Vector"
+        "radius", "The radius of the sphere. Type: float"
+        "mode", "Mode of sampling. Determines the geometrical structure used for sampling. Type: string. "
+                "Available: SURFACE (sampling from the 2-sphere), INTERIOR (sampling from the 3-ball)."
+        "distance_above_center", "The distance above the center, which should be used. Type: float. "
+                                 "Default: 0.0 (half of the sphere)."
+        "part_sphere_vector", "The direction in which the sphere should be split, the end point of the vector, will be "
+                              "in the middle of the sphere pointing towards the middle of the resulting surface. "
+                              "Type: mathutils.Vector. Default: [0, 0, 1]."
     """
 
     def __init__(self, config):
         Provider.__init__(self, config)
 
-    # https://math.stackexchange.com/a/87238
-    # https://math.stackexchange.com/a/1585996
     def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
