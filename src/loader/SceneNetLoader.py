@@ -8,6 +8,7 @@ import bpy
 
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
+from src.utility.LabelIdMapping import LabelIdMapping
 
 class SceneNetLoader(Loader):
     """
@@ -16,7 +17,7 @@ class SceneNetLoader(Loader):
     The textures for each object are sampled based on the name of the object, if the name is not represented in the
     texture folder the unknown folder is used.
 
-    All objects get "category_id" set based on the data in the "resources/scenenet/CategoryLabeling.csv"
+    All objects get "category_id" set based on the data in the "resources/id_mappings/nyu_idset.csv"
 
     Each object will have the custom property "is_scene_net_obj".
 
@@ -35,20 +36,11 @@ class SceneNetLoader(Loader):
         self._file_path = Utility.resolve_path(self.config.get_string("file_path"))
 
         self._texture_folder = Utility.resolve_path(self.config.get_string("texture_folder"))
-        default_category_labeling_path = "resources/scenenet/CategoryLabeling.csv"
-        self._category_labeling_path = Utility.resolve_path(self.config.get_string("category_labeling",
-                                                                              default_category_labeling_path))
-        self._category_labels = {}
-        if os.path.exists(self._category_labeling_path):
-            with open(self._category_labeling_path, "r") as csv_file:
-                csv_reader = csv.DictReader(csv_file, delimiter=',')
-                for line in csv_reader:
-                    if "LabelNumber" in line.keys() and "LabelName" in line.keys():
-                        self._category_labels[line["LabelName"].lower()] = int(line["LabelNumber"])
-            if not self._category_labels:
-                raise Exception("The csv file must have been empty: {}".format(self._category_labeling_path))
-            bpy.data.scenes["Scene"]["num_labels"] = len(self._category_labels)
-            bpy.context.scene.world["category_id"] = self._category_labels["void"]
+        LabelIdMapping.assign_mapping(os.path.join('resources', 'id_mappings', 'nyu_idset.csv'))
+
+        if LabelIdMapping.label_id_map:
+            bpy.data.scenes["Scene"]["num_labels"] = LabelIdMapping.num_labels
+            bpy.context.scene.world["category_id"] = LabelIdMapping.label_id_map["void"]
         else:
             print("Warning: The category labeling file could not be found -> no semantic segmentation available!")
 
@@ -125,19 +117,19 @@ class SceneNetLoader(Loader):
 
         :param loaded_objects objects loaded from the .obj file
         """
-        if self._category_labels:
+        if LabelIdMapping.label_id_map:
             for obj in loaded_objects:
                 obj_name = obj.name
                 if "." in obj_name:
                     obj_name = obj_name[:obj_name.find(".")]
-                if obj_name in self._category_labels:
-                    obj["category_id"] = self._category_labels[obj_name]
-                elif obj_name[-1] == "s" and obj_name[:-1] in self._category_labels:
-                    obj["category_id"] = self._category_labels[obj_name[:-1]]
+                if obj_name in LabelIdMapping.label_id_map:
+                    obj["category_id"] = LabelIdMapping.label_id_map[obj_name]
+                elif obj_name[-1] == "s" and obj_name[:-1] in LabelIdMapping.label_id_map:
+                    obj["category_id"] = LabelIdMapping.label_id_map[obj_name[:-1]]
                 elif "painting" in obj_name:
-                    obj["category_id"] = self._category_labels["picture"]
+                    obj["category_id"] = LabelIdMapping.label_id_map["picture"]
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
-                    obj["category_id"] = self._category_labels["other-structure".lower()]
+                    obj["category_id"] = LabelIdMapping.label_id_map["other-structure".lower()]
 
 
