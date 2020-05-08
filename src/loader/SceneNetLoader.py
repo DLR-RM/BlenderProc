@@ -2,7 +2,6 @@
 import os
 import glob
 import random
-import csv
 
 import bpy
 
@@ -27,7 +26,6 @@ class SceneNetLoader(Loader):
        :header: "Parameter", "Description"
        "file_path": "The path to the .obj file from SceneNet"
        "texture_folder": "The path to the texture folder used to sample the textures"
-       "category_labeling": "The path to the csv file used for the category labeling, default: resources/scenenet/CategoryLabeling.csv"
     """
 
     def __init__(self, config):
@@ -111,7 +109,7 @@ class SceneNetLoader(Loader):
 
     def _set_category_ids(self, loaded_objects):
         """
-        Set the category ids for the objs based on the category_labeling .csv file
+        Set the category ids for the objs based on the .csv file loaded in LabelIdMapping
 
         Each object will have a custom property with a label, can be used by the SegMapRenderer.
 
