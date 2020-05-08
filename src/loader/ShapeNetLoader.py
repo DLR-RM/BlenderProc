@@ -74,8 +74,8 @@ class ShapeNetLoader(Loader):
 
         self._set_properties(loaded_obj)
 
-        if "model_normalized" in bpy.data.objects:
-            bpy.data.objects['model_normalized']['category_id'] = LabelIdMapping.label_id_map["void"]
+        for obj in loaded_obj:
+            obj['category_id'] = LabelIdMapping.label_id_map["void"]
 
     def _correct_materials(self, objects):
         """
