@@ -9,7 +9,7 @@ class BasicMeshInitializer(Module):
         default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
         manipulation use manipulators.EntityManipulator module.
 
-        Example 1: Add a Plane "Ground_plane" object to the scene.
+        Example 1: Add a plane "Ground_plane" object to the scene.
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -23,7 +23,7 @@ class BasicMeshInitializer(Module):
           }
         }
 
-        Example 2: Add a rotated "Cube_1" Cube object, a displaced "Torus_2" Torus object, and a scaled "Cone_3" Cone
+        Example 2: Add a rotated "Cube_1" cube object, a displaced "Torus_2" torus object, and a scaled "Cone_3" cone
                    object to the scene.
 
         {
