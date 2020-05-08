@@ -1,4 +1,3 @@
-
 import os
 import glob
 import random
@@ -115,11 +114,20 @@ class SceneNetLoader(Loader):
 
         :param loaded_objects objects loaded from the .obj file
         """
+
+        #  Some category names in scenenet objects are written differently than in nyu_idset.csv
+        normalize_name = {"floor-mat": "floor_mat", "refrigerator": "refridgerator", "shower-curtain": "shower_curtain", 
+        "nightstand": "night_stand", "Other-structure": "otherstructure", "Other-furniture": "otherfurniture",
+        "Other-prop": "otherprop"}
+
         if LabelIdMapping.label_id_map:
             for obj in loaded_objects:
-                obj_name = obj.name
-                if "." in obj_name:
-                    obj_name = obj_name[:obj_name.find(".")]
+                obj_name = obj.name.lower().split(".")[0]
+
+                # If it's one of the cases that the category have different names in both idsets.
+                if obj_name in normalize_name:
+                    obj_name = normalize_name[obj_name]  # Then normalize it.
+
                 if obj_name in LabelIdMapping.label_id_map:
                     obj["category_id"] = LabelIdMapping.label_id_map[obj_name]
                 elif obj_name[-1] == "s" and obj_name[:-1] in LabelIdMapping.label_id_map:
@@ -128,6 +136,6 @@ class SceneNetLoader(Loader):
                     obj["category_id"] = LabelIdMapping.label_id_map["picture"]
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
-                    obj["category_id"] = LabelIdMapping.label_id_map["other-structure".lower()]
+                    obj["category_id"] = LabelIdMapping.label_id_map["otherstructure".lower()]
 
 

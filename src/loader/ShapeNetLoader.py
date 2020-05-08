@@ -3,8 +3,11 @@ import random
 import json
 import glob
 
+import bpy
+
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
+from src.utility.LabelIdMapping import LabelIdMapping
 
 
 class ShapeNetLoader(Loader):
@@ -14,6 +17,9 @@ class ShapeNetLoader(Loader):
     From these objects one is randomly sampled and loaded.
 
     As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
+
+    Finally it sets the object: 'model_normalized' to have a category id corresponding to the void class, 
+    so it wouldn't trigger an exception in the SegMapRenderer.
 
     **Configuration**:
 
@@ -66,6 +72,9 @@ class ShapeNetLoader(Loader):
         self._correct_materials(loaded_obj)
 
         self._set_properties(loaded_obj)
+
+        if "model_normalized" in bpy.data.objects:
+            bpy.data.objects['model_normalized']['category_id'] = LabelIdMapping.label_id_map["void"]
 
     def _correct_materials(self, objects):
         """
