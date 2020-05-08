@@ -34,7 +34,8 @@ class SceneNetLoader(Loader):
         self._file_path = Utility.resolve_path(self.config.get_string("file_path"))
 
         self._texture_folder = Utility.resolve_path(self.config.get_string("texture_folder"))
-        LabelIdMapping.assign_mapping(os.path.join('resources', 'id_mappings', 'nyu_idset.csv'))
+        LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 
+            'id_mappings', 'nyu_idset.csv')))
 
         if LabelIdMapping.label_id_map:
             bpy.data.scenes["Scene"]["num_labels"] = LabelIdMapping.num_labels
