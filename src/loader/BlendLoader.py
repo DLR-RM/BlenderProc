@@ -1,6 +1,7 @@
-import bpy
 import os
 import re
+
+import bpy
 
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility

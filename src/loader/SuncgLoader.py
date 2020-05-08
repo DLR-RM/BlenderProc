@@ -23,14 +23,16 @@ class SuncgLoader(Loader):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "path", "The path to the house.json file which should be loaded."
-       "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures etc."
+        "path", "The path to the house.json file which should be loaded. Type: string."
+        "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures "
+                      "etc. Type: string. Default: is extracted from the house.json path"
     """
 
     def __init__(self, config):
         Loader.__init__(self, config)
         self.house_path = Utility.resolve_path(self.config.get_string("path"))
-        self.suncg_dir = self.config.get_string("suncg_path", os.path.join(os.path.dirname(self.house_path), "../.."))
+        suncg_folder_path = os.path.join(os.path.dirname(self.house_path), "../..")
+        self.suncg_dir = self.config.get_string("suncg_path", suncg_folder_path)
         self._collection_of_loaded_objs = {}
         # there are only two types of materials, textures and diffuse
         self._collection_of_loaded_mats = {"texture": {}, "diffuse": {}}

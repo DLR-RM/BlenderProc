@@ -1,5 +1,5 @@
-import os
 import glob
+import os
 import random
 
 import bpy
@@ -7,6 +7,7 @@ import bpy
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
+
 
 class SceneNetLoader(Loader):
     """
@@ -23,8 +24,8 @@ class SceneNetLoader(Loader):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "file_path": "The path to the .obj file from SceneNet"
-       "texture_folder": "The path to the texture folder used to sample the textures"
+       "file_path", "The path to the .obj file from SceneNet. Type: string."
+       "texture_folder", "The path to the texture folder used to sample the textures. Type: string."
     """
 
     def __init__(self, config):

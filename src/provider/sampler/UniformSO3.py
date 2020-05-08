@@ -3,10 +3,9 @@ import numpy as np
 
 from src.main.Provider import Provider
 
-class UniformSO3(Provider):
-    """ Uniformly samples rotations from SO(3)
 
-    """
+class UniformSO3(Provider):
+    """ Uniformly samples rotations from SO(3). """
 
     def __init__(self, config):
         Provider.__init__(self, config)
@@ -21,20 +20,12 @@ class UniformSO3(Provider):
         return mathutils.Vector(euler_rand)
 
     def _random_quaternion(self, rand=None):
-        """Return uniform random unit quaternion.
+        """ Return uniform random unit quaternion.
 
-        rand: array like or None
-            Three independent random variables that are uniformly distributed
-            between 0 and 1.
-
-        >>> q = _random_quaternion()
-        >>> np.allclose(1, vector_norm(q))
-        True
-        >>> q = _random_quaternion(np.random.random(3))
-        >>> len(q.shape), q.shape[0]==4
-        (1, True)
-        
         https://github.com/thodan/bop_toolkit/blob/master/bop_toolkit_lib/transform.py
+
+        :param rand: Three independent random variables that are uniformly distributed between 0 and 1. Type: list.
+        :return: Unit quaternion. Type: np.array.
         """
         if rand is None:
             rand = np.random.rand(3)

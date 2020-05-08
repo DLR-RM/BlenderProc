@@ -1,5 +1,3 @@
-import numpy as np
-
 from src.main.Module import Module
 
 class TrimRedundantChannels(Module):

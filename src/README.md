@@ -15,8 +15,11 @@ The [main](main) folder contains the Module base class and the Pipeline class, w
 Existing modules are placed in use-case-dependent folders:
 * [camera](camera): camera loading and camera pose sampling.
 * [composite](composite): complex (composite, duh) modules that are using other existing modules.
+* [constructor](constructor): constructing scenery and adding objects.
 * [lighting](lighting): light source loading, light source pose sampling, dataset-specific light loaders.
 * [loader](loader): .obj, .ply, etc. object loading, dataset-specific object loading.
+* [manipulators](manipulators): manipulating of the World and different entities present in the scene.
+* [materials](materials): manipulating materials.
 * [object](object): object pose manipulation, physics between-object interaction, sampling and geometry manipulation.
 * [postprocessing](postprocessing): changing the pipeline output inside of a .hdf5 container.
 * [provider](provider): samplers and getters used for sampling various values, selecting objects, etc.
@@ -108,7 +111,7 @@ self.config.get_int("tile_x")
 
 In some modules it makes sense to revert changes made inside the module to not disturb modules coming afterwards (For example renderer modules should not change the state of the scene).
 
-This often requried funcitonality can be easily done via the `Utility.UndoAfterExecution()` with-statement:
+This often required functionality can be easily done via the `Utility.UndoAfterExecution()` with-statement:
 
 **Example:**
 ```python

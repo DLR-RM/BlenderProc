@@ -4,7 +4,7 @@
 <img src="readme.jpg" alt="Front readme image" width=430>
 </p>
 
-A procedural blender pipeline for image generation for deep learning.
+A procedural Blender pipeline for image generation for Deep Learning.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 

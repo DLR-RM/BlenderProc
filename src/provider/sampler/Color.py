@@ -1,5 +1,6 @@
-import mathutils
 import random
+
+import mathutils
 
 from src.main.Provider import Provider
 
@@ -7,15 +8,25 @@ from src.main.Provider import Provider
 class Color(Provider):
     """ Uniformly samples a 4-dimensional RGBA vector.
 
+        Example 1: Sample a RGBA grey color value using [min, max] range.
+
+        {
+          "provider": "sampler.Color",
+          "min": [0, 0, 0, 1],
+          "max": [1, 1, 1, 1],
+          "grey": True,
+        }
+
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "min", "A list of four values, describing the minimum values for R, G, B and A components. Range: [0; 1]. Type: list."
-       "max", "A list of four values, describing the maximum values for R, G, B and A components. Range: [0; 1]. Type: list."
-       "grey", "Sample grey values only. Type: bool. Default: False"
-
+        "min", "A list of four values, describing the minimum values of R, G, B and A components. "
+               "Type: list. Range: [0; 1]."
+        "max", "A list of four values, describing the maximum values of R, G, B and A components. "
+               "Type: list. Range: [0; 1]."
+        "grey", "Sample grey values only. Type: bool. Default: False."
     """
 
     def __init__(self, config):

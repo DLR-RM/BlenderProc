@@ -1,9 +1,8 @@
-from src.main.Module import Module
-from src.utility.ItemWriter import ItemWriter
-import bpy
 import os
+
 import mathutils
 
+from src.main.Module import Module
 from src.utility.Utility import Utility
 
 
@@ -14,19 +13,11 @@ class StateWriter(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-
-       "attributes_to_write", "A list of attribute names that should written to file. The next table lists all attributes that can be used here"
-       "output_file_prefix", "The prefix of the file that should be created."
-       "output_key", "The key which should be used for storing the output in a merged file."
-
-    **Attributes per object**:
-
-    .. csv-table::
-       :header: "Keyword", "Description"
-
-       "id", "A unique id."
-       "location", "The location of the item (x, y and z coordinate)."
-       "rotation_euler", "The rotation of the item written as three euler angles."
+       "destination_frame", "Used to transform point to blender coordinate frame. Type: list. Default: ["X", "Y", "Z"]"
+       "attributes_to_write", "A list of attribute names that should written to file. The next table lists all "
+                              "attributes that can be used here. Type: list."
+       "output_file_prefix", "The prefix of the file that should be created. Type: string."
+       "output_key", "The key which should be used for storing the output in a merged file. Type: string."
     """
 
     def __init__(self, config):
@@ -39,12 +30,12 @@ class StateWriter(Module):
 
         This method also registers the corresponding output.
 
-        :param item_writer: The item writer object to use.
-        :param items: The list of items.
-        :param default_file_prefix: The default file name prefix to use.
-        :param default_output_key: The default output key to use.
-        :param default_attributes: The default attributes to write, if no attributes are specified in the config.
-        :param version: The version to use when registering the output.
+        :param item_writer: The item writer object to use. Type: object.
+        :param items: The list of items. Type: list.
+        :param default_file_prefix: The default file name prefix to use. Type: string.
+        :param default_output_key: The default output key to use. Type: string.
+        :param default_attributes: The default attributes to write, if no attributes are specified in the config. Type: list.
+        :param version: The version to use when registering the output. Type: string.
         """
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
@@ -58,8 +49,8 @@ class StateWriter(Module):
 
         This method covers all general attributes that blender objects have.
 
-        :param item: The item, has to be a blender object.
-        :param attribute_name: The attribute name.
+        :param item: The item. Type: blender object.
+        :param attribute_name: The attribute name. Type: string.
         :return: The attribute value.
         """
         if attribute_name == "id":

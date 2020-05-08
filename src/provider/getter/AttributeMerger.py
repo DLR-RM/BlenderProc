@@ -55,23 +55,22 @@ class AttributeMerger(Provider):
           "transform_by": "sum"
         }
 
-        **Configuration**:
+    **Configuration**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
         "elements", "List of user-configured Provider calls. Type: list."
-        "transform_by", "Name of the operation to perform on the list of Provider return values. Type: string. "
-                        "Supported input types: (list of) int (and/or) float, or mathutils.Vector. See below for "
-                        "supported operation names."
+        "transform_by", "Name of the operation to perform on the list of Provider return values. See table below for "
+                        "supported operation names. Type: string."
 
-        **Operation names for `transform_by` parameter**
+    **Operations**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "sum", "Operation name. Returns the sum of all values of the input list."
-        "avg", "Operation name. Returns the average value of all values of the input list."
+        "sum", "Returns the sum of all values of the input list. Type: float (return)."
+        "avg", "Returns the average value of all values of the input list. Type: float (return)."
     """
 
     def __init__(self, config):
@@ -110,7 +109,7 @@ class AttributeMerger(Provider):
         """ Checks if the list of values contains appropriate data of int/float, or mathutils.Vector type.
 
         :param raw_result: list of provider output values. Type: List
-        :return: True if list is of of int (and/or) float, or mathutils.Vector data type. False if not.
+        :return: True if list is of of int (and/or) float, or mathutils.Vector data type. False if not. Type: bool.
         """
         return any([all(isinstance(item, mathutils.Vector) for item in raw_result),
                     all(isinstance(item, (int, float)) for item in raw_result)])

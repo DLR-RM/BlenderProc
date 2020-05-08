@@ -7,7 +7,7 @@ class WorldManipulator(Module):
     """ Allows manipulation of the current World in the scene via specifying one or more {attr name/custom prop. name/
         custom function name: value} pairs.
 
-        Example 1: Sets the World's custom property `category_id` to 123
+        Example 1: Sets the World's custom property `category_id` to 123.
 
         {
           "module": "manipulators.WorldManipulator",
@@ -26,7 +26,7 @@ class WorldManipulator(Module):
           }
         }
 
-        Example 3: Disables shader node tree of the background surface and sets a solid color to the background surface
+        Example 3: Disables shader node tree of the background surface and sets a solid color to the background surface.
 
         {
           "module": "manipulators.WorldManipulator",
@@ -41,27 +41,33 @@ class WorldManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "key": "Name of the attribute/custom prop. to change as a key in {name of an attr: value to set}. Type: string."
-               "In order to specify, what exactly one want to modify (e.g. attribute, custom property, etc.):"
-               "For attribute: key of the pair must be a valid attribute name of the world."
-               "For custom property: key of the pair must start with `cp_` prefix."
-               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for supported"
-               "cf names."
-        "value": "Value of the attribute/custom prop. to set as a value in {name of an attr: value to set}."
+        "key": "Name of the attribute/custom property to change or a name of a custom function to perform on objects. "
+               "Type: string. "
+               "In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.): "
+               "For attribute: key of the pair must be a valid attribute name of the world. "
+               "For custom property: key of the pair must start with `cp_` prefix. "
+               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
+               "supported custom function names."
+        "value": "Value of the attribute/custom prop. to set or input value(s) for a custom function. Type: string, "
+                 "int, bool or float, list/Vector."
 
-    **Custom function names**:
+    **Custom functions**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "bg_surface_color", "Sets the color of the light emitted by the background. Input value type: list of RGBA values."
-        "bg_surface_strength", "Sets the strength of the light emitted by the background. Input value type: float."
+        "cf_bg_surface_color", "Sets the RGBA color of the light emitted by the background. Type: mathutils.Vector."
+        "cf_bg_surface_strength", "Sets the strength of the light emitted by the background. Type: float."
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
+        """ Assigns user-defined values to World's attributes, custom properties, or manipulates the state of the world.
+            1. Selects current active World.
+            2. Change World's state via setting user-defined values to it's attributes, custom properties, etc.
+        """
         world = bpy.context.scene.world
         for key in self.config.data.keys():
             requested_cp = False
@@ -94,15 +100,15 @@ class WorldManipulator(Module):
     def _set_bg_surface_color(self, world, color):
         """ Sets the color of the emitted light by the background surface.
 
-        :param world: World to modify. Type: World.
-        :param color: Color of the emitted light. Type: RGBA vector.
+        :param world: World to modify. Type: bpy.types.World.
+        :param color: RGBA color of the emitted light. Type: mathutils.Vector.
         """
         world.node_tree.nodes["Background"].inputs['Color'].default_value = color
 
     def _set_bg_surface_strength(self, world, strength):
         """ Sets the strength of the emitted light by the background surface.
 
-        :param world: World to modify. Type: World.
+        :param world: World to modify. Type: bpy.types.World.
         :param strength: Strength of the emitted light. Type: float.
         """
         world.node_tree.nodes["Background"].inputs['Strength'].default_value = strength
