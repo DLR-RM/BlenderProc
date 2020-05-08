@@ -18,7 +18,7 @@ class ShapeNetLoader(Loader):
 
     As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
 
-    Finally it sets the object: 'model_normalized' to have a category id corresponding to the void class, 
+    Finally it sets all objects to have a category_id corresponding to the void class, 
     so it wouldn't trigger an exception in the SegMapRenderer.
 
     **Configuration**:
@@ -104,4 +104,3 @@ class ShapeNetLoader(Loader):
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
-
