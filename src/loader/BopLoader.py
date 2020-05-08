@@ -28,7 +28,7 @@ class BopLoader(Loader):
        "sys_paths", "System paths to append. Type: list."
        "resolution_x", "Image width. Type: int."
        "resolution_y", "Image height. Type: int."
-       "num_of_objs_to_sample", "Number of the objects to sample. Type: int.
+       "num_of_objs_to_sample", "Number of the objects to sample. Type: int."
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
        "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
@@ -40,7 +40,7 @@ class BopLoader(Loader):
        "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Default: -1 (no limit)."
        "obj_ids", "If scene_id is not specified (scene_id: -1): List of object ids to load (default = -1: All objects "
                   "from the given BOP dataset). Type: list. Default: []."
-       "model_type", "Optionally, specify type of BOP model, e.g. reconst, cad or eval. Type: string."
+       "model_type", "Optionally, specify type of BOP model. Type: string. Default: "". Available: [reconst, cad or eval]."
     """
 
     def __init__(self, config):
