@@ -26,8 +26,6 @@ class BopLoader(Loader):
 
        "cam_type", "Camera type. Type: string. Optional. Default value: ''."
        "sys_paths", "System paths to append. Type: list."
-       "resolution_x", "Image width. Type: int."
-       "resolution_y", "Image height. Type: int."
        "num_of_objs_to_sample", "Number of the objects to sample. Type: int."
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
@@ -87,8 +85,8 @@ class BopLoader(Loader):
             raise Exception("Wrong path or {} split does not exist in {}.".format(split, dataset))
         
         bpy.context.scene.world["category_id"] = 0
-        bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", split_p['im_size'][0])
-        bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", split_p['im_size'][1])
+        bpy.context.scene.render.resolution_x = split_p['im_size'][0]
+        bpy.context.scene.render.resolution_y = split_p['im_size'][1]
 
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
