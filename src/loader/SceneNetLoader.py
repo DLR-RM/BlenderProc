@@ -132,7 +132,9 @@ class SceneNetLoader(Loader):
 
                 if obj_name in LabelIdMapping.label_id_map:
                     obj["category_id"] = LabelIdMapping.label_id_map[obj_name]
-                elif obj_name[-1] == "s" and obj_name[:-1] in LabelIdMapping.label_id_map:
+                # Check whether the object's name without the plural 's' at the end exists in the mapping.
+                # This is also another case where object names in SceneNet is different from nyu_idset.csv
+                elif obj_name.endswith("s") and obj_name[:-1] in LabelIdMapping.label_id_map:
                     obj["category_id"] = LabelIdMapping.label_id_map[obj_name[:-1]]
                 elif "painting" in obj_name:
                     obj["category_id"] = LabelIdMapping.label_id_map["picture"]
