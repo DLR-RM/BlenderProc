@@ -1,4 +1,4 @@
-# Args: <bop_dataset_path> <output_dir>
+# Args: <bop_dataset_path> <bop_toolkit_path> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -60,8 +60,8 @@
             "max_iterations": 1000,
             "pos_sampler": {
               "provider": "sampler.Uniform3d",
-              "max": [0.5, 0.5, 0.5],
-              "min": [-0.5, -0.5, -0.5]
+              "max": [0.2, 0.2, 0.2],
+              "min": [-0.2, -0.2, -0.2]
             },
             "rot_sampler": {
               "provider": "sampler.Uniform3d",
@@ -78,7 +78,7 @@
                 "location": {
                   "provider": "sampler.Shell",
                   "center": [0, 0, 0],
-                  "radius_min": 0.8,
+                  "radius_min": 1,
                   "radius_max": 1.2,
                   "elevation_min": 1,
                   "elevation_max": 89
@@ -109,19 +109,10 @@
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter",
-      "config": {
-      }
+      "module": "writer.CocoAnnotationsWriter"
     },
     {
-      "module": "writer.ObjectStateWriter",
-      "config": {
-      }
-    },
-    {
-      "module": "writer.Hdf5Writer",
-      "config": {
-      }
+      "module": "writer.Hdf5Writer"
     },
     {
       "module": "writer.BopWriter"

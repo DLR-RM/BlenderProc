@@ -8,15 +8,16 @@ This example shows how to load BOP objects and alternatingly sample light poses,
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-In [examples/bop_object_pose_sampling/config.yaml](config.yaml) add the path to your bop_toolkit clone to `sys_paths` and set the `blender_install_path` where Blender should be installed.
+In [examples/bop_object_pose_sampling/config.yaml](config.yaml) set the `blender_install_path` where Blender is or should be installed.
 
 Execute in the BlenderProc main directory:  
 
 ```
-python run.py examples/bop_object_pose_sampling/config.yaml <path_to_bop_data> examples/bop_object_pose_sampling/output
+python run.py examples/bop_object_pose_sampling/config.yaml <path_to_bop_data> <path_to_bop_toolkit> examples/bop_object_pose_sampling/output
 ```
 * `examples/bop_object_pose_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a BOP dataset
+* `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
 * `examples/bop_object_pose_sampling/output`: path to the output directory.
 
 ## Visualization
@@ -72,3 +73,4 @@ python scripts/vis_coco_annotation.py /path/to/output_dir
 ## More examples
 
 * [bop_scene_replication](../bop_scene_replication): Replicate the scenes and cameras from BOP datasets in simulation.
+* [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials

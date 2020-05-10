@@ -1,4 +1,4 @@
-# Args: <bop_dataset_path> <bop_toolkit_path> <path_to_cc_textures> <output_dir>
+# Args: <path_to_bop_data> <bop_toolkit_path> <path_to_cc_textures> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -16,9 +16,7 @@
       "config": {
         "global": {
           "output_dir": "<args:3>",
-          "sys_paths": ["<args:1>"],
-          "resolution_x": 640,
-          "resolution_y": 480
+          "sys_paths": ["<args:1>"]
         }
       }
     },
@@ -38,11 +36,11 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/itodd",
-        "model_type": "",
-        "mm2m": True,
+        "bop_dataset_path": "<args:0>/ycbv",
+        "model_type": "vertex",
+        "mm2m": False,
         "sample_objects": True,
-        "num_of_objs_to_sample": 2,
+        "num_of_objs_to_sample": 5,
         "add_properties": {
           "cp_physics": True
         }
@@ -122,8 +120,36 @@
         "meshes_to_add": [
         {
           "type": "plane",
-          "name": "ground_plane",
+          "name": "ground_plane0",
           "scale": [2, 2, 1]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane1",
+          "scale": [2, 2, 1],
+          "location": [0, -2, 2],
+          "rotation": [-1.570796, 0, 0] # switch the sign to turn the normals to the outside
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane2",
+          "scale": [2, 2, 1],
+          "location": [0, 2, 2],
+          "rotation": [1.570796, 0, 0]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane4",
+          "scale": [2, 2, 1],
+          "location": [2, 0, 2],
+          "rotation": [0, -1.570796, 0]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane5",
+          "scale": [2, 2, 1],
+          "location": [-2, 0, 2],
+          "rotation": [0, 1.570796, 0]
         },
         {
           "type": "plane",
@@ -165,8 +191,8 @@
           "strength": {
             "provider": "sampler.Value",
             "type": "float",
-            "min": 5,
-            "max": 10
+            "min": 3,
+            "max": 6
           }
         }
       }
@@ -181,10 +207,11 @@
       "module": "materials.MaterialRandomizer",
       "config": {
         "randomization_level": 1,
+        "mode": "once_for_all",
         "manipulated_objects": {
           "provider": "getter.Entity",
           "conditions": {
-            "name": "ground_plane"
+            "name": "ground_plane.*"
           }
         },
         "materials_to_replace_with": {
@@ -206,7 +233,7 @@
         },
         "pos_sampler":{
           "provider":"sampler.Uniform3d",
-          "max":[0.2, 0.2, 0.5],
+          "max":[0.2, 0.2, 0.6],
           "min":[-0.2, -0.2, 0.2]
         },
         "rot_sampler":{
@@ -232,13 +259,13 @@
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 2,
-            "radius_max": 8,
-            "elevation_min": 1,
+            "radius_min": 1, # now depends on the bottom area of the box
+            "radius_max": 1.5, # this one too
+            "elevation_min": 20,
             "elevation_max": 89
           },
           "type": "POINT",
-          "energy": 1000
+          "energy": 200
         }
         ]
       }
@@ -254,7 +281,7 @@
             "center": [0, 0, 0],
             "radius_min": 0.7,
             "radius_max": 1.3,
-            "elevation_min": 25,
+            "elevation_min": 10,
             "elevation_max": 89.9
           },
           "rotation": {
@@ -292,15 +319,21 @@
     },
     {
       "module": "writer.CocoAnnotationsWriter",
-    },
-    {
-      "module": "writer.ObjectStateWriter",
+      "config": {
+        "append_to_existing_output": True
+      }
     },
     {
       "module": "writer.Hdf5Writer",
+      "config": {
+        "append_to_existing_output": True
+      }
     },
     {
-      "module": "writer.BopWriter"
+      "module": "writer.BopWriter",
+      "config": {
+        "append_to_existing_output": True
+      }
     }
   ]
 }

@@ -1,4 +1,4 @@
-# Args: <bop_dataset_path> <output_dir>
+# Args: <bop_dataset_path> <bop_toolkit_path> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -27,7 +27,7 @@
         "mm2m": True,
         "split": "test",
         "scene_id": 3,
-        "model_type": ""
+        "model_type": "reconst"
       }
     },
     {
@@ -62,14 +62,10 @@
       }
     },
     {
-      "module": "writer.ObjectStateWriter",
-      "config": {
-      }
+      "module": "writer.BopWriter"
     },
     {
-      "module": "writer.Hdf5Writer",
-      "config": {
-      }
+      "module": "writer.Hdf5Writer"
     }
   ]
 }
