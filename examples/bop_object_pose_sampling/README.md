@@ -38,6 +38,7 @@ python scripts/visHdf5Files.py examples/bop_object_pose_sampling/output/0.hdf5
 * Renders instance segmentation masks: `renderer.SegMapRenderer` module.
 * Writes instance segmentation masks: `writer.CocoAnnotationsWriter` module.
 * Writes labels and images to compressed hdf5 files in output_dir: `writer.Hdf5Writer` module.
+* Writes BOP labels: `writer.BopWriter` module.
 
 ## Config file
 
@@ -52,7 +53,7 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
         "bop_dataset_path": "<args:0>",
         "mm2m": True,
         "split": "val",
-        "obj_ids": [3,4,4,8],
+        "obj_ids": [1,1,3],
         "model_type": ""
       }
     },
