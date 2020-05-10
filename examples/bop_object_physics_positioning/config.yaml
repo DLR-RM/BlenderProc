@@ -318,22 +318,13 @@
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter",
-      "config": {
-        "append_to_existing_output": True
-      }
+      "module": "writer.CocoAnnotationsWriter"
     },
     {
-      "module": "writer.Hdf5Writer",
-      "config": {
-        "append_to_existing_output": True
-      }
+      "module": "writer.Hdf5Writer"
     },
     {
-      "module": "writer.BopWriter",
-      "config": {
-        "append_to_existing_output": True
-      }
+      "module": "writer.BopWriter"
     }
   ]
 }

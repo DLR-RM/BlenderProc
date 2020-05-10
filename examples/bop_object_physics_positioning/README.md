@@ -2,7 +2,7 @@
 
 ![](rendering.png)
 
-This example serves as the basis for generating the synthetic data provided at the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and dropped into an open cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, segmentation masks, Coco annotations and object poses in BOP format. Run multiple times to aggregate data and labels.
+This example serves as the basis for generating the synthetic data provided at the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and dropped into an open cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, segmentation masks, Coco annotations and object poses in BOP format.
 
 ## Usage
 
@@ -31,6 +31,20 @@ Visualize the generated data if it is stored in a container.
 python scripts/visHdf5Files.py examples/bop_object_physics_positioning/output/coco_data/0.hdf5
 ```
 
+## Generate a dataset
+To aggregate data and labels over multiple scenes, add the following 
+
+```
+"config": {
+  "append_to_existing_output": True
+}
+```
+to the configs of  
+`writer.CocoAnnotationsWriter`   
+`writer.Hdf5Writer`  
+`writer.BopWriter`  
+Then simply run the script multiple times.
+
 ## Steps
 
 * Load T-LESS BOP models: `loader.BopLoader` module.
@@ -50,7 +64,6 @@ python scripts/visHdf5Files.py examples/bop_object_physics_positioning/output/co
 * Render RGB: `renderer.RgbRenderer` module.
 * Render segmentation: `renderer.SegMapRenderer` module.
 * Write COCO annotations: `writer.CocoAnnotationsWriter` module.
-* Write object states: `writer.ObjectStateWriter` module.
 * Write output to .hdf5 container: `writer.Hdf5Writer` module.
 * Write BOP data: `writer.BopWriter` module.
 
