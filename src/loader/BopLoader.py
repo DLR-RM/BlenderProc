@@ -127,7 +127,7 @@ class BopLoader(Loader):
                         loaded_ids.update({random_id: 0})
                     # if there is no limit or if there is one, but it is not reached for this particular object
                     if self.obj_instances_limit == -1 or loaded_ids[random_id] < self.obj_instances_limit:
-                        cur_obj = self._load_mesh(random_id, model_p, dataset, scale=scale)
+                        cur_obj = self._load_mesh(random_id, model_p, dataset, scale=self.scale)
                         loaded_ids[random_id] += 1
                         loaded_amount += 1
                         loaded_objects.append(cur_obj)
@@ -137,7 +137,7 @@ class BopLoader(Loader):
                                                        loaded_amount, self.num_of_objs_to_sample))
             else:
                 for obj_id in obj_ids:
-                    cur_obj = self._load_mesh(obj_id, model_p, dataset, scale=scale)
+                    cur_obj = self._load_mesh(obj_id, model_p, dataset, scale=self.scale)
                     loaded_objects.append(cur_obj)
             self._set_properties(loaded_objects)
 
