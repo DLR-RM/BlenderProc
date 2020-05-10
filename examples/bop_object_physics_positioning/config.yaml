@@ -36,11 +36,11 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/ycbv",
-        "model_type": "vertex",
-        "mm2m": False,
+        "bop_dataset_path": "<args:0>/itodd",
+        "model_type": "",
+        "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 5,
+        "num_of_objs_to_sample": 2,
         "add_properties": {
           "cp_physics": True
         }
