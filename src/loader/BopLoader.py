@@ -78,7 +78,7 @@ class BopLoader(Loader):
         model_p = dataset_params.get_model_params(datasets_path, dataset, model_type=model_type if model_type else None)
         cam_p = dataset_params.get_camera_params(datasets_path, dataset, cam_type=cam_type if cam_type else None)
         bpy.data.scenes["Scene"]["num_labels"] = len(model_p['obj_ids'])
-
+        
         try:
             split_p = dataset_params.get_split_params(datasets_path, dataset, split = split)
         except ValueError:
@@ -120,19 +120,18 @@ class BopLoader(Loader):
                         loaded_ids.update({random_id: 0})
                     # if there is no limit or if there is one, but it is not reached for this particular object
                     if self.obj_instances_limit == -1 or loaded_ids[random_id] < self.obj_instances_limit:
-                        self._load_mesh(random_id, model_p, dataset, scale=scale)
+                        cur_obj = self._load_mesh(random_id, model_p, dataset, scale=scale)
                         loaded_ids[random_id] += 1
                         loaded_amount += 1
-                        loaded_objects.append(bpy.context.object)
+                        loaded_objects.append(cur_obj)
                     else:
                         print("ID {} was loaded {} times with limit of {}. Total loaded amount {} while {} are "
                               "being requested".format(random_id, loaded_ids[random_id], self.obj_instances_limit,
                                                        loaded_amount, self.num_of_objs_to_sample))
             else:
                 for obj_id in obj_ids:
-                    self._load_mesh(obj_id, model_p, dataset, scale=scale)
-                    loaded_objects.append(bpy.context.object)
-
+                    cur_obj = self._load_mesh(obj_id, model_p, dataset, scale=scale)
+                    loaded_objects.append(cur_obj)
             self._set_properties(loaded_objects)
 
         # replicate scene: load scene objects, object poses, camera intrinsics and camera poses
@@ -153,7 +152,7 @@ class BopLoader(Loader):
                 
                 #set camera intrinsics and extrinsics 
                 config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), 
-                                 "camK": list(cam_K.flatten())})
+                                 "cam_K": list(cam_K.flatten())})
                 camera_module._set_cam_intrinsics(cam, config)
                 camera_module._set_cam_extrinsics(cam_ob, config)
 
@@ -247,6 +246,7 @@ class BopLoader(Loader):
             if 'model_path' in loaded_obj and loaded_obj['model_path'] == model_path:
                 return loaded_obj
         return
+
 
     def _load_mesh(self, obj_id, model_p, dataset, scale=1):
         """ Loads BOP mesh and sets category_id
