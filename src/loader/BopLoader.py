@@ -175,9 +175,9 @@ class BopLoader(Loader):
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
 
-        :param cam_H_m2c_ref (ndarray): (4x4) homog trafo from object to world coord. Type: array. 
-        :param cam_H_m2w_ref (ndarray): (4x4) ndarray homog trafo from object to camera coords. Type: array.
-        :return: cam_H_c2w (Matrix): (4x4) homog trafo from camera to world coords. Type: mathutils.Matrix.
+        :param cam_H_m2c_ref: (4x4) Homog trafo from object to world coord. Type: ndarray.
+        :param cam_H_m2w_ref: (4x4) Homog trafo from object to camera coords. Type: ndarray.
+        :return: cam_H_c2w: (4x4) Homog trafo from camera to world coords. Type: mathutils.Matrix.
         """
 
         cam_H_c2w = np.dot(cam_H_m2w_ref, np.linalg.inv(cam_H_m2c_ref))
@@ -265,9 +265,12 @@ class BopLoader(Loader):
 
         # Gets the objects if it is already loaded         
         cur_obj = self._get_loaded_obj(model_path)
-        # if duplication is allowed or if the object was not previously loaded
-        if self.allow_duplication or cur_obj is None:
-            bpy.ops.import_mesh.ply(filepath = model_path)
+        # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
+        if cur_obj is None:
+            bpy.ops.import_mesh.ply(filepath=model_path)
+            cur_obj = bpy.context.selected_objects[-1]
+        elif self.allow_duplication:
+            bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
             cur_obj = bpy.context.selected_objects[-1]
 
         cur_obj.scale = Vector((scale, scale, scale))
