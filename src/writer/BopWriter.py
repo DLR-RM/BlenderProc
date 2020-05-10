@@ -24,11 +24,14 @@ class BopWriter(StateWriter):
     """
 
     def __init__(self, config):
-        StateWriter.__init__(self, config)
-        output_dir = os.path.join(self._determine_output_dir(False), 'bop_data')
-        self._scene_gt_path = os.path.join(output_dir, 'scene_gt.json') 
-        self._scene_camera_path = os.path.join(output_dir, 'scene_camera.json') 
-        self._camera_path = os.path.join(output_dir, 'camera.json')        
+        StateWriter.__init__(self, config)    
+        self._bop_data_dir = os.path.join(self._determine_output_dir(False), 'bop_data')
+        if not os.path.exists(self._bop_data_dir):
+            os.makedirs(self._bop_data_dir)
+        self._scene_gt_path = os.path.join(self._bop_data_dir, 'scene_gt.json') 
+        self._scene_camera_path = os.path.join(self._bop_data_dir, 'scene_camera.json') 
+        self._camera_path = os.path.join(self._bop_data_dir, 'camera.json')
+
 
     def run(self):
         """ Collects the camera and camera object then for each file to be written excutes its function"""
