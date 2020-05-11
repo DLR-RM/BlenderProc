@@ -11,7 +11,7 @@ from scripts.saveAsImg import convert_hdf
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser("Combines four images from .png or .hdf5. Requires Color, Normal, Depth and Semantic Segmentation.")
+    parser = argparse.ArgumentParser("Combines up to four images from .png or .hdf5. At least one is required Color, Normal, Depth and Semantic Segmentation.")
     parser.add_argument("-f", "--file_path", nargs='*', help="File path to the list of color.png or .hdf5 file.", required=True)
     parser.add_argument("-o", "--output", help="Folder path where the resulting image/s should be saved.", type=str)
     parser.add_argument("-b", "--border", help="Adds a border around the images in white.", type=int, default=0)
