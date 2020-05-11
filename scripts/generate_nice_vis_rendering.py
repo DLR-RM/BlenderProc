@@ -44,12 +44,14 @@ if __name__ == "__main__":
 
                 final_img[border:img_size[0]+border, border:img_size[1]+border, :] = used_imgs[0]
 
-                if len(used_imgs) > 1:
+                if len(used_imgs) == 2:
                     final_img[2 * border + img_size[0]:-border, border:border + img_size[1], :] = used_imgs[1]
                 if len(used_imgs) == 3:
                     start_val = int((img_size[1] + border + border * 0.5) * 0.5)
-                    final_img[2 * border + img_size[0]:-border, start_val:start_val + img_size.shape[1], :] = used_imgs[2]
+                    final_img[border:img_size[0] + border, 2 * border + img_size[1]:-border, :] = used_imgs[1]
+                    final_img[2 * border + img_size[0]:-border, start_val:start_val + img_size[1], :] = used_imgs[2]
                 if len(used_imgs) == 4:
+                    final_img[2 * border + img_size[0]:-border, border:border + img_size[1], :] = used_imgs[1]
                     final_img[border:img_size[0] + border, 2 * border + img_size[1]:-border, :] = used_imgs[2]
                     final_img[2 * border + img_size[0]:-border, 2 * border + img_size[1]:-border, :] = used_imgs[3]
 
