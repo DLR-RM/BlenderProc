@@ -21,29 +21,37 @@ if __name__ == "__main__":
     def convert_png_to_multiples(image_path, org_path):
         if "colors" in image_path:
             border = args.border
-            color_img = plt.imread(image_path)
-            img_size = color_img.shape
             normal_path = image_path.replace("colors", "normals")
             depth_path = image_path.replace("colors", "depth")
-            use_normal = os.path.exists(normal_path)
-            use_depth = os.path.exists(depth_path)
-            final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] * 2 + border * 3, img_size[2]))
-            normal_img = plt.imread(normal_path)
-            depth_img = plt.imread(depth_path)
-            final_img[border:img_size[0]+border, border:img_size[1]+border, :] = color_img
-
             seg_path = image_path.replace("colors", "segmap")
+            used_imgs = []
+            if os.path.exists(image_path):
+                used_imgs.append(plt.imread(image_path))
+            if os.path.exists(normal_path):
+                used_imgs.append(plt.imread(normal_path))
+            if os.path.exists(depth_path):
+                used_imgs.append(plt.imread(depth_path))
             if os.path.exists(seg_path):
-                if use_normal:
-                    final_img[2*border+img_size[0]:-border, border:border+img_size[1], :] = normal_img
-                semantic_img = plt.imread(image_path.replace("colors", "segmap"))
-                if use_depth:
-                    final_img[border:img_size[0]+border, 2*border+img_size[1]:-border, :] = depth_img
-                final_img[2*border+img_size[0]:-border, 2*border+img_size[1]:-border, :] = semantic_img
-            else:
-                final_img[border:border+img_size[0], 2*border+img_size[1]:-border, :] = normal_img
-                start_val = int((img_size[1]+border+border*0.5)*0.5)
-                final_img[2*border+img_size[0]:-border, start_val:start_val+depth_img.shape[1], :] = depth_img
+                used_imgs.append(plt.imread(seg_path))
+            if used_imgs:
+                img_size = used_imgs[0].shape
+                if len(used_imgs) == 1:
+                    final_img = np.ones((img_size[0] + border * 2, img_size[1] + border * 2, img_size[2]))
+                elif len(used_imgs) == 2:
+                    final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] + border * 2, img_size[2]))
+                else:
+                    final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] * 2 + border * 3, img_size[2]))
+
+                final_img[border:img_size[0]+border, border:img_size[1]+border, :] = used_imgs[0]
+
+                if len(used_imgs) > 1:
+                    final_img[2 * border + img_size[0]:-border, border:border + img_size[1], :] = used_imgs[1]
+                if len(used_imgs) == 3:
+                    start_val = int((img_size[1] + border + border * 0.5) * 0.5)
+                    final_img[2 * border + img_size[0]:-border, start_val:start_val + img_size.shape[1], :] = used_imgs[2]
+                if len(used_imgs) == 4:
+                    final_img[border:img_size[0] + border, 2 * border + img_size[1]:-border, :] = used_imgs[2]
+                    final_img[2 * border + img_size[0]:-border, 2 * border + img_size[1]:-border, :] = used_imgs[3]
 
             if ".png" in org_path:
                 resulting_file_name = org_path.replace("colors", "rendering")
