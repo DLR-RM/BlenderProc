@@ -23,16 +23,22 @@ if __name__ == "__main__":
             border = args.border
             color_img = plt.imread(image_path)
             img_size = color_img.shape
+            normal_path = image_path.replace("colors", "normals")
+            depth_path = image_path.replace("colors", "depth")
+            use_normal = os.path.exists(normal_path)
+            use_depth = os.path.exists(depth_path)
             final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] * 2 + border * 3, img_size[2]))
-            normal_img = plt.imread(image_path.replace("colors", "normals"))
-            depth_img = plt.imread(image_path.replace("colors", "depth"))
+            normal_img = plt.imread(normal_path)
+            depth_img = plt.imread(depth_path)
             final_img[border:img_size[0]+border, border:img_size[1]+border, :] = color_img
 
             seg_path = image_path.replace("colors", "segmap")
             if os.path.exists(seg_path):
-                final_img[2*border+img_size[0]:-border, border:border+img_size[1], :] = normal_img
+                if use_normal:
+                    final_img[2*border+img_size[0]:-border, border:border+img_size[1], :] = normal_img
                 semantic_img = plt.imread(image_path.replace("colors", "segmap"))
-                final_img[border:img_size[0]+border, 2*border+img_size[1]:-border, :] = depth_img
+                if use_depth:
+                    final_img[border:img_size[0]+border, 2*border+img_size[1]:-border, :] = depth_img
                 final_img[2*border+img_size[0]:-border, 2*border+img_size[1]:-border, :] = semantic_img
             else:
                 final_img[border:border+img_size[0], 2*border+img_size[1]:-border, :] = normal_img
@@ -42,7 +48,14 @@ if __name__ == "__main__":
             if ".png" in org_path:
                 resulting_file_name = org_path.replace("colors", "rendering")
             else:
-                resulting_file_name = org_path.replace(".hdf5", "_rendering.jpg")
+                if final_img.shape[2] == 3:
+                    resulting_file_name = org_path.replace(".hdf5", "_rendering.jpg")
+                elif final_img.shape[2] == 4:
+                    if abs(np.min(final_img) - 1) < 1e-7:
+                        final_img = final_img[:,:,:3]
+                        resulting_file_name = org_path.replace(".hdf5", "_rendering.jpg")
+                    else:
+                        resulting_file_name = org_path.replace(".hdf5", "_rendering.png")
             if args.output:
                 resulting_file_name = os.path.join(args.output, resulting_file_name)
             print("Saved in {}".format(resulting_file_name))
