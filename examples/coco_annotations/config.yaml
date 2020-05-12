@@ -46,6 +46,12 @@
       }
     },
     {
+      "module": "manipulators.WorldManipulator",
+      "config": {
+        "cp_category_id": 0
+      }
+    },
+    {
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors"
