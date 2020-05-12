@@ -29,7 +29,10 @@ draw = ImageDraw.Draw(im)
 
 def get_category(_id):
     category = [category["name"] for category in categories if category["id"] == _id]
-    return category[0]
+    if len(category) != 0:
+        return category[0]
+    else:
+        raise Exception("Category {} is not defined in {}".format(_id, os.path.join(base_path, conf)))
 
 # Add bounding boxes and masks
 for idx, annotation in enumerate(annotations):
