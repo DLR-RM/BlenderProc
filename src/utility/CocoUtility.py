@@ -6,12 +6,13 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, dataset_name, existing_coco_annotations=None):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, super_category_mapping, dataset_name, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
+        :param super_category_mapping: A dict mapping object name to their corresponding supercategory
         :param dataset_name: name of the dataset, a feature required by coco annotation format
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
@@ -19,7 +20,7 @@ class CocoUtility:
         # Adds all objects from the color map to the coco output (skip background)
         categories = []
         for obj in colormap[1:]:
-            categories.append({'id': int(obj["idx"]), 'name': obj["objname"], 'supercategory': dataset_name})
+            categories.append({'id': int(obj["idx"]), 'name': obj["objname"], 'supercategory': super_category_mapping[obj["objname"]]})
 
         licenses = [{
             "id": 1,

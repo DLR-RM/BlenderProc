@@ -24,25 +24,59 @@ class BopWriter(StateWriter):
     """
 
     def __init__(self, config):
-        StateWriter.__init__(self, config)    
-        self._bop_data_dir = os.path.join(self._determine_output_dir(False), 'bop_data')
+        StateWriter.__init__(self, config)
+
+
+    def initialize_bop_groups(self):
+        # Get and group all objects belonging to different bop datasets
+        all_mesh_objects = get_all_mesh_objects()
+        bop_datasets = {}
+        for obj in all_mesh_objects:
+            if "bop_dataset_name" in obj:
+                if obj["bop_dataset_name"] in bop_datasets:
+                    bop_datasets[obj["bop_dataset_name"]].append(obj)
+                else:
+                    bop_datasets[obj["bop_dataset_name"]] = [obj]
+        self.bop_datasets = bop_datasets
+
+        # For each group, make a seperate output directory
+        base_path = self._determine_output_dir(False)
+        self._bop_data_dir = os.path.join(base_path, 'bop_data')
+        # Create base directory if not exists
         if not os.path.exists(self._bop_data_dir):
             os.makedirs(self._bop_data_dir)
-        self._scene_gt_path = os.path.join(self._bop_data_dir, 'scene_gt.json') 
-        self._scene_camera_path = os.path.join(self._bop_data_dir, 'scene_camera.json') 
-        self._camera_path = os.path.join(self._bop_data_dir, 'camera.json')
+        # Create subdirectorys if don't exist
+        self._bop_data_sub_dirs = {}
+        for group in self.bop_datasets:
+            self._bop_data_sub_dirs[group] = os.path.join(base_path, 'bop_data', group)
+            if not os.path.exists(self._bop_data_sub_dirs[group]):
+                os.makedirs(self._bop_data_sub_dirs[group])
+
+        # For each subdirectory create internal file paths
+        self._scene_gt_path = {}
+        self._scene_camera_path = {}
+        self._camera_path = {}
+        for group in self.bop_datasets:
+            self._scene_gt_path[group] = os.path.join(self._bop_data_sub_dirs[group], 'scene_gt.json') 
+            self._scene_camera_path[group] = os.path.join(self._bop_data_sub_dirs[group], 'scene_camera.json') 
+            self._camera_path[group] = os.path.join(self._bop_data_sub_dirs[group], 'camera.json')
 
 
     def run(self):
         """ Collects the camera and camera object then for each file to be written excutes its function"""
+        # Initialize and group bop dataset objects
+        self.initialize_bop_groups()
+
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         self.cam = cam_ob.data
         self.cam_pose = (self.cam, cam_ob)
-               
-        self._write_scene_gt()
-        self._write_scene_camera()
-        self._write_camera()
+
+        # for each bop dataset group
+        for group in self.bop_datasets:       
+            self._write_scene_gt(group)
+            self._write_scene_camera(group)
+            self._write_camera(group)
 
     def _get_camera_attribute(self, cam_pose, attribute_name):
         """ Returns the value of the requested attribute for the given object.
@@ -82,15 +116,15 @@ class BopWriter(StateWriter):
 
         return super()._get_attribute(object, attribute_name)
 
-    def _write_scene_gt(self): 
+    def _write_scene_gt(self, bop_group): 
         """ Creates and writes scene_gt.json in output_dir.
 
         :return
         """
         scene_gt = {} 
         # Calculate image numbering offset, if append_to_existing_output is activated and scene ground truth exists
-        if self.config.get_bool("append_to_existing_output", False) and os.path.exists(self._scene_gt_path):
-            with open(self._scene_gt_path, 'r') as fp:
+        if self.config.get_bool("append_to_existing_output", False) and os.path.exists(self._scene_gt_path[bop_group]):
+            with open(self._scene_gt_path[bop_group], 'r') as fp:
                 scene_gt = json.load(fp)
             frame_offset = int(sorted(scene_gt.keys())[-1])
         else:
@@ -102,7 +136,7 @@ class BopWriter(StateWriter):
             # We add one to match the numbering system of bop toolkit
             current_frame = frame + 1 + frame_offset
             scene_gt[current_frame] = []
-            for idx, obj in enumerate(get_all_mesh_objects()):  
+            for idx, obj in enumerate(self.bop_datasets[bop_group]):
                 
                 # Convert the rotation_euler matrix into a list to match scene_gt fromat
                 rotation_vector = self._get_object_attribute(obj, 'rotation_euler')
@@ -113,20 +147,20 @@ class BopWriter(StateWriter):
                 scene_gt[current_frame].append({'cam_R_m2c': rot_matrix_as_list,
                                         'cam_t_m2c': list(1000*self._get_object_attribute(obj, 'location')),
                                         'obj_id': self._get_object_attribute(obj, 'id')})
-            with open(self._scene_gt_path, 'w') as scene_gt_file:
+            with open(self._scene_gt_path[bop_group], 'w') as scene_gt_file:
                 json.dump(scene_gt, scene_gt_file)
         
         return
 
-    def _write_scene_camera(self):
+    def _write_scene_camera(self, bop_group):
         """ Creates and writes scene_camera.json in output_dir.
 
         :return
         """ 
         scene_camera = {} 
         # Calculate image numbering offset, if append_to_existing_output is activated and scene ground truth exists
-        if self.config.get_bool("append_to_existing_output", False) and os.path.exists(self._scene_camera_path):
-            with open(self._scene_camera_path, 'r') as fp:
+        if self.config.get_bool("append_to_existing_output", False) and os.path.exists(self._scene_camera_path[bop_group]):
+            with open(self._scene_camera_path[bop_group], 'r') as fp:
                 scene_camera = json.load(fp)
             frame_offset = int(sorted(scene_camera.keys())[-1])
         else:
@@ -139,12 +173,12 @@ class BopWriter(StateWriter):
             current_frame = frame + 1 + frame_offset
             scene_camera[current_frame] = {'cam_K': list(self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')),
                                    'depth_scale': 0.001}
-            with open(self._scene_camera_path, 'w') as scene_camera_file:
+            with open(self._scene_camera_path[bop_group], 'w') as scene_camera_file:
                 json.dump(scene_camera, scene_camera_file)
 
         return
 
-    def _write_camera(self):
+    def _write_camera(self, bop_group):
         """ Creates and writes camera.json in output_dir.
 
         :return
@@ -164,7 +198,7 @@ class BopWriter(StateWriter):
                   'height': height,
                   'width': width}
 
-        with open(self._camera_path, 'w') as camera_file:
+        with open(self._camera_path[bop_group], 'w') as camera_file:
             json.dump(camera, camera_file)
 
         return

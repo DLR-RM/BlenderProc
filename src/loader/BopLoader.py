@@ -39,6 +39,7 @@ class BopLoader(Loader):
        "obj_ids", "List of object ids to load. Type: list. Default: [] (all objects from the given BOP dataset if "
                   "scene_id is not specified)."
        "model_type", "Optionally, specify type of BOP model. Type: string. Default: "". Available: [reconst, cad or eval]."
+       "bop_dataset_name", "Name of bop dataset e.g. Ycb, Homebrew. Type: string."
     """
 
     def __init__(self, config):
@@ -64,7 +65,8 @@ class BopLoader(Loader):
         self.split = self.config.get_string("split", "test")
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
-        
+        self.bop_dataset_name = self.config.get_string("bop_dataset_name", "")
+
     def run(self):
         """ Load BOP data """
 
@@ -278,7 +280,8 @@ class BopLoader(Loader):
         cur_obj['model_path'] = model_path     
         mat = self._load_materials(cur_obj, dataset)
         self._link_col_node(mat)
-
+        cur_obj["is_bop_object"] = True
+        cur_obj["bop_dataset_name"] = self.bop_dataset_name
         return cur_obj
 
     def _load_materials(self, cur_obj, dataset):

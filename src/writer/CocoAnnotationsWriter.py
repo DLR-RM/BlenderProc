@@ -7,7 +7,7 @@ import bpy
 
 from src.main.Module import Module
 from src.utility.CocoUtility import CocoUtility
-
+from src.utility.BlenderUtility import get_all_mesh_objects
 
 class CocoAnnotationsWriter(Module):
     """ Writes Coco Annotations in to a file.
@@ -101,7 +101,18 @@ class CocoAnnotationsWriter(Module):
             shutil.copyfile(source_path, target_path)
             new_coco_image_paths.append(os.path.basename(target_path))
 
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, "coco_annotations", existing_coco_annotations)
+        # Try to extract supercategory for each object
+        all_mesh_objects = get_all_mesh_objects()
+        super_category_mapping = {}
+        for obj in all_mesh_objects:
+            # For now the only scheme to extract super category is the afiliation of an object to a Bop dataset
+            if "bop_dataset_name" in obj:
+                super_category_mapping[obj.name] = obj["bop_dataset_name"]
+            # Otherwise assign default supercategory
+            else:
+                super_category_mapping[obj.name] = "default_supercategory"
+
+        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, super_category_mapping,"coco_annotations", existing_coco_annotations)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:
