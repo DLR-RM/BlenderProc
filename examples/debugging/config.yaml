@@ -47,21 +47,13 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors",
-        "samples": 350
+        "output_key": "colors"
       }
     },
     {
-      "module": "writer.Hdf5Writer",
+      "module": "renderer.SegMapRenderer",
       "config": {
-        "postprocessing_modules": {
-          "depth": [
-            {
-              "module": "postprocessing.TrimRedundantChannels",
-              "config": {}
-            }
-          ]
-        }
+        "map_by": "instance"
       }
     }
   ]
