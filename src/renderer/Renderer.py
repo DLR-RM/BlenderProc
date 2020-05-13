@@ -90,11 +90,13 @@ class Renderer(Module):
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples=256, default_denoiser="Intel"):
+    def _configure_renderer(self, default_samples=256, use_denoiser=False, default_denoiser="Intel"):
         """
         Sets many different render parameters which can be adjusted via the config.
 
         :param default_samples: Default number of samples to render for each pixel
+        :param use_denoiser: If true, a denoiser is used, only use this on color information
+        :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
         bpy.context.scene.cycles.samples = self.config.get_int("samples", default_samples)
 
@@ -126,32 +128,33 @@ class Renderer(Module):
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
 
-        denoiser = self.config.get_string("denoiser", default_denoiser)
-        if denoiser.upper() == "INTEL":
-            # The intel denoiser is activated via the compositor
-            bpy.context.view_layer.cycles.use_denoising = False
-            bpy.context.scene.use_nodes = True
-            nodes = bpy.context.scene.node_tree.nodes
-            links = bpy.context.scene.node_tree.links
+        if use_denoiser:
+            denoiser = self.config.get_string("denoiser", default_denoiser)
+            if denoiser.upper() == "INTEL":
+                # The intel denoiser is activated via the compositor
+                bpy.context.view_layer.cycles.use_denoising = False
+                bpy.context.scene.use_nodes = True
+                nodes = bpy.context.scene.node_tree.nodes
+                links = bpy.context.scene.node_tree.links
 
-            # The denoiser gets normal and diffuse color as input
-            bpy.context.view_layer.use_pass_normal = True
-            bpy.context.view_layer.use_pass_diffuse_color = True
+                # The denoiser gets normal and diffuse color as input
+                bpy.context.view_layer.use_pass_normal = True
+                bpy.context.view_layer.use_pass_diffuse_color = True
 
-            # Add denoiser node
-            denoise_node = nodes.new("CompositorNodeDenoise")
+                # Add denoiser node
+                denoise_node = nodes.new("CompositorNodeDenoise")
 
-            # Link nodes
-            render_layer_node = nodes.get('Render Layers')
-            composite_node = nodes.get('Composite')
-            Utility.insert_node_instead_existing_link(links, render_layer_node.outputs['Image'], denoise_node.inputs['Image'], denoise_node.outputs['Image'], composite_node.inputs['Image'])
+                # Link nodes
+                render_layer_node = nodes.get('Render Layers')
+                composite_node = nodes.get('Composite')
+                Utility.insert_node_instead_existing_link(links, render_layer_node.outputs['Image'], denoise_node.inputs['Image'], denoise_node.outputs['Image'], composite_node.inputs['Image'])
 
-            links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
-            links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
-        elif denoiser.upper() == "BLENDER":
-            bpy.context.view_layer.cycles.use_denoising = True
-        else:
-            raise Exception("No such denoiser: " + denoiser)
+                links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
+                links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
+            elif denoiser.upper() == "BLENDER":
+                bpy.context.view_layer.cycles.use_denoising = True
+            else:
+                raise Exception("No such denoiser: " + denoiser)
 
         simplify_subdivision_render = self.config.get_int("simplify_subdivision_render", 3)
         if simplify_subdivision_render > 0:
