@@ -48,7 +48,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors",
+        "output_key": "colors"
       }
     },
     {
