@@ -11,7 +11,7 @@ from scripts.saveAsImg import convert_hdf
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser("Combines four images from .png or .hdf5. Requires Color, Normal, Depth and Semantic Segmentation.")
+    parser = argparse.ArgumentParser("Combines up to four images from .png or .hdf5. It requires a Color rendering.  Normal, Depth and Semantic Segmentation are optional.")
     parser.add_argument("-f", "--file_path", nargs='*', help="File path to the list of color.png or .hdf5 file.", required=True)
     parser.add_argument("-o", "--output", help="Folder path where the resulting image/s should be saved.", type=str)
     parser.add_argument("-b", "--border", help="Adds a border around the images in white.", type=int, default=0)
@@ -21,28 +21,51 @@ if __name__ == "__main__":
     def convert_png_to_multiples(image_path, org_path):
         if "colors" in image_path:
             border = args.border
-            color_img = plt.imread(image_path)
-            img_size = color_img.shape
-            final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] * 2 + border * 3, img_size[2]))
-            normal_img = plt.imread(image_path.replace("colors", "normals"))
-            depth_img = plt.imread(image_path.replace("colors", "depth"))
-            final_img[border:img_size[0]+border, border:img_size[1]+border, :] = color_img
-
+            normal_path = image_path.replace("colors", "normals")
+            depth_path = image_path.replace("colors", "depth")
             seg_path = image_path.replace("colors", "segmap")
+            used_imgs = []
+            if os.path.exists(image_path):
+                used_imgs.append(plt.imread(image_path))
+            if os.path.exists(normal_path):
+                used_imgs.append(plt.imread(normal_path))
+            if os.path.exists(depth_path):
+                used_imgs.append(plt.imread(depth_path))
             if os.path.exists(seg_path):
-                final_img[2*border+img_size[0]:-border, border:border+img_size[1], :] = normal_img
-                semantic_img = plt.imread(image_path.replace("colors", "segmap"))
-                final_img[border:img_size[0]+border, 2*border+img_size[1]:-border, :] = depth_img
-                final_img[2*border+img_size[0]:-border, 2*border+img_size[1]:-border, :] = semantic_img
-            else:
-                final_img[border:border+img_size[0], 2*border+img_size[1]:-border, :] = normal_img
-                start_val = int((img_size[1]+border+border*0.5)*0.5)
-                final_img[2*border+img_size[0]:-border, start_val:start_val+depth_img.shape[1], :] = depth_img
+                used_imgs.append(plt.imread(seg_path))
+            if used_imgs:
+                img_size = used_imgs[0].shape
+                if len(used_imgs) == 1:
+                    final_img = np.ones((img_size[0] + border * 2, img_size[1] + border * 2, img_size[2]))
+                elif len(used_imgs) == 2:
+                    final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] + border * 2, img_size[2]))
+                else:
+                    final_img = np.ones((img_size[0] * 2 + border * 3, img_size[1] * 2 + border * 3, img_size[2]))
+
+                final_img[border:img_size[0]+border, border:img_size[1]+border, :] = used_imgs[0]
+
+                if len(used_imgs) == 2:
+                    final_img[2 * border + img_size[0]:-border, border:border + img_size[1], :] = used_imgs[1]
+                if len(used_imgs) == 3:
+                    start_val = int((img_size[1] + border + border * 0.5) * 0.5)
+                    final_img[border:img_size[0] + border, 2 * border + img_size[1]:-border, :] = used_imgs[1]
+                    final_img[2 * border + img_size[0]:-border, start_val:start_val + img_size[1], :] = used_imgs[2]
+                if len(used_imgs) == 4:
+                    final_img[2 * border + img_size[0]:-border, border:border + img_size[1], :] = used_imgs[1]
+                    final_img[border:img_size[0] + border, 2 * border + img_size[1]:-border, :] = used_imgs[2]
+                    final_img[2 * border + img_size[0]:-border, 2 * border + img_size[1]:-border, :] = used_imgs[3]
 
             if ".png" in org_path:
                 resulting_file_name = org_path.replace("colors", "rendering")
             else:
-                resulting_file_name = org_path.replace(".hdf5", "_rendering.jpg")
+                if final_img.shape[2] == 3:
+                    resulting_file_name = org_path.replace(".hdf5", "_rendering.jpg")
+                elif final_img.shape[2] == 4:
+                    if abs(np.min(final_img) - 1) < 1e-7:
+                        final_img = final_img[:,:,:3]
+                        resulting_file_name = org_path.replace(".hdf5", "_rendering.jpg")
+                    else:
+                        resulting_file_name = org_path.replace(".hdf5", "_rendering.png")
             if args.output:
                 resulting_file_name = os.path.join(args.output, resulting_file_name)
             print("Saved in {}".format(resulting_file_name))
@@ -81,7 +104,6 @@ if __name__ == "__main__":
                 raise Exception("This file format is not supported: {}".format(file_path))
         else:
             raise Exception("The given file does not exist: {}".format(args.file_path))
-
 
 
 

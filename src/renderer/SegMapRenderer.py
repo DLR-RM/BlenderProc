@@ -41,7 +41,7 @@ class SegMapRenderer(Renderer):
         category of the object.
 
         :param obj: The object to use.
-        :param color: RGB array of a color.
+        :param color: RGB array of a color in the range of [0, self.render_colorspace_size_per_dimension].
         """
         # Create new material emitting the given color
         new_mat = bpy.data.materials.new(name="segmentation")

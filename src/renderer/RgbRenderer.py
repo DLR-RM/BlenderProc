@@ -54,7 +54,7 @@ class RgbRenderer(Renderer):
         # if the rendering is not performed -> it is probably the debug case.
         do_undo = not self._avoid_rendering
         with Utility.UndoAfterExecution(perform_undo_op=do_undo):
-            self._configure_renderer(default_denoiser="Intel")
+            self._configure_renderer(use_denoiser=True, default_denoiser="Intel")
 
             # In case a previous renderer changed these settings
             bpy.context.scene.render.image_settings.color_mode = "RGB"
