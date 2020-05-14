@@ -64,7 +64,7 @@ class BopLoader(Loader):
         self.split = self.config.get_string("split", "test")
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
-        self.bop_dataset_name = self.bop_dataset_path.split("/")[-1]
+        self.bop_dataset_name = os.path.basename(self.bop_dataset_path)
 
     def run(self):
         """ Load BOP data """
