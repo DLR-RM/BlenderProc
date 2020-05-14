@@ -118,7 +118,8 @@ class BopWriter(StateWriter):
 
     def _write_scene_gt(self, bop_group): 
         """ Creates and writes scene_gt.json in output_dir.
-
+        
+        :param bop_group: BOP dataset for which to write the gt.
         :return
         """
         scene_gt = {} 
@@ -154,7 +155,8 @@ class BopWriter(StateWriter):
 
     def _write_scene_camera(self, bop_group):
         """ Creates and writes scene_camera.json in output_dir.
-
+        
+        :param bop_group: BOP dataset for which to write the gt.
         :return
         """ 
         scene_camera = {} 
@@ -180,7 +182,8 @@ class BopWriter(StateWriter):
 
     def _write_camera(self, bop_group):
         """ Creates and writes camera.json in output_dir.
-
+        
+        :param bop_group: BOP dataset for which to write the gt.
         :return
         """       
         if 'loaded_resolution' in self.cam:
