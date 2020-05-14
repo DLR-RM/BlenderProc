@@ -21,6 +21,8 @@ class ShapeNetLoader(Loader):
     Finally it sets the object: 'model_normalized' to have a category id corresponding to the void class, 
     so it wouldn't trigger an exception in the SegMapRenderer.
 
+    Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other module is loaded first in the config file.
+
     **Configuration**:
 
     .. csv-table::
@@ -74,8 +76,9 @@ class ShapeNetLoader(Loader):
 
         self._set_properties(loaded_obj)
 
-        for obj in loaded_obj:
-            obj['category_id'] = LabelIdMapping.label_id_map["void"]
+        if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
+            for obj in loaded_obj:
+                obj['category_id'] = LabelIdMapping.label_id_map["void"]
 
     def _correct_materials(self, objects):
         """
