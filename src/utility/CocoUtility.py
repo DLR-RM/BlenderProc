@@ -12,7 +12,7 @@ class CocoUtility:
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
-        :param super_category_mapping: A dict mapping object name to their corresponding supercategory
+        :param super_category_mapping: A dict mapping object name to their corresponding supercategory (A supercategory can be a string which distinguishes objects belonging to different datasets)
         :param dataset_name: name of the dataset, a feature required by coco annotation format
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations

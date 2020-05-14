@@ -24,7 +24,6 @@
       "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>/tless",
-        "bop_dataset_name": "tless",
         "model_type": "cad",
         "mm2m": True,
         "sample_objects": True,
@@ -38,7 +37,6 @@
       "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>/itodd",
-        "bop_dataset_name": "itodd",
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
@@ -52,7 +50,6 @@
       "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>/lm",
-        "bop_dataset_name": "lm",
         "split": "val",
         "mm2m": True,
         "model_type": "",
