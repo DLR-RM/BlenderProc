@@ -135,8 +135,6 @@ class BopWriter(StateWriter):
         max_resolution = max(width, height)
         
         cam_K[0] = syn_cam_K[0]
-``
-?
         cam_K[4] = syn_cam_K[4]
  
         cam_K[2] = width/2. - shift_x * max_resolution
@@ -187,6 +185,11 @@ class BopWriter(StateWriter):
                 scene_gt[current_frame].append({'cam_R_m2c': cam_R_m2c,
                                                 'cam_t_m2c': cam_t_m2c,
                                                 'obj_id': self._get_object_attribute(obj, 'id')})
+
+            dir_folder = os.path.dirname(self._scene_gt_path[bop_group])
+            if not os.path.exists(dir_folder):
+                os.makedirs(dir_folder)
+
             with open(self._scene_gt_path[bop_group], 'w') as scene_gt_file:
                 json.dump(scene_gt, scene_gt_file)
         

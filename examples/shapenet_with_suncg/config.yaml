@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <path_to_shape-net-core> <obj_file> <output_dir>
 {
   "version": 3,
   "setup": {

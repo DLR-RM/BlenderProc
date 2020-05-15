@@ -90,6 +90,7 @@ Following is a simple pattern for Git Commit messages:
 | `refactor` | refactoring/restructuring of the code |
 | `revert` | reverted commit or parts of it |
 | `style` | code cosmetica: formatting with no code change |
+| `chore` | updating grunt tasks/maintaining with no production code change, cleanup |
 
 * `subject` - the headline of the change, all lowercase.
 * `scope` - scope of the change, all lowercase.
