@@ -38,7 +38,9 @@ for window in bpy.context.window_manager.windows:
             break
 
 try:
-    pipeline = Pipeline(config_path, [], working_dir)
+    # In this debug case the rendering is avoided, everything is executed except the final render step
+    # For the RgbRenderer the undo is avoided to have a direct way of rendering in debug
+    pipeline = Pipeline(config_path, [], working_dir, avoid_rendering=True)
     pipeline.run()
 finally:
     # Revert back to previous view

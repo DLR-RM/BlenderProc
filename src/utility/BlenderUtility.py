@@ -62,10 +62,11 @@ def get_bounds(obj):
 
 def check_bb_intersection(obj1,obj2):
     """
+    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
+        The surrounding/including axis-aligned bounding box is calculated and used to check the intersection
+
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
-        The enclosing axis-aligned bounding box is calculated and used to check the intersection
     returns a boolean
     """
     b1w = get_bounds(obj1)
@@ -162,7 +163,6 @@ def check_intersection(obj, obj2, cache = None):
         co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
         co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
 
-
         t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
         if index != -1:
             intersect = True
@@ -219,6 +219,37 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
     bm.free()
     return obj
 
+def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='NewDirectionObject'):
+    """
+    Generates a new object with the given vertices, no edges or faces are generated.
+
+    :param vertices: [[float, float, float]] list of vertices
+    :param name: str name of the new object
+    :return the generated obj
+    """
+    if len(vertices) != len(normals):
+        raise Exception("The lenght of the vertices and normals is not equal!")
+
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    bm = bmesh.new()
+    for v, n in zip(vertices, normals):
+        v1 = bm.verts.new(v)
+        new_vert = v + n * radius
+        v2 = bm.verts.new(new_vert)
+        bm.edges.new([v1, v2])
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+
+
 def add_cube_based_on_bb(bouding_box, name='NewCube'):
     """
     Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
@@ -260,12 +291,20 @@ def get_all_mesh_objects():
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
-def load_image(file_path):
+def get_all_materials():
+    """
+    Returns a list of all materials used and unused
+    :return: a list of all materials
+    """
+    return list(bpy.data.materials)
+
+def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.
 
     The alpha channel is neglected.
 
     :param file_path: The path to the image.
+    :param num_channels: Number of channels to return.
     :return: The numpy array
     """
     # load image with blender function
@@ -273,8 +312,47 @@ def load_image(file_path):
     # convert image to proper size
     size = img.size
     channels = img.channels
-    img = np.array(img.pixels).reshape(size[0], size[1], channels)
+    img = np.array(img.pixels).reshape(size[1], size[0], channels)
     img = np.flip(img, axis=0)
-    return img[:, :, :3]
+    if file_path.endswith('.png') or file_path.endswith('.jpg'):
+        # convert the 0 to 1 space to 0 ... 255 and save it as uint8
+        img = (img * 255).astype(np.uint8)
+    return img[:, :, :num_channels]
 
+def get_bound_volume(obj):
+    """ Gets the volume of a possible orientated bounding box.
+    :param obj: Mesh object.
+    :return: volume of a bounding box.
+    """
+    bb = get_bounds(obj)
+    # Search for the point which is the maximum distance away from the first point
+    # we call this first point min and the furthest away point max
+    # the vector between the two is a diagonal of the bounding box
+    min_point, max_point = bb[0], None
+    max_dist = -1
+    for point in bb:
+        dist = (point - min_point).length
+        if dist > max_dist:
+            max_point = point
+            max_dist = dist
+    diag = max_point - min_point
+    # use the diagonal to calculate the volume of the box
+    return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
 
+def duplicate_objects(objects):
+    """
+    Creates duplicates of objects, first duplicates are given name <orignial_object_name>.001
+    
+    :param objects: an object or a list of objects to be duplicated
+    :return: a list of objects
+    """
+    if not isinstance(objects, list):
+        objects = [objects]
+
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in objects:
+        obj.select_set(True)
+    bpy.ops.object.duplicate()
+    duplicates = bpy.context.selected_objects
+    bpy.ops.object.select_all(action='DESELECT')
+    return duplicates

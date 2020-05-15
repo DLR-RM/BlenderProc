@@ -1,24 +1,41 @@
-import mathutils
 import bpy
-
-from src.utility.BlenderUtility import get_all_mesh_objects
-from src.main.Module import Module
+import mathutils
 import numpy as np
+
+from src.main.Module import Module
+from src.utility.BlenderUtility import get_all_mesh_objects, get_bound_volume
+
 
 class PhysicsPositioning(Module):
     """ Performs physics simulation in the scene, assigns new poses for all objects that participated.
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    **Configuration**:
 
-       "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location vector that is allowed, such that an object is still recognized as 'stopped moving'."
-       "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation euler vector that is allowed. such that an object is still recognized as 'stopped moving'."
-       "min_simulation_time", "The minimum number of seconds to simulate."
-       "check_object_interval", "The interval in seconds at which all objects should be checked if they are still moving. If all objects have stopped moving, than the simulation will be stopped."
-       "max_simulation_time", "The maximum number of seconds to simulate."
-       "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit."
-       "step_per_sec", "Number of simulation steps taken per second. Type: int. Optional. Default value: 60."
-       "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Optional. Default value: 10."
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location "
+                                             "vector that is allowed, such that an object is still recognized as "
+                                             "'stopped moving'. Type: float. Default: 0.01"
+        "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation "
+                                             "Euler vector that is allowed. such that an object is still recognized as "
+                                             "'stopped moving'. Type: float. Default: 0.1"
+        "min_simulation_time", "The minimum number of seconds to simulate. Type: float. Default: 4.0"
+        "check_object_interval", "The interval in seconds at which all objects should be checked if they are still "
+                                 "moving. If all objects have stopped moving, than the simulation will be stopped. "
+                                 "Type: float. Default: 2.0"
+        "max_simulation_time", "The maximum number of seconds to simulate. Type: int. Default: 40.0"
+        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve "
+                            "stability, but also make objects hover a bit. Type: float. Default: 0.001."
+        "steps_per_sec", "Number of simulation steps taken per second. Type: int. Default: 60."
+        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Default: 10."
+        "collision_mesh_source", "Source of the mesh used to create collision shape. Type: string. Default: 'FINAL'. "
+                                 "Available: 'BASE', 'DEFORM', 'FINAL'."
+        "collision_shape", "Collision shape of object in simulation. Type: string. Default: 'CONVEX_HULL'. "
+                           "Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'."
+        "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Type: bool. Default: False."
+        "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor "
+                       "(defines material density). Type: float. Default: 1."
     """
 
     def __init__(self, config):
@@ -26,32 +43,83 @@ class PhysicsPositioning(Module):
         self.object_stopped_location_threshold = self.config.get_float("object_stopped_location_threshold", 0.01)
         self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
         self.collision_margin = self.config.get_float("collision_margin", 0.001)
+        self.collision_mesh_source = self.config.get_string('collision_mesh_source', 'FINAL')
+        self.steps_per_sec = self.config.get_int("steps_per_sec", 60)
+        self.solver_iters = self.config.get_int("solver_iters", 10)
+        self.mass_scaling = self.config.get_bool("mass_scaling", False)
+        self.mass_factor = self.config.get_float("mass_factor", 1)
+        self.collision_shape = self.config.get_string("collision_shape", "CONVEX_HULL")
 
     def run(self):
         """ Performs physics simulation in the scene. """
-        # Enable physics for all objects
-        self._add_rigidbody()
-        # set custom animation settings
-        steps_per_sec = self.config.get_int("steps_per_sec", 60)
-        solver_iters = self.config.get_int("solver_iters", 10)
-        bpy.context.scene.rigidbody_world.steps_per_second = steps_per_sec
-        bpy.context.scene.rigidbody_world.solver_iterations = solver_iters
+        # locations of all soon to be active objects before we shift their origin points
+        locations_before_origin_shift = {}
+        for obj in get_all_mesh_objects():
+            if obj["physics"]:
+                locations_before_origin_shift.update({obj.name: obj.location.copy()})
+        # enable rigid body and shift origin point for active objects
+        locations_after_origin_shift = self._add_rigidbody()
+        # compute origin point shift for all active objects
+        origin_shift = {}
+        for obj in locations_after_origin_shift:
+            shift = locations_before_origin_shift[obj] - locations_after_origin_shift[obj]
+            origin_shift.update({obj: shift})
 
-        # Run simulation and use the position of the objects at the end of the simulation as new initial position.
+        bpy.context.scene.rigidbody_world.steps_per_second = self.steps_per_sec
+        bpy.context.scene.rigidbody_world.solver_iterations = self.solver_iters
+
+        # perform simulation
         obj_poses = self._do_simulation()
-        self._set_pose(obj_poses)
+        # reset origin point of all active objects to the total shift location of the 3D cursor
+        for obj in get_all_mesh_objects():
+            if obj.rigid_body.type == "ACTIVE":
+                bpy.context.view_layer.objects.active = obj
+                obj.select_set(True)
+                # set 3d cursor location to the total shift of the object
+                bpy.context.scene.cursor.location = origin_shift[obj.name] + obj_poses[obj.name]['location']
+                bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
+                obj.select_set(False)
 
-        # Disable physics for all objects
+        # reset 3D cursor location
+        bpy.context.scene.cursor.location = mathutils.Vector([0, 0, 0])
+
+        # get current poses
+        curr_pose = self._get_pose()
+        # displace for the origin shift
+        final_poses = {}
+        for obj in curr_pose:
+            final_poses.update({obj: {'location': curr_pose[obj]['location'] + origin_shift[obj], 'rotation': curr_pose[obj]['rotation']}})
+        self._set_pose(final_poses)
+
         self._remove_rigidbody()
 
     def _add_rigidbody(self):
-        """ Adds a rigidbody element to all mesh objects and sets their type depending on the custom property "physics". """
+        """ Adds a rigidbody element to all mesh objects and sets their type depending on the custom property "physics".
+
+        :return: Object locations after origin point shift. Type: dict.
+        """
+        locations_after_origin_shift = {}
         for obj in get_all_mesh_objects():
             bpy.context.view_layer.objects.active = obj
             bpy.ops.rigidbody.object_add()
+            if "physics" not in obj:
+                raise Exception("The obj: '{}' has no physics attribute, each object needs one.".format(obj.name))
             obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
-            obj.rigid_body.collision_shape = "MESH"
+            obj.select_set(True)
+            obj.rigid_body.collision_shape = self.collision_shape
             obj.rigid_body.collision_margin = self.collision_margin
+            obj.rigid_body.mesh_source = self.collision_mesh_source
+            if obj.rigid_body.type == "ACTIVE":
+                bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME', center='MEDIAN')
+                bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+                locations_after_origin_shift.update({obj.name: obj.location.copy()})
+
+            if self.mass_scaling:
+                obj.rigid_body.mass = get_bound_volume(obj) * self.mass_factor
+
+            obj.select_set(False)
+
+        return locations_after_origin_shift
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """
@@ -62,16 +130,16 @@ class PhysicsPositioning(Module):
     def _seconds_to_frames(self, seconds):
         """ Converts the given number of seconds into the corresponding number of blender animation frames.
 
-        :param seconds: The number of seconds
-        :return: The number of frames
+        :param seconds: The number of seconds. Type: int.
+        :return: The number of frames. Type: int.
         """
         return int(seconds * bpy.context.scene.render.fps)
 
     def _frames_to_seconds(self, frames):
         """ Converts the given number of frames into the corresponding number of seconds.
 
-        :param frames: The number of frames
-        :return: The number of seconds
+        :param frames: The number of frames. Type: int.
+        :return: The number of seconds: Type: int.
         """
         return float(frames) / bpy.context.scene.render.fps
 
@@ -130,7 +198,7 @@ class PhysicsPositioning(Module):
         objects_poses = {}
         for obj in get_all_mesh_objects():
             if obj.rigid_body.type == 'ACTIVE':
-                location = bpy.context.scene.objects[obj.name].matrix_world.translation
+                location = bpy.context.scene.objects[obj.name].matrix_world.translation.copy()
                 rotation = mathutils.Vector(bpy.context.scene.objects[obj.name].matrix_world.to_euler())
                 objects_poses.update({obj.name: {'location': location, 'rotation': rotation}})
 
@@ -149,8 +217,8 @@ class PhysicsPositioning(Module):
     def _have_objects_stopped_moving(self, last_poses, new_poses):
         """ Check if the difference between the two given poses per object is smaller than the configured threshold.
 
-        :param last_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
-        :param new_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
+        :param last_poses. Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
+        :param new_poses: Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :return: True, if no objects are moving anymore.
         """
         stopped = True

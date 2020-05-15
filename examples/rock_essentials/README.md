@@ -2,101 +2,166 @@
 
 ![](rendering.png)
 
-The focus of this example is the `RockEssentialsLoader` module that allows us to load models and textures from the [Rock Essentials](https://blendermarket.com/products/the-rock-essentials) (RE) dataset.
+The focus of this example is the `loader.RockEssentialsRockLoader`, `constructor.RockEssentialsGroundConstructor`, and `materials.RockEssentialsTextureSampler` modules that allow us to load models and textures from the [Rock Essentials](https://blendermarket.com/products/the-rock-essentials) (RE) dataset.
 
 ## Usage
 
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/rock_essentials/config.yaml ${PATH_TO_RE_DATASET} examples/rock_essentials/camera_positions examples/rock_essentials/output
+python run.py examples/rock_essentials/config.yaml <re_dataset> examples/rock_essentials/output
 ``` 
 
 * `examples/rock_essentials/config.yaml`: path to the configuration file with pipeline configuration.
-* `${PATH_TO_RE_DATASET}`: path to the downloaded rock essential dataset 
-* `examples/rock_essentials/camera_positions`: text file with parameters of camera positions.
+* `<re_dataset>`: path to the downloaded Rock Essentials dataset 
 * `examples/rock_essentials/output`: path to the output directory.
+
+## Visualization
+
+In the output folder you will find a `coco_data/` folder with a `coco_annotations.json` file and a series of rgb images. Note, that due to the configuration of `global` section of the config, output of multiple consecutive BlenderProc runs will be appended.
 
 ## Steps
 
-* Loads RE rocks and constructs a ground plane: `loader.RockEssentialsLoader` module.
-* Samples positions on the ground plane for boulders: `lobject.EntityManipulator` module.
+* Loads 4 batches of RE rocks: `loader.RockEssentialsRockLoader` module.
+* Constructs a blank ground tile wirh RE material: `constructor.RockEssentialsGroundConstructor` module.
+* Samples a texture for a ground's plane material: `materials.RockEssentialsTextureSampler` module.
+* Samples positions on the ground plane for large rocks: `manipulators.EntityManipulator` module.
 * Sample positions for rocks: `object.ObjectPoseSampler` module.
-* Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Creates a Sun light : `lighting.LightLoader` module.
+* Samples camera positions: `camera.CameraSampler` module.
+* Creates a Sun light: `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
+* Displaces a ground plane up: `manipulators.EntityManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
 
-### Rock Essentials Loader
+### Global
 
 ```yaml
-{
-  "module": "loader.RockEssentialsLoader",
-  "config": {
-    "rocks": [
-    {
-      "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-      "objects": ['Rock_1', 'Rock_2','Rock_3'],
-      "physics": False,
-      "render_levels": 2,
-      "high_detail_mode": True,
-    },
-    {
-      "path": "<args:0>/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
-      "amount": 20,
-      "physics": True,
-      "render_levels": 2,
-      "high_detail_mode": True
-    },
-    {
-      "path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
-      "amount": 20,
-      "physics": True,
-      "render_levels": 2,
-      "high_detail_mode": True
-    },
-    ],
-    "ground": {
-      "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
-      "images": {
-        "image_path": "<args:0>/Rock Essentials/Ground Textures/Sand/RDTSandWavy001/",
-        "maps": {
-          "color": "RDTSandWavy001_COL_VAR1_3K.jpg",
-          "roughness": "RDTSandWavy001_GLOSS_3K.jpg",
-          "reflection": "RDTSandWavy001_REFL_3K.jpg",
-          "normal": "RDTSandWavy001_NRM_3K.jpg",
-          "displacement": "RDTSandWavy001_DISP16_3K.tif"
-        }
-      },
-      "plane_scale": [20, 20, 1],
-      "subdivision_cuts": 30,
-      "subdivision_render_levels": 2,
-      "displacement_strength": 0.7
-    }
+"module": "main.Initializer",
+"config": {
+  "global": {
+    "output_dir": "<args:1>",
+    "append_to_existing_output": True
   }
 }
 ```
 
+`"append_to_existing_output": True` conditions all the modules (e.g. `writer.CocoAnnotationsWriter`) to append it's output to the existing output of the pipeline. It is useful when generating a coco annotation data for training.
+
+### Rock Essentials Rock Loader
+
+```yaml
+{
+  "module": "loader.RockEssentialsRockLoader",
+  "config": {
+    "batches": [
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+      "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
+      "physics": False,
+      "render_levels": 2,
+      "high_detail_mode": True
+    },
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Granite/Rocks_Granite_Medium.blend",
+      "amount": 10,
+      "physics": True,
+      "render_levels": 2,
+      "high_detail_mode": False,
+      "scale": [1.5, 1.5, 1.5]
+    },
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Desert/Rocks_Desert_Medium.blend",
+      "amount": 15,
+      "physics": True,
+      "render_levels": 2,
+      "high_detail_mode": False,
+      "scale": [1.5, 1.5, 1.5]
+    },
+    {
+      "path": "<args:0>/Rock Essentials/Individual Rocks/Forest/Rocks_Forest_Large.blend",
+      "objects": ['Rock_Forest_Large002', 'Rock_Forest_Large012'],
+      "physics": False,
+      "render_levels": 2,
+      "high_detail_mode": False
+    }
+    ]
+  }
+},
+```
+
 This module allows us to integrate the RE's models into our dataset.
-In `rocks` we are specifying batches of rocks to load by defining:
+In `batches` we are specifying batches of rocks to load by defining:
 * `path` to the .blend file with the models,
-* `amount` of rocks or the names (`objects`) to load,
+* `amount` of rocks or the names (`objects`) to load, (or both to have multiple selected rocks loaded)
 * the `physics` state of the rocks of this batch,
 * number of subdivisions (`render_levels`) to perform while rendering,
-* and whether to enable the HDM when possible.
+* scaling factor for X,Y,Z dimensions of rocks, HSV values, toggle HDM when possible, etc.
 
-In `ground` we are defining a realistically-looking ground plane by specifying:
+### Rock Essentials Ground Constructor
+
+```yaml
+{
+  "module": "constructor.RockEssentialsGroundConstructor",
+  "config": {
+    "tiles": [
+    {
+      "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
+      "plane_scale": [50, 50, 1],
+      "subdivision_cuts": 30,
+      "subdivision_render_levels": 2,
+      "tile_name": "Gr_Plane_1"
+    }
+    ]
+  }
+},
+```
+
+In `tiles` we are defining a settings of one or multiple ground tiles by specifying:
 * `shader_path` for a ground plane,
-* path to `color`, `roughness`, `reflection`, `normal` and `displacement` maps in `images/image_path`,
-* map files names in `maps`,
 * scale of the plane `plane_scale`,
 * `subdivision_cuts` and `subdivision_render_levels` to perform on a ground plane,
-* and a `displacement_strength` of the displacement modifier.
+* and  a tile name.
+
+### Rock Essentials Texture Sampler
+
+```yaml
+{
+  "module": "materials.RockEssentialsTextureSampler",
+  "config": {
+    "selector": {
+      "provider": "getter.Entity",
+      "conditions": {
+        "name": "Gr_Plane.*",
+        "type": "MESH"
+      }
+    },
+    "textures": [
+    {
+      "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
+      "uv_scaling": 9,
+      "displacement_strength": 0.7,
+      "ambient_occlusion": [0.5, 0.5, 0.5, 1],
+      "images": {
+        "color": "RDTGravel001_COL_VAR1_3K.jpg",
+        "roughness": "RDTGravel001_GLOSS_3K.jpg",
+        "reflection": "RDTGravel001_REFL_3K.jpg",
+        "normal": "RDTGravel001_NRM_3K.jpg",
+        "displacement": "RDTGravel001_DISP16_3K.tif"
+      }
+    },
+    ]
+  }
+},
+```
+
+This module allows us to set a texture for selected ground planes which have a RE specific material which is set by `constructor.RockEssentialsGroundConstructor` (or sampled if more than one texture is defined) by specifying:
+* `selector` for selecting the ground planes created by the ground constructor by specifying the name in the `conditions`,
+* one or multiple `textures`,
+* `path` to a texture maps folder, `uv_scaling` for the maps `displacements_strength` of the displacements modifier, ambient_occlusion parameter of the shader, and at least a `color` map file name.
 
 ### Physics Positioning
 
@@ -105,7 +170,7 @@ In `ground` we are defining a realistically-looking ground plane by specifying:
   "module": "object.PhysicsPositioning",
   "config": {
     "min_simulation_time": 2,
-    "max_simulation_time": 4,
+    "max_simulation_time": 5,
     "check_object_interval": 1,
     "solver_iters": 25,
     "steps_per_sec": 250
@@ -119,14 +184,6 @@ To counter this, we are setting two new parameters to `object.PhysicsPositioning
 * `"steps_per_sec"`: Number of simulation steps taken per second. 
 
 Which usually helps.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/rock_essentials/output/0.hdf5
-```
 
 ## More examples
 

@@ -4,6 +4,11 @@ blender
 .idea/
 .vscode/
 output/
+debug/
+resources/cctextures
+resources/scenenet/*zip
+resources/scenenet/SceneNetData
+.vscode
 *.pyc
 *.swp
 docs/build/

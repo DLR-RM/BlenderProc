@@ -1,7 +1,7 @@
-import mathutils
-import random
-import bpy
 import math
+import random
+
+import mathutils
 
 from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_bounds
@@ -9,30 +9,42 @@ from src.utility.BlenderUtility import get_bounds
 
 class UpperRegionSampler(Provider):
     """ Uniformly samples a 3-dimensional value over the bounding box of the specified objects.
+        This will lead to an parallelepiped (similar to a cube, which uses parallelograms as faces) in which the
+        values are uniformly sampled. The face closest to the bounding box is the face, which goes away either in the
+        upper direction or the normal direction of this particular face. The upper direction vector defines, where is
+        'up' in the scene. If the min_height is not zero the closest face to the bounding box is moved by min_height
+        away either in upper direction or in normal direction of the face. The face, which is furthest away is defined
+        by the max_height and has the same normal as the closest face to the bounding box.
 
-    This will lead to an parallelepiped (similar to a cube, which uses parallelograms as faces) in which the
-    values are uniformly sampled.
+        Example 1: Sample a location on the surface of the first object to match a name pattern with hight above this
+                   surface in range of [1.5, 1.8].
 
-    The face closest to the bounding box is the face, which goes away either in the upper direction or the normal
-    direction of this particular face. The upper direction vector defines, where is up in the scene.
-    If the min_height is not zero the closest face to the bounding box is moved by min_height away either in upper
-    direction or in normal direction of the face.
-
-    The face, which is furthest away is defined by the max_height and has the same normal as the closest face to the
-    bounding box.
+        {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 1.5,
+          "max_height": 1.8,
+          "to_sample_on": {
+            "provider": "getter.Entity",
+            "index": 0,
+            "conditions": {
+              "name": "Table.*"
+            }
+          }
+        }
 
     **Configuration**:
+
     .. csv-table::
         :header: "Parameter", "Description"
-        "to_sample_on": "Selector (getter.Entity), which gives a selection of object, which are used to sample on"
-        "min_height", "float, this is the minimum distance to the bounding box that a point is sampled on"
-        "max_height", "float, this is the maximum distance to the bounding box that a point is sampled on"
-        "upper_dir", "the upper direction of the sampling box,
-                            possible values [float, float, float], default: [0.0, 0.0, 1.0]"
-        "use_upper_dir", "the sampling above the selected surface, can be done with the upper_dir or
-                            with the face normal, if this is true the upper_dir is used: default: True"
-        "use_ray_trace_check", "When this is true, a ray is cast towards the sampled object and only if the object
-                            is directly below the sampled position is the position accepted. default: False"
+
+        "to_sample_on", "Objects, which are used to sample on. Type: Provider."
+        "min_height", "Minimum distance to the bounding box that a point is sampled on. Type: float. Default: 0.0."
+        "max_height", "Maximum distance to the bounding box that a point is sampled on. Type: float. Default: 1.0."
+        "upper_dir", "The 'up' direction of the sampling box. Type: list. Default: [0.0, 0.0, 1.0]."
+        "use_upper_dir", "Toggles the sampling above the selected surface, can be done with the upper_dir or with the "
+                         "face normal, if this is true the upper_dir is used. Type: bool. Default: True."
+        "use_ray_trace_check", "Toggles using a ray casting towards the sampled object (if the object is directly below "
+                               "the sampled position is the position accepted). Type: bool. Default: False."
     """
     def __init__(self, config):
         Provider.__init__(self, config)
@@ -60,10 +72,10 @@ class UpperRegionSampler(Provider):
         self._use_upper_dir = config.get_bool("use_upper_dir", True)
 
         def calc_vec_and_normals(face):
-            """
-            Calculates the two vectors, which lie in the plane of the face and the normal of the face
-            :param face: [4x[3xfloat]] four corner coordinates of a face
-            :return: (two vectors in the plane), and the normal
+            """ Calculates the two vectors, which lie in the plane of the face and the normal of the face.
+
+            :param face: Four corner coordinates of a face. Type: [4x[3xfloat]].
+            :return: (two vectors in the plane), and the normal.
             """
             vec1 = face[1] - face[0]
             vec2 = face[3] - face[0]
@@ -99,10 +111,9 @@ class UpperRegionSampler(Provider):
             else:
                 raise Exception("Couldn't find a face, for this obj: {}".format(obj.name))
 
-
     def run(self):
-        """
-        Samples based on the description above
+        """ Samples based on the description above.
+
         :return: Sampled value. Type: mathutils.Vector
         """
 
@@ -130,11 +141,8 @@ class UpperRegionSampler(Provider):
             raise Exception("The amount of regions is either zero or does not match the amount of objects!")
 
 
-
 class Region2D(object):
-    """
-    Helper class for UpperRegionSampler:
-    Defines a 2D region in 3D
+    """ Helper class for UpperRegionSampler: Defines a 2D region in 3D.
     """
 
     def __init__(self, vectors, normal, base_point):
@@ -158,6 +166,3 @@ class Region2D(object):
         :return: the normal of the region
         """
         return self._normal
-
-
-

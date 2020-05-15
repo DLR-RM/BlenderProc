@@ -1,24 +1,21 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    },
-    "renderer": {
-      "pixel_aspect_x": 1.333333333
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:2>",
+          "pixel_aspect_x": 1.333333333
+        }
+      }
     },
     {
       "module": "loader.SuncgLoader",
@@ -42,20 +39,19 @@
     },
     {
       "module": "lighting.SuncgLighting",
-      "config": {}
-    },
-    {
-      "module": "renderer.NormalRenderer",
-      "config": {}
     },
     {
       "module": "renderer.SegMapRenderer",
-      "config": {}
+      "config": {
+        "use_alpha": True
+      }
     },
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "render_depth": true
+        "use_alpha": True,
+        "render_depth": true,
+        "render_normals": True
       }
     },
     {
