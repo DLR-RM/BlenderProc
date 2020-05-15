@@ -1,12 +1,15 @@
 # Basic scene
 
-![](rendering.jpg)
+<p align="center">
+<img src="rendering_0.jpg" alt="Front readme image" width=375>
+<img src="rendering_1.jpg" alt="Front readme image" width=375>
+</p>
 
 In this example we demonstrate the basic functionality of BlenderProc.
 
 ## Usage
 
-Execute in the BlenderProc main directory:
+Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically downloaded blender 2.82, see the config-file if you want to change the installation path:
 
 ```
 python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
@@ -19,13 +22,20 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 * `examples/basic/scene.obj`: path to the object file with the basic scene.
 * `examples/basic/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/basic/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders normals: `renderer.NormalRenderer` module.
-* Renders rgb: `renderer.RgbRenderer` module.
+* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -45,20 +55,6 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 * we want to use blender 2.8 (installation is done automatically on the first run).
 * inside the blender python environment the python package `h5py` should be automatically installed. These are not provided per default, but are required in order to make the `writer.Hdf5Writer` module work.
 
-### Global
-
-```yaml
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    }
-  }
-```
-
-* In the `global` section, we just specify the `output_dir` which defines where the final files should be stored.
-* As this configuration is defined in `global/all`, it is inherited by all modules. This is equivalent to just putting the `output_dir` configuration into the `config` block of each single module.
-* As we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
-
 ### Modules
 
 Under `modules` we list all modules we want the pipeline to execute. The order also defines the order in which they are executed.
@@ -68,13 +64,21 @@ Every module has a name which specifies the python path to the corresponding cla
 
 ```yaml
  {
-  "module": "main.Initializer",
-  "config": {}
+  "module": "main.Initializer", 
+  "config": {
+    "global": {
+      "output_dir": "<args:2>"
+    }
+  }
 }
 ```
 
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
-* We are using the default parameters here, so `config` is empty.
+It also initializes the GlobalStorage, which contains two parts:
+* The first one is the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
+* These values are provided to all modules, but can be overwritten by the config in any module.
+* The second part of the GlobalStorage is a container, which can store information over the boundaries over single modules.
+* For more information on the GlobalStorage read the documentation in the class.
 
 #### ObjectLoader
 
@@ -91,11 +95,11 @@ Every module has a name which specifies the python path to the corresponding cla
 * The path of the .obj file should be configured via the parameter `path`.
 * Here we are using the second argument given, in the upper command the output path is set to `examples/basic/scene.obj`.
 
-#### LightPositioning
+#### LightLoader
 
 ```yaml
 {
-  "module": "lighting.LightPositioning",
+  "module": "lighting.LightLoader",
   "config": {
     "lights": [
       {
@@ -139,24 +143,6 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 => Creates the files `campose_0000.npy` and `campose_0001.npy` 
 
-#### NormalRenderer
-
-```yaml
-{
-  "module": "renderer.NormalRenderer",
-  "config": {
-      "output_key": "normals"
-  }
-}
-```
-
-* This module just goes through all cam poses which were defined in the previous model and renders a normal image for each of them
-* The images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* The output files are stored in the defined output directory (see [Global](#Global)) and are named like `i.exr` where `i` is the cam pose index
-* The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files.
-
-=> Creates the files `normal_0000.exr` and `normal_0001.exr`.
-
 #### RgbRenderer
 
 ```yaml
@@ -164,16 +150,30 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
   "module": "renderer.RgbRenderer",
   "config": {
      "output_key": "colors",
-     "samples": 350
+     "samples": 350,
+     "render_normals": True,
+     "normal_output_key": "normals",
+     "render_depth": True,
+     "depth_output_key": "depth"
   }
 }
 ```
 
 * This module just goes through all cam poses and renders a rgb image for each of them.
 * In this case we increase the number of samples used for raytracing which increases the rendering quality.
-* We again set the `output_key`, here to `colors`.
+* The output files are stored in the defined output directory (see [Global](#Global)) and are named like `i.png` where `i` is the cam pose index
+* The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files, we set the `output_key`, here to `colors`.
 
-=> Creates the files `rgb_0001.png` and `rgb_0002.png`.
+=> Creates the files `rgb_0000.png` and `rgb_0001.png`.
+
+It also creates the normals and depth 
+
+* The normal and depth images are rendered using the `.exr` format which allows linear colorspace and higher precision
+* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `depth_output_key`.
+
+=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `depth_0000.exr` and `depth_0001.exr`.
+
+In this example all of these are temporary and are used in the next module.
 
 #### Hdf5Writer
 
@@ -181,20 +181,29 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 {
   "module": "writer.Hdf5Writer",
   "config": {
+    "postprocessing_modules": {
+      "depth": [
+        {
+          "module": "postprocessing.TrimRedundantChannels",
+        }
+      ]
+    }
   }
 }
 ```
 
 * The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose.
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before.
+* The module can also apply some post-processing routines based on two parameters, the `output_key` (in this case `depth`) and the post-processor module, which is in this case `postprocessing.TrimRedundantChannels.py`. This reduces the depth map from 3 channels to a single channel (the other channels exist for internal reasons). 
+
 
 The file `0.h5py` would therefore look like the following:
 
 ```yaml
 {
-  "normals": #<numpy array with pixel values read in from normal_0000.exr>,
   "colors": #<numpy array with pixel values read in from rgb_0000.png>,
-  "campose": #<numpy array with cam pose read in from campose_0000.npy>
+  "depth": #<numpy array with pixel values read in from depth_0000.exr>,
+  "normals": #<numpy array with pixel values read in from normals_0000.exr>,
 }
 ``` 
 
@@ -202,14 +211,6 @@ The file `0.h5py` would therefore look like the following:
 * If you want to keep them, put `"output_is_temp": False` into the config of the corresponding module or in the `Global` section.
 
 => Creates the files `0.h5py` and `1.h5py`
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/basic/output/0.hdf5
-```
 
 ## More examples
 

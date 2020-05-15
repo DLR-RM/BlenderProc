@@ -1,5 +1,4 @@
 from src.main.Module import Module
-import mathutils
 
 class Loader(Module):
     """
@@ -7,7 +6,7 @@ class Loader(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "add_properties", "properties in form of a dict, which should be add to all loaded objects."
+       "add_properties", "Custom properties to set for loaded objects. Use 'cp_' prefix for keys. Type: dict."
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -22,6 +21,9 @@ class Loader(Module):
 
         for obj in objects:
             for key, value in properties.items():
-                obj[key] = value
-
-
+                if key.startswith("cp_"):
+                    key = key[3:]
+                    obj[key] = value
+                else:
+                    raise RuntimeError("Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
+                                       "Use manipulators.Entity for setting object's attribute values.")

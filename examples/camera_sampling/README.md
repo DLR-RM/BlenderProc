@@ -1,6 +1,11 @@
 # Camera sampling
 
-![](rendering.png)
+
+<p align="center">
+<img src="rendering_0.png" alt="Front readme image" width=375>
+<img src="rendering_1.jpg" alt="Front readme image" width=375>
+<img src="rendering_1.jpg" alt="Front readme image" width=375>
+</p>
 
 In this example we are demonstrating the sampling features in relation to camera objects.
 
@@ -16,13 +21,20 @@ python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scen
 * `examples/camera_sampling/scene.obj`: path to the object file with the basic scene.
 * `examples/camera_sampling/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Samples camera positions randomly above the plane looking to the point of interest: `camera.CameraSampler` module.
-* Renders normals: `renderer.NormalRenderer` module.
-* Renders rgb: `renderer.RgbRenderer` module.
+* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -68,14 +80,6 @@ Note that here we are using a [getter.POI](../../src/provider/getter) Provider w
 They also have a well-defined config structure, but `getter.POI`, for example, has no input arguments since it's output is fully dependent on the current state of the objects in the scene.
 The POI is calculated from the position of all objects.
  
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
-```
-
 ## More examples
 
 * [light_sampling](../light_sampling): More on sampling for lights.

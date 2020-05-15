@@ -1,21 +1,20 @@
 # Args: <cam_file> <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "examples/debugging/output"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "examples/debugging/output"
+        }
+      }
     },
     {
       "module": "loader.ObjectLoader",
@@ -42,6 +41,26 @@
         "file_format": "location rotation/value",
         "default_cam_param": {
           "fov": 1
+        }
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
         }
       }
     }

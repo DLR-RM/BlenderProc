@@ -1,21 +1,38 @@
-import numpy as np
 import mathutils
+import numpy as np
 
 from src.main.Provider import Provider
 
+
 class Shell(Provider):
-    """ Samples a point from the space in between two spheres with a spherical angle (sampling cone) with apex in the center of those two spheres.
+    """ Samples a point from the space in between two spheres with a a double spherical angle with apex in the center
+        of those two spheres.
+
+        Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
+        that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
+
+        {
+          "provider": "sampler.Shell",
+          "center": [0, 0, -0.8],
+          "radius_min": 1,
+          "radius_max": 4,
+          "elevation_min": 40,
+          "elevation_max": 89
+        }
+
 
     **Configuration**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "center", "Center of two spheres."
-        "radius_min", "Radius of a smaller sphere. Units: meters."
-        "radius_max", "Radius of a bigger sphere. Units: meters."
-        "elevation_min", "Minimum angle of elevation: defines slant height of the sampling cone. Units: degrees."
-        "elevation_max", "Maximum angle of elevation: defines slant height of the rejection cone. Units: degrees."
+        "center", "Center which is shared by both structure-defining spheres. Type: mathutils.Vector."
+        "radius_min", "Radius of a smaller sphere. Type: float."
+        "radius_max", "Radius of a bigger sphere. Type: float."
+        "elevation_min", "Minimum angle of elevation in degrees: defines slant height of the sampling cone. "
+                         "Type: float. Range: [0, 90]."
+        "elevation_max", "Maximum angle of elevation in degrees: defines slant height of the rejection cone. "
+                         "Type: float. Range: [0, 90]."
     """
 
     def __init__(self, config):
@@ -41,7 +58,7 @@ class Shell(Provider):
         elevation_max = self.config.get_float("elevation_max")
         if elevation_max == 90:
             # behold! magic number
-            elevation_max = 0
+            elevation_max = 0.001
         # Height of a sampling cone
         H = 1
         

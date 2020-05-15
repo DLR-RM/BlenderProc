@@ -12,7 +12,7 @@ class Utility:
     working_dir = ""
 
     @staticmethod
-    def initialize_modules(module_configs, global_config):
+    def initialize_modules(module_configs):
         """ Initializes the modules described in the given configuration.
 
         Example for module_configs:
@@ -23,35 +23,21 @@ class Utility:
 
         Here the name contains the path to the module class, starting from inside the src directory.
 
-        Example for global_config:
-        {"base": {
-            param: 42
-        }}
-
-        In this way all modules with prefix "base" will inherit "param" into their configuration.
-        Local config always overwrites global.
-        Parameters specified under "all" in the global config are inherited by all modules.
+        Be aware that all attributes stored in the GlobalStorage are also accessible here, even though
+        they are not copied into the new config.
 
         :param module_configs: A list of dicts, each one describing one module.
-        :param global_config: A dict containing the global configuration.
         :return:
         """
         modules = []
-        all_base_config = global_config["all"] if "all" in global_config else {}
 
         for module_config in module_configs:
             # If only the module name is given (short notation)
             if isinstance(module_config, str):
                 module_config = {"module": module_config}
 
-            # Merge global and local config (local overwrites global)
-            model_type = module_config["module"].split(".")[0]
-            base_config = global_config[model_type] if model_type in global_config else {}
-
-            # Initialize config with all_base_config
-            config = deepcopy(all_base_config)
-            # Overwrite with module type base config
-            Utility.merge_dicts(base_config, config)
+            # Initialize config with empty config
+            config = {}
             # Check if there is a module specific config
             if "config" in module_config:
                 # Overwrite with module specific config
@@ -110,9 +96,27 @@ class Utility:
 
         if path.startswith("/"):
             return path
+        elif path.startswith("~"):
+            return path.replace("~", os.getenv("HOME"))
         else:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
+    @staticmethod
+    def get_temporary_directory(config_object):
+        ''' 
+        :return: default temporary directory, shared memory if it exists
+        '''
+
+        # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
+        if os.path.exists("/dev/shm"):
+            default_temp_dir = "/dev/shm"
+        else:
+            default_temp_dir = "/tmp"
+
+        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + str(os.getpid())))
+
+        return temp_dir
+    
     @staticmethod
     def merge_dicts(source, destination):
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
@@ -181,7 +185,29 @@ class Utility:
                 links.remove(l)
 
         links.new(source_socket, new_node_dest_socket)
-        links.new(new_node_src_socket, dest_socket)
+        links.new(new_node_src_socket, dest_socket)\
+
+    @staticmethod
+    def get_node_connected_to_the_output_and_unlink_it(material):
+        """
+        Searches for the OutputMaterial in the given material and finds the connected node to it,
+        removes the connection between this node and the output and returns this node and the material_output
+        :param material_slot: material slot (
+        """
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+
+        material_output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
+        # find the node, which is connected to the output
+        node_connected_to_the_output = None
+        for link in links:
+            if link.to_node == material_output:
+                node_connected_to_the_output = link.from_node
+                # remove this link
+                links.remove(link)
+                break
+        return node_connected_to_the_output, material_output
+
 
     @staticmethod
     def get_nodes_with_type(nodes, node_type):
@@ -192,6 +218,23 @@ class Utility:
         :return: list of nodes, which belong to the type
         """
         return [node for node in nodes if node_type in node.bl_idname]
+
+    @staticmethod
+    def get_the_one_node_with_type(nodes, node_type):
+        """
+        Returns the one nodes which is of the given node_type
+
+        This function will only work if there is only one of the nodes of this type.
+
+        :param nodes: list of nodes of the current material
+        :param node_type: node types
+        :return: node of the node type
+        """
+        node = Utility.get_nodes_with_type(nodes, node_type)
+        if node and len(node) == 1:
+            return node[0]
+        else:
+            raise Exception("There is not only one node of this type: {}".format(node_type))
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.
@@ -213,18 +256,21 @@ class Utility:
 
         Usage: with UndoAfterExecution():
         """
-        def __init__(self, check_point_name=None):
+        def __init__(self, check_point_name=None, perform_undo_op=True):
             if check_point_name is None:
                 check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
             self.check_point_name = check_point_name
+            self._perform_undo_op = perform_undo_op
 
         def __enter__(self):
-            bpy.ops.ed.undo_push(message="before " + self.check_point_name)
+            if self._perform_undo_op:
+                bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
         def __exit__(self, type, value, traceback):
-            bpy.ops.ed.undo_push(message="after " + self.check_point_name)
-            # The current state points to "after", now by calling undo we go back to "before"
-            bpy.ops.ed.undo()
+            if self._perform_undo_op:
+                bpy.ops.ed.undo_push(message="after " + self.check_point_name)
+                # The current state points to "after", now by calling undo we go back to "before"
+                bpy.ops.ed.undo()
 
     @staticmethod
     def build_provider(name, parameters):
@@ -331,27 +377,45 @@ class Utility:
         return np.round(values)
 
     @staticmethod
-    def import_objects(filepath, **kwargs):
+    def import_objects(filepath, cached_objects=None, **kwargs):
         """ Import all objects for the given file and returns the loaded objects
 
         In .obj files a list of objects can be saved in.
         In .ply files only one object can saved so the list has always at most one element
 
         :param filepath: the filepath to the location where the data is stored
+        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is updated in this function)
         :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
         :return: a list of all newly loaded objects, in the failure case an empty list is returned
         """
         if os.path.exists(filepath):
-            # save all selected objects
-            previously_selected_objects = set(bpy.context.selected_objects)
-            if filepath.endswith('.obj'):
-                # load an .obj file:
-                bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
-            elif filepath.endswith('.ply'):
-                # load a .ply mesh
-                bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
-            # return all currently selected objects
-            return list(set(bpy.context.selected_objects) - previously_selected_objects)
+            if cached_objects is not None and isinstance(cached_objects, dict):
+                if filepath in cached_objects.keys():
+                    created_obj = []
+                    for obj in cached_objects[filepath]:
+                        # deselect all objects and duplicate the object
+                        bpy.ops.object.select_all(action='DESELECT')
+                        obj.select_set(True)
+                        bpy.ops.object.duplicate()
+                        # save the duplicate in new list
+                        if len(bpy.context.selected_objects) != 1:
+                            raise Exception("The amount of objects after the copy was more than one!")
+                        created_obj.append(bpy.context.selected_objects[0])
+                    return created_obj
+                else:
+                    loaded_objects = Utility.import_objects(filepath, cached_objects=None, **kwargs)
+                    cached_objects[filepath] = loaded_objects
+                    return loaded_objects
+            else:
+                # save all selected objects
+                previously_selected_objects = set(bpy.context.selected_objects)
+                if filepath.endswith('.obj'):
+                    # load an .obj file:
+                    bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+                elif filepath.endswith('.ply'):
+                    # load a .ply mesh
+                    bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+                # return all currently selected objects
+                return list(set(bpy.context.selected_objects) - previously_selected_objects)
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))
-        return []

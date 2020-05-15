@@ -17,14 +17,21 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
 * `examples/object_poses_sampling/scene.obj`: path to the object file with the basic scene.
 * `examples/object_pose_sampling/output`: path to the output directory.
 
+## Visualization
+
+Visualize the generated data:
+
+```
+python scripts/visHdf5Files.py examples/object_pose_sampling/output/0.hdf5
+```
+
 ## Steps
 
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
 * Sample object poses: `object.ObjectPoseSampler` module.
-* Renders normals: `renderer.NormalRenderer` module.
-* Renders rgb: `renderer.RgbRenderer` module.
+* Renders rgb: `renderer.RgbRenderer` module plus normals.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -39,7 +46,7 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
     "objects_to_sample": {
       "provider": "getter.Entity",
       "condition": {
-        "sample_pose": True 
+        "cp_sample_pose": True 
       }
     },
     "pos_sampler":{
@@ -59,14 +66,6 @@ python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sam
 `object.ObjectPoseSampler` for each `passive` object in the scene places the object outside the sampling volume until there are objects remaining and `max_iterations` have not been reached, point is sampled.
 Then the object is placed at the sampled point with collision check. If there is a collision - the position is reset and module tries to sample a new one.
 Here we are sampling location and rotation using `sampler.Uniform3d` provider.
-
-## Visualization
-
-Visualize the generated data:
-
-```
-python scripts/visHdf5Files.py examples/object_pose_sampling/output/0.hdf5
-```
 
 ## More examples
 

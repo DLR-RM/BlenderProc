@@ -1,19 +1,28 @@
-import mathutils
 import random
 
+import mathutils
+
 from src.main.Provider import Provider
+
 
 class Uniform3d(Provider):
     """ Uniformly samples a 3-dimensional vector.
 
+        Example 1: Return a uniform;y sampled 3d vector from a range [min, max].
+
+        {
+          "provider": "sampler.Uniform3d",
+          "max": [0.5, 0.5, 0.5],
+          "min": [-0.5, -0.5, -0.5]
+        }
+
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "min", "A list of three values, describing the minimum values for 1st, 2nd, and 3rd dimensions."
-       "max", "A list of three values, describing the maximum values for 1st, 2nd, and 3rd dimensions."
-
+        "min", "A list of three values, describing the minimum values of 1st, 2nd, and 3rd dimensions. Type: list."
+        "max", "A list of three values, describing the maximum values of 1st, 2nd, and 3rd dimensions. Type: list."
     """
 
     def __init__(self, config):

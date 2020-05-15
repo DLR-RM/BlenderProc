@@ -1,0 +1,85 @@
+# Args: <path_to_the_replica_data_folder>  <output_path>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "data_set_name": "office_1",
+          "data_path": "<args:0>",
+          "pixel_aspect_x": 1.333333333
+        }
+      }
+    },
+    {
+      "module": "loader.ReplicaLoader",
+      "config": {
+        "use_smooth_shading": True,
+        "use_ambient_occlusion": True
+      }
+    },
+    {
+      "module": "object.FloorExtractor",
+      "config": {
+        "is_replica_object": True,
+        "obj_name": "mesh",
+        "compare_angle_degrees" : 7.5, # max angle difference to up facing polygons
+        "compare_height": 0.15  # height, which is allowed for polygons to be away from the height level in up and down dir.
+      }
+    },
+    {
+      "module": "camera.ReplicaCameraSampler",
+      "config": {
+        "is_replica_object": True,
+        "cam_poses": [{
+          "number_of_samples": 15,
+          "clip_start": 0.01,
+          "proximity_checks": {
+            "min": 1.0,
+            "avg": {
+              "min": 2.0,
+              "max": 4.0
+            }
+          },
+          "location": [0, 0, 1.55],
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.373401334, 0, 6.283185307],
+              "min":[1.373401334, 0, 0]
+            }
+          },
+        }]
+      }
+    },
+    {
+      "module": "materials.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "ReplicaMaterial"
+          }
+        },
+        "cf_change_to_vertex_color": "Col"
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "render_normals": True
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+    }
+  ]
+}

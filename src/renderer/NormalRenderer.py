@@ -3,11 +3,18 @@ import bpy
 from src.renderer.Renderer import Renderer
 from src.utility.Utility import Utility
 
-class NormalRenderer(Renderer):
-    """  Renders normal images for each registered keypoint.
 
-    Every object's materials are replaced with an imported normal material to render normals.
-    The rendering is stored using the .exr filetype and a color depth of 32bit to achieve high precision.
+class NormalRenderer(Renderer):
+    """  Renders normal images for each registered key point.
+
+    Be aware that this can also be done by setting in any other renderer the `render_normals` to true.
+
+    The key difference here is that this renderer replaces every object's materials with an imported normal
+    material to render normals. The rendering is stored using the .exr file type and a color depth of 32bit
+    to achieve high precision. Furthermore, the `render_normals` mode supports anti-aliasing, while this
+    renderer does not.
+
+    This is only useful if you only want normals and no color.
     """
 
     def __init__(self, config):
@@ -42,11 +49,7 @@ class NormalRenderer(Renderer):
 
         emission_node = nodes.new(type='ShaderNodeEmission')
 
-        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-        if output and len(output) == 1:
-            output = output[0]
-        else:
-            raise Exception("This material: {} has not one material output!".format(new_mat.name))
+        output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
 
         links.new(texture_coord_node.outputs['Normal'], vector_transform_node.inputs['Vector'])
         links.new(vector_transform_node.outputs['Vector'], mapping_node.inputs['Vector'])
