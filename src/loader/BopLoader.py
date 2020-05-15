@@ -98,7 +98,7 @@ class BopLoader(Loader):
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
-        cam['loaded_resolution'] = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+        cam['loaded_resolution'] = split_p['im_size'][0], split_p['im_size'][1]
         # load default intrinsics from camera.json
         cam['loaded_intrinsics'] = cam_p['K']
         
@@ -177,8 +177,8 @@ class BopLoader(Loader):
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
 
-        :param cam_H_m2c_ref: (4x4) Homog trafo from object to world coord. Type: ndarray.
-        :param cam_H_m2w_ref: (4x4) Homog trafo from object to camera coords. Type: ndarray.
+        :param cam_H_m2c_ref: (4x4) Homog trafo from object to camera coords. Type: ndarray.
+        :param cam_H_m2w_ref: (4x4) Homog trafo from object to world coords. Type: ndarray.
         :return: cam_H_c2w: (4x4) Homog trafo from camera to world coords. Type: mathutils.Matrix.
         """
 
