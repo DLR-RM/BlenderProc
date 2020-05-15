@@ -11,7 +11,7 @@
 
 - added the NormalRenderer functions to the RGBRenderer saves a render call, when generating normal images
 - added a script to automatically download all PBR assest from [https://cc0textures.com/](https://cc0textures.com/)
-- add CCMaterialLoader can load all downloaded materials from cc0textures, to randomly replace them later
+- add CCMaterialLoader, which can load all downloaded materials from cc0textures, to randomly replace them later
 - add support for ShapeNet
 - add support for SceneNet, including the lighting, which is modeled after the SUNCG lighting module.
 - massive docu improvements, added a type to all config values and a default value if one is there
@@ -142,4 +142,3 @@
 - Added MaterialRandomizer
 - Added Shell-, Sphere- and Uniform3DSampler
 - Added debug script
-
