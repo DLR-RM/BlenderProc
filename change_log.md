@@ -50,6 +50,7 @@
 - improved the capabilities of the DiscSampler
 - now all custom properties should be accessed in the config via: "cp_..." for custom functions: "cf_"
 - add texture support for ycbv objects in the BopLoader
+- change the default results of the SegMapRenderer to NYU ids instead of the row-index in the .csv file.
 
 ## Version 1.3.0: 25th March 2020
 - added Optical Flow Renderer 
