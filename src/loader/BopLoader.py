@@ -9,6 +9,7 @@ from mathutils import Matrix, Vector
 
 from src.camera.CameraModule import CameraModule
 from src.loader.Loader import Loader
+from src.utility.Utility import Utility
 from src.utility.Config import Config
 
 
@@ -129,7 +130,7 @@ class BopLoader(Loader):
                         loaded_ids.update({random_id: 0})
                     # if there is no limit or if there is one, but it is not reached for this particular object
                     if self.obj_instances_limit == -1 or loaded_ids[random_id] < self.obj_instances_limit:
-                        cur_obj = self._load_mesh(random_id, model_p, dataset, scale=self.scale)
+                        cur_obj = self._load_mesh(random_id, model_p, scale=self.scale)
                         loaded_ids[random_id] += 1
                         loaded_amount += 1
                         loaded_objects.append(cur_obj)
@@ -139,7 +140,7 @@ class BopLoader(Loader):
                                                        loaded_amount, self.num_of_objs_to_sample))
             else:
                 for obj_id in obj_ids:
-                    cur_obj = self._load_mesh(obj_id, model_p, dataset, scale=self.scale)
+                    cur_obj = self._load_mesh(obj_id, model_p, scale=self.scale)
                     loaded_objects.append(cur_obj)
             self._set_properties(loaded_objects)
 
@@ -157,7 +158,7 @@ class BopLoader(Loader):
                     cur_objs = []
                     # load scene objects and set their poses
                     for inst in insts:                           
-                        cur_objs.append(self._load_mesh(inst['obj_id'], model_p, dataset, scale=self.scale))
+                        cur_objs.append(self._load_mesh(inst['obj_id'], model_p, scale=self.scale))
                         self.set_object_pose(cur_objs[-1], inst, self.scale)
                         
 
@@ -256,7 +257,7 @@ class BopLoader(Loader):
         return
 
 
-    def _load_mesh(self, obj_id, model_p, dataset, scale=1):
+    def _load_mesh(self, obj_id, model_p, scale=1):
         """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object. Type: int.
