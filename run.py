@@ -1,5 +1,6 @@
 import argparse
 import os
+from os.path import join
 import tarfile
 import subprocess
 import shutil
@@ -36,8 +37,11 @@ if "custom_blender_path" not in setup_config:
     if "blender_install_path" in setup_config:
         blender_install_path = setup_config["blender_install_path"]
         if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
-            print("Warning: Changed install path from /home_local/... to /home/..., there is no /home_local/ on this machine.")
-            blender_install_path = blender_install_path.replace("/home_local", "/home", 1)
+            user_name = os.getenv("USER")
+            home_path = os.getenv("HOME")
+            print("Warning: Changed install path from {}... to {}..., there is no /home_local/ "
+                  "on this machine.".format(join("/home_local", user_name), home_path))
+            blender_install_path = blender_install_path.replace(join("/home_local", user_name), home_path, 1)
     else:
         blender_install_path = "blender"
         
