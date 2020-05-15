@@ -25,8 +25,8 @@
       "config": {
         "bop_dataset_path": "<args:0>",
         "mm2m": True,
-        "split": "val", # careful, some BOP datasets only have test sets
-        "scene_id": 3,
+        "split": "test", # careful, some BOP datasets only have test sets
+        "scene_id": 1,
         "model_type": ""
       }
     },

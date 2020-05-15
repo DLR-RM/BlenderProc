@@ -1,8 +1,9 @@
 import json
 import os
+import math
 
 import bpy
-from mathutils import Euler
+from mathutils import Euler, Matrix, Vector
 
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.writer.StateWriter import StateWriter
@@ -28,7 +29,9 @@ class BopWriter(StateWriter):
 
 
     def initialize_bop_groups(self):
-        # Get and group all objects belonging to different bop datasets
+        """ Get and group all objects to their respective bop dataset
+        """
+
         all_mesh_objects = get_all_mesh_objects()
         bop_datasets = {}
         for obj in all_mesh_objects:
@@ -116,6 +119,29 @@ class BopWriter(StateWriter):
 
         return super()._get_attribute(object, attribute_name)
 
+    def get_camK_from_blender_attributes(self, cam_pose):
+        half_angle_x = self._get_camera_attribute(cam_pose, 'half_fov_x')
+        half_angle_y = self._get_camera_attribute(cam_pose, 'half_fov_y')
+        shift_x = self._get_camera_attribute(cam_pose, 'shift_x')
+        shift_y = self._get_camera_attribute(cam_pose, 'shift_y')
+        syn_cam_K = self._get_camera_attribute(cam_pose, 'loaded_intrinsics')
+
+
+        width, height = bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y
+
+        cam_K = [0.] * 9
+        cam_K[-1] = 1
+
+        max_resolution = max(width, height)
+        
+        cam_K[0] = syn_cam_K[0]
+        cam_K[4] = syn_cam_K[4]
+ 
+        cam_K[2] = width/2. - shift_x * max_resolution
+        cam_K[5] = height/2. + shift_y * max_resolution
+
+        return cam_K
+
     def _write_scene_gt(self, bop_group): 
         """ Creates and writes scene_gt.json in output_dir.
         
@@ -127,30 +153,43 @@ class BopWriter(StateWriter):
         if self.config.get_bool("append_to_existing_output", False) and os.path.exists(self._scene_gt_path[bop_group]):
             with open(self._scene_gt_path[bop_group], 'r') as fp:
                 scene_gt = json.load(fp)
-            frame_offset = int(sorted(scene_gt.keys())[-1])
+            frame_offset = int(sorted(scene_gt.keys())[-1]) + 1
         else:
             frame_offset = 0
 
         # Go Through all frames
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             bpy.context.scene.frame_set(frame)
-            # We add one to match the numbering system of bop toolkit
-            current_frame = frame + 1 + frame_offset
+            current_frame = frame + frame_offset
             scene_gt[current_frame] = []
+
+            camera_rotation = self._get_camera_attribute(self.cam_pose, 'rotation_euler')
+            camera_translation = self._get_camera_attribute(self.cam_pose, 'location')
+            H_c2w = Matrix.Translation(Vector(camera_translation)) @ Euler(camera_rotation, 'XYZ').to_matrix().to_4x4()
+
+            # blender to opencv coordinates
+            H_c2w_opencv = H_c2w @ Matrix.Rotation(math.radians(-180), 4, "X")
+
             for idx, obj in enumerate(self.bop_datasets[bop_group]):
                 
-                # Convert the rotation_euler matrix into a list to match scene_gt fromat
-                rotation_vector = self._get_object_attribute(obj, 'rotation_euler')
-                rot_matrix_as_list = []
-                for v in Euler(rotation_vector).to_matrix()[:]:
-                    rot_matrix_as_list += list(v)
+                object_rotation = self._get_object_attribute(obj, 'rotation_euler')
+                object_translation = self._get_object_attribute(obj, 'location')
+                H_m2w = Matrix.Translation(Vector(object_translation)) @ Euler(object_rotation, 'XYZ').to_matrix().to_4x4()
                 
-                scene_gt[current_frame].append({'cam_R_m2c': rot_matrix_as_list,
-                                        'cam_t_m2c': list(1000*self._get_object_attribute(obj, 'location')),
-                                        'obj_id': self._get_object_attribute(obj, 'id')})
+                cam_H_m2c = (H_m2w.inverted() @ H_c2w_opencv).inverted()
+
+                cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
+                cam_R_m2c = list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2])
+                cam_t_m2c = list(cam_H_m2c.to_translation() * 1000.)
+                
+                scene_gt[current_frame].append({'cam_R_m2c': cam_R_m2c,
+                                                'cam_t_m2c': cam_t_m2c,
+                                                'obj_id': self._get_object_attribute(obj, 'id')})
+
             dir_folder = os.path.dirname(self._scene_gt_path[bop_group])
             if not os.path.exists(dir_folder):
                 os.makedirs(dir_folder)
+
             with open(self._scene_gt_path[bop_group], 'w') as scene_gt_file:
                 json.dump(scene_gt, scene_gt_file)
         
@@ -167,16 +206,15 @@ class BopWriter(StateWriter):
         if self.config.get_bool("append_to_existing_output", False) and os.path.exists(self._scene_camera_path[bop_group]):
             with open(self._scene_camera_path[bop_group], 'r') as fp:
                 scene_camera = json.load(fp)
-            frame_offset = int(sorted(scene_camera.keys())[-1])
+            frame_offset = int(sorted(scene_camera.keys())[-1]) + 1
         else:
             frame_offset = 0 
 
         # Go Through all frames
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             bpy.context.scene.frame_set(frame)
-            # We add one to match the numbering system of bop toolkit
-            current_frame = frame + 1 + frame_offset
-            scene_camera[current_frame] = {'cam_K': list(self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')),
+            current_frame = frame + frame_offset
+            scene_camera[current_frame] = {'cam_K': list(self.get_camK_from_blender_attributes(self.cam_pose)),
                                    'depth_scale': 0.001}
             with open(self._scene_camera_path[bop_group], 'w') as scene_camera_file:
                 json.dump(scene_camera, scene_camera_file)
@@ -195,7 +233,7 @@ class BopWriter(StateWriter):
             width = bpy.context.scene.render.resolution_x
             height = bpy.context.scene.render.resolution_y
 
-        cam_K = self._get_camera_attribute(self.cam_pose, 'loaded_intrinsics')
+        cam_K = self.get_camK_from_blender_attributes(self.cam_pose)
         camera = {'cx': cam_K[2],
                   'cy': cam_K[5],
                   'depth_scale': 0.001,
