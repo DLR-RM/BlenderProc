@@ -148,6 +148,9 @@ class BopWriter(StateWriter):
                 scene_gt[current_frame].append({'cam_R_m2c': rot_matrix_as_list,
                                         'cam_t_m2c': list(1000*self._get_object_attribute(obj, 'location')),
                                         'obj_id': self._get_object_attribute(obj, 'id')})
+            dir_folder = os.path.dirname(self._scene_gt_path[bop_group])
+            if not os.path.exists(dir_folder):
+                os.makedirs(dir_folder)
             with open(self._scene_gt_path[bop_group], 'w') as scene_gt_file:
                 json.dump(scene_gt, scene_gt_file)
         

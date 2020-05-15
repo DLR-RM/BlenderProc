@@ -3,8 +3,11 @@ import json
 import os
 import random
 
+import bpy
+
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
+from src.utility.LabelIdMapping import LabelIdMapping
 
 
 class ShapeNetLoader(Loader):
@@ -14,6 +17,11 @@ class ShapeNetLoader(Loader):
     From these objects one is randomly sampled and loaded.
 
     As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
+
+    Finally it sets all objects to have a category_id corresponding to the void class, 
+    so it wouldn't trigger an exception in the SegMapRenderer.
+
+    Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other module is loaded first in the config file.
 
     **Configuration**:
 
@@ -68,6 +76,10 @@ class ShapeNetLoader(Loader):
 
         self._set_properties(loaded_obj)
 
+        if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
+            for obj in loaded_obj:
+                obj['category_id'] = LabelIdMapping.label_id_map["void"]
+
     def _correct_materials(self, objects):
         """
         If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
@@ -95,4 +107,3 @@ class ShapeNetLoader(Loader):
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
-
