@@ -232,7 +232,7 @@ class BopLoader(Loader):
 
         :param sc_camera: BOP scene_camera file. Type: dict.
         :param cam_id: BOP camera id. Type: int.
-        :param inst: Instance from BOP scene_gt file. Type: dict.
+        :param insts: Instance from BOP scene_gt file. Type: dict.
         :param scale: Factor to transform get pose in mm or meters. Type: int.
         :return camK : loaded camera matrix. Type: ndarray.
         :return cam_H_m2c_ref: loaded object to camera transformation. Type: ndarray.
@@ -315,7 +315,7 @@ class BopLoader(Loader):
     def _load_materials(self, cur_obj):
         """ Loads / defines materials, e.g. vertex colors.
         
-        :param object: The object to use. Type: bpy.types.Object.
+        :param cur_obj: The object to use. Type: bpy.types.Object.
         :return: Material with vertex color. Type: bpy.types.Material.
         """
 
@@ -370,7 +370,7 @@ class BopLoader(Loader):
     def _link_col_node(self, mat):
         """ Links a color attribute node to a Principled BSDF node.
 
-        :param object: The material to use. Type: bpy.types.Object.
+        :param mat: The material to use. Type: bpy.types.Material.
         """
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
