@@ -145,17 +145,21 @@ class BopLoader(Loader):
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id': self.scene_id}))
             sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id': self.scene_id}))
-            
             for i, (cam_id, insts) in enumerate(sc_gt.items()):
-
                 cam_K, cam_H_m2c_ref = self._get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, insts, self.scale)
 
                 if i == 0:
                     # define world = first camera
                     cam_H_m2w_ref = cam_H_m2c_ref.copy()
-               
+
+                    cur_objs = []
+                    # load scene objects and set their poses
+                    for inst in insts:                           
+                        cur_objs.append(self._load_mesh(inst['obj_id'], model_p, dataset, scale=self.scale))
+                        self.set_object_pose(cur_objs[-1], inst, self.scale)
+                        
+
                 cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
-                
                 #set camera intrinsics and extrinsics 
                 config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), "cam_K": list(cam_K.flatten())})
                 camera_module._set_cam_intrinsics(cam, config)
@@ -163,11 +167,9 @@ class BopLoader(Loader):
 
                 # Store new cam pose as next frame
                 frame_id = bpy.context.scene.frame_end
-                for inst in insts:                           
-                    cur_obj = self._load_mesh(inst['obj_id'], model_p, dataset)
-                    self.set_object_pose(cur_obj, inst, self.scale)
+                # Copy object poses to next key frame (to be sure)
+                for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
-
                 camera_module._insert_key_frames(cam, cam_ob, frame_id)
                 bpy.context.scene.frame_end = frame_id + 1
 
@@ -234,7 +236,6 @@ class BopLoader(Loader):
         """
 
         cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
-
         cam_H_m2c_ref = np.eye(4)
         cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
         cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * scale
