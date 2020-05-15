@@ -134,7 +134,9 @@ class BopWriter(StateWriter):
 
         max_resolution = max(width, height)
         
-        cam_K[0] = syn_cam_K[0] #width / (2 * math.tan(half_angle_x))
+        cam_K[0] = syn_cam_K[0]
+``
+?
         cam_K[4] = syn_cam_K[4]
  
         cam_K[2] = width/2. - shift_x * max_resolution
