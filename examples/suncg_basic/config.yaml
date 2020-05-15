@@ -1,4 +1,4 @@
-# Args: <obj_file> <output_dir>
+# Args: <cam_file> <obj_file> <output_dir>
 {
   "version": 3,
   "setup": {

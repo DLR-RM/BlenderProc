@@ -14,9 +14,9 @@ python run.py examples/physics_positioning/config.yaml examples/physics_position
 ```
 
 * `examples/physics_positioning/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/physics_positioning/output`: path to the output directory.
 * `examples/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.
 * `examples/physics_positioning/passive.obj`: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.
+* `examples/physics_positioning/output`: path to the output directory.
 
 ## Visualization
 

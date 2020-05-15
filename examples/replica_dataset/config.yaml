@@ -1,4 +1,4 @@
-# Args: path_to_the_replica_data_folder  output_path
+# Args: <path_to_the_replica_data_folder>  <output_path>
 {
   "version": 3,
   "setup": {
