@@ -64,7 +64,8 @@ class BopLoader(Loader):
         self.split = self.config.get_string("split", "test")
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
-        
+        self.bop_dataset_name = os.path.basename(self.bop_dataset_path)
+
     def run(self):
         """ Load BOP data """
 
@@ -279,7 +280,8 @@ class BopLoader(Loader):
         cur_obj['model_path'] = model_path     
         mat = self._load_materials(cur_obj, dataset)
         self._link_col_node(mat)
-
+        cur_obj["is_bop_object"] = True
+        cur_obj["bop_dataset_name"] = self.bop_dataset_name
         return cur_obj
 
     def _load_materials(self, cur_obj, dataset):
