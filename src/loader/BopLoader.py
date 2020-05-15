@@ -65,6 +65,7 @@ class BopLoader(Loader):
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
         self.bop_dataset_name = os.path.basename(self.bop_dataset_path)
+        self._is_ycbv = self.bop_dataset_name == "ycbv"
 
     def run(self):
         """ Load BOP data """
@@ -265,26 +266,52 @@ class BopLoader(Loader):
 
         model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
 
+        texture_file_path = ""  # only needed for ycbv objects
+
         # Gets the objects if it is already loaded         
         cur_obj = self._get_loaded_obj(model_path)
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
         if cur_obj is None:
-            bpy.ops.import_mesh.ply(filepath=model_path)
-            cur_obj = bpy.context.selected_objects[-1]
+            if self._is_ycbv:
+                if os.path.exists(model_path):
+                    new_file_ply_content = ""
+                    with open(model_path, "r") as file:
+                        new_file_ply_content = file.read()
+                        texture_pos = new_file_ply_content.find("comment TextureFile ") + len("comment TextureFile ")
+                        texture_file_name = new_file_ply_content[texture_pos:
+                                                                 new_file_ply_content.find("\n", texture_pos)]
+                        texture_file_path = os.path.join(os.path.dirname(model_path), texture_file_name)
+                        new_file_ply_content = new_file_ply_content.replace("property float texture_u",
+                                                                            "property float s")
+                        new_file_ply_content = new_file_ply_content.replace("property float texture_v",
+                                                                            "property float t")
+                    model_name = os.path.basename(model_path)
+                    tmp_ply_file = os.path.join(Utility.get_temporary_directory(self.config), model_name)
+                    with open(tmp_ply_file, "w") as file:
+                        file.write(new_file_ply_content)
+                    bpy.ops.import_mesh.ply(filepath=tmp_ply_file)
+                    cur_obj = bpy.context.selected_objects[-1]
+            else:
+                bpy.ops.import_mesh.ply(filepath=model_path)
+                cur_obj = bpy.context.selected_objects[-1]
         elif self.allow_duplication:
             bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
             cur_obj = bpy.context.selected_objects[-1]
 
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
-        cur_obj['model_path'] = model_path     
-        mat = self._load_materials(cur_obj, dataset)
-        self._link_col_node(mat)
+        cur_obj['model_path'] = model_path
+        if not self._is_ycbv:
+            mat = self._load_materials(cur_obj)
+            self._link_col_node(mat)
+        else:
+            # ycbv objects contain normal image textures, which should be used instead of the vertex colors
+            self._load_texture(cur_obj, texture_file_path)
         cur_obj["is_bop_object"] = True
         cur_obj["bop_dataset_name"] = self.bop_dataset_name
         return cur_obj
 
-    def _load_materials(self, cur_obj, dataset):
+    def _load_materials(self, cur_obj):
         """ Loads / defines materials, e.g. vertex colors.
         
         :param object: The object to use. Type: bpy.types.Object.
@@ -295,7 +322,7 @@ class BopLoader(Loader):
         
         if mat is None:
             # create material
-            mat = bpy.data.materials.new(name="bop_" + dataset + "_vertex_col_material")
+            mat = bpy.data.materials.new(name="bop_" + self.bop_dataset_name + "_vertex_col_material")
 
         mat.use_nodes = True
 
@@ -307,6 +334,37 @@ class BopLoader(Loader):
             cur_obj.data.materials.append(mat)
 
         return mat
+
+    def _load_texture(self, cur_obj, texture_file_path):
+        """
+        Load the textures for the ycbv objects, only those contain texture information
+
+        :param cur_obj: The object to use. Type: bpy.types.Object.
+        :param texture_file_path: path to the texture file (most likely ".png")
+        """
+        mat = bpy.data.materials.new(name="bop_" + self.bop_dataset_name + "_texture_material")
+
+        mat.use_nodes = True
+
+        nodes = mat.node_tree.nodes
+        links = mat.node_tree.links
+
+        color_image = nodes.new('ShaderNodeTexImage')
+        if not os.path.exists(texture_file_path):
+            raise Exception("The texture path for the ycbv object could not be loaded from the "
+                            "file: {}".format(texture_file_path))
+        color_image.image = bpy.data.images.load(texture_file_path, check_existing=True)
+
+        principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+        links.new(color_image.outputs["Color"], principled.inputs["Base Color"])
+
+        if cur_obj.data.materials:
+            # assign to 1st material slot
+            cur_obj.data.materials[0] = mat
+        else:
+            # no slots
+            cur_obj.data.materials.append(mat)
+
 
     def _link_col_node(self, mat):
         """ Links a color attribute node to a Principled BSDF node.
