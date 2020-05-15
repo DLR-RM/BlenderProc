@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <obj_file> <texture_file> <path_to_shape-net-core> <output_dir>
 {
   "version": 3,
   "setup": {
