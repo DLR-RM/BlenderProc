@@ -9,6 +9,7 @@ from mathutils import Matrix, Vector
 
 from src.camera.CameraModule import CameraModule
 from src.loader.Loader import Loader
+from src.utility.Utility import Utility
 from src.utility.Config import Config
 
 
@@ -64,7 +65,9 @@ class BopLoader(Loader):
         self.split = self.config.get_string("split", "test")
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
-        
+        self.bop_dataset_name = os.path.basename(self.bop_dataset_path)
+        self._is_ycbv = self.bop_dataset_name == "ycbv"
+
     def run(self):
         """ Load BOP data """
 
@@ -127,7 +130,7 @@ class BopLoader(Loader):
                         loaded_ids.update({random_id: 0})
                     # if there is no limit or if there is one, but it is not reached for this particular object
                     if self.obj_instances_limit == -1 or loaded_ids[random_id] < self.obj_instances_limit:
-                        cur_obj = self._load_mesh(random_id, model_p, dataset, scale=self.scale)
+                        cur_obj = self._load_mesh(random_id, model_p, scale=self.scale)
                         loaded_ids[random_id] += 1
                         loaded_amount += 1
                         loaded_objects.append(cur_obj)
@@ -137,7 +140,7 @@ class BopLoader(Loader):
                                                        loaded_amount, self.num_of_objs_to_sample))
             else:
                 for obj_id in obj_ids:
-                    cur_obj = self._load_mesh(obj_id, model_p, dataset, scale=self.scale)
+                    cur_obj = self._load_mesh(obj_id, model_p, scale=self.scale)
                     loaded_objects.append(cur_obj)
             self._set_properties(loaded_objects)
 
@@ -145,17 +148,21 @@ class BopLoader(Loader):
         else:
             sc_gt = inout.load_scene_gt(split_p['scene_gt_tpath'].format(**{'scene_id': self.scene_id}))
             sc_camera = inout.load_json(split_p['scene_camera_tpath'].format(**{'scene_id': self.scene_id}))
-            
             for i, (cam_id, insts) in enumerate(sc_gt.items()):
-
                 cam_K, cam_H_m2c_ref = self._get_ref_cam_extrinsics_intrinsics(sc_camera, cam_id, insts, self.scale)
 
                 if i == 0:
                     # define world = first camera
                     cam_H_m2w_ref = cam_H_m2c_ref.copy()
-               
+
+                    cur_objs = []
+                    # load scene objects and set their poses
+                    for inst in insts:                           
+                        cur_objs.append(self._load_mesh(inst['obj_id'], model_p, scale=self.scale))
+                        self.set_object_pose(cur_objs[-1], inst, self.scale)
+                        
+
                 cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
-                
                 #set camera intrinsics and extrinsics 
                 config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), "cam_K": list(cam_K.flatten())})
                 camera_module._set_cam_intrinsics(cam, config)
@@ -163,11 +170,9 @@ class BopLoader(Loader):
 
                 # Store new cam pose as next frame
                 frame_id = bpy.context.scene.frame_end
-                for inst in insts:                           
-                    cur_obj = self._load_mesh(inst['obj_id'], model_p, dataset)
-                    self.set_object_pose(cur_obj, inst, self.scale)
+                # Copy object poses to next key frame (to be sure)
+                for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
-
                 camera_module._insert_key_frames(cam, cam_ob, frame_id)
                 bpy.context.scene.frame_end = frame_id + 1
 
@@ -227,14 +232,13 @@ class BopLoader(Loader):
 
         :param sc_camera: BOP scene_camera file. Type: dict.
         :param cam_id: BOP camera id. Type: int.
-        :param inst: Instance from BOP scene_gt file. Type: dict.
+        :param insts: Instance from BOP scene_gt file. Type: dict.
         :param scale: Factor to transform get pose in mm or meters. Type: int.
         :return camK : loaded camera matrix. Type: ndarray.
         :return cam_H_m2c_ref: loaded object to camera transformation. Type: ndarray.
         """
 
         cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)
-
         cam_H_m2c_ref = np.eye(4)
         cam_H_m2c_ref[:3,:3] = np.array(insts[0]['cam_R_m2c']).reshape(3,3) 
         cam_H_m2c_ref[:3, 3] = np.array(insts[0]['cam_t_m2c']).reshape(3) * scale
@@ -253,7 +257,7 @@ class BopLoader(Loader):
         return
 
 
-    def _load_mesh(self, obj_id, model_p, dataset, scale=1):
+    def _load_mesh(self, obj_id, model_p, scale=1):
         """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object. Type: int.
@@ -263,28 +267,55 @@ class BopLoader(Loader):
 
         model_path = model_p['model_tpath'].format(**{'obj_id': obj_id})
 
+        texture_file_path = ""  # only needed for ycbv objects
+
         # Gets the objects if it is already loaded         
         cur_obj = self._get_loaded_obj(model_path)
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
         if cur_obj is None:
-            bpy.ops.import_mesh.ply(filepath=model_path)
-            cur_obj = bpy.context.selected_objects[-1]
+            if self._is_ycbv:
+                if os.path.exists(model_path):
+                    new_file_ply_content = ""
+                    with open(model_path, "r") as file:
+                        new_file_ply_content = file.read()
+                        texture_pos = new_file_ply_content.find("comment TextureFile ") + len("comment TextureFile ")
+                        texture_file_name = new_file_ply_content[texture_pos:
+                                                                 new_file_ply_content.find("\n", texture_pos)]
+                        texture_file_path = os.path.join(os.path.dirname(model_path), texture_file_name)
+                        new_file_ply_content = new_file_ply_content.replace("property float texture_u",
+                                                                            "property float s")
+                        new_file_ply_content = new_file_ply_content.replace("property float texture_v",
+                                                                            "property float t")
+                    model_name = os.path.basename(model_path)
+                    tmp_ply_file = os.path.join(Utility.get_temporary_directory(self.config), model_name)
+                    with open(tmp_ply_file, "w") as file:
+                        file.write(new_file_ply_content)
+                    bpy.ops.import_mesh.ply(filepath=tmp_ply_file)
+                    cur_obj = bpy.context.selected_objects[-1]
+            else:
+                bpy.ops.import_mesh.ply(filepath=model_path)
+                cur_obj = bpy.context.selected_objects[-1]
         elif self.allow_duplication:
             bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
             cur_obj = bpy.context.selected_objects[-1]
 
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
-        cur_obj['model_path'] = model_path     
-        mat = self._load_materials(cur_obj, dataset)
-        self._link_col_node(mat)
-
+        cur_obj['model_path'] = model_path
+        if not self._is_ycbv:
+            mat = self._load_materials(cur_obj)
+            self._link_col_node(mat)
+        else:
+            # ycbv objects contain normal image textures, which should be used instead of the vertex colors
+            self._load_texture(cur_obj, texture_file_path)
+        cur_obj["is_bop_object"] = True
+        cur_obj["bop_dataset_name"] = self.bop_dataset_name
         return cur_obj
 
-    def _load_materials(self, cur_obj, dataset):
+    def _load_materials(self, cur_obj):
         """ Loads / defines materials, e.g. vertex colors.
         
-        :param object: The object to use. Type: bpy.types.Object.
+        :param cur_obj: The object to use. Type: bpy.types.Object.
         :return: Material with vertex color. Type: bpy.types.Material.
         """
 
@@ -292,7 +323,7 @@ class BopLoader(Loader):
         
         if mat is None:
             # create material
-            mat = bpy.data.materials.new(name="bop_" + dataset + "_vertex_col_material")
+            mat = bpy.data.materials.new(name="bop_" + self.bop_dataset_name + "_vertex_col_material")
 
         mat.use_nodes = True
 
@@ -305,10 +336,41 @@ class BopLoader(Loader):
 
         return mat
 
+    def _load_texture(self, cur_obj, texture_file_path):
+        """
+        Load the textures for the ycbv objects, only those contain texture information
+
+        :param cur_obj: The object to use. Type: bpy.types.Object.
+        :param texture_file_path: path to the texture file (most likely ".png")
+        """
+        mat = bpy.data.materials.new(name="bop_" + self.bop_dataset_name + "_texture_material")
+
+        mat.use_nodes = True
+
+        nodes = mat.node_tree.nodes
+        links = mat.node_tree.links
+
+        color_image = nodes.new('ShaderNodeTexImage')
+        if not os.path.exists(texture_file_path):
+            raise Exception("The texture path for the ycbv object could not be loaded from the "
+                            "file: {}".format(texture_file_path))
+        color_image.image = bpy.data.images.load(texture_file_path, check_existing=True)
+
+        principled = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+        links.new(color_image.outputs["Color"], principled.inputs["Base Color"])
+
+        if cur_obj.data.materials:
+            # assign to 1st material slot
+            cur_obj.data.materials[0] = mat
+        else:
+            # no slots
+            cur_obj.data.materials.append(mat)
+
+
     def _link_col_node(self, mat):
         """ Links a color attribute node to a Principled BSDF node.
 
-        :param object: The material to use. Type: bpy.types.Object.
+        :param mat: The material to use. Type: bpy.types.Material.
         """
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
