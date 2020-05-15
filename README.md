@@ -25,7 +25,7 @@ The blender pipeline consists of different modules, where each of them performs 
 The modules are selected, ordered and configured via a .yaml file.
  
 To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file and any additional arguments.
-
+An exemplary `config.yaml` can be found in the respective example folder.
 ```
 python run.py config.yaml <additional arguments>
 ```
