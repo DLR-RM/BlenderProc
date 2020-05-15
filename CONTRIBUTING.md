@@ -90,6 +90,7 @@ Following is a simple pattern for Git Commit messages:
 | `refactor` | refactoring/restructuring of the code |
 | `revert` | reverted commit or parts of it |
 | `style` | code cosmetica: formatting with no code change |
+| `chore` | updating grunt tasks/maintaining with no production code change, cleanup |
 
 * `subject` - the headline of the change, all lowercase.
 * `scope` - scope of the change, all lowercase.
@@ -124,28 +125,42 @@ This way you are required to apply the following patterns:
 * Pipeline Module Description
 
 Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide csv tables with parameter description/explanation along with general module description.
-For every parameter give a short explanation of it, it's type, state if it is an optional parameter (if it is, then state the default value of this parameter), and mention the range of applicable values.
+After the general description, please give a couple of examples with short explanation, try to show off all config parameters in them. For every parameter give a short explanation of its type, its default value, its range or available values, if applicable. The exact order is represented below.
 
 ```python
 class MyNewPipelineModule(Loader):
     """ This module is doing this, this, and this, while incorporating that.
     
+        Example 1: Explain what happens
+
+        {
+          "some": "config",
+          "example": "here"
+        }
+
+        Example 2: Explain this more complex example
+        
+        {
+          "some": "more",
+          "complex": "example"
+        }
+
     **Table for a part of config**:
     
     .. csv-table::
        :header: "Keyword", "Description"
        
-       "param_a", "Used for this/means this. Type: type. Optional. Default value: value."
-       "param_b", "Used for that/means that. Type: type. Range: [min, max]."
+       "param_a", "Used for this/means this. Type: type. Default: value. Available: [some_value, value, another_value]."
+       "param_b", "Used for that/means that. Type: type. Range: [min, max]. Default: B."
        
      **Table for another part of config if needed**:
 
     .. csv-table::
        :header: "Keyword", "Description"
        
-       "param_c", "Used for this. Contains that."
+       "param_c", "Used for this. Contains that. Type: type."
        "param_c/param_d", "Used for this/means this. Type: type."
-       "param_c/param_e", "Used for that/means that. Type: type. Optional. Default value: value. Range: [min, max]."
+       "param_c/param_e", "Used for that/means that. Type: type. Default: value. Available: [value, value1, value2]."
     """
 ```
 
@@ -181,6 +196,6 @@ To create a good example, please follow this steps:
 * In this folder provide at least a configuration config.yaml file and a README.md file.
 * And any other files that may be necessary (like rendering images, .obj files, text files with some data required by the pipeline, etc), but keep it as clean as possible and **do not include any copyrighted materials**.
 
-For the README.md of the example, please follow the [template](EXAMPLE_README_TEMPLATE.md). If the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
+For the README.md of the example, please follow the [template](examples/EXAMPLE_README_TEMPLATE.md). If the proposed changes are not including some new modules or substantial changes in the existing ones, but an example is still required, then follow your best judgement.
 
 Also remember, that when making changes to the existing modules it is up to you to verify that existing examples that are using this module are valid and working. Fix the configuration files and update READMEs of these examples, if the example requires it.

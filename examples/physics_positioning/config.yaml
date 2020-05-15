@@ -1,28 +1,27 @@
 # Args: <obj_file1> <obj_file2> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
     },
     {
       "module": "loader.ObjectLoader",
       "config": {
         "path": "<args:0>",
         "add_properties": {
-           "physics": True
+           "cp_physics": True
         }
       }
     },
@@ -31,7 +30,7 @@
       "config": {
         "path": "<args:1>",
         "add_properties": {
-          "physics": False
+          "cp_physics": False
         }
       }
     },
@@ -41,7 +40,7 @@
         "objects_to_sample": {
           "provider": "getter.Entity",
           "conditions": {
-            "physics": True,
+            "cp_physics": True,
             "type": "MESH"
           }
         },

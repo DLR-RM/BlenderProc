@@ -1,12 +1,13 @@
 import csv
 import json
-import shutil
 import os
+import shutil
+
 import bpy
 
-from src.utility.CocoUtility import CocoUtility
 from src.main.Module import Module
-
+from src.utility.CocoUtility import CocoUtility
+from src.utility.BlenderUtility import get_all_mesh_objects
 
 class CocoAnnotationsWriter(Module):
     """ Writes Coco Annotations in to a file.
@@ -15,11 +16,19 @@ class CocoAnnotationsWriter(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging."
-       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the output_key of the RgbRenderer module."
-       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as the output_key of the SegMapRenderer module."
-       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was registered. Should be the same as the colormap_output_key of the SegMapRenderer module."
-       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output directory, the new coco annotations will be appended to the existing file. Also the rgb images will be named such that there are no collisions."
+       
+       "avoid_rendering", "If true, no output is produced. Type: bool. Default: False"
+       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the "
+                         "output_key of the RgbRenderer module. Type: string.Default: colors."
+       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as "
+                            "the output_key of the SegMapRenderer module. Type: string. Default: segmap."
+       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was "
+                                 "registered. Should be the same as the colormap_output_key of the SegMapRenderer "
+                                 "module. Type: string. Default: segcolormap."
+       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output "
+                                    "directory, the new coco annotations will be appended to the existing file. Also "
+                                    "the rgb images will be named such that there are no collisions. Type: bool. "
+                                    "Default: False."
     """
 
     def __init__(self, config):
@@ -34,6 +43,13 @@ class CocoAnnotationsWriter(Module):
             os.makedirs(self._coco_data_dir)
 
     def run(self):
+        """ Writes coco annotations in the following steps:
+        1. Locat the seg images
+        2. Locat the rgb maps
+        3. Locat the seg maps
+        4. Read color mappings
+        5. For each frame write the coco annotation
+        """
         if self._avoid_rendering:
             print("Avoid rendering is on, no output produced!")
             return
@@ -85,7 +101,18 @@ class CocoAnnotationsWriter(Module):
             shutil.copyfile(source_path, target_path)
             new_coco_image_paths.append(os.path.basename(target_path))
 
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, "coco_annotations", existing_coco_annotations)
+        # Try to extract supercategory for each object
+        all_mesh_objects = get_all_mesh_objects()
+        super_category_mapping = {}
+        for obj in all_mesh_objects:
+            # For now the only scheme to extract super category is the afiliation of an object to a Bop dataset
+            if "bop_dataset_name" in obj:
+                super_category_mapping[obj.name] = obj["bop_dataset_name"]
+            # Otherwise assign default supercategory
+            else:
+                super_category_mapping[obj.name] = "default_supercategory"
+
+        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, super_category_mapping,"coco_annotations", existing_coco_annotations)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:

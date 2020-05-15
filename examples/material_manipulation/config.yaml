@@ -1,6 +1,6 @@
 # Args: <obj_file> <path_to_textures> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
@@ -8,15 +8,14 @@
       "imageio"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+            "output_dir": "<args:2>"
+          }
+      }
     },
     {
       "module": "loader.ObjectLoader",
@@ -67,7 +66,7 @@
             "name": "Material.001"
           }
         },
-        "color_link_to_displacement": 1.5
+        "cf_color_link_to_displacement": 1.5
       }
     },
     {
@@ -80,7 +79,7 @@
           }
         },
         "mode": "once_for_each",
-        "textures": {
+        "cf_textures": {
           "Base Color": {
             "provider": "sampler.Path",
             "path": "<args:1>/*.jpg"

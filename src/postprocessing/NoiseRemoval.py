@@ -2,6 +2,7 @@ import numpy as np
 
 from src.main.Module import Module
 
+
 class NoiseRemoval(Module):
     """Removes noise pixels.
 
@@ -31,13 +32,15 @@ class NoiseRemoval(Module):
 
         """
 
-        A function that takes an image and a few 2D indices, where these indices correspond to pixel values in segmentation maps, where these values are not
-        real labels, but some deviations from the real labels, that were generated as a result of Blender doing some interpolation, smooting, or other numerical operations.
+        A function that takes an image and a few 2D indices, where these indices correspond to pixel values in
+        segmentation maps, where these values are not real labels, but some deviations from the real labels, that were g
+        enerated as a result of Blender doing some interpolation, smooting, or other numerical operations.
 
         Parameters
         ----------
         image: ndarray of the .exr segmap
-        noise_indices: a list of 2D indices that correspond to the noisy pixels. One criteria of finding these pixels is to use a histogram and find the pixels with
+        noise_indices: a list of 2D indices that correspond to the noisy pixels. One criteria of finding these pixels
+        is to use a histogram and find the pixels with
         frequencies lower than a threshold, e.g. 100.
         """
 
@@ -75,12 +78,14 @@ class NoiseRemoval(Module):
         :param image: The image data.
         :return: The cleaned image data.
         """
-        # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation that should remove some noise or deviations
+        # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation
+        # that should remove some noise or deviations
         image = ((image * 37) / (65536))  # assuming 16 bit color depth
         image = image.astype(np.int32)
         b, counts = np.unique(image.flatten(), return_counts=True)
 
-        # Removing further noise where there are some stray pixel values with very small counts, by assigning them to their closest (numerically, since this deviation is a
+        # Removing further noise where there are some stray pixel values with very small counts, by assigning them to
+        # their closest (numerically, since this deviation is a
         # result of some numerical operation) neighbor.
         hist = sorted((np.asarray((b, counts)).T), key=lambda x: x[1])
         noise_vals = [h[0] for h in hist if h[1] <= 100]  # Assuming the stray pixels wouldn't have a count of more than 100

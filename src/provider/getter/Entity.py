@@ -1,80 +1,101 @@
+import re
+
 import bpy
 import mathutils
-import re
 
 from src.main.Provider import Provider
 from src.utility.Config import Config
 
 
 class Entity(Provider):
-    """ Returns a list of objects in accordance to a condition.
-    Specify a desired condition in the format {attribute_name: attribute_value}, note that attribute_value for a custom
-    property can be a string/int/bool/float, while only attribute_value for valid attributes of objects can be a bool or a
-    list (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by 'list' type).
+    """ Returns a list of objects that comply with defined conditions.
 
-    NOTE: any given attribute_value of the type string will be treated as a REGULAR EXPRESSION.
+        Example 1: Return a list of objects that match a name pattern.
 
-    An example:
-        "name_of_selector": {
-            "provider": "getter.Entity"
-            "conditions": {
-                "name": "Suzanne"   # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
+        {
+          "provider": "getter.Entity"
+          "conditions": {
+            "name": "Suzanne.*"
+          }
+        }
+
+        Example 2: Returns the first object to: {match the name pattern "Suzanne", AND to be of a MESH type},
+                                                OR {match the name pattern, AND have a certain value of a cust. prop}
+                                                OR {be inside a bounding box defined by a min and max points}
+                                                OR {have a Z position in space greater than -1}
+
+
+        {
+          "provider": "getter.Entity",
+          "index": 0,
+          "conditions": [
+          {
+            "name": "Suzanne",
+            "type": "MESH"
+          },
+          {
+            "name": "Cube.*",
+            "cp_category": "is_cube"
+          },
+          {
+            "cf_inside": {
+            "min": "[-5, -5, -5]",
+            "max": "[5, 5, 5]"
             }
+          },
+          {
+            "cf_inside": {
+              "z_min": -1,
+            }
+          }
+          ]
         }
-    Another more complex example:
-    Here all objects which are either named Suzanne or (the name starts with Cube and belong to the category "is_cube")
-        "name_of_selector": {
-            "provider": "getter.Entity",
-            "index": 0,             # only returns the first match
-            "conditions": [{
-                "name": "Suzanne",  # this checks if the name of the object is equal to Suzanne (treated as a regular expr.)
-                "type": "MESH"      # this will make sure that the object is a mesh
-            },{
-                "name": "Cube.*",   # this checks if the name of the object starts with Cube (treated as a regular expr.)
-                "category": "is_cube" # both have to be true
-            },{
-                "inside": {         # this checks if the object is inside the bounding box defined by min and max points
-                    "min": "[-5, -5, -5]", # or use "outside" for checking whether the obj is outside of b box
-                    "max": "[5, 5, 5]"
-                },
-            },{
-                "inside": {         # alternative syntax for inside/outside, cannot be mixed with min/max vector syntax
-                    "z_min": -1,    # any object with a z position greater than -1
-                    # supported keys: [xyz]_{min,max}
-                    # missing arguments extend the bounding box to infinity in that direction
-                },
-            ]
-        }
-
-    This means: conditions, which are in one {...} are connected with AND, conditions which are in the
-    list are connected with or.
-
-    In the event that a custom property has the same name as an attribute of the object, the attribute is always
-    evaluated first. In order to change let the key start with "cp_". For example there is a custom property with the
-    key "type", so checking "type": "MESH" will lead to a problem, because the attribute will be checked.
-    To avoid this change the key: "type" to "cp_type".
 
     **Configuration**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
-    "condition", "Dict with one entry of format {attribute_name: attribute_value}. Type: dict."
-    "condition/attribute_name", "Name of any valid object's attribute or custom property. Type: string."
-    "condition/attribute_value", "Any value to set. Types: string, int, bool or float, list/Vector/Euler/Color."
-    "index", "If set, after the conditions are applied only the entity with the specified index is returned. Type: int"
+        "conditions", "List of dicts/a dict of entries of format {attribute_name: attribute_value}. Entries in a dict "
+                      "are conditions connected with AND, if there multiple dicts are defined (i.e. 'conditions' is a "
+                      "list of dicts, each cell is connected by OR. Type: list/dict."
+        "conditions/attribute_name", "Name of any valid object's attribute, custom property, or custom function. Any "
+                                     "given attribute_value of the type string will be treated as a REGULAR EXPRESSION. "
+                                     "Also, any attribute_value for a custom property can be a string/int/bool/float, "
+                                     "while only attribute_value for valid attributes of objects can be a bool or a "
+                                     "list (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by the "
+                                     "'list' type). Type: string. "
+                                     "In order to specify, what exactly one wants to look for: "
+                                     "For attribute: key of the pair must be a valid attribute name. "
+                                     "For custom property: key of the pair must start with `cp_` prefix. "
+                                     "For calling custom function: key of the pair must start with `cf_` prefix. See "
+                                     "table below for supported custom functions."
+        "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
+        "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
+                 "Type: int."
+
+    **Custom functions**
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "cf_{inside,outside}", "Returns objects that lies inside/outside of a bounding box or with a specific "
+                               "coordinate component >,< than a value. Type: dict."
+        "cf_{inside,outside}/(min,max)", "min and max pair defines a bounding box used for a check. cannot be mixed "
+                                         "with /[xyz]_{min,max} configuration. Type: list ([x, y, z])."
+        "cf_{inside,outside}/[xyz]_(min,max), "Alternative syntax. Defines a hyperplane. Missing arguments extend the "
+                                              "bounding box to infinity in that direction. Type: float."
     """
 
     def __init__(self, config):
         Provider.__init__(self, config)
 
     def perform_and_condition_check(self, and_condition, objects):
-        """
-        Checks for all objects in the scene if all given conditions are true, collects them in the return list
-        See class description on how to set up AND and OR connections.
-        :param and_condition: Given dictionary with conditions
-        :param objects: list of objects, which already have been used
-        :return: list of objects, which full fill the conditions
+        """ Checks all objects in the scene if all given conditions are true for an object, it is added to the list.
+
+        :param and_condition: Given conditions. Type: dict.
+        :param objects: Objects, that are already in the return list. Type: list.
+        :return: Objects that fulfilled given conditions. Type: list.
         """
         new_objects = []
         # through every object
@@ -87,8 +108,12 @@ class Entity(Provider):
             for key, value in and_condition.items():
                 # check if the key is a requested custom property
                 requested_custom_property = False
+                requested_custom_function = False
                 if key.startswith('cp_'):
                     requested_custom_property = True
+                    key = key[3:]
+                if key.startswith('cf_'):
+                    requested_custom_function = True
                     key = key[3:]
 
                 # check if an attribute with this name exists and the key was not a requested custom property
@@ -114,7 +139,7 @@ class Entity(Provider):
                         select_object = False
                         break
                 # check if a custom property with this name exists
-                elif key in obj:
+                elif key in obj and requested_custom_property:
                     # check if the type of the value of such custom property matches desired
                     if isinstance(obj[key], type(value)) or (isinstance(obj[key], int) and isinstance(value, bool)):
                         # if is a string and if the whole string matches the given pattern
@@ -124,9 +149,9 @@ class Entity(Provider):
                             break
                     # raise an exception if not
                     else:
-                        raise Exception("Types are not matching: %s and %s !"
-                                        % (type(obj[key]), type(value)))
-                elif key == "inside" or key == "outside":
+                        raise Exception("Types are not matching: {} and {} for key: {}".format(type(obj[key]),
+                                                                                               type(value), key))
+                elif requested_custom_function and any([key == "inside", key == "outside"]):
                     conditions = Config(value)
                     if conditions.has_param("min") and conditions.has_param("max"):
                         if any(conditions.has_param(key) for key in
@@ -164,8 +189,9 @@ class Entity(Provider):
         return new_objects
 
     def run(self):
-        """
-        :return: List of objects that met the conditional requirement.
+        """ Processes defined conditions and compiles a list of objects.
+
+        :return: List of objects that met the conditional requirement. Type: list.
         """
         conditions = self.config.get_raw_dict('conditions')
 

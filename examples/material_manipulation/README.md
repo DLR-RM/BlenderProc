@@ -52,7 +52,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
         "name": "Material.001"
       }
     },
-    "color_link_to_displacement": 1.5
+    "cf_color_link_to_displacement": 1.5
   }
 },
 {
@@ -65,7 +65,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
       }
     },
     "mode": "once_for_each",
-    "textures": {
+    "cf_textures": {
       "Base Color": {
         "provider": "sampler.Path",
         "path": "<args:1>/*.png"

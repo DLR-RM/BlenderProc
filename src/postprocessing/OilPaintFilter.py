@@ -1,16 +1,16 @@
-from src.main.Module import Module
+import cv2
+import numpy as np
 from scipy import stats
 
-import numpy as np
-import cv2
+from src.main.Module import Module
 
 
 def get_neighbors_stacked(img, filter_size=3, return_list=False):
     """
     Stacks the neighbors of each pixel according to a square filter around each given pixel in the depth dimensions.
     The neighbors are represented by shifting the input image in all directions required to simulate the filter.
-    :param img: Input image.
-    :param filter_size: Filter size.
+    :param img: Input image. Type: blender object of type image.
+    :param filter_size: Filter size. Type: int. Default: 5..
     :param return_list: Instead of stacking in the output array, just return a list of the "neighbor" images along with the input image.
     :return: Either a tensor with the "neighbor" images stacked in a separate additional dimension, or a list of images of the same shape as the input image, containing the shifted images (simulating the neighbors) and the input image.
     """
@@ -45,9 +45,9 @@ class OilPaintFilter(Module):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "filter_size", "Mode filter size, should be an odd number. Type: int. Optional. Default value: 5"
-       "edges_only", "If true, applies the filter on the edges only. For RGB images, they should be represented in uint8 arrays. Type: bool. Optional. Default value: True"
-       "rgb", "Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated). Type: bool. Default value: False" 
+       "filter_size", "Mode filter size, should be an odd number. Type: int. Default: 5"
+       "edges_only", "If true, applies the filter on the edges only. For RGB images, they should be represented in uint8 arrays. Type: bool. Default: True"
+       "rgb", "Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated). Type: bool. Default: False" 
     """
 
     def __init__(self, config):

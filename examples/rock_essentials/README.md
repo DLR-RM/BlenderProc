@@ -25,12 +25,12 @@ In the output folder you will find a `coco_data/` folder with a `coco_annotation
 * Loads 4 batches of RE rocks: `loader.RockEssentialsRockLoader` module.
 * Constructs a blank ground tile wirh RE material: `constructor.RockEssentialsGroundConstructor` module.
 * Samples a texture for a ground's plane material: `materials.RockEssentialsTextureSampler` module.
-* Samples positions on the ground plane for large rocks: `lobject.EntityManipulator` module.
+* Samples positions on the ground plane for large rocks: `manipulators.EntityManipulator` module.
 * Sample positions for rocks: `object.ObjectPoseSampler` module.
 * Samples camera positions: `camera.CameraSampler` module.
 * Creates a Sun light: `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
-* Displaces a ground plane up: `object.EntityManipulator` module.
+* Displaces a ground plane up: `manipulators.EntityManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Renders instance segmentation: `renderer.SegMapRenderer` module.
 * Writes coco annotations: `writer.CocoAnnotationsWriter` module.
@@ -40,12 +40,13 @@ In the output folder you will find a `coco_data/` folder with a `coco_annotation
 ### Global
 
 ```yaml
-"global": {
-  "all": {
+"module": "main.Initializer",
+"config": {
+  "global": {
     "output_dir": "<args:1>",
     "append_to_existing_output": True
   }
-},
+}
 ```
 
 `"append_to_existing_output": True` conditions all the modules (e.g. `writer.CocoAnnotationsWriter`) to append it's output to the existing output of the pipeline. It is useful when generating a coco annotation data for training.
@@ -112,8 +113,6 @@ In `batches` we are specifying batches of rocks to load by defining:
       "plane_scale": [50, 50, 1],
       "subdivision_cuts": 30,
       "subdivision_render_levels": 2,
-      "displacement_strength": 0.7,
-      "AO": [0.5, 0.5, 0.5, 1],
       "tile_name": "Gr_Plane_1"
     }
     ]
@@ -125,8 +124,7 @@ In `tiles` we are defining a settings of one or multiple ground tiles by specify
 * `shader_path` for a ground plane,
 * scale of the plane `plane_scale`,
 * `subdivision_cuts` and `subdivision_render_levels` to perform on a ground plane,
-* and a `displacement_strength` of the displacement modifier,
-* AO and a tile name.
+* and  a tile name.
 
 ### Rock Essentials Texture Sampler
 
@@ -145,6 +143,8 @@ In `tiles` we are defining a settings of one or multiple ground tiles by specify
     {
       "path": "<args:0>/Rock Essentials/Ground Textures/Pebbles/RDTGravel001/",
       "uv_scaling": 9,
+      "displacement_strength": 0.7,
+      "ambient_occlusion": [0.5, 0.5, 0.5, 1],
       "images": {
         "color": "RDTGravel001_COL_VAR1_3K.jpg",
         "roughness": "RDTGravel001_GLOSS_3K.jpg",
@@ -161,7 +161,7 @@ In `tiles` we are defining a settings of one or multiple ground tiles by specify
 This module allows us to set a texture for selected ground planes which have a RE specific material which is set by `constructor.RockEssentialsGroundConstructor` (or sampled if more than one texture is defined) by specifying:
 * `selector` for selecting the ground planes created by the ground constructor by specifying the name in the `conditions`,
 * one or multiple `textures`,
-* `path` to a texture maps folder, `uv_scaling` for the maps, and at least a `color` map file name.
+* `path` to a texture maps folder, `uv_scaling` for the maps `displacements_strength` of the displacements modifier, ambient_occlusion parameter of the shader, and at least a `color` map file name.
 
 ### Physics Positioning
 

@@ -15,8 +15,11 @@ The [main](main) folder contains the Module base class and the Pipeline class, w
 Existing modules are placed in use-case-dependent folders:
 * [camera](camera): camera loading and camera pose sampling.
 * [composite](composite): complex (composite, duh) modules that are using other existing modules.
+* [constructor](constructor): constructing scenery and adding objects.
 * [lighting](lighting): light source loading, light source pose sampling, dataset-specific light loaders.
 * [loader](loader): .obj, .ply, etc. object loading, dataset-specific object loading.
+* [manipulators](manipulators): manipulating of the World and different entities present in the scene.
+* [materials](materials): manipulating materials.
 * [object](object): object pose manipulation, physics between-object interaction, sampling and geometry manipulation.
 * [postprocessing](postprocessing): changing the pipeline output inside of a .hdf5 container.
 * [provider](provider): samplers and getters used for sampling various values, selecting objects, etc.
@@ -58,20 +61,21 @@ This configuration object has the methods `get_int`, `get_float`, `get_bool`, `g
 Config file:
 ```yaml
 {
-  "global": {
-    "all": {
-      "output_dir": "/tmp/",
-      "auto_tile_size": false
-    },
-    "renderer": {
-      "pixel_aspect_x": 1.333333333
-    }
-  },
   "modules": [
     {
-      "module": "renderer.NormalRenderer",
+      "module": "main.Initializer",
       "config": {
-        "auto_tile_size": true,
+        "global": {
+          "output_dir": "/tmp/",
+          "auto_tile_size": False,
+          "pixel_aspect_x": 1.333333333
+        }
+      }
+    },
+    {
+      "module": "renderer.NewRenderer",
+      "config": {
+        "auto_tile_size": True,
         "cycles": {
           "samples": 255
         }
@@ -81,20 +85,20 @@ Config file:
 }
 ```
 
-Inside the `renderer.NormalRenderer` module:
+Inside the `renderer.NewRenderer` module:
 
 ```python
 self.get_int("cycles/samples", 42)  
 # -> 255
 
 self.get_float("pixel_aspect_x") 
-# -> 1.333333333
+# -> 1.333333333 this value is drawn from the GlobalStorage
 
 self.get_string("output_dir", "output/") 
-# -> /tmp/
+# -> /tmp/ this value is drawn from the GlobalStorage
 
 self.get_bool("auto_tile_size") 
-# -> True
+# -> True 
 
 self.config.get_int("resolution_x", 512)
 # ->  512
@@ -107,7 +111,7 @@ self.config.get_int("tile_x")
 
 In some modules it makes sense to revert changes made inside the module to not disturb modules coming afterwards (For example renderer modules should not change the state of the scene).
 
-This often requried funcitonality can be easily done via the `Utility.UndoAfterExecution()` with-statement:
+This often required functionality can be easily done via the `Utility.UndoAfterExecution()` with-statement:
 
 **Example:**
 ```python

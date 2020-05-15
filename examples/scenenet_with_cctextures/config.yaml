@@ -1,0 +1,117 @@
+# Args: <obj_file> <texture_file> <cctexture folder> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:3>",
+          "max_bounces": 200,
+          "diffuse_bounces": 200,
+          "glossy_bounces": 200,
+          "transmission_bounces": 200,
+          "transparency_bounces": 200
+        }
+      }
+    },
+    {
+      "module": "loader.SceneNetLoader",
+      "config": {
+        "file_path": "<args:0>",
+        "texture_folder": "<args:1>"
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [{
+          "number_of_samples": 5,
+          "proximity_checks": {
+            "min": 1.0
+          },
+          "location": {
+            "provider": "sampler.UpperRegionSampler",
+            "min_height": 1.5,
+            "max_height": 1.8,
+            "to_sample_on": {
+              "provider": "getter.Entity",
+              "index": 0,
+              "conditions": {
+                "cp_category_id": 2
+              }
+            }
+          },
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.2217, 0, 6.283185307],
+              "min":[1.2217, 0, 0]
+            }
+          },
+          "check_if_pose_above_object_list": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "cp_category_id": 2,
+              "type": "MESH"
+            }
+          }
+        }]
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>"
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.4,
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True  # this will return all loaded cc textures
+          }
+        }
+      }
+    },
+    {
+      "module": "lighting.SceneNetLighting"
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "samples": 350,
+        "render_normals": True,
+        "render_depth": True,
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "use_alpha": true
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -11,7 +11,8 @@ class RgbRenderer(Renderer):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission materials, default: False (off)."
+       "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
+                              "materials, Type: bool. Default: False."
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
@@ -26,11 +27,7 @@ class RgbRenderer(Renderer):
         new_mat.use_nodes = True
         nodes = new_mat.node_tree.nodes
 
-        principled_bsdf = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-        if principled_bsdf and len(principled_bsdf) == 1:
-            principled_bsdf = principled_bsdf[0]
-        else:
-            print("Warning: The generation of the new texture failed, it has more than one Prinicipled BSDF!")
+        principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
 
         # setting the color values for the shader
         principled_bsdf.inputs['Specular'].default_value = 0.65  # specular
@@ -57,7 +54,7 @@ class RgbRenderer(Renderer):
         # if the rendering is not performed -> it is probably the debug case.
         do_undo = not self._avoid_rendering
         with Utility.UndoAfterExecution(perform_undo_op=do_undo):
-            self._configure_renderer(default_denoiser="Intel")
+            self._configure_renderer(use_denoiser=True, default_denoiser="Intel")
 
             # In case a previous renderer changed these settings
             bpy.context.scene.render.image_settings.color_mode = "RGB"

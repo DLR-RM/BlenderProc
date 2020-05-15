@@ -1,15 +1,14 @@
 import csv
 import json
 import os
-import shutil
 
 import bpy
 import h5py
 import numpy as np
 
 from src.main.Module import Module
-from src.utility.Utility import Utility
 from src.utility.BlenderUtility import load_image
+from src.utility.Utility import Utility
 
 
 class Hdf5Writer(Module):
@@ -18,13 +17,21 @@ class Hdf5Writer(Module):
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "compression", "The compression technique that should be used when storing data in a hdf5 file."
-       "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging."
-       "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output to which the postprocessing modules should be applied. Every postprocessing module has to have a run function which takes in the raw data and returns the processed data."
-       "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that there are no collisions with already existing hdf5 files in the output directory."
-       "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Default: false, stereo images are combined into one np.array (2, ...).
+        "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that "
+                                    "there are no collisions with already existing hdf5 files in the output directory. "
+                                    "Type: bool. Default: False"
+        "compression", "The compression technique that should be used when storing data in a hdf5 file. Type: string."
+        "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging. "
+                                             "Type: bool. Default value: True."
+        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
+                                  "to which the postprocessing modules should be applied. Every postprocessing module "
+                                  "has to have a run function which takes in the raw data and returns the processed "
+                                  "data. Type: dict."
+        "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Type: bool. "
+                                "Default: False (stereo images are combined into one np.array (2, ...))."
+        "avoid_rendering", "If true, exit. Type: bool. Default: False."
     """
 
     def __init__(self, config):
@@ -33,7 +40,7 @@ class Hdf5Writer(Module):
         self.postprocessing_modules_per_output = {}
         module_configs = config.get_raw_dict("postprocessing_modules", {})
         for output_key in module_configs:
-            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key], {})
+            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
 
     def run(self):
         if self._avoid_rendering:
@@ -95,7 +102,7 @@ class Hdf5Writer(Module):
         """ Adds the given data as a new entry to the given hdf5 file.
 
         :param file: The hdf5 file handle.
-        :param key: The key at which the data should be stored in the hdf5 file.
+        :param key: The key at which the data should be stored in the hdf5 file. Type: string.
         :param data: The data to store.
         """
         if data.dtype.char == 'S':
@@ -106,7 +113,7 @@ class Hdf5Writer(Module):
     def _load_file(self, file_path):
         """ Tries to read in the file with the given path into a numpy array.
 
-        :param file_path: The file path.
+        :param file_path: The file path. Type: string.
         :return: A numpy array containing the data of the file.
         """
         if not os.path.exists(file_path):
@@ -126,7 +133,7 @@ class Hdf5Writer(Module):
     def _load_npy(self, file_path):
         """ Load the npy/npz file at the given path.
 
-        :param file_path: The path.
+        :param file_path: The path. Type: string.
         :return: The content of the file
         """
         return np.load(file_path)
@@ -134,7 +141,7 @@ class Hdf5Writer(Module):
     def _load_csv(self, file_path):
         """ Load the csv file at the given path.
 
-        :param file_path: The path.
+        :param file_path: The path. Type: string.
         :return: The content of the file
         """
         rows = []
@@ -147,8 +154,8 @@ class Hdf5Writer(Module):
     def _apply_postprocessing(self, output_key, data):
         """ Applies all postprocessing modules registered for this output type.
 
-        :param output_key: The key of the output type.
-        :param data: The numpy data
+        :param output_key: The key of the output type. Type: string.
+        :param data: The numpy data.
         :return: The modified numpy data after doing the postprocessing
         """
         if output_key in self.postprocessing_modules_per_output:
@@ -160,8 +167,8 @@ class Hdf5Writer(Module):
     def _load_and_postprocess(self, file_path, key):
         """
         Loads an image and post process it.
-        :param file_path: Image path.
-        :param key: The image's key with regards to the hdf5 file.
+        :param file_path: Image path. Type: string.
+        :param key: The image's key with regards to the hdf5 file. Type: string.
         :return: The post-processed image that was loaded using the file path.
         """
         data = self._load_file(Utility.resolve_path(file_path))
@@ -176,7 +183,7 @@ class Hdf5Writer(Module):
     def _get_stereo_path_pair(self, file_path):
         """
         Returns stereoscopic file path pair for a given "normal" image file path.
-        :param file_path: The file path of a single image.
+        :param file_path: The file path of a single image. Type: string.
         :return: The pair of file paths corresponding to the stereo images,
         """
         path_split = file_path.split(".")

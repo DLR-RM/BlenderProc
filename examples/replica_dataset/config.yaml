@@ -1,26 +1,23 @@
-# Args: path_to_the_replica_data_folder  output_path
+# Args: <path_to_the_replica_data_folder>  <output_path>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:1>",
-      "data_set_name": "office_1",
-      "data_path": "<args:0>"
-    },
-    "renderer": {
-      "pixel_aspect_x": 1.333333333
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:1>",
+          "data_set_name": "office_1",
+          "data_path": "<args:0>",
+          "pixel_aspect_x": 1.333333333
+        }
+      }
     },
     {
       "module": "loader.ReplicaLoader",
@@ -72,14 +69,14 @@
             "name": "ReplicaMaterial"
           }
         },
-        change_to_vertex_color: "Col"
+        "cf_change_to_vertex_color": "Col"
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-    },
-    {
       "module": "renderer.RgbRenderer",
+      "config": {
+        "render_normals": True
+      }
     },
     {
       "module": "writer.Hdf5Writer",

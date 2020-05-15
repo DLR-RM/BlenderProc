@@ -1,21 +1,20 @@
 # Args: <obj_file> <obj_file> <output_dir>
 {
-  "version": 2,
+  "version": 3,
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py"
     ]
   },
-  "global": {
-    "all": {
-      "output_dir": "<args:2>"
-    }
-  },
   "modules": [
     {
       "module": "main.Initializer",
-      "config": {}
+      "config": {
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
     },
     {
       "module": "loader.SuncgLoader",
@@ -28,37 +27,37 @@
       "config": {
           "path": "<args:1>",
           "add_properties": {
-            "replace": "chair",
+            "cp_replace": "chair",
           }
         },
     },
     {
-     "module": "object.EntityManipulator",
+     "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "replace": "chair"
+            "cp_replace": "chair"
           }
         }
       }
     },
     {
-      "module": "manipulators.ObjectReplacer",
+      "module": "object.ObjectReplacer",
       "config": {
         "replace_ratio": 1,
         "copy_properties": True,
         "objects_to_be_replaced": {
             "provider": "getter.Entity",
             "conditions": {
-              "coarse_grained_class": "chair",
+              "cp_coarse_grained_class": "chair",
               "type": "MESH"
             }
         },
         "objects_to_replace_with": {
             "provider": "getter.Entity",
             "conditions": {
-              "replace": "chair",
+              "cp_replace": "chair",
               "type": "MESH"
             }
         },
@@ -106,12 +105,11 @@
       }
     },
     {
-      "module": "renderer.NormalRenderer",
-      "config": {}
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
+        "render_normals": True,
+        "render_depth": True,
+        "use_alpha": True
       }
     },
     {

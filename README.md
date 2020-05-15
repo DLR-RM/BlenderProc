@@ -4,7 +4,7 @@
 <img src="readme.jpg" alt="Front readme image" width=430>
 </p>
 
-A procedural blender pipeline for image generation for deep learning.
+A procedural Blender pipeline for image generation for Deep Learning.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
@@ -25,7 +25,7 @@ The blender pipeline consists of different modules, where each of them performs 
 The modules are selected, ordered and configured via a .yaml file.
  
 To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file and any additional arguments.
-
+An exemplary `config.yaml` can be found in the respective example folder.
 ```
 python run.py config.yaml <additional arguments>
 ```
@@ -49,7 +49,7 @@ For advanced usage which is not covered by these modules, own modules can easily
 * [Basic scene](examples/basic/): Basic example 
 * [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a depth images.
 * [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a depth images.
-* [Replica dataset](examples/replica-dataset): Load a replica room, sample camera poses and render normal images.
+* [Replica dataset](examples/replica_dataset): Load a replica room, sample camera poses and render normal images.
 * [COCO annotations](examples/coco_annotations): Write to a .json file containing COCO annotations for the objects in the scene.
 
 ... And much more!

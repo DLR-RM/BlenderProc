@@ -12,7 +12,7 @@ class Utility:
     working_dir = ""
 
     @staticmethod
-    def initialize_modules(module_configs, global_config):
+    def initialize_modules(module_configs):
         """ Initializes the modules described in the given configuration.
 
         Example for module_configs:
@@ -23,35 +23,21 @@ class Utility:
 
         Here the name contains the path to the module class, starting from inside the src directory.
 
-        Example for global_config:
-        {"base": {
-            param: 42
-        }}
-
-        In this way all modules with prefix "base" will inherit "param" into their configuration.
-        Local config always overwrites global.
-        Parameters specified under "all" in the global config are inherited by all modules.
+        Be aware that all attributes stored in the GlobalStorage are also accessible here, even though
+        they are not copied into the new config.
 
         :param module_configs: A list of dicts, each one describing one module.
-        :param global_config: A dict containing the global configuration.
         :return:
         """
         modules = []
-        all_base_config = global_config["all"] if "all" in global_config else {}
 
         for module_config in module_configs:
             # If only the module name is given (short notation)
             if isinstance(module_config, str):
                 module_config = {"module": module_config}
 
-            # Merge global and local config (local overwrites global)
-            model_type = module_config["module"].split(".")[0]
-            base_config = global_config[model_type] if model_type in global_config else {}
-
-            # Initialize config with all_base_config
-            config = deepcopy(all_base_config)
-            # Overwrite with module type base config
-            Utility.merge_dicts(base_config, config)
+            # Initialize config with empty config
+            config = {}
             # Check if there is a module specific config
             if "config" in module_config:
                 # Overwrite with module specific config
@@ -110,6 +96,8 @@ class Utility:
 
         if path.startswith("/"):
             return path
+        elif path.startswith("~"):
+            return path.replace("~", os.getenv("HOME"))
         else:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
@@ -209,11 +197,7 @@ class Utility:
         nodes = material.node_tree.nodes
         links = material.node_tree.links
 
-        output = Utility.get_nodes_with_type(nodes, 'OutputMaterial')
-        if output and len(output) == 1:
-            material_output = output[0]
-        else:
-            raise Exception("This material: {} has not one material output!".format(material.name))
+        material_output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
         # find the node, which is connected to the output
         node_connected_to_the_output = None
         for link in links:
@@ -234,6 +218,23 @@ class Utility:
         :return: list of nodes, which belong to the type
         """
         return [node for node in nodes if node_type in node.bl_idname]
+
+    @staticmethod
+    def get_the_one_node_with_type(nodes, node_type):
+        """
+        Returns the one nodes which is of the given node_type
+
+        This function will only work if there is only one of the nodes of this type.
+
+        :param nodes: list of nodes of the current material
+        :param node_type: node types
+        :return: node of the node type
+        """
+        node = Utility.get_nodes_with_type(nodes, node_type)
+        if node and len(node) == 1:
+            return node[0]
+        else:
+            raise Exception("There is not only one node of this type: {}".format(node_type))
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.

@@ -1,15 +1,56 @@
 
 # Planned Features
 
-- Merge BlenderProc and BlenderProc4Bop, except README
-- Add optical flow estimation
-- Add depth corruption (making the perfect depth images more realistic)
 - Add support for YCB objects (not just Bob)
-- Add support for single object datasets
-
+- Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
+- Improve the documentation 
 
 # Version History
 
+## Version 1.4.0: 15th May 2020
+
+- added the NormalRenderer functions to the RGBRenderer saves a render call, when generating normal images
+- added a script to automatically download all PBR assest from [https://cc0textures.com/](https://cc0textures.com/)
+- add CCMaterialLoader, which can load all downloaded materials from cc0textures, to randomly replace them later
+- add support for ShapeNet
+- add support for SceneNet, including the lighting, which is modeled after the SUNCG lighting module.
+- massive docu improvements, added a type to all config values and a default value if one is there
+- added examples for: 
+  - bop_object_physics_positioning
+  - bop_object_pose_sampling
+  - bop_scene_replication
+  - on_surface_object_sampling
+  - scenenet
+  - scenenet_with_cctextures
+  - shapenet
+  - shapenet_with_scenenet
+  - shapenet_with_suncg
+  - suncg_with_improved_mat
+- added object OnSurfaceSampler (similiar to the phyiscs but faster and places object only on the bb)
+- added WorldManipulator (can change custom properties of the world, like the category_id)
+- switched to config version 3.0 
+  - global initialized values are now in the main.Initializer
+  - added a GlobalStorage to save variables over module boundaries
+- add VisNormalImage for debugging mode, which visualizes a depth & normal image in blender 
+- material selectors now also support AND and OR conditions
+- add automatic detection of optix graphics cards
+- added a min interest score for the CameraSampler
+- added a novelty pose checker for the CameraSampler, to avoid clustering of camera poses
+- global config values are now not longer added to the modules config, only in the event that there is no module found the global config is checked
+- rename SUNCG materials to the textures they load, makes selecting them easier
+- SUNCG materials are now shared over objects, if they share the same properties, also true for lights
+- rewrite of MaterialRandomizer to make use of the new cc0textures
+- added a Bop Writer to write out the current scene config in the BOP format
+- add the solidify modifier to the options of the EntityManipulator
+- add a PartSphere sampler to e.g. only sample in the upper half of a sphere
+- add a script to download scenenet to make the use of it even easier
+- add easy option to change specular values for materials with the MaterialManipulator
+- added the option to make runs deterministic by introducing a env variable: `BLENDER_PROC_RANDOM_SEED`
+- added a Basic Color Sampler
+- improved the capabilities of the DiscSampler
+- now all custom properties should be accessed in the config via: "cp_..." for custom functions: "cf_"
+- add texture support for ycbv objects in the BopLoader
+- change the default results of the SegMapRenderer to NYU ids instead of the row-index in the .csv file.
 
 ## Version 1.3.0: 25th March 2020
 - added Optical Flow Renderer 
@@ -101,4 +142,3 @@
 - Added MaterialRandomizer
 - Added Shell-, Sphere- and Uniform3DSampler
 - Added debug script
-

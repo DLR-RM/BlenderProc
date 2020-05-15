@@ -219,6 +219,37 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
     bm.free()
     return obj
 
+def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='NewDirectionObject'):
+    """
+    Generates a new object with the given vertices, no edges or faces are generated.
+
+    :param vertices: [[float, float, float]] list of vertices
+    :param name: str name of the new object
+    :return the generated obj
+    """
+    if len(vertices) != len(normals):
+        raise Exception("The lenght of the vertices and normals is not equal!")
+
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    bm = bmesh.new()
+    for v, n in zip(vertices, normals):
+        v1 = bm.verts.new(v)
+        new_vert = v + n * radius
+        v2 = bm.verts.new(new_vert)
+        bm.edges.new([v1, v2])
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
+
+
 def add_cube_based_on_bb(bouding_box, name='NewCube'):
     """
     Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
@@ -259,6 +290,13 @@ def get_all_mesh_objects():
     :return: a list of all mesh objects
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
+
+def get_all_materials():
+    """
+    Returns a list of all materials used and unused
+    :return: a list of all materials
+    """
+    return list(bpy.data.materials)
 
 def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.

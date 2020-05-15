@@ -1,29 +1,50 @@
+import os
+from math import radians, fabs, acos
 
-from src.main.Module import Module
+import bmesh
 import bpy
 import mathutils
-from math import radians, fabs, acos
-import os
-import bmesh
+
+from src.main.Module import Module
 from src.utility.Utility import Utility
 
+
 class FloorExtractor(Module):
+    """ Will search for the specified object and splits the surfaces which point upwards at a specified level away
+
+        Example 1:
+
+        {
+          "module": "object.FloorExtractor",
+          "config": {
+            "is_replica_object": "True",
+            "obj_name": "mesh",
+            "compare_angle_degrees" : 7.5,
+            "compare_height": 0.15
+          }
+        }
+
+    **Configuration**:
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "obj_name", "Name of the object where the floor gets extracted. Type: string."
+        "compare_angle_degrees", "Maximum difference between the up vector and the current polygon normal in degrees. "
+                                 "Type: float. Default: 7.5."
+        "compare_height", "Maximum difference in Z direction between the polygons median point and the specified height "
+                          "of the room. Type: float. Default: 0.15."
+        "is_replica_object", "In this instance the data_set_name key has to be set. Type: bool. Default: False."
+        "height_list_path", "Path to a file with height values. Specify one if is_replica_object == False. Type: string."
+        "data_set_name", "Name of the data set only useful with replica_dataset. Type: string."
+    """
 
     def __init__(self, config):
         Module.__init__(self, config)
 
     def run(self):
-        """Will search for the specified object and splits the surfaces which point upwards at a specified level away 
-
-        **Configuration**:
-        .. csv-table::
-            :header: "Parameter", "Description"
-            "obj_name", name of the object were the floor gets extracted
-            "compare_angle_degrees", maximum difference between the up vector and the current polygon normal in degrees
-            "compare_height", maximum difference in Z direction between the polygons median point and the specified height of the room
-
-            "is_replica_object", in this instance the data_set_name key has to be set
-            "data_set_name", name of the data set only useful with replica-dataset
+        """ Exctract floors in the following steps:
+        1. Searchs for the specified object.
+        2. Splits the surfaces which point upwards at a specified level away.
         """
         obj_name = self.config.get_string('obj_name')
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
@@ -31,7 +52,7 @@ class FloorExtractor(Module):
         if not self.config.get_bool('is_replica_object', False):
             file_path = self.config.get_string('height_list_path')
         else:
-            file_folder = os.path.join('resources', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
+            file_folder = os.path.join('resources', 'replica_dataset', 'height_levels', self.config.get_string('data_set_name'))
             file_path = Utility.resolve_path(os.path.join(file_folder, 'height_list_values.txt'))
         with open(file_path) as file:
             import ast

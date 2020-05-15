@@ -1,7 +1,8 @@
 import mathutils
-import src.utility.Utility as Utility
 
+import src.utility.Utility as Utility
 from src.main.Provider import Provider
+from src.main.GlobalStorage import GlobalStorage
 
 class Config:
 
@@ -28,7 +29,7 @@ class Config:
             
         return False
             
-    def _get_value(self, name, block=None, allow_invoke_provider=False):
+    def _get_value(self, name, block=None, allow_invoke_provider=False, global_check=True):
         """ Returns the value of the parameter with the given name inside the given block.
 
         Basically just a recursive dict lookup, making sure the parameter exists, otherwise an error is thrown.
@@ -60,6 +61,9 @@ class Config:
                     return block[name].run()
                 else:
                     return block[name]
+            elif global_check and GlobalStorage.has_param(name):
+                # this might also throw an NotFoundError
+                return GlobalStorage.get_global_config()._get_value(name, None, allow_invoke_provider, global_check=False)
             else:
                 raise NotFoundError("No such configuration '" + name + "'!")
             

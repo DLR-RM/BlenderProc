@@ -1,30 +1,37 @@
-import math
+import ast
+import os
 import random
 
 import bpy
-import mathutils
-import numpy as np
-import os
-import ast
-
-import bmesh
-from src.utility.Utility import Utility
 
 from src.camera.CameraSampler import CameraSampler
+from src.utility.Utility import Utility
 
 
 class ReplicaCameraSampler(CameraSampler):
-
-    def __init__(self, config):
-        """ Samples valid camera poses inside replica rooms.
+    """ Samples valid camera poses inside replica rooms.
 
         Works as the standard camera sampler, except the following differences:
-        - Always sets the x and y coordinate of the camera location to a value uniformly sampled inside a rooms bounding box
+        - Always sets the x and y coordinate of the camera location to a value uniformly sampled inside of a room's
+          bounding box
         - The configured z coordinate of the configured camera location is used as relative to the floor
         - All sampled camera locations need to lie straight above the room's floor to be valid
-        - Using the scene coverage/interestingness score in the ReplicaCameraSampler does not make much sense, as the 3D mesh is not split into individual objects.
+        - Using the scene coverage/interestingness score in the ReplicaCameraSampler does not make much sense, as the
+          3D mesh is not split into individual objects.
 
-        """
+        See parent class CameraSampler for more details.
+
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "is_replica_object", "Whether it's a Replica object. Type: bool. Default: False."
+        "height_list_path", "Path to height list. Type: string."
+        "data_set_name", "Dataset name in case is_replica_object is set to false. Type: string."
+    """
+
+    def __init__(self, config):
         CameraSampler.__init__(self, config)
 
     def run(self):
@@ -52,7 +59,7 @@ class ReplicaCameraSampler(CameraSampler):
         if not self.config.get_bool('is_replica_object', False):
             file_path = self.config.get_string('height_list_path')
         else:
-            folder_path = os.path.join('resources', 'replica-dataset', 'height_levels', self.config.get_string('data_set_name'))
+            folder_path = os.path.join('resources', 'replica_dataset', 'height_levels', self.config.get_string('data_set_name'))
             file_path = Utility.resolve_path(os.path.join(folder_path, 'height_list_values.txt'))
         with open(file_path) as file:
             self.floor_height_values = [float(val) for val in ast.literal_eval(file.read())]

@@ -6,10 +6,12 @@ import bpy
 import cv2
 import numpy as np
 
-from src.utility.SGMUtility import fill_in_fast
-from src.utility.BlenderUtility import load_image
-from src.utility.SGMUtility import resize
+from src.main.GlobalStorage import GlobalStorage
 from src.renderer.Renderer import Renderer
+from src.utility.BlenderUtility import load_image
+from src.utility.SGMUtility import fill_in_fast
+from src.utility.SGMUtility import resize
+
 
 class StereoGlobalMatchingWriter(Renderer):
     """ Writes depth image generated from the stereo global matching algorithm to file
@@ -18,16 +20,30 @@ class StereoGlobalMatchingWriter(Renderer):
 
     .. csv-table::
        :header: "Parameter", "Description"
-       "infer_focal_length_from_fov", "If true, then focal length would be calculated from the field of view angle, otherwise the value of the focal length would be read from the config parameter: "focal_length". Type: bool. Optional. Default value: False"
-       "disparity_filter", "Applies post-processing of the generated disparity map using WLS filter. Type: bool. Optional. Default value: True"
-       "depth_completion", "Applies basic depth completion using image processing techniques. Type: bool. Optional. Default value: True"
-       "focal_length", "Focal length used in the depth calculation step, should be set if 'infer_focal_length_from_fov' is set to false. Type: float. Optional. Default value: 0.0"
 
-       "window_size", "Semi-global matching kernel size. Should be an odd number. Type: int. Optional. Default value: 7"
-       "num_disparities", "Semi-global matching number of disparities. Should be > 0 and divisible by 16. Type: int. Optional. Default value: 32"
-       "min_disparity", "Semi-global matching minimum disparity. Type: int. Optional. Default value: 0"
+       "infer_focal_length_from_fov", "If true, then focal length would be calculated from the field of view angle, "
+                                      "otherwise the value of the focal length would be read from the config parameter: "
+                                      "'focal_length'. Type: bool. Default: False"
+       "disparity_filter", "Applies post-processing of the generated disparity map using WLS filter. Type: bool. "
+                           "Default: True"
+       "depth_completion", "Applies basic depth completion using image processing techniques. Type: bool. Default: True"
+       "focal_length", "Focal length used in the depth calculation step, should be set if 'infer_focal_length_from_fov' "
+                       "is set to false. Type: float. Default: 0.0"
 
-       "output_disparity", "Additionally outputs the disparity map. Type: bool. Optional. Default value: False"
+       "window_size", "Semi-global matching kernel size. Should be an odd number. Type: int. Optional. Default: 7"
+       "num_disparities", "Semi-global matching number of disparities. Should be > 0 and divisible by 16. Type: int. "
+                          "Default: 32"
+       "min_disparity", "Semi-global matching minimum disparity. Type: int. Optional. Default: 0"
+       "avoid_rendering", "If true, exit. Type: bool. Optional. Default: False."
+       "output_disparity", "Additionally outputs the disparity map. Type: bool. Default: False"
+       "rgb_output_key", "The key for the rgb data in the output. Type: string. Optional. default: colors."
+       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles "
+                       "in front of the camera. Type: int. Optional. Default: 512."
+       "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles "
+                       "in front of the camera. Type: int. Optional. Default: 512."
+       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles "
+                         "in front of the camera. Type: float. Optional. Default: 1."
+
     """
 
     def __init__(self, config):
@@ -42,10 +58,15 @@ class StereoGlobalMatchingWriter(Renderer):
         if not os.path.exists(self.output_dir):
             os.makedirs(self.output_dir)
 
-        self.depth_max = Renderer.DEPTH_END
-
-    # https://elib.dlr.de/73119/1/180Hirschmueller.pdf
+ 
     def sgm(self, imgL, imgR):
+        """ Semi global matching funciton, for more details on what this function does check the original paper
+        https://elib.dlr.de/73119/1/180Hirschmueller.pdf
+        
+        :param imgL: Left image. Type: blender image type object.
+        :param imgR: Right image. Type: blender image type object.
+        :return: depth, disparity
+         """
         window_size = self.config.get_int("window_size", 7)
         if window_size % 2 == 0:
             raise Exception("Window size must be an odd number")
@@ -80,18 +101,16 @@ class StereoGlobalMatchingWriter(Renderer):
             wls_filter.setSigmaColor(sigma)
 
             dispr = right_matcher.compute(imgR, imgL)
-            dispr = np.int16(dispr)
 
         displ = left_matcher.compute(imgL, imgR)
-        displ = np.int16(displ)
 
         filteredImg = None
         if self.config.get_bool("disparity_filter", True):
             filteredImg = wls_filter.filter(displ, imgL, None, dispr).astype(np.float32)
             filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0, alpha=255, norm_type=cv2.NORM_MINMAX)
 
-        disparity = np.float64(filteredImg) / 16.0 if self.config.get_bool("disparity_filter", True) else \
-            np.float64(displ) / 16.0
+        disparity_to_be_written = filteredImg if self.config.get_bool("disparity_filter", True) else displ
+        disparity = np.float64(np.copy(disparity_to_be_written)) / 16.0
 
         # Crop and resize, due to baseline, a part of the image on the left can't be matched with the one on the right
         disparity = resize(disparity[:, numDisparities:], (self.width, self.height))
@@ -106,14 +125,23 @@ class StereoGlobalMatchingWriter(Renderer):
         if self.config.get_bool("depth_completion", True):
             depth = fill_in_fast(depth, self.depth_max)
 
-        
-        disparity = np.int16(disparity)
-        return depth, disparity
+        return depth, disparity_to_be_written
 
     def run(self):
+        """ Does the stereo global matching in the following steps:
+        1. Collect camera object and its state,
+        2. For each frame, load left and right images and call the `sgm()` methode.
+        3. Write the results to a numpy file.
+        """
         if self._avoid_rendering:
             print("Avoid rendering is on, no output produced!")
             return
+
+        if GlobalStorage.is_in_storage("renderer_depth_end"):
+            self.depth_max = GlobalStorage.get("renderer_depth_end")
+        else:
+            raise RuntimeError("A depth rendering has to be executed before this module is executed, "
+                               "else the depth_end value is not set!")
 
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
 
