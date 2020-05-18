@@ -167,7 +167,7 @@ class Renderer(Module):
         bpy.context.scene.cycles.max_bounces = self.config.get_int("max_bounces", 3)
         bpy.context.scene.cycles.min_bounces = self.config.get_int("min_bounces", 1)
         bpy.context.scene.cycles.transmission_bounces = self.config.get_int("transmission_bounces", 0)
-        bpy.context.scene.cycles.transparency_bounces = self.config.get_int("transparency_bounces", 8)
+        bpy.context.scene.cycles.transparent_max_bounces = self.config.get_int("transparency_bounces", 8)
         bpy.context.scene.cycles.volume_bounces = self.config.get_int("volume_bounces", 0)
 
         bpy.context.scene.cycles.debug_bvh_type = "STATIC_BVH"
