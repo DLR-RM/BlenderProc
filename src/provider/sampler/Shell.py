@@ -5,7 +5,7 @@ from src.main.Provider import Provider
 
 
 class Shell(Provider):
-    """ Samples a point from the space in between two spheres with a a double spherical angle with apex in the center
+    """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
         of those two spheres.
 
         Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
