@@ -50,7 +50,6 @@
       "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>/lm",
-        "split": "val",
         "mm2m": True,
         "model_type": "",
         "sample_objects": True,
@@ -308,7 +307,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 150
+        "samples": 50
       }
     },
     {
