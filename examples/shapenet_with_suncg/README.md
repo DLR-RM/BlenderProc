@@ -118,7 +118,7 @@ We also add a custom property to make the selection with `EntityManipulator` in 
     "to_sample_on": {
         "provider": "getter.Entity",
         "conditions": {
-          "cp_category_id": 1, # 1 is the category of the bed
+          "cp_category_id": 4, # 4 is the category of the bed
           "type": "MESH"
         }
 
