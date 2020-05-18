@@ -68,7 +68,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
     "cf_textures": {
       "Base Color": {
         "provider": "sampler.Path",
-        "path": "<args:1>/*.png"
+        "path": "<args:1>/*.jpg"
       }
     }
   }
