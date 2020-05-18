@@ -95,7 +95,7 @@ if "custom_blender_path" not in setup_config:
             print("Downloading blender from " + url)
             file_tmp = urlretrieve(url, None, DownloadProgressBar())[0]
         except ImportError:
-            print("Progressbar for downloading, can only been shown, "
+            print("Progressbar for downloading, can only be shown, "
                   "when the python package \"progressbar\" is installed")
             file_tmp = urlretrieve(url, None)[0]
 
