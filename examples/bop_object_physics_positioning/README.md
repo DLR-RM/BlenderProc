@@ -6,7 +6,7 @@ This example serves as the basis for generating the synthetic data provided at t
 
 ## Usage
 
-Execute in the Blender-Pipeline main directory:
+Execute in the BlenderProc main directory:
 
 ```
 python scripts/download_cc_textures.py 
