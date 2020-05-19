@@ -305,7 +305,7 @@ class BopLoader(Loader):
         if not self._is_ycbv:
             mat = self._load_materials(cur_obj)
             self._link_col_node(mat)
-        else:
+        elif texture_file_path != "":
             # ycbv objects contain normal image textures, which should be used instead of the vertex colors
             self._load_texture(cur_obj, texture_file_path)
         cur_obj["is_bop_object"] = True

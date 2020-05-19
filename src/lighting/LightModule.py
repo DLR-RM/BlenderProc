@@ -50,5 +50,5 @@ class LightModule(Module):
         light_obj.location = config.get_list("location", [0, 0, 0])
         light_obj.rotation_euler = config.get_list("rotation", [0, 0, 0])
         light_data.energy = config.get_float("energy", 10.)
-        light_data.color = config.get_list("color", [1, 1, 1])
+        light_data.color = config.get_list("color", [1, 1, 1])[:3]
         light_data.distance = config.get_float("distance", 0)
