@@ -56,4 +56,3 @@ class Loader(Module):
         for obj in objects:
             for face in obj.data.polygons:
                 face.use_smooth = is_smooth
-                print(face, face.use_smooth)
