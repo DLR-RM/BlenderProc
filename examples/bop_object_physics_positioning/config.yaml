@@ -57,7 +57,8 @@
         "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
-        }
+        },
+        "cf_set_shading": "SMOOTH"
       }
     },
     {
