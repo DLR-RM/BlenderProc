@@ -1,4 +1,5 @@
 import re
+from random import choice
 
 import bpy
 import mathutils
@@ -13,7 +14,7 @@ class Entity(Provider):
         Example 1: Return a list of objects that match a name pattern.
 
         {
-          "provider": "getter.Entity"
+          "provider": "getter.Entity",
           "conditions": {
             "name": "Suzanne.*"
           }
@@ -23,7 +24,6 @@ class Entity(Provider):
                                                 OR {match the name pattern, AND have a certain value of a cust. prop}
                                                 OR {be inside a bounding box defined by a min and max points}
                                                 OR {have a Z position in space greater than -1}
-
 
         {
           "provider": "getter.Entity",
@@ -51,6 +51,16 @@ class Entity(Provider):
           ]
         }
 
+        Example 3: Returns a random object of MESH type.
+
+        {
+          "provider": "getter.Entity",
+          "random_index": True,
+          "conditions": {
+            "type": "MESH"
+          }
+        }
+
     **Configuration**:
 
     .. csv-table::
@@ -73,6 +83,8 @@ class Entity(Provider):
         "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
         "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
                  "Type: int."
+        "random_index": "If set, this Provider returns a single random object from the pool of selected ones. Shadows "
+                        "`index` property. Type: bool. Default: False."
 
     **Custom functions**
 
@@ -207,5 +219,7 @@ class Entity(Provider):
 
         if self.config.has_param("index"):
             objects = [objects[self.config.get_int("index")]]
+        if self.config.get_bool("random_index", False):
+            objects = [choice(objects)]
 
         return objects
