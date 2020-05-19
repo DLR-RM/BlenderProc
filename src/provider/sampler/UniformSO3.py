@@ -6,7 +6,7 @@ from src.main.Provider import Provider
 
 
 class UniformSO3(Provider):
-    """ Uniformly samples rotations from SO(3).
+    """ Uniformly samples rotations from SO(3). Allows to limit the rotation around Blender World coordinate axes.
 
     **Configuration**:
 
