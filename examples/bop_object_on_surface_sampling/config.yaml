@@ -284,11 +284,17 @@
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [
-        {
-          "number_of_samples": 3,
+        {          
           "proximity_checks": {
-            "min": 0.2
+            "min": 0.3
           },
+          "excluded_objs_in_proximity_check":  {
+            "provider": "getter.Entity",
+            "conditions": {
+              "name": "ground_plane.*"
+            }
+          },
+          "number_of_samples": 5,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
@@ -310,7 +316,7 @@
                   }
                 }
               },
-              "index": 0,
+              "random_index": True,
               "get": "location"
             }
           }
