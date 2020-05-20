@@ -282,6 +282,7 @@ Then simply run the script multiple times.
           },
           "min_height": 1,
           "max_height": 4,
+          "face_sample_range": [0.4,0.6],
           "use_ray_trace_check": False,
         },
         "min_distance": 0.05,
@@ -304,8 +305,17 @@ Then simply run the script multiple times.
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [
-        {
-          "number_of_samples": 3,
+        {          
+          "proximity_checks": {
+            "min": 0.3
+          },
+          "excluded_objs_in_proximity_check":  {
+            "provider": "getter.Entity",
+            "conditions": {
+              "name": "ground_plane.*"
+            }
+          },
+          "number_of_samples": 5,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
@@ -321,10 +331,10 @@ Then simply run the script multiple times.
               "entities": {
                 "provider": "getter.Entity",
                 "conditions": {
-                  "cp_model_path": ".*/lm/.*"
+                  "cp_bop_dataset_name": "lm",
                 }
               },
-              "index": 0,
+              "random_index": True,
               "get": "location"
             }
           }
@@ -334,8 +344,9 @@ Then simply run the script multiple times.
     },
 ```
 
-* Sample 3 camera poses, where camera's location is sampled using `sampler.Shell` Provider, and camera's rotation is based on the output of the `getter.Attribute` Provider.
-* `getter.Attribute` Provider returns a `location` (`"get": "location"`) of the first (`"index": 0`) LM dataset (`"cp_model_path": ".*/lm/.*"`) object.
+* Sample 5 camera poses, where camera's location is sampled using `sampler.Shell` Provider, and camera's rotation is based on the output of the `getter.Attribute` Provider.
+* `getter.Attribute` Provider returns a `location` (`"get": "location"`) of a random object (`"random_index": True`) from the LM dataset (`"cp_bop_dataset_name": "lm"`).
+* Camera poses undergo proximity checks (`"proximity_checks"`) with respect to all objects besides ground_plane (`"excluded_objs_in_proximity_check"`).
 
 ## More examples
 
