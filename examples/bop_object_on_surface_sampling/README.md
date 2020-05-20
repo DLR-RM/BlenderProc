@@ -1,4 +1,4 @@
-# BOP object pose sampling on textured object surface
+# BOP object on textured surface sampling
 
 ![](rendering.png)
 
@@ -295,7 +295,7 @@ Then simply run the script multiple times.
     },
 ```
 
-* Get all objects with `"cp_physics": True` and the ground plane `"name": "ground_plane0"`. Use the provider `"sampler.UpperRegionSampler"` to sample objects above the plane at specified height, position and rotation. Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. Check the [on_surface_object_sampling](../on_surface_object_sampling/README.md) for more details.
+* Get all objects with `"cp_physics": True` and the ground plane `"name": "ground_plane0"`. Use the provider `"sampler.UpperRegionSampler"` to sample objects above the plane at specified height, position and rotation. Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. `object.OnSurfaceSampler` then places the objects down to the plane. Check the [on_surface_object_sampling](../on_surface_object_sampling/README.md) example for more details.
 
 ### Camera Sampler
 
