@@ -74,7 +74,10 @@ class CameraSampler(CameraModule):
         "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries "
                             "containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical "
                             "threshold in case of max or min. The operators are combined in conjunction (i.e boolean "
-                            "AND). Type: dict. Defaul: [].
+                            "AND). Type: dict. Default: {}.
+        "excluded_objs_in_proximity_check", "A list of objects, returned by getter.Entity to remove some objects from"
+                                            "the proximity checks defined in 'proximity_checks'."
+                                            "Type: list. Default: []"
         "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views. Type: float. "
                               "Default: 0.0."
         "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera "
@@ -129,7 +132,6 @@ class CameraSampler(CameraModule):
 
     def run(self):
         """ Sets camera poses. """
-        self._init_bvh_tree()
 
         source_specs = self.config.get_list("cam_poses")
         for i, source_spec in enumerate(source_specs):
@@ -144,9 +146,11 @@ class CameraSampler(CameraModule):
         cam = cam_ob.data
 
         # Set global parameters
+        self._is_bvh_tree_inited = False
         self.sqrt_number_of_rays = config.get_int("sqrt_number_of_rays", 10)
         self.max_tries = config.get_int("max_tries", 100000000)
-        self.proximity_checks = config.get_raw_dict("proximity_checks", [])
+        self.proximity_checks = config.get_raw_dict("proximity_checks", {})
+        self.excluded_objects_in_proximity_check = config.get_list("excluded_objs_in_proximity_check", [])
         self.min_interest_score = config.get_float("min_interest_score", 0.0)
         self.interest_score_range = config.get_float("interest_score_range", self.min_interest_score)
         self.interest_score_step = config.get_float("interest_score_step", 0.1)
@@ -154,6 +158,9 @@ class CameraSampler(CameraModule):
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
         self._above_objects = config.get_list("check_if_pose_above_object_list", [])
 
+        if self.proximity_checks:
+            # needs to build an bvh tree
+            self._init_bvh_tree()
 
         if self.interest_score_step <= 0.0:
             raise Exception("Must have an interest score step size bigger than 0")
@@ -274,6 +281,8 @@ class CameraSampler(CameraModule):
         bm = bmesh.new()
         # Go through all mesh objects
         for obj in get_all_mesh_objects():
+            if obj in self.excluded_objects_in_proximity_check:
+                continue
             # Add object mesh to bmesh (the newly added vertices will be automatically selected)
             bm.from_mesh(obj.data)
             # Apply world matrix to all selected vertices
@@ -285,6 +294,8 @@ class CameraSampler(CameraModule):
         # Create tree from bmesh
         self.bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
 
+        self._is_bvh_tree_inited = True
+
     def _perform_obstacle_in_view_check(self, cam, cam2world_matrix):
         """ Check if there is an obstacle in front of the camera which is less than the configured
             "min_dist_to_obstacle" away from it.
@@ -293,8 +304,11 @@ class CameraSampler(CameraModule):
         :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
         :return: True, if there are no obstacles too close to the cam.
         """
-        if len(self.proximity_checks) == 0: # if no checks are in the settings all positions are accepted
+        if not self.proximity_checks:  # if no checks are in the settings all positions are accepted
             return True
+        if not self._is_bvh_tree_inited:
+            raise Exception("The bvh tree should be inited before this function is called!")
+
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
@@ -329,6 +343,7 @@ class CameraSampler(CameraModule):
                 range_distance = self.proximity_checks["max"] + 1.0
             else:
                 range_distance = self.proximity_checks["min"]
+
 
         # Go in discrete grid-like steps over plane
         position = cam2world_matrix.to_translation()
