@@ -344,7 +344,6 @@ class CameraSampler(CameraModule):
             else:
                 range_distance = self.proximity_checks["min"]
 
-        objects_to_ignore = self.proximity_checks["ignore_objects"]
 
         # Go in discrete grid-like steps over plane
         position = cam2world_matrix.to_translation()
