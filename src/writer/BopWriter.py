@@ -155,6 +155,11 @@ class BopWriter(StateWriter):
                 if obj["bop_dataset_name"] == self.dataset:
                     self.dataset_objects.append(obj)
 
+        # Check if there is any object from the specified dataset.
+        if not self.dataset_objects:
+            raise Exception("The scene does not contain any object from the "
+                            "specified dataset: {}".format(self.dataset))
+
         # Paths to the already existing scene folders (such folders may exist
         # when appending to an existing dataset).
         scene_dirs = sorted(glob.glob(os.path.join(self.scenes_dir, '*')))
