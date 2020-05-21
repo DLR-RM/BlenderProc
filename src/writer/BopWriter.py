@@ -342,11 +342,15 @@ class BopWriter(StateWriter):
 
             # Copy the resulting RGB image.
             rgb_output = self._find_registered_output_by_key("colors")
+            if rgb_output is None:
+                raise Exception("RGB image has not been rendered.")
             rgb_fpath = self.rgb_tpath.format(chunk_id=chunk_id, im_id=current_frame_id)
             shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
             # Load the resulting depth image.
             depth_output = self._find_registered_output_by_key("depth")
+            if depth_output is None:
+                raise Exception("Depth image has not been rendered.")
             depth = load_image(depth_output['path'] % frame_id, num_channels=1)
             depth = depth.squeeze(axis=2)
 
