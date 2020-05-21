@@ -115,12 +115,12 @@ class BopWriter(StateWriter):
         # Number of frames saved in each chunk.
         self.frames_per_chunk = 1000
 
+        # Multiply the output depth image with this factor to get depth in mm.
+        self.depth_scale = 0.1
+
         # Format of the RGB and depth images.
         rgb_ext = '.png'
         depth_ext = '.png'
-
-        # Multiply the output depth image with this factor to get depth in mm.
-        self.depth_scale = 0.1
 
         # Output paths.
         base_path = self._determine_output_dir(False)
@@ -159,18 +159,6 @@ class BopWriter(StateWriter):
         if not self.dataset_objects:
             raise Exception("The scene does not contain any object from the "
                             "specified dataset: {}".format(self.dataset))
-
-        # Paths to the already existing chunk folders (such folders may exist
-        # when appending to an existing dataset).
-        chunk_dirs = sorted(glob.glob(os.path.join(self.chunks_dir, '*')))
-        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
-
-        # Get the ID of the last already existing frame.
-        self.frame_id_offset = 0
-        if len(chunk_dirs):
-            last_chunk_gt_fpath = os.path.join(sorted(chunk_dirs)[-1], 'scene_gt.json')
-            chunk_gt = load_json(last_chunk_gt_fpath, keys_to_int=True)
-            self.frame_id_offset = int(sorted(chunk_gt.keys())[-1]) + 1
 
         # Get the camera.
         cam_ob = bpy.context.scene.camera
@@ -311,15 +299,39 @@ class BopWriter(StateWriter):
     def _write_frames(self):
         """ Writes images, GT annotations and camera info.
         """
+        # Paths to the already existing chunk folders (such folders may exist
+        # when appending to an existing dataset).
+        chunk_dirs = sorted(glob.glob(os.path.join(self.chunks_dir, '*')))
+        chunk_dirs = [d for d in chunk_dirs if os.path.isdir(d)]
+
+        # Get ID's of the last already existing chunk and frame.
+        curr_chunk_id = 0
+        curr_frame_id = 0
+        if len(chunk_dirs):
+            last_chunk_dir = sorted(chunk_dirs)[-1]
+            last_chunk_gt_fpath = os.path.join(last_chunk_dir, 'scene_gt.json')
+            chunk_gt = load_json(last_chunk_gt_fpath, keys_to_int=True)
+
+            # Last chunk and frame ID's.
+            last_chunk_id = int(os.path.basename(last_chunk_dir))
+            last_frame_id = int(sorted(chunk_gt.keys())[-1])
+
+            # Current chunk and frame ID's.
+            curr_chunk_id = last_chunk_id
+            curr_frame_id = last_frame_id + 1
+            if curr_frame_id % self.frames_per_chunk == 0:
+                curr_chunk_id += 1
+                curr_frame_id = 0
+
         # Initialize structures for the GT annotations and camera info.
-        if self.frame_id_offset % self.frames_per_chunk == 0:
-            chunk_gt = {}
-            chunk_camera = {}
-        else:
+        chunk_gt = {}
+        chunk_camera = {}
+        if curr_frame_id != 0:
             # Load GT and camera info of the chunk we are appending to.
-            chunk_id = int(self.frame_id_offset / self.frames_per_chunk)
-            chunk_gt = load_json(self.chunk_gt_tpath.format(chunk_id=chunk_id), keys_to_int=True)
-            chunk_camera = load_json(self.chunk_camera_tpath.format(chunk_id=chunk_id), keys_to_int=True)
+            chunk_gt = load_json(
+                self.chunk_gt_tpath.format(chunk_id=curr_chunk_id), keys_to_int=True)
+            chunk_camera = load_json(
+                self.chunk_camera_tpath.format(chunk_id=curr_chunk_id), keys_to_int=True)
 
         # Go through all frames.
         num_new_frames = bpy.context.scene.frame_end - bpy.context.scene.frame_start
@@ -327,24 +339,24 @@ class BopWriter(StateWriter):
             # Activate frame.
             bpy.context.scene.frame_set(frame_id)
 
-            # Frame and chunk ID's.
-            current_frame_id = frame_id + self.frame_id_offset
-            chunk_id = int(current_frame_id / self.frames_per_chunk)
-
-            # Prepare folders for a new chunk.
-            if current_frame_id % self.frames_per_chunk == 0:
-                os.makedirs(os.path.dirname(self.rgb_tpath.format(chunk_id=chunk_id, im_id=0)))
-                os.makedirs(os.path.dirname(self.depth_tpath.format(chunk_id=chunk_id, im_id=0)))
+            # Reset data structures and prepare folders for a new chunk.
+            if curr_frame_id == 0:
+                chunk_gt = {}
+                chunk_camera = {}
+                os.makedirs(os.path.dirname(
+                    self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
+                os.makedirs(os.path.dirname(
+                    self.depth_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
 
             # Get GT annotations and camera info for the current frame.
-            chunk_gt[current_frame_id] = self._get_frame_gt()
-            chunk_camera[current_frame_id] = self._get_frame_camera()
+            chunk_gt[curr_frame_id] = self._get_frame_gt()
+            chunk_camera[curr_frame_id] = self._get_frame_camera()
 
             # Copy the resulting RGB image.
             rgb_output = self._find_registered_output_by_key("colors")
             if rgb_output is None:
                 raise Exception("RGB image has not been rendered.")
-            rgb_fpath = self.rgb_tpath.format(chunk_id=chunk_id, im_id=current_frame_id)
+            rgb_fpath = self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id)
             shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
             # Load the resulting depth image.
@@ -360,21 +372,23 @@ class BopWriter(StateWriter):
             depth_mm_scaled = depth_mm / float(self.depth_scale)
 
             # Save the scaled depth image.
-            depth_fpath = self.depth_tpath.format(chunk_id=chunk_id, im_id=current_frame_id)
+            depth_fpath = self.depth_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id)
             save_depth(depth_fpath, depth_mm_scaled)
 
             # Save the chunk info if we are at the end of a chunk or at the last new frame.
-            if ((current_frame_id + 1) % self.frames_per_chunk == 0) or\
+            if ((curr_frame_id + 1) % self.frames_per_chunk == 0) or\
                   (frame_id == num_new_frames - 1):
 
                 # Save GT annotations.
-                save_json(self.chunk_gt_tpath.format(chunk_id=chunk_id), chunk_gt)
+                save_json(self.chunk_gt_tpath.format(chunk_id=curr_chunk_id), chunk_gt)
 
                 # Save camera info.
-                save_json(self.chunk_camera_tpath.format(chunk_id=chunk_id), chunk_camera)
+                save_json(self.chunk_camera_tpath.format(chunk_id=curr_chunk_id), chunk_camera)
 
-                # Reset structures for GT and camera info.
-                chunk_gt = {}
-                chunk_camera = {}
+                # Update ID's.
+                curr_chunk_id += 1
+                curr_frame_id = 0
+            else:
+                curr_frame_id += 1
 
         return
