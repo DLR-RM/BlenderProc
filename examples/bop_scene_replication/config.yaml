@@ -52,7 +52,8 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 150
+        "samples": 50,
+        "render_depth": True
       }
     },
     {
@@ -62,7 +63,10 @@
       }
     },
     {
-      "module": "writer.BopWriter"
+      "module": "writer.BopWriter",
+      "config": {
+        "dataset": "tless"
+      }
     },
     {
       "module": "writer.Hdf5Writer"
