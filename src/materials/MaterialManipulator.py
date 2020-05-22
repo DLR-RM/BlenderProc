@@ -132,6 +132,9 @@ class MaterialManipulator(Module):
 
         op_mode = self.config.get_string("mode", "once_for_each")
 
+        if not materials:
+            raise Exception("No materials selected")
+
         if op_mode == "once_for_all":
             # get values to set if they are to be set/sampled once for all selected materials
             params = self._get_the_set_params(params_conf)
