@@ -66,7 +66,7 @@ class BopLoader(Loader):
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
         self.bop_dataset_name = os.path.basename(self.bop_dataset_path)
-        self._is_ycbv = self.bop_dataset_name == "ycbv"
+        self._has_external_texture = self.bop_dataset_name in ["ycbv", "ruapc"]
 
     def run(self):
         """ Load BOP data """
@@ -273,7 +273,7 @@ class BopLoader(Loader):
         cur_obj = self._get_loaded_obj(model_path)
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
         if cur_obj is None:
-            if self._is_ycbv:
+            if self._has_external_texture:
                 if os.path.exists(model_path):
                     new_file_ply_content = ""
                     with open(model_path, "r") as file:
@@ -302,7 +302,7 @@ class BopLoader(Loader):
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path
-        if not self._is_ycbv:
+        if not self._has_external_texture:
             mat = self._load_materials(cur_obj)
             self._link_col_node(mat)
         elif texture_file_path != "":
