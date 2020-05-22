@@ -74,7 +74,7 @@ def save_depth(path, im):
     :param path: Path to the output depth image file.
     :param im: ndarray with the depth image to save.
     """
-    if path.split('.')[-1].lower() != 'png':
+    if not path.endswith(".png"):
         raise ValueError('Only PNG format is currently supported.')
 
     im[im > 65535] = 65535
