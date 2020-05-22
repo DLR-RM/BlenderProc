@@ -11,13 +11,13 @@ class ObjectStateWriter(StateWriter):
         self.object_writer = ItemWriter(self._get_attribute)
 
     def run(self):
-        """ Collect all mesh objects and writes their id and pose."""
+        """ Collect all mesh objects and writes their id, name and pose."""
         objects = []
         for object in get_all_mesh_objects():
             objects.append(object)
 
         self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states",
-                                      ["id", "location", "rotation_euler"])
+                                      ["id", "name", "location", "rotation_euler"])
 
     def _get_attribute(self, object, attribute_name):
         """ Returns the value of the requested attribute for the given object.
