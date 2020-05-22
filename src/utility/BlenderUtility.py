@@ -185,7 +185,8 @@ def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
         raise Exception("This only support objects which only have one uv layer.")
     for layer in obj.data.uv_layers:
         max_val = np.max([list(uv_coords.uv) for uv_coords in layer.data])
-        return max_val < 1e-7
+        return max_val > 1e-7
+    return False
 
 def vector_to_euler(vector, vector_type):
     """
