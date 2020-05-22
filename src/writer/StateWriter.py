@@ -39,7 +39,7 @@ class StateWriter(Module):
         """
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
-
+        
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
 
         self._register_output(file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
@@ -57,6 +57,8 @@ class StateWriter(Module):
             if item.name not in self.name_to_id:
                 self.name_to_id[item.name] = len(self.name_to_id.values())
             return self.name_to_id[item.name]
+        elif attribute_name == "name":
+            return item.name
         elif attribute_name == "location":
             return Utility.transform_point_to_blender_coord_frame(item.location, self.destination_frame)
         elif attribute_name == "rotation_euler":
