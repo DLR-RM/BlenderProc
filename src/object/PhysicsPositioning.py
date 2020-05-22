@@ -108,6 +108,7 @@ class PhysicsPositioning(Module):
             obj.select_set(True)
             obj.rigid_body.collision_shape = self.collision_shape
             obj.rigid_body.collision_margin = self.collision_margin
+            obj.rigid_body.use_margin = True
             obj.rigid_body.mesh_source = self.collision_mesh_source
             if obj.rigid_body.type == "ACTIVE":
                 bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME', center='MEDIAN')
