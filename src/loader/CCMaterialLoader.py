@@ -24,6 +24,8 @@ class CCMaterialLoader(Module):
        :header: "Parameter", "Description"
 
        "folder_path", "The path to the downloaded cc0textures. Type: string. Default: resources/cctextures."
+       "used_assets", "A list of all asset names, you want to use, the numbers are not important."
+                      "By default all assets will be loaded, specified by an empty list. Type: list. Default: []."
     """
 
     def __init__(self, config):
@@ -32,11 +34,20 @@ class CCMaterialLoader(Module):
 
     def run(self):
         self._folder_path = Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures"))
+        self._used_assets = self.config.get_list("used_assets", [])
 
         x_texture_node = -1500
         y_texture_node = 300
         if os.path.exists(self._folder_path) and os.path.isdir(self._folder_path):
             for asset in os.listdir(self._folder_path):
+                if self._used_assets:
+                    skip_this_one = True
+                    for used_asset in self._used_assets:
+                        if asset.startswith(used_asset):
+                            skip_this_one = False
+                            break
+                    if skip_this_one:
+                        continue
                 current_path = os.path.join(self._folder_path, asset)
                 if os.path.isdir(current_path):
                     base_image_path = os.path.join(current_path, "{}_2K_Color.jpg".format(asset))
@@ -45,6 +56,7 @@ class CCMaterialLoader(Module):
                     collection_of_texture_nodes = []
                     new_mat = bpy.data.materials.new(asset)
                     new_mat["is_cc_texture"] = True
+                    new_mat["asset_name"] = asset
                     new_mat.use_nodes = True
                     nodes = new_mat.node_tree.nodes
                     links = new_mat.node_tree.links
