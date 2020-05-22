@@ -106,9 +106,8 @@ class BopWriter(StateWriter):
         StateWriter.__init__(self, config)
 
         # Parse configuration.
-        self.dataset = self.config.get_string("dataset", "")
-        if self.dataset == "":
-            raise Exception("Dataset not specified.")
+        self.dataset = self.config.get_string("dataset")
+
         self.append_to_existing_output =\
             self.config.get_bool("append_to_existing_output", False)
 
