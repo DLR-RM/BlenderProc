@@ -312,7 +312,8 @@ Then simply run the script multiple times.
           "excluded_objs_in_proximity_check":  {
             "provider": "getter.Entity",
             "conditions": {
-              "name": "ground_plane.*"
+              "name": "ground_plane.*",
+              "type": "MESH"
             }
           },
           "number_of_samples": 5,
