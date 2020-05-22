@@ -152,6 +152,7 @@ class Material(Provider):
                 elif requested_custom_function:
                     if key.startswith("texture_amount_"):
                         if material.use_nodes:
+                            value = int(value)
                             nodes = material.node_tree.nodes
                             texture_nodes = Utility.get_nodes_with_type(nodes, "TexImage")
                             amount_of_texture_nodes = len(texture_nodes) if texture_nodes is not None else 0
