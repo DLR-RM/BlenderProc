@@ -1,4 +1,4 @@
-# Args: <path_to_bop_data> <bop_toolkit_path> <path_to_cc_textures> <output_dir>
+# Args: <path_to_bop_data> <bop_datset_name> <bop_toolkit_path> <path_to_cc_textures> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -15,8 +15,8 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:3>",
-          "sys_paths": ["<args:1>"]
+          "output_dir": "<args:4>",
+          "sys_paths": ["<args:2>"]
         }
       }
     },
@@ -49,7 +49,7 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/lm",
+        "bop_dataset_path": "<args:0>/<args:1>",
         "mm2m": True,
         "model_type": "",
         "sample_objects": True,
@@ -200,7 +200,7 @@
     {
       "module": "loader.CCMaterialLoader",
       "config": {
-        "folder_path": "<args:2>"
+        "folder_path": "<args:3>"
       }
     },
     {
@@ -308,14 +308,15 @@
             "format": "look_at",
             "value": {
               "provider": "getter.Attribute",
+              "get": "location",
               "entities": {
                 "provider": "getter.Entity",
+                "random_index": True,
                 "conditions": {
-                  "cp_bop_dataset_name": "lm",
+                  "cp_bop_dataset_name": "<args:1>",
                 }
               },
-              "random_index": True,
-              "get": "location"
+              "index": 0,
             },
             "inplane_rot": {
               "provider": "sampler.Value",
@@ -331,7 +332,8 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 50
+        "samples": 50,
+        "render_depth": True
       }
     },
     {
@@ -344,12 +346,9 @@
       "module": "writer.CocoAnnotationsWriter"
     },
     {
-      "module": "writer.Hdf5Writer"
-    },
-    {
       "module": "writer.BopWriter",
       "config": {
-        "dataset": "lm",
+        "dataset": "<args:1>",
         "append_to_existing_output": True,
         "postprocessing_modules": {
           "depth": [
