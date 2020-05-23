@@ -57,6 +57,12 @@ python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
           "format": "look_at",
           "value": {
             "provider": "getter.POI"
+          },
+          "inplane_rot": {
+            "provider": "sampler.Value",
+            "type": "float",
+            "min": -0.7854,
+            "max": 0.7854
           }
         }
       }
@@ -65,21 +71,21 @@ python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
 },
 ```
 
-The focus of this example is `camera.CameraSampler` module which allows one to sample random camera positions. 
-In this example we are doing it in such a way that all camera positions always "look" towards the point of interest (POI).
+The `camera.CameraSampler` module allows sampling camera positions and orientations. 
+In this example, all camera poses are constrained to "look at" a point of interest (POI).
 
 * Sample location uniformly in a bounding box above the plane.
 
-Note that for this we are using [sampler.Uniform3d](../../src/provider/sampler) Provider which is not a part of a module, but a useful tool for introducing some "controlled randomness" into the process.
-To call a sampler for some attribute of a camera, specify a name (`provider`) of a desired sampler and define some input arguments for it, e.g. `min` and `max`.
-Sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.
+For sampling camera positions we are using the [sampler.Uniform3d](../../src/provider/sampler) Provider. To call a sampler for some attribute of a camera, specify a name (`provider`) of a desired sampler and define some input arguments for it, e.g. `min` and `max`.
+The sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.
 
-* Set orientation of the camera such that it will always look at the POI in any pose.
+* Set orientation of the camera such that it will always look at the POI in any pose. 
 
-Note that here we are using a [getter.POI](../../src/provider/getter) Provider which is just as like a `sampler.Uniform3d`, but without any "randomness" inside.
-They also have a well-defined config structure, but `getter.POI`, for example, has no input arguments since it's output is fully dependent on the current state of the objects in the scene.
-The POI is calculated from the position of all objects.
- 
+The [getter.POI](../../src/provider/getter) Provider also has a well-defined config structure, but here its output is fully dependent on the current state of the objects in the scene. The POI per default is defined as the object position closest to the mean position of all objects. 
+
+* Optionally, add an `"inplane_rot"` sampler to rotate the camera around the optical axis
+It samples float values between specified `min` and `max` in radians. Here it is used to randomly inplane rotate the cameras in an interval of +/- 45 degree.
+
 ## More examples
 
 * [light_sampling](../light_sampling): More on sampling for lights.
