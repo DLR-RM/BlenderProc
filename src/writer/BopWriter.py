@@ -74,7 +74,7 @@ def save_depth(path, im):
     :param path: Path to the output depth image file.
     :param im: ndarray with the depth image to save.
     """
-    if path.split('.')[-1].lower() != 'png':
+    if not path.endswith(".png"):
         raise ValueError('Only PNG format is currently supported.')
 
     im[im > 65535] = 65535
@@ -110,9 +110,8 @@ class BopWriter(StateWriter):
         StateWriter.__init__(self, config)
 
         # Parse configuration.
-        self.dataset = self.config.get_string("dataset", "")
-        if self.dataset == "":
-            raise Exception("Dataset not specified.")
+        self.dataset = self.config.get_string("dataset")
+
         self.append_to_existing_output =\
             self.config.get_bool("append_to_existing_output", False)
 
