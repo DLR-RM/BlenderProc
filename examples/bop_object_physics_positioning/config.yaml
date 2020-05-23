@@ -288,8 +288,8 @@
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 0.7,
-            "radius_max": 1.3,
+            "radius_min": 0.4,
+            "radius_max": 1.5,
             "elevation_min": 10,
             "elevation_max": 89.9
           },
@@ -314,7 +314,8 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 50
+        "samples": 50,
+        "render_depth": True
       }
     },
     {
@@ -330,7 +331,11 @@
       "module": "writer.Hdf5Writer"
     },
     {
-      "module": "writer.BopWriter"
+      "module": "writer.BopWriter",
+      "config": {
+        "dataset": "lm",
+        "append_to_existing_output": True
+      }
     }
   ]
 }
