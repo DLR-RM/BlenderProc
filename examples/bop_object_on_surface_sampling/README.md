@@ -15,11 +15,12 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/bop_object_on_surface_sampling/config.yaml <path_to_bop_data> <path_to_bop_toolkit> resources/cctextures examples/bop_object_on_surface_sampling/output
+python run.py examples/bop_object_on_surface_sampling/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> resources/cctextures examples/bop_object_on_surface_sampling/output
 ``` 
 
 * `examples/bop_object_on_surface_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
+* `<bop_dataset_name>`: name of BOP dataset.
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
 * `examples/bop_object_on_surface_sampling/output`: path to an output folder.
