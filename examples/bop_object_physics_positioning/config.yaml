@@ -328,7 +328,12 @@
       "module": "writer.BopWriter",
       "config": {
         "dataset": "lm",
-        "append_to_existing_output": True
+        "append_to_existing_output": True,
+        "postprocessing_modules": {
+          "depth": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
       }
     }
   ]
