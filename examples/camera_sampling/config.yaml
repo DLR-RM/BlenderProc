@@ -49,6 +49,12 @@
               "format": "look_at",
               "value": {
                 "provider": "getter.POI"
+              },          
+              "inplane_rot": {
+                "provider": "sampler.Value",
+                "type": "float",
+                "min": -0.7854,
+                "max": 0.7854
               }
             }
           }
