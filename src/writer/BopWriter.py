@@ -9,8 +9,8 @@ import shutil
 import bpy
 from mathutils import Euler, Matrix, Vector
 
-from src.utility.BlenderUtility import get_all_mesh_objects
-from src.utility.BlenderUtility import load_image
+from src.utility.BlenderUtility import get_all_mesh_objects, load_image
+from src.utility.Utility import Utility
 from src.writer.StateWriter import StateWriter
 
 
@@ -95,11 +95,15 @@ class BopWriter(StateWriter):
     **Attributes per object**:
 
     .. csv-table::
-       :header: "Keyword", "Description"
+        :header: "Keyword", "Description"
 
-       "dataset", "Annotations for objects of this dataset will be saved. Type: string."
-       "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
+        "dataset", "Annotations for objects of this dataset will be saved. Type: string."
+        "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
                                     "Type: bool. Default: False"
+        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
+                            "to which the postprocessing modules should be applied. Every postprocessing module "
+                            "has to have a run function which takes in the raw data and returns the processed "
+                            "data. Type: dict."
     """
 
     def __init__(self, config):
@@ -108,8 +112,12 @@ class BopWriter(StateWriter):
         # Parse configuration.
         self.dataset = self.config.get_string("dataset")
 
-        self.append_to_existing_output =\
-            self.config.get_bool("append_to_existing_output", False)
+        self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
+
+        self.postprocessing_modules_per_output = {}
+        module_configs = config.get_raw_dict("postprocessing_modules", {})
+        for output_key in module_configs:
+            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
 
         # Number of frames saved in each chunk.
         self.frames_per_chunk = 1000
@@ -168,6 +176,36 @@ class BopWriter(StateWriter):
         self._write_camera()
         self._write_frames()
 
+    def _apply_postprocessing(self, output_key, data):
+        """ Applies all postprocessing modules registered for this output type.
+
+        :param output_key: The key of the output type. Type: string.
+        :param data: The numpy data.
+        :return: The modified numpy data after doing the postprocessing
+        """
+        if output_key in self.postprocessing_modules_per_output:
+            for module in self.postprocessing_modules_per_output[output_key]:
+                data = module.run(data)
+
+        return data
+
+    def _load_and_postprocess(self, file_path, key):
+        """
+        Loads an image and post process it.
+        :param file_path: Image path. Type: string.
+        :param key: The image's key with regards to the hdf5 file. Type: string.
+        :return: The post-processed image that was loaded using the file path.
+        """        
+        
+        data = load_image(Utility.resolve_path(file_path))
+
+        data = self._apply_postprocessing(key, data)
+
+        print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(
+            data.dtype) + " - path: " + file_path)
+
+        return data
+
     def _get_camera_attribute(self, cam_pose, attribute_name):
         """ Returns the value of the requested attribute for the given object.
 
@@ -210,11 +248,12 @@ class BopWriter(StateWriter):
         """ Constructs the camera matrix K.
 
         :param cam_pose: Camera info.
-        :return: 3x3 camera matrix K.
+        :return: camera matrix K as 9x1 list.
         """
         shift_x = self._get_camera_attribute(cam_pose, 'shift_x')
         shift_y = self._get_camera_attribute(cam_pose, 'shift_y')
         syn_cam_K = self._get_camera_attribute(cam_pose, 'loaded_intrinsics')
+
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
 
@@ -362,8 +401,7 @@ class BopWriter(StateWriter):
             depth_output = self._find_registered_output_by_key("depth")
             if depth_output is None:
                 raise Exception("Depth image has not been rendered.")
-            depth = load_image(depth_output['path'] % frame_id, num_channels=1)
-            depth = depth.squeeze(axis=2)
+            depth = self._load_and_postprocess(depth_output['path'] % frame_id, "depth")
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).
