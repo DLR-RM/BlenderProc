@@ -112,8 +112,7 @@ class BopWriter(StateWriter):
         # Parse configuration.
         self.dataset = self.config.get_string("dataset")
 
-        self.append_to_existing_output =\
-            self.config.get_bool("append_to_existing_output", False)
+        self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
 
         self.postprocessing_modules_per_output = {}
         module_configs = config.get_raw_dict("postprocessing_modules", {})
