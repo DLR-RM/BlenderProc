@@ -6,7 +6,7 @@ from src.main.Provider import Provider
 
 class Shell(Provider):
     """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
-        of those two spheres.
+        of those two spheres. Has option for uniform elevation sampling.
 
         Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
         that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
@@ -33,6 +33,7 @@ class Shell(Provider):
                          "Type: float. Range: [0, 90]."
         "elevation_max", "Maximum angle of elevation in degrees: defines slant height of the rejection cone. "
                          "Type: float. Range: [0, 90]."
+        "uniform_elevation", "Uniformly sample elevation angles. Type: bool. Default: False"
     """
 
     def __init__(self, config):
@@ -54,13 +55,14 @@ class Shell(Provider):
         elevation_min = self.config.get_float("elevation_min")
         elevation_max = self.config.get_float("elevation_max")
 
-        if self.config.get_bool("uniform_elevation"):
-            elevation_sampled = elevation_min + (elevation_max-elevation_min) * np.random.rand()
-            azimuth_sampled = 2 * np.pi * np.random.rand()
-            cart_point = 1
-
+        if self.config.get_bool("uniform_elevation", False):
+            el_sampled = (elevation_min + (elevation_max-elevation_min) * np.random.rand()) / 180. * np.pi
+            az_sampled = 2 * np.pi * np.random.rand()
+            # spherical to cartesian coordinates
+            direction_vector = np.array([np.sin(np.pi/2 - el_sampled) * np.cos(az_sampled), 
+                                         np.sin(np.pi/2 - el_sampled) * np.sin(az_sampled), 
+                                         np.cos(np.pi/2 - el_sampled)])
         else:
-
             if elevation_min == 0:
                 # here comes the magic number
                 elevation_min = 0.001
@@ -88,10 +90,11 @@ class Shell(Provider):
 
             # Sampled point in 3d
             direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + H])
+
             # Getting vector, then unit vector that defines the direction
             full_vector = direction_point - center
-            direction_vector = full_vector/np.linalg.norm(full_vector)
 
+            direction_vector = full_vector/np.linalg.norm(full_vector)
 
         # Calculate the factor for the unit vector
         factor = np.random.uniform(radius_min, radius_max)
