@@ -92,16 +92,21 @@ class Material(Provider):
     def __init__(self, config):
         Provider.__init__(self, config)
 
-    def perform_and_condition_check(self, and_condition, materials):
+    @staticmethod
+    def perform_and_condition_check(and_condition, materials, used_materials_to_check=None):
         """ Checks for all materials in the scene if all given conditions are true, collects them in the return list.
 
         :param and_condition: Given conditions. Type: dict.
-        :param objects: Materials, that are already in the return list. Type: list.
+        :param materials: Materials, that are already in the return list. Type: list.
+        :param used_materials_to_check: a list of materials to perform the check on. Type: list. Default: all materials
         :return: Materials that fulfilled given conditions. Type: list.
         """
         new_materials = []
+        if used_materials_to_check is None:
+            used_materials_to_check = get_all_materials()
+
         # through every material
-        for material in get_all_materials():
+        for material in used_materials_to_check:
             if material in new_materials or material in materials:
                 continue
 
