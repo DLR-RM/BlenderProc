@@ -2,7 +2,7 @@ import numpy as np
 
 from src.main.Module import Module
 from src.utility.BlenderUtility import get_all_mesh_objects, get_all_materials
-
+from src.provider.getter.Material import Material
 
 class MaterialRandomizer(Module):
     """ Randomizes the materials for the selected objects.
@@ -65,22 +65,28 @@ class MaterialRandomizer(Module):
         self.randomization_level = self.config.get_float("randomization_level", 0.2)
         self._objects_to_manipulate = self.config.get_list('manipulated_objects', get_all_mesh_objects())
         self._materials_to_replace_with = self.config.get_list("materials_to_replace_with", get_all_materials())
+        self._obj_materials_cond_to_be_replaced = self.config.get_raw_dict("obj_materials_to_be_replaced", {})
         op_mode = self.config.get_string("mode", "once_for_each")
 
         # if there were no materials selected throw an exception
         if not self._materials_to_replace_with:
-            raise Exception("There were no materials selected!")
+            print("There were no materials selected!")
 
-        if op_mode == "once_for_all":
-            random_material = np.random.choice(self._materials_to_replace_with)
+        else:
+            if op_mode == "once_for_all":
+                random_material = np.random.choice(self._materials_to_replace_with)
 
-        # walk over all objects
-        for obj in self._objects_to_manipulate:
-            if hasattr(obj, 'material_slots'):
-                # walk over all materials
-                for material in obj.material_slots:
-                    if np.random.uniform(0, 1) <= self.randomization_level:
-                        if op_mode == "once_for_each":
-                            random_material = np.random.choice(self._materials_to_replace_with)
-                        # select a random material to replace the old one with
-                        material.material = random_material
+            # walk over all objects
+            for obj in self._objects_to_manipulate:
+                if hasattr(obj, 'material_slots'):
+                    # walk over all materials
+                    for material in obj.material_slots:
+                        use_mat = True
+                        if self._obj_materials_cond_to_be_replaced:
+                            use_mat = len(Material.perform_and_condition_check(self._obj_materials_cond_to_be_replaced, [], [material.material])) == 1
+                        if use_mat:
+                            if np.random.uniform(0, 1) <= self.randomization_level:
+                                if op_mode == "once_for_each":
+                                    random_material = np.random.choice(self._materials_to_replace_with)
+                                # select a random material to replace the old one with
+                                material.material = random_material
