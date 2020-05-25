@@ -273,11 +273,9 @@ class BopWriter(StateWriter):
     def _write_camera(self):
         """ Writes camera.json into dataset_dir.
         """
-        if 'loaded_resolution' in self.cam:
-            width, height = self.cam['loaded_resolution']
-        else:
-            width = bpy.context.scene.render.resolution_x
-            height = bpy.context.scene.render.resolution_y
+
+        width = bpy.context.scene.render.resolution_x
+        height = bpy.context.scene.render.resolution_y
 
         cam_K = self.get_camK_from_blender_attributes(self.cam_pose)
         camera = {'cx': cam_K[2],
