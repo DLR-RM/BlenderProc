@@ -113,9 +113,10 @@ class CameraModule(Module):
 
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
-
+        
         if config.has_param("cam_K"):
-            cam_K = np.array(config.get_list("cam_K", [])).reshape(3, 3).astype(np.float32)
+            cam['loaded_intrinsics'] = config.get_list("cam_K")
+            cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
         elif 'loaded_intrinsics' in cam:
             cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
         else:
