@@ -133,46 +133,46 @@ class MaterialManipulator(Module):
         op_mode = self.config.get_string("mode", "once_for_each")
 
         if not materials:
-            raise Exception("No materials selected")
-
-        if op_mode == "once_for_all":
-            # get values to set if they are to be set/sampled once for all selected materials
-            params = self._get_the_set_params(params_conf)
-
-        for material in materials:
-            if not material.use_nodes:
-                raise Exception("This material does not use nodes -> not supported here.")
-
-            if op_mode == "once_for_each":
-                # get values to set if they are to be set/sampled anew for each selected entity
+            print("No materials selected")
+        else:
+            if op_mode == "once_for_all":
+                # get values to set if they are to be set/sampled once for all selected materials
                 params = self._get_the_set_params(params_conf)
 
-            for key, value in params.items():
+            for material in materials:
+                if not material.use_nodes:
+                    raise Exception("This material does not use nodes -> not supported here.")
 
-                # used so we don't modify original key when having more than one material
-                key_copy = key
+                if op_mode == "once_for_each":
+                    # get values to set if they are to be set/sampled anew for each selected entity
+                    params = self._get_the_set_params(params_conf)
 
-                requested_cf = False
-                if key.startswith('cf_'):
-                    requested_cf = True
-                    key_copy = key[3:]
+                for key, value in params.items():
 
-                # if an attribute with such name exists for this entity
-                if key_copy == "color_link_to_displacement" and requested_cf:
-                    MaterialManipulator._link_color_to_displacement_for_mat(material, value)
-                elif key_copy == "change_to_vertex_color" and requested_cf:
-                    MaterialManipulator._map_vertex_color(material, value)
-                elif key_copy == "textures" and requested_cf:
-                    loaded_textures = self._load_textures(value)
-                    self._set_textures(loaded_textures, material)
-                elif key_copy == "switch_to_emission_shader" and requested_cf:
-                    self._switch_to_emission_shader(material, value)
-                elif "set_" in key_copy and requested_cf:
-                    # sets the value of the principled shader
-                    self._set_principled_shader_value(material, key_copy[len("set_"):], value)
-                elif hasattr(material, key_copy):
-                    # set the value
-                    setattr(material, key_copy, value)
+                    # used so we don't modify original key when having more than one material
+                    key_copy = key
+
+                    requested_cf = False
+                    if key.startswith('cf_'):
+                        requested_cf = True
+                        key_copy = key[3:]
+
+                    # if an attribute with such name exists for this entity
+                    if key_copy == "color_link_to_displacement" and requested_cf:
+                        MaterialManipulator._link_color_to_displacement_for_mat(material, value)
+                    elif key_copy == "change_to_vertex_color" and requested_cf:
+                        MaterialManipulator._map_vertex_color(material, value)
+                    elif key_copy == "textures" and requested_cf:
+                        loaded_textures = self._load_textures(value)
+                        self._set_textures(loaded_textures, material)
+                    elif key_copy == "switch_to_emission_shader" and requested_cf:
+                        self._switch_to_emission_shader(material, value)
+                    elif "set_" in key_copy and requested_cf:
+                        # sets the value of the principled shader
+                        self._set_principled_shader_value(material, key_copy[len("set_"):], value)
+                    elif hasattr(material, key_copy):
+                        # set the value
+                        setattr(material, key_copy, value)
 
     def _get_the_set_params(self, params_conf):
         """ Extracts actual values to set from a Config object.
