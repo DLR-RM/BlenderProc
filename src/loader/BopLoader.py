@@ -94,13 +94,13 @@ class BopLoader(Loader):
             raise Exception("Wrong path or {} split does not exist in {}.".format(self.split, dataset))
         
         bpy.context.scene.world["category_id"] = 0
-        bpy.context.scene.render.resolution_x = split_p['im_size'][0]
-        bpy.context.scene.render.resolution_y = split_p['im_size'][1]
+        bpy.context.scene.render.resolution_x = cam_p['im_size'][0]
+        bpy.context.scene.render.resolution_y = cam_p['im_size'][1]
 
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
-        cam['loaded_resolution'] = split_p['im_size'][0], split_p['im_size'][1]
+        cam['loaded_resolution'] = cam_p['im_size'][0], cam_p['im_size'][1]
         # load default intrinsics from camera.json
         cam['loaded_intrinsics'] = cam_p['K']
         
