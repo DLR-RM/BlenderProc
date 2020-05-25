@@ -115,7 +115,16 @@
       "module": "writer.Hdf5Writer"
     },
     {
-      "module": "writer.BopWriter"
+      "module": "writer.BopWriter",
+      "config": {
+        "dataset": "hb",
+        "append_to_existing_output": True,
+        "postprocessing_modules": {
+          "depth": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
+      }
     }
   ]
 }

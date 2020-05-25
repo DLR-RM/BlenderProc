@@ -62,7 +62,13 @@
       }
     },
     {
-      "module": "writer.BopWriter"
+      "module": "writer.BopWriter",
+      "dataset": "hb",
+      "postprocessing_modules": {
+        "depth": [
+          {"module": "postprocessing.Dist2Depth"}
+        ]
+      }
     },
     {
       "module": "writer.Hdf5Writer"
