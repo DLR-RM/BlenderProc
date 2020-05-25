@@ -305,6 +305,12 @@
               },
               "random_index": True,
               "get": "location"
+            },
+            "inplane_rot": {
+              "provider": "sampler.Value",
+              "type": "float",
+              "min": -0.7854,
+              "max": 0.7854
             }
           }
         }
