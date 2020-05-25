@@ -99,7 +99,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 150
+        "samples": 50
       }
     },
     {
