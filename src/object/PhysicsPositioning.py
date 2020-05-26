@@ -49,7 +49,10 @@ class PhysicsPositioning(Module):
         self.mass_scaling = self.config.get_bool("mass_scaling", False)
         self.mass_factor = self.config.get_float("mass_factor", 1)
         self.collision_shape = self.config.get_string("collision_shape", "CONVEX_HULL")
-
+        self.friction = self.config.get_float("friction", 0.5)
+        self.angular_damping = self.config.get_float("angular_damping",0.1)
+        self.linear_damping = self.config.get_float("linear_damping",0.04)
+        
     def run(self):
         """ Performs physics simulation in the scene. """
         # locations of all soon to be active objects before we shift their origin points
@@ -106,10 +109,16 @@ class PhysicsPositioning(Module):
                 raise Exception("The obj: '{}' has no physics attribute, each object needs one.".format(obj.name))
             obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
             obj.select_set(True)
-            obj.rigid_body.collision_shape = self.collision_shape
+            if 'ground_plane' in obj.name:
+                obj.rigid_body.collision_shape = "BOX"
+            else:
+                obj.rigid_body.collision_shape = self.collision_shape
             obj.rigid_body.collision_margin = self.collision_margin
             obj.rigid_body.use_margin = True
             obj.rigid_body.mesh_source = self.collision_mesh_source
+            obj.rigid_body.friction = self.friction
+            obj.rigid_body.angular_damping = self.angular_damping
+            obj.rigid_body.linear_damping = self.linear_damping
             if obj.rigid_body.type == "ACTIVE":
                 bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME', center='MEDIAN')
                 bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
@@ -188,7 +197,6 @@ class PhysicsPositioning(Module):
                 break
             elif current_time + check_object_interval >= max_simulation_time:
                 print("Stopping simulation as configured max_simulation_time has been reached")
-
         return new_poses
 
     def _get_pose(self):
