@@ -52,7 +52,8 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 150
+        "samples": 50,
+        "render_depth": True
       }
     },
     {
@@ -63,7 +64,7 @@
     },
     {
       "module": "writer.BopWriter",
-      "dataset": "hb",
+      "dataset": "<args:0>",
       "postprocessing_modules": {
         "depth": [
           {"module": "postprocessing.Dist2Depth"}
