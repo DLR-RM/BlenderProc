@@ -26,6 +26,7 @@ class CCMaterialLoader(Module):
        "folder_path", "The path to the downloaded cc0textures. Type: string. Default: resources/cctextures."
        "used_assets", "A list of all asset names, you want to use, the numbers are not important."
                       "By default all assets will be loaded, specified by an empty list. Type: list. Default: []."
+       "add_custom_properties", "A dictionary of materials and the respective properties. Type: Dictionary. Default: {}."
     """
 
     def __init__(self, config):
@@ -35,6 +36,7 @@ class CCMaterialLoader(Module):
     def run(self):
         self._folder_path = Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures"))
         self._used_assets = self.config.get_list("used_assets", [])
+        self._add_cp = self.config.get_raw_dict("add_custom_properties", {})
 
         x_texture_node = -1500
         y_texture_node = 300
@@ -57,6 +59,13 @@ class CCMaterialLoader(Module):
                     new_mat = bpy.data.materials.new(asset)
                     new_mat["is_cc_texture"] = True
                     new_mat["asset_name"] = asset
+                    for key, value in self._add_cp.items():
+                        cp_key = key
+                        if key.startswith("cp_"):
+                            cp_key = key[len("cp_"):]
+                        else:
+                            raise Exception("All cp have to start with cp_")
+                        new_mat[cp_key] = value
                     new_mat.use_nodes = True
                     nodes = new_mat.node_tree.nodes
                     links = new_mat.node_tree.links
