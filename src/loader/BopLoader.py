@@ -27,7 +27,6 @@ class BopLoader(Loader):
 
        "cam_type", "Camera type. Type: string. Optional. Default value: ''."
        "sys_paths", "System paths to append. Type: list."
-       "num_of_objs_to_sample", "Number of the objects to sample. Type: int."
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
        "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
@@ -94,15 +93,19 @@ class BopLoader(Loader):
             raise Exception("Wrong path or {} split does not exist in {}.".format(self.split, dataset))
         
         bpy.context.scene.world["category_id"] = 0
-        bpy.context.scene.render.resolution_x = cam_p['im_size'][0]
-        bpy.context.scene.render.resolution_y = cam_p['im_size'][1]
+        bpy.context.scene.render.resolution_x = split_p['im_size'][0]
+        bpy.context.scene.render.resolution_y = split_p['im_size'][1]
 
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
-        cam['loaded_resolution'] = cam_p['im_size'][0], cam_p['im_size'][1]
-        # load default intrinsics from camera.json
         cam['loaded_intrinsics'] = cam_p['K']
+        cam['loaded_resolution'] = split_p['im_size'][0], split_p['im_size'][1]
+
+        # TLESS exception because images are cropped
+        if self.bop_dataset_name in ['tless']:
+            cam['loaded_intrinsics'][2] = split_p['im_size'][0]/2
+            cam['loaded_intrinsics'][5] = split_p['im_size'][1]/2   
         
         config = Config({})
         camera_module = CameraModule(config)
