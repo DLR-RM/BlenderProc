@@ -94,7 +94,7 @@ class Shell(Provider):
             # Getting vector, then unit vector that defines the direction
             full_vector = direction_point - center
 
-            direction_vector = full_vector/np.linalg.norm(full_vector)
+            direction_vector = full_vector/np.maximum(np.linalg.norm(full_vector), np.finfo(np.float32).eps)
 
         # Calculate the factor for the unit vector
         factor = np.random.uniform(radius_min, radius_max)
