@@ -56,7 +56,7 @@ class Shell(Provider):
         elevation_max = self.config.get_float("elevation_max")
 
         if self.config.get_bool("uniform_elevation", False):
-            el_sampled = (elevation_min + (elevation_max-elevation_min) * np.random.rand()) / 180. * np.pi
+            el_sampled = np.deg2rad(elevation_min + (elevation_max-elevation_min) * np.random.rand())
             az_sampled = 2 * np.pi * np.random.rand()
             # spherical to cartesian coordinates
             direction_vector = np.array([np.sin(np.pi/2 - el_sampled) * np.cos(az_sampled), 
