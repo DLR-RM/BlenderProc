@@ -1,5 +1,5 @@
 import re
-from random import choice
+from random import choice, sample
 
 import bpy
 import mathutils
@@ -51,11 +51,11 @@ class Entity(Provider):
           ]
         }
 
-        Example 3: Returns a random object of MESH type.
+        Example 3: Returns two random objects of MESH type.
 
         {
           "provider": "getter.Entity",
-          "random_index": True,
+          "random_samples": 2,
           "conditions": {
             "type": "MESH"
           }
@@ -83,8 +83,8 @@ class Entity(Provider):
         "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
         "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
                  "Type: int."
-        "random_index": "If set, this Provider returns a single random object from the pool of selected ones. Define "
-                        "index or random_index property, only one is allowed at a time. Type: bool. Default: False."
+        "random_samples": "If set, this Provider returns random_samples objects from the pool of selected ones. Define "
+                        "index or random_samples property, only one is allowed at a time. Type: bool. Default: False."
 
     **Custom functions**
 
@@ -217,14 +217,14 @@ class Entity(Provider):
             # only one condition was given, treat it as and condition
             objects = self.perform_and_condition_check(conditions, [])
 
-        random_index = self.config.get_bool("random_index", False)
+        random_samples = self.config.get_int("random_samples", 0)
         has_index = self.config.has_param("index")
 
-        if has_index and random_index:
-            raise RuntimeError("Please, define only one of two: `index` or `random_index`.")
+        if has_index and random_samples:
+            raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
         elif has_index:
             objects = [objects[self.config.get_int("index")]]
-        elif random_index:
-            objects = [choice(objects)]
+        elif random_samples:
+            objects = sample(objects, k=min(random_samples, len(objects)))
 
         return objects
