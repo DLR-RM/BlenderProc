@@ -71,11 +71,11 @@ class Shell(Provider):
                 elevation_max = 0.001
 
             # Height of a sampling cone
-            H = 1
+            cone_height = 1
             
             # Sampling and rejection radius
-            R_sampling = H / np.tan(np.deg2rad(elevation_min))
-            R_rejection = H / np.tan(np.deg2rad(elevation_max))
+            R_sampling = cone_height / np.tan(np.deg2rad(elevation_min))
+            R_rejection = cone_height / np.tan(np.deg2rad(elevation_max))
             # Init sampled point at the center of a sampling disk
             sampled_2d = [center[0], center[1]]
             
@@ -89,7 +89,7 @@ class Shell(Provider):
                 sampled_2d[1] = center[1] + r * np.sin(theta)
 
             # Sampled point in 3d
-            direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + H])
+            direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + cone_height])
 
             # Getting vector, then unit vector that defines the direction
             full_vector = direction_point - center
