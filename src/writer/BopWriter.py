@@ -379,7 +379,7 @@ class BopWriter(StateWriter):
                 chunk_gt = {}
                 chunk_camera = {}
                 os.makedirs(os.path.dirname(
-                    self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
+                    self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=0, im_type='PNG')))
                 os.makedirs(os.path.dirname(
                     self.depth_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
 
