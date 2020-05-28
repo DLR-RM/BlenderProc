@@ -125,8 +125,7 @@ class BopWriter(StateWriter):
         # Multiply the output depth image with this factor to get depth in mm.
         self.depth_scale = 0.1
 
-        # Format of the RGB and depth images.
-        rgb_ext = '.png'
+        # Format of the depth images.
         depth_ext = '.png'
 
         # Output paths.
@@ -135,7 +134,7 @@ class BopWriter(StateWriter):
         self.chunks_dir = os.path.join(self.dataset_dir, 'train_synt')
         self.camera_path = os.path.join(self.dataset_dir, 'camera.json')
         self.rgb_tpath = os.path.join(
-            self.chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + rgb_ext)
+            self.chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + '{im_type}')
         self.depth_tpath = os.path.join(
             self.chunks_dir, '{chunk_id:06d}', 'depth', '{im_id:06d}' + depth_ext)
         self.chunk_camera_tpath = os.path.join(
@@ -392,7 +391,8 @@ class BopWriter(StateWriter):
             rgb_output = self._find_registered_output_by_key("colors")
             if rgb_output is None:
                 raise Exception("RGB image has not been rendered.")
-            rgb_fpath = self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id)
+            image_type = '.png' if rgb_output['path'].endswith('png') else '.jpg'
+            rgb_fpath = self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type=image_type)
             shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
             # Load the resulting depth image.
