@@ -83,6 +83,10 @@ class Material(Provider):
         "cf_texture_amount_{min,max,eq}", "Returns materials that have a certain amount of texture nodes inside of the "
                                           "material. Suffix 'min' = less nodes or equal than specified, 'max' = at "
                                           "least as many or 'eq' = for this exact amount of textures nodes. Type: int."
+        "cf_principled_bsdf_amount_{min,max,eq}", "Returns materials that have a certain amount of principled bsdf"
+                                                  "nodes inside of the material. Suffix 'min' = less nodes or equal"
+                                                  "than specified, 'max' = at least as many or 'eq' = for this exact"
+                                                  "amount of principled bsdf nodes. Type: int."
     """
 
     def __init__(self, config):
@@ -161,6 +165,29 @@ class Material(Provider):
                                     break
                             elif "eq" in key:
                                 if not (amount_of_texture_nodes == value):
+                                    select_material = False
+                                    break
+                            else:
+                                raise Exception("This type of key is unknown: {}".format(key))
+                        else:
+                            select_material = False
+                            break
+                    elif key.startswith("principled_bsdf_amount_"):
+                        if material.use_nodes:
+                            value = int(value)
+                            nodes = material.node_tree.nodes
+                            principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                            amount_of_principled_bsdf_nodes = len(principled) if principled is not None else 0
+                            if "min" in key:
+                                if not (amount_of_principled_bsdf_nodes >= value):
+                                    select_material = False
+                                    break
+                            elif "max" in key:
+                                if not (amount_of_principled_bsdf_nodes <= value):
+                                    select_material = False
+                                    break
+                            elif "eq" in key:
+                                if not (amount_of_principled_bsdf_nodes == value):
                                     select_material = False
                                     break
                             else:
