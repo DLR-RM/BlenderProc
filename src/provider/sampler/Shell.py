@@ -56,7 +56,7 @@ class Shell(Provider):
         elevation_max = self.config.get_float("elevation_max")
 
         if self.config.get_bool("uniform_elevation", False):
-            el_sampled = (elevation_min + (elevation_max-elevation_min) * np.random.rand()) / 180. * np.pi
+            el_sampled = np.deg2rad(elevation_min + (elevation_max-elevation_min) * np.random.rand())
             az_sampled = 2 * np.pi * np.random.rand()
             # spherical to cartesian coordinates
             direction_vector = np.array([np.sin(np.pi/2 - el_sampled) * np.cos(az_sampled), 
@@ -71,17 +71,21 @@ class Shell(Provider):
                 elevation_max = 0.001
 
             # Height of a sampling cone
-            H = 1
+            
+            cone_height = 1
             
             # Sampling and rejection radius
-            R_sampling = H / np.tan(np.deg2rad(elevation_min))
-            R_rejection = H / np.tan(np.deg2rad(elevation_max))
+            R_sampling = cone_height / np.tan(np.deg2rad(elevation_min))
+            R_rejection = cone_height / np.tan(np.deg2rad(elevation_max))
+
             # Init sampled point at the center of a sampling disk
             sampled_2d = [center[0], center[1]]
             
             # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling
             # cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone.
-            while (sampled_2d[0] - center[0])**2 + (sampled_2d[1] - center[1])**2 <= R_rejection**2:
+
+            while sum((sampled_2d - center)**2) <= R_rejection**2:
+
             # http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
                 r = R_sampling * np.sqrt(np.random.uniform())
                 theta = np.random.uniform() * 2 * np.pi
@@ -89,12 +93,13 @@ class Shell(Provider):
                 sampled_2d[1] = center[1] + r * np.sin(theta)
 
             # Sampled point in 3d
-            direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + H])
+
+            direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + cone_height])
 
             # Getting vector, then unit vector that defines the direction
             full_vector = direction_point - center
 
-            direction_vector = full_vector/np.linalg.norm(full_vector)
+            direction_vector = full_vector/np.maximum(np.linalg.norm(full_vector), np.finfo(np.float32).eps)
 
         # Calculate the factor for the unit vector
         factor = np.random.uniform(radius_min, radius_max)
