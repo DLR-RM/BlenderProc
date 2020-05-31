@@ -84,7 +84,7 @@ class Entity(Provider):
         "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
                  "Type: int."
         "random_samples": "If set, this Provider returns random_samples objects from the pool of selected ones. Define "
-                        "index or random_samples property, only one is allowed at a time. Type: bool. Default: False."
+                        "index or random_samples property, only one is allowed at a time. Type: int. Default: False."
 
     **Custom functions**
 
