@@ -36,6 +36,10 @@ class PhysicsPositioning(Module):
         "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Type: bool. Default: False."
         "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor "
                        "(defines material density). Type: float. Default: 1."
+        "friction", "Resistance of object to movement. Type: float in [0, inf]. Default: 0.5"
+        "angular_damping", "Amount of angular velocity that is lost over time. Type: float in [0, 1]. Default: 0.1"
+        "linear_damping", "Amount of linear velocity that is lost over time. Type: float in [0, 1]. Default: 0.04"
+        
     """
 
     def __init__(self, config):
