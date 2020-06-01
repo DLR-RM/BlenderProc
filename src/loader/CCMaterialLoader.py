@@ -28,7 +28,7 @@ class CCMaterialLoader(Module):
        "used_assets", "A list of all asset names, you want to use, the numbers are not important."
                       "By default all assets will be loaded, specified by an empty list. Type: list. Default: []."
        "add_custom_properties", "A dictionary of materials and the respective properties."
-                                "Type: Dictionary. Default: {}."
+                                "Type: dict. Default: {}."
        "preload", "If set true, only the material names are loaded and not the complete material."
                   "Type: bool. Default: False"
        "fill_used_empty_materials", "If set true, the preloaded materials, which are used are now loaded completely."
