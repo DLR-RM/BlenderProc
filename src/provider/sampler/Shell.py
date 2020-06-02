@@ -71,13 +71,11 @@ class Shell(Provider):
                 elevation_max = 0.001
 
             # Height of a sampling cone
-            
             cone_height = 1
             
             # Sampling and rejection radius
             R_sampling = cone_height / np.tan(np.deg2rad(elevation_min))
             R_rejection = cone_height / np.tan(np.deg2rad(elevation_max))
-
             # Init sampled point at the center of a sampling disk
             sampled_2d = np.array([center[0], center[1]])
             
@@ -85,7 +83,6 @@ class Shell(Provider):
             # cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone.
 
             while np.sum((sampled_2d - center[:2])**2) <= R_rejection**2:
-
                 # http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
                 r = R_sampling * np.sqrt(np.random.uniform())
                 theta = np.random.uniform() * 2 * np.pi
@@ -93,7 +90,6 @@ class Shell(Provider):
                 sampled_2d[1] = center[1] + r * np.sin(theta)
 
             # Sampled point in 3d
-
             direction_point = np.array([center[0] + sampled_2d[0], center[1] + sampled_2d[1], center[2] + cone_height])
 
             # Getting vector, then unit vector that defines the direction
