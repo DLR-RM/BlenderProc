@@ -33,6 +33,7 @@ class PhysicsPositioning(Module):
                                  "Available: 'BASE', 'DEFORM', 'FINAL'."
         "collision_shape", "Collision shape of object in simulation. Type: string. Default: 'CONVEX_HULL'. "
                            "Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'."
+        "objs_with_box_collision_shape", "List of objects that get 'BOX' collision shape instead 'collision_shape'"                           
         "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Type: bool. Default: False."
         "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor "
                        "(defines material density). Type: float. Default: 1."
@@ -113,7 +114,7 @@ class PhysicsPositioning(Module):
                 raise Exception("The obj: '{}' has no physics attribute, each object needs one.".format(obj.name))
             obj.rigid_body.type = "ACTIVE" if obj["physics"] else "PASSIVE"
             obj.select_set(True)
-            if 'ground_plane' in obj.name:
+            if obj in self.config.get_list("objs_with_box_collision_shape", []):
                 obj.rigid_body.collision_shape = "BOX"
             else:
                 obj.rigid_body.collision_shape = self.collision_shape

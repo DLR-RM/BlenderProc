@@ -79,14 +79,14 @@ class Shell(Provider):
             R_rejection = cone_height / np.tan(np.deg2rad(elevation_max))
 
             # Init sampled point at the center of a sampling disk
-            sampled_2d = [center[0], center[1]]
+            sampled_2d = np.array([center[0], center[1]])
             
             # Sampling a point from a 2-ball (disk) i.e. from the base of the right subsampling
             # cone using Polar + Radial CDF method + rejection for 2-ball base of the rejection cone.
 
-            while sum((sampled_2d - center)**2) <= R_rejection**2:
+            while np.sum((sampled_2d - center[:2])**2) <= R_rejection**2:
 
-            # http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
+                # http://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
                 r = R_sampling * np.sqrt(np.random.uniform())
                 theta = np.random.uniform() * 2 * np.pi
                 sampled_2d[0] = center[0] + r * np.cos(theta)
