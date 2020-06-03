@@ -6,6 +6,8 @@ Here we explain the on surface sampling config used for the synthetic data gener
 
 ## Usage
 
+Make sure that you downloaded the [BOP datasets](https://bop.felk.cvut.cz/datasets/). 
+
 Execute in the BlenderProc main directory:
 
 ```
@@ -13,12 +15,17 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/bop_object_on_surface_sampling/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> resources/cctextures examples/bop_object_on_surface_sampling/output
+python run.py examples/bop_object_on_surface_sampling/config.yaml 
+              <path_to_bop_data> 
+              <bop_dataset_name> 
+              <path_to_bop_toolkit> 
+              resources/cctextures 
+              examples/bop_object_on_surface_sampling/output
 ``` 
 
 * `examples/bop_object_on_surface_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
-* `<bop_dataset_name>`: name of BOP dataset for which the ground truth should be saved.
+* `<bop_dataset_name>`: name of BOP dataset for which ground truth should be saved, e.g. lm
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
 * `examples/bop_object_on_surface_sampling/output`: path to an output folder.
@@ -29,19 +36,19 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 ## Steps
 
 * Load T-LESS BOP models: `loader.BopLoader` module.
-* Load ITODD BOP models: `loader.BopLoader` module.
 * Load LM BOP models: `loader.BopLoader` module.
-* Sample color for T-LESS and ITODD models: `materials.MaterialManipulator` module.
-* Sample roughness and specular values for LM models: `materials.MaterialManipulator` module.
-* Initialize two mesh planes: `constructor.BasicMeshInitializer` module.
+* Load `<args:1>` (YCB-V) BOP models: `loader.BopLoader` module.
+* Sample colors for T-LESS models: `materials.MaterialManipulator` module.
+* Sample roughness and specular values for all objects: `materials.MaterialManipulator` module.
+* Construct planes: `constructor.BasicMeshInitializer` module.
 * Set custom properties for those planes: `manipulators.EntityManipulator` module.
-* Switch to an emission shader for one of those plane: `materials.MaterialManipulator` module.
+* Switch to an light emission shader for the top plane: `materials.MaterialManipulator` module.
 * Load CCTexture materials: `loader.CCMaterialLoader` module.
-* Sample a material for a second plane: `materials.MaterialRandomizer` module.
+* Sample a material for the other planes: `materials.MaterialRandomizer` module.
 * Sample upright objects poses on surface: `object.OnSurfaceSampler` module.
-* Sample light source pose: `lighting.LightSampler` module.
+* Sample point light source: `lighting.LightSampler` module.
 * Sample camera poses: `camera.CameraSampler` module.
-* Render RGB: `renderer.RgbRenderer` module.
+* Render RGB and distance: `renderer.RgbRenderer` module.
 * Write BOP data: `writer.BopWriter` module.
 
 ## Config file
@@ -65,7 +72,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/ycbv",
+        "bop_dataset_path": "<args:0>/lm",
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
@@ -83,8 +90,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 15,
-        "obj_instances_limit": 1,
+        "num_of_objs_to_sample": 10,
         "add_properties": {
           "cp_physics": True
         },
@@ -94,10 +100,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 ```
 
 * Here we are sampling BOP objects from 3 different datasets.
-* We load 3 random objects from YCBV and T-LESS datasets, and 15 objects from the dataset given by `"<args:1>"` (e.g. LM in this case).
-* `"obj_instances_limit": 1` means that each object is only sampled once without repetition, i.e. it is unique.
+* We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `"<args:1>"` (e.g. ycbv in this case).
 * `"cf_set_shading": "SMOOTH"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.  
-* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, `"<args:1>"`(LM) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x / resolution_y / cam_K` in the camera sampler or global config.
+* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, `"<args:1>"`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
 
 ### Material Manipulator
 
@@ -128,7 +133,10 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "provider": "getter.Material",
           "conditions": [
           {
-            "name": "bop_ycbv_vertex_col_material.*"
+            "name": "bop_tless_vertex_col_material.*"
+          }
+          {
+            "name": "bop_lm_vertex_col_material.*"
           },
           {
             "name": "bop_<args:1>_vertex_col_material.*"
@@ -151,7 +159,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     },
 ```
 
-* Sample RGBA color for T-LESS object's materials using `sampler.Color` Provider.
+* Sample grey colors for T-LESS object's materials using `sampler.Color` Provider.
 * Sample `specular` and `roughness` values for object's materials from all datasets using `sampler.Value` Provider.
 
 ### Basic Mesh Initializer
@@ -218,7 +226,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     },
 ```
 
-* Construct minimal 2mx2mx2m room from 6 planes
+* Construct minimal 2m x 2m x 2m room from 6 planes
 * Set `"cp_physics": False` to fix the planes during any simulations
 
 ### Material Manipulator
@@ -348,8 +356,8 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 1, # now depends on the bottom area of the box
-            "radius_max": 1.5, # this one too
+            "radius_min": 1,
+            "radius_max": 1.5,
             "elevation_min": 5,
             "elevation_max": 89,
             "uniform_elevation": True
@@ -391,8 +399,8 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 0.35,
-            "radius_max": 1.50,
+            "radius_min": 0.61,
+            "radius_max": 1.24,
             "elevation_min": 5,
             "elevation_max": 89,
             "uniform_elevation": True

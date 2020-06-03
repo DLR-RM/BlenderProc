@@ -27,7 +27,7 @@
         "model_type": "cad",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 2,
+        "num_of_objs_to_sample": 3,
         "add_properties": {
           "cp_physics": True
         }
@@ -36,24 +36,25 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/itodd",
+        "bop_dataset_path": "<args:0>/lm",
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 2,
+        "num_of_objs_to_sample": 3,
         "add_properties": {
           "cp_physics": True
-        }
+        },
+        "cf_set_shading": "SMOOTH"
       }
     },
     {
       "module": "loader.BopLoader",
       "config": {
         "bop_dataset_path": "<args:0>/<args:1>",
-        "mm2m": True,
         "model_type": "",
+        "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 8,
+        "num_of_objs_to_sample": 10,
         "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
@@ -68,9 +69,6 @@
           "provider": "getter.Material",
           "conditions": [
           {
-            "name": "bop_itodd_vertex_col_material.*"
-          },
-          {
             "name": "bop_tless_vertex_col_material.*"
           }
           ]
@@ -78,8 +76,8 @@
         "cf_set_base_color": {
           "provider": "sampler.Color",
           "grey": True,
-          "min": [0.25, 0.25, 0.25, 1],
-          "max": [1, 1, 1, 1]
+          "min": [0.1, 0.1, 0.1, 1.0],
+          "max": [0.9, 0.9, 0.9, 1.0]
         }
       }
     },
@@ -90,27 +88,27 @@
           "provider": "getter.Material",
           "conditions": [
           {
-            "name": "bop_itodd_vertex_col_material.*"
-          },
-          {
             "name": "bop_tless_vertex_col_material.*"
           },
           {
             "name": "bop_lm_vertex_col_material.*"
+          },
+          {
+            "name": "bop_<args:1>_vertex_col_material.*"
           }
           ]
         },
         "cf_set_specular": {
           "provider": "sampler.Value",
           "type": "float",
-          "min": 0.1,
-          "max": 1
+          "min": 0.0,
+          "max": 1.0
         },
         "cf_set_roughness": {
           "provider": "sampler.Value",
           "type": "float",
-          "min": 0.1,
-          "max": 1
+          "min": 0.0,
+          "max": 1.0
         }
       }
     },
@@ -185,8 +183,8 @@
         "cf_switch_to_emission_shader": {
           "color": {
             "provider": "sampler.Color",
-            "min": [0, 0, 0, 1],
-            "max": [1, 1, 1, 1]
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
           },
           "strength": {
             "provider": "sampler.Value",
@@ -224,17 +222,25 @@
     },
     {
       "module": "object.ObjectPoseSampler",
-      "config":{
+      "config": {
         "objects_to_sample": {
           "provider": "getter.Entity",
           "conditions": {
             "cp_physics": True
           }
         },
-        "pos_sampler":{
+        "pos_sampler": {
           "provider":"sampler.Uniform3d",
-          "max":[0.2, 0.2, 0.6],
-          "min":[-0.2, -0.2, 0.2]
+          "min": {
+            "provider": "sampler.Uniform3d",
+            "min": [-0.3, -0.3, 0.0],
+            "max": [-0.2, -0.2, 0.0]
+          },
+          "max": {
+            "provider": "sampler.Uniform3d",
+            "min": [0.2, 0.2, 0.4],
+            "max": [0.3, 0.3, 0.6]
+          }
         },
         "rot_sampler":{
           "provider":"sampler.UniformSO3"
@@ -249,12 +255,15 @@
         "check_object_interval": 1,
         "solver_iters": 25,
         "steps_per_sec": 100,
+        "friction": 100.0,
+        "linear_damping": 0.99,
+        "angular_damping": 0.99,
         "objs_with_box_collision_shape": {
           "provider": "getter.Entity",
           "conditions": {
             "name": "ground_plane.*"
           }
-        },
+        }
       }
     },
     {
@@ -265,10 +274,16 @@
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 1, # now depends on the bottom area of the box
-            "radius_max": 1.5, # this one too
-            "elevation_min": 20,
-            "elevation_max": 89
+            "radius_min": 1,
+            "radius_max": 1.5,
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
+          },
+          "color": {
+            "provider": "sampler.Color",
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
           },
           "type": "POINT",
           "energy": 200
@@ -280,7 +295,7 @@
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [
-        {          
+        {
           "proximity_checks": {
             "min": 0.3
           },
@@ -291,28 +306,28 @@
               "type": "MESH"
             }
           },
-          "number_of_samples": 5,
+          "number_of_samples": 10,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 0.4,
-            "radius_max": 1.5,
-            "elevation_min": 10,
-            "elevation_max": 89.9
+            "radius_min": 0.61,
+            "radius_max": 1.24,
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
           },
           "rotation": {
             "format": "look_at",
             "value": {
-              "provider": "getter.Attribute",
-              "get": "location",
-              "entities": {
+              "provider": "getter.POI",
+              "selector": {
                 "provider": "getter.Entity",
-                "random_index": True, 
                 "conditions": {
-                  "cp_bop_dataset_name": "<args:1>"
-                }
-              },
-              "index": 0
+                  "type": "MESH",
+                  "cp_bop_dataset_name": "<args:1>",
+                },
+                "random_samples": 10
+              }
             },
             "inplane_rot": {
               "provider": "sampler.Value",
@@ -329,17 +344,9 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 50,
-        "render_depth": True
+        "render_depth": True,
+        "image_type": "JPEG"
       }
-    },
-    {
-      "module": "renderer.SegMapRenderer",
-      "config": {
-        "map_by": "instance"
-      }
-    },
-    {
-      "module": "writer.CocoAnnotationsWriter"
     },
     {
       "module": "writer.BopWriter",

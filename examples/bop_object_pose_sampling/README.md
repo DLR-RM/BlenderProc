@@ -75,3 +75,4 @@ python scripts/vis_coco_annotation.py /path/to/output_dir
 
 * [bop_scene_replication](../bop_scene_replication): Replicate the scenes and cameras from BOP datasets in simulation.
 * [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
+* [bop_object_on_surface_sampling](../bop_object_on_surface_sampling): Sample upright poses on plane and randomize materials

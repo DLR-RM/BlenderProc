@@ -36,7 +36,7 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/ycbv",
+        "bop_dataset_path": "<args:0>/lm",
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
@@ -54,8 +54,7 @@
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 15,
-        "obj_instances_limit": 1,
+        "num_of_objs_to_sample": 10,
         "add_properties": {
           "cp_physics": True
         },
@@ -89,9 +88,9 @@
           "conditions": [
           {
             "name": "bop_tless_vertex_col_material.*"
-          }
+          },
           {
-            "name": "bop_ycbv_vertex_col_material.*"
+            "name": "bop_lm_vertex_col_material.*"
           },
           {
             "name": "bop_<args:1>_vertex_col_material.*"
@@ -303,8 +302,8 @@
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 0.35,
-            "radius_max": 1.50,
+            "radius_min": 0.61,
+            "radius_max": 1.24,
             "elevation_min": 5,
             "elevation_max": 89,
             "uniform_elevation": True
