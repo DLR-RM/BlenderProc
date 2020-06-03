@@ -1,4 +1,4 @@
-# Args: <bop_dataset_path> <bop_toolkit_path> <output_dir>
+# Args: <path_to_bop_data> <bop_datset_name> <bop_toolkit_path> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -15,15 +15,15 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:2>",
-          "sys_paths": ["<args:1>"] # path to the bop toolkit
+          "output_dir": "<args:3>",
+          "sys_paths": ["<args:2>"] # path to the bop toolkit
         }
       }
     },
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>",
+        "bop_dataset_path": "<args:0>/<args:1>",
         "mm2m": True,
         "split": "test", # careful, some BOP datasets only have test sets
         "scene_id": 1,
@@ -64,11 +64,13 @@
     },
     {
       "module": "writer.BopWriter",
-      "dataset": "<args:0>",
-      "postprocessing_modules": {
-        "depth": [
-          {"module": "postprocessing.Dist2Depth"}
-        ]
+      "config": {
+        "dataset": "<args:1>",
+        "postprocessing_modules": {
+          "depth": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
       }
     },
     {

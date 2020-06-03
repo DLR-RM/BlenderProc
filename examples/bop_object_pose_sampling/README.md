@@ -13,10 +13,11 @@ In [examples/bop_object_pose_sampling/config.yaml](config.yaml) set the `blender
 Execute in the BlenderProc main directory:  
 
 ```
-python run.py examples/bop_object_pose_sampling/config.yaml <path_to_bop_data> <path_to_bop_toolkit> examples/bop_object_pose_sampling/output
+python run.py examples/bop_object_pose_sampling/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/bop_object_pose_sampling/output
 ```
 * `examples/bop_object_pose_sampling/config.yaml`: path to the pipeline configuration file.
-* `<path_to_bop_data>`: path to a BOP dataset
+* `<path_to_bop_data>`: path to a folder containing BOP datasets.
+* `<bop_dataset_name>`: name of BOP dataset, e.g. lm
 * `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
 * `examples/bop_object_pose_sampling/output`: path to the output directory.
 
@@ -50,7 +51,7 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
     {
       "name": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>",
+        "bop_dataset_path": "<args:0>/<args:1>",
         "mm2m": True,
         "split": "val",
         "obj_ids": [1,1,3],
