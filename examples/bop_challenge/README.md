@@ -2,7 +2,7 @@
 
 ![](rendering.png)
 
-Here, we collect the official BlenderProc configs for all 7 core datasets that were used to generate the provided synthetic data for the BOP Challenge 2020. The output will be a dataset in [BOP Format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md). 
+Here you find the official BlenderProc configs that we used to generate the provided synthetic data for the BOP Challenge 2020 (7 core datasets). The output will be a dataset in [BOP Format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md). 
 
 For LineMOD, the objects are placed upright on a plane based on the [bop_object_on_surface_sampling](../bop_object_on_surface_sampling) example. All other datasets are created by dropping objects using physics based on the [bop_object_physics_positioning](../bop_object_physics_positioning) example. Make sure to read through them if you want to understand and adapt the configs. 
 

@@ -2,9 +2,7 @@
 
 ![](rendering.png)
 
-This serves as another example for generating synthetic data for the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and placed upright onto a plane inside a cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, segmentation masks, Coco annotations and object poses in BOP format.
-
-Note: The objects might hover a mm above the surface. You can add the `object.PhysicsPositioning` module, but some taller objects might tip over, then.
+Here we explain the on surface sampling config used for the synthetic data generation in the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and placed upright onto a plane inside a cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, camera intrinsics and object poses in BOP format.
 
 ## Usage
 
@@ -20,32 +18,13 @@ python run.py examples/bop_object_on_surface_sampling/config.yaml <path_to_bop_d
 
 * `examples/bop_object_on_surface_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
-* `<bop_dataset_name>`: name of BOP dataset.
+* `<bop_dataset_name>`: name of BOP dataset for which the ground truth should be saved.
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
 * `examples/bop_object_on_surface_sampling/output`: path to an output folder.
 
-## Visualization
-
-Visualize the generated data if it is stored in a container.
-
-```
-python scripts/visHdf5Files.py examples/bop_object_on_surface_sampling/output/coco_data/0.hdf5
-```
-
 ## Generate a dataset
-To aggregate data and labels over multiple scenes, add the following 
-
-```
-"config": {
-  "append_to_existing_output": True
-}
-```
-to the configs of  
-`writer.CocoAnnotationsWriter`   
-`writer.Hdf5Writer`  
-`writer.BopWriter`  
-Then simply run the script multiple times.
+To aggregate data and labels over multiple scenes, simply run the script multiple times using the same command. As data is saved in chunks of 1000 images, you can easily distribute the data generation by running the scripts on different machines/servers and then collecting all chunks.
 
 ## Steps
 
@@ -63,9 +42,6 @@ Then simply run the script multiple times.
 * Sample light source pose: `lighting.LightSampler` module.
 * Sample camera poses: `camera.CameraSampler` module.
 * Render RGB: `renderer.RgbRenderer` module.
-* Render segmentation: `renderer.SegMapRenderer` module.
-* Write COCO annotations: `writer.CocoAnnotationsWriter` module.
-* Write output to .hdf5 container: `writer.Hdf5Writer` module.
 * Write BOP data: `writer.BopWriter` module.
 
 ## Config file
@@ -80,7 +56,7 @@ Then simply run the script multiple times.
         "model_type": "cad",
         "mm2m": True,
         "sample_objects": True,
-        "amount_to_sample": 2,
+        "num_of_objs_to_sample": 3,
         "add_properties": {
           "cp_physics": True
         }
@@ -89,25 +65,25 @@ Then simply run the script multiple times.
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/itodd",
+        "bop_dataset_path": "<args:0>/ycbv",
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
-        "amount_to_sample": 2,
+        "num_of_objs_to_sample": 3,
         "add_properties": {
           "cp_physics": True
-        }
+        },
+        "cf_set_shading": "SMOOTH"
       }
     },
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/lm",
-        "split": "val",
-        "mm2m": True,
+        "bop_dataset_path": "<args:0>/<args:1>",
         "model_type": "",
+        "mm2m": True,
         "sample_objects": True,
-        "amount_to_sample": 8,
+        "num_of_objs_to_sample": 15,
         "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
@@ -118,9 +94,10 @@ Then simply run the script multiple times.
 ```
 
 * Here we are sampling BOP objects from 3 different datasets.
-* We load 2 random objects from T-LESS and ITODD datasets, and 8 objects from LM dataset.
-* Note `"obj_instances_limit": 1` parameter for LM data which dictates that each sampled object from this dataset must be unique in this scene, while this parameter is omitted for T-LESS and ITODD, which means that potentially those objects may have duplicates due to the process of sampling.
-* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, LM-dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x / resolution_y / cam_K` in the camera or global config.
+* We load 3 random objects from YCBV and T-LESS datasets, and 15 objects from the dataset given by `"<args:1>"` (e.g. LM in this case).
+* `"obj_instances_limit": 1` means that each object is only sampled once without repetition, i.e. it is unique.
+* `"cf_set_shading": "SMOOTH"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.  
+* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, `"<args:1>"`(LM) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x / resolution_y / cam_K` in the camera sampler or global config.
 
 ### Material Manipulator
 
@@ -131,9 +108,6 @@ Then simply run the script multiple times.
         "selector": {
           "provider": "getter.Material",
           "conditions": [
-          {
-            "name": "bop_itodd_vertex_col_material.*"
-          },
           {
             "name": "bop_tless_vertex_col_material.*"
           }
@@ -154,36 +128,103 @@ Then simply run the script multiple times.
           "provider": "getter.Material",
           "conditions": [
           {
-            "name": "bop_itodd_vertex_col_material.*"
+            "name": "bop_ycbv_vertex_col_material.*"
           },
           {
-            "name": "bop_tless_vertex_col_material.*"
-          },
-          {
-            "name": "bop_lm_vertex_col_material.*"
+            "name": "bop_<args:1>_vertex_col_material.*"
           }
           ]
         },
         "cf_set_specular": {
           "provider": "sampler.Value",
           "type": "float",
-          "min": 0.1,
-          "max": 1
+          "min": 0.0,
+          "max": 1.0
         },
         "cf_set_roughness": {
           "provider": "sampler.Value",
           "type": "float",
-          "min": 0.1,
-          "max": 1
+          "min": 0.0,
+          "max": 1.0
         }
       }
     },
 ```
 
-* Sample RGBA color for T-LESS and ITODD object's materials using `sampler.Color` Provider.
+* Sample RGBA color for T-LESS object's materials using `sampler.Color` Provider.
 * Sample `specular` and `roughness` values for object's materials from all datasets using `sampler.Value` Provider.
 
+### Basic Mesh Initializer
+
 ```yaml
+    {
+      "module": "constructor.BasicMeshInitializer",
+      "config": {
+        "meshes_to_add": [
+        {
+          "type": "plane",
+          "name": "ground_plane0",
+          "scale": [2, 2, 1]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane1",
+          "scale": [2, 2, 1],
+          "location": [0, -2, 2],
+          "rotation": [-1.570796, 0, 0] # switch the sign to turn the normals to the outside
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane2",
+          "scale": [2, 2, 1],
+          "location": [0, 2, 2],
+          "rotation": [1.570796, 0, 0]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane4",
+          "scale": [2, 2, 1],
+          "location": [2, 0, 2],
+          "rotation": [0, -1.570796, 0]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane5",
+          "scale": [2, 2, 1],
+          "location": [-2, 0, 2],
+          "rotation": [0, 1.570796, 0]
+        },
+        {
+          "type": "plane",
+          "name": "light_plane",
+          "location": [0, 0, 10],
+          "scale": [3, 3, 1]
+        }
+        ]
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": '.*plane.*'
+          }
+        },
+        "cp_physics": False,
+        "cp_category_id": 333
+      }
+    },
+```
+
+* Construct minimal 2mx2mx2m room from 6 planes
+* Set `"cp_physics": False` to fix the planes during any simulations
+
+### Material Manipulator
+
+```yaml
+
     {
       "module": "materials.MaterialManipulator",
       "config": {
@@ -196,8 +237,8 @@ Then simply run the script multiple times.
         "cf_switch_to_emission_shader": {
           "color": {
             "provider": "sampler.Color",
-            "min": [0, 0, 0, 1],
-            "max": [1, 1, 1, 1]
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
           },
           "strength": {
             "provider": "sampler.Value",
@@ -212,21 +253,20 @@ Then simply run the script multiple times.
 
 * For a default material of a light plane which was created during object's initialization, switch to a Emission shader and sample `color` and `strength` values of the emitted light.
 
-### CC Material Loader
+### CCMaterial Loader 
 
 ```yaml
     {
       "module": "loader.CCMaterialLoader",
       "config": {
-        "folder_path": "<args:2>"
+        "folder_path": "<args:3>"
       }
-    }
+    },
 ```
 
-* Load CCMaterials.
+* Load a random CC0Texture that was downloaded from https://cc0textures.com/
 
 ### Material Randomizer
-
 ```yaml
     {
       "module": "materials.MaterialRandomizer",
@@ -251,9 +291,7 @@ Then simply run the script multiple times.
 
 * Sample a CCTextures material once for all loaded ground_planes.
 
-
 ### On Surface Sampler
-
 
 ```yaml
     {
@@ -283,21 +321,53 @@ Then simply run the script multiple times.
           },
           "min_height": 1,
           "max_height": 4,
-          "face_sample_range": [0.4,0.6],
+          "face_sample_range": [0.4, 0.6],
           "use_ray_trace_check": False,
         },
-        "min_distance": 0.05,
-        "max_distance": 0.5,
+        "min_distance": 0.01,
+        "max_distance": 0.20,
         "rot_sampler": {
           "provider": "sampler.Uniform3d",
-          "min": [0,0,0],
-          "max": [0,0,6.28]
+          "min": [0, 0, 0],
+          "max": [0, 0, 6.28]
         }
       }
     },
 ```
 
-* Get all objects with `"cp_physics": True` and the ground plane `"name": "ground_plane0"`. Use the provider `"sampler.UpperRegionSampler"` to sample objects above the plane at specified height, position and rotation. Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. `object.OnSurfaceSampler` then places the objects down to the plane. Check the [on_surface_object_sampling](../on_surface_object_sampling/README.md) example for more details.
+* Get all objects with `"cp_physics": True` and the ground plane `"name": "ground_plane0"`. Use the provider `"sampler.UpperRegionSampler"` to sample objects above the plane at specified height (`"min_height", "max_height"`), relative position on plane (`"face_sample_range"`) and rotation (`"rot_sampler"`). Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. `"object.OnSurfaceSampler"` then places the objects down to the plane. Check the [on_surface_object_sampling](../on_surface_object_sampling/README.md) example for more details. 
+
+### Light Sampler
+
+```yaml
+    {
+      "module": "lighting.LightSampler",
+      "config": {
+        "lights": [
+        {
+          "location": {
+            "provider": "sampler.Shell",
+            "center": [0, 0, 0],
+            "radius_min": 1, # now depends on the bottom area of the box
+            "radius_max": 1.5, # this one too
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
+          },
+          "color": {
+            "provider": "sampler.Color",
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
+          },
+          "type": "POINT",
+          "energy": 200
+        }
+        ]
+      }
+    },
+```
+
+* Samples an additional point light source (next to ceiling) in a `"sampler.Shell"` around the origin with a `"sampler.Color"` provider. 
 
 ### Camera Sampler
 
@@ -306,7 +376,7 @@ Then simply run the script multiple times.
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [
-        {          
+        {
           "proximity_checks": {
             "min": 0.3
           },
@@ -317,27 +387,34 @@ Then simply run the script multiple times.
               "type": "MESH"
             }
           },
-          "number_of_samples": 5,
+          "number_of_samples": 10,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 0.7,
-            "radius_max": 1.3,
-            "elevation_min": 10,
-            "elevation_max": 89.9
+            "radius_min": 0.35,
+            "radius_max": 1.50,
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
           },
           "rotation": {
             "format": "look_at",
             "value": {
-              "provider": "getter.Attribute",
-              "entities": {
+              "provider": "getter.POI",
+              "selector": {
                 "provider": "getter.Entity",
                 "conditions": {
-                  "cp_bop_dataset_name": "lm",
-                }
-              },
-              "random_index": True,
-              "get": "location"
+                  "type": "MESH",
+                  "cp_bop_dataset_name": "<args:1>",
+                },
+                "random_samples": 10
+              }
+            },
+            "inplane_rot": {
+              "provider": "sampler.Value",
+              "type": "float",
+              "min": -0.7854,
+              "max": 0.7854
             }
           }
         }
@@ -346,9 +423,47 @@ Then simply run the script multiple times.
     },
 ```
 
-* Sample 5 camera poses, where camera's location is sampled using `sampler.Shell` Provider, and camera's rotation is based on the output of the `getter.Attribute` Provider.
-* `getter.Attribute` Provider returns a `location` (`"get": "location"`) of a random object (`"random_index": True`) from the LM dataset (`"cp_bop_dataset_name": "lm"`).
-* Camera poses undergo proximity checks (`"proximity_checks"`) with respect to all objects besides ground_plane (`"excluded_objs_in_proximity_check"`).
+* Samples `"number_of_samples": 10` camera poses, where the camera location is sampled using a `sampler.Shell` Provider with `"uniform_elevation"` sampling. 
+* The camera rotation is defined by `"look_at"` a point of interest (`"getter.POI"`) plus a sampled `"inplane_rot"` in the specified range.
+* The `"getter.POI"` is defined by the object closest to the mean position of all objects that are returned by the `"getter.Entity"` Provider, i.e. `"random_samples": 10` objects from the target BOP dataset `"cp_bop_dataset_name": "<args:1>"`.
+* Camera poses undergo `"proximity_checks"` with respect to all objects besides ground_plane (`"excluded_objs_in_proximity_check"`) to ensure that no objects are closer than `"min": 0.3` meters.
+
+
+### Rgb Renderer
+
+```yaml
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "samples": 50,
+        "render_depth": True,
+        "image_type": "JPEG"
+      }
+    },
+```
+* Renders RGB using 50 `"samples"`, and saves them as jpg images with 0.95 quality. Also outputs distance images. 
+
+### Bop Writer
+
+```yaml
+    {
+      "module": "writer.BopWriter",
+      "config": {
+        "dataset": "<args:1>",
+        "append_to_existing_output": True,
+        "postprocessing_modules": {
+          "depth": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
+      }
+    }
+```
+
+* Saves all pose and camera information that is provided in BOP datasets.
+* Only considers objects from the given `"dataset": "<args:1>"`
+* `"append_to_existing_output"` means that if the same output folder is chosen, data will be accumulated and not overwritten
+* We use a `postprocessing.Dist2Depth` to convert the distance images from Blender to actual depth images.
 
 ## More examples
 
