@@ -104,6 +104,8 @@ class BopWriter(StateWriter):
                             "to which the postprocessing modules should be applied. Every postprocessing module "
                             "has to have a run function which takes in the raw data and returns the processed "
                             "data. Type: dict."
+        "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to "
+                            "failed physics. Default: 5. Type float."
     """
 
     def __init__(self, config):
@@ -119,14 +121,16 @@ class BopWriter(StateWriter):
         for output_key in module_configs:
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
 
+        # Distance in meteres to object after which it is ignored. Mostly due to failed physics.
+        self._ignore_dist_thres = self.config.get_float("ignore_dist_thres", 5.)
+
         # Number of frames saved in each chunk.
         self.frames_per_chunk = 1000
 
         # Multiply the output depth image with this factor to get depth in mm.
         self.depth_scale = 0.1
 
-        # Format of the RGB and depth images.
-        rgb_ext = '.png'
+        # Format of the depth images.
         depth_ext = '.png'
 
         # Output paths.
@@ -135,7 +139,7 @@ class BopWriter(StateWriter):
         self.chunks_dir = os.path.join(self.dataset_dir, 'train_synt')
         self.camera_path = os.path.join(self.dataset_dir, 'camera.json')
         self.rgb_tpath = os.path.join(
-            self.chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + rgb_ext)
+            self.chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + '{im_type}')
         self.depth_tpath = os.path.join(
             self.chunks_dir, '{chunk_id:06d}', 'depth', '{im_id:06d}' + depth_ext)
         self.chunk_camera_tpath = os.path.join(
@@ -273,11 +277,9 @@ class BopWriter(StateWriter):
     def _write_camera(self):
         """ Writes camera.json into dataset_dir.
         """
-        if 'loaded_resolution' in self.cam:
-            width, height = self.cam['loaded_resolution']
-        else:
-            width = bpy.context.scene.render.resolution_x
-            height = bpy.context.scene.render.resolution_y
+
+        width = bpy.context.scene.render.resolution_x
+        height = bpy.context.scene.render.resolution_y
 
         cam_K = self.get_camK_from_blender_attributes(self.cam_pose)
         camera = {'cx': cam_K[2],
@@ -318,11 +320,15 @@ class BopWriter(StateWriter):
             cam_R_m2c = list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2])
             cam_t_m2c = list(cam_H_m2c.to_translation() * 1000.)
 
-            frame_gt.append({
-                'cam_R_m2c': cam_R_m2c,
-                'cam_t_m2c': cam_t_m2c,
-                'obj_id': self._get_object_attribute(obj, 'id')
-            })
+            # ignore examples that fell through the plane
+            if not np.linalg.norm(cam_t_m2c) > self._ignore_dist_thres * 1000.:
+                frame_gt.append({
+                    'cam_R_m2c': cam_R_m2c,
+                    'cam_t_m2c': cam_t_m2c,
+                    'obj_id': self._get_object_attribute(obj, 'id')
+                })
+            else:
+                print('ignored obj, ', self._get_object_attribute(obj, 'id'))
 
         return frame_gt
 
@@ -382,7 +388,7 @@ class BopWriter(StateWriter):
                 chunk_gt = {}
                 chunk_camera = {}
                 os.makedirs(os.path.dirname(
-                    self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
+                    self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=0, im_type='PNG')))
                 os.makedirs(os.path.dirname(
                     self.depth_tpath.format(chunk_id=curr_chunk_id, im_id=0)))
 
@@ -394,7 +400,8 @@ class BopWriter(StateWriter):
             rgb_output = self._find_registered_output_by_key("colors")
             if rgb_output is None:
                 raise Exception("RGB image has not been rendered.")
-            rgb_fpath = self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id)
+            image_type = '.png' if rgb_output['path'].endswith('png') else '.jpg'
+            rgb_fpath = self.rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type=image_type)
             shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
             # Load the resulting depth image.

@@ -33,12 +33,12 @@ class Dist2Depth(Module):
         xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
         
         # coordinate distances to principal point
-        x_opt = np.abs(xs-cx) 
-        y_opt = np.abs(ys-cy) 
+        x_opt = np.abs(xs-cx)
+        y_opt = np.abs(ys-cy)
 
         # Solve 3 equations in Wolfram Alpha: 
         # Solve[{X == (x-c0)/f0*Z, Y == (y-c1)/f0*Z, X*X + Y*Y + Z*Z = d*d}, {X,Y,Z}]
-        depth = dist**2 * f * x_opt / (dist*x_opt*np.sqrt(x_opt**2 + y_opt**2 + f**2))
+        depth = dist * f / np.sqrt(x_opt**2 + y_opt**2 + f**2)
 
         return depth
 

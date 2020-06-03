@@ -7,16 +7,18 @@ from src.utility.Utility import Utility
 class RgbRenderer(Renderer):
     """ Renders rgb images for each registered keypoint.
 
-    Images are stored as PNG-files with 8bit color depth.
+    Images are stored as PNG-files or JPEG-files with 8bit color depth.
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
-                              "materials, Type: bool. Default: False."
+        "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
+                                "materials, Type: bool. Default: False."
+        "image_type", "Image type of saved rendered images, Type: string. Default: 'PNG'. Options: ['PNG','JPEG']"
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
         self._texture_less_mode = config.get_bool('render_texture_less', False)
+        self._image_type = config.get_string('image_type', 'PNG')
 
     def change_to_texture_less_render(self):
         """
@@ -58,8 +60,11 @@ class RgbRenderer(Renderer):
 
             # In case a previous renderer changed these settings
             bpy.context.scene.render.image_settings.color_mode = "RGB"
-            bpy.context.scene.render.image_settings.file_format = "PNG"
+            bpy.context.scene.render.image_settings.file_format = self._image_type
             bpy.context.scene.render.image_settings.color_depth = "8"
+
+            # only influences jpg quality
+            bpy.context.scene.render.image_settings.quality = 95
 
             # check if texture less render mode is active
             if self._texture_less_mode:
@@ -70,4 +75,9 @@ class RgbRenderer(Renderer):
 
             self._render("rgb_")
 
-        self._register_output("rgb_", "colors", ".png", "1.0.0")
+        if self._image_type == 'PNG':
+            self._register_output("rgb_", "colors", ".png", "1.0.0")
+        elif self._image_type == 'JPEG':
+            self._register_output("rgb_", "colors", ".jpg", "1.0.0")
+        else:
+            raise Exception("Unknown Image Type " + self._image_type)
