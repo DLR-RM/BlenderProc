@@ -9,6 +9,8 @@
 
 ## Version 1.4.1: 3rd June 2020
 
+- switches to blender 2.83
+- adds support for adaptive sampling (Renderer/use_adaptive_sampling) -> can decrease rendering time for complex scenes if used
 - add random_samples option for entity getter
 - add friction/damping for physics positioning
 - add JPG save option for RgbRenderer
