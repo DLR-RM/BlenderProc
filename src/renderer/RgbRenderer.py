@@ -13,7 +13,7 @@ class RgbRenderer(Renderer):
 
         "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
                                 "materials, Type: bool. Default: False."
-        "image_type", "Image type of saved rendered images, Type: string. Default: 'PNG'. Options: ['PNG','JPEG']"
+        "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
     """
     def __init__(self, config):
         Renderer.__init__(self, config)
