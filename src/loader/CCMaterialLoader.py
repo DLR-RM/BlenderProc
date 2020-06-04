@@ -25,8 +25,9 @@ class CCMaterialLoader(Module):
        :header: "Parameter", "Description"
 
        "folder_path", "The path to the downloaded cc0textures. Type: string. Default: resources/cctextures."
-       "used_assets", "A list of all asset names, you want to use."
-                      "By default all assets will be loaded, specified by an empty list. Type: list. Default: []."
+       "used_assets", "A list of all asset names, you want to use. The asset-name must not be typed in completely,"
+                      "only the beginning the name starts with. By default all assets will be loaded, specified by"
+                      "an empty list. Type: list. Default: []."
        "add_custom_properties", "A dictionary of materials and the respective properties."
                                 "Type: dict. Default: {}."
        "preload", "If set true, only the material names are loaded and not the complete material."
