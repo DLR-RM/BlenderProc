@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import bpy
 
@@ -133,7 +134,7 @@ class MaterialManipulator(Module):
         op_mode = self.config.get_string("mode", "once_for_each")
 
         if not materials:
-            print("Warning: No materials selected inside of the MaterialManipulator")
+            warnings.warn("Warning: No materials selected inside of the MaterialManipulator")
             return
 
         if op_mode == "once_for_all":
