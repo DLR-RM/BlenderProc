@@ -257,7 +257,6 @@ class BopWriter(StateWriter):
         shift_x = self._get_camera_attribute(cam_pose, 'shift_x')
         shift_y = self._get_camera_attribute(cam_pose, 'shift_y')
         syn_cam_K = self._get_camera_attribute(cam_pose, 'loaded_intrinsics')
-
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
 
