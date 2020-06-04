@@ -27,7 +27,6 @@ class BopLoader(Loader):
 
        "cam_type", "Camera type. Type: string. Optional. Default value: ''."
        "sys_paths", "System paths to append. Type: list."
-       "num_of_objs_to_sample", "Number of the objects to sample. Type: int."
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
        "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
@@ -66,7 +65,7 @@ class BopLoader(Loader):
         self.model_type = self.config.get_string("model_type", "")
         self.scale = 0.001 if self.config.get_bool("mm2m", False) else 1
         self.bop_dataset_name = os.path.basename(self.bop_dataset_path)
-        self._is_ycbv = self.bop_dataset_name == "ycbv"
+        self._has_external_texture = self.bop_dataset_name in ["ycbv", "ruapc"]
 
     def run(self):
         """ Load BOP data """
@@ -100,9 +99,14 @@ class BopLoader(Loader):
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
-        cam['loaded_resolution'] = cam_p['im_size'][0], cam_p['im_size'][1]
-        # load default intrinsics from camera.json
+
         cam['loaded_intrinsics'] = cam_p['K']
+        cam['loaded_resolution'] = split_p['im_size'][0], split_p['im_size'][1]
+
+        # TLESS exception because images are cropped
+        if self.bop_dataset_name in ['tless']:
+            cam['loaded_intrinsics'][2] = split_p['im_size'][0]/2
+            cam['loaded_intrinsics'][5] = split_p['im_size'][1]/2   
         
         config = Config({})
         camera_module = CameraModule(config)
@@ -273,7 +277,7 @@ class BopLoader(Loader):
         cur_obj = self._get_loaded_obj(model_path)
         # if the object was not previously loaded - load it, if duplication is allowed - duplicate it
         if cur_obj is None:
-            if self._is_ycbv:
+            if self._has_external_texture:
                 if os.path.exists(model_path):
                     new_file_ply_content = ""
                     with open(model_path, "r") as file:
@@ -302,7 +306,7 @@ class BopLoader(Loader):
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path
-        if not self._is_ycbv:
+        if not self._has_external_texture:
             mat = self._load_materials(cur_obj)
             self._link_col_node(mat)
         elif texture_file_path != "":

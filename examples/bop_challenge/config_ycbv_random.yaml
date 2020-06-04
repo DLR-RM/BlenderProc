@@ -27,7 +27,7 @@
         "model_type": "cad",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 3,
+        "num_of_objs_to_sample": 2,
         "add_properties": {
           "cp_physics": True
         }
@@ -36,11 +36,25 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>/lm",
+        "bop_dataset_path": "<args:0>/hb",
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 3,
+        "num_of_objs_to_sample": 2,
+        "add_properties": {
+          "cp_physics": True
+        },
+        "cf_set_shading": "SMOOTH"
+      }
+    },
+    {
+      "module": "loader.BopLoader",
+      "config": {
+        "bop_dataset_path": "<args:0>/tyol",
+        "model_type": "",
+        "mm2m": True,
+        "sample_objects": True,
+        "num_of_objs_to_sample": 2,
         "add_properties": {
           "cp_physics": True
         },
@@ -54,7 +68,7 @@
         "model_type": "",
         "mm2m": True,
         "sample_objects": True,
-        "num_of_objs_to_sample": 10,
+        "num_of_objs_to_sample": 21,
         "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
@@ -91,7 +105,10 @@
             "name": "bop_tless_vertex_col_material.*"
           },
           {
-            "name": "bop_lm_vertex_col_material.*"
+            "name": "bop_hb_vertex_col_material.*"
+          },
+          {
+            "name": "bop_tyol_vertex_col_material.*"
           },
           {
             "name": "bop_<args:1>_vertex_col_material.*"
@@ -274,8 +291,8 @@
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
-            "radius_min": 1,
-            "radius_max": 1.5,
+            "radius_min": 1, # now depends on the bottom area of the box
+            "radius_max": 1.5, # this one too
             "elevation_min": 5,
             "elevation_max": 89,
             "uniform_elevation": True
@@ -306,7 +323,7 @@
               "type": "MESH"
             }
           },
-          "number_of_samples": 10,
+          "number_of_samples": 25,
           "location": {
             "provider": "sampler.Shell",
             "center": [0, 0, 0],
@@ -326,14 +343,14 @@
                   "type": "MESH",
                   "cp_bop_dataset_name": "<args:1>",
                 },
-                "random_samples": 10
+                "random_samples": 15
               }
             },
             "inplane_rot": {
               "provider": "sampler.Value",
               "type": "float",
-              "min": -0.7854,
-              "max": 0.7854
+              "min": -3.14159,
+              "max": 3.14159
             }
           }
         }

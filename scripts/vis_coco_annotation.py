@@ -24,7 +24,12 @@ with open(os.path.join(base_path, conf)) as f:
     categories = annotations['categories']
     annotations = annotations['annotations']
 
-im = Image.open(os.path.join(base_path, "rgb_{:04d}.png".format(image_idx)))
+im_path = os.path.join(base_path, "rgb_{:04d}.png".format(image_idx))
+if os.path.exists(im_path):
+    im = Image.open(im_path)
+else:
+    im = Image.open(im_path.replace('png','jpg'))
+
 draw = ImageDraw.Draw(im)
 
 def get_category(_id):
