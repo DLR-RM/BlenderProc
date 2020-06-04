@@ -24,7 +24,12 @@ with open(os.path.join(base_path, conf)) as f:
     categories = annotations['categories']
     annotations = annotations['annotations']
 
-im = Image.open(os.path.join(base_path, "rgb_{:04d}.png".format(image_idx)))
+im_path = os.path.join(base_path, "rgb_{:04d}.png".format(image_idx))
+if os.path.exists(im_path):
+    im = Image.open(im_path)
+else:
+    im = Image.open(im_path.replace('png','jpg'))
+
 draw = ImageDraw.Draw(im)
 
 def get_category(_id):
@@ -34,12 +39,13 @@ def get_category(_id):
     else:
         raise Exception("Category {} is not defined in {}".format(_id, os.path.join(base_path, conf)))
 
+font = ImageFont.load_default()
 # Add bounding boxes and masks
 for idx, annotation in enumerate(annotations):
     if annotation["image_id"] == image_idx:
         bb = annotation['bbox']
         draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
-        draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=ImageFont.truetype("arial"))
+        draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
         poly = Image.new('RGBA', im.size)
         pdraw = ImageDraw.Draw(poly)
         pdraw.polygon(annotation["segmentation"][0], fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))

@@ -1,4 +1,5 @@
 import re
+from random import choice, sample
 
 import bpy
 import mathutils
@@ -13,7 +14,7 @@ class Entity(Provider):
         Example 1: Return a list of objects that match a name pattern.
 
         {
-          "provider": "getter.Entity"
+          "provider": "getter.Entity",
           "conditions": {
             "name": "Suzanne.*"
           }
@@ -23,7 +24,6 @@ class Entity(Provider):
                                                 OR {match the name pattern, AND have a certain value of a cust. prop}
                                                 OR {be inside a bounding box defined by a min and max points}
                                                 OR {have a Z position in space greater than -1}
-
 
         {
           "provider": "getter.Entity",
@@ -51,6 +51,16 @@ class Entity(Provider):
           ]
         }
 
+        Example 3: Returns two random objects of MESH type.
+
+        {
+          "provider": "getter.Entity",
+          "random_samples": 2,
+          "conditions": {
+            "type": "MESH"
+          }
+        }
+
     **Configuration**:
 
     .. csv-table::
@@ -73,6 +83,8 @@ class Entity(Provider):
         "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
         "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
                  "Type: int."
+        "random_samples": "If set, this Provider returns random_samples objects from the pool of selected ones. Define "
+                        "index or random_samples property, only one is allowed at a time. Type: int. Default: False."
 
     **Custom functions**
 
@@ -205,7 +217,14 @@ class Entity(Provider):
             # only one condition was given, treat it as and condition
             objects = self.perform_and_condition_check(conditions, [])
 
-        if self.config.has_param("index"):
+        random_samples = self.config.get_int("random_samples", 0)
+        has_index = self.config.has_param("index")
+
+        if has_index and random_samples:
+            raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
+        elif has_index:
             objects = [objects[self.config.get_int("index")]]
+        elif random_samples:
+            objects = sample(objects, k=min(random_samples, len(objects)))
 
         return objects

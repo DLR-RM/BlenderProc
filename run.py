@@ -1,5 +1,6 @@
 import argparse
 import os
+from os.path import join
 import tarfile
 import subprocess
 import shutil
@@ -36,14 +37,18 @@ if "custom_blender_path" not in setup_config:
     if "blender_install_path" in setup_config:
         blender_install_path = setup_config["blender_install_path"]
         if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
-            print("Warning: Changed install path from /home_local/... to /home/..., there is no /home_local/ on this machine.")
-            blender_install_path = blender_install_path.replace("/home_local", "/home", 1)
+            user_name = os.getenv("USER")
+            home_path = os.getenv("HOME")
+            print("Warning: Changed install path from {}... to {}..., there is no /home_local/ "
+                  "on this machine.".format(join("/home_local", user_name), home_path))
+            blender_install_path = blender_install_path.replace(join("/home_local", user_name), home_path, 1)
     else:
         blender_install_path = "blender"
         
     # Determine configured version
-    # right new only support blender-2.82
-    blender_version = "blender-2.82"
+    # right new only support blender-2.83
+    major_version = "2.83"
+    blender_version = "blender-{}.0".format(major_version)
     if platform == "linux" or platform == "linux2":
         blender_version += "-linux64"
         blender_path = os.path.join(blender_install_path, blender_version)
@@ -52,7 +57,6 @@ if "custom_blender_path" not in setup_config:
         blender_path = os.path.join(blender_install_path, "Blender.app")
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
-    major_version = blender_version[len("blender-"):len("blender-") + 4]
 
     # If forced reinstall is demanded, remove existing files
     if os.path.exists(blender_path) and args.reinstall_blender:
@@ -161,9 +165,13 @@ if len(required_packages) > 0:
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
 
-    used_env = dict(os.environ, PYTHONPATH=packages_path)
+    pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.7", "site-packages")
+    used_env = dict(os.environ, PYTHONPATH=packages_path + ":" + pre_python_package_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
-    installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze"], env=used_env, cwd=python_bin_folder)
+    installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
+                                                  "--path={}".format(pre_python_package_path)], cwd=python_bin_folder)
+    installed_packages += subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
+                                                  "--path={}".format(packages_path)], cwd=python_bin_folder)
 
     # Split up strings into two lists (names and versions)
     installed_packages_name, installed_packages_versions = zip(*[str(line).lower().split('==') for line in installed_packages.splitlines()])
