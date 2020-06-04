@@ -26,6 +26,11 @@ class Renderer(Module):
 
        "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in
                   "dark areas. Type: int. Default: 256, (not true for all Renderes)"
+       "use_adaptive_sampling", "Combined with the maximum sample amount, it is also possible to set the amount of"
+                                "noise left per pixel. This means pixel is sampled until the noise level is smaller"
+                                "than specified or the maximum amount of samples were reached."
+                                "Do not use this with Non-RGB-Renders! Only used if specified" in config."
+                                "Type: float. Default: 0.0"
 
        "auto_tile_size", "If true, then the number of render tiles is set automatically using the
                          "render_auto_tile_size addon. Type: bool. Default: True"
@@ -99,6 +104,10 @@ class Renderer(Module):
         :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
         bpy.context.scene.cycles.samples = self.config.get_int("samples", default_samples)
+
+        if self.config.has_param("use_adaptive_sampling"):
+            bpy.context.scene.cycles.use_adaptive_sampling = True
+            bpy.context.scene.cycles.adaptive_threshold = self.config.get_float("use_adaptive_sampling")
 
         if self.config.get_bool("auto_tile_size", True):
             bpy.context.scene.ats_settings.is_enabled = True
