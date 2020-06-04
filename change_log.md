@@ -1,11 +1,33 @@
 
 # Planned Features
 
-- Add support for YCB objects (not just Bob)
+- Add support for all YCB objects (not just BOP)
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
 - Improve the documentation 
 
 # Version History
+
+## Version 1.4.1: 3rd June 2020
+
+- switches to blender 2.83
+- adds support for adaptive sampling (Renderer/use_adaptive_sampling) -> can decrease rendering time for complex scenes if used
+- add random_samples option for entity getter
+- add friction/damping for physics positioning
+- add JPG save option for RgbRenderer
+- add uniform elevation sampling in Shell Sampler
+- add in plane rotation option for look_at/direction camera rotations
+- add postprocessing.Dist2Depth to convert Blender distance images to depth images 
+- UpperRegionSamlper can sample in relative area on selected face
+- improve physics by using convex hull and box collision shapes
+- obj.rigid_body.use_margin = True, to actually use margin
+- add a Smooth Shader cf to entityManipulator
+- BopWriter improvements, outputs chunks of 1000 images
+- exclude objects like planes from proximity checks
+- fix transparency bounces
+- add custom property cp_bop_dataset_name
+- add bop_challenge example with all configs used to render the provided synthetic data 
+- add bop_object_on_surface_sampling for sampling upright objects
+- docu improvements and step by step explanations of config files
 
 ## Version 1.4.0: 15th May 2020
 

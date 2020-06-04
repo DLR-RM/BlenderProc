@@ -113,9 +113,10 @@ class CameraModule(Module):
 
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
-
+        
         if config.has_param("cam_K"):
-            cam_K = np.array(config.get_list("cam_K", [])).reshape(3, 3).astype(np.float32)
+            cam['loaded_intrinsics'] = config.get_list("cam_K")
+            cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
         elif 'loaded_intrinsics' in cam:
             cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
         else:
@@ -192,7 +193,13 @@ class CameraModule(Module):
             else:
                 raise Exception("No such rotation format:" + str(rotation_format))
 
-            cam2world_matrix = Matrix.Translation(Vector(position)) @ Euler(rotation_euler, 'XYZ').to_matrix().to_4x4()
+            rotation_matrix = Euler(rotation_euler, 'XYZ').to_matrix()
+
+            if rotation_format == "look_at" or rotation_format == "forward_vec":
+                inplane_rot = config.get_float("rotation/inplane_rot", 0.0)
+                rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
+
+            cam2world_matrix = Matrix.Translation(Vector(position)) @ rotation_matrix.to_4x4()
         else:
             cam2world_matrix = Matrix(np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32))
         return cam2world_matrix

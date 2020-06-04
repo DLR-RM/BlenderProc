@@ -2,6 +2,7 @@ import bpy
 
 from src.main.Module import Module
 from src.utility.Config import Config
+from src.loader.Loader import Loader
 
 
 class EntityManipulator(Module):
@@ -111,6 +112,8 @@ class EntityManipulator(Module):
                            "getter.Content Provider. Type: Provider."
         "cf_add_modifier/name", "Name of the modifier to add. Type: string. Available values: 'Solidify'."
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
+        "cf_set_shading", "Custom function to set the shading of the selected object."
+                          "Type: str. Available: ["FLAT", "SMOOTH"]"
     """
 
     def __init__(self, config):
@@ -197,5 +200,9 @@ class EntityManipulator(Module):
                 bpy.context.object.modifiers["Solidify"].thickness = thickness
             else:
                 raise Exception("Unknown modifier name: {}.".format(name))
+        elif key == "set_shading":
+            result = Config(result)
+            mode = result.get_string("cf_set_shaing")
+            Loader.change_shading_mode([entity], mode)
         else:
             raise Exception("Unknown custom function name: {}.".format(key))

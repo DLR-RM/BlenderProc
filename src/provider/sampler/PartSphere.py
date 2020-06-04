@@ -1,5 +1,7 @@
 import numpy as np
 
+import mathutils
+
 from src.main.Provider import Provider
 from src.provider.sampler.Sphere import Sphere
 
@@ -46,7 +48,7 @@ class PartSphere(Provider):
         :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
         """
         # Center of the sphere.
-        center = np.array(self.config.get_list("center"))
+        center = mathutils.Vector(self.config.get_list("center"))
         # Radius of the sphere.
         radius = self.config.get_float("radius")
         # Mode of operation.
@@ -61,6 +63,7 @@ class PartSphere(Provider):
         while True:
             location = Sphere.sample(center, radius, mode)
             # project the location onto the part_sphere_dir_vector and get the length
-            length = location.dot(part_sphere_dir_vector)
+            loc_in_sphere = location - center
+            length = loc_in_sphere.dot(part_sphere_dir_vector)
             if length > dist_above_center:
                 return location

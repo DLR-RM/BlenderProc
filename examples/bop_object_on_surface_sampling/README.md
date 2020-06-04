@@ -1,12 +1,12 @@
-# BOP with object pose sampling and physics positioning
+# BOP object on textured surface sampling
 
 ![](rendering.png)
 
-This example serves as the basis for generating the synthetic data provided at the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and dropped into an open cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, segmentation masks, Coco annotations and object poses in BOP format.
+Here we explain the on surface sampling config used for the synthetic data generation in the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and placed upright onto a plane inside a cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, camera intrinsics and object poses in BOP format.
 
 ## Usage
 
-Make sure that you downloaded the [BOP datasets](https://bop.felk.cvut.cz/datasets/).
+Make sure that you downloaded the [BOP datasets](https://bop.felk.cvut.cz/datasets/). 
 
 Execute in the BlenderProc main directory:
 
@@ -15,20 +15,20 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/bop_object_physics_positioning/config.yaml
-              <path_to_bop_data>
-              <bop_dataset_name>
-              <path_to_bop_toolkit>
+python run.py examples/bop_object_on_surface_sampling/config.yaml 
+              <path_to_bop_data> 
+              <bop_dataset_name> 
+              <path_to_bop_toolkit> 
               resources/cctextures 
-              examples/bop_object_physics_positioning/output
+              examples/bop_object_on_surface_sampling/output
 ``` 
 
-* `examples/bop_object_physics_positioning/config.yaml`: path to the config file.
-* `<path_to_bop_data>`: path to a folder containing BOP datasets
-* `<bop_dataset_name>`: name of BOP dataset for which ground truth should be saved, e.g. ycbv
-* `<path_to_bop_toolkit>`: path to the bop_toolkit folder
+* `examples/bop_object_on_surface_sampling/config.yaml`: path to the pipeline configuration file.
+* `<path_to_bop_data>`: path to a folder containing BOP datasets.
+* `<bop_dataset_name>`: name of BOP dataset for which ground truth should be saved, e.g. lm
+* `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
-* `examples/bop_object_physics_positioning/output`: path to an output folder
+* `examples/bop_object_on_surface_sampling/output`: path to an output folder.
 
 ## Generate a dataset
 To aggregate data and labels over multiple scenes, simply run the script multiple times using the same command. As data is saved in chunks of 1000 images, you can easily distribute the data generation by running the scripts on different machines/servers and then collecting all chunks.
@@ -45,8 +45,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Switch to an light emission shader for the top plane: `materials.MaterialManipulator` module.
 * Load CCTexture materials: `loader.CCMaterialLoader` module.
 * Sample a material for the other planes: `materials.MaterialRandomizer` module.
-* Sample objects poses: `object.ObjectPoseSampler` module.
-* Perform physics simulation: `object.PhysicsPositioning` module.
+* Sample upright objects poses on surface: `object.OnSurfaceSampler` module.
 * Sample point light source: `lighting.LightSampler` module.
 * Sample camera poses: `camera.CameraSampler` module.
 * Render RGB and distance: `renderer.RgbRenderer` module.
@@ -92,7 +91,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "mm2m": True,
         "sample_objects": True,
         "num_of_objs_to_sample": 10,
-        "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
         },
@@ -103,7 +101,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Here we are sampling BOP objects from 3 different datasets.
 * We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `"<args:1>"` (e.g. ycbv in this case).
-* `"cf_set_shading": "SMOOTH"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.  
+* `"cf_set_shading": "SMOOTH"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.  
 * Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, `"<args:1>"`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
 
 ### Material Manipulator
@@ -123,8 +121,8 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "cf_set_base_color": {
           "provider": "sampler.Color",
           "grey": True,
-          "min": [0.1, 0.1, 0.1, 1.0],
-          "max": [0.9, 0.9, 0.9, 1.0]
+          "min": [0.25, 0.25, 0.25, 1],
+          "max": [1, 1, 1, 1]
         }
       }
     },
@@ -136,7 +134,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "conditions": [
           {
             "name": "bop_tless_vertex_col_material.*"
-          },
+          }
           {
             "name": "bop_lm_vertex_col_material.*"
           },
@@ -163,7 +161,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Sample grey colors for T-LESS object's materials using `sampler.Color` Provider.
 * Sample `specular` and `roughness` values for object's materials from all datasets using `sampler.Value` Provider.
-
 
 ### Basic Mesh Initializer
 
@@ -262,7 +259,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     },
 ```
 
-* For the top light plane, switch to an Emission shader and sample `color` and `strength` values of the emitted light.
+* For a default material of a light plane which was created during object's initialization, switch to a Emission shader and sample `color` and `strength` values of the emitted light.
 
 ### CCMaterial Loader 
 
@@ -302,11 +299,11 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Sample a CCTextures material once for all loaded ground_planes.
 
-### Object Pose Sampler
+### On Surface Sampler
 
 ```yaml
     {
-      "module": "object.ObjectPoseSampler",
+      "module": "object.OnSurfaceSampler",
       "config": {
         "objects_to_sample": {
           "provider": "getter.Entity",
@@ -314,60 +311,39 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
             "cp_physics": True
           }
         },
-        "pos_sampler": {
-          "provider":"sampler.Uniform3d",
-          "min": {
-            "provider": "sampler.Uniform3d",
-            "min": [-0.3, -0.3, 0.0],
-            "max": [-0.2, -0.2, 0.0]
-          },
-          "max": {
-            "provider": "sampler.Uniform3d",
-            "min": [0.2, 0.2, 0.4],
-            "max": [0.3, 0.3, 0.6]
+        "surface": {
+          "provider": "getter.Entity",
+          "index": 0,
+          "conditions": {
+            "name": "ground_plane0"
           }
         },
-        "rot_sampler":{
-          "provider":"sampler.UniformSO3"
+        "pos_sampler": {
+          "provider": "sampler.UpperRegionSampler",
+          "to_sample_on": {
+            "provider": "getter.Entity",
+            "index": 0,
+            "conditions": {
+              "name": "ground_plane0"
+            }
+          },
+          "min_height": 1,
+          "max_height": 4,
+          "face_sample_range": [0.4, 0.6],
+          "use_ray_trace_check": False,
+        },
+        "min_distance": 0.01,
+        "max_distance": 0.20,
+        "rot_sampler": {
+          "provider": "sampler.Uniform3d",
+          "min": [0, 0, 0],
+          "max": [0, 0, 6.28]
         }
       }
     },
 ```
 
-* Samples initial object poses before applying physics
-* For all `"objects_to_sample"`, i.e. with `"cp_physics": True`, uniformly sample a position in the specified range and a uniform SO3 rotation
-
-### Physics Positioning
-
-```yaml
-    {
-      "module": "object.PhysicsPositioning",
-      "config": {
-        "min_simulation_time": 3,
-        "max_simulation_time": 10,
-        "check_object_interval": 1,
-        "solver_iters": 25,
-        "steps_per_sec": 100,
-        "friction": 100.0,
-        "linear_damping": 0.99,
-        "angular_damping": 0.99,
-        "objs_with_box_collision_shape": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "ground_plane.*"
-          }
-        }
-      }
-    },
-```
-
-* Performs physics simuluation, i.e. dropping objects on the floor.
-* `"min_simulation_time", "max_simulation_time"` in seconds
-* `"check_object_interval"` after which objects are checked to stand still  
-* `"solver_iters": 25` increase if physics glitches occur.
-* `"steps_per_sec": 100` increase if physics glitches occur.
-* `"friction": 100.0, "linear_damping": 0.99, "angular_damping": 0.99` ensure inert physics properties so that objects don't spread too much
-* Give ground planes a BOX collision shape since they behave better using `"objs_with_box_collision_shape"`
+* Get all objects with `"cp_physics": True` and the ground plane `"name": "ground_plane0"`. Use the provider `"sampler.UpperRegionSampler"` to sample objects above the plane at specified height (`"min_height", "max_height"`), relative position on plane (`"face_sample_range"`) and rotation (`"rot_sampler"`). Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. `"object.OnSurfaceSampler"` then places the objects down to the plane. Check the [on_surface_object_sampling](../on_surface_object_sampling/README.md) example for more details. 
 
 ### Light Sampler
 
@@ -460,6 +436,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * The `"getter.POI"` is defined by the object closest to the mean position of all objects that are returned by the `"getter.Entity"` Provider, i.e. `"random_samples": 10` objects from the target BOP dataset `"cp_bop_dataset_name": "<args:1>"`.
 * Camera poses undergo `"proximity_checks"` with respect to all objects besides ground_plane (`"excluded_objs_in_proximity_check"`) to ensure that no objects are closer than `"min": 0.3` meters.
 
+
 ### Rgb Renderer
 
 ```yaml
@@ -499,5 +476,5 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 ## More examples
 
 * [bop_object_pose_sampling](../bop_object_pose_sampling): Sample BOP object and camera poses.
+* [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
 * [bop_scene_replication](../bop_scene_replication): Replicate the scenes and cameras from BOP datasets in simulation.
-* [bop_object_on_surface_sampling](../bop_object_on_surface_sampling): Sample upright poses on plane and randomize materials

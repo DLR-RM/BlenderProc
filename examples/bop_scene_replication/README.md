@@ -13,10 +13,11 @@ In [examples/bop_scene_replication/config.yaml](config.yaml) set the `blender_in
 Execute in the BlenderProc main directory: 
 
 ```
-python run.py examples/bop_scene_replication/config.yaml <path_to_bop_data> <path_to_bop_toolkit> examples/bop_scene_replication/output
+python run.py examples/bop_scene_replication/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/bop_scene_replication/output
 ```
 * `examples/bop_scene_replication/config.yaml`: path to the pipeline configuration file.
-* `<path_to_bop_data>`: path to a BOP dataset
+* `<path_to_bop_data>`: path to a folder containing BOP datasets.
+* `<bop_dataset_name>`: name of BOP dataset, e.g. tless
 * `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
 * `examples/bop_scene_replication/output`: path to the output directory.
 
@@ -43,12 +44,12 @@ python scripts/visHdf5Files.py example/bop_scene_replication/0.hdf5
 
 ```yaml
     {
-      "name": "loader.BopLoader",
+      "module": "loader.BopLoader",
       "config": {
-        "bop_dataset_path": "<args:0>",
+        "bop_dataset_path": "<args:0>/<args:1>",
         "mm2m": True,
-        "split": "val",
-        "scene_id": 3,
+        "split": "test", # careful, some BOP datasets only have test sets
+        "scene_id": 1,
         "model_type": ""
       }
     },
