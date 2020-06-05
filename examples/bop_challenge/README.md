@@ -1,6 +1,10 @@
 # BOP Challenge 2020 Data Generation
 
-![](rendering.png)
+<p align="center">
+<img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_tless_01.jpg" alt="Front readme image" width=250>
+<img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_01.jpg" alt="Front readme image" width=250>
+<img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_03.jpg" alt="Front readme image" width=250>
+</p>
 
 Here you find the official BlenderProc configs that we used to generate the provided synthetic data for the BOP Challenge 2020 (7 core datasets). The output will be a dataset in [BOP Format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md) saved in chunks of 1000 images. 
 
