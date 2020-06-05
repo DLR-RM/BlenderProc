@@ -1,8 +1,10 @@
 # BlenderProc4BOP
 
-![Tless](https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_tless_01.jpg)
-![YCBV](https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_01.jpg)
-![YCBV2](https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_03.jpg)
+<p align="center">
+<img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_tless_01.jpg" alt="Front readme image" width=300>
+<img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_01.jpg" alt="Front readme image" width=300>
+<img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_03.jpg" alt="Front readme image" width=300>
+</p>
 
 ## Motivation
 
@@ -60,7 +62,7 @@ Now that you have an overview, head on to the examples:
 
  ## References
 
-[1] Hodaň, Michel et al.: [BOP: Benchmark for 6D Object Pose Estimation](http://cmp.felk.cvut.cz/~hodanto2/data/hodan2018bop.pdf), ECCV 2018.
-[2] Hodaň et al.: [Photorealistic Image Synthesis for Object Instance Detection](https://arxiv.org/abs/1902.03334), ICIP 2019.
-[3] Denninger, Sundermeyer et al.: [BlenderProc](https://arxiv.org/pdf/1911.01911.pdf), arXiv 2019.
-[4] Pitteri et al.: [On Object Symmetries and 6D Pose Estimation from Images](https://arxiv.org/abs/1908.07640), CVPR 2020.
+[1] Hodaň, Michel et al.: [BOP: Benchmark for 6D Object Pose Estimation](http://cmp.felk.cvut.cz/~hodanto2/data/hodan2018bop.pdf), ECCV 2018.  
+[2] Hodaň et al.: [Photorealistic Image Synthesis for Object Instance Detection](https://arxiv.org/abs/1902.03334), ICIP 2019.  
+[3] Denninger, Sundermeyer et al.: [BlenderProc](https://arxiv.org/pdf/1911.01911.pdf), arXiv 2019.  
+[4] Pitteri et al.: [On Object Symmetries and 6D Pose Estimation from Images](https://arxiv.org/abs/1908.07640), CVPR 2020.  
