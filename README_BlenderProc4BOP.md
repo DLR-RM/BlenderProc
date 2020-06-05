@@ -44,7 +44,7 @@ Realistic Object Poses are achieved by dropping objects on the ground plane usin
 
 ### Camera Poses
 
-Through interfacing with the BOP toolkit, we automatically load the corresponding camera intrinsics and min/max raduis, azimuth and elevation ranges of the test data. Based on these parameters, we sample camera positions inside a shell around the objects. Camera rotations are determined by looking at objects near the center.
+Through interfacing with the BOP toolkit, we automatically load the corresponding camera intrinsics and min/max radius, azimuth and elevation ranges of the test data. Based on these parameters, we sample camera positions inside a shell around the objects. Camera rotations are determined by looking at objects near the center.
 
 ### BOP Writer
 
