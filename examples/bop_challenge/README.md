@@ -21,7 +21,12 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/bop_challenge/<config_dataset.yaml> <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> resources/cctextures examples/bop_challenge/output
+python run.py examples/bop_challenge/<config_dataset.yaml> 
+              <path_to_bop_data> 
+              <bop_dataset_name> 
+              <path_to_bop_toolkit> 
+              resources/cctextures 
+              examples/bop_challenge/output
 ``` 
 
 * `examples/bop_challenge/<config_dataset.yaml>`: path to the pipeline configuration file.
