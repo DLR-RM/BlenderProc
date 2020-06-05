@@ -6,63 +6,42 @@
 <img src="https://bop.felk.cvut.cz/static/img/bop20_pbr/bop20_pbr_ycbv_03.jpg" alt="Front readme image" width=250>
 </p>
 
-## Motivation
 
-The [Benchmark for 6D Object Pose Estimation (BOP)](https://bop.felk.cvut.cz/challenges/) [1] is the most relevant challenge to compare the performance of both learning-based and traditional Object Pose Estimation algorithms. The 7 test datasets (LM, T-LESS, YCB-V, ITODD, HB, TUD-L, IC-BIN) represent a variety of object properties and environment conditions that are present in practice. Every year at ECCV/ICCV state-of-the-art methods are seamlessly compared using an [online evaluation system](https://bop.felk.cvut.cz/login/?next=/sub_upload/).
+## Introduction
 
-Capturing and annotating real training images for Object Pose Estimation requires significant effort. Therefore, the BOP Challenge is focused primarily on the more practical scenario where only the object models, which can be used to render synthetic training images, are available at training time. 
+The [Benchmark for 6D Object Pose Estimation (BOP)](https://bop.felk.cvut.cz/challenges/) [1] aims at capturing the state of the art in estimating the 6D pose, i.e. 3D translation and 3D rotation, of rigid objects from RGB/RGB-D images.
+The benchmark is primarily focused on the scenario where only the 3D object models, which can be used to render synthetic training images, are available at training time. Whereas capturing and annotating real training images requires a significant effort, the 3D object models are often available or can be generated at a low cost using KinectFusion-like systems for 3D surface reconstruction.
 
-However, creating and rendering sufficiently realistic training data to bridge the sim2real gap is also challenging and time-consuming. In fact, setting up and running synthetic data generation often takes the majority of time.
+While learning from synthetic data has been common for depth-based pose estimation methods, the same is still difficult for RGB-based methods where the domain gap between synthetic training and real test images is more severe. Specifically for the benchmark, the BlenderProc [3] team and BOP organizers [1] have therefore joined forces and prepared BlenderProc4BOP, an open-source, light-weight, procedural and photorealistic (PBR) renderer. The renderer was used to render 50K training images for each of the seven core datasets of the [BOP Challenge 2020](https://bop.felk.cvut.cz/challenges/bop-challenge-2020/) (LM, T-LESS, YCB-V, ITODD, HB, TUD-L, IC-BIN). The images can be downloaded from the website with [BOP datasets](https://bop.felk.cvut.cz/datasets/).
 
-Therefore, the BlenderProc [3] team and BOP organizers [1] have joined forces to create an automized, procedural data synthesis pipeline that was used to generate 350K pose-annotated RGB and depth images for the BOP challenge 2020.
+BlenderProc4BOP saves all generated data in the [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md), which allows using the visualization and utility functions from the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-## Goals of BlenderProc4BOP
+Users of BlenderProc4BOP are encouraged to build on top of it and release their extensions.
 
-- Facilitate challenge participation by providing pre-rendered, photo-realistic training data in BOP format
-- Increase comparability of methods by introducing an award for learning-based methods trained solely on the provided data
-- Also provide the data generation configs so that participants can generate their own data to accelerate sim2real research
 
-For progress in the Object Pose Estimation domain, it is crucial that our evaluations are common, broad and simple. We hope that our extensions motivate researchers to contribute towards these goals.
+## Image Synthesis Approach
 
-## Data Generation
+Recent works [2,4] have shown that physically-based rendering and realistic object arrangement help to reduce the synthetic-to-real domain gap in object detection and pose estimation. In the following, we give an overview on the synthesis approach implemented in BlenderProc4BOP. Detailed explanations can be found in the [examples](#examples).
 
-Recent works [2,4] have shown that physically-based rendering and realistic setups are beneficial for sim2real transfer in object detection and pose estimation. 
+Objects from the selected BOP dataset are arranged inside an empty room, with objects from other BOP datasets used as distractors. To achieve a rich spectrum of generated images, a random PBR material from the [CC0 Textures](https://cc0textures.com/) library is assigned to the walls of the room, and light with a random strength and color is emitted from the room ceiling and from a randomly positioned point light source. This simple setup keeps the computational load low (1-4 seconds per image; 50K images can be rendered on 5 GPU's overnight).
 
-In the following we give an overview on the generation of the provided training data. Detailed explanations can be found in the [BOP examples](examples/bop_challenge).
+Instead of trying to perfectly model the object materials, the object materials are randomized. Realistic object poses are achieved by dropping objects on the ground plane using the PyBullet physics engine integrated in Blender. This allows to create dense but shallow piles that introduce various levels of occlusion. When rendering training images for the LM dataset, where the objects are always standing upright in test images, we place the objects in upright poses on the ground plane.
 
-### Environment
+The cameras are positioned to cover the distribution of the ground-truth object poses in test images (given by the range of azimuth angles, elevation angles and distances of objects from the camera – provided in file [dataset_params.py](https://github.com/thodan/bop_toolkit/blob/master/bop_toolkit_lib/dataset_params.py) in the BOP toolkit).
 
-We decided to sample BOP objects in an empty room whose faces are randomly assigned with PBR textures to keep the computational load low while maintaining realism. This reduces the complexity of physics simulations and allows to render images in 1-4 seconds. Creating a complete synthetic BOP dataset of 50K images can thus be done overnight on 5 GPUs which hopefully also allows smaller labs to play with the data. BOP objects from other datasets are used as distractors. 
-
-### Physically Plausible Domain Randomization
-
-Instead of trying to perfectly model object materials, we randomize their specularity, roughness and other properties to prevent networks from relying on mismatching high frequency patterns. We emit light at random strength and color from the room ceiling and a randomly positioned point light source. Challenge participants are welcome to apply further image augmentations on the provided data.
-
-### Object Poses
-
-Realistic Object Poses are achieved by dropping objects on the ground plane using the PyBullet physics engine integrated in Blender. This allows us to create dense but shallow piles that resemble the test images well. Since in LineMOD, objects are standing upright on a table, we perform a sampling of upright poses on the ground plane instead. 
-
-### Camera Poses
-
-Through interfacing with the BOP toolkit, we automatically load the corresponding camera intrinsics and min/max radius, azimuth and elevation ranges of the test data. Based on these parameters, we sample camera positions inside a shell around the objects. Camera rotations are determined by looking at objects near the center.
-
-### BOP Writer
-
-BlenderProc4BOP saves all generated synthetic data (RGB, depth, camera to object poses and camera intrinsics) in the [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md). This has the advantage that train and test data share the same format and the visualization and utility functions in the [bop-toolkit](https://github.com/thodan/bop_toolkit) can be directly applied.
 
 ## Examples
 
-Now that you have an overview, head on to the examples:
+* [bop_challenge](examples/bop_challenge): Configuration files and information on how the official synthetic data for the BOP Challenge 2020 were created.
+* [bop_object_physics_positioning](examples/bop_object_physics_positioning): Drops BOP objects on a plane and randomizes materials.
+* [bop_object_on_surface_sampling](examples/bop_object_on_surface_sampling): Samples upright poses on a plane and randomizes materials.
+* [bop_scene_replication](examples/bop_scene_replication): Replicates test scenes (object poses, camera intrinsics and extrinsics) from the BOP datasets.
+* [bop_object_pose_sampling](examples/bop_object_pose_sampling): Loads BOP objects and samples the camera, light poses and object poses in a free space.
 
-* [bop_challenge](examples/bop_challenge): Configs and instructions to create the official synthetic data for the BOP challenge 2020
-* [bop_object_physics_positioning](examples/bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
-* [bop_object_on_surface_sampling](examples/bop_object_on_surface_sampling): Sample upright poses on plane and randomize materials
-* [bop_scene_replication](examples/bop_scene_replication): Replicate test scenes (object poses, camera intrinsics and extrinsics) from BOP
-* [bop_object_pose_sampling](examples/bop_object_pose_sampling): Loads BOP objects and samples object, camera and light poses in free space
 
- ## References
+## References
 
 [1] Hodaň, Michel et al.: [BOP: Benchmark for 6D Object Pose Estimation](http://cmp.felk.cvut.cz/~hodanto2/data/hodan2018bop.pdf), ECCV 2018.  
 [2] Hodaň et al.: [Photorealistic Image Synthesis for Object Instance Detection](https://arxiv.org/abs/1902.03334), ICIP 2019.  
 [3] Denninger, Sundermeyer et al.: [BlenderProc](https://arxiv.org/pdf/1911.01911.pdf), arXiv 2019.  
-[4] Pitteri et al.: [On Object Symmetries and 6D Pose Estimation from Images](https://arxiv.org/abs/1908.07640), CVPR 2020.  
+[4] Pitteri, Ramamonjisoa et al.: [On Object Symmetries and 6D Pose Estimation from Images](https://arxiv.org/abs/1908.07640), CVPR 2020.  
