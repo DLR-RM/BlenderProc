@@ -14,7 +14,7 @@ Capturing and annotating real training images for Object Pose Estimation require
 
 However, creating and rendering sufficiently realistic training data to bridge the sim2real gap is also challenging and time-consuming. In fact, setting up and running synthetic data generation often takes the majority of time.
 
-Therefore, the BlenderProc [3] team and BOP organizers have joined forces to create an automized, procedural data synthesis pipeline that was used to generate 350K pose-annotated RGB and depth images for the BOP challenge 2020.
+Therefore, the BlenderProc [3] team and BOP organizers [1] have joined forces to create an automized, procedural data synthesis pipeline that was used to generate 350K pose-annotated RGB and depth images for the BOP challenge 2020.
 
 ## Goals of BlenderProc4BOP
 
