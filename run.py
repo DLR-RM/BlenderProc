@@ -35,7 +35,7 @@ setup_config = config["setup"]
 if "custom_blender_path" not in setup_config:
     # Determine path where blender should be installed
     if "blender_install_path" in setup_config:
-        blender_install_path = setup_config["blender_install_path"]
+        blender_install_path = os.path.expanduser(setup_config["blender_install_path"])
         if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
             user_name = os.getenv("USER")
             home_path = os.getenv("HOME")
@@ -44,7 +44,7 @@ if "custom_blender_path" not in setup_config:
             blender_install_path = blender_install_path.replace(join("/home_local", user_name), home_path, 1)
     else:
         blender_install_path = "blender"
-        
+
     # Determine configured version
     # right new only support blender-2.83
     major_version = "2.83"
@@ -101,7 +101,7 @@ if "custom_blender_path" not in setup_config:
 
 
         if platform == "linux" or platform == "linux2":
-            
+
             if version_info.major == 3:
                 with tarfile.open(file_tmp) as tar:
                     tar.extractall(blender_install_path)
@@ -124,7 +124,7 @@ if "custom_blender_path" not in setup_config:
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
 else:
-    blender_path = setup_config["custom_blender_path"]
+    blender_path = os.path.expanduser(setup_config["custom_blender_path"])
 
     # Try to get major version of given blender installation
     major_version = None
@@ -160,7 +160,7 @@ if len(required_packages) > 0:
     subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
     # Make sure pip is up-to-date
     subprocess.Popen(["./python3.7m", "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
-    
+
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
