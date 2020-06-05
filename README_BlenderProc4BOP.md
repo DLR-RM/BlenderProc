@@ -28,7 +28,7 @@ For progress in the Object Pose Estimation domain, it is crucial that our evalua
 
 Recent works [2,4] have shown that physically-based rendering and realistic setups are beneficial for sim2real transfer in object detection and pose estimation. 
 
-In the following we give an overview on the generation of the provided training data. Detailed explanations can be found in the [BOP examples](examples/bop_object_physics_positioning).
+In the following we give an overview on the generation of the provided training data. Detailed explanations can be found in the [BOP examples](examples/bop_challenge).
 
 ### Environment
 
@@ -48,7 +48,7 @@ Through interfacing with the BOP toolkit, we automatically load the correspondin
 
 ### BOP Writer
 
-BlenderProc4BOP saves all generated synthetic data (RGB, depth, camera to object poses and camera intrinsics) in the [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md). This has the advantage that train and test data share the same format and the visualization and utility function in the [bop-toolkit](https://github.com/thodan/bop_toolkit) can be directly applied.
+BlenderProc4BOP saves all generated synthetic data (RGB, depth, camera to object poses and camera intrinsics) in the [BOP format](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md). This has the advantage that train and test data share the same format and the visualization and utility functions in the [bop-toolkit](https://github.com/thodan/bop_toolkit) can be directly applied.
 
 ## Examples
 
