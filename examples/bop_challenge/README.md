@@ -8,7 +8,7 @@ For LineMOD, the objects are placed upright on a plane based on the [bop_object_
 
 ## Usage
 
-Downloade the necessary [BOP datasets](https://bop.felk.cvut.cz/datasets/) and the [bop-toolkit](https://github.com/thodan/bop_toolkit). 
+Download the necessary [BOP datasets](https://bop.felk.cvut.cz/datasets/) and the [bop-toolkit](https://github.com/thodan/bop_toolkit). 
 
 Execute in the BlenderProc main directory:
 
