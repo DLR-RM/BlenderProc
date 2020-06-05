@@ -32,7 +32,7 @@ In the following we give an overview on the generation of the provided training 
 
 ### Environment
 
-We decided to sample BOP objects in an empty room whose faces are randomly assigned with PBR textures to keep the computational load low while maintaining realism. This reduces the complexity of physics simulations and allows to render images in 1-4 seconds. Creating a complete syntethic BOP dataset of 50K images can thus be done overnight on 5 GPUs which hopefully also allows smaller labs to play with the data. BOP objects from other datasets are used as distractors. 
+We decided to sample BOP objects in an empty room whose faces are randomly assigned with PBR textures to keep the computational load low while maintaining realism. This reduces the complexity of physics simulations and allows to render images in 1-4 seconds. Creating a complete synthetic BOP dataset of 50K images can thus be done overnight on 5 GPUs which hopefully also allows smaller labs to play with the data. BOP objects from other datasets are used as distractors. 
 
 ### Physically Plausible Domain Randomization
 
