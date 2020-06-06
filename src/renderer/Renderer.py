@@ -16,78 +16,78 @@ class Renderer(Module):
     **Configuration**:
 
     .. csv-table::
-       :header: "Parameter", "Description"
+        :header: "Parameter", "Description"
 
-       "output_file_prefix", "The file prefix that should be used when writing the rendering to file. Type: String."
-       "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
+        "output_file_prefix", "The file prefix that should be used when writing the rendering to file. Type: String."
+        "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
 
-       "resolution_x", "The render image width. Type: int. Default: 512, except the CameraModule loaded something else"
-       "resolution_y", "The render image height. Type: int. Default: 512, except the CameraModule loaded something else"
+        "resolution_x", "The render image width. "
+                        "Type: int. Default: 512, except the CameraModule loaded something else."
+        "resolution_y", "The render image height. "
+                        "Type: int. Default: 512, except the CameraModule loaded something else."
 
-       "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in
-                  "dark areas. Type: int. Default: 256, (not true for all Renderes)"
-       "use_adaptive_sampling", "Combined with the maximum sample amount, it is also possible to set the amount of"
-                                "noise left per pixel. This means pixel is sampled until the noise level is smaller"
-                                "than specified or the maximum amount of samples were reached."
-                                "Do not use this with Non-RGB-Renders! Only used if specified" in config."
-                                "Type: float. Default: 0.0"
+        "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark "
+                   "areas. Type: int. Default: 256, (not true for all Renderes)."
+        "use_adaptive_sampling", "Combined with the maximum sample amount, it is also possible to set the amount of "
+                                 "noise left per pixel. This means pixel is sampled until the noise level is smaller "
+                                 "than specified or the maximum amount of samples were reached. "
+                                 "Do not use this with Non-RGB-Renders! Only used if specified" in config. "
+                                 "Type: float. Default: 0.0"
 
-       "auto_tile_size", "If true, then the number of render tiles is set automatically using the
-                         "render_auto_tile_size addon. Type: bool. Default: True"
-       "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set"
-                 "to true. Type: int."
-       "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set"
-                 "to true. Type: int."
-       "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution"
-                         "aspect ratio to distort the image. Type: float. Default: 1.0"
-       "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering."
-                                      "Type: int. Default: 3"
+        "auto_tile_size", "If true, then the number of render tiles is set automatically using the "
+                          "render_auto_tile_size addon. Type: bool. Default: True."
+        "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set "
+                  "to true. Type: int."
+        "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set "
+                  "to true. Type: int."
+        "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution "
+                          "aspect ratio to distort the image. Type: float. Default: 1.0"
+        "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering. "
+                                       "Type: int. Default: 3"
 
-       "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or "
-                   "set to 'Intel', if you want to use the Intel Open Image Denoiser, performs much better."
-                   "Type: string. Default: "Intel" Available: ["Intel", "Blender"]."
-       "max_bounces", "Total maximum number of bounces. Type: int. Default: 3"
-       "min_bounces", "Total minimum number of bounces. Type: int. Default: 1"
-       "diffuse_bounces", "Maximum number of diffuse reflection bounces, bounded by total maximum."
-                          "Type: int. Default: 3"
-       "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum."
-                         "Be careful the default is set to zero to improve rendering time, but it removes all glossy"
-                         "surfaces from the rendering process"
-                         "Type: int. Default: 0"
-       "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the"
-                            "specified bounce. Type: int. Default: 3"
-       "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum. "
-                               "Be careful the default is set to zero to improve rendering time, but it removes all"
-                               "transmission surfaces from the rendering process.
-                               "Type: int. Default: 0"
-       "transparency_bounces", "Maximum number of transparency bounces, bounded by total maximum."
-                               "A higher value helps if a lot of transparency objects are stacked after each other."
-                               "Type: int. Default: 8"
-       "volume_bounces", "Maximum number of volumetric scattering events. Type: int. Default: 0"
+        "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or "
+                    "set to 'Intel', if you want to use the Intel Open Image Denoiser, performs much better. "
+                    "Type: string. Default: "Intel" Available: ["Intel", "Blender"]."
+        "max_bounces", "Total maximum number of bounces. Type: int. Default: 3"
+        "min_bounces", "Total minimum number of bounces. Type: int. Default: 1"
+        "diffuse_bounces", "Maximum number of diffuse reflection bounces, bounded by total maximum. "
+                           "Type: int. Default: 3"
+        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum. "
+                          "Be careful the default is set to zero to improve rendering time, but it removes all glossy "
+                          "surfaces from the rendering process. Type: int. Default: 0"
+        "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the "
+                             "specified bounce. Type: int. Default: 3"
+        "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum. "
+                                "Be careful the default is set to zero to improve rendering time, but it removes all "
+                                "transmission surfaces from the rendering process. Type: int. Default: 0"
+        "transparency_bounces", "Maximum number of transparency bounces, bounded by total maximum. A higher value "
+                                "helps if a lot of transparency objects are stacked after each other. "
+                                "Type: int. Default: 8"
+        "volume_bounces", "Maximum number of volumetric scattering events. Type: int. Default: 0"
 
-       "render_depth", "If true, the depth is also rendered to file. Type: bool. Default: False"
-       "depth_output_file_prefix", "The file prefix that should be used when writing depth to file."
-                                   "Type: string. Default: "depth_""
-       "depth_output_key", "The key which should be used for storing the depth in a merged file.
-                           "Type: string. Default: "depth""
-       "depth_start", "Starting distance of the depth, measured from the camera. Type: float. Default: 0.1"
-       "depth_range", "Total distance in which the depth is measured, depth_end = depth_start + depth_range."
-                      "Type: float. Default: 25.0"
-       "depth_falloff", "Type of transition used to fade depth. Type: string. Default: "Linear". "
-                        "Available=[LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
+        "render_distance", "If true, the distance is also rendered to file. Type: bool. Default: False."
+        "distance_output_file_prefix", "The file prefix that should be used when writing distance to file. "
+                                       "Type: string. Default: 'distance_'"
+        "distance_output_key", "The key which should be used for storing the distance in a merged file. "
+                               "Type: string. Default: 'distance'."
+        "distance_start", "Starting distance of the distance, measured from the camera. Type: float. Default: 0.1"
+        "distance_range", "Total distance in which the distance is measured. "
+                          "distance_end = distance_start + distance_range. Type: float. Default: 25.0"
+        "distance_falloff", "Type of transition used to fade distance. Type: string. Default: 'Linear'. "
+                            "Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
 
-       "use_alpha", "If true, the alpha channel stored in .png textures is used. Type: bool. Default: False"
-       "stereo", "If true, renders a pair of stereoscopic images for each camera position. Type: bool. Default: False"
-       "avoid_rendering", "This mode is only used during debugging, when all settings should be executed but the actual"
-                          "rendering call is omitted. Type: bool Default: False"
-       "cpu_threads", "Set number of cpu cores used for rendering (1 thread is always used for coordination
-                      "if more than one cpu thread means GPU-only rendering). Type: int, Default: 1"
+        "use_alpha", "If true, the alpha channel stored in .png textures is used. Type: bool. Default: False"
+        "stereo", "If true, renders a pair of stereoscopic images for each camera position. Type: bool. Default: False"
+        "avoid_rendering", "This mode is only used during debugging, when all settings should be executed but the "
+                           "actual rendering call is omitted. Type: bool. Default: False"
+        "cpu_threads", "Set number of cpu cores used for rendering (1 thread is always used for coordination "
+                       "if more than one cpu thread means GPU-only rendering). Type: int. Default: 1"
 
-       "render_normals", "If true, the normals are also rendered. Type: bool, Default: False"
-       "normals_output_file_prefix", "The file prefix that should be used when writing normals."
-                                     "Type: string, Default: "normals_""
-       "normals_output_key", "The key which is used for storing the normal in a merged file."
-                             "Type: string, Default: "normal""
+        "render_normals", "If true, the normals are also rendered. Type: bool. Default: False"
+        "normals_output_file_prefix", "The file prefix that should be used when writing normals. "
+                                      "Type: string. Default: 'normals_'"
+        "normals_output_key", "The key which is used for storing the normal in a merged file. "
+                              "Type: string. Default: 'normal'"
     """
 
     def __init__(self, config):
@@ -116,7 +116,8 @@ class Renderer(Module):
             bpy.context.scene.render.tile_x = self.config.get_int("tile_x")
             bpy.context.scene.render.tile_y = self.config.get_int("tile_y")
 
-        # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1 cpu thread means GPU-only rendering)
+        # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1
+        # cpu thread means GPU-only rendering)
         number_of_threads = self.config.get_int("cpu_threads", 1)
         # If set to 0, use number of cores (default)
         if number_of_threads > 0:
@@ -156,7 +157,11 @@ class Renderer(Module):
                 # Link nodes
                 render_layer_node = nodes.get('Render Layers')
                 composite_node = nodes.get('Composite')
-                Utility.insert_node_instead_existing_link(links, render_layer_node.outputs['Image'], denoise_node.inputs['Image'], denoise_node.outputs['Image'], composite_node.inputs['Image'])
+                Utility.insert_node_instead_existing_link(links,
+                                                          render_layer_node.outputs['Image'],
+                                                          denoise_node.inputs['Image'],
+                                                          denoise_node.outputs['Image'],
+                                                          composite_node.inputs['Image'])
 
                 links.new(render_layer_node.outputs['DiffCol'], denoise_node.inputs['Albedo'])
                 links.new(render_layer_node.outputs['Normal'], denoise_node.inputs['Normal'])
@@ -191,20 +196,20 @@ class Renderer(Module):
 
         self._use_alpha_channel = self.config.get_bool('use_alpha', False)
 
-    def _write_depth_to_file(self):
+    def _write_distance_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
 
         # Mist settings
-        depth_start = self.config.get_float("depth_start", 0.1)
-        depth_range = self.config.get_float("depth_range", 25.0)
-        GlobalStorage.add("renderer_depth_end", depth_start + depth_range)
-        bpy.context.scene.world.mist_settings.start = depth_start
-        bpy.context.scene.world.mist_settings.depth = depth_range
-        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("depth_falloff", "LINEAR")
+        distance_start = self.config.get_float("distance_start", 0.1)
+        distance_range = self.config.get_float("distance_range", 25.0)
+        GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
+        bpy.context.scene.world.mist_settings.start = distance_start
+        bpy.context.scene.world.mist_settings.distance = distance_range
+        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("distance_falloff", "LINEAR")
 
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.view_layer.use_pass_mist = True  # Enable depth pass
+        bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
 
         tree = bpy.context.scene.node_tree
         links = tree.links
@@ -215,14 +220,14 @@ class Renderer(Module):
         mapper_node = tree.nodes.new("CompositorNodeMapRange")
 
         links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
-        # map the values 0-1 to range depth_start to depth_range
-        mapper_node.inputs['To Min'].default_value = depth_start
-        mapper_node.inputs['To Max'].default_value = depth_start + depth_range
+        # map the values 0-1 to range distance_start to distance_range
+        mapper_node.inputs['To Min'].default_value = distance_start
+        mapper_node.inputs['To Max'].default_value = distance_start + distance_range
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
-        output_file.file_slots.values()[0].path = self.config.get_string("depth_output_file_prefix", "depth_")
+        output_file.file_slots.values()[0].path = self.config.get_string("distance_output_file_prefix", "distance_")
 
         # Feed the Mist output of the render layer to the input of the file IO layer
         links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
@@ -232,14 +237,16 @@ class Renderer(Module):
 
         :param default_prefix: The default prefix of the output files.
         """
-        if self.config.get_bool("render_depth", False):
-            self._write_depth_to_file()
+        if self.config.get_bool("render_distance", False):
+            self._write_distance_to_file()
 
         if self.config.get_bool("render_normals", False):
             self._write_normal_to_file()
 
         if custom_file_path is None:
-            bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(), self.config.get_string("output_file_prefix", default_prefix))
+            bpy.context.scene.render.filepath = os.path.join(self._determine_output_dir(),
+                                                             self.config.get_string("output_file_prefix",
+                                                                                    default_prefix))
         else:
             bpy.context.scene.render.filepath = custom_file_path
 
@@ -248,7 +255,8 @@ class Renderer(Module):
             if len(get_all_mesh_objects()) == 0:
                 raise Exception("There are no mesh-objects to render, "
                                 "please load an object before invoking the renderer.")
-            # As frame_end is pointing to the next free frame, decrease it by one, as blender will render all frames in [frame_start, frame_ned]
+            # As frame_end is pointing to the next free frame, decrease it by one, as
+            # blender will render all frames in [frame_start, frame_ned]
             bpy.context.scene.frame_end -= 1
             if not self._avoid_rendering:
                 bpy.ops.render.render(animation=True, write_still=True)
@@ -306,7 +314,8 @@ class Renderer(Module):
                             # connect to material output
                             links.new(mix_node.outputs['Shader'], material_output.inputs['Surface'])
                         else:
-                            raise Exception("Could not find shader node, which is connected to the material output for: {}".format(slot.name))
+                            raise Exception("Could not find shader node, which is connected to the material output "
+                                            "for: {}".format(slot.name))
 
     def add_alpha_texture_node(self, used_material, new_material):
         """
@@ -429,10 +438,11 @@ class Renderer(Module):
         links.new(combine_rgba.outputs["Image"], output_file.inputs["Image"])
 
 
-    def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes=True, output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix"):
+    def _register_output(self, default_prefix, default_key, suffix, version, unique_for_camposes=True,
+                         output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix"):
         """ Registers new output type using configured key and file prefix.
 
-        If depth rendering is enabled, this will also register the corresponding depth output type.
+        If distance rendering is enabled, this will also register the corresponding distance output type.
 
         :param default_prefix: The default prefix of the generated files.
         :param default_key: The default key which should be used for storing the output in merged file.
@@ -444,21 +454,28 @@ class Renderer(Module):
         """
         use_stereo = self.config.get_bool("stereo", False)
 
-        super(Renderer, self)._register_output(default_prefix, default_key, suffix, version, stereo=use_stereo, unique_for_camposes=unique_for_camposes, output_key_parameter_name=output_key_parameter_name, output_file_prefix_parameter_name=output_file_prefix_parameter_name)
+        super(Renderer, self)._register_output(default_prefix,
+                                               default_key,
+                                               suffix,
+                                               version,
+                                               stereo=use_stereo,
+                                               unique_for_camposes=unique_for_camposes,
+                                               output_key_parameter_name=output_key_parameter_name,
+                                               output_file_prefix_parameter_name=output_file_prefix_parameter_name)
 
-        if self.config.get_bool("render_depth", False):
+        if self.config.get_bool("render_distance", False):
             self._add_output_entry({
-                "key": self.config.get_string("depth_output_key", "depth"),
-                "path": os.path.join(self._determine_output_dir(), self.config.get_string("depth_output_file_prefix", "depth_")) + "%04d" + ".exr",
+                "key": self.config.get_string("distance_output_key", "distance"),
+                "path": os.path.join(self._determine_output_dir(),
+                                     self.config.get_string("distance_output_file_prefix", "distance_")) + "%04d" + ".exr",
                 "version": "2.0.0",
                 "stereo": use_stereo
             })
         if self.config.get_bool("render_normals", False):
             self._add_output_entry({
                 "key": self.config.get_string("normals_output_key", "normals"),
-                "path": os.path.join(self._determine_output_dir(), self.config.get_string("normals_output_file_prefix", "normals_")) + "%04d" + ".exr",
+                "path": os.path.join(self._determine_output_dir(),
+                                     self.config.get_string("normals_output_file_prefix", "normals_")) + "%04d" + ".exr",
                 "version": "2.0.0",
                 "stereo": use_stereo
             })
-
-

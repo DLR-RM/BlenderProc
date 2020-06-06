@@ -23,7 +23,7 @@ Existing modules are placed in use-case-dependent folders:
 * [object](object): object pose manipulation, physics between-object interaction, sampling and geometry manipulation.
 * [postprocessing](postprocessing): changing the pipeline output inside of a .hdf5 container.
 * [provider](provider): samplers and getters used for sampling various values, selecting objects, etc.
-* [renderer](renderer): RGB, depth, etc. rendering.
+* [renderer](renderer): RGB, distance, etc. rendering.
 * [utility](utility): an assortment of variuos utility functions and classes for any taste.
 * [writer](writer): world-to-.hdf5-container state writers.
 
