@@ -67,7 +67,7 @@
         "output_key": "colors",
         "samples": 350,
         "render_normals": True,
-        "render_depth": True
+        "render_distance": True
       }
     },
     {

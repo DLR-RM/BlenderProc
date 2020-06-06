@@ -51,15 +51,15 @@
         "samples": 350,
         "render_normals": True,
         "normals_output_key": "normals",
-        "render_depth": True,
-        "depth_output_key": "depth"
+        "render_distance": True,
+        "distance_output_key": "distance"
       }
     },
     {
       "module": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
-          "depth": [
+          "distance": [
             {
               "module": "postprocessing.TrimRedundantChannels",
             }

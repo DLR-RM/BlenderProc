@@ -33,7 +33,7 @@ python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
 * Randomly places them: `object.ObjectPoseSampler` module.
 * Adds a camera and a light: `camera.CameraLoader` and `lighting.LightLoader` module.
 * Runs the physics simulation: `object.PhysicsPositioning` module.
-* Renders rgb and depth: `renderer.RgbRenderer` module.
+* Renders rgb and distance: `renderer.RgbRenderer` module.
 
 ## Config File
 

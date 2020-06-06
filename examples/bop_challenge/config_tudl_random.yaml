@@ -361,7 +361,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 50,
-        "render_depth": True,
+        "render_": True,
         "image_type": "JPEG"
       }
     },
@@ -371,7 +371,7 @@
         "dataset": "<args:1>",
         "append_to_existing_output": True,
         "postprocessing_modules": {
-          "depth": [
+          "": [
             {"module": "postprocessing.Dist2Depth"}
           ]
         }

@@ -31,7 +31,7 @@ python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
 * Loads camera positions from a given file: `camera.CameraLoader` module.
 * Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
 * Renders semantic segmentation map: `renderer.SegMapRenderer` module.
-* Renders rgb, depth and normals: `renderer.RgbRenderer` module, by using the alpha mode.
+* Renders rgb, distance and normals: `renderer.RgbRenderer` module, by using the alpha mode.
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
 
 ## Config file
