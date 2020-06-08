@@ -44,7 +44,7 @@ class Texture(Provider):
                              "VORONOI", "WOOD"]
 
         # given textures
-        given_textures = self.config.get_list("texture")
+        given_textures = self.config.get_list("texture", [])
 
         if len(given_textures) == 0:
             return random.choice(possible_textures)
