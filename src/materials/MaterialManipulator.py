@@ -1,4 +1,5 @@
 import os
+import warnings
 
 import bpy
 
@@ -131,6 +132,10 @@ class MaterialManipulator(Module):
         materials = sel_conf.get_list("selector")
 
         op_mode = self.config.get_string("mode", "once_for_each")
+
+        if not materials:
+            warnings.warn("Warning: No materials selected inside of the MaterialManipulator")
+            return
 
         if op_mode == "once_for_all":
             # get values to set if they are to be set/sampled once for all selected materials

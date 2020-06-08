@@ -5,6 +5,7 @@ import bpy
 
 from src.main.Module import Module
 from src.utility.Utility import Utility
+from src.provider.getter.Material import Material
 
 
 class CCMaterialLoader(Module):
@@ -24,28 +25,90 @@ class CCMaterialLoader(Module):
        :header: "Parameter", "Description"
 
        "folder_path", "The path to the downloaded cc0textures. Type: string. Default: resources/cctextures."
+       "used_assets", "A list of all asset names, you want to use. The asset-name must not be typed in completely,"
+                      "only the beginning the name starts with. By default all assets will be loaded, specified by"
+                      "an empty list. Type: list. Default: []."
+       "add_custom_properties", "A dictionary of materials and the respective properties."
+                                "Type: dict. Default: {}."
+       "preload", "If set true, only the material names are loaded and not the complete material."
+                  "Type: bool. Default: False"
+       "fill_used_empty_materials", "If set true, the preloaded materials, which are used are now loaded completely."
+                                    "Type: bool. Default: False"
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
+        self._folder_path = ""
+        self._used_assets = []
+        self._add_cp = {}
+        self._preload = False
+        self._fill_used_empty_materials = False
 
 
     def run(self):
         self._folder_path = Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures"))
+        self._used_assets = self.config.get_list("used_assets", [])
+        self._add_cp = self.config.get_raw_dict("add_custom_properties", {})
+        self._preload = self.config.get_bool("preload", False)
+        self._fill_used_empty_materials = self.config.get_bool("fill_used_empty_materials", False)
+
+        if self._preload and self._fill_used_empty_materials:
+            raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
 
         x_texture_node = -1500
         y_texture_node = 300
         if os.path.exists(self._folder_path) and os.path.isdir(self._folder_path):
             for asset in os.listdir(self._folder_path):
+                if self._used_assets:
+                    skip_this_one = True
+                    for used_asset in self._used_assets:
+                        if asset.startswith(used_asset):
+                            skip_this_one = False
+                            break
+                    if skip_this_one:
+                        continue
                 current_path = os.path.join(self._folder_path, asset)
                 if os.path.isdir(current_path):
                     base_image_path = os.path.join(current_path, "{}_2K_Color.jpg".format(asset))
                     if not os.path.exists(base_image_path):
                         continue
+
+                    if self._fill_used_empty_materials:
+                        # find used cc materials with this name
+                        cond = {"cp_is_cc_texture": True, "cp_asset_name": asset}
+                        for key, value in self._add_cp.items():
+                            cond[key] = value
+                        new_mats = Material.perform_and_condition_check(cond, [])
+                        if len(new_mats) == 1:
+                            new_mat = new_mats[0]
+                        elif len(new_mats) > 1:
+                            raise Exception("There was more than one material found!")
+                        else:
+                            # the material was not even loaded
+                            continue
+                        # check amount of usage of this material
+                        if new_mat.users == 0:
+                            # no one is using this material skip loading
+                            continue
+                        # only loads materials which are actually used
+                        print("Fill material: {}".format(asset))
+                    else:
+                        # create a new material with the name of the asset
+                        new_mat = bpy.data.materials.new(asset)
+                        new_mat["is_cc_texture"] = True
+                        new_mat["asset_name"] = asset
+                        new_mat.use_nodes = True
+                        for key, value in self._add_cp.items():
+                            cp_key = key
+                            if key.startswith("cp_"):
+                                cp_key = key[len("cp_"):]
+                            else:
+                                raise Exception("All cp have to start with cp_")
+                            new_mat[cp_key] = value
+                    if self._preload:
+                        continue
                     collection_of_texture_nodes = []
-                    new_mat = bpy.data.materials.new(asset)
-                    new_mat["is_cc_texture"] = True
-                    new_mat.use_nodes = True
+
                     nodes = new_mat.node_tree.nodes
                     links = new_mat.node_tree.links
 
