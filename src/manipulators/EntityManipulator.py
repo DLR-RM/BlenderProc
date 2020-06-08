@@ -3,7 +3,7 @@ import bpy
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.loader.Loader import Loader
-
+import src.utility.BlenderUtility as BlenderUtility
 
 class EntityManipulator(Module):
     """ Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
@@ -97,7 +97,8 @@ class EntityManipulator(Module):
         }
 
         Example 5: Add a random generated texture to the displacement modifier of a given object_type with custom
-                   texture, noice scale, modifier mid_level, modifier render_level and modifier strength.
+                   texture, noice scale, modifier mid_level, modifier render_level and modifier strength. With
+                   previous adding of uv_layer to all object without an uv layer.
 
         {
           "module": "manipulators.EntityManipulator",
@@ -108,10 +109,14 @@ class EntityManipulator(Module):
                 "cp_type": 'apple'
               }
             },
+            "cf_add_uv_layer":{
+              "projection": "cylinder"
+            },
             "cf_add_displace_modifier_with_structure": {
               "texture": {
                 "provider": "sampler.Texture"
               },
+              "min_vertices": 10000,
               "noice_scale": 40,
               "modifier_mid_level": 0.5,
               "modifier_render_level": {
@@ -168,14 +173,18 @@ class EntityManipulator(Module):
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
         "cf_set_shading", "Custom function to set the shading of the selected object."
                           "Type: str. Available: ["FLAT", "SMOOTH"]"
-        "cf_add_displace_modifier_with_structure", "
+        "cf_add_displace_modifier_with_structure", "Adds a displace modifier with structure to an object. The structure"
+                                                   "is either a given or a random texture. Checking if a subdivision is"
+                                                   "necessary by adding an value to the variable 'min_vertices' e.g."
+                                                   "10 000. Available textures are ["CLOUDS", "DISTORTED_NOISE","
+                                                   "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI","VORONOI", "WOOD"]."
+                                                   "Type: string.
+        "cf_add_uv_layer", "Adds a uv layer to an object if uv layer is missing. Supported projections are cube,"
+                        "cylinder, smart and sphere. Type str. Available: ["cube", "cylinder", "smart", "sphere"]"
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
-
-    def check_if_Subdivision_is_necessary(self, obj):
-        return not len(obj.data.vertices) > 10000
 
     def run(self):
         """ Sets according values of defined attributes/custom properties or applies custom functions to the selected
@@ -268,20 +277,21 @@ class EntityManipulator(Module):
             possible_textures = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI",
                                  "VORONOI", "WOOD"]
             result = Config(result)
-            texture_name = result.get_string("texture") # the name of the texture
-            if texture_name.upper() not in possible_textures:
+            texture_name = result.get_string("texture").upper() # the name of the texture
+            if texture_name not in possible_textures:
                 raise Exception("The given texture {} is not existing in blender".format(texture_name))
             texture_noise_scale = result.get_int("noice_scale")
             modifier_mid_level = result.get_float("modifier_mid_level")
             modifier_render_level = result.get_int("modifier_render_level")
             modifier_strength = result.get_float("modifier_strength")
+            min_vertices = result.get_int("min_vertices")
 
             tex = bpy.data.textures.new("ct_{}".format(texture_name), texture_name)
             if texture_noise_scale is not None:
                 tex.noise_scale = texture_noise_scale
             else:
                 tex.noise_scale = 40
-            if self.check_if_Subdivision_is_necessary(entity):
+            if min_vertices is not None and not len(entity.data.vertices) > min_vertices:
                 bpy.ops.object.modifier_add(type="Subsurf".upper())
                 modifier = entity.modifiers[-1]
                 if modifier_render_level is not None:
@@ -301,5 +311,27 @@ class EntityManipulator(Module):
             else:
                 modifier.strength = 0.1
 
+        elif key == "add_uv_layer":
+            result = Config(result)
+            projection = result.get_string("projection").lower()
+
+            bpy.context.view_layer.objects.active = entity
+            if hasattr(entity, "data") and entity.data is not None and \
+                    hasattr(entity.data, "uv_layers") and entity.data.uv_layers is not None:
+                if not BlenderUtility.check_if_uv_coordinates_are_set(entity):
+                    bpy.ops.object.editmode_toggle()
+                    if projection == "cube":
+                        bpy.ops.uv.cube_project()
+                    elif projection == "cylinder":
+                        bpy.ops.uv.cylinder_project()
+                    elif projection == "smart":
+                        bpy.ops.uv.smart_project()
+                    elif projection == "sphere":
+                        bpy.ops.uv.sphere_project()
+                    else:
+                        raise Exception("Projection {} does not exist! Please use cube, cylinder, smart or sphere"
+                                        .format(projection))
+
+                    bpy.ops.object.editmode_toggle()
         else:
             raise Exception("Unknown custom function name: {}.".format(key))
