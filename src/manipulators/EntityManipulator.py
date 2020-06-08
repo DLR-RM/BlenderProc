@@ -78,6 +78,60 @@ class EntityManipulator(Module):
           }
         }
 
+        Example 4: Add a specific texture to the displacement modifier of a given object.
+
+         {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": 'Cube.*',
+                "type": "MESH"
+              }
+            },
+            "cf_add_displace_modifier_with_structure": {
+              "texture": 'VORONOI'
+            }
+          }
+        }
+
+        Example 5: Add a random generated texture to the displacement modifier of a given object_type with custom
+                   texture, noice scale, modifier mid_level, modifier render_level and modifier strength.
+
+        {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "cp_type": 'apple'
+              }
+            },
+            "cf_add_displace_modifier_with_structure": {
+              "texture": {
+                "provider": "sampler.Texture"
+              },
+              "noice_scale": 40,
+              "modifier_mid_level": 0.5,
+              "modifier_render_level": {
+                "provider": "sampler.Value",
+                "type": "int",
+                "min": 1,
+                "max": 3
+              },
+              "modifier_strength": {
+                "provider": "sampler.Value",
+                "type": "dist",
+                "mean": 0.0,
+                "std_dev": 0.7
+              }
+
+            }
+          }
+        }
+
+
     **Configuration**:
 
     .. csv-table::
@@ -114,10 +168,14 @@ class EntityManipulator(Module):
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
         "cf_set_shading", "Custom function to set the shading of the selected object."
                           "Type: str. Available: ["FLAT", "SMOOTH"]"
+        "cf_add_displace_modifier_with_structure", "
     """
 
     def __init__(self, config):
         Module.__init__(self, config)
+
+    def check_if_Subdivision_is_necessary(self, obj):
+        return not len(obj.data.vertices) > 10000
 
     def run(self):
         """ Sets according values of defined attributes/custom properties or applies custom functions to the selected
@@ -200,9 +258,48 @@ class EntityManipulator(Module):
                 bpy.context.object.modifiers["Solidify"].thickness = thickness
             else:
                 raise Exception("Unknown modifier name: {}.".format(name))
+
         elif key == "set_shading":
             result = Config(result)
             mode = result.get_string("cf_set_shaing")
             Loader.change_shading_mode([entity], mode)
+
+        elif key == "add_displace_modifier_with_structure":
+            possible_textures = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI",
+                                 "VORONOI", "WOOD"]
+            result = Config(result)
+            texture_name = result.get_string("texture") # the name of the texture
+            if texture_name.upper() not in possible_textures:
+                raise Exception("The given texture {} is not existing in blender".format(texture_name))
+            texture_noise_scale = result.get_int("noice_scale")
+            modifier_mid_level = result.get_float("modifier_mid_level")
+            modifier_render_level = result.get_int("modifier_render_level")
+            modifier_strength = result.get_float("modifier_strength")
+
+            tex = bpy.data.textures.new("ct_{}".format(texture_name), texture_name)
+            if texture_noise_scale is not None:
+                tex.noise_scale = texture_noise_scale
+            else:
+                tex.noise_scale = 40
+            if self.check_if_Subdivision_is_necessary(entity):
+                bpy.ops.object.modifier_add(type="Subsurf".upper())
+                modifier = entity.modifiers[-1]
+                if modifier_render_level is not None:
+                    modifier.render_levels = modifier_render_level
+                else:
+                    modifier.render_levels = 2
+
+            bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
+            modifier = entity.modifiers[-1]
+            modifier.texture = tex
+            if modifier_mid_level is not None:
+                modifier.mid_level = modifier_mid_level
+            else:
+                modifier.mid_level = 0.5
+            if modifier_strength is not None:
+                modifier.strength = modifier_strength
+            else:
+                modifier.strength = 0.1
+
         else:
             raise Exception("Unknown custom function name: {}.".format(key))
