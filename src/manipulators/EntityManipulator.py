@@ -91,7 +91,10 @@ class EntityManipulator(Module):
               }
             },
             "cf_add_displace_modifier_with_structure": {
-              "texture": 'VORONOI'
+             "provider": "getter.Content",
+              "content": {
+                "texture": 'VORONOI'
+              }
             }
           }
         }
@@ -110,26 +113,32 @@ class EntityManipulator(Module):
               }
             },
             "cf_add_uv_layer":{
-              "projection": "cylinder"
+              "provider": "getter.Content",
+              "content": {
+                "projection": "cylinder"
+              }
             },
             "cf_add_displace_modifier_with_structure": {
-              "texture": {
-                "provider": "sampler.Texture"
-              },
-              "min_vertices": 10000,
-              "noice_scale": 40,
-              "modifier_mid_level": 0.5,
-              "modifier_render_level": {
-                "provider": "sampler.Value",
-                "type": "int",
-                "min": 1,
-                "max": 3
-              },
-              "modifier_strength": {
-                "provider": "sampler.Value",
-                "type": "dist",
-                "mean": 0.0,
-                "std_dev": 0.7
+              "provider": "getter.Content",
+              "content": {
+                  "texture": {
+                    "provider": "sampler.Texture"
+                  },
+                  "min_vertices": 10000,
+                  "noice_scale": 40,
+                  "modifier_mid_level": 0.5,
+                  "modifier_render_level": {
+                    "provider": "sampler.Value",
+                    "type": "int",
+                    "min": 1,
+                    "max": 3
+                  },
+                  "modifier_strength": {
+                    "provider": "sampler.Value",
+                    "type": "dist",
+                    "mean": 0.0,
+                    "std_dev": 0.7
+                  }
               }
 
             }
@@ -180,7 +189,7 @@ class EntityManipulator(Module):
                                                    "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI","VORONOI", "WOOD"]."
                                                    "Type: string.
         "cf_add_uv_layer", "Adds a uv layer to an object if uv layer is missing. Supported projections are cube,"
-                        "cylinder, smart and sphere. Type str. Available: ["cube", "cylinder", "smart", "sphere"]"
+                           "cylinder, smart and sphere. Type str. Available: ["cube", "cylinder", "smart", "sphere"]"
     """
 
     def __init__(self, config):
@@ -280,36 +289,26 @@ class EntityManipulator(Module):
             texture_name = result.get_string("texture").upper() # the name of the texture
             if texture_name not in possible_textures:
                 raise Exception("The given texture {} is not existing in blender".format(texture_name))
-            texture_noise_scale = result.get_int("noice_scale")
-            modifier_mid_level = result.get_float("modifier_mid_level")
-            modifier_render_level = result.get_int("modifier_render_level")
-            modifier_strength = result.get_float("modifier_strength")
-            min_vertices = result.get_int("min_vertices")
+
+            texture_noise_scale = result.get_int("noice_scale", 40)
+            modifier_mid_level = result.get_float("modifier_mid_level", 0.5)
+            modifier_render_level = result.get_int("modifier_render_level", 2)
+            modifier_strength = result.get_float("modifier_strength", 0.1)
+            min_vertices = result.get_int("min_vertices", 10000)
 
             tex = bpy.data.textures.new("ct_{}".format(texture_name), texture_name)
-            if texture_noise_scale is not None:
-                tex.noise_scale = texture_noise_scale
-            else:
-                tex.noise_scale = 40
-            if min_vertices is not None and not len(entity.data.vertices) > min_vertices:
+            tex.noise_scale = texture_noise_scale
+            bpy.context.view_layer.objects.active = entity
+            if not len(entity.data.vertices) > min_vertices:
                 bpy.ops.object.modifier_add(type="Subsurf".upper())
                 modifier = entity.modifiers[-1]
-                if modifier_render_level is not None:
-                    modifier.render_levels = modifier_render_level
-                else:
-                    modifier.render_levels = 2
+                modifier.render_levels = modifier_render_level
 
             bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
             modifier = entity.modifiers[-1]
             modifier.texture = tex
-            if modifier_mid_level is not None:
-                modifier.mid_level = modifier_mid_level
-            else:
-                modifier.mid_level = 0.5
-            if modifier_strength is not None:
-                modifier.strength = modifier_strength
-            else:
-                modifier.strength = 0.1
+            modifier.mid_level = modifier_mid_level
+            modifier.strength = modifier_strength
 
         elif key == "add_uv_layer":
             result = Config(result)
