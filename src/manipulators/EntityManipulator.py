@@ -78,7 +78,7 @@ class EntityManipulator(Module):
           }
         }
 
-        Example 4: Add a specific texture to the displacement modifier of a given object.
+        Example 4: Add a displacement modifier with a newly generated texture.
 
          {
           "module": "manipulators.EntityManipulator",
