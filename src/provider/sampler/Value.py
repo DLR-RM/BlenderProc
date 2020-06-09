@@ -26,7 +26,7 @@ class Value(Provider):
 
         {
           "provider": "sampler.Value",
-          "type": "dist",
+          "type": "normal",
           "mean": 0.0,
           "std_dev": 0.7
         }
@@ -36,7 +36,7 @@ class Value(Provider):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "type", "The type of a value to sample. Type: string. Available: 'float', 'int', 'boolean', 'dist'."
+        "type", "The type of a value to sample. Type: string. Available: 'float', 'int', 'boolean', 'normal'."
         "min", "The minimum value. Optional. Type: float/int."
         "max", "The maximum value (excluded frm the defined range of values). Type: float/int."
         "mean", "Mean (“centre”) of the normal (Gaussian) distribution. Type: float."
@@ -65,7 +65,7 @@ class Value(Provider):
             val_min = self.config.get_float('min')
             val_max = self.config.get_float('max')
             val = np.random.uniform(val_min, val_max)
-        elif val_type.lower() == 'dist':
+        elif val_type.lower() == 'normal':
             mean = self.config.get_float('mean')
             std_dev = self.config.get_float('std_dev')
             val = np.random.normal(loc=mean, scale=std_dev)
