@@ -1,5 +1,6 @@
 import random
 
+import bpy
 from src.main.Provider import Provider
 
 
@@ -19,6 +20,20 @@ class Texture(Provider):
           "textures": ["VORONOI", "MARBLE", "MAGIC"]
         }
 
+        Example 3: Add parameters for texture Voronoi (Voroni is currently the only texture supported for doing this):
+
+        {
+          "provider": "sampler.Texture",
+          "textures": ["VORONOI"]
+          "noise_scale": 40
+          "noise_intensity": 1.1
+          "nabla": {
+            "provider": "sampler.Value",
+               "type": "dist",
+               "mean": 0.0,
+               "std_dev": 0.05
+        }
+
 
     **Configuration**:
 
@@ -29,6 +44,9 @@ class Texture(Provider):
                     "of those given texture names. Otherwise it returns a uniform random sampled name of one of the"
                     "possible blender textures (CLOUDS, DISTORTED_NOISE, MAGIC, MARBLE, MUSGRAVE, NOICE, STUCCI,
                     "VORONOI, WOOD). Type: list."
+        "noise_scale", "Texture-Parameter. Type: float. At the moment only texture VORONOI is supported."
+        "noise_intensity", "Texture-Parameter. Type: float. At the moment only texture VORONOI is supported."
+        "nabla", "Texture-Parameter. Type: float. At the moment only texture VORONOI is supported."
     """
 
     def __init__(self, config):
@@ -47,7 +65,15 @@ class Texture(Provider):
         given_textures = self.config.get_list("texture", [])
 
         if len(given_textures) == 0:
-            return random.choice(possible_textures)
+            texture_name = random.choice(possible_textures)
         else:
-            return random.choice(given_textures).upper()
+            texture_name = random.choice(given_textures).upper()
+
+        tex = bpy.data.textures.new("ct_{}".format(texture_name), texture_name)
+
+        if texture_name == "VORONOI":
+            #default values are the values blender uses as default for texture Voronoi
+            tex.noise_scale = self.config.get_float("noise_scale", 0.25)
+            tex.noise_intensity = self.config.get_float("noise_intensity", 1.0)
+            tex.nabla = self.config.get_float("nabla", 0.03)
 
