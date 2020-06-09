@@ -99,10 +99,10 @@ class EntityManipulator(Module):
           }
         }
 
-        Example 5: Add a random generated texture to the displacement modifier of a given object_type with custom
+        Example 5: Add a displacement modifier with a newly random generated texture with custom
                    texture, noice scale, modifier mid_level, modifier render_level and modifier strength. With
-                   previous adding of uv_map to all object without an uv map and adding a Subdivision Surface Modifier
-                   if the number of vertices of an object is less than 10000.
+                   prior addition of a uv_map to all object without an uv map and adding of a Subdivision Surface
+                   Modifier if the number of vertices of an object is less than 10000.
 
         {
           "module": "manipulators.EntityManipulator",
@@ -110,7 +110,8 @@ class EntityManipulator(Module):
             "selector": {
               "provider": "getter.Entity",
               "conditions": {
-                "cp_type": 'apple'
+                "name": 'apple',
+                "type": "MESH"
               }
             },
             "cf_add_uv_mapping":{
@@ -126,9 +127,9 @@ class EntityManipulator(Module):
                     "provider": "sampler.Texture",
                     "noice_scale": 40"
                   },
-                  "min_vertices": 10000,
-                  "modifier_mid_level": 0.5,
-                  "modifier_render_level": {
+                  "min_vertices_for_subdiv": 10000,
+                  "mid_level": 0.5,
+                  "subdiv_level": {
                     "provider": "sampler.Value",
                     "type": "int",
                     "min": 1,
@@ -186,19 +187,22 @@ class EntityManipulator(Module):
         "cf_add_displace_modifier_with_structure", "Adds a displace modifier with structure to an object."
                                                    "getter.Content Provider. Type: Provider."
         "cf_add_displace_modifier_with_structure/texture", "The structure is either a given or a random texture."
-                                                           "Available textures are ["CLOUDS", "DISTORTED_NOISE","
-                                                           ""MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI","VORONOI","
-                                                           ""WOOD"]. Type: str. Default: []"
-        "cf_add_displace_modifier_with_structure/min_vertices", "Checks if a subdivision is necessary. If the vertices"
-                                                                "of a object are less than 'min_vertices' a"
-                                                                "Subdivision modifier will be add to the object."
-                                                                "Type: int. Default: 10000."
-        "cf_add_displace_modifier_with_structure/modifier_mid_level", "Sets the mid level of the displace modifier."
-                                                                      "Type: float. Default: 0.5"
-        "cf_add_displace_modifier_with_structure/modifier_render_level", "Sets the render level of the displace"
-                                                                         "modifier. Type: int. Default: 2"
-        "cf_add_displace_modifier_with_structure/modifier_strength", "Sets the strength of the displace modifier."
-                                                                     "Type: float. Default: 0.1"
+                                                           "Type: str. Default: []. Available:['CLOUDS',"
+                                                           "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOICE',"
+                                                           "'STUCCI', 'VORONOI', 'WOOD']"
+        "cf_add_displace_modifier_with_structure/min_vertices_for_subdiv", "Checks if a subdivision is necessary. If"
+                                                                           "the vertices of a object are less than"
+                                                                           "'min_vertices_for_subdiv' a Subdivision"
+                                                                           "modifier will be add to the object."
+                                                                           "Type: int. Default: 10000."
+        "cf_add_displace_modifier_with_structure/mid_level", "Material value that gives no displacement."
+                                                             "Parameter of displace modifier."
+                                                             "Type: float. Default: 0.5"
+        "cf_add_displace_modifier_with_structure/subdiv_level", "Numbers of Subdivisions to perform when"
+                                                                "rendering. Parameter of Subdivision"
+                                                                "modifier. Type: int. Default: 2"
+        "cf_add_displace_modifier_with_structure/strength", "Amount to displace geometry. Parameter of displace"
+                                                            "modifier. Type: float. Default: 0.1"
         "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing. getter.Content Provider. Type: Provider"
         "cf_add_uv_mapping/projection", "Name of the projection as str. Type: str. Default: []."
                                         "Available: ["cube", "cylinder", "smart", "sphere"]"
@@ -297,29 +301,27 @@ class EntityManipulator(Module):
         elif key == "add_displace_modifier_with_structure":
             result = Config(result)
             tex = result.get_raw_value("texture", [])
-            if tex is not None:
 
-                if not isinstance(tex, bpy.types.Texture):
-                    raise Exception("The given texture {} is not existing in blender".format(tex.name))
+            if not isinstance(tex, bpy.types.Texture):
+                raise Exception("The return type is not of type Texture")
 
-                modifier_mid_level = result.get_float("modifier_mid_level", 0.5)
-                modifier_render_level = result.get_int("modifier_render_level", 2)
-                modifier_strength = result.get_float("modifier_strength", 0.1)
-                min_vertices = result.get_int("min_vertices", 10000)
+            mid_level = result.get_float("mid_level", 0.5)
+            subdiv_level = result.get_int("subdiv_level", 2)
+            strength = result.get_float("strength", 0.1)
+            min_vertices_for_subdiv = result.get_int("min_vertices_for_subdiv", 10000)
 
-                bpy.context.view_layer.objects.active = entity
-                if not len(entity.data.vertices) > min_vertices:
-                    bpy.ops.object.modifier_add(type="Subsurf".upper())
-                    modifier = entity.modifiers[-1]
-                    modifier.render_levels = modifier_render_level
-
-                bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
+            bpy.context.view_layer.objects.active = entity
+            if not len(entity.data.vertices) > min_vertices_for_subdiv:
+                bpy.ops.object.modifier_add(type="Subsurf".upper())
                 modifier = entity.modifiers[-1]
-                modifier.texture = tex
-                modifier.mid_level = modifier_mid_level
-                modifier.strength = modifier_strength
-            else:
-                raise Exception("No texture given for add_displace_modifier_with_structure")
+                modifier.render_levels = subdiv_level
+
+            bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
+            modifier = entity.modifiers[-1]
+            modifier.texture = tex
+            modifier.mid_level = mid_level
+            modifier.strength = strength
+
 
         elif key == "add_uv_layer":
             result = Config(result)
