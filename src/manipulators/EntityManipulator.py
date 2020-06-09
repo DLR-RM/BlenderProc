@@ -137,7 +137,8 @@ class EntityManipulator(Module):
                   },
                   "modifier_strength": {
                     "provider": "sampler.Value",
-                    "type": "dist",
+                    "type": "float",
+                    "mode": "normal",
                     "mean": 0.0,
                     "std_dev": 0.7
                   }
