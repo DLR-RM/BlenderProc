@@ -284,32 +284,31 @@ class EntityManipulator(Module):
             Loader.change_shading_mode([entity], mode)
 
         elif key == "add_displace_modifier_with_structure":
-            possible_textures = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI",
-                                 "VORONOI", "WOOD"]
             result = Config(result)
-            texture_name = result.get_string("texture").upper() # the name of the texture
-            if texture_name not in possible_textures:
-                raise Exception("The given texture {} is not existing in blender".format(texture_name))
+            tex = result.get_raw_value("texture", [])
+            if tex is not None:
 
-            texture_noise_scale = result.get_int("noice_scale", 40)
-            modifier_mid_level = result.get_float("modifier_mid_level", 0.5)
-            modifier_render_level = result.get_int("modifier_render_level", 2)
-            modifier_strength = result.get_float("modifier_strength", 0.1)
-            min_vertices = result.get_int("min_vertices", 10000)
+                if not isinstance(tex, bpy.types.Texture):
+                    raise Exception("The given texture {} is not existing in blender".format(tex.name))
 
-            tex = bpy.data.textures.new("ct_{}".format(texture_name), texture_name)
-            tex.noise_scale = texture_noise_scale
-            bpy.context.view_layer.objects.active = entity
-            if not len(entity.data.vertices) > min_vertices:
-                bpy.ops.object.modifier_add(type="Subsurf".upper())
+                modifier_mid_level = result.get_float("modifier_mid_level", 0.5)
+                modifier_render_level = result.get_int("modifier_render_level", 2)
+                modifier_strength = result.get_float("modifier_strength", 0.1)
+                min_vertices = result.get_int("min_vertices", 10000)
+
+                bpy.context.view_layer.objects.active = entity
+                if not len(entity.data.vertices) > min_vertices:
+                    bpy.ops.object.modifier_add(type="Subsurf".upper())
+                    modifier = entity.modifiers[-1]
+                    modifier.render_levels = modifier_render_level
+
+                bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
                 modifier = entity.modifiers[-1]
-                modifier.render_levels = modifier_render_level
-
-            bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
-            modifier = entity.modifiers[-1]
-            modifier.texture = tex
-            modifier.mid_level = modifier_mid_level
-            modifier.strength = modifier_strength
+                modifier.texture = tex
+                modifier.mid_level = modifier_mid_level
+                modifier.strength = modifier_strength
+            else:
+                raise Exception("No texture given for add_displace_modifier_with_structure")
 
         elif key == "add_uv_layer":
             result = Config(result)
