@@ -62,7 +62,7 @@ class Texture(Provider):
                              "VORONOI", "WOOD"]
 
         # given textures
-        given_textures = self.config.get_list("texture", [])
+        given_textures = self.config.get_list("textures", [])
 
         if len(given_textures) == 0:
             texture_name = random.choice(possible_textures)
@@ -76,4 +76,6 @@ class Texture(Provider):
             tex.noise_scale = self.config.get_float("noise_scale", 0.25)
             tex.noise_intensity = self.config.get_float("noise_intensity", 1.0)
             tex.nabla = self.config.get_float("nabla", 0.03)
+
+        return tex
 
