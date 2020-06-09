@@ -83,21 +83,30 @@ class Material(Provider):
         "cf_texture_amount_{min,max,eq}", "Returns materials that have a certain amount of texture nodes inside of the "
                                           "material. Suffix 'min' = less nodes or equal than specified, 'max' = at "
                                           "least as many or 'eq' = for this exact amount of textures nodes. Type: int."
+        "cf_principled_bsdf_amount_{min,max,eq}", "Returns materials that have a certain amount of principled bsdf"
+                                                  "nodes inside of the material. Suffix 'min' = less nodes or equal"
+                                                  "than specified, 'max' = at least as many or 'eq' = for this exact"
+                                                  "amount of principled bsdf nodes. Type: int."
     """
 
     def __init__(self, config):
         Provider.__init__(self, config)
 
-    def perform_and_condition_check(self, and_condition, materials):
+    @staticmethod
+    def perform_and_condition_check(and_condition, materials, used_materials_to_check=None):
         """ Checks for all materials in the scene if all given conditions are true, collects them in the return list.
 
         :param and_condition: Given conditions. Type: dict.
-        :param objects: Materials, that are already in the return list. Type: list.
+        :param materials: Materials, that are already in the return list. Type: list.
+        :param used_materials_to_check: a list of materials to perform the check on. Type: list. Default: all materials
         :return: Materials that fulfilled given conditions. Type: list.
         """
         new_materials = []
+        if used_materials_to_check is None:
+            used_materials_to_check = get_all_materials()
+
         # through every material
-        for material in get_all_materials():
+        for material in used_materials_to_check:
             if material in new_materials or material in materials:
                 continue
 
@@ -148,6 +157,7 @@ class Material(Provider):
                 elif requested_custom_function:
                     if key.startswith("texture_amount_"):
                         if material.use_nodes:
+                            value = int(value)
                             nodes = material.node_tree.nodes
                             texture_nodes = Utility.get_nodes_with_type(nodes, "TexImage")
                             amount_of_texture_nodes = len(texture_nodes) if texture_nodes is not None else 0
@@ -161,6 +171,29 @@ class Material(Provider):
                                     break
                             elif "eq" in key:
                                 if not (amount_of_texture_nodes == value):
+                                    select_material = False
+                                    break
+                            else:
+                                raise Exception("This type of key is unknown: {}".format(key))
+                        else:
+                            select_material = False
+                            break
+                    elif key.startswith("principled_bsdf_amount_"):
+                        if material.use_nodes:
+                            value = int(value)
+                            nodes = material.node_tree.nodes
+                            principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                            amount_of_principled_bsdf_nodes = len(principled) if principled is not None else 0
+                            if "min" in key:
+                                if not (amount_of_principled_bsdf_nodes >= value):
+                                    select_material = False
+                                    break
+                            elif "max" in key:
+                                if not (amount_of_principled_bsdf_nodes <= value):
+                                    select_material = False
+                                    break
+                            elif "eq" in key:
+                                if not (amount_of_principled_bsdf_nodes == value):
                                     select_material = False
                                     break
                             else:

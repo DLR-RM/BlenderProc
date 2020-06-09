@@ -177,6 +177,17 @@ def check_intersection(obj, obj2, cache = None):
 
     return intersect, cache
 
+def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
+    """
+    :param obj: should be an object, which has a mesh
+    """
+    if len(obj.data.uv_layers) > 1:
+        raise Exception("This only support objects which only have one uv layer.")
+    for layer in obj.data.uv_layers:
+        max_val = np.max([list(uv_coords.uv) for uv_coords in layer.data])
+        return max_val > 1e-7
+    return False
+
 def vector_to_euler(vector, vector_type):
     """
     :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils Vector.

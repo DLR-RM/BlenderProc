@@ -1,4 +1,5 @@
 import os
+import uuid
 import bpy
 import time
 import inspect
@@ -10,6 +11,7 @@ import numpy as np
 
 class Utility:
     working_dir = ""
+    used_temp_id = None
 
     @staticmethod
     def initialize_modules(module_configs):
@@ -112,8 +114,9 @@ class Utility:
             default_temp_dir = "/dev/shm"
         else:
             default_temp_dir = "/tmp"
-
-        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + str(os.getpid())))
+        if Utility.used_temp_id is None:
+            Utility.used_temp_id = str(uuid.uuid4().hex)
+        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + Utility.used_temp_id))
 
         return temp_dir
     
