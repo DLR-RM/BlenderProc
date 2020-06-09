@@ -196,7 +196,7 @@ class EntityManipulator(Module):
                                                                            "'min_vertices_for_subdiv' a Subdivision"
                                                                            "modifier will be add to the object."
                                                                            "Type: int. Default: 10000."
-        "cf_add_displace_modifier_with_structure/mid_level", "Material value that gives no displacement."
+        "cf_add_displace_modifier_with_structure/mid_level", "Texture value that gives no displacement."
                                                              "Parameter of displace modifier."
                                                              "Type: float. Default: 0.5"
         "cf_add_displace_modifier_with_structure/subdiv_level", "Numbers of Subdivisions to perform when"
