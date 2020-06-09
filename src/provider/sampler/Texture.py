@@ -40,8 +40,8 @@ class Texture(Provider):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "textures", "A list of texture names. If not None the provider returns a uniform random sampled name of one"
-                    "of those given texture names. Otherwise it returns a uniform random sampled name of one of the"
+        "textures", "A list of texture names. If not None the provider returns a uniform random sampled texture of one"
+                    "of those given texture names. Otherwise it returns a uniform random sampled texture of one of the"
                     "possible blender textures (CLOUDS, DISTORTED_NOISE, MAGIC, MARBLE, MUSGRAVE, NOICE, STUCCI,
                     "VORONOI, WOOD). Type: list."
         "noise_scale", "Texture-Parameter. Type: float. At the moment only texture VORONOI is supported."
