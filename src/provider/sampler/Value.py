@@ -38,7 +38,7 @@ class Value(Provider):
         :header: "Parameter", "Description"
 
         "type", "The type of a value to sample. Type: string. Available: 'float', 'int', 'boolean'."
-        "mode", "The way of how to sample values. Type: string. Default: 'min_max'. Available: 'min_max', 'normal'."
+        "mode", "The way of how to sample values. Type: string. Default: 'uniform'. Available: 'uniform', 'normal'."
         "min", "The minimum value. Optional. Type: float/int."
         "max", "The maximum value (excluded frm the defined range of values). Type: float/int."
         "mean", "Mean (“centre”) of the normal (Gaussian) distribution. Type: float."
@@ -54,25 +54,21 @@ class Value(Provider):
         """
         # get type of the value to sample
         val_type = self.config.get_string("type")
-        mode = self.config.get_string("mode", "min_max")
+        mode = self.config.get_string("mode", "uniform")
         # sample bool
         if val_type.lower() == 'bool' or val_type.lower() == 'boolean':
             val = bool(np.random.randint(0, 2))
         # or sample int
         elif val_type.lower() == 'int':
-            if mode == "min_max":
+            if mode == "uniform":
                 val_min = self.config.get_int('min')
                 val_max = self.config.get_int('max')
                 val = np.random.randint(val_min, val_max)
-            elif mode == "normal":
-                mean = self.config.get_float('mean')
-                std_dev = self.config.get_float('std_dev')
-                val = np.random.normal(loc=mean, scale=std_dev)
             else:
                 raise Exception("Mode {} doesn't exist".format(mode))
         # or sample float
         elif val_type.lower() == 'float':
-            if mode == "min_max":
+            if mode == "uniform":
                 val_min = self.config.get_float('min')
                 val_max = self.config.get_float('max')
                 val = np.random.uniform(val_min, val_max)
