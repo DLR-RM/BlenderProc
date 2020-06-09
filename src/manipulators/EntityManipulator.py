@@ -101,7 +101,8 @@ class EntityManipulator(Module):
 
         Example 5: Add a random generated texture to the displacement modifier of a given object_type with custom
                    texture, noice scale, modifier mid_level, modifier render_level and modifier strength. With
-                   previous adding of uv_layer to all object without an uv layer.
+                   previous adding of uv_map to all object without an uv map and adding a Subdivision Surface Modifier
+                   if the number of vertices of an object is less than 10000.
 
         {
           "module": "manipulators.EntityManipulator",
@@ -112,7 +113,7 @@ class EntityManipulator(Module):
                 "cp_type": 'apple'
               }
             },
-            "cf_add_uv_layer":{
+            "cf_add_uv_mapping":{
               "provider": "getter.Content",
               "content": {
                 "projection": "cylinder"
@@ -122,10 +123,10 @@ class EntityManipulator(Module):
               "provider": "getter.Content",
               "content": {
                   "texture": {
-                    "provider": "sampler.Texture"
+                    "provider": "sampler.Texture",
+                    "noice_scale": 40"
                   },
                   "min_vertices": 10000,
-                  "noice_scale": 40,
                   "modifier_mid_level": 0.5,
                   "modifier_render_level": {
                     "provider": "sampler.Value",
@@ -188,7 +189,7 @@ class EntityManipulator(Module):
                                                    "10 000. Available textures are ["CLOUDS", "DISTORTED_NOISE","
                                                    "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI","VORONOI", "WOOD"]."
                                                    "Type: string.
-        "cf_add_uv_layer", "Adds a uv layer to an object if uv layer is missing. Supported projections are cube,"
+        "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing. Supported projections are cube,"
                            "cylinder, smart and sphere. Type str. Available: ["cube", "cylinder", "smart", "sphere"]"
     """
 
