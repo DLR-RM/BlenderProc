@@ -29,7 +29,8 @@ class Texture(Provider):
           "noise_intensity": 1.1,
           "nabla": {
             "provider": "sampler.Value",
-               "type": "dist",
+               "type": "float",
+               "mode": "normal",
                "mean": 0.0,
                "std_dev": 0.05
           }
