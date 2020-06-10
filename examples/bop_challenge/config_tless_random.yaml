@@ -412,7 +412,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 50,
-        "render_": True,
+        "render_distance": True,
         "image_type": "JPEG"
       }
     },
@@ -422,7 +422,7 @@
         "dataset": "<args:1>",
         "append_to_existing_output": True,
         "postprocessing_modules": {
-          "": [
+          "distance": [
             {"module": "postprocessing.Dist2Depth"}
           ]
         }
