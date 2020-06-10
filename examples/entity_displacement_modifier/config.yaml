@@ -1,0 +1,116 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py",
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "cam_poses": [
+        {
+          "location": [0, -13.741, 4.1242],
+          "rotation": {
+            "value":[1.3, 0, 0]
+          }
+        },
+        {
+          "location": [1.9488, -6.5202, 0.23291],
+          "rotation": {
+            "value": [1.84, 0, 0.5]
+          }
+        }
+        ],
+        "default_cam_param": {
+          "fov": 1
+        }
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "type": "MESH" # this guarantees that the object is a mesh, and not for example a camera
+          }
+        },
+        "cf_add_uv_mapping":{
+          "provider": "getter.Content",
+          "content": {
+            "projection": "cylinder"
+          }
+        },
+        "cf_add_displace_modifier_with_texture": {
+          "provider": "getter.Content",
+          "content": {
+              "texture": {
+                "provider": "sampler.Texture",
+                "noice_scale": 40"
+              },
+              "min_vertices_for_subdiv": 10000,
+              "mid_level": 0.5,
+              "subdiv_level": {
+                "provider": "sampler.Value",
+                "type": "int",
+                "min": 1,
+                "max": 3
+              },
+              "strength": {
+                "provider": "sampler.Value",
+                "type": "float",
+                "mode": "normal",
+                "mean": 0.0,
+                "std_dev": 0.7
+              }
+          }
+
+        }
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_normals": True,
+        "render_depth": True
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+      }
+    }
+  ]
+}
