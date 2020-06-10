@@ -3,7 +3,7 @@ import bpy
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.loader.Loader import Loader
-
+import src.utility.BlenderUtility as BlenderUtility
 
 class EntityManipulator(Module):
     """ Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
@@ -78,6 +78,77 @@ class EntityManipulator(Module):
           }
         }
 
+        Example 4: Add a displacement modifier with a newly generated texture.
+
+         {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": 'Cube.*',
+                "type": "MESH"
+              }
+            },
+            "cf_add_displace_modifier_with_structure": {
+             "provider": "getter.Content",
+              "content": {
+                "texture": 'VORONOI'
+              }
+            }
+          }
+        }
+
+        Example 5: Add a displacement modifier with a newly random generated texture with custom
+                   texture, noice scale, modifier mid_level, modifier render_level and modifier strength. With
+                   prior addition of a uv_map to all object without an uv map and adding of a Subdivision Surface
+                   Modifier if the number of vertices of an object is less than 10000.
+
+        {
+          "module": "manipulators.EntityManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": 'apple',
+                "type": "MESH"
+              }
+            },
+            "cf_add_uv_mapping":{
+              "provider": "getter.Content",
+              "content": {
+                "projection": "cylinder"
+              }
+            },
+            "cf_add_displace_modifier_with_structure": {
+              "provider": "getter.Content",
+              "content": {
+                  "texture": {
+                    "provider": "sampler.Texture",
+                    "noice_scale": 40"
+                  },
+                  "min_vertices_for_subdiv": 10000,
+                  "mid_level": 0.5,
+                  "subdiv_level": {
+                    "provider": "sampler.Value",
+                    "type": "int",
+                    "min": 1,
+                    "max": 3
+                  },
+                  "strength": {
+                    "provider": "sampler.Value",
+                    "type": "float",
+                    "mode": "normal",
+                    "mean": 0.0,
+                    "std_dev": 0.7
+                  }
+              }
+
+            }
+          }
+        }
+
+
     **Configuration**:
 
     .. csv-table::
@@ -114,6 +185,28 @@ class EntityManipulator(Module):
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
         "cf_set_shading", "Custom function to set the shading of the selected object."
                           "Type: str. Available: ["FLAT", "SMOOTH"]"
+        "cf_add_displace_modifier_with_structure", "Adds a displace modifier with structure to an object."
+                                                   "getter.Content Provider. Type: Provider."
+        "cf_add_displace_modifier_with_structure/texture", "The structure is either a given or a random texture."
+                                                           "Type: str. Default: []. Available:['CLOUDS',"
+                                                           "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOICE',"
+                                                           "'STUCCI', 'VORONOI', 'WOOD']"
+        "cf_add_displace_modifier_with_structure/min_vertices_for_subdiv", "Checks if a subdivision is necessary. If"
+                                                                           "the vertices of a object are less than"
+                                                                           "'min_vertices_for_subdiv' a Subdivision"
+                                                                           "modifier will be add to the object."
+                                                                           "Type: int. Default: 10000."
+        "cf_add_displace_modifier_with_structure/mid_level", "Texture value that gives no displacement."
+                                                             "Parameter of displace modifier."
+                                                             "Type: float. Default: 0.5"
+        "cf_add_displace_modifier_with_structure/subdiv_level", "Numbers of Subdivisions to perform when"
+                                                                "rendering. Parameter of Subdivision"
+                                                                "modifier. Type: int. Default: 2"
+        "cf_add_displace_modifier_with_structure/strength", "Amount to displace geometry. Parameter of displace"
+                                                            "modifier. Type: float. Default: 0.1"
+        "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing. getter.Content Provider. Type: Provider"
+        "cf_add_uv_mapping/projection", "Name of the projection as str. Type: str. Default: []."
+                                        "Available: ["cube", "cylinder", "smart", "sphere"]"
     """
 
     def __init__(self, config):
@@ -200,9 +293,58 @@ class EntityManipulator(Module):
                 bpy.context.object.modifiers["Solidify"].thickness = thickness
             else:
                 raise Exception("Unknown modifier name: {}.".format(name))
+
         elif key == "set_shading":
             result = Config(result)
             mode = result.get_string("cf_set_shaing")
             Loader.change_shading_mode([entity], mode)
+
+        elif key == "add_displace_modifier_with_structure":
+            result = Config(result)
+            tex = result.get_raw_value("texture", [])
+
+            if not isinstance(tex, bpy.types.Texture):
+                raise Exception("The return type is not of type Texture")
+
+            mid_level = result.get_float("mid_level", 0.5)
+            subdiv_level = result.get_int("subdiv_level", 2)
+            strength = result.get_float("strength", 0.1)
+            min_vertices_for_subdiv = result.get_int("min_vertices_for_subdiv", 10000)
+
+            bpy.context.view_layer.objects.active = entity
+            if not len(entity.data.vertices) > min_vertices_for_subdiv:
+                bpy.ops.object.modifier_add(type="Subsurf".upper())
+                modifier = entity.modifiers[-1]
+                modifier.render_levels = subdiv_level
+
+            bpy.ops.object.modifier_add(type="Displace".upper()) # does not return anything
+            modifier = entity.modifiers[-1]
+            modifier.texture = tex
+            modifier.mid_level = mid_level
+            modifier.strength = strength
+
+
+        elif key == "add_uv_layer":
+            result = Config(result)
+            projection = result.get_string("projection").lower()
+
+            bpy.context.view_layer.objects.active = entity
+            if hasattr(entity, "data") and entity.data is not None and \
+                    hasattr(entity.data, "uv_layers") and entity.data.uv_layers is not None:
+                if not BlenderUtility.check_if_uv_coordinates_are_set(entity):
+                    bpy.ops.object.editmode_toggle()
+                    if projection == "cube":
+                        bpy.ops.uv.cube_project()
+                    elif projection == "cylinder":
+                        bpy.ops.uv.cylinder_project()
+                    elif projection == "smart":
+                        bpy.ops.uv.smart_project()
+                    elif projection == "sphere":
+                        bpy.ops.uv.sphere_project()
+                    else:
+                        raise Exception("Projection {} does not exist! Please use cube, cylinder, smart or sphere"
+                                        .format(projection))
+
+                    bpy.ops.object.editmode_toggle()
         else:
             raise Exception("Unknown custom function name: {}.".format(key))

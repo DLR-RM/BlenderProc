@@ -22,14 +22,27 @@ class Value(Provider):
           "type": "bool"
         }
 
+        Example 3: Sample a float value from a normal (Gaussian) distribution.
+
+        {
+          "provider": "sampler.Value",
+          "type": "float",
+          "mode": "normal",
+          "mean": 0.0,
+          "std_dev": 0.7
+        }
+
     **Configuration**:
 
     .. csv-table::
         :header: "Parameter", "Description"
 
         "type", "The type of a value to sample. Type: string. Available: 'float', 'int', 'boolean'."
+        "mode", "The way of how to sample values. Type: string. Default: 'uniform'. Available: 'uniform', 'normal'."
         "min", "The minimum value. Optional. Type: float/int."
         "max", "The maximum value (excluded frm the defined range of values). Type: float/int."
+        "mean", "Mean (“centre”) of the normal (Gaussian) distribution. Type: float."
+        "std_dev", "Standard deviation (spread or “width”) of the normal (Gaussian) distribution. Type: float."
     """
 
     def __init__(self, config):
@@ -41,19 +54,30 @@ class Value(Provider):
         """
         # get type of the value to sample
         val_type = self.config.get_string("type")
+        mode = self.config.get_string("mode", "uniform")
         # sample bool
         if val_type.lower() == 'bool' or val_type.lower() == 'boolean':
             val = bool(np.random.randint(0, 2))
         # or sample int
         elif val_type.lower() == 'int':
-            val_min = self.config.get_int('min')
-            val_max = self.config.get_int('max')
-            val = np.random.randint(val_min, val_max)
+            if mode == "uniform":
+                val_min = self.config.get_int('min')
+                val_max = self.config.get_int('max')
+                val = np.random.randint(val_min, val_max)
+            else:
+                raise Exception("Mode {} doesn't exist".format(mode))
         # or sample float
         elif val_type.lower() == 'float':
-            val_min = self.config.get_float('min')
-            val_max = self.config.get_float('max')
-            val = np.random.uniform(val_min, val_max)
+            if mode == "uniform":
+                val_min = self.config.get_float('min')
+                val_max = self.config.get_float('max')
+                val = np.random.uniform(val_min, val_max)
+            elif mode == "normal":
+                mean = self.config.get_float('mean')
+                std_dev = self.config.get_float('std_dev')
+                val = np.random.normal(loc=mean, scale=std_dev)
+            else:
+                raise Exception("Mode {} doesn't exist".format(mode))
         else:
             raise Exception("Cannot sample this type: " + val_type)
 
