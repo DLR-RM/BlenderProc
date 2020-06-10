@@ -124,8 +124,7 @@ class EntityManipulator(Module):
               "provider": "getter.Content",
               "content": {
                   "texture": {
-                    "provider": "sampler.Texture",
-                    "noice_scale": 40"
+                    "provider": "sampler.Texture"
                   },
                   "min_vertices_for_subdiv": 10000,
                   "mid_level": 0.5,
@@ -185,7 +184,7 @@ class EntityManipulator(Module):
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
         "cf_set_shading", "Custom function to set the shading of the selected object."
                           "Type: str. Available: ["FLAT", "SMOOTH"]"
-        "cf_add_displace_modifier_with_texture", "Adds a displace modifier with structure to an object."
+        "cf_add_displace_modifier_with_texture", "Adds a displace modifier with texture to an object."
                                                    "getter.Content Provider. Type: Provider."
         "cf_add_displace_modifier_with_texture/texture", "The structure is either a given or a random texture."
                                                            "Type: str. Default: []. Available:['CLOUDS',"
