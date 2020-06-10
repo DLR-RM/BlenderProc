@@ -40,7 +40,7 @@ def processFile(file_path):
                 print("Keys: " + ', '.join(res))
 
 if isinstance(args.hdf5, str):
-    procressFile(args.hdf5)
+    processFile(args.hdf5)
 elif isinstance(args.hdf5, list):
     for file in args.hdf5:
         processFile(file)

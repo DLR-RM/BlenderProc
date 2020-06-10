@@ -79,7 +79,7 @@ class OilPaintFilter(Module):
                 image[edges > 0] = filtered_img[edges > 0]
                 filtered_img = image
         else:
-            if len(image.shape) == 3 and img.shape[2] > 1:
+            if len(image.shape) == 3 and image.shape[2] > 1:
                 image = image[:, :, 0]
 
             filtered_img = stats.mode(get_neighbors_stacked(image, filter_size), axis=2)[0] \

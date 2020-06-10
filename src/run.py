@@ -1,8 +1,8 @@
 # blender --background --python run.py  -- <config> [<args>]
-import bpy
 import sys
 import os
 from sys import platform
+
 
 # Make sure the current script directory is in PATH, so we can load other python modules
 dir = "."  # From CLI
@@ -29,6 +29,7 @@ argv = argv[argv.index("--") + 1:]
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
 from src.main.Pipeline import Pipeline
+from src.utility.Utility import Utility
 
 config_path = argv[0]
 if batch_index_file == None:

@@ -138,11 +138,11 @@ def check_if_element_is_of_type(element, ele_type):
     try:
         convert_str = "{}({})".format(ele_type, element)
         eval(convert_str)
-    except ValueError as e:
+    except ValueError:
         return False
-    except NameError as e:
+    except NameError:
         return False
-    except TypeError as e:
+    except TypeError:
         return False
     except SyntaxError as e:
         print(convert_str, ele_type, element)

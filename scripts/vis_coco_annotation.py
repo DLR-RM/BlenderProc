@@ -1,8 +1,6 @@
-from PIL import Image, ImageFont, ImageDraw, ImageEnhance
+from PIL import Image, ImageFont, ImageDraw
 import json
 import argparse
-import h5py
-import numpy as np
 import os
 
 parser = argparse.ArgumentParser()

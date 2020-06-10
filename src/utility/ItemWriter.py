@@ -1,4 +1,3 @@
-import os
 import numpy as np
 from mathutils import Vector, Euler
 import bpy

@@ -3,8 +3,6 @@ import json
 import os
 import random
 
-import bpy
-
 from src.loader.Loader import Loader
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping

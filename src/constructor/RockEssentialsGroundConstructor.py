@@ -126,7 +126,7 @@ class RockEssentialsGroundConstructor(Loader):
 
         # create new texture
         texture_name = tile_name + "_texture"
-        texture = bpy.data.textures.new(name=texture_name, type="IMAGE")
+        bpy.data.textures.new(name=texture_name, type="IMAGE")
 
         # set new texture as a displacement texture, set UV texture coordinates
         plane_obj.modifiers['Displace'].texture = bpy.data.textures[texture_name]

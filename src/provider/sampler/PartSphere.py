@@ -1,5 +1,3 @@
-import numpy as np
-
 import mathutils
 
 from src.main.Provider import Provider

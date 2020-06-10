@@ -1,5 +1,5 @@
 import re
-from random import choice, sample
+from random import sample
 
 import bpy
 import mathutils
