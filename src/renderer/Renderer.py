@@ -204,7 +204,7 @@ class Renderer(Module):
         distance_range = self.config.get_float("distance_range", 25.0)
         GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
         bpy.context.scene.world.mist_settings.start = distance_start
-        bpy.context.scene.world.mist_settings.distance = distance_range
+        bpy.context.scene.world.mist_settings.depth = distance_range
         bpy.context.scene.world.mist_settings.falloff = self.config.get_string("distance_falloff", "LINEAR")
 
         bpy.context.scene.render.use_compositing = True
