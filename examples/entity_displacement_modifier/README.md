@@ -1,4 +1,4 @@
-# Object selection and manipulation
+# Object selection and manipulation using displacement modifier
 
 ![](rendering.png)
 
