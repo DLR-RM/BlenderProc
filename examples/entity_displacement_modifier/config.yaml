@@ -75,8 +75,7 @@
           "provider": "getter.Content",
           "content": {
               "texture": {
-                "provider": "sampler.Texture",
-                "noice_scale": 40"
+                "provider": "sampler.Texture"
               },
               "min_vertices_for_subdiv": 10000,
               "mid_level": 0.5,
@@ -91,7 +90,7 @@
                 "type": "float",
                 "mode": "normal",
                 "mean": 0.0,
-                "std_dev": 0.7
+                "std_dev": 0.5
               }
           }
 

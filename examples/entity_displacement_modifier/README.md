@@ -1,11 +1,11 @@
 # Object selection and manipulation
 
-<p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=400>
-</p>
+![](rendering.png)
 
 In this example we demonstrate how to manipulate a entity by adding different displacement modifiers with different textures as part of the `EntityManipulator` module.
+This is an advanced example, please make sure that you have read:
 
+* [entity_manipulator](../shapenet): Basics of `EntityManipulator` module to load entities and manipulate them. 
 ## Usage
 
 Execute this in the BlenderProc main directory:
@@ -75,7 +75,7 @@ python scripts/visHdf5Files.py examples/entity_displacement_modifier/output/0.hd
                 "type": "float",
                 "mode": "normal",
                 "mean": 0.0,
-                "std_dev": 0.7
+                "std_dev": 0.5
               }
           }
 
@@ -88,18 +88,19 @@ The focus of this example are the custom functions `cf_add_displacement_modifier
 We are selecting multiple entities based on a user-defined condition and change the attribute and custom property values of the selected entities.
 First we want to check if each entity has a uv_map and if not, we add a uv_map to the entity. Than we add a displacement modifier with a random texture to each entity. 
 
-* `cf_add_uv_mapping` - section of the `EntityManipulator` for adding a uv map to an object if uv map is missing.
+1.) `cf_add_uv_mapping` - section of the `EntityManipulator` for adding a uv map to an object if uv map is missing.
 
-For uv mapping we have to chose a `projection`. Possible projection types given by blender are: "cube", "cylinder", "smart", "sphere".
+* This step is mandatory for adding a displacement modifier to an object, if the object does't have a uv_map. Because if a object doesn't have a uv_map it is not possible to put a texture over it. And without texture a displacement is not possible. 
+For uv mapping we have to chose a `projection`. Possible projection types given by blender are: "cube", "cylinder", "smart" and "sphere".
 
-* `cf_add_displacement_modifier_with_texture` - section of the `EntityManipulator` for adding a displace modifier with texture to an entity.
+2.) `cf_add_displacement_modifier_with_texture` - section of the `EntityManipulator` for adding a displace modifier with texture to an entity.
 
-First we need a `texture`.This can be a random or a specific texture. For possible `texture`'s data types check `provider.sampler.Texture` documentation.
-All other, following parameter are not mandatory but can be used to further customize the displacement.
-By adding a value to `min_vertices_for_subdiv` we can check if a subdivision modifier is necessary for the entity. If the vertices of a entity are less than `min_vertices_for_subdiv` a Subdivision modifier will be added to increase the number of vertices. The number of vertices of a entity are having a big effect on the displacement modifier. If there are not enough, the displacement is not working well.                                                                         
-`mid_level` is the texture value that gives no displacement.
-`subdiv_level` are the numbers of Subdivisions to perform
-`strength` is the amount to displace geometry
+* First we need a `texture` to lay over the object. This can be a random or a specific texture. For possible `texture`'s data types check `provider.sampler.Texture` documentation.
+* All other, following parameter are not mandatory but can be used to further customize the displacement.
+* By adding a value to `min_vertices_for_subdiv` we can check if a subdivision modifier is necessary for the entity. If the vertices of a entity are less than `min_vertices_for_subdiv` a Subdivision modifier will be added to increase the number of vertices. The number of vertices of a entity is having a big effect on the displacement modifier. If there are not enough, the displacement is not working well.                                                                         
+* If a subdivision is being applied the `subdiv_level` defines the numbers of subdivisions to perform on the entity. We are using one or two in this example.
+* `mid_level` is the texture value that gives no displacement. Having `0.5` like we do, means that only half of the object will be displaced, which is a good value to start from.
+* `strength` is the amount to displace geometry. We are here sampling the `strength` over a gaussian distribution with mean `0.0` and standard deviation of `0.5`.
 
 ## More examples
 
