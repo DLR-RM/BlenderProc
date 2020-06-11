@@ -323,7 +323,7 @@ class EntityManipulator(Module):
             modifier.strength = strength
 
 
-        elif key == "add_uv_layer":
+        elif key == "add_uv_mapping":
             result = Config(result)
             projection = result.get_string("projection").lower()
 
