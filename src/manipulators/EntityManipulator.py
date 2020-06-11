@@ -100,7 +100,7 @@ class EntityManipulator(Module):
         }
 
         Example 5: Add a displacement modifier with a newly random generated texture with custom
-                   texture, noice scale, modifier mid_level, modifier render_level and modifier strength. With
+                   texture, noise scale, modifier mid_level, modifier render_level and modifier strength. With
                    prior addition of a uv_map to all object without an uv map and adding of a Subdivision Surface
                    Modifier if the number of vertices of an object is less than 10000.
 
@@ -188,7 +188,7 @@ class EntityManipulator(Module):
                                                    "getter.Content Provider. Type: Provider."
         "cf_add_displace_modifier_with_texture/texture", "The structure is either a given or a random texture."
                                                            "Type: str. Default: []. Available:['CLOUDS',"
-                                                           "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOICE',"
+                                                           "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE',"
                                                            "'STUCCI', 'VORONOI', 'WOOD']"
         "cf_add_displace_modifier_with_texture/min_vertices_for_subdiv", "Checks if a subdivision is necessary. If"
                                                                            "the vertices of a object are less than"
