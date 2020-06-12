@@ -6,7 +6,7 @@
 
 ## [>>> All infos regarding BlenderProc4BOP and the BOP challenge 2020 <<<](https://github.com/DLR-RM/BlenderProc/blob/master/README_BlenderProc4BOP.md)
 
-A procedural Blender pipeline for image generation for Deep Learning.
+A procedural Blender pipeline for photo-realistic training image generation.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
