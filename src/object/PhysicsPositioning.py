@@ -76,15 +76,22 @@ class PhysicsPositioning(Module):
         bpy.context.scene.rigidbody_world.steps_per_second = self.steps_per_sec
         bpy.context.scene.rigidbody_world.solver_iterations = self.solver_iters
 
+        obj_poses_before_sim = self._get_pose()
         # perform simulation
-        obj_poses = self._do_simulation()
+        obj_poses_after_sim = self._do_simulation()
         # reset origin point of all active objects to the total shift location of the 3D cursor
         for obj in get_all_mesh_objects():
             if obj.rigid_body.type == "ACTIVE":
                 bpy.context.view_layer.objects.active = obj
                 obj.select_set(True)
+                # compute relative object rotation before and after simulation
+                R_obj_before_sim = mathutils.Euler(obj_poses_before_sim[obj.name]['rotation']).to_matrix()
+                R_obj_after = mathutils.Euler(obj_poses_after_sim[obj.name]['rotation']).to_matrix()
+                R_obj_rel = R_obj_before_sim @ R_obj_after.transposed()
+                # compute origin shift in object coordinates
+                origin_shift[obj.name] = R_obj_rel.transposed() @ origin_shift[obj.name]
                 # set 3d cursor location to the total shift of the object
-                bpy.context.scene.cursor.location = origin_shift[obj.name] + obj_poses[obj.name]['location']
+                bpy.context.scene.cursor.location = origin_shift[obj.name] + obj_poses_after_sim[obj.name]['location']
                 bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
                 obj.select_set(False)
 
