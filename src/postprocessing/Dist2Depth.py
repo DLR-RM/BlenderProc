@@ -8,10 +8,10 @@ class Dist2Depth(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def run(self, dist):
+    def run(self, dist, key, version):
         """
         :param dist: The distance data.
-        :return: The depth data.
+        :return: The depth data, an appropriate key and version.
         """
         if len(dist.shape) > 2:
             dist = dist[:, :, 0] # All channles have the same value, so just extract any single channel
@@ -40,5 +40,6 @@ class Dist2Depth(Module):
         # Solve[{X == (x-c0)/f0*Z, Y == (y-c1)/f0*Z, X*X + Y*Y + Z*Z = d*d}, {X,Y,Z}]
         depth = dist * f / np.sqrt(x_opt**2 + y_opt**2 + f**2)
 
-        return depth
-
+        key = "depth"
+        version = "1.0.0"
+        return depth, key, version
