@@ -72,7 +72,6 @@ class Hdf5Writer(Module):
                 print("Merging data for frame " + str(frame) + " into " + hdf5_path)
 
                 for output_type in bpy.context.scene["output"]:
-
                     use_stereo = output_type["stereo"]
                     # Build path (path attribute is format string)
                     file_path = output_type["path"]
@@ -82,21 +81,27 @@ class Hdf5Writer(Module):
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
 
-                        img_l = self._load_and_postprocess(path_l, output_type["key"])
-                        img_r = self._load_and_postprocess(path_r, output_type["key"])
+                        img_l, new_key_l, new_version = self._load_and_postprocess(path_l, output_type["key"],
+                                                                                   output_type["version"])
+                        img_r, new_key_r, new_version = self._load_and_postprocess(path_r, output_type["key"],
+                                                                                   output_type["version"])
 
                         if self.config.get_bool("stereo_separate_keys", False):
-                            self._write_to_hdf_file(f, output_type["key"] + "_0", img_l)
-                            self._write_to_hdf_file(f, output_type["key"] + "_1", img_r)
+                            self._write_to_hdf_file(f, new_key_l + "_0", img_l)
+                            self._write_to_hdf_file(f, new_key_r + "_1", img_r)
                         else:
                             data = np.array([img_l, img_r])
                             self._write_to_hdf_file(f, output_type["key"], data)
-                    else:
-                        data = self._load_and_postprocess(file_path, output_type["key"])
-                        self._write_to_hdf_file(f, output_type["key"], data)
 
-                    # Write version number of current output at key_version
-                    self._write_to_hdf_file(f, output_type["key"] + "_version", np.string_([output_type["version"]]))
+                        new_key = new_key_l
+
+                    else:
+                        data, new_key, new_version = self._load_and_postprocess(file_path, output_type["key"],
+                                                                                output_type["version"])
+
+                        self._write_to_hdf_file(f, new_key, data)
+
+                    self._write_to_hdf_file(f, new_key + "_version", np.string_([new_version]))
 
     def _write_to_hdf_file(self, file, key, data):
         """ Adds the given data as a new entry to the given hdf5 file.
@@ -149,36 +154,41 @@ class Hdf5Writer(Module):
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
                 rows.append(row)
-        return np.string_(json.dumps(rows)) # make the list of dicts as a string
+        return np.string_(json.dumps(rows))  # make the list of dicts as a string
 
-    def _apply_postprocessing(self, output_key, data):
+    def _apply_postprocessing(self, output_key, data, version):
         """ Applies all postprocessing modules registered for this output type.
 
         :param output_key: The key of the output type. Type: string.
         :param data: The numpy data.
-        :return: The modified numpy data after doing the postprocessing
+        :param version: The version number of the original data.
+        :return: The modified numpy data, a key to use when writing, and the version number.
         """
         if output_key in self.postprocessing_modules_per_output:
             for module in self.postprocessing_modules_per_output[output_key]:
-                data = module.run(data)
+                data, new_key, new_version = module.run(data, output_key, version)
+        else:
+            new_key = output_key
+            new_version = version
 
-        return data
+        return data, new_key, new_version
 
-    def _load_and_postprocess(self, file_path, key):
+    def _load_and_postprocess(self, file_path, key, version):
         """
         Loads an image and post process it.
         :param file_path: Image path. Type: string.
         :param key: The image's key with regards to the hdf5 file. Type: string.
+        :param version: The version number original data.
         :return: The post-processed image that was loaded using the file path.
         """
         data = self._load_file(Utility.resolve_path(file_path))
 
-        data = self._apply_postprocessing(key, data)
+        data, new_key, new_version = self._apply_postprocessing(key, data, version)
 
         print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(
             data.dtype) + " - path: " + file_path)
 
-        return data
+        return data, new_key, new_version
 
     def _get_stereo_path_pair(self, file_path):
         """
