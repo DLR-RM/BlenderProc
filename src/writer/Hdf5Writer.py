@@ -91,7 +91,7 @@ class Hdf5Writer(Module):
                             self._write_to_hdf_file(f, new_key + "_1", img_r)
                         else:
                             data = np.array([img_l, img_r])
-                            self._write_to_hdf_file(f, output_type["key"], data)
+                            self._write_to_hdf_file(f, new_key, data)
 
                     else:
                         data, new_key, new_version = self._load_and_postprocess(file_path, output_type["key"],
