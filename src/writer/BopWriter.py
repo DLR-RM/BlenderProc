@@ -189,7 +189,7 @@ class BopWriter(StateWriter):
         """
         if output_key in self.postprocessing_modules_per_output:
             for module in self.postprocessing_modules_per_output[output_key]:
-                data, _, _ = module.run(data, "depth", "1.0.0")
+                data, _, _ = module.run(data, None, None)
 
         return data
 
