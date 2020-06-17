@@ -99,7 +99,7 @@ For the UV mapping we have to chose a `projection`. Possible projection types gi
 * All other, following parameter are not mandatory but can be used to further customize the displacement.
 * By adding a value to `min_vertices_for_subdiv` we can check if a subdivision modifier is necessary for the entity. If the vertices of a entity are less than `min_vertices_for_subdiv` a Subdivision modifier will be added to increase the number of vertices. The number of vertices of a entity has a big effect on the displacement modifier. If there are not enough vertices, the displacement modifier will not work well.                                                                         
 * If a subdivision is being applied the `subdiv_level` defines the numbers of subdivisions to perform on the entity. We are using one or two in this example.
-* `mid_level` is the texture value that gives no displacement. Having `0.5` like we do, means that only half of the object will be displaced, which is a good value to start from.
+* `mid_level` is the texture value which will be treated as no displacement by the modifier. Texture values below this threshold will result in negative displacement along the selected direction, while texture values above it will result in positive displacement. `displacement = texture_value - mid_level`. Recall that color/luminosity values are typically between (0.0 to 1.0) in Blender, and not between (0 to 255).
 * `strength` is the amount to displace geometry. We are here sampling the `strength` over a gaussian distribution with mean `0.0` and standard deviation of `0.5`.
 
 ## More examples
