@@ -11,6 +11,8 @@ class Dist2Depth(Module):
     def run(self, dist, key, version):
         """
         :param dist: The distance data.
+        :param key: The key used to store distance data.
+        :param version: Version of the produced distance data.
         :return: The depth data, an appropriate key and version.
         """
         if len(dist.shape) > 2:

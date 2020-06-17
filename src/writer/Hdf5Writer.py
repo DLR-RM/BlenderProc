@@ -81,19 +81,17 @@ class Hdf5Writer(Module):
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
 
-                        img_l, new_key_l, new_version = self._load_and_postprocess(path_l, output_type["key"],
+                        img_l, new_key, new_version = self._load_and_postprocess(path_l, output_type["key"],
                                                                                    output_type["version"])
-                        img_r, new_key_r, new_version = self._load_and_postprocess(path_r, output_type["key"],
+                        img_r, new_key, new_version = self._load_and_postprocess(path_r, output_type["key"],
                                                                                    output_type["version"])
 
                         if self.config.get_bool("stereo_separate_keys", False):
-                            self._write_to_hdf_file(f, new_key_l + "_0", img_l)
-                            self._write_to_hdf_file(f, new_key_r + "_1", img_r)
+                            self._write_to_hdf_file(f, new_key + "_0", img_l)
+                            self._write_to_hdf_file(f, new_key + "_1", img_r)
                         else:
                             data = np.array([img_l, img_r])
                             self._write_to_hdf_file(f, output_type["key"], data)
-
-                        new_key = new_key_l
 
                     else:
                         data, new_key, new_version = self._load_and_postprocess(file_path, output_type["key"],
