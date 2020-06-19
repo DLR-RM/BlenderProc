@@ -90,7 +90,7 @@ class EntityManipulator(Module):
                 "type": "MESH"
               }
             },
-            "cf_add_displace_modifier_with_structure": {
+            "cf_add_displace_modifier_with_texture": {
              "provider": "getter.Content",
               "content": {
                 "texture": 'VORONOI'
@@ -100,7 +100,7 @@ class EntityManipulator(Module):
         }
 
         Example 5: Add a displacement modifier with a newly random generated texture with custom
-                   texture, noice scale, modifier mid_level, modifier render_level and modifier strength. With
+                   texture, noise scale, modifier mid_level, modifier render_level and modifier strength. With
                    prior addition of a uv_map to all object without an uv map and adding of a Subdivision Surface
                    Modifier if the number of vertices of an object is less than 10000.
 
@@ -120,12 +120,11 @@ class EntityManipulator(Module):
                 "projection": "cylinder"
               }
             },
-            "cf_add_displace_modifier_with_structure": {
+            "cf_add_displace_modifier_with_texture": {
               "provider": "getter.Content",
               "content": {
                   "texture": {
-                    "provider": "sampler.Texture",
-                    "noice_scale": 40"
+                    "provider": "sampler.Texture"
                   },
                   "min_vertices_for_subdiv": 10000,
                   "mid_level": 0.5,
@@ -185,24 +184,24 @@ class EntityManipulator(Module):
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
         "cf_set_shading", "Custom function to set the shading of the selected object."
                           "Type: str. Available: ["FLAT", "SMOOTH"]"
-        "cf_add_displace_modifier_with_structure", "Adds a displace modifier with structure to an object."
+        "cf_add_displace_modifier_with_texture", "Adds a displace modifier with texture to an object."
                                                    "getter.Content Provider. Type: Provider."
-        "cf_add_displace_modifier_with_structure/texture", "The structure is either a given or a random texture."
+        "cf_add_displace_modifier_with_texture/texture", "The structure is either a given or a random texture."
                                                            "Type: str. Default: []. Available:['CLOUDS',"
-                                                           "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOICE',"
+                                                           "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE',"
                                                            "'STUCCI', 'VORONOI', 'WOOD']"
-        "cf_add_displace_modifier_with_structure/min_vertices_for_subdiv", "Checks if a subdivision is necessary. If"
+        "cf_add_displace_modifier_with_texture/min_vertices_for_subdiv", "Checks if a subdivision is necessary. If"
                                                                            "the vertices of a object are less than"
                                                                            "'min_vertices_for_subdiv' a Subdivision"
                                                                            "modifier will be add to the object."
                                                                            "Type: int. Default: 10000."
-        "cf_add_displace_modifier_with_structure/mid_level", "Texture value that gives no displacement."
+        "cf_add_displace_modifier_with_texture/mid_level", "Texture value that gives no displacement."
                                                              "Parameter of displace modifier."
                                                              "Type: float. Default: 0.5"
-        "cf_add_displace_modifier_with_structure/subdiv_level", "Numbers of Subdivisions to perform when"
+        "cf_add_displace_modifier_with_texture/subdiv_level", "Numbers of Subdivisions to perform when"
                                                                 "rendering. Parameter of Subdivision"
                                                                 "modifier. Type: int. Default: 2"
-        "cf_add_displace_modifier_with_structure/strength", "Amount to displace geometry. Parameter of displace"
+        "cf_add_displace_modifier_with_texture/strength", "Amount to displace geometry. Parameter of displace"
                                                             "modifier. Type: float. Default: 0.1"
         "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing. getter.Content Provider. Type: Provider"
         "cf_add_uv_mapping/projection", "Name of the projection as str. Type: str. Default: []."
@@ -299,7 +298,7 @@ class EntityManipulator(Module):
             mode = result.get_string("cf_set_shaing")
             Loader.change_shading_mode([entity], mode)
 
-        elif key == "add_displace_modifier_with_structure":
+        elif key == "add_displace_modifier_with_texture":
             result = Config(result)
             tex = result.get_raw_value("texture", [])
 
@@ -324,7 +323,7 @@ class EntityManipulator(Module):
             modifier.strength = strength
 
 
-        elif key == "add_uv_layer":
+        elif key == "add_uv_mapping":
             result = Config(result)
             projection = result.get_string("projection").lower()
 
