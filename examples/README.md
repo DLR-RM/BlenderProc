@@ -23,7 +23,7 @@ It will give you an idea about how, why and when certain things happen.
 * [material_randomizer](material_randomizer): object's material randomization.
 * [coco annotations](coco_annotations): generating COCO annotations.
 * [optical_flow](optical_flow): obtaining forward/backward flow values between consecutive key frames.
-* [stereo_matching](stereo_matching): compute depth image using stereo matching.
+* [stereo_matching](stereo_matching): compute distance image using stereo matching.
 * [on_surface_object_sampling](on_surface_object_sampling): object pose sampling on a surface.
 
 ### Benchmark for 6D Object Pose Estimation (BOP)

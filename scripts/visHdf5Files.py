@@ -20,7 +20,7 @@ if args.hdf5 is None:
 	exit(0)
 
 def process_img(img, key):
-	if 'depth' in key or 'seg' in key:
+	if 'distance' in key or 'seg' in key:
 		img = img.astype(np.float)
 		img -= np.min(img)
 		max_val = np.max(img)

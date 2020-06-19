@@ -11,7 +11,7 @@ from scripts.saveAsImg import convert_hdf
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser("Combines up to four images from .png or .hdf5. It requires a Color rendering.  Normal, Depth and Semantic Segmentation are optional.")
+    parser = argparse.ArgumentParser("Combines up to four images from .png or .hdf5. It requires a Color rendering.  Normal, distance and Semantic Segmentation are optional.")
     parser.add_argument("-f", "--file_path", nargs='*', help="File path to the list of color.png or .hdf5 file.", required=True)
     parser.add_argument("-o", "--output", help="Folder path where the resulting image/s should be saved.", type=str)
     parser.add_argument("-b", "--border", help="Adds a border around the images in white.", type=int, default=0)
@@ -22,15 +22,15 @@ if __name__ == "__main__":
         if "colors" in image_path:
             border = args.border
             normal_path = image_path.replace("colors", "normals")
-            depth_path = image_path.replace("colors", "depth")
+            distance_path = image_path.replace("colors", "distance")
             seg_path = image_path.replace("colors", "segmap")
             used_imgs = []
             if os.path.exists(image_path):
                 used_imgs.append(plt.imread(image_path))
             if os.path.exists(normal_path):
                 used_imgs.append(plt.imread(normal_path))
-            if os.path.exists(depth_path):
-                used_imgs.append(plt.imread(depth_path))
+            if os.path.exists(distance_path):
+                used_imgs.append(plt.imread(distance_path))
             if os.path.exists(seg_path):
                 used_imgs.append(plt.imread(seg_path))
             if used_imgs:

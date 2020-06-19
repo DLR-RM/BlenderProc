@@ -467,7 +467,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 50,
-        "render_depth": True,
+        "render_distance": True,
         "image_type": "JPEG"
       }
     },
@@ -483,7 +483,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "dataset": "<args:1>",
         "append_to_existing_output": True,
         "postprocessing_modules": {
-          "depth": [
+          "distance": [
             {"module": "postprocessing.Dist2Depth"}
           ]
         }

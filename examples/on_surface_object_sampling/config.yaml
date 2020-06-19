@@ -128,7 +128,7 @@
       "module": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
-          "depth": [
+          "distance": [
           {
             "module": "postprocessing.TrimRedundantChannels",
             "config": {}

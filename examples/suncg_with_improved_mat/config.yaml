@@ -147,7 +147,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 350,
-        "render_depth": True,
+        "render_distance": True,
         "render_normals": True,
         "use_alpha": True
       }
