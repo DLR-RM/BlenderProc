@@ -12,7 +12,7 @@ class Dist2Depth(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "output_key", "The key which should be used for storing the output data in a merged file. "
+        "depth_output_key", "The key which should be used for storing the output data in a merged file. "
                       "Type: string. Default: 'depth'."
     """
     def __init__(self, config):
@@ -51,6 +51,6 @@ class Dist2Depth(Module):
         # Solve 3 equations in Wolfram Alpha: 
         # Solve[{X == (x-c0)/f0*Z, Y == (y-c1)/f0*Z, X*X + Y*Y + Z*Z = d*d}, {X,Y,Z}]
         depth = dist * f / np.sqrt(x_opt**2 + y_opt**2 + f**2)
-        output_key = self.config.get_string("output_key", "depth")
+        output_key = self.config.get_string("depth_output_key", "depth")
         version = "1.0.0"
         return depth, output_key, version
