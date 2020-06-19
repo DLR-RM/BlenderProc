@@ -12,7 +12,12 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "examples/front_3d"
+          "output_dir": "examples/front_3d",
+          "max_bounces": 200,
+          "diffuse_bounces": 200,
+          "glossy_bounces": 200,
+          "transmission_bounces": 200,
+          "transparency_bounces": 200
         }
       }
     },
@@ -20,6 +25,89 @@
       "module": "loader.Front3DLoader",
       "config": {
         "path": "<args:0>"
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      "config": {
+        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.95,
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Floor.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True  # this will return all loaded cc textures
+          }
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 1.0,
+        "mode": "once_for_all",
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Baseboard.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True,  # this will return all loaded cc textures
+            "cp_asset_name": "WoodFloor.*"
+          }
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 1.0,
+        "mode": "once_for_all",
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Door.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True,  # this will return all loaded cc textures
+            "cp_asset_name": "WoodFloor.*"
+          }
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.1,
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Wall.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True,  # this will return all loaded cc textures
+            "cp_asset_name": "Marble.*"
+          }
+        }
       }
     },
     {
@@ -39,16 +127,17 @@
       "config": {
         "cam_poses": [
           {
-            "number_of_samples": 5,
+            "number_of_samples": 1,
             "location": {
               "provider":"sampler.Uniform3d",
-              "max":[10, 10, 8],
-              "min":[-10, -10, 12]
+              "max":[3.401, 1.6301, 1.3701],
+              "min":[3.4, 1.63, 1.37]
             },
             "rotation": {
-              "format": "look_at",
               "value": {
-                "provider": "getter.POI"
+                "provider":"sampler.Uniform3d",
+                "max":[1.338668, 0, 1.98],
+                "min":[1.338, 0, 1.97]
               }
             }
           }
