@@ -50,7 +50,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "use_alpha": True,
-        "render_depth": true,
+        "render_distance": true,
         "render_normals": True
       }
     },

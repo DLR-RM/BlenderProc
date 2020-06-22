@@ -130,7 +130,7 @@
       "config": {
         "output_key": "colors",
         "samples": 150,
-        "render_depth": True,
+        "render_distance": True,
         "render_normals": True
       }
     },
@@ -138,7 +138,7 @@
       "module": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
-          "depth": [
+          "distance": [
           {
             "module": "postprocessing.TrimRedundantChannels",
           }

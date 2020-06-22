@@ -65,7 +65,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "render_depth": True,
+        "render_distance": True,
         "render_normals": True,
         "use_alpha": True
       }
