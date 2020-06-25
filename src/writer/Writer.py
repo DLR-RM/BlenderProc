@@ -1,25 +1,33 @@
 import bpy
+import os
 
 from src.main.Module import Module
+from src.utility.Utility import Utility
 
 class Writer(Module):
     """
     **Configuration**:
     .. csv-table::
-        :header: "Parameter", "Description"
-        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
+       :header: "Parameter", "Description"
+       "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
                                 "to which the postprocessing modules should be applied. Every postprocessing module "
                                 "has to have a run function which takes in the raw data and returns the processed "
                                 "data. Type: dict."
+       "destination_frame", "Used to transform point to blender coordinate frame. Type: list. Default: ["X", "Y", "Z"]"
+       "attributes_to_write", "A list of attribute names that should written to file. The next table lists all "
+                              "attributes that can be used here. Type: list."
+       "output_file_prefix", "The prefix of the file that should be created. Type: string."
+       "output_key", "The key which should be used for storing the output in a merged file. Type: string."
     """
     def __init__(self, config):
-        Module.__init__(config)
+        Module.__init__(self, config)
         self.postprocessing_modules_per_output = {}
         module_configs = config.get_raw_dict("postprocessing_modules", {})
         for output_key in module_configs:
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
         self.name_to_id = {}
         self.destination_frame = self.config.get_list("destination_frame", ["X", "Y", "Z"])
+
 
     def write_attributes_to_file(self, item_writer, items, default_file_prefix, default_output_key, default_attributes, version="1.0.0"):
         """ Writes the state of the given items to a file with the configured prefix.
@@ -35,9 +43,7 @@ class Writer(Module):
         """
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
-        
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
-
         self._register_output(file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
 
     def _get_attribute(self, item, attribute_name):
@@ -79,7 +85,7 @@ class Writer(Module):
         else:
             raise Exception("No such attribute: " + attribute_name)
 
-    def _apply_postprocessing(self, iutput_key, data):
+    def _apply_postprocessing(self, output_key, data, version):
         """ Applies all postprocessing modules registered for this output type.
         :param output_key: The key of the output type. Type: string
         :param data: The numpy data.
@@ -102,13 +108,8 @@ class Writer(Module):
         :param version: The version number original data.
         :return: The post-processed image that was loaded using the file path.
         """
-
         data = self._load_file(Utility.resolve_path(file_path))
-
         data, new_key, new_version = self._apply_postprocessing(key, data, version)
-
         print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
-
         return data, new_key, new_version
-
 

@@ -1,6 +1,6 @@
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.ItemWriter import ItemWriter
-from src.writer.StateWriter import StateWriter
+from src.writer.Writer import Writer
 
 
 class ObjectStateWriter(Writer):
