@@ -3,11 +3,11 @@ from src.utility.ItemWriter import ItemWriter
 from src.writer.StateWriter import StateWriter
 
 
-class ObjectStateWriter(StateWriter):
+class ObjectStateWriter(Writer):
     """ Writes the state of all objects for each frame to a numpy file if no hfd5 file is available. """
 
     def __init__(self, config):
-        StateWriter.__init__(self, config)
+        Writer.__init__(self, config)
         self.object_writer = ItemWriter(self._get_attribute)
 
     def run(self):
