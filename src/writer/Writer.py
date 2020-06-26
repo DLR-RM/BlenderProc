@@ -5,7 +5,8 @@ from src.main.Module import Module
 from src.utility.Utility import Utility
 
 class Writer(Module):
-    """
+    """ Parent class for all other writers classes, it had the functionality to return objects attributes and write them to file and to load and process post processing modules
+
     **Configuration**:
     .. csv-table::
        :header: "Parameter", "Description"
@@ -89,6 +90,7 @@ class Writer(Module):
         """ Applies all postprocessing modules registered for this output type.
         :param output_key: The key of the output type. Type: string
         :param data: The numpy data.
+        :param version: The version number original data.
         :return: The modified numpy data after doing the postprocessing
         """
         if output_key in self.postprocessing_modules_per_output:

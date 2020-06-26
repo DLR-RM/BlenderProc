@@ -368,7 +368,7 @@ class BopWriter(Writer):
             dist_output = self._find_registered_output_by_key("distance")
             if dist_output is None:
                 raise Exception("Distance image has not been rendered.")
-            depth = self._load_and_postprocess(dist_output['path'] % frame_id, "distance")
+            depth, _, _ = self._load_and_postprocess(dist_output['path'] % frame_id, "distance")
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).
