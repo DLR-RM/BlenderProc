@@ -105,7 +105,7 @@ class BopWriter(Writer):
     """
 
     def __init__(self, config):
-        StateWriter.__init__(self, config)
+        Writer.__init__(self, config)
 
         # Parse configuration.
         self.dataset = self.config.get_string("dataset")
