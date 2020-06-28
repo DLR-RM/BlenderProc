@@ -68,11 +68,8 @@
         },
         # by adding a modifier we avoid that the objects falls through other objects during the physics simulation
         "cf_add_modifier": {
-          "provider": "getter.Content",
-          "content": {
-            "name": "Solidify",
-            "thickness": 0.0025
-          }
+          "name": "Solidify",
+          "thickness": 0.0025
         }
       }
     },

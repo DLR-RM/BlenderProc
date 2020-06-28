@@ -47,38 +47,31 @@ python scripts/visHdf5Files.py examples/entity_displacement_modifier/output/0.hd
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "type": "MESH" # this guarantees that the object is a mesh, and not for example a camera
+            "type": "MESH"
           }
         },
         "cf_add_uv_mapping":{
-          "provider": "getter.Content",
-          "content": {
-            "projection": "cylinder"
-          }
+          "projection": "cylinder"
         },
         "cf_add_displace_modifier_with_texture": {
-          "provider": "getter.Content",
-          "content": {
-              "texture": {
-                "provider": "sampler.Texture"
-              },
-              "min_vertices_for_subdiv": 10000,
-              "mid_level": 0.5,
-              "subdiv_level": {
-                "provider": "sampler.Value",
-                "type": "int",
-                "min": 1,
-                "max": 3
-              },
-              "strength": {
-                "provider": "sampler.Value",
-                "type": "float",
-                "mode": "normal",
-                "mean": 0.0,
-                "std_dev": 0.5
-              }
+          "texture": {
+            "provider": "sampler.Texture"
+          },
+          "min_vertices_for_subdiv": 10000,
+          "mid_level": 0.5,
+          "subdiv_level": {
+            "provider": "sampler.Value",
+            "type": "int",
+            "min": 1,
+            "max": 3
+          },
+          "strength": {
+            "provider": "sampler.Value",
+            "type": "float",
+            "mode": "normal",
+            "mean": 0.0,
+            "std_dev": 0.5
           }
-
         }
       }
     },
