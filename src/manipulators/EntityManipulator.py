@@ -167,12 +167,12 @@ class EntityManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "cf_add_modifier", "Adds a modifier to the selected object."
+        "cf_add_modifier", "Adds a modifier to the selected object. Type: dict."
         "cf_add_modifier/name", "Name of the modifier to add. Type: string. Available values: 'Solidify'."
         "cf_add_modifier/thickness", "'thickness' attribute of the 'Solidify' modifier. Type: float."
         "cf_set_shading", "Custom function to set the shading of the selected object."
                           "Type: str. Available: ["FLAT", "SMOOTH"]"
-        "cf_add_displace_modifier_with_texture", "Adds a displace modifier with texture to an object."
+        "cf_add_displace_modifier_with_texture", "Adds a displace modifier with texture to an object. Type: dict."
         "cf_add_displace_modifier_with_texture/texture", "The structure is either a given or a random texture."
                                                            "Type: str. Default: []. Available:['CLOUDS',"
                                                            "'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE',"
@@ -190,7 +190,7 @@ class EntityManipulator(Module):
                                                                 "modifier. Type: int. Default: 2"
         "cf_add_displace_modifier_with_texture/strength", "Amount to displace geometry. Parameter of displace"
                                                             "modifier. Type: float. Default: 0.1"
-        "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing."
+        "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing. Type: dict."
         "cf_add_uv_mapping/projection", "Name of the projection as str. Type: str. Default: []."
                                         "Available: ["cube", "cylinder", "smart", "sphere"]"
     """
@@ -273,6 +273,8 @@ class EntityManipulator(Module):
                         modifier_val = modifier_conf.get_string(modifier_key).upper()
                     elif modifier_key == "thickness":
                         modifier_val = modifier_conf.get_float(modifier_key)
+                    else:
+                        modifier_val = modifier_conf.get_raw_value(modifier_key)
                     result.update({modifier_key: modifier_val})
             elif key == "cf_set_shading":
                 result = params_conf.get_string("cf_set_shading")
@@ -289,6 +291,8 @@ class EntityManipulator(Module):
                         displace_val = displace_conf.get_float(displace_key, 0.1)
                     elif displace_key == "min_vertices_for_subdiv":
                         displace_val = displace_conf.get_int(displace_key, 10000)
+                    else:
+                        displace_val = displace_conf.get_raw_value(displace_key)
                     result.update({displace_key: displace_val})
             elif key == "cf_add_uv_mapping":
                 uv_conf = Config(params_conf.get_raw_dict(key))
