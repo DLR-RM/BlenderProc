@@ -274,7 +274,9 @@ class EntityManipulator(Module):
                     elif modifier_key == "thickness":
                         modifier_val = modifier_conf.get_float(modifier_key)
                     else:
-                        modifier_val = modifier_conf.get_raw_value(modifier_key)
+                        modifier_val = None
+                        warnings.warn("Warning: Unknown configuration key '{}' of 'cf_add_modifier'. Check available "
+                                      "configuration options.".format(modifier_key))
                     result.update({modifier_key: modifier_val})
             elif key == "cf_set_shading":
                 result = params_conf.get_string("cf_set_shading")
@@ -292,7 +294,10 @@ class EntityManipulator(Module):
                     elif displace_key == "min_vertices_for_subdiv":
                         displace_val = displace_conf.get_int(displace_key, 10000)
                     else:
-                        displace_val = displace_conf.get_raw_value(displace_key)
+                        displace_val = None
+                        warnings.warn("Warning: Unknown configuration key '{}' of "
+                                      "'cf_add_displace_modifier_with_texture'. Check available configuration "
+                                      "options.".format(displace_key))
                     result.update({displace_key: displace_val})
             elif key == "cf_add_uv_mapping":
                 uv_conf = Config(params_conf.get_raw_dict(key))
@@ -300,7 +305,9 @@ class EntityManipulator(Module):
                     if uv_key == "projection":
                         uv_val = uv_conf.get_string(uv_key).lower()
                     else:
-                        uv_key = uv_conf.get_raw_value(uv_key)
+                        uv_val = None
+                        warnings.warn("Warning: Unknown configuration key '{}' of 'cf_add_uv_mapping'. Check available "
+                                      "configuration options.".format(uv_key))
                     result.update({uv_key: uv_val})
             else:
                 result = params_conf.get_raw_value(key)
