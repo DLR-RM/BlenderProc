@@ -115,3 +115,43 @@ class Writer(Module):
         print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
         return data, new_key, new_version
 
+    def _load_file(self, file_path):
+        """ Tries to read in the file with the given path into a numpy array.
+
+        :param file_path: The file path. Type: string.
+        :return: A numpy array containing the data of the file.
+        """
+        if not os.path.exists(file_path):
+            raise Exception("File not found: " + file_path)
+
+        file_ending = file_path[file_path.rfind(".") + 1:].lower()
+
+        if file_ending in ["exr", "png", "jpg"]:
+            return load_image(file_path)
+        elif file_ending in ["npy", "npz"]:
+            return self._load_npy(file_path)
+        elif file_ending in ["csv"]:
+            return self._load_csv(file_path)
+        else:
+            raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
+
+    def _load_npy(self, file_path):
+        """ Load the npy/npz file at the given path.
+
+        :param file_path: The path. Type: string.
+        :return: The content of the file
+        """
+        return np.load(file_path)
+
+    def _load_csv(self, file_path):
+        """ Load the csv file at the given path.
+
+        :param file_path: The path. Type: string.
+        :return: The content of the file
+        """
+        rows = []
+        with open(file_path, mode='r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            for row in csv_reader:
+                rows.append(row)
+        return np.string_(json.dumps(rows))  # make the list of dicts as a string
