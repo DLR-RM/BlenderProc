@@ -102,12 +102,12 @@ class Writer(Module):
 
         return data, new_key, new_version
 
-    def _load_and_postprocess(self, file_path, key, version):
+    def _load_and_postprocess(self, file_path, key, version = "1.0.0"):
         """
         Loads an image and post process it.
         :param file_path: Image path. Type: string.
         :param key: The image's key with regards to the hdf5 file. Type: string.
-        :param version: The version number original data.
+        :param version: The version number original data. Type: String. Default: 1.0.0.
         :return: The post-processed image that was loaded using the file path.
         """
         data = self._load_file(Utility.resolve_path(file_path))
