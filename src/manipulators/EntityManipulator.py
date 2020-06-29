@@ -280,7 +280,8 @@ class EntityManipulator(Module):
         for key in params_conf.data.keys():
             if key == "cf_add_modifier":
                 modifier_config = Config(params_conf.get_raw_dict(key))
-                # instruction about unpacking the data: what type to get, it's default value and a postproc function
+                # instruction about unpacking the data: key, corresponding Config method to extract the value,
+                # it's default value and a postproc function
                 instructions = {"name": (Config.get_string, None, str.upper),
                              "thickness": (Config.get_float, None, None)}
                 # unpack
@@ -289,7 +290,8 @@ class EntityManipulator(Module):
                 result = params_conf.get_string("cf_set_shading")
             elif key == "cf_add_displace_modifier_with_texture":
                 displace_config = Config(params_conf.get_raw_dict(key))
-                # instruction about unpacking the data: what type to get, it's default value and a postproc function
+                # instruction about unpacking the data: key, corresponding Config method to extract the value,
+                # it's default value and a postproc function
                 instructions = {"texture": (Config.get_raw_value, [], None),
                              "mid_level": (Config.get_float, 0.5, None),
                              "subdiv_level": (Config.get_int, 2, None),
@@ -299,7 +301,8 @@ class EntityManipulator(Module):
                 result = self._unpack_params(displace_config, instructions)
             elif key == "cf_add_uv_mapping":
                 uv_config = Config(params_conf.get_raw_dict(key))
-                # instruction about unpacking the data: what type to get, it's default value and a postproc function
+                # instruction about unpacking the data: key, corresponding Config method to extract the value,
+                # it's default value and a postproc function
                 instructions = {"projection": (Config.get_string, None, str.lower)}
                 # unpack
                 result = self._unpack_params(uv_config, instructions)
@@ -382,15 +385,22 @@ class EntityManipulator(Module):
         :param param_config: Structure that contains the unpacked data. Type: Config.
         :return: Unpacked data. Type: dict.
         """
+        # check what was defined by the user
+        for defined_key in param_config.data:
+            if defined_key not in instructions:
+                warnings.warn("Warning: key '{}' is not expected. Check spelling/docu for this cf.".format(defined_key))
+
         result = {}
         # for each key and a corresponding instructions
         for key, (config_fct, default_val, result_fct) in instructions.items():
-            # extract the value of the requested type
-            val = config_fct(param_config, key, default_val)
-            # if a function to be applied to this value after extraction is defined - use it
-            if result_fct:
-                val = result_fct(val)
+            # check if whatever was defined as a desired Config method is callable
+            if callable(config_fct):
+                # extract the value of the requested type
+                val = config_fct(param_config, key, default_val)
+                # if a function to be applied to this value after extraction is defined - use it
+                if result_fct:
+                    val = result_fct(val)
 
-            result.update({key: val})
+                result.update({key: val})
 
         return result
