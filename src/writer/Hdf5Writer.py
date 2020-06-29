@@ -4,7 +4,7 @@ import bpy
 import h5py
 import numpy as np
 
-from src.writer.Writer import WriterInterface
+from src.writer.WriterInterface import WriterInterface
 from src.utility.Utility import Utility
 
 
