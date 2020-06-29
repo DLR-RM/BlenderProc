@@ -47,7 +47,7 @@ python scripts/visHdf5Files.py examples/entity_displacement_modifier/output/0.hd
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "type": "MESH"
+            "type": "MESH" # this guarantees that the object is a mesh, and not for example a camera
           }
         },
         "cf_add_uv_mapping":{

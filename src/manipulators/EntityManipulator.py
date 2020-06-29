@@ -202,15 +202,19 @@ class EntityManipulator(Module):
             Sets according values of defined attributes/custom properties or applies custom functions to the selected
             entities.
         """
+        # separating defined part with the selector from ambiguous part with attribute names and their values to set
         set_params = {}
         sel_objs = {}
         for key in self.config.data.keys():
             if key != 'selector':
+                # if its not a selector -> to the set parameters dict
                 set_params[key] = self.config.data[key]
             else:
                 sel_objs[key] = self.config.data[key]
+        # create Config objects
         params_conf = Config(set_params)
         sel_conf = Config(sel_objs)
+        # invoke a Getter, get a list of entities to manipulate
         entities = sel_conf.get_list("selector")
 
         op_mode = self.config.get_string("mode", "once_for_each")
@@ -221,18 +225,22 @@ class EntityManipulator(Module):
         else:
             print("Amount of objects to modify: {}.".format(len(entities)))
 
+        # get raw value from the set parameters if it is to be sampled once for all selected entities
         if op_mode == "once_for_all":
             params = self._get_the_set_params(params_conf)
 
         for entity in entities:
 
+            # get raw value from the set parameters if it is to be sampled anew for each selected entity
             if op_mode == "once_for_each":
                 params = self._get_the_set_params(params_conf)
 
             for key, value in params.items():
 
+                # used so we don't modify original key when having more than one entity
                 key_copy = key
 
+                # check if the key is a requested custom property
                 requested_cp = False
                 if key.startswith('cp_'):
                     requested_cp = True
@@ -242,6 +250,7 @@ class EntityManipulator(Module):
                     requested_cf = True
                     key_copy = key[3:]
 
+                # as an attribute of this value
                 if hasattr(entity, key_copy) and not requested_cp:
                     setattr(entity, key_copy, value)
                 elif key_copy == "add_modifier" and requested_cf:
@@ -252,6 +261,9 @@ class EntityManipulator(Module):
                     self._add_displace(entity, value)
                 elif key_copy == "add_uv_mapping" and requested_cf:
                     self._add_uv_mapping(entity, value)
+                # if key had a cp_ prefix - treat it as a custom property
+                # values will be overwritten for existing custom property,
+                # but if the name is new then new custom property will be created
                 elif requested_cp:
                     entity[key_copy] = value
 
