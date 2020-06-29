@@ -1,7 +1,9 @@
 import bpy
 import os
+import numpy as np
 
 from src.main.Module import Module
+from src.utility.BlenderUtility import load_image
 from src.utility.Utility import Utility
 
 class Writer(Module):

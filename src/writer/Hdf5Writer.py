@@ -7,7 +7,6 @@ import h5py
 import numpy as np
 
 from src.writer.Writer import Writer
-from src.utility.BlenderUtility import load_image
 from src.utility.Utility import Utility
 
 
