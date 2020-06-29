@@ -1,13 +1,13 @@
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.ItemWriter import ItemWriter
-from src.writer.Writer import Writer
+from src.writer.WriterInterface import WriterInterface
 
 
-class ObjectStateWriter(Writer):
+class ObjectStateWriter(WriterInterface):
     """ Writes the state of all objects for each frame to a numpy file if no hfd5 file is available. """
 
     def __init__(self, config):
-        Writer.__init__(self, config)
+        WriterInterface.__init__(self, config)
         self.object_writer = ItemWriter(self._get_attribute)
 
     def run(self):

@@ -9,7 +9,7 @@ from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
 from src.utility.Utility import Utility
 
-class Writer(Module):
+class WriterInterface(Module):
     """ Parent class for all other writers classes, it had the functionality to return objects attributes and write them to file and to load and process post processing modules
 
     **Configuration**:

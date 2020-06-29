@@ -1,10 +1,10 @@
 import bpy
 
 from src.utility.ItemWriter import ItemWriter
-from src.writer.Writer import Writer
+from src.writer.WriterInterface import WriterInterface
 
 
-class LightStateWriter(Writer):
+class LightStateWriter(WriterInterface):
     """ Writes the state of all lights for each frame to a file.
 
     **Attributes per object**:
@@ -16,7 +16,7 @@ class LightStateWriter(Writer):
     """
 
     def __init__(self, config):
-        Writer.__init__(self, config)
+        WriterInterface.__init__(self, config)
         self.light_writer = ItemWriter(self._get_attribute)
 
     def run(self):

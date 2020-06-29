@@ -5,11 +5,11 @@ import shutil
 
 import bpy
 
-from src.writer.Writer import Writer
+from src.writer.WriterInterface import WriterInterface
 from src.utility.CocoUtility import CocoUtility
 from src.utility.BlenderUtility import get_all_mesh_objects
 
-class CocoAnnotationsWriter(Writer):
+class CocoAnnotationsWriter(WriterInterface):
     """ Writes Coco Annotations in to a file.
 
     **Configuration**:
@@ -32,7 +32,7 @@ class CocoAnnotationsWriter(Writer):
     """
 
     def __init__(self, config):
-        Writer.__init__(self, config)
+        WriterInterface.__init__(self, config)
 
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")

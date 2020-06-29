@@ -11,7 +11,7 @@ from mathutils import Euler, Matrix, Vector
 
 from src.utility.BlenderUtility import get_all_mesh_objects, load_image
 from src.utility.Utility import Utility
-from src.writer.Writer import Writer
+from src.writer.WriterInterface import WriterInterface
 
 
 def load_json(path, keys_to_int=False):
@@ -86,7 +86,7 @@ def save_depth(path, im):
         w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))
 
 
-class BopWriter(Writer):
+class BopWriter(WriterInterface):
     """ Saves the synthesized dataset in the BOP format. The dataset is split
         into chunks which are saved as individual "scenes". For more details
         about the BOP format, visit the BOP toolkit docs:
@@ -105,7 +105,7 @@ class BopWriter(Writer):
     """
 
     def __init__(self, config):
-        Writer.__init__(self, config)
+        WriterInterface.__init__(self, config)
 
         # Parse configuration.
         self.dataset = self.config.get_string("dataset")

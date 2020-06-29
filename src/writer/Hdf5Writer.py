@@ -4,11 +4,11 @@ import bpy
 import h5py
 import numpy as np
 
-from src.writer.Writer import Writer
+from src.writer.Writer import WriterInterface
 from src.utility.Utility import Utility
 
 
-class Hdf5Writer(Writer):
+class Hdf5Writer(WriterInterface):
     """ For each key frame merges all registered output files into one hdf5 file
 
     **Configuration**:
@@ -28,7 +28,7 @@ class Hdf5Writer(Writer):
     """
 
     def __init__(self, config):
-        Writer.__init__(self, config)
+        WriterInterface.__init__(self, config)
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
 
     def run(self):
