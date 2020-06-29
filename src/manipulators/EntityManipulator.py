@@ -253,6 +253,7 @@ class EntityManipulator(Module):
                 # as an attribute of this value
                 if hasattr(entity, key_copy) and not requested_cp:
                     setattr(entity, key_copy, value)
+                # custom functions
                 elif key_copy == "add_modifier" and requested_cf:
                     self._add_modifier(entity, value)
                 elif key_copy == "set_shading" and requested_cf:
@@ -277,50 +278,31 @@ class EntityManipulator(Module):
         """
         params = {}
         for key in params_conf.data.keys():
-            result = {}
             if key == "cf_add_modifier":
-                modifier_conf = Config(params_conf.get_raw_dict(key))
-                for modifier_key in modifier_conf.data.keys():
-                    if modifier_key == "name":
-                        modifier_val = modifier_conf.get_string(modifier_key).upper()
-                    elif modifier_key == "thickness":
-                        modifier_val = modifier_conf.get_float(modifier_key)
-                    else:
-                        modifier_val = None
-                        warnings.warn("Warning: Unknown configuration key '{}' of 'cf_add_modifier'. Check available "
-                                      "configuration options.".format(modifier_key))
-                    result.update({modifier_key: modifier_val})
+                modifier_config = Config(params_conf.get_raw_dict(key))
+                # instruction about unpacking the data: what type to get, it's default value and a postproc function
+                instructions = {"name": (Config.get_string, None, str.upper),
+                             "thickness": (Config.get_float, None, None)}
+                # unpack
+                result = self._unpack_params(modifier_config, instructions)
             elif key == "cf_set_shading":
                 result = params_conf.get_string("cf_set_shading")
             elif key == "cf_add_displace_modifier_with_texture":
-                displace_conf = Config(params_conf.get_raw_dict(key))
-                for displace_key in displace_conf.data.keys():
-                    if displace_key == "texture":
-                        displace_val = displace_conf.get_raw_value(displace_key, [])
-                    elif displace_key == "mid_level":
-                        displace_val = displace_conf.get_float(displace_key, 0.5)
-                    elif displace_key == "subdiv_level":
-                        displace_val = displace_conf.get_int(displace_key, 2)
-                    elif displace_key == "strength":
-                        displace_val = displace_conf.get_float(displace_key, 0.1)
-                    elif displace_key == "min_vertices_for_subdiv":
-                        displace_val = displace_conf.get_int(displace_key, 10000)
-                    else:
-                        displace_val = None
-                        warnings.warn("Warning: Unknown configuration key '{}' of "
-                                      "'cf_add_displace_modifier_with_texture'. Check available configuration "
-                                      "options.".format(displace_key))
-                    result.update({displace_key: displace_val})
+                displace_config = Config(params_conf.get_raw_dict(key))
+                # instruction about unpacking the data: what type to get, it's default value and a postproc function
+                instructions = {"texture": (Config.get_raw_value, [], None),
+                             "mid_level": (Config.get_float, 0.5, None),
+                             "subdiv_level": (Config.get_int, 2, None),
+                             "strength": (Config.get_float, 0.1, None),
+                             "min_vertices_for_subdiv": (Config.get_int, 10000, None)}
+                # unpack
+                result = self._unpack_params(displace_config, instructions)
             elif key == "cf_add_uv_mapping":
-                uv_conf = Config(params_conf.get_raw_dict(key))
-                for uv_key in uv_conf.data.keys():
-                    if uv_key == "projection":
-                        uv_val = uv_conf.get_string(uv_key).lower()
-                    else:
-                        uv_val = None
-                        warnings.warn("Warning: Unknown configuration key '{}' of 'cf_add_uv_mapping'. Check available "
-                                      "configuration options.".format(uv_key))
-                    result.update({uv_key: uv_val})
+                uv_config = Config(params_conf.get_raw_dict(key))
+                # instruction about unpacking the data: what type to get, it's default value and a postproc function
+                instructions = {"projection": (Config.get_string, None, str.lower)}
+                # unpack
+                result = self._unpack_params(uv_config, instructions)
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -391,3 +373,24 @@ class EntityManipulator(Module):
                                     .format(value["projection"]))
 
                 bpy.ops.object.editmode_toggle()
+
+    def _unpack_params(self, param_config, instructions):
+        """ Unpacks the data from a config object following the instructions in the dict.
+
+        :param instructions: Instruction for unpacking: keys, corresponding Config method to extract the value, default
+        value, and a function to perform on the value after extraction. Type: dict.
+        :param param_config: Structure that contains the unpacked data. Type: Config.
+        :return: Unpacked data. Type: dict.
+        """
+        result = {}
+        # for each key and a corresponding instructions
+        for key, (config_fct, default_val, result_fct) in instructions.items():
+            # extract the value of the requested type
+            val = config_fct(param_config, key, default_val)
+            # if a function to be applied to this value after extraction is defined - use it
+            if result_fct:
+                val = result_fct(val)
+
+            result.update({key: val})
+
+        return result
