@@ -7,7 +7,7 @@ import bpy
 import numpy as np
 from mathutils import Matrix, Vector
 
-from src.camera.CameraModule import CameraModule
+from src.camera.CameraInterface import CameraInterface
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.Config import Config
@@ -109,7 +109,7 @@ class BopLoader(LoaderInterface):
             cam['loaded_intrinsics'][5] = split_p['im_size'][1]/2   
         
         config = Config({})
-        camera_module = CameraModule(config)
+        camera_module = CameraInterface(config)
         camera_module._set_cam_intrinsics(cam, config)
 
         loaded_objects = []

@@ -22,9 +22,9 @@ class RendererInterface(Module):
         "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
 
         "resolution_x", "The render image width. "
-                        "Type: int. Default: 512, except the CameraModule loaded something else."
+                        "Type: int. Default: 512, except the CameraInterface loaded something else."
         "resolution_y", "The render image height. "
-                        "Type: int. Default: 512, except the CameraModule loaded something else."
+                        "Type: int. Default: 512, except the CameraInterface loaded something else."
 
         "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark "
                    "areas. Type: int. Default: 256, (not true for all Renderes)."

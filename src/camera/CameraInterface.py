@@ -11,7 +11,7 @@ class CameraInterface(Module):
         in addition to setting stereo parameters.
 
         Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config
-                   parameters here, it has to be in a child class of CameraModule.
+                   parameters here, it has to be in a child class of CameraInterface.
 
         {
           "module": "camera.CameraLoader",
