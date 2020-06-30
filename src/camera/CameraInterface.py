@@ -6,7 +6,7 @@ from src.main.Module import Module
 from src.utility.Utility import Utility
 
 
-class CameraModule(Module):
+class CameraInterface(Module):
     """ A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,
         in addition to setting stereo parameters.
 

@@ -11,7 +11,7 @@ from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.Utility import Utility
 
 
-class Renderer(Module):
+class RendererInterface(Module):
     """
     **Configuration**:
 
@@ -454,7 +454,7 @@ class Renderer(Module):
         """
         use_stereo = self.config.get_bool("stereo", False)
 
-        super(Renderer, self)._register_output(default_prefix,
+        super(RendererInterface, self)._register_output(default_prefix,
                                                default_key,
                                                suffix,
                                                version,

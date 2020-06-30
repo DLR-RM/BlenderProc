@@ -4,12 +4,12 @@ import random
 
 import bpy
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
 
 
-class SceneNetLoader(Loader):
+class SceneNetLoader(LoaderInterface):
     """
     Loads all SceneNet objects at the given "file_path".
 
@@ -29,7 +29,7 @@ class SceneNetLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
 
         self._file_path = Utility.resolve_path(self.config.get_string("file_path"))
 
