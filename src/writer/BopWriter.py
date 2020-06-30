@@ -11,7 +11,7 @@ from mathutils import Euler, Matrix, Vector
 
 from src.utility.BlenderUtility import get_all_mesh_objects, load_image
 from src.utility.Utility import Utility
-from src.writer.StateWriter import StateWriter
+from src.writer.WriterInterface import WriterInterface
 
 
 def load_json(path, keys_to_int=False):
@@ -86,7 +86,7 @@ def save_depth(path, im):
         w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))
 
 
-class BopWriter(StateWriter):
+class BopWriter(WriterInterface):
     """ Saves the synthesized dataset in the BOP format. The dataset is split
         into chunks which are saved as individual "scenes". For more details
         about the BOP format, visit the BOP toolkit docs:
@@ -100,26 +100,17 @@ class BopWriter(StateWriter):
         "dataset", "Annotations for objects of this dataset will be saved. Type: string."
         "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
                                     "Type: bool. Default: False"
-        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
-                            "to which the postprocessing modules should be applied. Every postprocessing module "
-                            "has to have a run function which takes in the raw data and returns the processed "
-                            "data. Type: dict."
         "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to "
                             "failed physics. Default: 5. Type float."
     """
 
     def __init__(self, config):
-        StateWriter.__init__(self, config)
+        WriterInterface.__init__(self, config)
 
         # Parse configuration.
         self.dataset = self.config.get_string("dataset")
 
         self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
-
-        self.postprocessing_modules_per_output = {}
-        module_configs = config.get_raw_dict("postprocessing_modules", {})
-        for output_key in module_configs:
-            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
 
         # Distance in meteres to object after which it is ignored. Mostly due to failed physics.
         self._ignore_dist_thres = self.config.get_float("ignore_dist_thres", 5.)
@@ -179,36 +170,6 @@ class BopWriter(StateWriter):
         # Save the data.
         self._write_camera()
         self._write_frames()
-
-    def _apply_postprocessing(self, output_key, data):
-        """ Applies all postprocessing modules registered for this output type.
-
-        :param output_key: The key of the output type. Type: string.
-        :param data: The numpy data.
-        :return: The modified numpy data after doing the postprocessing
-        """
-        if output_key in self.postprocessing_modules_per_output:
-            for module in self.postprocessing_modules_per_output[output_key]:
-                data, _, _ = module.run(data, None, None)
-
-        return data
-
-    def _load_and_postprocess(self, file_path, key):
-        """
-        Loads an image and post process it.
-        :param file_path: Image path. Type: string.
-        :param key: The image's key with regards to the hdf5 file. Type: string.
-        :return: The post-processed image that was loaded using the file path.
-        """        
-        
-        data = load_image(Utility.resolve_path(file_path))
-
-        data = self._apply_postprocessing(key, data)
-
-        print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(
-            data.dtype) + " - path: " + file_path)
-
-        return data
 
     def _get_camera_attribute(self, cam_pose, attribute_name):
         """ Returns the value of the requested attribute for the given object.
@@ -407,7 +368,7 @@ class BopWriter(StateWriter):
             dist_output = self._find_registered_output_by_key("distance")
             if dist_output is None:
                 raise Exception("Distance image has not been rendered.")
-            depth = self._load_and_postprocess(dist_output['path'] % frame_id, "distance")
+            depth, _, _ = self._load_and_postprocess(dist_output['path'] % frame_id, "distance")
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).

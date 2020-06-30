@@ -1,17 +1,14 @@
-import csv
-import json
 import os
 
 import bpy
 import h5py
 import numpy as np
 
-from src.main.Module import Module
-from src.utility.BlenderUtility import load_image
+from src.writer.WriterInterface import WriterInterface
 from src.utility.Utility import Utility
 
 
-class Hdf5Writer(Module):
+class Hdf5Writer(WriterInterface):
     """ For each key frame merges all registered output files into one hdf5 file
 
     **Configuration**:
@@ -25,22 +22,14 @@ class Hdf5Writer(Module):
         "compression", "The compression technique that should be used when storing data in a hdf5 file. Type: string."
         "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging. "
                                              "Type: bool. Default value: True."
-        "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
-                                  "to which the postprocessing modules should be applied. Every postprocessing module "
-                                  "has to have a run function which takes in the raw data and returns the processed "
-                                  "data. Type: dict."
-        "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Type: bool. "
+       "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Type: bool. "
                                 "Default: False (stereo images are combined into one np.array (2, ...))."
         "avoid_rendering", "If true, exit. Type: bool. Default: False."
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        WriterInterface.__init__(self, config)
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
-        self.postprocessing_modules_per_output = {}
-        module_configs = config.get_raw_dict("postprocessing_modules", {})
-        for output_key in module_configs:
-            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
 
     def run(self):
         if self._avoid_rendering:
@@ -112,81 +101,6 @@ class Hdf5Writer(Module):
             file.create_dataset(key, data=data, dtype=data.dtype)
         else:
             file.create_dataset(key, data=data, compression=self.config.get_string("compression", 'gzip'))
-
-    def _load_file(self, file_path):
-        """ Tries to read in the file with the given path into a numpy array.
-
-        :param file_path: The file path. Type: string.
-        :return: A numpy array containing the data of the file.
-        """
-        if not os.path.exists(file_path):
-            raise Exception("File not found: " + file_path)
-
-        file_ending = file_path[file_path.rfind(".") + 1:].lower()
-
-        if file_ending in ["exr", "png", "jpg"]:
-            return load_image(file_path)
-        elif file_ending in ["npy", "npz"]:
-            return self._load_npy(file_path)
-        elif file_ending in ["csv"]:
-            return self._load_csv(file_path)
-        else:
-            raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
-
-    def _load_npy(self, file_path):
-        """ Load the npy/npz file at the given path.
-
-        :param file_path: The path. Type: string.
-        :return: The content of the file
-        """
-        return np.load(file_path)
-
-    def _load_csv(self, file_path):
-        """ Load the csv file at the given path.
-
-        :param file_path: The path. Type: string.
-        :return: The content of the file
-        """
-        rows = []
-        with open(file_path, mode='r') as csv_file:
-            csv_reader = csv.DictReader(csv_file)
-            for row in csv_reader:
-                rows.append(row)
-        return np.string_(json.dumps(rows))  # make the list of dicts as a string
-
-    def _apply_postprocessing(self, output_key, data, version):
-        """ Applies all postprocessing modules registered for this output type.
-
-        :param output_key: The key of the output type. Type: string.
-        :param data: The numpy data.
-        :param version: The version number of the original data.
-        :return: The modified numpy data, a key to use when writing, and the version number.
-        """
-        if output_key in self.postprocessing_modules_per_output:
-            for module in self.postprocessing_modules_per_output[output_key]:
-                data, new_key, new_version = module.run(data, output_key, version)
-        else:
-            new_key = output_key
-            new_version = version
-
-        return data, new_key, new_version
-
-    def _load_and_postprocess(self, file_path, key, version):
-        """
-        Loads an image and post process it.
-        :param file_path: Image path. Type: string.
-        :param key: The image's key with regards to the hdf5 file. Type: string.
-        :param version: The version number original data.
-        :return: The post-processed image that was loaded using the file path.
-        """
-        data = self._load_file(Utility.resolve_path(file_path))
-
-        data, new_key, new_version = self._apply_postprocessing(key, data, version)
-
-        print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(
-            data.dtype) + " - path: " + file_path)
-
-        return data, new_key, new_version
 
     def _get_stereo_path_pair(self, file_path):
         """
