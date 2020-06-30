@@ -80,5 +80,6 @@ class TextureLoader(Loader):
             file_name = os.path.basename(image_path)
             bpy.ops.image.open(filepath=image_path, directory=dir_path)
             texture_name = "ct_{}".format(os.path.splitext(file_name)[0])
-            bpy.data.textures.new(name=texture_name, type="IMAGE")
+            tex = bpy.data.textures.new(name=texture_name, type="IMAGE")
             bpy.data.textures[texture_name].image = bpy.data.images.get(file_name)
+            tex.use_nodes = True
