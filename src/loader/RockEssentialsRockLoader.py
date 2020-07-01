@@ -3,11 +3,11 @@ from random import choice
 
 import bpy
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Config import Config
 
 
-class RockEssentialsRockLoader(Loader):
+class RockEssentialsRockLoader(LoaderInterface):
     """ Loads rocks/cliffs from a specified .bled Rocks Essentials file.
 
     Example 1: Load two rocks from the specified .blend file.
@@ -102,7 +102,7 @@ class RockEssentialsRockLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
 
     def run(self):
         """ Loads rocks."""

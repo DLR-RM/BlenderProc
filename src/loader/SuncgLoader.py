@@ -6,12 +6,12 @@ import os
 import bpy
 from mathutils import Matrix
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
 
 
-class SuncgLoader(Loader):
+class SuncgLoader(LoaderInterface):
     """ Loads a house.json file into blender.
 
      - Loads all objects files specified in the house.json file.
@@ -29,7 +29,7 @@ class SuncgLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
         self.house_path = Utility.resolve_path(self.config.get_string("path"))
         suncg_folder_path = os.path.join(os.path.dirname(self.house_path), "../..")
         self.suncg_dir = self.config.get_string("suncg_path", suncg_folder_path)

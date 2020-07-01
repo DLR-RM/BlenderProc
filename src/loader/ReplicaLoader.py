@@ -2,11 +2,11 @@ import os
 
 import bpy
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 
 
-class ReplicaLoader(Loader):
+class ReplicaLoader(LoaderInterface):
     """ Just imports the objects for the given file path
 
     The import will load all materials into cycle nodes.
@@ -24,7 +24,7 @@ class ReplicaLoader(Loader):
                              "Type: bool. Default: False."
     """
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
 
     def run(self):
         """ Just imports the configured .ply file straight into blender for the replica case. """

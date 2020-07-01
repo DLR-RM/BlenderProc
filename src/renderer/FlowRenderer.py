@@ -3,12 +3,12 @@ import os
 import bpy
 import numpy as np
 
-from src.renderer.Renderer import Renderer
+from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image
 from src.utility.Utility import Utility
 
 
-class FlowRenderer(Renderer):
+class FlowRenderer(RendererInterface):
     """ Renders optical flow between consecutive keypoints.
 
     .. csv-table::
@@ -30,7 +30,7 @@ class FlowRenderer(Renderer):
     """
 
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        RendererInterface.__init__(self, config)
 
     def _output_vector_field(self):
         """ Configures compositor to output speed vectors. """

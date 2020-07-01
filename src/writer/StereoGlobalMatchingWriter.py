@@ -7,13 +7,13 @@ import cv2
 import numpy as np
 
 from src.main.GlobalStorage import GlobalStorage
-from src.renderer.Renderer import Renderer
+from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image
 from src.utility.SGMUtility import fill_in_fast
 from src.utility.SGMUtility import resize
 
 
-class StereoGlobalMatchingWriter(Renderer):
+class StereoGlobalMatchingWriter(RendererInterface):
     """ Writes depth image generated from the stereo global matching algorithm to file
 
     **Configuration**:
@@ -47,7 +47,7 @@ class StereoGlobalMatchingWriter(Renderer):
     """
 
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        RendererInterface.__init__(self, config)
 
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
