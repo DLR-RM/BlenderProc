@@ -33,14 +33,14 @@ class FlowRenderer(RendererInterface):
         RendererInterface.__init__(self, config)
 
     def _output_vector_field(self):
-        """ Configures compositor to output speed vectors. """
+        """ Configures compositor to output_256_0 speed vectors. """
 
         # Flow settings (is called "vector" in blender)
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         bpy.context.scene.view_layers["View Layer"].use_pass_vector = True
 
-        # Adapt compositor to output vector field
+        # Adapt compositor to output_256_0 vector field
         tree = bpy.context.scene.node_tree
         links = tree.links
 
@@ -80,7 +80,7 @@ class FlowRenderer(RendererInterface):
             raise Exception("Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
 
         with Utility.UndoAfterExecution():
-            self._configure_renderer()
+            self._configure_renderer(default_samples=self.config.get_int("samples", 1))
 
             self._output_vector_field()
 

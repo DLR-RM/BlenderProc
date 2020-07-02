@@ -47,7 +47,6 @@
     {
       "module": "renderer.FlowRenderer",
       "config": {
-        "samples": 1,
         "forward_flow_output_key": "forward_flow",
         "backward_flow_output_key": "backward_flow",
         "forward_flow": True,
