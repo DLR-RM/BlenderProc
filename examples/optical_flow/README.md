@@ -52,6 +52,7 @@ python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
 ```yaml
   "module": "renderer.FlowRenderer",
   "config": {
+      "samples": 1,
       "forward_flow_output_key": "forward_flow",
       "backward_flow_output_key": "backward_flow",
       "forward_flow": True,
@@ -67,6 +68,16 @@ python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
 * Per default, Blender uses the bottom left corner as coordinate system origin. OpenCV and popular Flow datasets use the upper left corner instead - change the flag `"blender_image_coordinate_style": True` if you want the default Blender behaviour. Note that the colors in the visualization will be different!
 
 => Creates the files `forward_flow_000{0, 1, 2, 3, 4}.npy` and / or `backward_flow_000{0, 1, 2, 3, 4}.npy`.
+
+The number of samples is set to `samples = 1` per default. Note that for a sample value > 1 the resulting optical flow map is smoother, especially at border regions. There, the optical flow value might not represent the actual value of the pixel in motion. The below image compares 256 samples (left) with 1 sample (middle) and displays a normalized difference (right):
+
+![](num_samples.png)
+
+Zoomed version:
+
+![](num_samples_zoomed.png)
+
+Following this argumentation we suggest using the default setting.
 
 ## More examples
 
