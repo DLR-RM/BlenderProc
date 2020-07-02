@@ -33,14 +33,14 @@ class FlowRenderer(RendererInterface):
         RendererInterface.__init__(self, config)
 
     def _output_vector_field(self):
-        """ Configures compositor to output_256_0 speed vectors. """
+        """ Configures compositor to output speed vectors. """
 
         # Flow settings (is called "vector" in blender)
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         bpy.context.scene.view_layers["View Layer"].use_pass_vector = True
 
-        # Adapt compositor to output_256_0 vector field
+        # Adapt compositor to output vector field
         tree = bpy.context.scene.node_tree
         links = tree.links
 
