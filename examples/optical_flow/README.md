@@ -52,7 +52,6 @@ python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
 ```yaml
   "module": "renderer.FlowRenderer",
   "config": {
-      "samples": 1,
       "forward_flow_output_key": "forward_flow",
       "backward_flow_output_key": "backward_flow",
       "forward_flow": True,
