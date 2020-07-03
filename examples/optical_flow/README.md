@@ -68,6 +68,16 @@ python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
 
 => Creates the files `forward_flow_000{0, 1, 2, 3, 4}.npy` and / or `backward_flow_000{0, 1, 2, 3, 4}.npy`.
 
+The number of samples is set to `samples = 1` in `src.renderer.FlowRenderer.py` per default. Note that for a sample value > 1 the resulting optical flow map is smoother, especially at border regions. There, the optical flow value might not represent the actual value of the pixel in motion. The below image compares 256 samples (left) with 1 sample (middle) and displays a normalized difference (right):
+
+![](num_samples.png)
+
+Zoomed version:
+
+![](num_samples_zoomed.png)
+
+Following this argumentation we suggest using the default setting.
+
 ## More examples
 
 * [camera_sampling](../camera_sampling): Introduction to sampling for cameras.

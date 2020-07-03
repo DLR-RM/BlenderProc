@@ -80,7 +80,7 @@ class FlowRenderer(RendererInterface):
             raise Exception("Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
 
         with Utility.UndoAfterExecution():
-            self._configure_renderer()
+            self._configure_renderer(default_samples=self.config.get_int("samples", 1))
 
             self._output_vector_field()
 
