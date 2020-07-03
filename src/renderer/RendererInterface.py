@@ -304,7 +304,7 @@ class RendererInterface(Module):
                             else:
                                 # Map all alpha values to 0 or 1 by applying the step function: 1 if x > 0.5 else 0
                                 step_function_node = nodes.new("ShaderNodeMath")
-                                step_function_node['operation'] = "GreaterThan"
+                                step_function_node.operation = "GREATER_THAN"
                                 links.new(texture_node.outputs['Alpha'], step_function_node.inputs['Value'])
                                 links.new(step_function_node.outputs['Value'], mix_node.inputs['Fac'])
 
