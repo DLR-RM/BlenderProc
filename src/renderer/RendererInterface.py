@@ -302,11 +302,11 @@ class RendererInterface(Module):
                                 # add the alpha channel of the image to the mix shader node as a factor
                                 links.new(texture_node.outputs['Alpha'], mix_node.inputs['Fac'])
                             else:
-                                bright_contrast_node = nodes.new("ShaderNodeBrightContrast")
-                                # extreme high contrast to avoid blurry edges
-                                bright_contrast_node.inputs['Contrast'].default_value = 1000.0
-                                links.new(texture_node.outputs['Alpha'], bright_contrast_node.inputs['Color'])
-                                links.new(bright_contrast_node.outputs['Color'], mix_node.inputs['Fac'])
+                                # Map all alpha values to 0 or 1 by applying the step function: 1 if x > 0.5 else 0
+                                step_function_node = nodes.new("ShaderNodeMath")
+                                step_function_node['operation'] = "GreaterThan"
+                                links.new(texture_node.outputs['Alpha'], step_function_node.inputs['Value'])
+                                links.new(step_function_node.outputs['Value'], mix_node.inputs['Fac'])
 
                             links.new(node_connected_to_the_output.outputs[0], mix_node.inputs[2])
                             transparent_node = nodes.new(type='ShaderNodeBsdfTransparent')
