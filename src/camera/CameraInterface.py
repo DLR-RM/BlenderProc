@@ -94,9 +94,10 @@ class CameraInterface(Module):
     def _set_cam_intrinsics(self, cam, config):
         """ Sets camera intrinsics from a source with following priority
 
-           1. from config if defined
-           2. custom property cam['loaded_intrinsics'] if set in Loader
-           3. default config
+           1. from config function parameter if defined
+           2. from module config (self.config) if defined
+           3. custom property cam['loaded_intrinsics'] if set in Loader
+           4. default config
                 resolution_x/y: 512 
                 pixel_aspect_x: 1
                 clip_start:   : 0.1
@@ -104,24 +105,23 @@ class CameraInterface(Module):
                 fov           : 0.691111
         :param config: A configuration object with cam intrinsics.
         """
-
         width, height = self.config.get_int("resolution_x", 512), self.config.get_int("resolution_y", 512)
-        if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
+        if 'loaded_resolution' in cam and not self.config.has_param('resolution_x'):
             width, height = cam['loaded_resolution']
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
         
-        # If defined, get cam_K from config
-        cam_K = config.get_list("cam_K", [])
+        # If defined, get cam_K from config else from self.config
+        cam_K = config.get_list("cam_K", self.config.get_list("cam_K", []))
         if cam_K:
             cam['loaded_intrinsics'] = cam_K        
 
         # Convert intrinsics from loader/config to Blender format
         cam.lens_unit = 'FOV'
         if 'loaded_intrinsics' in cam:
-            if config.has_param("fov"):
+            if self.config.has_param("fov"):
                 print('WARNING: FOV defined in config is ignored. Mutually exclusive with cam_K')
-            if config.has_param("pixel_aspect_x"):
+            if self.config.has_param("pixel_aspect_x"):
                 print('WARNING: pixel_aspect_x defined in config is ignored. Mutually exclusive with cam_K')
             
             cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
@@ -144,7 +144,7 @@ class CameraInterface(Module):
             cam.shift_y = (cy - height / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
-            cam.angle = config.get_float("fov", 0.691111)
+            cam.angle = config.get_float(self.config.get_float("fov", 0.691111))
 
             # Set Pixel Aspect Ratio
             bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
@@ -153,20 +153,20 @@ class CameraInterface(Module):
                 print('WARNING: Using non-square pixel aspect ratio. Can influence intrinsics.')
 
             # FOV is sometimes also given as the angle between forward vector and one side of the frustum
-            if config.get_bool("fov_is_half", False):
+            if self.config.get_bool("fov_is_half", False):
                 cam.angle *= 2
 
         # Clipping (Default values are the same as default blender values)
-        cam.clip_start = config.get_float("clip_start", 0.1)
-        cam.clip_end = config.get_float("clip_end", 1000)
+        cam.clip_start = config.get_float(self.config.get_float("clip_start", 0.1))
+        cam.clip_end = config.get_float(self.config.get_float("clip_end", 1000))
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
-        cam.stereo.convergence_mode = config.get_string("stereo_convergence_mode", "OFFAXIS")
+        cam.stereo.convergence_mode = self.config.get_string("stereo_convergence_mode", "OFFAXIS")
         # The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen) (Default value is the same as the default blender value)
-        cam.stereo.convergence_distance = config.get_float("convergence_distance", 1.95)
+        cam.stereo.convergence_distance = self.config.get_float("convergence_distance", 1.95)
         # Distance between the camera pair (Default value is the same as the default blender value)
-        cam.stereo.interocular_distance = config.get_float("interocular_distance", 0.065)
+        cam.stereo.interocular_distance = self.config.get_float("interocular_distance", 0.065)
 
 
     def _set_cam_extrinsics(self, cam_ob, config):
