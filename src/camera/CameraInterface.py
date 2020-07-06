@@ -148,6 +148,9 @@ class CameraInterface(Module):
 
             # Set Pixel Aspect Ratio
             bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+            
+            if bpy.context.scene.render.pixel_aspect_x != 1:
+                print('WARNING: Using non-square pixel aspect ratio. Can influence intrinsics.')
 
             # FOV is sometimes also given as the angle between forward vector and one side of the frustum
             if config.get_bool("fov_is_half", False):
