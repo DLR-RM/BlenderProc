@@ -40,8 +40,6 @@ class RendererInterface(Module):
                   "to true. Type: int."
         "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set "
                   "to true. Type: int."
-        "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution "
-                          "aspect ratio to distort the image. Type: float. Default: 1.0"
         "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering. "
                                        "Type: int. Default: 3"
 
@@ -131,7 +129,6 @@ class RendererInterface(Module):
         if not 'loaded_resolution' in cam:
             bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
             bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
-            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
         print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
 
         bpy.context.scene.render.resolution_percentage = 100
