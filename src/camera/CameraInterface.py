@@ -105,7 +105,7 @@ class CameraInterface(Module):
         :param config: A configuration object with cam intrinsics.
         """
 
-        width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
+        width, height = self.config.get_int("resolution_x", 512), self.config.get_int("resolution_y", 512)
         if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
             width, height = cam['loaded_resolution']
         bpy.context.scene.render.resolution_x = width
@@ -129,16 +129,19 @@ class CameraInterface(Module):
             # Convert focal lengths to FOV
             cam.angle = 2 * np.arctan(width / (2 * cam_K[0, 0]))
             
+            fx, fy = cam_K[0,0], cam_K[1,1]
+            cx, cy = cam_K[0,2], cam_K[1,2]
+
             # If fx!=fy change pixel aspect ratio
-            if cam_K[0,0] > cam_K[1,1]:
-                bpy.context.scene.render.pixel_aspect_y = cam_K[0,0]/cam_K[1,1]
-            elif cam_K[0,0] < cam_K[1,1]:
-                bpy.context.scene.render.pixel_aspect_x = cam_K[1,1]/cam_K[0,0]
+            if fx > fy:
+                bpy.context.scene.render.pixel_aspect_y = fx/fy
+            elif fx < fy:
+                bpy.context.scene.render.pixel_aspect_x = fy/fx
 
             # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
             max_resolution = max(width, height)
-            cam.shift_x = -(cam_K[0,2] - width / 2.0) / max_resolution
-            cam.shift_y = (cam_K[1, 2] - height / 2.0) / max_resolution
+            cam.shift_x = -(cx - width / 2.0) / max_resolution
+            cam.shift_y = (cy - height / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
             cam.angle = config.get_float("fov", 0.691111)
