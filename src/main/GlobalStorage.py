@@ -11,9 +11,10 @@ class GlobalStorage(object):
         For example you have a personal renderer or loader, which has attributes, which are independent of the scene and
         the objects so custom properties for those are not the way to go. In these instances you can use these functions.
     Here is a list of all used global_storage_keys to avoid that your key is clashing with existing keys:
+
     .. csv-table::
        :header: "Key", "Description"
-       "renderer_depth_end", "This key is saved by the Renderer during depth rendering and is used in
+       "renderer_distance_end", "This key is saved by the Renderer during distance rendering and is used in
                               the StereoGlobalMatchingWriter. Type: string."
 
     Please add all new keys you create to this list.
@@ -76,7 +77,7 @@ class GlobalStorage(object):
         Adds a key to the GlobalStorage this is independent of the global config, this can be used to store values
         over Module boundaries. Adding only works if there is not already a key like this in the GlobalStorage.
 
-        For example the depth renderer sets the value "depth_end" during the rendering process, a module which is
+        For example the distance renderer sets the value "distance_end" during the rendering process, a module which is
         executed afterwards can then with get() access this value.
 
         These values can be added before the global config was inited as they do not depend on each other.
@@ -87,7 +88,7 @@ class GlobalStorage(object):
             GlobalStorage._storage_dict[key] = value
         else:
             raise RuntimeError("The key: {} was already set before with this value: {}".format(key,
-                GlobalStorage._storage_dict[key]))
+                                                                                               GlobalStorage._storage_dict[key]))
 
     @staticmethod
     def set(key, value):
@@ -95,8 +96,8 @@ class GlobalStorage(object):
         Sets a key in the GlobalStorage this is independent of the global config, this can be used to store values
         over Module boundaries. Setting always works and overwrites existing keys
 
-        For example the depth renderer sets the value "renderer_depth_end" during the rendering process, a module which is
-        executed afterwards can then with get() access this value.
+        For example the distance renderer sets the value "renderer_distance_end" during the rendering process, a module
+        which is executed afterwards can then with get() access this value.
 
         These values can be added before the global config was inited as they do not depend on each other.
         :param key which is added to the GlobalStorage
@@ -115,7 +116,6 @@ class GlobalStorage(object):
             return GlobalStorage._storage_dict[key]
         else:
             raise RuntimeError("The key: {} is not in the global storage!".format(key))
-
 
     @staticmethod
     def is_in_storage(key):
@@ -152,4 +152,3 @@ class GlobalStorage(object):
             return GlobalStorage._global_config
         else:
             raise RuntimeError("The global config was not initialized!")
-

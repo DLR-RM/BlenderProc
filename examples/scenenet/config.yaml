@@ -68,7 +68,7 @@
       "config": {
         "samples": 350,
         "render_normals": True,
-        "render_depth": True,
+        "render_distance": True,
       }
     },
     {
@@ -81,7 +81,7 @@
       "module": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
-          "depth": [
+          "distance": [
             {
               "module": "postprocessing.TrimRedundantChannels",
             }

@@ -45,7 +45,7 @@ class Texture(Provider):
         "textures", "A list of texture names. If not None the provider returns a uniform random sampled texture of one"
                     "of those given texture names. Otherwise it returns a uniform random sampled texture of one of the"
                     "available blender textures. Type: list. Default: []. Available: ['CLOUDS', 'DISTORTED_NOISE',"
-                    "'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOICE', 'STUCCI', 'VORONOI', 'WOOD']"
+                    "'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE', 'STUCCI', 'VORONOI', 'WOOD']"
         "noise_scale", "Scaling for noise input. Type: float. Default: 0.25. Only for VORONOI."
         "noise_intensity", "Scales the intensity of the noise. Type: float. Default: 1.0. Only for VORONOI."
         "nabla", "Size of derivative offset used for calculating normal. Type: float. Default: 0.03. Only for VORONOI."
@@ -60,7 +60,7 @@ class Texture(Provider):
         :return: Texture. Type: bpy.types.Texture
         """
 
-        possible_textures = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOICE", "STUCCI",
+        possible_textures = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOISE", "STUCCI",
                              "VORONOI", "WOOD"]
 
         # given textures

@@ -5,7 +5,7 @@ class TrimRedundantChannels(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def run(self, image):
+    def run(self, image, key, version):
         """
         :param image: The image data.
         :return: The trimmed image data.
@@ -13,4 +13,4 @@ class TrimRedundantChannels(Module):
 
         image = image[:, :, 0] # All channles have the same value, so just extract any single channel
 
-        return image
+        return image, key, version

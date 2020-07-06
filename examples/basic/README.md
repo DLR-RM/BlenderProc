@@ -35,7 +35,7 @@ python scripts/visHdf5Files.py examples/basic/output/0.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
+* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -153,8 +153,8 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
      "samples": 350,
      "render_normals": True,
      "normal_output_key": "normals",
-     "render_depth": True,
-     "depth_output_key": "depth"
+     "render_distance": True,
+     "distance_output_key": "distance"
   }
 }
 ```
@@ -166,12 +166,12 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 => Creates the files `rgb_0000.png` and `rgb_0001.png`.
 
-It also creates the normals and depth 
+It also creates the normals and distance 
 
-* The normal and depth images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `depth_output_key`.
+* The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
+* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`.
 
-=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `depth_0000.exr` and `depth_0001.exr`.
+=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
 
 In this example all of these are temporary and are used in the next module.
 
@@ -182,7 +182,7 @@ In this example all of these are temporary and are used in the next module.
   "module": "writer.Hdf5Writer",
   "config": {
     "postprocessing_modules": {
-      "depth": [
+      "distance": [
         {
           "module": "postprocessing.TrimRedundantChannels",
         }
@@ -194,7 +194,7 @@ In this example all of these are temporary and are used in the next module.
 
 * The last module now merges all the single temporary files created by the two rendering modules into one `.hdf5` file per cam pose.
 * A `.hdf5` file can be seen as a dict of numpy arrays, where the keys correspond to the `output_key` defined before.
-* The module can also apply some post-processing routines based on two parameters, the `output_key` (in this case `depth`) and the post-processor module, which is in this case `postprocessing.TrimRedundantChannels.py`. This reduces the depth map from 3 channels to a single channel (the other channels exist for internal reasons). 
+* The module can also apply some post-processing routines based on two parameters, the `output_key` (in this case `distance`) and the post-processor module, which is in this case `postprocessing.TrimRedundantChannels.py`. This reduces the distance map from 3 channels to a single channel (the other channels exist for internal reasons). 
 
 
 The file `0.h5py` would therefore look like the following:
@@ -202,7 +202,7 @@ The file `0.h5py` would therefore look like the following:
 ```yaml
 {
   "colors": #<numpy array with pixel values read in from rgb_0000.png>,
-  "depth": #<numpy array with pixel values read in from depth_0000.exr>,
+  "distance": #<numpy array with pixel values read in from distance_0000.exr>,
   "normals": #<numpy array with pixel values read in from normals_0000.exr>,
 }
 ``` 

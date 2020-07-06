@@ -7,13 +7,13 @@ import bpy
 import numpy as np
 from mathutils import Matrix, Vector
 
-from src.camera.CameraModule import CameraModule
-from src.loader.Loader import Loader
+from src.camera.CameraInterface import CameraInterface
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.Config import Config
 
 
-class BopLoader(Loader):
+class BopLoader(LoaderInterface):
     """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
     
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -42,7 +42,7 @@ class BopLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
         sys_paths = self.config.get_list("sys_paths")
         for sys_path in sys_paths:
             if 'bop_toolkit' in sys_path:
@@ -109,7 +109,7 @@ class BopLoader(Loader):
             cam['loaded_intrinsics'][5] = split_p['im_size'][1]/2   
         
         config = Config({})
-        camera_module = CameraModule(config)
+        camera_module = CameraInterface(config)
         camera_module._set_cam_intrinsics(cam, config)
 
         loaded_objects = []

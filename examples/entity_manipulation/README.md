@@ -4,7 +4,7 @@
 <img src="rendering.jpg" alt="Front readme image" width=400>
 </p>
 
-In this example we demonstrate how to select entities in the scene using `getter.Entity` and then manipulate then using the `EntityManipulator` module.
+In this example we demonstrate how to select entities in the scene using `getter.Entity` and then manipulate them using the `EntityManipulator` module.
 
 ## Usage
 
@@ -33,7 +33,7 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
 * Sets two camera positions: `camera.CameraLoader` module.
 * Selects objects based on the condition: `manipulators.EntityManipulator` module.
 * Change some parameters of the selected entities: `manipulators.EntityManipulator` module.
-* Renders rgb, normals and depth: `renderer.RgbRenderer` module.
+* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file

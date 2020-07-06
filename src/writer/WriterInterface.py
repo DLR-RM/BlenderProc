@@ -1,29 +1,39 @@
 import os
-
-import mathutils
+import csv
+import json
+import bpy
+import h5py
+import numpy as np
 
 from src.main.Module import Module
+from src.utility.BlenderUtility import load_image
 from src.utility.Utility import Utility
 
-
-class StateWriter(Module):
-    """ Writes the state of multiple items for each frame to a file.
+class WriterInterface(Module):
+    """ Parent class for all other writers classes, it had the functionality to return objects attributes and write them to file and to load and process post processing modules
 
     **Configuration**:
-
     .. csv-table::
        :header: "Parameter", "Description"
+       "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
+                                "to which the postprocessing modules should be applied. Every postprocessing module "
+                                "has to have a run function which takes in the raw data and returns the processed "
+                                "data. Type: dict."
        "destination_frame", "Used to transform point to blender coordinate frame. Type: list. Default: ["X", "Y", "Z"]"
        "attributes_to_write", "A list of attribute names that should written to file. The next table lists all "
                               "attributes that can be used here. Type: list."
        "output_file_prefix", "The prefix of the file that should be created. Type: string."
        "output_key", "The key which should be used for storing the output in a merged file. Type: string."
     """
-
     def __init__(self, config):
         Module.__init__(self, config)
+        self.postprocessing_modules_per_output = {}
+        module_configs = config.get_raw_dict("postprocessing_modules", {})
+        for output_key in module_configs:
+            self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
         self.name_to_id = {}
         self.destination_frame = self.config.get_list("destination_frame", ["X", "Y", "Z"])
+
 
     def write_attributes_to_file(self, item_writer, items, default_file_prefix, default_output_key, default_attributes, version="1.0.0"):
         """ Writes the state of the given items to a file with the configured prefix.
@@ -39,9 +49,7 @@ class StateWriter(Module):
         """
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
-        
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
-
         self._register_output(file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
 
     def _get_attribute(self, item, attribute_name):
@@ -82,3 +90,73 @@ class StateWriter(Module):
                 raise Exception("No such custom property: " + custom_property_name)
         else:
             raise Exception("No such attribute: " + attribute_name)
+
+    def _apply_postprocessing(self, output_key, data, version):
+        """ Applies all postprocessing modules registered for this output type.
+        :param output_key: The key of the output type. Type: string
+        :param data: The numpy data.
+        :param version: The version number original data.
+        :return: The modified numpy data after doing the postprocessing
+        """
+        if output_key in self.postprocessing_modules_per_output:
+            for module in self.postprocessing_modules_per_output[output_key]:
+                data, new_key, new_version = module.run(data, output_key, version)
+        else:
+            new_key = output_key
+            new_version = version
+
+        return data, new_key, new_version
+
+    def _load_and_postprocess(self, file_path, key, version = "1.0.0"):
+        """
+        Loads an image and post process it.
+        :param file_path: Image path. Type: string.
+        :param key: The image's key with regards to the hdf5 file. Type: string.
+        :param version: The version number original data. Type: String. Default: 1.0.0.
+        :return: The post-processed image that was loaded using the file path.
+        """
+        data = self._load_file(Utility.resolve_path(file_path))
+        data, new_key, new_version = self._apply_postprocessing(key, data, version)
+        print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
+        return data, new_key, new_version
+
+    def _load_file(self, file_path):
+        """ Tries to read in the file with the given path into a numpy array.
+
+        :param file_path: The file path. Type: string.
+        :return: A numpy array containing the data of the file.
+        """
+        if not os.path.exists(file_path):
+            raise Exception("File not found: " + file_path)
+
+        file_ending = file_path[file_path.rfind(".") + 1:].lower()
+
+        if file_ending in ["exr", "png", "jpg"]:
+            return load_image(file_path)
+        elif file_ending in ["npy", "npz"]:
+            return self._load_npy(file_path)
+        elif file_ending in ["csv"]:
+            return self._load_csv(file_path)
+        else:
+            raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
+
+    def _load_npy(self, file_path):
+        """ Load the npy/npz file at the given path.
+
+        :param file_path: The path. Type: string.
+        :return: The content of the file
+        """
+        return np.load(file_path)
+
+    def _load_csv(self, file_path):
+        """ Load the csv file at the given path.
+
+        :param file_path: The path. Type: string.
+        :return: The content of the file
+        """
+        rows = []
+        with open(file_path, mode='r') as csv_file:
+            csv_reader = csv.DictReader(csv_file)
+            for row in csv_reader:
+                rows.append(row)
+        return np.string_(json.dumps(rows))  # make the list of dicts as a string

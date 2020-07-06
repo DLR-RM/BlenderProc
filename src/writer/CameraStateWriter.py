@@ -1,10 +1,10 @@
 import bpy
 
 from src.utility.ItemWriter import ItemWriter
-from src.writer.StateWriter import StateWriter
+from src.writer.WriterInterface import WriterInterface
 
 
-class CameraStateWriter(StateWriter):
+class CameraStateWriter(WriterInterface):
     """ Writes the state of all camera poses to a numpy file, if there was no hdf5 file to add them to.
 
     **Attributes per object**:
@@ -19,7 +19,7 @@ class CameraStateWriter(StateWriter):
     """
 
     def __init__(self, config):
-        StateWriter.__init__(self, config)
+        WriterInterface.__init__(self, config)
         self.object_writer = ItemWriter(self._get_attribute)
 
     def run(self):

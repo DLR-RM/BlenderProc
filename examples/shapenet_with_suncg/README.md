@@ -126,11 +126,8 @@ We also add a custom property to make the selection with `EntityManipulator` in 
   },
   # by adding a modifier we avoid that the objects falls through other objects during the physics simulation
   "cf_add_modifier": {
-    "provider": "getter.Content",
-    "content": {
-      "name": "Solidify",
-      "thickness": 0.001
-    }
+    "name": "Solidify",
+    "thickness": 0.001
   }
 }
 ```
@@ -139,7 +136,7 @@ With the `EntityManipulator` do we change the location and the custom properties
 For that we first select the object, via the `"selector"`, based on these conditions it returns the ShapeNetObject, which we will manipulate next.
 
 We first set the location to be sampled above a entity, which has the `category_id: 1` (1 stands for bed).
-Finally, we add a solidify modifier to get a correct physics interaction, this uses the `getter.Content` as we want to return the full dictionary to the modifier constructor.
+Finally, we add a solidify modifier to get a correct physics interaction.
 
 ### PhysicsPositioning
 

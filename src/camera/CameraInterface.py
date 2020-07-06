@@ -6,12 +6,12 @@ from src.main.Module import Module
 from src.utility.Utility import Utility
 
 
-class CameraModule(Module):
+class CameraInterface(Module):
     """ A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,
         in addition to setting stereo parameters.
 
         Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config
-                   parameters here, it has to be in a child class of CameraModule.
+                   parameters here, it has to be in a child class of CameraInterface.
 
         {
           "module": "camera.CameraLoader",

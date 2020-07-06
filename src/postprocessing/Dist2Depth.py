@@ -1,17 +1,29 @@
-import numpy as np
 import bpy
+import numpy as np
 
 from src.main.Module import Module
 
+
 class Dist2Depth(Module):
-    """ Transforms Distance Image Rendered using Mist/Z pass to a depth image"""
+    """ Transforms Distance Image Rendered using Mist/Z pass to a depth image.
+
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "depth_output_key", "The key which should be used for storing the output data in a merged file. "
+                      "Type: string. Default: 'depth'."
+    """
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def run(self, dist):
+    def run(self, dist, key, version):
         """
         :param dist: The distance data.
-        :return: The depth data.
+        :param key: The key used to store distance data.
+        :param version: Version of the produced distance data.
+        :return: The depth data, an appropriate key and version.
         """
         if len(dist.shape) > 2:
             dist = dist[:, :, 0] # All channles have the same value, so just extract any single channel
@@ -39,6 +51,6 @@ class Dist2Depth(Module):
         # Solve 3 equations in Wolfram Alpha: 
         # Solve[{X == (x-c0)/f0*Z, Y == (y-c1)/f0*Z, X*X + Y*Y + Z*Z = d*d}, {X,Y,Z}]
         depth = dist * f / np.sqrt(x_opt**2 + y_opt**2 + f**2)
-
-        return depth
-
+        output_key = self.config.get_string("depth_output_key", "depth")
+        version = "1.0.0"
+        return depth, output_key, version

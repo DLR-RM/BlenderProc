@@ -5,7 +5,6 @@
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py",
-      "imageio"
     ]
   },
   "modules": [
@@ -63,17 +62,32 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "name": 'Suzanne',
-            "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera
+            "type": "MESH" # this guarantees that the object is a mesh, and not for example a camera
           }
         },
-        "location": {
-          "provider": "sampler.Uniform3d",
-          "max":[1, 2, 3],
-          "min":[0, 1, 2]
+        "cf_add_uv_mapping":{
+          "projection": "cylinder"
         },
-        "rotation_euler": [1, 1, 0],
-        "cp_physics": True
+        "cf_add_displace_modifier_with_texture": {
+          "texture": {
+            "provider": "sampler.Texture"
+          },
+          "min_vertices_for_subdiv": 10000,
+          "mid_level": 0.5,
+          "subdiv_level": {
+            "provider": "sampler.Value",
+            "type": "int",
+            "min": 1,
+            "max": 3
+          },
+          "strength": {
+            "provider": "sampler.Value",
+            "type": "float",
+            "mode": "normal",
+            "mean": 0.0,
+            "std_dev": 0.5
+          }
+        }
       }
     },
     {

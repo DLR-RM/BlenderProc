@@ -53,7 +53,7 @@ class OilPaintFilter(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def run(self, image):
+    def run(self, image, key, version):
         filter_size = self.config.get_int("filter_size", 5)
         edges_only = self.config.get_bool("edges_only", True)
 
@@ -98,4 +98,4 @@ class OilPaintFilter(Module):
                 image[edges > 0] = filtered_img[edges > 0]
                 filtered_img = image
 
-        return filtered_img
+        return filtered_img, key, version

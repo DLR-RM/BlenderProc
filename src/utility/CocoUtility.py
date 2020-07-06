@@ -54,7 +54,9 @@ class CocoUtility:
                 # Calc object mask
                 binary_inst_mask = np.where(segmentation_map == obj, 1, 0)
                 # Add coco info for object in this image
-                annotations.append(CocoUtility.create_annotation_info(len(annotations), image_id, int(obj), binary_inst_mask))
+                annotation = CocoUtility.create_annotation_info(len(annotations), image_id, int(obj), binary_inst_mask)
+                if annotation is not None:
+                    annotations.append(annotation)
 
         new_coco_annotations = {
             "info": info,
@@ -131,6 +133,8 @@ class CocoUtility:
         """
         bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
         area = bounding_box[2] * bounding_box[3]
+        if area < 1:
+            return None
 
         segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
 

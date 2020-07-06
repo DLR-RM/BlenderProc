@@ -73,10 +73,12 @@ class NoiseRemoval(Module):
         element = np.asarray(element)
         return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
 
-    def run(self, image):
+    def run(self, image, key, version):
         """
         :param image: The image data.
-        :return: The cleaned image data.
+        :param key: The key to use when writing to the .hdf5.
+        :param version: Version of the original data.
+        :return: The cleaned image data, key to use when writing and version numer.
         """
         # The map was scaled to be ranging along the entire 16 bit color depth, and this is the scaling down operation
         # that should remove some noise or deviations
@@ -91,4 +93,4 @@ class NoiseRemoval(Module):
         noise_vals = [h[0] for h in hist if h[1] <= 100]  # Assuming the stray pixels wouldn't have a count of more than 100
         noise_indices = np.argwhere(self._isin(image, noise_vals))
 
-        return self._remove_noise(image, noise_indices)
+        return self._remove_noise(image, noise_indices), key, version

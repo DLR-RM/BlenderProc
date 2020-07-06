@@ -3,7 +3,7 @@ import bpy
 from src.main.Module import Module
 
 
-class Loader(Module):
+class LoaderInterface(Module):
     """
     **Configuration**:
 
@@ -36,7 +36,7 @@ class Loader(Module):
                                        "Use manipulators.Entity for setting object's attribute values.")
         if self.config.has_param("cf_set_shading"):
             mode = self.config.get_string("cf_set_shading")
-            Loader.change_shading_mode(objects, mode)
+            LoaderInterface.change_shading_mode(objects, mode)
 
     @staticmethod
     def change_shading_mode(objects: [bpy.types.Object], mode: str):

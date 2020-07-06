@@ -7,12 +7,12 @@ import bpy
 import mathutils
 import numpy as np
 
-from src.camera.CameraModule import CameraModule
+from src.camera.CameraInterface import CameraInterface
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.ItemCollection import ItemCollection
 
 
-class CameraSampler(CameraModule):
+class CameraSampler(CameraInterface):
     """ A general camera sampler.
 
         First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.
@@ -105,12 +105,12 @@ class CameraSampler(CameraModule):
                                     "check that the variance is increased. Type: float. Default: sys.float_info.min."
         "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor "
                                            "or a table. Type: list. Default: []."
-        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraModule "
+        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraInterface "
                              "for more info. Type: dict. Default: {}."
     """
 
     def __init__(self, config):
-        CameraModule.__init__(self, config)
+        CameraInterface.__init__(self, config)
         self.bvh_tree = None
 
         self.rotations = []
