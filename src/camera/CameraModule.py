@@ -128,8 +128,11 @@ class CameraModule(Module):
                 print('WARNING: FOV defined in config is ignored')
             
             # Convert focal lengths to FOV
-            cam.angle_y = 2 * np.arctan(height / (2 * cam_K[1,1]))
-            cam.angle_x = 2 * np.arctan(width / (2 * cam_K[0, 0]))
+            cam.angle = 2 * np.arctan(width / (2 * cam_K[0, 0]))
+            if cam_K[0,0] > cam_K[1,1]:
+                bpy.context.scene.render.pixel_aspect_y = cam_K[0,0]/cam_K[1,1]
+            elif cam_K[0,0] < cam_K[1,1]:
+                bpy.context.scene.render.pixel_aspect_x = cam_K[1,1]/cam_K[0,0]
 
             # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
             max_resolution = max(width, height)
