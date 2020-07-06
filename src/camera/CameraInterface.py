@@ -108,27 +108,28 @@ class CameraInterface(Module):
         width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
         if 'loaded_resolution' in cam and not config.has_param('resolution_x'):
             width, height = cam['loaded_resolution']
-        else:
-            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
-
         bpy.context.scene.render.resolution_x = width
         bpy.context.scene.render.resolution_y = height
         
-        if config.has_param("cam_K"):
-            cam['loaded_intrinsics'] = config.get_list("cam_K")
-            cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
-        elif 'loaded_intrinsics' in cam:
-            cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
-        else:
-            cam_K = None
+        # If defined, get cam_K from config
+        cam_K = config.get_list("cam_K", [])
+        if cam_K:
+            cam['loaded_intrinsics'] = cam_K        
 
+        # Convert intrinsics from loader/config to Blender format
         cam.lens_unit = 'FOV'
-        if cam_K is not None:
+        if 'loaded_intrinsics' in cam:
             if config.has_param("fov"):
-                print('WARNING: FOV defined in config is ignored')
+                print('WARNING: FOV defined in config is ignored. Mutually exclusive with cam_K')
+            if config.has_param("pixel_aspect_x"):
+                print('WARNING: pixel_aspect_x defined in config is ignored. Mutually exclusive with cam_K')
+            
+            cam_K = np.array(cam['loaded_intrinsics']).reshape(3, 3).astype(np.float32)
             
             # Convert focal lengths to FOV
             cam.angle = 2 * np.arctan(width / (2 * cam_K[0, 0]))
+            
+            # If fx!=fy change pixel aspect ratio
             if cam_K[0,0] > cam_K[1,1]:
                 bpy.context.scene.render.pixel_aspect_y = cam_K[0,0]/cam_K[1,1]
             elif cam_K[0,0] < cam_K[1,1]:
@@ -141,6 +142,10 @@ class CameraInterface(Module):
         else:
             # Set FOV (Default value is the same as the default blender value)
             cam.angle = config.get_float("fov", 0.691111)
+
+            # Set Pixel Aspect Ratio
+            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
+
             # FOV is sometimes also given as the angle between forward vector and one side of the frustum
             if config.get_bool("fov_is_half", False):
                 cam.angle *= 2
