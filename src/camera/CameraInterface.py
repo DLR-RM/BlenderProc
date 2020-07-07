@@ -144,7 +144,7 @@ class CameraInterface(Module):
             cam.shift_y = (cy - height / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
-            cam.angle = config.get_float(self.config.get_float("fov", 0.691111))
+            cam.angle = self.config.get_float("fov", 0.691111)
 
             # Set Pixel Aspect Ratio
             bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
@@ -157,16 +157,16 @@ class CameraInterface(Module):
                 cam.angle *= 2
 
         # Clipping (Default values are the same as default blender values)
-        cam.clip_start = config.get_float(self.config.get_float("clip_start", 0.1))
-        cam.clip_end = config.get_float(self.config.get_float("clip_end", 1000))
+        cam.clip_start = config.get_float("clip_start", self.config.get_float("clip_start", 0.1))
+        cam.clip_end = config.get_float("clip_end", self.config.get_float("clip_end", 1000))
 
         # How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
         # convergence plane, or parallel where they do not converge and are parallel)
-        cam.stereo.convergence_mode = self.config.get_string("stereo_convergence_mode", "OFFAXIS")
+        cam.stereo.convergence_mode = config.get_string("stereo_convergence_mode", "OFFAXIS")
         # The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen) (Default value is the same as the default blender value)
-        cam.stereo.convergence_distance = self.config.get_float("convergence_distance", 1.95)
+        cam.stereo.convergence_distance = config.get_float("convergence_distance", 1.95)
         # Distance between the camera pair (Default value is the same as the default blender value)
-        cam.stereo.interocular_distance = self.config.get_float("interocular_distance", 0.065)
+        cam.stereo.interocular_distance = config.get_float("interocular_distance", 0.065)
 
 
     def _set_cam_extrinsics(self, cam_ob, config):
