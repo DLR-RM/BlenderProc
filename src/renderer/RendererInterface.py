@@ -20,12 +20,7 @@ class RendererInterface(Module):
 
         "output_file_prefix", "The file prefix that should be used when writing the rendering to file. Type: String."
         "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
-
-        "resolution_x", "The render image width. "
-                        "Type: int. Default: 512, except the CameraInterface loaded something else."
-        "resolution_y", "The render image height. "
-                        "Type: int. Default: 512, except the CameraInterface loaded something else."
-
+        
         "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark "
                    "areas. Type: int. Default: 256, (not true for all Renderes)."
         "use_adaptive_sampling", "Combined with the maximum sample amount, it is also possible to set the amount of "
@@ -40,8 +35,6 @@ class RendererInterface(Module):
                   "to true. Type: int."
         "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set "
                   "to true. Type: int."
-        "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution "
-                          "aspect ratio to distort the image. Type: float. Default: 1.0"
         "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering. "
                                        "Type: int. Default: 3"
 
@@ -124,14 +117,6 @@ class RendererInterface(Module):
             bpy.context.scene.render.threads_mode = "FIXED"
             bpy.context.scene.render.threads = number_of_threads
         
-        # Collect camera and camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-        
-        if not 'loaded_resolution' in cam:
-            bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
-            bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
-            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
         print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
 
         bpy.context.scene.render.resolution_percentage = 100

@@ -127,7 +127,7 @@ class BopWriter(WriterInterface):
         # Output paths.
         base_path = self._determine_output_dir(False)
         self.dataset_dir = os.path.join(base_path, 'bop_data', self.dataset)
-        self.chunks_dir = os.path.join(self.dataset_dir, 'train_synt')
+        self.chunks_dir = os.path.join(self.dataset_dir, 'train_pbr')
         self.camera_path = os.path.join(self.dataset_dir, 'camera.json')
         self.rgb_tpath = os.path.join(
             self.chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + '{im_type}')
