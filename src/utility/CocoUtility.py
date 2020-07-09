@@ -13,14 +13,26 @@ class CocoUtility:
         :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param colormap: mapping for color, class and object
         :param super_category_mapping: A dict mapping object name to their corresponding supercategory (A supercategory can be a string which distinguishes objects belonging to different datasets)
-        :param dataset_name: name of the dataset, a feature required by coco annotation format
+        :param dataset_name: name of the dataset, used for selecting a supercategory e.g. a specific BOP dataset
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
         """
-        # Adds all objects from the color map to the coco output (skip background)
+
         categories = []
+        obj_idx_2_category_map = {}
+        # Adds objects from the color map to the coco output 
+        # skip background
         for obj in colormap[1:]:
-            categories.append({'id': int(obj["idx"]), 'name': obj["objname"], 'supercategory': super_category_mapping[obj["objname"]]})
+            # if supercategory is defined, skip classes from other supercategories
+            if dataset_name in ['coco_annotations', super_category_mapping[obj["objname"]]]:
+                
+                if obj["class"].isnumeric()
+                    category_id = int(obj["class"])  
+                else: 
+                    category_id = int(obj["idx"])
+                
+                categories.append({'id': category_id, 'name': obj["class"], 'supercategory': super_category_mapping[obj["objname"]]})
+                obj_idx_2_category_map[int(obj["idx"])] = category_id
 
         licenses = [{
             "id": 1,
@@ -48,15 +60,17 @@ class CocoUtility:
 
             # Go through all objects visible in this image
             unique_objects = np.unique(segmentation_map)
+            breakpoint()
             # Remove background
             unique_objects = np.delete(unique_objects, np.where(unique_objects == 0))
             for obj in unique_objects:
-                # Calc object mask
-                binary_inst_mask = np.where(segmentation_map == obj, 1, 0)
-                # Add coco info for object in this image
-                annotation = CocoUtility.create_annotation_info(len(annotations), image_id, int(obj), binary_inst_mask)
-                if annotation is not None:
-                    annotations.append(annotation)
+                if obj in obj_idx_2_category_map:
+                    # Calc object mask
+                    binary_inst_mask = np.where(segmentation_map == obj, 1, 0)
+                    # Add coco info for object in this image
+                    annotation = CocoUtility.create_annotation_info(len(annotations), image_id, obj_idx_2_category_map[obj], binary_inst_mask)
+                    if annotation is not None:
+                        annotations.append(annotation)
 
         new_coco_annotations = {
             "info": info,
@@ -122,18 +136,22 @@ class CocoUtility:
         return image_info
 
     @staticmethod
-    def create_annotation_info(annotation_id, image_id, object_id, binary_mask, tolerance=2):
+    def create_annotation_info(annotation_id, image_id, category_id, binary_mask, tolerance=2):
         """Creates info section of coco annotation
 
         :param annotation_id: integer to uniquly identify the annotation
         :param image_id: integer to uniquly identify image
-        :param object_id: The object id, should match with the object's category id
+        :param category_id: Id of the category
         :param binary_mask: A binary image mask of the object with the shape [H, W].
         :param tolerance: The tolerance for fitting polygons to the objects mask.
         """
-        bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
-        area = bounding_box[2] * bounding_box[3]
-        if area < 1:
+
+        if np.any(binary_mask):
+            bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
+            area = bounding_box[2] * bounding_box[3]
+            if area < 1:
+                return None
+        else:
             return None
 
         segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
@@ -141,7 +159,7 @@ class CocoUtility:
         annotation_info = {
             "id": annotation_id,
             "image_id": image_id,
-            "category_id": object_id,
+            "category_id": category_id,
             "iscrowd": 0,
             "area": [area],
             "bbox": bounding_box,

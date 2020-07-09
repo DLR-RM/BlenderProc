@@ -36,6 +36,7 @@ class CocoAnnotationsWriter(WriterInterface):
 
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
+        self.supercategory_dataset = self.config.get_string("supercategory_dataset", "coco_annotations")
         self.segmap_output_key = self.config.get_string("segmap_output_key", "segmap")
         self.segcolormap_output_key = self.config.get_string("segcolormap_output_key", "segcolormap")
         self._coco_data_dir = os.path.join(self._determine_output_dir(False), 'coco_data')
@@ -112,7 +113,7 @@ class CocoAnnotationsWriter(WriterInterface):
             else:
                 super_category_mapping[obj.name] = "default_supercategory"
 
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, super_category_mapping,"coco_annotations", existing_coco_annotations)
+        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, super_category_mapping, self.supercategory_dataset, existing_coco_annotations)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:
