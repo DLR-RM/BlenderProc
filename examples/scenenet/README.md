@@ -64,6 +64,9 @@ The same as in the basic example.
 This module loads the SceneNet data object, specified via the `file_path`. 
 All objects included in this `.obj` file get a randomly selected texture from the `texture_folder`.
 The `category_id` of each object are set based on their name, check the [table](../../resources/scenenet/CategoryLabeling.csv) for more information on the labels.
+Be aware if the `unknown_texture_folder` value is not set, that the unknown folder will be assumed to be inside of the `texture_folder` with the name `unknown`.
+This folder does *not* exist after downloading the texture files, it has to be manually generated. 
+By selecting random texture and putting them in this `unknown_texture_folder`, which can be used on unknown structures.
 
 ### SceneNetLighting
 
