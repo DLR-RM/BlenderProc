@@ -42,8 +42,8 @@ class SceneNetLoader(LoaderInterface):
         # the default unknown texture folder is not included inside of the scenenet texture folder
         default_unknown_texture_folder = os.path.join(self._texture_folder, "unknown")
         # the textures in this folder are used, if the object has no available texture
-        self._unknown_texture_folder = Utility.resolve_path(self.config.get_string("unknown_texture_folder"),
-                                                            default_unknown_texture_folder)
+        self._unknown_texture_folder = Utility.resolve_path(self.config.get_string("unknown_texture_folder",
+                                                            default_unknown_texture_folder))
 
         LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 
             'id_mappings', 'nyu_idset.csv')))
