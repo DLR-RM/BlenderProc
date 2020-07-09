@@ -14,8 +14,7 @@
         "global": {
           "output_dir": "<args:1>",
           "data_set_name": "office_1",
-          "data_path": "<args:0>",
-          "pixel_aspect_x": 1.333333333
+          "data_path": "<args:0>"
         }
       }
     },
@@ -38,6 +37,9 @@
     {
       "module": "camera.ReplicaCameraSampler",
       "config": {
+        "default_cam_param": {
+          "pixel_aspect_x": 1.333333333
+        },
         "is_replica_object": True,
         "cam_poses": [{
           "number_of_samples": 15,

@@ -137,8 +137,10 @@
     {
       "module": "camera.CameraSampler",
       "config": {
-        "resolution_x": 640,
-        "resolution_y": 480,
+        "default_cam_param": {
+          "resolution_x": 640,
+          "resolution_y": 480
+        },
         "cam_poses": [
         {
           "number_of_samples": 5,
@@ -222,9 +224,7 @@
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter",
-      "config": {
-      }
+      "module": "writer.CocoAnnotationsWriter"
     }
   ]
 }

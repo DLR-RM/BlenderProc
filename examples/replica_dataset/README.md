@@ -87,6 +87,9 @@ As before all these values are stored in the GlobalStorage and are only used if 
 {
   "module": "camera.ReplicaCameraSampler",
   "config": {
+    "default_cam_param": {
+      "pixel_aspect_x": 1.333333333
+    },
     "is_replica_object": True,
     "cam_poses": [{
       "number_of_samples": 15,
