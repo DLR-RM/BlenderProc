@@ -15,7 +15,7 @@ class SceneNetLoader(LoaderInterface):
 
     The textures for each object are sampled based on the name of the object, if the name is not represented in the
     texture folder the unknown folder is used. This folder does not exists, after downloading the texture dataset.
-    Make sure to create and but some texture, you want to use for these instances there.
+    Make sure to create and put some textures, you want to use for these instances there.
 
     All objects get "category_id" set based on the data in the "resources/id_mappings/nyu_idset.csv"
 
@@ -159,5 +159,4 @@ class SceneNetLoader(LoaderInterface):
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
                     obj["category_id"] = LabelIdMapping.label_id_map["otherstructure".lower()]
-
 
