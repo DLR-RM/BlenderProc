@@ -303,7 +303,7 @@ class SegMapRenderer(RendererInterface):
                         writer.writerow(object_element)
 
         self._register_output("segmap_", "segmap", ".npy", "2.0.0")
-        if save_in_csv_attributes is not None:
+        if save_in_csv_attributes:
             self._register_output("class_inst_col_map",
                                   "segcolormap",
                                   ".csv",
