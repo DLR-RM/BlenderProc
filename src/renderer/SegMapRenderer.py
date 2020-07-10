@@ -171,24 +171,32 @@ class SegMapRenderer(RendererInterface):
                             resulting_map = segmap
                             was_used = True
                         else:
+                            # for the current attribute remove cp_ and _csv, if present
+                            used_attribute = current_attribute
+                            if used_attribute.startswith("cp_"):
+                                used_attribute = used_attribute[len("cp_"):]
+                            if used_attribute.endswith("_csv"):
+                                used_attribute = used_attribute[:-len("_csv")]
+                            # iterate over all object ids
                             for object_id in used_object_ids:
+                                # get the corresponding object via the id
                                 current_obj = used_objects[object_id]
-                                used_attribute = current_attribute
-                                if used_attribute.startswith("cp_"):
-                                    used_attribute = used_attribute[len("cp_"):]
-                                if used_attribute.endswith("_csv"):
-                                    used_attribute = used_attribute[:-len("_csv")]
+                                # if the current obj has a member with that name -> get it
                                 if hasattr(current_obj, used_attribute):
                                     used_value = getattr(current_obj, used_attribute)
+                                # if the current object has a custom property with that name -> get it
                                 elif current_attribute.startswith("cp_") and used_attribute in current_obj:
                                     used_value = current_obj[used_attribute]
                                 else:
+                                    # if the requested current_attribute is not a custom property or a member
+                                    # it throws an exception
                                     raise Exception("The obj: {} does not have the "
                                                     "attribute: {}/{}".format(current_obj.name,
                                                                               current_attribute, used_attribute))
+                                # check if the value should be saved as an image or in the csv file
                                 save_in_csv = False
                                 try:
-                                    if current_attribute.endswith("_csv"):
+                                    if not current_attribute.endswith("_csv"):
                                         resulting_map[segmap == object_id] = used_value
                                         was_used = True
                                     else:
@@ -197,13 +205,14 @@ class SegMapRenderer(RendererInterface):
                                     save_in_csv = True
                                 if save_in_csv:
                                     if object_id in save_in_csv_attributes:
-                                        save_in_csv_attributes[object_id][current_attribute] = used_value
+                                        save_in_csv_attributes[object_id][used_attribute] = used_value
                                     else:
-                                        save_in_csv_attributes[object_id] = {current_attribute: used_value}
+                                        save_in_csv_attributes[object_id] = {used_attribute: used_value}
                         if was_used:
                             combined_result_map.append(resulting_map)
 
                     fname = final_segmentation_file_path + "%04d" % frame
+                    # combine all resulting images to one image
                     resulting_map = np.stack(combined_result_map, axis=2)
                     np.save(fname, resulting_map)
 
@@ -215,11 +224,13 @@ class SegMapRenderer(RendererInterface):
                 with open(csv_file_path, 'w', newline='') as csvfile:
                     # get from the first element the used field names
                     fieldnames = ["idx"]
+                    # get all used object element keys
                     for object_element in save_in_csv_attributes.values():
                         fieldnames.extend(list(object_element.keys()))
                         break
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
+                    # save for each object all values in one row
                     for obj_idx, object_element in save_in_csv_attributes.items():
                         object_element["idx"] = obj_idx
                         writer.writerow(object_element)
