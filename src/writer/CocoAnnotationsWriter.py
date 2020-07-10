@@ -36,7 +36,7 @@ class CocoAnnotationsWriter(WriterInterface):
 
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
-        self.supercategory_dataset = self.config.get_string("supercategory_dataset", "coco_annotations")
+        self._supercategory = self.config.get_string("supercategory", "coco_annotations")
         self.segmap_output_key = self.config.get_string("segmap_output_key", "segmap")
         self.segcolormap_output_key = self.config.get_string("segcolormap_output_key", "segcolormap")
         self._coco_data_dir = os.path.join(self._determine_output_dir(False), 'coco_data')
@@ -74,12 +74,11 @@ class CocoAnnotationsWriter(WriterInterface):
             raise Exception("There is no output registered with key " + self.segcolormap_output_key + ". Are you sure you ran the SegMapRenderer module with 'map_by' set to 'instance' before?")
 
         # read colormappings, which include object name/class to integer mapping
-        color_map = []
+        inst_attribute_maps = []
         with open(segcolormap_output["path"], 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for mapping in reader:
-                color_map.append(mapping)
-        breakpoint()
+                inst_attribute_maps.append(mapping)
         coco_annotations_path = os.path.join(self._coco_data_dir, "coco_annotations.json")
         # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
         if self.config.get_bool("append_to_existing_output", False) and os.path.exists(coco_annotations_path):
@@ -102,18 +101,7 @@ class CocoAnnotationsWriter(WriterInterface):
             shutil.copyfile(source_path, target_path)
             new_coco_image_paths.append(os.path.basename(target_path))
 
-        # Try to extract supercategory for each object
-        all_mesh_objects = get_all_mesh_objects()
-        super_category_mapping = {}
-        for obj in all_mesh_objects:
-            # For now the only scheme to extract super category is the afiliation of an object to a Bop dataset
-            if "bop_dataset_name" in obj:
-                super_category_mapping[obj.name] = obj["bop_dataset_name"]
-            # Otherwise assign default supercategory
-            else:
-                super_category_mapping[obj.name] = "default_supercategory"
-
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, super_category_mapping, self.supercategory_dataset, existing_coco_annotations)
+        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, inst_attribute_maps, self._supercategory, existing_coco_annotations)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:

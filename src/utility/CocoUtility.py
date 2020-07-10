@@ -6,14 +6,13 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, super_category_mapping, dataset_name, existing_coco_annotations=None):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, supercategory, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param image_paths: A list of paths which points to the rendered segmentation maps.
-        :param inst_attribute_maps: mapping with idx, class and optionally super_category
-        :param super_category_mapping: A dict mapping object name to their corresponding supercategory (A supercategory can be a string which distinguishes objects belonging to different datasets)
-        :param dataset_name: name of the dataset, used for selecting a supercategory e.g. a specific BOP dataset
+        :param inst_attribute_maps: mapping with idx, class and optionally supercategory/bop_dataset_name
+        :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
         """
@@ -24,13 +23,16 @@ class CocoUtility:
         # skip background
         for inst in inst_attribute_maps[1:]:
             # take all objects or objects from specified supercategory is defined
-            if dataset_name in ['coco_annotations', super_category_mapping[obj["name"]]]:
-                
-                if not inst["class"].isnumeric():
-                    raise Exception("The object " + inst["name"] + " does not have an integer category_id.")
-                
-                categories.append({'id': int(inst["class"]), 'name': inst["class"], 'supercategory': super_category_mapping[inst["name"]]})
-                instance_2_category_map[int(inst["instance"])] = int(inst["class"])
+            if "bop_dataset_name" in inst:
+                inst_supercategory = inst["bop_dataset_name"] 
+            elif "supercategory" in inst:
+                inst_supercategory = inst["supercategory"]
+            else:
+                inst_supercategory = "coco_annotations"
+
+            if supercategory == inst_supercategory:
+                categories.append({'id': int(inst["category_id"]), 'name': inst["category_id"], 'supercategory': inst_supercategory})
+                instance_2_category_map[int(inst["idx"])] = int(inst["category_id"])
 
         licenses = [{
             "id": 1,
@@ -38,7 +40,7 @@ class CocoUtility:
             "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/"
         }]
         info = {
-            "description": dataset_name,
+            "description": supercategory,
             "url": "https://github.com/waspinator/pycococreator",
             "version": "0.1.0",
             "year": 2020,
@@ -50,7 +52,7 @@ class CocoUtility:
         annotations = []
 
         for segmentation_map_path, image_path in zip(segmentation_map_paths, image_paths):
-            segmentation_map = np.load(segmentation_map_path)
+            segmentation_map = np.load(segmentation_map_path).squeeze()
 
             # Add coco info for image
             image_id = len(images)
