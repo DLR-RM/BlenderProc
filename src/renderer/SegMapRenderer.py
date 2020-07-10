@@ -47,6 +47,13 @@ class SegMapRenderer(RendererInterface):
          attribute would be saved now in a dict as we only store ints and floats in the image.
          We can force keys to be stored in the dict with adding "_csv" to the end.
 
+    Example 4:
+        "config": {
+            "map_by": [("class", 0)]
+         }
+         It is also possible to set default values, for keys object, which don't have a certain custom property.
+         This is especially useful dealing with the background, which often lacks certain object properties.
+
     .. csv-table::
        :header: "Parameter", "Description"
 
@@ -163,7 +170,7 @@ class SegMapRenderer(RendererInterface):
             # get the type of mappings which should be performed
             used_attributes = self.config.get_raw_dict("map_by", "class")
 
-            if isinstance(used_attributes, str):
+            if isinstance(used_attributes, str) or isinstance(used_attributes, tuple):
                 # only one result is requested
                 result_channels = 1
                 used_attributes = [used_attributes]
@@ -191,6 +198,17 @@ class SegMapRenderer(RendererInterface):
                         resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
                         was_used = False
                         current_attribute = used_attributes[channel_id]
+                        default_value = None
+                        default_value_set = False
+                        if isinstance(current_attribute, tuple):
+                            default_value_set = True
+                            if len(current_attribute) != 2:
+                                raise Exception("A tuple, which describes a default value must have two values."
+                                                "The first containg the attribute, the second the "
+                                                "default value: {}".format(current_attribute))
+                            current_attribute = current_attribute[0]
+                            default_value = current_attribute[1]
+
                         # if the class is used the category_id attribute is evaluated
                         if current_attribute == "class":
                             current_attribute = "cp_category_id"
@@ -217,8 +235,12 @@ class SegMapRenderer(RendererInterface):
                                 # if the current object has a custom property with that name -> get it
                                 elif current_attribute.startswith("cp_") and used_attribute in current_obj:
                                     used_value = current_obj[used_attribute]
+                                elif default_value_set:
+                                    # if none of the above applies use the default value
+                                    used_value = default_value
                                 else:
                                     # if the requested current_attribute is not a custom property or a attribute
+                                    # or there is a default value stored
                                     # it throws an exception
                                     raise Exception("The obj: {} does not have the "
                                                     "attribute: {}/{}".format(current_obj.name,
