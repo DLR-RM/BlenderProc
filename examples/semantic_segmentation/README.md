@@ -24,7 +24,6 @@ python run.py examples/semantic_segmentation/config.yaml examples/semantic_segme
 
 * Loads `scene.obj`: `loader.ObjectLoader` module, each object in this scene already contains a custom property `category_id`, which is later used in the `SegMapRenderer`. 
 Without this idea it would not be possible to render the correct class.
-
 * Creates a point light: `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
 * Renders rgb and the distance: `renderer.RgbRenderer` module.
@@ -45,7 +44,7 @@ Without this idea it would not be possible to render the correct class.
 },
 ```
 
-This loads the `.blend` file, it extracts hereby only the `/Objects from the file, not all information stored in this `.blend` file.
+This loads the `.blend` file, it extracts hereby only the `/Objects` from the file, not all information stored in this `.blend` file.
 
 ### WorldManipulator
 
@@ -53,14 +52,12 @@ This loads the `.blend` file, it extracts hereby only the `/Objects from the fil
 {
   "module": "manipulators.WorldManipulator",
   "config": {
-    "cf_set_world_category_id": 0,  # this sets the worlds background category id to 0
-    "cf_set_max_category_id": True  # this sets the maximum amount of num labels for the SegMapRenderer
+    "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
   }
 }
 ```
 
-This module does two things. First it sets the world background to the `category_id` 0, this is necessary for the `SegMapRenderer`. Secondly, it searches for the maximum used `category_id`, which is set as a scene attribute.
-This value determines how many classes can be rendered in the `SegMapRenderer`.
+This module does sets the world background to the `category_id` 0, this is necessary for the `SegMapRenderer`. 
 
 ### SegMapRenderer
 ```yaml
@@ -81,7 +78,7 @@ This can not be saved in an image, so a csv file is generated, which is attached
 Where it maps each instance nr to a name. 
 The same is true, if you write after values which can be mapped to an image `_csv` then these values are also stored in the csv file as well.
 
-For example it would also be possible to use the key: `"location_csv"` this would access the location of each object and it map to the csv file.
+For example it would also be possible to use the key: `"location_csv"`. This would access the location of each object and add it to the csv file.
 Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
 
 ### Hdf5Writer

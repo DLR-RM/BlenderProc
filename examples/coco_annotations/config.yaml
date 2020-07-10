@@ -25,6 +25,12 @@
       }
     },
     {
+      "module": "manipulators.WorldManipulator",
+      "config": {
+        "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
+      }
+    },
+    {
       "module": "lighting.LightLoader",
       "config": {
         "lights": [
@@ -55,7 +61,7 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "instance"
+        "map_by": ["instance", "class_csv", "name"]
       }
     },
     {
