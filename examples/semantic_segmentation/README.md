@@ -67,13 +67,22 @@ This value determines how many classes can be rendered in the `SegMapRenderer`.
 {
   "module": "renderer.SegMapRenderer",
   "config": {
-    "map_by": "class"
+    "map_by": ["class", "instance", "name", "class_csv"]
   }
 }
 ```
 
-This module creates a semantic segmentation of the scene, it uses the `category_id` attribute set in all mesh objects and the scene background.
-It also depends on the `num_labels` attribute, which can be set over the `WorldManipulator`.
+This module can map any kind of object related information to an image or to a list of indices of the objects in the scene.
+So, if you want to map the custom property `category_id` to an image, you write `"map_by": "class"`.
+Then each pixel gets assigned the `category_id` of the object present in that pixel.
+If it set to `instance` each pixel gets an id for the obj nr in the scene, these are consistent for several frames, which also means that not all ids must appear in each image.
+It can also be set to different custom properties or attributes of the object class like: `"name"`, which returns the name of each object. 
+This can not be saved in an image, so a csv file is generated, which is attached to the `.hdf5` container in the end.
+Where it maps each instance nr to a name. 
+The same is true, if you write after values which can be mapped to an image `_csv` then these values are also stored in the csv file as well.
+
+For example it would also be possible to use the key: `"location_csv"` this would access the location of each object and it map to the csv file.
+Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
 
 ### Hdf5Writer
 

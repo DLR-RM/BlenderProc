@@ -13,12 +13,45 @@ class SegMapRenderer(RendererInterface):
     """
     Renders segmentation maps for each registered keypoint.
 
-    The rendering is stored using the .exr file type and a color depth of 16bit to achieve high precision.
+    The SegMapRenderer can render segmetation maps of any kind, it can render any information related to each object.
+    This can include an instance id, which is consistent over several key frames.
+    It can also be a `category_id`, which can be indicated by "class".
+
+    This Renderer can access all custom properties or attributes of the rendered objects.
+    This means it can also be used to map your own custom properties to an image or if the data can not be stored in
+    an image like the name of the object in a .csv file.
+
+    The csv file will contain a mapping between each instance id and the corresponding custom property or attribute.
+
+    Example 1:
+        config: {
+            "map_by": "class"
+        }
+        In this example each pixel would be mapped to the corresponding category_id of the object.
+        Each object then needs such a custom property! Even the background. If an object is missing one an Exception
+        is thrown.
+
+    Example 2:
+        "config": {
+            "map_by": ["class", "instance"]
+        }
+        In this example the output will be a class image and an instance image, so the output will have two channels,
+        instead of one. The first will contain the class the second the instance segmentation.
+
+    Example 3:
+        "config": {
+            "map_by": ["class", "class_csv", "instance", "name"]
+         }
+         It is often useful to also store a mapping between the instance and these class in a dict, which is possible
+         via the `_csv` option. All values which can not be stored in the image are stored inside of a dict. The `name`
+         attribute would be saved now in a dict as we only store ints and floats in the image.
+         We can force keys to be stored in the dict with adding "_csv" to the end.
 
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "map_by", "Method to be used for color mapping. Type: string. Default: "class" Available: [instance, class]"
+       "map_by", "Method to be used for color mapping. Type: string. Default: "instance".
+                 "Available: [instance, class] or any custom property or attribute."
        "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in"
                                  "a merged file. Type: string. Default: "segcolormap""
        "segcolormap_output_file_prefix", "The file prefix that should be used when writing the class instance to"
@@ -121,15 +154,11 @@ class SegMapRenderer(RendererInterface):
             # Render the temporary output
             self._render("seg_", custom_file_path=temporary_segmentation_file_path)
 
-            # get current method for color mapping, instance or class
-            method = self.config.get_string("map_by", "class")
-
             # Find optimal dtype of output based on max index
             for dtype in [np.uint8, np.uint16, np.uint32]:
                 optimal_dtype = dtype
                 if np.iinfo(optimal_dtype).max >= len(colors) - 1:
                     break
-
 
             used_attributes = self.config.get_raw_dict("map_by", "instance")
 
@@ -181,14 +210,14 @@ class SegMapRenderer(RendererInterface):
                             for object_id in used_object_ids:
                                 # get the corresponding object via the id
                                 current_obj = used_objects[object_id]
-                                # if the current obj has a member with that name -> get it
+                                # if the current obj has a attribute with that name -> get it
                                 if hasattr(current_obj, used_attribute):
                                     used_value = getattr(current_obj, used_attribute)
                                 # if the current object has a custom property with that name -> get it
                                 elif current_attribute.startswith("cp_") and used_attribute in current_obj:
                                     used_value = current_obj[used_attribute]
                                 else:
-                                    # if the requested current_attribute is not a custom property or a member
+                                    # if the requested current_attribute is not a custom property or a attribute
                                     # it throws an exception
                                     raise Exception("The obj: {} does not have the "
                                                     "attribute: {}/{}".format(current_obj.name,
@@ -214,10 +243,13 @@ class SegMapRenderer(RendererInterface):
                     fname = final_segmentation_file_path + "%04d" % frame
                     # combine all resulting images to one image
                     resulting_map = np.stack(combined_result_map, axis=2)
+                    # remove the unneeded third dimension
+                    if resulting_map.shape[2] == 1:
+                        resulting_map = resulting_map[:, :]
                     np.save(fname, resulting_map)
 
             # write color mappings to file
-            if objs_with_mats and not self._avoid_rendering:
+            if save_in_csv_attributes and not self._avoid_rendering:
                 csv_file_path = os.path.join(self._determine_output_dir(),
                                              self.config.get_string("segcolormap_output_file_prefix",
                                                                     "class_inst_col_map") + ".csv")
