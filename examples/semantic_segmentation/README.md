@@ -78,7 +78,7 @@ This can not be saved in an image, so a csv file is generated, which is attached
 Where it maps each instance nr to a name. 
 The same is true, if you write after values which can be mapped to an image `_csv` then these values are also stored in the csv file as well.
 
-For example it would also be possible to use the key: `"location_csv"` this would access the location of each object and it map to the csv file.
+For example it would also be possible to use the key: `"location_csv"`. This would access the location of each object and add it to the csv file.
 Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
 
 ### Hdf5Writer
