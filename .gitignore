@@ -8,6 +8,7 @@ debug/
 resources/cctextures
 resources/scenenet/*zip
 resources/scenenet/SceneNetData
+*.blend1
 .vscode
 *.pyc
 *.swp

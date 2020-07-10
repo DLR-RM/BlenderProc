@@ -18,9 +18,10 @@
       }
     },
     {
-      "module": "loader.ObjectLoader",
+      "module": "loader.BlendLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "load_from": "/Object"  # load all objects from the scene file
       }
     },
     {
