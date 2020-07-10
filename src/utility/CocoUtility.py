@@ -6,12 +6,12 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, super_category_mapping, dataset_name, existing_coco_annotations=None):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, super_category_mapping, dataset_name, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param image_paths: A list of paths which points to the rendered segmentation maps.
-        :param colormap: mapping for color, class and object
+        :param inst_attribute_maps: mapping with idx, class and optionally super_category
         :param super_category_mapping: A dict mapping object name to their corresponding supercategory (A supercategory can be a string which distinguishes objects belonging to different datasets)
         :param dataset_name: name of the dataset, used for selecting a supercategory e.g. a specific BOP dataset
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
@@ -19,18 +19,18 @@ class CocoUtility:
         """
 
         categories = []
-        obj_idx_2_category_map = {}
-        # Adds objects from the color map to the coco output 
+        instance_2_category_map = {}
+
         # skip background
-        for obj in colormap[1:]:
+        for inst in inst_attribute_maps[1:]:
             # take all objects or objects from specified supercategory is defined
-            if dataset_name in ['coco_annotations', super_category_mapping[obj["objname"]]]:
+            if dataset_name in ['coco_annotations', super_category_mapping[obj["name"]]]:
                 
-                if not obj["class"].isnumeric():
-                    raise Exception("The object " + obj.name + " does not have an integer category_id.")
+                if not inst["class"].isnumeric():
+                    raise Exception("The object " + inst["name"] + " does not have an integer category_id.")
                 
-                categories.append({'id': int(obj["class"]), 'name': obj["class"], 'supercategory': super_category_mapping[obj["objname"]]})
-                obj_idx_2_category_map[int(obj["idx"])] = int(obj["class"])
+                categories.append({'id': int(inst["class"]), 'name': inst["class"], 'supercategory': super_category_mapping[inst["name"]]})
+                instance_2_category_map[int(inst["instance"])] = int(inst["class"])
 
         licenses = [{
             "id": 1,
@@ -57,16 +57,16 @@ class CocoUtility:
             images.append(CocoUtility.create_image_info(image_id, image_path, segmentation_map.shape))
 
             # Go through all objects visible in this image
-            unique_objects = np.unique(segmentation_map)
+            instances = np.unique(segmentation_map)
 
             # Remove background
-            unique_objects = np.delete(unique_objects, np.where(unique_objects == 0))
-            for obj in unique_objects:
-                if obj in obj_idx_2_category_map:
+            instances = np.delete(instances, np.where(instances == 0))
+            for inst in instances:
+                if inst in instance_2_category_map:
                     # Calc object mask
-                    binary_inst_mask = np.where(segmentation_map == obj, 1, 0)
+                    binary_inst_mask = np.where(segmentation_map == inst, 1, 0)
                     # Add coco info for object in this image
-                    annotation = CocoUtility.create_annotation_info(len(annotations), image_id, obj_idx_2_category_map[obj], binary_inst_mask)
+                    annotation = CocoUtility.create_annotation_info(len(annotations), image_id, instance_2_category_map[inst], binary_inst_mask)
                     if annotation is not None:
                         annotations.append(annotation)
 

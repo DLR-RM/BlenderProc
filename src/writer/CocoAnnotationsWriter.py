@@ -79,7 +79,7 @@ class CocoAnnotationsWriter(WriterInterface):
             reader = csv.DictReader(csvfile)
             for mapping in reader:
                 color_map.append(mapping)
-
+        breakpoint()
         coco_annotations_path = os.path.join(self._coco_data_dir, "coco_annotations.json")
         # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
         if self.config.get_bool("append_to_existing_output", False) and os.path.exists(coco_annotations_path):

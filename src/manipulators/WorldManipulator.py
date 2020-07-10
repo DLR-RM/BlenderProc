@@ -60,8 +60,6 @@ class WorldManipulator(Module):
         "cf_bg_surface_color", "Sets the RGBA color of the light emitted by the background. Type: mathutils.Vector."
         "cf_bg_surface_strength", "Sets the strength of the light emitted by the background. Type: float."
         "cf_set_world_category_id", "Sets the category_id of the background. Type: int."
-        "cf_set_max_category_id", "Finds the biggest category_id used in the scene and sets the number of"
-                                  "num_labels, which is later used in the SegMapRenderer. Type: bool. Default: False."
     """
 
     def __init__(self, config):
@@ -100,14 +98,6 @@ class WorldManipulator(Module):
                         bpy.context.scene.world["category_id"] = value
                     else:
                         raise Exception("The category id of the world can only be int!")
-                elif key == "set_max_category_id":
-                    max_used_id = -1
-                    for obj in get_all_mesh_objects():
-                        if "category_id" in obj:
-                            max_used_id = obj["category_id"] if obj["category_id"] > max_used_id else max_used_id
-                    if max_used_id == -1:
-                        raise Exception("There has been not one object, which has a cp_category_id.")
-                    bpy.data.scenes["Scene"]["num_labels"] = max_used_id
                 else:
                     raise RuntimeError('Unknown cf_ parameter: ' + key)
 

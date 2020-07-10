@@ -410,7 +410,6 @@ class SuncgLoader(LoaderInterface):
                 self.object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]     
                 self.object_coarse_grained_label_map[row["model_id"]] = row["coarse_grained_class"]     
         
-        bpy.data.scenes["Scene"]["num_labels"] = LabelIdMapping.num_labels
         # Use the void category as label for the world background
         bpy.context.scene.world["category_id"] = LabelIdMapping.label_id_map["void"]
 
