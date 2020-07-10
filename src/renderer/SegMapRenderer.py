@@ -277,7 +277,7 @@ class SegMapRenderer(RendererInterface):
                     resulting_map = np.stack(combined_result_map, axis=2)
                     # remove the unneeded third dimension
                     if resulting_map.shape[2] == 1:
-                        resulting_map = resulting_map[:, :]
+                        resulting_map = resulting_map[:, :, 0]
                     np.save(fname, resulting_map)
 
             # write color mappings to file
