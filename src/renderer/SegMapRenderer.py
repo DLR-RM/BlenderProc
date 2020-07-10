@@ -131,16 +131,16 @@ class SegMapRenderer(RendererInterface):
                     break
 
 
-            used_attribute = self.config.get_raw_dict("map_by", "instance")
+            used_attributes = self.config.get_raw_dict("map_by", "instance")
 
-            if isinstance(used_attribute, str):
+            if isinstance(used_attributes, str):
                 # only one result is requested
                 result_channels = 1
-                used_attribute = [used_attribute]
-            elif isinstance(used_attribute, list):
-                result_channels = len(used_attribute)
+                used_attributes = [used_attributes]
+            elif isinstance(used_attributes, list):
+                result_channels = len(used_attributes)
             else:
-                raise Exception("The type of this is not supported here: {}".format(used_attribute))
+                raise Exception("The type of this is not supported here: {}".format(used_attributes))
 
             save_in_csv_attributes = {}
 
@@ -160,10 +160,12 @@ class SegMapRenderer(RendererInterface):
                     for channel_id in range(result_channels):
                         resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
                         was_used = False
-                        current_attribute = used_attribute[channel_id]
+                        current_attribute = used_attributes[channel_id]
                         # if the class is used the category_id attribute is evaluated
                         if current_attribute == "class":
                             current_attribute = "cp_category_id"
+                        if current_attribute == "class_csv":
+                            current_attribute = "cp_category_id_csv"
                         # in the instance case the resulting ids are directly used
                         if current_attribute == "instance":
                             resulting_map = segmap
@@ -171,29 +173,33 @@ class SegMapRenderer(RendererInterface):
                         else:
                             for object_id in used_object_ids:
                                 current_obj = used_objects[object_id]
-                                if hasattr(current_obj, current_attribute):
-                                    used_value = getattr(current_obj, current_attribute)
-                                    try:
-                                        resulting_map[segmap == object_id] = used_value
-                                        was_used = True
-                                    except ValueError:
-                                        if object_id in save_in_csv_attributes:
-                                            save_in_csv_attributes[object_id][current_attribute] = used_value
-                                        else:
-                                            save_in_csv_attributes[object_id] = {current_attribute: used_value}
-                                elif current_attribute.startswith("cp_") and current_attribute[len("cp_"):] in current_obj:
-                                    used_value = current_obj[current_attribute[len("cp_"):]]
-                                    try:
-                                        resulting_map[segmap == object_id] = used_value
-                                        was_used = True
-                                    except ValueError:
-                                        if object_id in save_in_csv_attributes:
-                                            save_in_csv_attributes[object_id][current_attribute] = used_value
-                                        else:
-                                            save_in_csv_attributes[object_id] = {current_attribute: used_value}
+                                used_attribute = current_attribute
+                                if used_attribute.startswith("cp_"):
+                                    used_attribute = used_attribute[len("cp_"):]
+                                if used_attribute.endswith("_csv"):
+                                    used_attribute = used_attribute[:-len("_csv")]
+                                if hasattr(current_obj, used_attribute):
+                                    used_value = getattr(current_obj, used_attribute)
+                                elif current_attribute.startswith("cp_") and used_attribute in current_obj:
+                                    used_value = current_obj[used_attribute]
                                 else:
                                     raise Exception("The obj: {} does not have the "
-                                                    "attribute: {}".format(current_obj.name, current_attribute))
+                                                    "attribute: {}/{}".format(current_obj.name,
+                                                                              current_attribute, used_attribute))
+                                save_in_csv = False
+                                try:
+                                    if current_attribute.endswith("_csv"):
+                                        resulting_map[segmap == object_id] = used_value
+                                        was_used = True
+                                    else:
+                                        save_in_csv = True
+                                except ValueError:
+                                    save_in_csv = True
+                                if save_in_csv:
+                                    if object_id in save_in_csv_attributes:
+                                        save_in_csv_attributes[object_id][current_attribute] = used_value
+                                    else:
+                                        save_in_csv_attributes[object_id] = {current_attribute: used_value}
                         if was_used:
                             combined_result_map.append(resulting_map)
 
