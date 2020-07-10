@@ -63,7 +63,7 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "class"
+        "map_by": ["class", "instance", "name"]
       }
     },
     {
