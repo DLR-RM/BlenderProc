@@ -72,5 +72,6 @@ Sampler returns a value based on these input parameters specified in the config 
 
 ## More examples
 
+* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
 * [camera_sampling](../camera_sampling): More on sampling for cameras.
 * [entity_manipulation](../entity_manipulation): More on the true power of Providers.
