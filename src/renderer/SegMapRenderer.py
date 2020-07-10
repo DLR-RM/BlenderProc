@@ -226,6 +226,7 @@ class SegMapRenderer(RendererInterface):
                                     default_value = used_default_values[current_attribute]
                                 elif used_attribute in used_default_values:
                                     default_value = used_default_values[used_attribute]
+                            last_state_save_in_csv = None
                             # iterate over all object ids
                             for object_id in used_object_ids:
                                 # get the corresponding object via the id
@@ -244,8 +245,9 @@ class SegMapRenderer(RendererInterface):
                                     # or there is a default value stored
                                     # it throws an exception
                                     raise Exception("The obj: {} does not have the "
-                                                    "attribute: {}/{}".format(current_obj.name,
-                                                                              current_attribute, used_attribute))
+                                                    "attribute: {}, striped: {}. Maybe try a default "
+                                                    "value.".format(current_obj.name, current_attribute, used_attribute))
+
                                 # check if the value should be saved as an image or in the csv file
                                 save_in_csv = False
                                 try:
@@ -256,6 +258,12 @@ class SegMapRenderer(RendererInterface):
                                         save_in_csv = True
                                 except ValueError:
                                     save_in_csv = True
+                                if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
+                                    raise Exception("During creating the mapping, the saving to an image or a csv file "
+                                                    "switched, this might indicated that the used default value, does "
+                                                    "not have the same type as the returned value, "
+                                                    "for: {}".format(current_attribute))
+                                last_state_save_in_csv = save_in_csv
                                 if save_in_csv:
                                     if object_id in save_in_csv_attributes:
                                         save_in_csv_attributes[object_id][used_attribute] = used_value
@@ -284,7 +292,6 @@ class SegMapRenderer(RendererInterface):
                     for object_element in save_in_csv_attributes.values():
                         fieldnames.extend(list(object_element.keys()))
                         break
-                    print(fieldnames)
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
                     # save for each object all values in one row
