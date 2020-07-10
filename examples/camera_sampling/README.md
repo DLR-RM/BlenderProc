@@ -88,5 +88,6 @@ It samples float values between specified `min` and `max` in radians. Here it is
 
 ## More examples
 
+* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
 * [light_sampling](../light_sampling): More on sampling for lights.
 * [entity_manipulation](../entity_manipulation): More on the true power of Providers.
