@@ -50,7 +50,7 @@ class SegMapRenderer(RendererInterface):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "map_by", "Method to be used for color mapping. Type: string. Default: "instance".
+       "map_by", "Method to be used for color mapping. Type: string. Default: "class".
                  "Available: [instance, class] or any custom property or attribute."
        "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in"
                                  "a merged file. Type: string. Default: "segcolormap""
@@ -160,7 +160,8 @@ class SegMapRenderer(RendererInterface):
                 if np.iinfo(optimal_dtype).max >= len(colors) - 1:
                     break
 
-            used_attributes = self.config.get_raw_dict("map_by", "instance")
+            # get the type of mappings which should be performed
+            used_attributes = self.config.get_raw_dict("map_by", "class")
 
             if isinstance(used_attributes, str):
                 # only one result is requested
