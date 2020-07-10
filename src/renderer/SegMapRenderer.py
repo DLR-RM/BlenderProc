@@ -5,7 +5,7 @@ import bpy
 import numpy as np
 
 from src.renderer.RendererInterface import RendererInterface
-from src.utility.BlenderUtility import load_image
+from src.utility.BlenderUtility import load_image, get_all_mesh_objects
 from src.utility.Utility import Utility
 
 
@@ -31,7 +31,7 @@ class SegMapRenderer(RendererInterface):
         RendererInterface.__init__(self, config)
         # As we use float16 for storing the rendering, the interval of integers which can be precisely
         # stored is [-2048, 2048]. As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our
-        # color space which allows ~8 billion different colors/labels. This should be enough.
+        # color space which allows ~8 billion different colors/objects. This should be enough.
         self.render_colorspace_size_per_dimension = 2048
 
     def _colorize_object(self, obj, color):
@@ -72,53 +72,25 @@ class SegMapRenderer(RendererInterface):
         nodes = bpy.context.scene.world.node_tree.nodes
         nodes.get("Background").inputs['Color'].default_value = color + [1]
 
-    def _colorize_objects_for_semantic_segmentation(self, objects):
-        """ Sets the color of each object according to their category_id.
-
-        :param objects: A list of objects.
-        :return: The num_splits_per_dimension of the spanned color space, the color map
-        """
-        if "num_labels" not in bpy.context.scene:
-            raise Exception("The scene is missing the custom property 'num_labels'. For generating semantic segmentation "
-                            "maps, this needs to contain the total number classes!")
-
-        colors, num_splits_per_dimension = Utility.generate_equidistant_values(bpy.context.scene["num_labels"] + 1,
-                                                                               self.render_colorspace_size_per_dimension)
-
-        for obj in objects:
-            if "category_id" not in obj:
-                raise Exception("The object " + obj.name + " does not have a category_id.")
-
-            self._colorize_object(obj, colors[obj["category_id"]])
-
-        # Set world background label
-        if "category_id" not in bpy.context.scene.world:
-            raise Exception("The world does not have a category_id. It will be used to set the label of the world background.")
-        self._set_world_background_color(colors[bpy.context.scene.world["category_id"]])
-
-        # As we don't need any color map when doing semantic segmenation, just return None instead.
-        return colors, num_splits_per_dimension, None
-
     def _colorize_objects_for_instance_segmentation(self, objects):
         """ Sets a different color to each object.
 
         :param objects: A list of objects.
         :return: The num_splits_per_dimension of the spanned color space, the color map
         """
+        # + 1 for the background
         colors, num_splits_per_dimension = Utility.generate_equidistant_values(len(objects) + 1,
                                                                                self.render_colorspace_size_per_dimension)
-
+        # this list maps ids in the image back to the objects
         color_map = []
 
-        # Set world background label
+        # Set world background label, which is always label zero
         self._set_world_background_color(colors[0])
-        color_map.append({'objname': "background", 'class': -1, 'idx': 0})
+        color_map.append(bpy.context.scene.world)  # add the world background as an object to this list
 
         for idx, obj in enumerate(objects):
             self._colorize_object(obj, colors[idx + 1])
-
-            obj_class = obj["category_id"] if "category_id" in obj else None
-            color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx + 1})
+            color_map.append(obj)
 
         return colors, num_splits_per_dimension, color_map
 
@@ -126,18 +98,12 @@ class SegMapRenderer(RendererInterface):
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_samples=1)
 
-            # get current method for color mapping, instance or class
-            method = self.config.get_string("map_by", "class")
 
-            # Get objects with materials (i.e. not lights or cameras)
-            objs_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
+            # Get objects with meshes (i.e. not lights or cameras)
+            objs_with_mats = get_all_mesh_objects()
 
-            if method.lower() == "class":
-                colors, num_splits_per_dimension, color_map = self._colorize_objects_for_semantic_segmentation(objs_with_mats)
-            elif method.lower() == "instance":
-                colors, num_splits_per_dimension, color_map = self._colorize_objects_for_instance_segmentation(objs_with_mats)
-            else:
-                raise Exception("Invalid mapping method: {}, possible for map_by are: class, instance".format(method))
+            colors, num_splits_per_dimension, used_objects = self._colorize_objects_for_instance_segmentation(
+                objs_with_mats)
 
             bpy.context.scene.render.image_settings.file_format = "OPEN_EXR"
             bpy.context.scene.render.image_settings.color_depth = "16"
@@ -155,11 +121,28 @@ class SegMapRenderer(RendererInterface):
             # Render the temporary output
             self._render("seg_", custom_file_path=temporary_segmentation_file_path)
 
+            # get current method for color mapping, instance or class
+            method = self.config.get_string("map_by", "class")
+
             # Find optimal dtype of output based on max index
             for dtype in [np.uint8, np.uint16, np.uint32]:
                 optimal_dtype = dtype
                 if np.iinfo(optimal_dtype).max >= len(colors) - 1:
                     break
+
+
+            used_attribute = self.config.get_raw_dict("map_by", "instance")
+
+            if isinstance(used_attribute, str):
+                # only one result is requested
+                result_channels = 1
+                used_attribute = [used_attribute]
+            elif isinstance(used_attribute, list):
+                result_channels = len(used_attribute)
+            else:
+                raise Exception("The type of this is not supported here: {}".format(used_attribute))
+
+            save_in_csv_attributes = {}
 
             # After rendering
             if not self._avoid_rendering:
@@ -172,26 +155,75 @@ class SegMapRenderer(RendererInterface):
                                                                                      self.render_colorspace_size_per_dimension)
                     segmap = segmap.astype(optimal_dtype)
 
+                    used_object_ids = np.unique(segmap)
+                    combined_result_map = []
+                    for channel_id in range(result_channels):
+                        resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
+                        was_used = False
+                        current_attribute = used_attribute[channel_id]
+                        # if the class is used the category_id attribute is evaluated
+                        if current_attribute == "class":
+                            current_attribute = "cp_category_id"
+                        # in the instance case the resulting ids are directly used
+                        if current_attribute == "instance":
+                            resulting_map = segmap
+                            was_used = True
+                        else:
+                            for object_id in used_object_ids:
+                                current_obj = used_objects[object_id]
+                                if hasattr(current_obj, current_attribute):
+                                    used_value = getattr(current_obj, current_attribute)
+                                    try:
+                                        resulting_map[segmap == object_id] = used_value
+                                        was_used = True
+                                    except ValueError:
+                                        if object_id in save_in_csv_attributes:
+                                            save_in_csv_attributes[object_id][current_attribute] = used_value
+                                        else:
+                                            save_in_csv_attributes[object_id] = {current_attribute: used_value}
+                                elif current_attribute.startswith("cp_") and current_attribute[len("cp_"):] in current_obj:
+                                    used_value = current_obj[current_attribute[len("cp_"):]]
+                                    try:
+                                        resulting_map[segmap == object_id] = used_value
+                                        was_used = True
+                                    except ValueError:
+                                        if object_id in save_in_csv_attributes:
+                                            save_in_csv_attributes[object_id][current_attribute] = used_value
+                                        else:
+                                            save_in_csv_attributes[object_id] = {current_attribute: used_value}
+                                else:
+                                    raise Exception("The obj: {} does not have the "
+                                                    "attribute: {}".format(current_obj.name, current_attribute))
+                        if was_used:
+                            combined_result_map.append(resulting_map)
+
                     fname = final_segmentation_file_path + "%04d" % frame
-                    np.save(fname, segmap)
+                    resulting_map = np.stack(combined_result_map, axis=2)
+                    np.save(fname, resulting_map)
 
             # write color mappings to file
-            if color_map is not None and not self._avoid_rendering:
-                with open(os.path.join(self._determine_output_dir(),
-                                       self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map") +
-                                       ".csv"), 'w', newline='') as csvfile:
-                    fieldnames = list(color_map[0].keys())
+            if objs_with_mats and not self._avoid_rendering:
+                csv_file_path = os.path.join(self._determine_output_dir(),
+                                             self.config.get_string("segcolormap_output_file_prefix",
+                                                                    "class_inst_col_map") + ".csv")
+                with open(csv_file_path, 'w', newline='') as csvfile:
+                    # get from the first element the used field names
+                    fieldnames = ["idx"]
+                    for object_element in save_in_csv_attributes.values():
+                        fieldnames.extend(list(object_element.keys()))
+                        break
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
-                    for mapping in color_map:
-                        writer.writerow(mapping)
+                    for obj_idx, object_element in save_in_csv_attributes.items():
+                        object_element["idx"] = obj_idx
+                        writer.writerow(object_element)
 
-        self._register_output("segmap_", "segmap", ".npy", "1.0.0")
-        if color_map is not None:
+        self._register_output("segmap_", "segmap", ".npy", "2.0.0")
+        if save_in_csv_attributes is not None:
             self._register_output("class_inst_col_map",
                                   "segcolormap",
                                   ".csv",
-                                  "1.0.0",
+                                  "2.0.0",
                                   unique_for_camposes=False,
                                   output_key_parameter_name="segcolormap_output_key",
                                   output_file_prefix_parameter_name="segcolormap_output_file_prefix")
