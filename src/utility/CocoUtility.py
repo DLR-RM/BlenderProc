@@ -23,16 +23,14 @@ class CocoUtility:
         # Adds objects from the color map to the coco output 
         # skip background
         for obj in colormap[1:]:
-            # if supercategory is defined, skip classes from other supercategories
+            # take all objects or objects from specified supercategory is defined
             if dataset_name in ['coco_annotations', super_category_mapping[obj["objname"]]]:
                 
-                if obj["class"].isnumeric()
-                    category_id = int(obj["class"])  
-                else: 
-                    category_id = int(obj["idx"])
+                if not obj["class"].isnumeric():
+                    raise Exception("The object " + obj.name + " does not have an integer category_id.")
                 
-                categories.append({'id': category_id, 'name': obj["class"], 'supercategory': super_category_mapping[obj["objname"]]})
-                obj_idx_2_category_map[int(obj["idx"])] = category_id
+                categories.append({'id': int(obj["class"]), 'name': obj["class"], 'supercategory': super_category_mapping[obj["objname"]]})
+                obj_idx_2_category_map[int(obj["idx"])] = int(obj["class"])
 
         licenses = [{
             "id": 1,
@@ -60,7 +58,7 @@ class CocoUtility:
 
             # Go through all objects visible in this image
             unique_objects = np.unique(segmentation_map)
-            breakpoint()
+
             # Remove background
             unique_objects = np.delete(unique_objects, np.where(unique_objects == 0))
             for obj in unique_objects:
