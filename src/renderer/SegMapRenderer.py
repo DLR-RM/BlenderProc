@@ -115,9 +115,12 @@ class SegMapRenderer(RendererInterface):
         color_map.append({'objname': "background", 'class': -1, 'idx': 0})
 
         for idx, obj in enumerate(objects):
-            self._colorize_object(obj, colors[idx + 1])
+            if "category_id" not in obj:
+                raise Exception("The object " + obj.name + " does not have a category_id.")
+            else:
+                obj_class = obj["category_id"]
 
-            obj_class = obj["category_id"] if "category_id" in obj else None
+            self._colorize_object(obj, colors[idx + 1])
             color_map.append({'objname': obj.name, 'class': obj_class, 'idx': idx + 1})
 
         return colors, num_splits_per_dimension, color_map
