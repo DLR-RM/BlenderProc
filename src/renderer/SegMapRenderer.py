@@ -130,9 +130,6 @@ class SegMapRenderer(RendererInterface):
         color_map.append(bpy.context.scene.world)  # add the world background as an object to this list
 
         for idx, obj in enumerate(objects):
-            if "category_id" not in obj:
-                raise Exception("The object " + obj.name + " does not have a category_id.")
-
             self._colorize_object(obj, colors[idx + 1])
             color_map.append(obj)
 
