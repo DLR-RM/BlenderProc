@@ -354,7 +354,6 @@ class Utility:
                     b_mid_point += block_length
                 g_mid_point += block_length
             r_mid_point += block_length
-
         return values[:num], num_splits_per_dimension
 
     @staticmethod
@@ -371,6 +370,8 @@ class Utility:
         block_length = space_size_per_dimension // num_splits_per_dimension
         # Subtract a half of a block from all values, s.t. now every value points to the lower corner of a block
         values -= block_length // 2
+        # this clipping is necessary to avoid that numbers below zero are than used in an uint16
+        values = np.clip(values, 0, space_size_per_dimension)
         # Calculate the block indices per dimension
         values /= block_length
         # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())

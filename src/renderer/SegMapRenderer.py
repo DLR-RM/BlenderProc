@@ -199,6 +199,9 @@ class SegMapRenderer(RendererInterface):
                     segmap = segmap.astype(optimal_dtype)
 
                     used_object_ids = np.unique(segmap)
+                    max_id = np.max(used_object_ids)
+                    if max_id >= len(used_objects):
+                        raise Exception("There are more object colors than there are objects")
                     combined_result_map = []
                     for channel_id in range(result_channels):
                         resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
@@ -303,7 +306,7 @@ class SegMapRenderer(RendererInterface):
                         writer.writerow(object_element)
 
         self._register_output("segmap_", "segmap", ".npy", "2.0.0")
-        if save_in_csv_attributes is not None:
+        if save_in_csv_attributes:
             self._register_output("class_inst_col_map",
                                   "segcolormap",
                                   ".csv",
