@@ -111,7 +111,10 @@
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter"
+      "module": "writer.CocoAnnotationsWriter",
+      "config": {
+        "supercategory": "<args:1>"
+      }
     },
     {
       "module": "writer.Hdf5Writer"
