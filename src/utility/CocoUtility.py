@@ -22,14 +22,14 @@ class CocoUtility:
 
         # skip background
         for inst in inst_attribute_maps[1:]:
+
             # take all objects or objects from specified supercategory is defined
+            inst_supercategory = "coco_annotations"
             if "bop_dataset_name" in inst:
                 inst_supercategory = inst["bop_dataset_name"] 
             elif "supercategory" in inst:
                 inst_supercategory = inst["supercategory"]
-            else:
-                inst_supercategory = "coco_annotations"
-
+                
             if supercategory == inst_supercategory:
                 categories.append({'id': int(inst["category_id"]), 'name': inst["category_id"], 'supercategory': inst_supercategory})
                 instance_2_category_map[int(inst["idx"])] = int(inst["category_id"])
