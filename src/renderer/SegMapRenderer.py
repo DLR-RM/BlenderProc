@@ -36,16 +36,19 @@ class SegMapRenderer(RendererInterface):
             "map_by": ["class", "instance"]
         }
         In this example the output will be a class image and an instance image, so the output will have two channels,
-        instead of one. The first will contain the class the second the instance segmentation.
+        instead of one. The first will contain the class the second the instance segmentation. This also means that
+        the class labels per instance are stored in a .csv file.
 
     Example 3:
         "config": {
-            "map_by": ["class", "class_csv", "instance", "name"]
+            "map_by": ["class", "instance", "name"]
          }
-         It is often useful to also store a mapping between the instance and these class in a dict, which is possible
-         via the `_csv` option. All values which can not be stored in the image are stored inside of a dict. The `name`
+         It is often useful to also store a mapping between the instance and these class in a dict, This happens
+         automatically, when "instance" and another key is used.
+         All values which can not be stored in the image are stored inside of a dict. The `name`
          attribute would be saved now in a dict as we only store ints and floats in the image.
-         We can force keys to be stored in the dict with adding "_csv" to the end.
+         If no "instance" is provided and only "name" would be there, an error would be thrown as an instance mapping
+         is than not possible
 
     Example 4:
         "config": {
@@ -54,6 +57,7 @@ class SegMapRenderer(RendererInterface):
          }
          It is also possible to set default values, for keys object, which don't have a certain custom property.
          This is especially useful dealing with the background, which often lacks certain object properties.
+
 
     .. csv-table::
        :header: "Parameter", "Description"
@@ -66,6 +70,16 @@ class SegMapRenderer(RendererInterface):
                                          "color mapping to file. Type: string. Default: class_inst_col_map"
        "output_file_prefix", "The file prefix that should be used when writing semantic information to a file."
                              "Type: string, Default: "segmap_""
+
+    **Custom functions**
+
+    All custom functions here are used inside of the map_by/default_values list.
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+
+        "cf_basename", "Adds the basename of the object to the .csv file. The basename is the name attribute, without"
+                       "added numbers to separate objects with the same name. This is used in the map_by list."
     """
 
     def __init__(self, config):
@@ -200,6 +214,8 @@ class SegMapRenderer(RendererInterface):
                     if max_id >= len(used_objects):
                         raise Exception("There are more object colors than there are objects")
                     combined_result_map = []
+                    there_was_an_instance_rendering = False
+                    list_of_used_attributes = []
                     for channel_id in range(result_channels):
                         resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
                         was_used = False
@@ -208,19 +224,18 @@ class SegMapRenderer(RendererInterface):
                         # if the class is used the category_id attribute is evaluated
                         if current_attribute == "class":
                             current_attribute = "cp_category_id"
-                        if current_attribute == "class_csv":
-                            current_attribute = "cp_category_id_csv"
                         # in the instance case the resulting ids are directly used
                         if current_attribute == "instance":
+                            there_was_an_instance_rendering = True
                             resulting_map = segmap
                             was_used = True
                         else:
+                            if current_attribute != "cp_category_id":
+                                list_of_used_attributes.append(current_attribute)
                             # for the current attribute remove cp_ and _csv, if present
                             used_attribute = current_attribute
                             if used_attribute.startswith("cp_"):
                                 used_attribute = used_attribute[len("cp_"):]
-                            if used_attribute.endswith("_csv"):
-                                used_attribute = used_attribute[:-len("_csv")]
                             # check if a default value was specified
                             default_value_set = False
                             if current_attribute in used_default_values or used_attribute in used_default_values:
@@ -240,6 +255,11 @@ class SegMapRenderer(RendererInterface):
                                 # if the current object has a custom property with that name -> get it
                                 elif current_attribute.startswith("cp_") and used_attribute in current_obj:
                                     used_value = current_obj[used_attribute]
+                                elif current_attribute.startswith("cf_"):
+                                    if current_attribute == "cf_basename":
+                                        used_value = current_obj.name
+                                        if "." in used_value:
+                                            used_value = used_value[:used_value.rfind(".")]
                                 elif default_value_set:
                                     # if none of the above applies use the default value
                                     used_value = default_value
@@ -254,10 +274,10 @@ class SegMapRenderer(RendererInterface):
                                 # check if the value should be saved as an image or in the csv file
                                 save_in_csv = False
                                 try:
-                                    if not current_attribute.endswith("_csv"):
-                                        resulting_map[segmap == object_id] = used_value
-                                        was_used = True
-                                    else:
+                                    resulting_map[segmap == object_id] = used_value
+                                    was_used = True
+                                    # save everything which is not instance also in the .csv
+                                    if current_attribute != "instance":
                                         save_in_csv = True
                                 except ValueError:
                                     save_in_csv = True
@@ -282,6 +302,14 @@ class SegMapRenderer(RendererInterface):
                     if resulting_map.shape[2] == 1:
                         resulting_map = resulting_map[:, :, 0]
                     np.save(fname, resulting_map)
+            if not there_was_an_instance_rendering:
+                if len(list_of_used_attributes) > 0:
+                    raise Exception("There were attributes specified in the may_by, which could not be saved as "
+                                    "there was no \"instance\" may_by key used. This is true for this/these "
+                                    "keys: {}".format(", ".join(list_of_used_attributes)))
+                # if there was no instance rendering no .csv file is generated!
+                # delete all saved infos about .csv
+                save_in_csv_attributes = {}
 
             # write color mappings to file
             if save_in_csv_attributes and not self._avoid_rendering:
