@@ -326,15 +326,15 @@ class SegMapRenderer(RendererInterface):
                     for object_element in save_in_csv_attributes.values():
                         fieldnames.extend(list(object_element.keys()))
                         break
-                    for i in range(len(used_channels)):
-                        fieldnames.append("channel_{}".format(i))
+                    for channel_name in used_channels:
+                        fieldnames.append("channel_{}".format(channel_name))
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
                     # save for each object all values in one row
                     for obj_idx, object_element in save_in_csv_attributes.items():
                         object_element["idx"] = obj_idx
                         for i, channel_name in enumerate(used_channels):
-                            object_element["channel_{}".format(i)] = channel_name
+                            object_element["channel_{}".format(channel_name)] = i
                         writer.writerow(object_element)
 
         self._register_output("segmap_", "segmap", ".npy", "2.0.0")
