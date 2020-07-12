@@ -216,10 +216,12 @@ class SegMapRenderer(RendererInterface):
                     combined_result_map = []
                     there_was_an_instance_rendering = False
                     list_of_used_attributes = []
+                    used_channels = []
                     for channel_id in range(result_channels):
                         resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
                         was_used = False
                         current_attribute = used_attributes[channel_id]
+                        org_attribute = current_attribute
 
                         # if the class is used the category_id attribute is evaluated
                         if current_attribute == "class":
@@ -293,6 +295,7 @@ class SegMapRenderer(RendererInterface):
                                     else:
                                         save_in_csv_attributes[object_id] = {used_attribute: used_value}
                         if was_used:
+                            used_channels.append(org_attribute)
                             combined_result_map.append(resulting_map)
 
                     fname = final_segmentation_file_path + "%04d" % frame
@@ -323,11 +326,15 @@ class SegMapRenderer(RendererInterface):
                     for object_element in save_in_csv_attributes.values():
                         fieldnames.extend(list(object_element.keys()))
                         break
+                    for i in range(len(used_channels)):
+                        fieldnames.append("channel_{}".format(i))
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
                     # save for each object all values in one row
                     for obj_idx, object_element in save_in_csv_attributes.items():
                         object_element["idx"] = obj_idx
+                        for i, channel_name in enumerate(used_channels):
+                            object_element["channel_{}".format(i)] = channel_name
                         writer.writerow(object_element)
 
         self._register_output("segmap_", "segmap", ".npy", "2.0.0")
