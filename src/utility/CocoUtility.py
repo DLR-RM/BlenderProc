@@ -52,7 +52,10 @@ class CocoUtility:
         annotations = []
 
         for segmentation_map_path, image_path in zip(segmentation_map_paths, image_paths):
-            segmentation_map = np.load(segmentation_map_path).squeeze()
+            
+            # Load instance map
+            inst_channel = int(inst_attribute_maps[0]['channel_instance'])
+            segmentation_map = np.load(segmentation_map_path)[:,:,inst_channel]
 
             # Add coco info for image
             image_id = len(images)
@@ -60,7 +63,7 @@ class CocoUtility:
 
             # Go through all objects visible in this image
             instances = np.unique(segmentation_map)
-
+            
             # Remove background
             instances = np.delete(instances, np.where(instances == 0))
             for inst in instances:
