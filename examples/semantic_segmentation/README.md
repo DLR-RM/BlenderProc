@@ -64,7 +64,7 @@ This module does sets the world background to the `category_id` 0, this is neces
 {
   "module": "renderer.SegMapRenderer",
   "config": {
-    "map_by": ["class", "instance", "name", "class_csv"]
+    "map_by": ["class", "instance", "name"]
   }
 }
 ```
@@ -72,14 +72,16 @@ This module does sets the world background to the `category_id` 0, this is neces
 This module can map any kind of object related information to an image or to a list of indices of the objects in the scene.
 So, if you want to map the custom property `category_id` to an image, you write `"map_by": "class"`.
 Then each pixel gets assigned the `category_id` of the object present in that pixel.
-If it set to `instance` each pixel gets an id for the obj nr in the scene, these are consistent for several frames, which also means that not all ids must appear in each image.
+If it is set to `instance` each pixel gets an id for the obj nr in the scene, these are consistent for several frames, which also means that not all ids must appear in each image.
 It can also be set to different custom properties or attributes of the object class like: `"name"`, which returns the name of each object. 
 This can not be saved in an image, so a csv file is generated, which is attached to the `.hdf5` container in the end.
 Where it maps each instance nr to a name. 
-The same is true, if you write after values which can be mapped to an image `_csv` then these values are also stored in the csv file as well.
+If there are keys, which can not be stored in an image, it is necessary to also generate a instance image.
+Furthermore, if an instance image is used all other used keys are stored in the .csv.
 
-For example it would also be possible to use the key: `"location_csv"`. This would access the location of each object and add it to the csv file.
+For example it would also be possible to use the key: `"location"`. This would access the location of each object and add it to the csv file.
 Be aware that if the background is visible this will raise an error, as the background has no `location` attribute.
+This can be avoided by providing a default value like: `default_values: {"location: [0,0,0]}`.
 
 ### Hdf5Writer
 
@@ -103,6 +105,6 @@ We therefore here convert this image into a `depth` image by using the `Dist2Dep
 The `TrimRedundantChannels` decreases the amount of channels in the `distance/depth` image to 1 instead of 3.
 
 ## More examples
-
+* [coco_annotations](../coco_annotations): Produce instance segmentations in coco format
 * [suncg_basic](../suncg_basic): Rendering SUNCG scenes with fixed camera poses.
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): Rendering SUNCG scenes with dynamically sampled camera poses.
