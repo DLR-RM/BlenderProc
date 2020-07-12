@@ -1,6 +1,7 @@
 import bpy
 
 from src.main.Module import Module
+from src.utility.BlenderUtility import get_all_mesh_objects
 
 
 class WorldManipulator(Module):
@@ -58,6 +59,7 @@ class WorldManipulator(Module):
 
         "cf_bg_surface_color", "Sets the RGBA color of the light emitted by the background. Type: mathutils.Vector."
         "cf_bg_surface_strength", "Sets the strength of the light emitted by the background. Type: float."
+        "cf_set_world_category_id", "Sets the category_id of the background. Type: int."
     """
 
     def __init__(self, config):
@@ -91,6 +93,11 @@ class WorldManipulator(Module):
                     self._set_bg_surface_color(world, value)
                 elif key == "bg_surface_strength":
                     self._set_bg_surface_strength(world, value)
+                elif key == "set_world_category_id":
+                    if isinstance(value, int):
+                        bpy.context.scene.world["category_id"] = value
+                    else:
+                        raise Exception("The category id of the world can only be int!")
                 else:
                     raise RuntimeError('Unknown cf_ parameter: ' + key)
 

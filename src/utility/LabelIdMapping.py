@@ -7,11 +7,9 @@ class LabelIdMapping(object):
 	Attributes:
 	id_label_map: maps from an id to its name. E.g. id_label_map[0] = "void".
 	label_id_map: maps a class/category name to its id. E.g. label_id_map["void"] = 0.
-	num_labels: the number of classes for the currently loaded mapping. E.g. 40 for NYU.
 	"""
 	id_label_map = []
 	label_id_map = {}
-	num_labels   = 0
 
 	def __init__(self):
 		pass
@@ -46,4 +44,3 @@ class LabelIdMapping(object):
 			mapping = LabelIdMapping.read_csv_mapping(mapping)
 
 		LabelIdMapping.id_label_map, LabelIdMapping.label_id_map = mapping
-		LabelIdMapping.num_labels = len(LabelIdMapping.label_id_map)

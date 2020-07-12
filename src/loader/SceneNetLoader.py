@@ -49,7 +49,6 @@ class SceneNetLoader(LoaderInterface):
             'id_mappings', 'nyu_idset.csv')))
 
         if LabelIdMapping.label_id_map:
-            bpy.data.scenes["Scene"]["num_labels"] = LabelIdMapping.num_labels
             bpy.context.scene.world["category_id"] = LabelIdMapping.label_id_map["void"]
         else:
             print("Warning: The category labeling file could not be found -> no semantic segmentation available!")

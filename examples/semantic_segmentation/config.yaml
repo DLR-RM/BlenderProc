@@ -55,18 +55,25 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "output_key": "colors"
+        "output_key": "colors",
+        "render_distance": True
       }
     },
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": ["instance", "class_csv", "name"]
+        "map_by": ["class", "instance", "name"]
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter",
+      "module": "writer.Hdf5Writer",
       "config": {
+        "postprocessing_modules": {
+          "distance": [
+          {"module": "postprocessing.TrimRedundantChannels"},
+          {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
       }
     }
   ]

@@ -23,6 +23,7 @@ if __name__ == "__main__":
             border = args.border
             normal_path = image_path.replace("colors", "normals")
             distance_path = image_path.replace("colors", "distance")
+            depth_path = image_path.replace("colors", "depth")
             seg_path = image_path.replace("colors", "segmap")
             used_imgs = []
             if os.path.exists(image_path):
@@ -31,6 +32,10 @@ if __name__ == "__main__":
                 used_imgs.append(plt.imread(normal_path))
             if os.path.exists(distance_path):
                 used_imgs.append(plt.imread(distance_path))
+            if os.path.exists(depth_path):
+                used_imgs.append(plt.imread(depth_path))
+            if os.path.exists(distance_path) and os.path.exists(depth_path):
+                raise Exception("This can only work with one of the two, either distance or depth!")
             if os.path.exists(seg_path):
                 used_imgs.append(plt.imread(seg_path))
             if used_imgs:

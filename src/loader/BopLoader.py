@@ -85,8 +85,7 @@ class BopLoader(LoaderInterface):
 
         model_p = dataset_params.get_model_params(datasets_path, dataset, model_type=self.model_type if self.model_type else None)
         cam_p = dataset_params.get_camera_params(datasets_path, dataset, cam_type=self.cam_type if self.cam_type else None)
-        bpy.data.scenes["Scene"]["num_labels"] = len(model_p['obj_ids'])
-        
+
         try:
             split_p = dataset_params.get_split_params(datasets_path, dataset, split=self.split)
         except ValueError:

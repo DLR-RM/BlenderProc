@@ -75,6 +75,7 @@ class EntityManipulator(Module):
             "cf_add_modifier": {
               "name": "Solidify",
               "thickness": 0.001
+            }
           }
         }
 
