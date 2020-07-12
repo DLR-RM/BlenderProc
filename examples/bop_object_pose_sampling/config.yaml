@@ -106,8 +106,8 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": ["instance", "class_csv", "cp_bop_dataset_name_csv"],
-        "default_values": {"class":0, "cp_bop_dataset_name_csv": -1}
+        "map_by": ["instance", "class", "cp_bop_dataset_name"],
+        "default_values": {"class":0, "cp_bop_dataset_name": -1}
       }
     },
     {

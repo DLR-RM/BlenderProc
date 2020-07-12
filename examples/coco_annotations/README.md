@@ -51,6 +51,19 @@ python scripts/vis_coco_annotation.py
 
 ## Config file
 
+### SegMapRenderer
+
+```yaml
+  {
+    "module": "renderer.SegMapRenderer",
+    "config": {
+      "map_by": ["instance", "class"],
+    }
+  },
+```
+
+The `renderer.SegMapRenderer` needs to render both instance and class maps. The class is defined in terms of a custom property `category_id` which must be previously defined for each instance. The `category_id` can be either set in a custom Loader module or in a `.blend` file. 
+
 ### CocoAnnotationsWriter
 
 ```yaml
