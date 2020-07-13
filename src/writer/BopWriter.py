@@ -100,8 +100,8 @@ class BopWriter(WriterInterface):
         "dataset", "Annotations for objects of this dataset will be saved. Type: string."
         "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
                                     "Type: bool. Default: False"
-        "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to "
-                            "failed physics. Default: 5. Type float."
+        "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to"
+                             "failed physics. Type: float. Default: 5."
     """
 
     def __init__(self, config):

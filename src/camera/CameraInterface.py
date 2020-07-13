@@ -51,6 +51,7 @@ class CameraInterface(Module):
                            "(three Euler angles), 'forward_vec'(specified with a forward vector: the Y-Axis is assumed "
                            "as Up-Vector), 'look_at' (camera will be turned such as it looks at 'value' location, which "
                            "can be defined as a fixed or sampled XYZ location)."
+        "rotation/inplane_rot", "A rotation angle in radians around the Z axis. Type: float. Default: 0.0"
         "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float."
         "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed "
                "to be the angle between forward vector and one side of the frustum). Type: float. Default: 0.691111."

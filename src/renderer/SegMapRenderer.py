@@ -64,6 +64,7 @@ class SegMapRenderer(RendererInterface):
 
        "map_by", "Method to be used for color mapping. Type: string. Default: "class".
                  "Available: [instance, class] or any custom property or attribute."
+       "default_values", "The default values used for the keys used in map_by. Type: dir. Default: {}"
        "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in"
                                  "a merged file. Type: string. Default: "segcolormap""
        "segcolormap_output_file_prefix", "The file prefix that should be used when writing the class instance to"
@@ -80,6 +81,7 @@ class SegMapRenderer(RendererInterface):
 
         "cf_basename", "Adds the basename of the object to the .csv file. The basename is the name attribute, without"
                        "added numbers to separate objects with the same name. This is used in the map_by list."
+                       "Type: None"
     """
 
     def __init__(self, config):

@@ -25,6 +25,8 @@ class CocoAnnotationsWriter(WriterInterface):
        "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was "
                                  "registered. Should be the same as the colormap_output_key of the SegMapRenderer "
                                  "module. Type: string. Default: segcolormap."
+       "supercategory", "Name of the dataset/supercategory to filter for, e.g. a specific BOP dataset."
+                        "Type: str. Default: coco_annotations"
        "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output "
                                     "directory, the new coco annotations will be appended to the existing file. Also "
                                     "the rgb images will be named such that there are no collisions. Type: bool. "
