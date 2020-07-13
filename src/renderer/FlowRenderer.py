@@ -27,6 +27,8 @@ class FlowRenderer(RendererInterface):
                                            "Type: string, Default: "forward_flow_""
         "backward_flow_output_file_prefix", "The file prefix that should be used when writing backward flow to a file."
                                             "Type: string, Default: "backward_flow_""
+        "samples", "The amount of samples rendered, this value should be 1. Only change it when you know what you are"
+                   "doing. Type: int. Default: 1"
     """
 
     def __init__(self, config):
