@@ -107,6 +107,7 @@ In `batches` we are specifying batches of rocks to load by defining:
 {
   "module": "constructor.RockEssentialsGroundConstructor",
   "config": {
+    "cp_category_id": 2,
     "tiles": [
     {
       "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
@@ -121,6 +122,7 @@ In `batches` we are specifying batches of rocks to load by defining:
 ```
 
 In `tiles` we are defining a settings of one or multiple ground tiles by specifying:
+* `"cp_category_id"` set category for segmap and coco annotations
 * `shader_path` for a ground plane,
 * scale of the plane `plane_scale`,
 * `subdivision_cuts` and `subdivision_render_levels` to perform on a ground plane,

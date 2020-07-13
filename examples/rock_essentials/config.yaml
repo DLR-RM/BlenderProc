@@ -58,6 +58,7 @@
     {
       "module": "constructor.RockEssentialsGroundConstructor",
       "config": {
+        "cp_category_id": 2,
         "tiles": [
         {
           "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
@@ -220,7 +221,8 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": ["instance", "class"]
+        "map_by": ["instance", "class"],
+        "default_values": {"class":0}
       }
     },
     {
