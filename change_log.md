@@ -12,6 +12,7 @@
 - create postprocessing module to calculate the depth out of the distance image
 - rewriting of the SegMapRenderer, it now supports the mapping of any attribute or custom property of an object to an image or a csv file
 - reworking of the used coco examples to better work with this new SegMapRenderer
+- adapting CocoAnnotationsWriter to write category_ids which must be defined in a Loader or in a .blend file
 - adding support for a supercategory inside of the coco annotations tool (useful for bop dataset names)
 - add texture provider, which can generate random textures, which can be used in a displacement modifier
 - added to the EntityManipulator: 
