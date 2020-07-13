@@ -41,6 +41,7 @@
         "mm2m": True,
         "sample_objects": True,
         "num_of_objs_to_sample": 3,
+        "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
         },
@@ -55,7 +56,6 @@
         "mm2m": True,
         "sample_objects": True,
         "num_of_objs_to_sample": 10,
-        "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
         },
@@ -346,6 +346,19 @@
         "samples": 50,
         "render_distance": True,
         "image_type": "JPEG"
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": ["instance", "class", "cp_bop_dataset_name"],
+        "default_values": {"class":0, "cp_bop_dataset_name": -1}
+      }
+    },
+    {
+      "module": "writer.CocoAnnotationsWriter",
+      "config": {
+        "supercategory": "<args:1>"
       }
     },
     {
