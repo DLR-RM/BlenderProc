@@ -349,19 +349,6 @@
       }
     },
     {
-      "module": "renderer.SegMapRenderer",
-      "config": {
-        "map_by": ["instance", "class", "cp_bop_dataset_name"],
-        "default_values": {"class":0, "cp_bop_dataset_name": -1}
-      }
-    },
-    {
-      "module": "writer.CocoAnnotationsWriter",
-      "config": {
-        "supercategory": "<args:1>"
-      }
-    },
-    {
       "module": "writer.BopWriter",
       "config": {
         "dataset": "<args:1>",
