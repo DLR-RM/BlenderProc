@@ -106,11 +106,15 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "instance"
+        "map_by": ["instance", "class", "cp_bop_dataset_name"],
+        "default_values": {"class":0, "cp_bop_dataset_name": -1}
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter"
+      "module": "writer.CocoAnnotationsWriter",
+      "config": {
+        "supercategory": "<args:1>"
+      }
     },
     {
       "module": "writer.Hdf5Writer"
