@@ -10,7 +10,7 @@ Check out our arXiv paper (we are updating it from time to time): https://arxiv.
 
 ## Overview Video
 
-[![BlenderProc Video](http://img.youtube.com/vi/tQ59iGVnJWM/0.jpg)](http://www.youtube.com/watch?v=tQ59iGVnJWM "BlenderProc")
+[![BlenderProc Video](BlenderProcVideoImg.jpg)](http://www.youtube.com/watch?v=tQ59iGVnJWM "BlenderProc")
 
 ## Contents
 
