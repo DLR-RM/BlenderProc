@@ -6,9 +6,7 @@
 
 A procedural Blender pipeline for image generation for Deep Learning.
 
-Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
-
-Also check out our workshop paper at RSS: https://sim2real.github.io/assets/papers/2020/denninger.pdf
+Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating it from time to time) and our [workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) on sim2real transfer presented at RSS 2020.
 
 ## Overview Video
 
