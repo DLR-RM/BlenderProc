@@ -10,7 +10,12 @@ Check out our arXiv paper (we are updating it from time to time): https://arxiv.
 
 ## Overview Video
 
-[![BlenderProc Video](BlenderProcVideoImg.jpg)](http://www.youtube.com/watch?v=tQ59iGVnJWM "BlenderProc")
+<a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
+<p align="center">
+<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550>
+</p>
+</a>
+
 
 ## Contents
 
