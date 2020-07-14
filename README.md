@@ -8,6 +8,15 @@ A procedural Blender pipeline for image generation for Deep Learning.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
+## Overview Video
+
+<a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
+<p align="center">
+<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550>
+</p>
+</a>
+
+
 ## Contents
 
 * [General](#general)
