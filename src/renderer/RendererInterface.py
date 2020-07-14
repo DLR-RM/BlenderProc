@@ -88,6 +88,36 @@ class RendererInterface(Module):
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
 
+    def _disable_all_denoiser(self):
+        """ Disables all denoiser.
+
+        At the moment this includes the cycles and the intel denoiser.
+        """
+        # Disable cycles denoiser
+        bpy.context.view_layer.cycles.use_denoising = False
+
+        # Disable intel denoiser
+        if bpy.context.scene.use_nodes:
+            nodes = bpy.context.scene.node_tree.nodes
+            links = bpy.context.scene.node_tree.links
+
+            # Go through all existing denoiser nodes
+            for denoiser_node in Utility.get_nodes_with_type(nodes, 'CompositorNodeDenoise'):
+                in_node = denoiser_node.inputs['Image']
+                out_node = denoiser_node.outputs['Image']
+
+                # If it is fully included into the node tree
+                if in_node.is_linked and out_node.is_linked:
+                    # There is always only one input link
+                    in_link = in_node.links[0]
+                    # Connect from_socket of the incoming link with all to_sockets of the out going links
+                    for link in out_node.links:
+                        links.new(in_link.from_socket, link.to_socket)
+
+                # Finally remove the denoiser node
+                nodes.remove(denoiser_node)
+
+
     def _configure_renderer(self, default_samples=256, use_denoiser=False, default_denoiser="Intel"):
         """
         Sets many different render parameters which can be adjusted via the config.
@@ -123,11 +153,12 @@ class RendererInterface(Module):
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
 
+        # Make sure there is no denoiser active
+        self._disable_all_denoiser()
         if use_denoiser:
             denoiser = self.config.get_string("denoiser", default_denoiser)
             if denoiser.upper() == "INTEL":
                 # The intel denoiser is activated via the compositor
-                bpy.context.view_layer.cycles.use_denoising = False
                 bpy.context.scene.use_nodes = True
                 nodes = bpy.context.scene.node_tree.nodes
                 links = bpy.context.scene.node_tree.links
