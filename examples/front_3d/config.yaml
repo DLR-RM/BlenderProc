@@ -24,7 +24,14 @@
     {
       "module": "loader.Front3DLoader",
       "config": {
-        "path": "<args:0>"
+        "json_path": "<args:0>",
+        "3D_future_model_path": "<args:1>"
+      }
+    },
+    {
+      "module": "manipulators.WorldManipulator",
+      "config": {
+        "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
       }
     },
     {
@@ -111,33 +118,30 @@
       }
     },
     {
-      "module": "lighting.LightLoader",
-      "config": {
-        "lights": [
-          {
-            "type": "POINT",
-            "location": [5, -5, 5],
-            "energy": 1000
-          }
-        ]
-      }
-    },
-    {
-      "module": "camera.CameraSampler",
+      "module": "camera.Front3DCameraSampler",
       "config": {
         "cam_poses": [
           {
-            "number_of_samples": 1,
+            "number_of_samples": 10,
+            "min_interest_score": 0.25,
+            "proximity_checks": {
+              "min": 1.0,
+              "avg": {
+                "min": 2.5,
+                "max": 3.5,
+              },
+              "no_background": True
+            },
             "location": {
               "provider":"sampler.Uniform3d",
-              "max":[3.401, 1.6301, 1.3701],
-              "min":[3.4, 1.63, 1.37]
+              "max":[0, 0, 1.8],
+              "min":[0, 0, 1.4]
             },
             "rotation": {
               "value": {
                 "provider":"sampler.Uniform3d",
-                "max":[1.338668, 0, 1.98],
-                "min":[1.338, 0, 1.97]
+                "max":[1.338, 0, 6.283185307],
+                "min":[1.2217, 0, 0]
               }
             }
           }
@@ -151,6 +155,12 @@
         "samples": 350,
         "render_normals": True,
         "render_depth": True,
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": "class"
       }
     },
     {
