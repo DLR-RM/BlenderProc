@@ -8,6 +8,8 @@ A procedural Blender pipeline for image generation for Deep Learning.
 
 Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
 
+Also check out our workshop paper at RSS: https://sim2real.github.io/assets/papers/2020/denninger.pdf
+
 ## Overview Video
 
 <a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
@@ -78,3 +80,16 @@ Found a bug? help us by reporting it. Want a new feature in the next BlenderProc
 ## Change log
 
 See our [change log](change_log.md). 
+
+## Citation 
+
+If you use BlenderProc in a research project, please cite as follows:
+
+```
+@article{denninger2019blenderproc,
+  title={BlenderProc},
+  author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
+  journal={arXiv preprint arXiv:1911.01911},
+  year={2019}
+}
+```
