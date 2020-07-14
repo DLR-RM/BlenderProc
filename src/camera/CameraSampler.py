@@ -344,6 +344,10 @@ class CameraSampler(CameraInterface):
             else:
                 range_distance = self.proximity_checks["min"]
 
+        no_range_distance = False
+        if "no_background" in self.proximity_checks and self.proximity_checks["no_background"]:
+            # when no background is on, it can not be combined with a reduced range distance
+            no_range_distance = True
 
         # Go in discrete grid-like steps over plane
         position = cam2world_matrix.to_translation()
@@ -352,7 +356,10 @@ class CameraSampler(CameraInterface):
                 # Compute current point on plane
                 end = frame[0] + vec_x * x / (self.sqrt_number_of_rays - 1) + vec_y * y / (self.sqrt_number_of_rays - 1)
                 # Send ray from the camera position through the current point on the plane
-                _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
+                if no_range_distance:
+                    _, _, _, dist = self.bvh_tree.ray_cast(position, end - position)
+                else:
+                    _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, distance=range_distance)
 
                 # Check if something was hit and how far it is away
                 if dist is not None:
@@ -369,6 +376,8 @@ class CameraSampler(CameraInterface):
                         if not "avg" in self.proximity_checks:
                             sum += dist
                         sum_sq += dist * dist
+                elif "no_background" in self.proximity_checks and self.proximity_checks["no_background"]:
+                    return False
 
         if "avg" in self.proximity_checks:
             avg = sum / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
