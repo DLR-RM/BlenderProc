@@ -1,10 +1,12 @@
 # BlenderProc
 
 <p align="center">
-<img src="readme.jpg" alt="Front readme image" width=430>
+<img src="readme.jpg" alt="Front readme image" width=500>
 </p>
 
-A procedural Blender pipeline for image generation for Deep Learning.
+## [>>> All infos regarding BlenderProc4BOP and the BOP challenge 2020 <<<](https://github.com/DLR-RM/BlenderProc/blob/master/README_BlenderProc4BOP.md)
+
+A procedural Blender pipeline for photorealistic training image generation.
 
 Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating it from time to time) and our [workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) on sim2real transfer presented at RSS 2020.
 
