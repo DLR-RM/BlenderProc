@@ -91,11 +91,11 @@ Here we specify the camera parameters, some notable points are:
 * Adding a camera matrix in `cam_K`.
 * Adding the image resolution once again in `default_cam_param`, since this nested parameter is not on the same level as the global parameters, and thus the global parameters won't affect any configuration inside `default_cam_param`.
 
-```
+```yaml
 {
       "module": "renderer.RgbRenderer",
       "config": {
-        "render_depth": true,
+        "render_distance": true,
         "render_normals": true,
         "stereo": true
       }
@@ -103,7 +103,7 @@ Here we specify the camera parameters, some notable points are:
 ```
 We enable stereo rendering here. Also notice the order of the modules, where the stereo RGB rendering should be added before stereo matching. Orderings generally reflect dependencies.
 
-```
+```yaml
 {
       "module": "writer.StereoGlobalMatchingWriter",
       "config": {

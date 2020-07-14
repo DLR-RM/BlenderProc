@@ -3,12 +3,12 @@ import json
 import os
 import random
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
 
 
-class ShapeNetLoader(Loader):
+class ShapeNetLoader(LoaderInterface):
     """
     This loads an object from ShapeNet based on the given synset_id, which specifies the category of objects to use.
 
@@ -31,7 +31,7 @@ class ShapeNetLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
 
         self._data_path = Utility.resolve_path(self.config.get_string("data_path"))
         self._used_synset_id = self.config.get_string("used_synset_id")

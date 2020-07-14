@@ -6,21 +6,33 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, image_paths, colormap, super_category_mapping, dataset_name, existing_coco_annotations=None):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, supercategory, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param image_paths: A list of paths which points to the rendered segmentation maps.
-        :param colormap: mapping for color, class and object
-        :param super_category_mapping: A dict mapping object name to their corresponding supercategory (A supercategory can be a string which distinguishes objects belonging to different datasets)
-        :param dataset_name: name of the dataset, a feature required by coco annotation format
+        :param inst_attribute_maps: mapping with idx, class and optionally supercategory/bop_dataset_name
+        :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
         """
-        # Adds all objects from the color map to the coco output (skip background)
+
         categories = []
-        for obj in colormap[1:]:
-            categories.append({'id': int(obj["idx"]), 'name': obj["objname"], 'supercategory': super_category_mapping[obj["objname"]]})
+        instance_2_category_map = {}
+
+        # skip background
+        for inst in inst_attribute_maps[1:]:
+
+            # take all objects or objects from specified supercategory is defined
+            inst_supercategory = "coco_annotations"
+            if "bop_dataset_name" in inst:
+                inst_supercategory = inst["bop_dataset_name"] 
+            elif "supercategory" in inst:
+                inst_supercategory = inst["supercategory"]
+                
+            if supercategory == inst_supercategory:
+                categories.append({'id': int(inst["category_id"]), 'name': inst["category_id"], 'supercategory': inst_supercategory})
+                instance_2_category_map[int(inst["idx"])] = int(inst["category_id"])
 
         licenses = [{
             "id": 1,
@@ -28,7 +40,7 @@ class CocoUtility:
             "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/"
         }]
         info = {
-            "description": dataset_name,
+            "description": supercategory,
             "url": "https://github.com/waspinator/pycococreator",
             "version": "0.1.0",
             "year": 2020,
@@ -40,23 +52,28 @@ class CocoUtility:
         annotations = []
 
         for segmentation_map_path, image_path in zip(segmentation_map_paths, image_paths):
-            segmentation_map = np.load(segmentation_map_path)
+            
+            # Load instance map
+            inst_channel = int(inst_attribute_maps[0]['channel_instance'])
+            segmentation_map = np.load(segmentation_map_path)[:,:,inst_channel]
 
             # Add coco info for image
             image_id = len(images)
             images.append(CocoUtility.create_image_info(image_id, image_path, segmentation_map.shape))
 
             # Go through all objects visible in this image
-            unique_objects = np.unique(segmentation_map)
+            instances = np.unique(segmentation_map)
+            
             # Remove background
-            unique_objects = np.delete(unique_objects, np.where(unique_objects == 0))
-            for obj in unique_objects:
-                # Calc object mask
-                binary_inst_mask = np.where(segmentation_map == obj, 1, 0)
-                # Add coco info for object in this image
-                annotation = CocoUtility.create_annotation_info(len(annotations), image_id, int(obj), binary_inst_mask)
-                if annotation is not None:
-                    annotations.append(annotation)
+            instances = np.delete(instances, np.where(instances == 0))
+            for inst in instances:
+                if inst in instance_2_category_map:
+                    # Calc object mask
+                    binary_inst_mask = np.where(segmentation_map == inst, 1, 0)
+                    # Add coco info for object in this image
+                    annotation = CocoUtility.create_annotation_info(len(annotations), image_id, instance_2_category_map[inst], binary_inst_mask)
+                    if annotation is not None:
+                        annotations.append(annotation)
 
         new_coco_annotations = {
             "info": info,
@@ -122,18 +139,22 @@ class CocoUtility:
         return image_info
 
     @staticmethod
-    def create_annotation_info(annotation_id, image_id, object_id, binary_mask, tolerance=2):
+    def create_annotation_info(annotation_id, image_id, category_id, binary_mask, tolerance=2):
         """Creates info section of coco annotation
 
         :param annotation_id: integer to uniquly identify the annotation
         :param image_id: integer to uniquly identify image
-        :param object_id: The object id, should match with the object's category id
+        :param category_id: Id of the category
         :param binary_mask: A binary image mask of the object with the shape [H, W].
         :param tolerance: The tolerance for fitting polygons to the objects mask.
         """
-        bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
-        area = bounding_box[2] * bounding_box[3]
-        if area < 1:
+
+        if np.any(binary_mask):
+            bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
+            area = bounding_box[2] * bounding_box[3]
+            if area < 1:
+                return None
+        else:
             return None
 
         segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
@@ -141,7 +162,7 @@ class CocoUtility:
         annotation_info = {
             "id": annotation_id,
             "image_id": image_id,
-            "category_id": object_id,
+            "category_id": category_id,
             "iscrowd": 0,
             "area": [area],
             "bbox": bounding_box,

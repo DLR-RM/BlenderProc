@@ -69,7 +69,7 @@ class MaterialRandomizer(Module):
         self.randomization_level = self.config.get_float("randomization_level", 0.2)
         self._objects_to_manipulate = self.config.get_list('manipulated_objects', get_all_mesh_objects())
         self._materials_to_replace_with = self.config.get_list("materials_to_replace_with", get_all_materials())
-        self._obj_materials_cond_to_be_replaced = self.config.get_raw_dict("obj_materials_to_be_replaced", {})
+        self._obj_materials_cond_to_be_replaced = self.config.get_raw_dict("obj_materials_cond_to_be_replaced", {})
         op_mode = self.config.get_string("mode", "once_for_each")
 
         # if there were no materials selected throw an exception

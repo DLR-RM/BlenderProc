@@ -9,12 +9,12 @@ The focus of this example is to introduce user to `writer.CocoAnnotationsWriter`
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/coco_annotations/config.yaml examples/coco_annotations/camera_positions examples/coco_annotations/scene.obj examples/coco_annotations/output
+python run.py examples/coco_annotations/config.yaml examples/coco_annotations/camera_positions examples/coco_annotations/scene.blend examples/coco_annotations/output
 ```
 
 * `examples/coco_annotations/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/coco_annotations/camera_positions`: text file with parameters of camera positions.
-* `examples/coco_annotations/scene.obj`: path to the object file with the basic scene.
+* `examples/coco_annotations/scene.blend`: path to the blend file with the basic scene.
 * `examples/coco_annotations/output`: path to the output directory.
 
 ### Visualizing Annotations
@@ -41,7 +41,7 @@ python scripts/vis_coco_annotation.py
 
 ## Steps
 
-* Loads `scene.obj`: `loader.ObjectLoader` module.
+* Loads `scene.blend`: `loader.BlendLoader` module. The `BlendLoader` is used here as we always load the `cp_category_id` for each object, which is stored in the `.blend` file.
 * Creates a point light: `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
 * Renders rgb: `renderer.RgbRenderer` module.
@@ -50,6 +50,19 @@ python scripts/vis_coco_annotation.py
 <!-- * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module. -->
 
 ## Config file
+
+### SegMapRenderer
+
+```yaml
+  {
+    "module": "renderer.SegMapRenderer",
+    "config": {
+      "map_by": ["instance", "class"],
+    }
+  },
+```
+
+The `renderer.SegMapRenderer` needs to render both instance and class maps. The class is defined in terms of a custom property `category_id` which must be previously defined for each instance. The `category_id` can be either set in a custom Loader module or in a `.blend` file. 
 
 ### CocoAnnotationsWriter
 
@@ -61,7 +74,7 @@ python scripts/vis_coco_annotation.py
   }
 ```
 
-This modules depends on output from `renderer.SegMapRenderer` and stores annotations in `coco_annotations.json`.
+This modules depends on output from `renderer.SegMapRenderer` and stores annotations in `coco_annotations.json`. Optionally, you can set `"supercategory": "<some_supercategory>"` in the `writer.CocoAnnotationsWriter` config to filter objects by a previously assigned custom property called `"supercategory"`.
 
 ## More examples
 

@@ -7,13 +7,13 @@ import cv2
 import numpy as np
 
 from src.main.GlobalStorage import GlobalStorage
-from src.renderer.Renderer import Renderer
+from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image
 from src.utility.SGMUtility import fill_in_fast
 from src.utility.SGMUtility import resize
 
 
-class StereoGlobalMatchingWriter(Renderer):
+class StereoGlobalMatchingWriter(RendererInterface):
     """ Writes depth image generated from the stereo global matching algorithm to file
 
     **Configuration**:
@@ -47,7 +47,7 @@ class StereoGlobalMatchingWriter(Renderer):
     """
 
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        RendererInterface.__init__(self, config)
 
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
@@ -137,11 +137,11 @@ class StereoGlobalMatchingWriter(Renderer):
             print("Avoid rendering is on, no output produced!")
             return
 
-        if GlobalStorage.is_in_storage("renderer_depth_end"):
-            self.depth_max = GlobalStorage.get("renderer_depth_end")
+        if GlobalStorage.is_in_storage("renderer_distance_end"):
+            self.depth_max = GlobalStorage.get("renderer_distance_end")
         else:
-            raise RuntimeError("A depth rendering has to be executed before this module is executed, "
-                               "else the depth_end value is not set!")
+            raise RuntimeError("A distance rendering has to be executed before this module is executed, "
+                               "else the `renderer_distance_end` is not set!")
 
         self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
 

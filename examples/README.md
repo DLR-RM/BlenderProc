@@ -16,6 +16,7 @@ It will give you an idea about how, why and when certain things happen.
 * [debugging](debugging): what happens during the execution of the pipeline and certain modules it is sometimes useful to use blender directly
 * [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation.
 * [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling.
+* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
 * [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
 * [physics_positioning](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
 * [entity manipulation](entity_manipulation): Changing various parameters of entities via selecting them through config file.
@@ -23,7 +24,7 @@ It will give you an idea about how, why and when certain things happen.
 * [material_randomizer](material_randomizer): object's material randomization.
 * [coco annotations](coco_annotations): generating COCO annotations.
 * [optical_flow](optical_flow): obtaining forward/backward flow values between consecutive key frames.
-* [stereo_matching](stereo_matching): compute depth image using stereo matching.
+* [stereo_matching](stereo_matching): compute distance image using stereo matching.
 * [on_surface_object_sampling](on_surface_object_sampling): object pose sampling on a surface.
 
 ### Benchmark for 6D Object Pose Estimation (BOP)

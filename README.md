@@ -1,12 +1,23 @@
 # BlenderProc
 
 <p align="center">
-<img src="readme.jpg" alt="Front readme image" width=430>
+<img src="readme.jpg" alt="Front readme image" width=500>
 </p>
 
-A procedural Blender pipeline for image generation for Deep Learning.
+## [>>> All infos regarding BlenderProc4BOP and the BOP challenge 2020 <<<](https://github.com/DLR-RM/BlenderProc/blob/master/README_BlenderProc4BOP.md)
 
-Check out our arXiv paper (we are updating it from time to time): https://arxiv.org/abs/1911.01911
+A procedural Blender pipeline for photorealistic training image generation.
+
+Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating it from time to time) and our [workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) on sim2real transfer presented at RSS 2020.
+
+## Overview Video
+
+<a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
+<p align="center">
+<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550>
+</p>
+</a>
+
 
 ## Contents
 
@@ -20,7 +31,7 @@ Check out our arXiv paper (we are updating it from time to time): https://arxiv.
 
 ## General
 
-In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and renders different types of images (rgb, depth, normals etc.) for each of them.
+In general, one run of the pipeline first loads or constructs a 3D scene, then sets some camera positions inside this scene and renders different types of images (rgb, distance, normals etc.) for each of them.
 The blender pipeline consists of different modules, where each of them performs one step in the described process.
 The modules are selected, ordered and configured via a .yaml file.
  
@@ -39,7 +50,7 @@ The following modules are already implemented and ready to use:
 * Loading: *.obj, SunCG, Replica scenes, BOP datasets.
 * Lighting: Set, sample lights, automatic lighting of SunCG scenes.
 * Cameras: set, sample or load camera poses from file.
-* Rendering: RGB, depth, normal and segmentation images.
+* Rendering: RGB, distance, normal and segmentation images.
 * Merging: .hdf5 containers.
 
 For advanced usage which is not covered by these modules, own modules can easily be implemented.
@@ -47,8 +58,8 @@ For advanced usage which is not covered by these modules, own modules can easily
 ## Examples
 
 * [Basic scene](examples/basic/): Basic example 
-* [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a depth images.
-* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a depth images.
+* [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a distance images.
+* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a distance images.
 * [Replica dataset](examples/replica_dataset): Load a replica room, sample camera poses and render normal images.
 * [COCO annotations](examples/coco_annotations): Write to a .json file containing COCO annotations for the objects in the scene.
 
@@ -69,3 +80,16 @@ Found a bug? help us by reporting it. Want a new feature in the next BlenderProc
 ## Change log
 
 See our [change log](change_log.md). 
+
+## Citation 
+
+If you use BlenderProc in a research project, please cite as follows:
+
+```
+@article{denninger2019blenderproc,
+  title={BlenderProc},
+  author={Denninger, Maximilian and Sundermeyer, Martin and Winkelbauer, Dominik and Zidan, Youssef and Olefir, Dmitry and Elbadrawy, Mohamad and Lodhi, Ahsan and Katam, Harinandan},
+  journal={arXiv preprint arXiv:1911.01911},
+  year={2019}
+}
+```

@@ -58,6 +58,9 @@
     {
       "module": "constructor.RockEssentialsGroundConstructor",
       "config": {
+        "add_properties":{
+          "cp_category_id": 2
+        },
         "tiles": [
         {
           "shader_path": "<args:0>/Rock Essentials/Individual Rocks/Volcanic/Rocks_Volcanic_Small.blend",
@@ -137,6 +140,10 @@
     {
       "module": "camera.CameraSampler",
       "config": {
+        "default_cam_param": {
+          "resolution_x": 640,
+          "resolution_y": 480
+        },
         "cam_poses": [
         {
           "number_of_samples": 5,
@@ -210,23 +217,18 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "output_key": "colors",
-        "samples": 128,
-        "resolution_x": 640,
-        "resolution_y": 480
+        "samples": 128
       }
     },
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "instance",
-        "resolution_x": 640,
-        "resolution_y": 480
+        "map_by": ["instance", "class"],
+        "default_values": {"class":0}
       }
     },
     {
-      "module": "writer.CocoAnnotationsWriter",
-      "config": {
-      }
+      "module": "writer.CocoAnnotationsWriter"
     }
   ]
 }

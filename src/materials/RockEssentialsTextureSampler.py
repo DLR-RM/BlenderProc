@@ -4,12 +4,12 @@ from random import choice
 
 import bpy
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Config import Config
 from src.utility.Utility import Utility
 
 
-class RockEssentialsTextureSampler(Loader):
+class RockEssentialsTextureSampler(LoaderInterface):
     """ Samples a random texture data from the provided list and sets the images to each selected object (ground tiles
         created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material assigned (they have
         it applied by default if ground tile was constructed by aforementioned constructor module).
@@ -84,7 +84,7 @@ class RockEssentialsTextureSampler(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
         # set a RE-specific material name pattern to look for in the selected objects
         self.target_material = "re_ground_mat.*"
 

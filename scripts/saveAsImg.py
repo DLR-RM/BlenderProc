@@ -12,7 +12,7 @@ from utils import flow_to_rgb
 
 
 def process_img(img, key):
-    if 'depth' in key or 'seg' in key:
+    if 'distance' in key or 'depth' in key or 'seg' in key:
         img = img.astype(np.float)
         if not "seg" in key:
             min_val = np.min(img)

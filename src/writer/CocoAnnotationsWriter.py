@@ -5,11 +5,11 @@ import shutil
 
 import bpy
 
-from src.main.Module import Module
+from src.writer.WriterInterface import WriterInterface
 from src.utility.CocoUtility import CocoUtility
 from src.utility.BlenderUtility import get_all_mesh_objects
 
-class CocoAnnotationsWriter(Module):
+class CocoAnnotationsWriter(WriterInterface):
     """ Writes Coco Annotations in to a file.
 
     **Configuration**:
@@ -25,6 +25,8 @@ class CocoAnnotationsWriter(Module):
        "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was "
                                  "registered. Should be the same as the colormap_output_key of the SegMapRenderer "
                                  "module. Type: string. Default: segcolormap."
+       "supercategory", "Name of the dataset/supercategory to filter for, e.g. a specific BOP dataset."
+                        "Type: str. Default: coco_annotations"
        "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output "
                                     "directory, the new coco annotations will be appended to the existing file. Also "
                                     "the rgb images will be named such that there are no collisions. Type: bool. "
@@ -32,10 +34,11 @@ class CocoAnnotationsWriter(Module):
     """
 
     def __init__(self, config):
-        Module.__init__(self, config)
+        WriterInterface.__init__(self, config)
 
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
+        self._supercategory = self.config.get_string("supercategory", "coco_annotations")
         self.segmap_output_key = self.config.get_string("segmap_output_key", "segmap")
         self.segcolormap_output_key = self.config.get_string("segcolormap_output_key", "segcolormap")
         self._coco_data_dir = os.path.join(self._determine_output_dir(False), 'coco_data')
@@ -73,11 +76,11 @@ class CocoAnnotationsWriter(Module):
             raise Exception("There is no output registered with key " + self.segcolormap_output_key + ". Are you sure you ran the SegMapRenderer module with 'map_by' set to 'instance' before?")
 
         # read colormappings, which include object name/class to integer mapping
-        color_map = []
+        inst_attribute_maps = []
         with open(segcolormap_output["path"], 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for mapping in reader:
-                color_map.append(mapping)
+                inst_attribute_maps.append(mapping)
 
         coco_annotations_path = os.path.join(self._coco_data_dir, "coco_annotations.json")
         # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
@@ -101,18 +104,7 @@ class CocoAnnotationsWriter(Module):
             shutil.copyfile(source_path, target_path)
             new_coco_image_paths.append(os.path.basename(target_path))
 
-        # Try to extract supercategory for each object
-        all_mesh_objects = get_all_mesh_objects()
-        super_category_mapping = {}
-        for obj in all_mesh_objects:
-            # For now the only scheme to extract super category is the afiliation of an object to a Bop dataset
-            if "bop_dataset_name" in obj:
-                super_category_mapping[obj.name] = obj["bop_dataset_name"]
-            # Otherwise assign default supercategory
-            else:
-                super_category_mapping[obj.name] = "default_supercategory"
-
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, color_map, super_category_mapping,"coco_annotations", existing_coco_annotations)
+        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths, new_coco_image_paths, inst_attribute_maps, self._supercategory, existing_coco_annotations)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:

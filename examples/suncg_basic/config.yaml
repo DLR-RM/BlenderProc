@@ -12,8 +12,7 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:2>",
-          "pixel_aspect_x": 1.333333333
+          "output_dir": "<args:2>"
         }
       }
     },
@@ -33,7 +32,8 @@
           "rotation": {
             "format": "forward_vec"
           },
-          "fov_is_half": true
+          "fov_is_half": true,
+          "pixel_aspect_x": 1.333333333
         }
       }
     },
@@ -50,7 +50,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "use_alpha": True,
-        "render_depth": true,
+        "render_distance": true,
         "render_normals": True
       }
     },

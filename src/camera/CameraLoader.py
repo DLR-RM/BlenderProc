@@ -1,10 +1,10 @@
 import bpy
 
-from src.camera.CameraModule import CameraModule
+from src.camera.CameraInterface import CameraInterface
 from src.utility.ItemCollection import ItemCollection
 
 
-class CameraLoader(CameraModule):
+class CameraLoader(CameraInterface):
     """ Loads camera poses from the configuration and sets them as separate keypoints.
         Camera poses can be specified either directly inside the config or in an extra file.
 
@@ -22,7 +22,7 @@ class CameraLoader(CameraModule):
         }
 
         Example 2: More examples for parameters in "default_cam_param". Here cam_K is a camera matrix. Check
-                   CameraModule for more info on "default_cam_param".
+                   CameraInterface for more info on "default_cam_param".
 
         "default_cam_param": {
           "fov_is_half": true,
@@ -50,7 +50,7 @@ class CameraLoader(CameraModule):
     """
 
     def __init__(self, config):
-        CameraModule.__init__(self, config)
+        CameraInterface.__init__(self, config)
         # A dict specifying the length of parameters that require more than one argument. If not specified, 1 is assumed.
         self.number_of_arguments_per_parameter = {
             "location": 3,

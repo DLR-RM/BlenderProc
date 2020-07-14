@@ -3,12 +3,12 @@ import os
 import bpy
 import numpy as np
 
-from src.renderer.Renderer import Renderer
+from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image
 from src.utility.Utility import Utility
 
 
-class FlowRenderer(Renderer):
+class FlowRenderer(RendererInterface):
     """ Renders optical flow between consecutive keypoints.
 
     .. csv-table::
@@ -27,10 +27,12 @@ class FlowRenderer(Renderer):
                                            "Type: string, Default: "forward_flow_""
         "backward_flow_output_file_prefix", "The file prefix that should be used when writing backward flow to a file."
                                             "Type: string, Default: "backward_flow_""
+        "samples", "The amount of samples rendered, this value should be 1. Only change it when you know what you are"
+                   "doing. Type: int. Default: 1"
     """
 
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        RendererInterface.__init__(self, config)
 
     def _output_vector_field(self):
         """ Configures compositor to output speed vectors. """
@@ -80,7 +82,7 @@ class FlowRenderer(Renderer):
             raise Exception("Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
 
         with Utility.UndoAfterExecution():
-            self._configure_renderer()
+            self._configure_renderer(default_samples=self.config.get_int("samples", 1))
 
             self._output_vector_field()
 

@@ -18,9 +18,16 @@
       }
     },
     {
-      "module": "loader.ObjectLoader",
+      "module": "loader.BlendLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:1>",
+        "load_from": "/Object"  # load all objects from the scene file
+      }
+    },
+    {
+      "module": "manipulators.WorldManipulator",
+      "config": {
+        "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
       }
     },
     {
@@ -54,7 +61,7 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "map_by": "instance"
+        "map_by": ["instance", "class"]
       }
     },
     {

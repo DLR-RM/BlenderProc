@@ -1,8 +1,8 @@
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 
 
-class ObjectLoader(Loader):
+class ObjectLoader(LoaderInterface):
     """ Just imports the objects for the given file path
 
     The import will load all materials into cycle nodes.
@@ -16,7 +16,7 @@ class ObjectLoader(Loader):
        "paths", "A list of paths of 3D data files to load. Can be either path or paths not both. Type: list."
     """
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
 
     def run(self):
         if self.config.has_param('path') and self.config.has_param('paths'):

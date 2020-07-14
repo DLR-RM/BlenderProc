@@ -1,10 +1,10 @@
 import bpy
 
-from src.renderer.Renderer import Renderer
+from src.renderer.RendererInterface import RendererInterface
 from src.utility.Utility import Utility
 
 
-class NormalRenderer(Renderer):
+class NormalRenderer(RendererInterface):
     """  Renders normal images for each registered key point.
 
     Be aware that this can also be done by setting in any other renderer the `render_normals` to true.
@@ -18,7 +18,7 @@ class NormalRenderer(Renderer):
     """
 
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        RendererInterface.__init__(self, config)
 
     def _create_normal_material(self):
         """ Creates a new material which uses xyz normal coordinates as rgb.
