@@ -233,6 +233,8 @@ class SegMapRenderer(RendererInterface):
                             there_was_an_instance_rendering = True
                             resulting_map = segmap
                             was_used = True
+                            # a non default value was also used
+                            non_default_value_was_used = True
                         else:
                             if current_attribute != "cp_category_id":
                                 list_of_used_attributes.append(current_attribute)
@@ -249,8 +251,11 @@ class SegMapRenderer(RendererInterface):
                                 elif used_attribute in used_default_values:
                                     default_value = used_default_values[used_attribute]
                             last_state_save_in_csv = None
+                            # this avoids that for certain attributes only the default value is written
+                            non_default_value_was_used = False
                             # iterate over all object ids
                             for object_id in used_object_ids:
+                                is_default_value = False
                                 # get the corresponding object via the id
                                 current_obj = used_objects[object_id]
                                 # if the current obj has a attribute with that name -> get it
@@ -267,6 +272,7 @@ class SegMapRenderer(RendererInterface):
                                 elif default_value_set:
                                     # if none of the above applies use the default value
                                     used_value = default_value
+                                    is_default_value = True
                                 else:
                                     # if the requested current_attribute is not a custom property or a attribute
                                     # or there is a default value stored
@@ -280,11 +286,14 @@ class SegMapRenderer(RendererInterface):
                                 try:
                                     resulting_map[segmap == object_id] = used_value
                                     was_used = True
+                                    if not is_default_value:
+                                        non_default_value_was_used = True
                                     # save everything which is not instance also in the .csv
                                     if current_attribute != "instance":
                                         save_in_csv = True
                                 except ValueError:
                                     save_in_csv = True
+                                print(last_state_save_in_csv)
                                 if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
                                     raise Exception("During creating the mapping, the saving to an image or a csv file "
                                                     "switched, this might indicated that the used default value, does "
@@ -296,7 +305,7 @@ class SegMapRenderer(RendererInterface):
                                         save_in_csv_attributes[object_id][used_attribute] = used_value
                                     else:
                                         save_in_csv_attributes[object_id] = {used_attribute: used_value}
-                        if was_used:
+                        if was_used and non_default_value_was_used:
                             used_channels.append(org_attribute)
                             combined_result_map.append(resulting_map)
 

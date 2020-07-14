@@ -197,6 +197,8 @@ class RockEssentialsRockLoader(LoaderInterface):
         for obj in objects:
             # set physics parameter
             obj["physics"] = physics
+            # set category id
+            obj["category_id"] = 1
             # set render value
             obj.modifiers["Subsurf"].render_levels = render_levels
             # set scale

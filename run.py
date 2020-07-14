@@ -46,9 +46,10 @@ if "custom_blender_path" not in setup_config:
         blender_install_path = "blender"
         
     # Determine configured version
-    # right new only support blender-2.83
+    # right new only support blender-2.83.2
     major_version = "2.83"
-    blender_version = "blender-{}.0".format(major_version)
+    minor_version = "2"
+    blender_version = "blender-{}.{}".format(major_version, minor_version)
     if platform == "linux" or platform == "linux2":
         blender_version += "-linux64"
         blender_path = os.path.join(blender_install_path, blender_version)
