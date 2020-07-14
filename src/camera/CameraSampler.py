@@ -354,7 +354,8 @@ class CameraSampler(CameraInterface):
         for x in range(0, self.sqrt_number_of_rays):
             for y in range(0, self.sqrt_number_of_rays):
                 # Compute current point on plane
-                end = frame[0] + vec_x * x / (self.sqrt_number_of_rays - 1) + vec_y * y / (self.sqrt_number_of_rays - 1)
+                end = frame[0] + vec_x * x / float(self.sqrt_number_of_rays - 1) \
+                      + vec_y * y / float(self.sqrt_number_of_rays - 1)
                 # Send ray from the camera position through the current point on the plane
                 if no_range_distance:
                     _, _, _, dist = self.bvh_tree.ray_cast(position, end - position)
@@ -363,13 +364,10 @@ class CameraSampler(CameraInterface):
 
                 # Check if something was hit and how far it is away
                 if dist is not None:
-                    if "min" in self.proximity_checks:
-                        pass
-                    if dist <= self.proximity_checks["min"]:
+                    if "min" in self.proximity_checks and dist <= self.proximity_checks["min"]:
                         return False
-                    if "max" in self.proximity_checks:
-                        if dist >= self.proximity_checks["max"]:
-                            return False
+                    if "max" in self.proximity_checks and dist >= self.proximity_checks["max"]:
+                        return False
                     if "avg" in self.proximity_checks:
                         sum += dist
                     if "var" in self.proximity_checks:
@@ -447,11 +445,11 @@ class CameraSampler(CameraInterface):
 
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for
         # each object more/less, excluding floor, ceiling and walls
-        scene_variance = len(objects_hit.keys()) / 3
-        for object_hit in objects_hit.keys():
+        scene_variance = len(objects_hit) / 3
+        for object_hit_value in objects_hit.values():
             # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even
             # distribution of the objects in the scene
-            scene_variance *= 1 - objects_hit[object_hit] / num_of_rays
+            scene_variance *= 1 - object_hit_value / num_of_rays
 
         score = scene_variance * (score / num_of_rays)
         return score
