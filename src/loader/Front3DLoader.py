@@ -16,8 +16,30 @@ from src.utility.LabelIdMapping import LabelIdMapping
 
 class Front3DLoader(LoaderInterface):
     """
-    Loads the 3D-Front dataset
-    """
+    Loads the 3D-Front dataset.
+
+    https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset
+
+    Each object gets the name based on the category/type, on top of that you can use a mapping specified in the
+    resources/front_3D folder.
+
+    The dataset already supports semantic segmentation with either the 3D-Front classes or the nyu classes.
+    As we have created this mapping ourselves it might be faulty.
+
+    The Front3DLoader creates automatically lights in the scene, by adding emission shaders to the ceiling and lamps.
+    The strength can be configured via the config.
+
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+        "json_path", "Path to the json file, where the house information is stored. Type: str."
+        "3D_future_model_path", "Path to the models used in the 3D-Front dataset. Type: str"
+        "mapping_file", "Path to a file, which maps the names of the objects to ids."
+                        "Type: str. Default: resources/front_3D/3D_front_mapping.csv"
+        "ceiling_light_strength", "Strength of the emission shader used in the ceiling. Type: float. Default: 0.8"
+        "lamp_light_strength", "Strength of the emission shader used in each lamp. Type: float. Default: 7.0"
+   """
 
     def __init__(self, config: Config):
         LoaderInterface.__init__(self, config)
