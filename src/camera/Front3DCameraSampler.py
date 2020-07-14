@@ -7,6 +7,26 @@ from src.camera.CameraSampler import CameraSampler
 from src.utility.BlenderUtility import get_all_mesh_objects, get_bounds
 
 class Front3DCameraSampler(CameraSampler):
+    """
+    This Camera Sampler is similar to how the SuncgCameraSampler works.
+
+    It first searches for rooms, by using the different floors, which are used in each room.
+    It then counts the amount of 3D-Future objects on this particular floor, to check if this room is interesting
+    for creating cameras or not. The amount of needed objects can be changed via the config.
+    If the amount is set to 0, all rooms will have cameras, even if these rooms are empty.
+
+    The Front3D Loader provides information for using the min_interesting_score option.
+    Furthermore, it supports the no_background: True option, which is useful as the 3D-Front dataset has no windows
+    or doors to the outside world, which then leads to the background appearing in this shots, if not activated.
+
+    **Configuration**:
+
+    .. csv-table::
+        :header: "Parameter", "Description"
+        "amount_of_objects_needed_per_room", "The amount of objects needed per room, so that cameras are sampled in it.
+                                             "This avoids that cameras are sampled in empty rooms."
+                                             "Type: int. Default: 2"
+    """
 
     def __init__(self, config):
         CameraSampler.__init__(self, config)
@@ -32,7 +52,7 @@ class Front3DCameraSampler(CameraSampler):
                 is_above = self._position_is_above_object(location, floor_obj)
                 if is_above:
                     floor_obj_counters[floor_obj.name] += 1
-        amount_of_objects_needed_per_room = 2
+        amount_of_objects_needed_per_room = self.config.get_int("amount_of_objects_needed_per_room", 2)
         self.used_floors = [obj for obj in floor_objs if floor_obj_counters[obj.name] > amount_of_objects_needed_per_room]
 
         super().run()
