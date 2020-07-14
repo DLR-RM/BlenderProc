@@ -293,7 +293,7 @@ class SegMapRenderer(RendererInterface):
                                         save_in_csv = True
                                 except ValueError:
                                     save_in_csv = True
-                                print(last_state_save_in_csv)
+
                                 if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
                                     raise Exception("During creating the mapping, the saving to an image or a csv file "
                                                     "switched, this might indicated that the used default value, does "
