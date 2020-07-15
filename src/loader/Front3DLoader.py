@@ -298,9 +298,6 @@ class Front3DLoader(LoaderInterface):
         :param data: json data dir. Should contain "scene", which should contain "room"
         :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs
         """
-        def flip_y_and_z(vec):
-            # to bring the location to the blender coordinate system
-            return [vec[0], vec[2], vec[1]]
         # this rotation matrix rotates the given quaternion into the blender coordinate system
         blender_rot_mat = mathutils.Matrix.Rotation(radians(-90), 4, 'X')
         if "scene" not in data:
@@ -323,7 +320,8 @@ class Front3DLoader(LoaderInterface):
                             new_obj["room_id"] = room_id
                             new_obj["type"] = "Object"  # is an object used for the interesting score
                             new_obj["coarse_grained_class"] = new_obj["category_id"]
-                            new_obj.location = flip_y_and_z(child["pos"])
+                            # this flips the y and z coordinate to bring it to the blender coordinate system
+                            new_obj.location = mathutils.Vector(child["pos"]).xzy
                             new_obj.scale = child["scale"]
                             # extract the quaternion and convert it to a rotation matrix
                             rotation_mat = mathutils.Quaternion(child["rot"]).to_euler().to_matrix().to_4x4()
