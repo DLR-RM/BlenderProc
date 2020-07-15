@@ -38,7 +38,7 @@ We provide example configs that interface with the BOP datasets.
 
 ### Dataset related examples
 
-We are providing limited dataset support, for example for ShapeNet, SceneNet, SUNCG, Replica, Rock Essentials and others.
+We are providing limited dataset support, for example for ShapeNet, SceneNet, 3D-Front, SUNCG, Replica, Rock Essentials and others.
 These can be found in:
 * [replica_dataset](replica_dataset)
 * [shapenet](shapenet)
@@ -46,6 +46,8 @@ These can be found in:
 * [shapenet_with_suncg](shapenet_with_suncg)
 * [scenenet](scenenet)
 * [scenenet_with_cctextures](scenenet_with_cctextures)
+* [front_3d](../front_3d)
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat)
 * [suncg_basic](suncg_basic)
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
 * [suncg_with_improved_mat](suncg_with_improved_mat)

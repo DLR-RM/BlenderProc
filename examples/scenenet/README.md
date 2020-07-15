@@ -125,5 +125,7 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 
 * [shapenet_with_scenenet](../shapenet_with_scenenet): Using shapenet combined with scenenet
 * [scenenet_with_cctextures](../scenenet_with_cctextures): An example on how to use CCTextures with scenenet.
+* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.

@@ -1,0 +1,179 @@
+# Args: <PATH_TO_3D-Front_json> <PATH_TO_3D-Future-model> <CC_Material_path> <output>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:3>",
+          "max_bounces": 200,
+          "diffuse_bounces": 200,
+          "glossy_bounces": 200,
+          "transmission_bounces": 200,
+          "transparency_bounces": 200
+        }
+      }
+    },
+    {
+      "module": "loader.Front3DLoader",
+      "config": {
+        "json_path": "<args:0>",
+        "3D_future_model_path": "<args:1>"
+      }
+    },
+    {
+      "module": "manipulators.WorldManipulator",
+      "config": {
+        "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      "config": {
+        "folder_path": "<args:2>",
+        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.95,
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Floor.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True  # this will return all loaded cc textures
+          }
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 1.0,
+        "mode": "once_for_all",
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Baseboard.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True,  # this will return all loaded cc textures
+            "cp_asset_name": "WoodFloor.*"
+          }
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 1.0,
+        "mode": "once_for_all",
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Door.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True,  # this will return all loaded cc textures
+            "cp_asset_name": "WoodFloor.*"
+          }
+        }
+      }
+    },
+    {
+      "module": "materials.MaterialRandomizer",
+      "config": {
+        "randomization_level": 0.1,
+        "manipulated_objects": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Wall.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "conditions": {
+            "cp_is_cc_texture": True,  # this will return all loaded cc textures
+            "cp_asset_name": "Marble.*"
+          }
+        }
+      }
+    },
+    {
+      "module": "camera.Front3DCameraSampler",
+      "config": {
+        "cam_poses": [
+          {
+            "number_of_samples": 10,
+            "min_interest_score": 0.15,
+            "proximity_checks": {
+              "min": 1.0,
+              "avg": {
+                "min": 2.5,
+                "max": 3.5,
+              },
+              "no_background": True
+            },
+            "location": {
+              "provider":"sampler.Uniform3d",
+              "max":[0, 0, 1.8],
+              "min":[0, 0, 1.4]
+            },
+            "rotation": {
+              "value": {
+                "provider":"sampler.Uniform3d",
+                "max":[1.338, 0, 6.283185307],
+                "min":[1.2217, 0, 0]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_normals": True
+      }
+    },
+    {
+      "module": "renderer.SegMapRenderer",
+      "config": {
+        "map_by": "class"
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "depth": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

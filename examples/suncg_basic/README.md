@@ -109,3 +109,5 @@ Therefore each window, lamp or lampshade gets an emissive material and also the 
 ## More examples
 
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
+* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.

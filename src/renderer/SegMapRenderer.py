@@ -199,6 +199,9 @@ class SegMapRenderer(RendererInterface):
                 raise Exception("The type of this is not supported here: {}".format(used_attributes))
 
             save_in_csv_attributes = {}
+            # define them for the avoid rendering case
+            there_was_an_instance_rendering = False
+            list_of_used_attributes = []
 
             # After rendering
             if not self._avoid_rendering:
