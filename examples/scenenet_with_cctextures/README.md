@@ -174,3 +174,5 @@ So it does not matter if the materials of the object have been switched beforeha
 * [shapenet_with_scenenet](../shapenet_with_scenenet): Using shapenet combined with scenenet
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
+* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.

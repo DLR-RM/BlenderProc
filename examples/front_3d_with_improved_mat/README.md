@@ -6,8 +6,8 @@
 </p>
 
 In this example we explain to you how to use the 3D-Front Dataset with the BlenderProc pipeline in combination with the CCMaterialLoader.
-This is an advanced example, make sure that you have executed the basic examples before proceeding to this one, especially the `front_3d_with_improved_mat` example.
-It is also necessary to download the textures from cc_textures we provide a script [here](../../scripts/download_cc_textures.py).
+This is an advanced example, make sure that you have executed the basic examples before proceeding to this one, especially the `front_3d` example.
+It is also necessary to download the textures from cc_textures, we provide a script [here](../../scripts/download_cc_textures.py).
 
 ## Usage
 
@@ -117,6 +117,7 @@ Also pay attention that only 10% of all materials are replaced, to not over load
 
 ## More examples
 
+* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
 

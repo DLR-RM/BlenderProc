@@ -76,3 +76,5 @@ After sampling a pose the pose is only accepted if it is valid according to the 
 ## More examples
 
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
+* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.
