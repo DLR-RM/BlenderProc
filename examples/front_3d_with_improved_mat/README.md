@@ -14,7 +14,7 @@ It is also necessary to download the textures from cc_textures, we provide a scr
 Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically downloaded blender 2.82, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} examples/front_3d_with_improved_mat/output 
+python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} resources/cctextures examples/front_3d_with_improved_mat/output  
 ```
 
 * `examples/front_3d_with_improved_mat/config.yaml`: path to the configuration file with pipeline configuration.
@@ -22,6 +22,7 @@ python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
+* `resources/cctextures`: path to the cc texture folder
 * `examples/front_3d_with_improved_mat/output`: path to the output directory
 
 Be aware that the default path for the CCMaterialLoader is used, if you want to change this please refer to the documentation in the `CCMaterialLoader` class.
@@ -39,7 +40,7 @@ python scripts/visHdf5Files.py examples/front_3d_with_improved_mat/output/0.hdf5
 * Loads the `.json` file: `loader.Front3DLoader` module. It loads all modules and creates the rooms, it furthermore also adds emission shaders to the ceiling and lamps.
 * Sets the category_id of the background to 0: `manipulators.WorldManipulator`
 * Adds cameras to the scene: `camera.Front3DCameraSampler`
-* Loads the cc Materials: `loader.CCMaterialLoader` (the default path is assumed)
+* Loads the cc Materials: `loader.CCMaterialLoader` 
 * Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials: `materials.MaterialRandomizer`
 * Renders rgb, normals and distance: `renderer.RgbRenderer` module.
 * Renders semantic segmentation: `renderer.SegMapRenderer` module.
@@ -53,12 +54,14 @@ python scripts/visHdf5Files.py examples/front_3d_with_improved_mat/output/0.hdf5
 {
   "module": "loader.CCMaterialLoader",
   "config": {
+    "folder_path": "<args:2>",
     "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
   }
 }
 ```
 
-This module loads the assests which names contain a string listed in `"used_assets"`.
+The `folder_path` if the script was used, should be `"resources/cctextures"`
+This module loads the assets which names contain a string listed in `"used_assets"`.
 These will be later used to replace the materials in the 3D-Front scenes.
 
 #### 

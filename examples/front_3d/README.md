@@ -93,7 +93,7 @@ python scripts/visHdf5Files.py examples/front_3d/output/0.hdf5
     "cam_poses": [
       {
         "number_of_samples": 10,
-        "min_interest_score": 0.25,
+        "min_interest_score": 0.15,
         "proximity_checks": {
           "min": 1.0,
           "avg": {

@@ -1,4 +1,4 @@
-# Args: <PATH_TO_3D-Front_json> <PATH_TO_3D-Future-model> <output>
+# Args: <PATH_TO_3D-Front_json> <PATH_TO_3D-Future-model> <CC_Material_path> <output>
 {
   "version": 3,
   "setup": {
@@ -12,7 +12,7 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:2>",
+          "output_dir": "<args:3>",
           "max_bounces": 200,
           "diffuse_bounces": 200,
           "glossy_bounces": 200,
@@ -37,6 +37,7 @@
     {
       "module": "loader.CCMaterialLoader",
       "config": {
+        "folder_path": "<args:2>",
         "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
       }
     },
@@ -123,7 +124,7 @@
         "cam_poses": [
           {
             "number_of_samples": 10,
-            "min_interest_score": 0.25,
+            "min_interest_score": 0.15,
             "proximity_checks": {
               "min": 1.0,
               "avg": {
