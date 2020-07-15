@@ -11,7 +11,7 @@ It is also necessary to download the textures from cc_textures, we provide a scr
 
 ## Usage
 
-Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically downloaded blender 2.82, see the config-file if you want to change the installation path:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} resources/cctextures examples/front_3d_with_improved_mat/output  
@@ -42,7 +42,7 @@ python scripts/visHdf5Files.py examples/front_3d_with_improved_mat/output/0.hdf5
 * Adds cameras to the scene: `camera.Front3DCameraSampler`
 * Loads the cc Materials: `loader.CCMaterialLoader` 
 * Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials: `materials.MaterialRandomizer`
-* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
+* Renders rgb, normals: `renderer.RgbRenderer` module.
 * Renders semantic segmentation: `renderer.SegMapRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module, removes unnecessary channels for the `"distance"`
 

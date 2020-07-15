@@ -35,7 +35,7 @@ and **attach the Terms of Use pdf**:
 
 ## Usage
 
-Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically downloaded blender 2.82, see the config-file if you want to change the installation path:
+Execute in the BlenderProc main directory:
 
 ```
 python run.py examples/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} examples/front_3d/output 
@@ -61,7 +61,7 @@ python scripts/visHdf5Files.py examples/front_3d/output/0.hdf5
 * Loads the `.json` file: `loader.Front3DLoader` module. It loads all modules and creates the rooms, it furthermore also adds emission shaders to the ceiling and lamps.
 * Sets the category_id of the background to 0: `manipulators.WorldManipulator`
 * Adds cameras to the scene: `camera.Front3DCameraSampler`
-* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
+* Renders rgb, normals: `renderer.RgbRenderer` module.
 * Renders semantic segmentation: `renderer.SegMapRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module, removes unnecessary channels for the `"distance"`
 
