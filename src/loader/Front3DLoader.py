@@ -172,15 +172,12 @@ class Front3DLoader(LoaderInterface):
 
             # add this new data to the mesh object
             mesh = obj.data
-            print("----")
-            print("num_vertices", num_vertices)
             mesh.vertices.add(num_vertices)
             mesh.vertices.foreach_set("co", vertices)
             mesh.vertices.foreach_set("normal", normal)
 
             # link the faces as vertex indices
             num_vertex_indicies = len(faces)
-            print("num_vertex_indices", num_vertex_indicies)
             mesh.loops.add(num_vertex_indicies)
             mesh.loops.foreach_set("vertex_index", faces)
 
