@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <PATH_TO_3D-Front_json> <PATH_TO_3D-Future-model> <output>
 {
   "version": 3,
   "setup": {
@@ -12,7 +12,7 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "examples/front_3d",
+          "output_dir": "<args:2>",
           "max_bounces": 200,
           "diffuse_bounces": 200,
           "glossy_bounces": 200,
@@ -32,89 +32,6 @@
       "module": "manipulators.WorldManipulator",
       "config": {
         "cf_set_world_category_id": 0  # this sets the worlds background category id to 0
-      }
-    },
-    {
-      "module": "loader.CCMaterialLoader",
-      "config": {
-        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
-      }
-    },
-    {
-      "module": "materials.MaterialRandomizer",
-      "config": {
-        "randomization_level": 0.95,
-        "manipulated_objects": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Floor.*"
-          }
-        },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "conditions": {
-            "cp_is_cc_texture": True  # this will return all loaded cc textures
-          }
-        }
-      }
-    },
-    {
-      "module": "materials.MaterialRandomizer",
-      "config": {
-        "randomization_level": 1.0,
-        "mode": "once_for_all",
-        "manipulated_objects": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Baseboard.*"
-          }
-        },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "conditions": {
-            "cp_is_cc_texture": True,  # this will return all loaded cc textures
-            "cp_asset_name": "WoodFloor.*"
-          }
-        }
-      }
-    },
-    {
-      "module": "materials.MaterialRandomizer",
-      "config": {
-        "randomization_level": 1.0,
-        "mode": "once_for_all",
-        "manipulated_objects": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Door.*"
-          }
-        },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "conditions": {
-            "cp_is_cc_texture": True,  # this will return all loaded cc textures
-            "cp_asset_name": "WoodFloor.*"
-          }
-        }
-      }
-    },
-    {
-      "module": "materials.MaterialRandomizer",
-      "config": {
-        "randomization_level": 0.1,
-        "manipulated_objects": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Wall.*"
-          }
-        },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "conditions": {
-            "cp_is_cc_texture": True,  # this will return all loaded cc textures
-            "cp_asset_name": "Marble.*"
-          }
-        }
       }
     },
     {
