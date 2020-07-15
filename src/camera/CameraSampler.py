@@ -361,7 +361,7 @@ class CameraSampler(CameraInterface):
                 if no_range_distance:
                     _, _, _, dist = self.bvh_tree.ray_cast(position, end - position)
                 else:
-                    _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, distance=range_distance)
+                    _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
 
                 # Check if something was hit and how far it is away
                 if dist is not None:
