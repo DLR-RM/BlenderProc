@@ -59,6 +59,9 @@ class RendererInterface(Module):
         "volume_bounces", "Maximum number of volumetric scattering events. Type: int. Default: 0"
 
         "render_distance", "If true, the distance is also rendered to file. Type: bool. Default: False."
+        "use_mist_distance", "If true, the distance is sampled over several iterations, useful for motion blur or"
+                             "soft edges, if this is turned off, only one sample is taken to determine the depth."
+                             "Type: bool. Default: True."
         "distance_output_file_prefix", "The file prefix that should be used when writing distance to file. "
                                        "Type: string. Default: 'distance_'"
         "distance_output_key", "The key which should be used for storing the distance in a merged file. "
@@ -215,38 +218,56 @@ class RendererInterface(Module):
     def _write_distance_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
 
-        # Mist settings
+        # z-buffer/mist settings
         distance_start = self.config.get_float("distance_start", 0.1)
         distance_range = self.config.get_float("distance_range", 25.0)
         GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
-        bpy.context.scene.world.mist_settings.start = distance_start
-        bpy.context.scene.world.mist_settings.depth = distance_range
-        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("distance_falloff", "LINEAR")
 
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
 
         tree = bpy.context.scene.node_tree
         links = tree.links
-
         # Use existing render layer
         render_layer_node = tree.nodes.get('Render Layers')
-        # Create a mapper node to map from 0-1 to SI units
-        mapper_node = tree.nodes.new("CompositorNodeMapRange")
 
-        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
-        # map the values 0-1 to range distance_start to distance_range
-        mapper_node.inputs['To Min'].default_value = distance_start
-        mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+        # use either mist rendering or the z-buffer
+        # mists uses an interpolation during the sample per pixel
+        # while the z buffer only returns the closest object per pixel
+        use_mist_as_distance = self.config.get_bool("use_mist_distance", True)
+        if use_mist_as_distance:
+            bpy.context.scene.world.mist_settings.start = distance_start
+            bpy.context.scene.world.mist_settings.depth = distance_range
+            bpy.context.scene.world.mist_settings.falloff = self.config.get_string("distance_falloff", "LINEAR")
+
+            bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
+            # Create a mapper node to map from 0-1 to SI units
+            mapper_node = tree.nodes.new("CompositorNodeMapRange")
+            links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
+            # map the values 0-1 to range distance_start to distance_range
+            mapper_node.inputs['To Min'].default_value = distance_start
+            mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+            final_output = mapper_node.outputs['Value']
+        else:
+            bpy.context.view_layer.use_pass_z = True
+            # add min and max nodes to perform the clipping to the desired range
+            min_node = tree.nodes.new("CompositorNodeMath")
+            min_node.operation = "MINIMUM"
+            min_node.inputs[1].default_value = distance_start + distance_range
+            links.new(render_layer_node.outputs["Depth"], min_node.inputs[0])
+            max_node = tree.nodes.new("CompositorNodeMath")
+            max_node.operation = "MAXIMUM"
+            max_node.inputs[1].default_value = distance_start
+            links.new(min_node.outputs["Value"], max_node.inputs[0])
+            final_output = max_node.outputs["Value"]
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("distance_output_file_prefix", "distance_")
 
-        # Feed the Mist output of the render layer to the input of the file IO layer
-        links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
+        # Feed the Z-Buffer or Mist output of the render layer to the input of the file IO layer
+        links.new(final_output, output_file.inputs['Image'])
 
     def _render(self, default_prefix, custom_file_path=None):
         """ Renders each registered keypoint.
