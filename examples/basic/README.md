@@ -160,7 +160,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 ```
 
 * This module just goes through all cam poses and renders a rgb image for each of them.
-* In this case we increase the number of samples used for raytracing which increases the rendering quality.
+* The sample amount determines the quality of the rendering, higher sampling reduces noise but increases the render time.
 * The output files are stored in the defined output directory (see [Global](#Global)) and are named like `i.png` where `i` is the cam pose index
 * The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files, we set the `output_key`, here to `colors`.
 
@@ -169,6 +169,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 It also creates the normals and distance 
 
 * The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
+* By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`. 
 * The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`.
 
 => Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
