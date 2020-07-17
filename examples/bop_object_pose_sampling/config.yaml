@@ -113,7 +113,8 @@
     {
       "module": "writer.CocoAnnotationsWriter",
       "config": {
-        "supercategory": "<args:1>"
+        "supercategory": "<args:1>",
+        "append_to_existing_output": True
       }
     },
     {
