@@ -7,7 +7,15 @@
 
 # Version History
 
-## Version 1.5.0: 13th July 2020
+## Version 1.5.1: 17th July 2020
+- adding support for 3D-Front: https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset
+- added to example on how to use 3D-Front
+- fixed visualization of newly generated SegMapRenderer results
+- fixed combining several coco annotations
+- added option for the "class" key for default values in the SegMapRenderer
+- fixed a bug in the SegMapRenderer when used in debug mode
+
+## Version 1.5.0: 14th July 2020
 - rename depth to distance (this is the difference between taking at each pixel the Z coordinate (in the camera coordinate system) or the distance from the optical center, as sensors usually produce depth and not distance, we changed this)
 - create postprocessing module to calculate the depth out of the distance image
 - rewriting of the SegMapRenderer, it now supports the mapping of any attribute or custom property of an object to an image or a csv file
