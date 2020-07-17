@@ -188,6 +188,8 @@ class SegMapRenderer(RendererInterface):
             used_attributes = self.config.get_raw_dict("map_by", "class")
 
             used_default_values = self.config.get_raw_dict("default_values", {})
+            if 'class' in used_default_values:
+                used_default_values['cp_category_id'] = used_default_values['class']
 
             if isinstance(used_attributes, str):
                 # only one result is requested
