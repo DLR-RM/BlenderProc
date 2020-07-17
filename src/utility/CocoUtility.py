@@ -31,7 +31,9 @@ class CocoUtility:
                 inst_supercategory = inst["supercategory"]
                 
             if supercategory == inst_supercategory:
-                categories.append({'id': int(inst["category_id"]), 'name': inst["category_id"], 'supercategory': inst_supercategory})
+                cat_dict = {'id': int(inst["category_id"]), 'name': inst["category_id"], 'supercategory': inst_supercategory}
+                if cat_dict not in categories:
+                    categories.append(cat_dict)
                 instance_2_category_map[int(inst["idx"])] = int(inst["category_id"])
 
         licenses = [{
@@ -99,8 +101,11 @@ class CocoUtility:
         :param new_coco_annotations: A dict describing the second coco annotations.
         :return: A dict containing the merged coco annotations.
         """
-        if existing_coco_annotations["categories"] != new_coco_annotations["categories"]:
-            raise NotImplementedError("The existing coco annotations file contains different categories/objects than the current scene. Merging the two lists is not implemented yet.")
+
+        # Concatenate category sections
+        for cat_dict in new_coco_annotations["categories"]:
+            if cat_dict not in existing_coco_annotations["categories"]:
+                existing_coco_annotations["categories"].append(cat_dict)
 
         # Concatenate images sections
         image_id_offset = max([image["id"] for image in existing_coco_annotations["images"]]) + 1
