@@ -51,7 +51,9 @@ class TextureLoader(Loader):
         path = Utility.resolve_path(self.config.get_string("path"))
         colorspace = self.config.get_string("colorspace", "sRGB")
         image_paths = self._resolve_paths(path)
-        self._load_and_create(image_paths, colorspace)
+        textures = self._load_and_create(image_paths, colorspace)
+
+        self._set_properties(textures)
 
     @staticmethod
     def _resolve_paths(path):
@@ -79,7 +81,9 @@ class TextureLoader(Loader):
 
         :param image_paths: List of absolute paths to assets. Type: list.
         :param colorspace: Colorspace type of the assets. Type: string.
+        :return: Created textures. Type: list.
         """
+        textures = []
         for image_path in image_paths:
             dir_path = os.path.dirname(image_path)
             file_name = os.path.basename(image_path)
@@ -89,3 +93,7 @@ class TextureLoader(Loader):
             tex = bpy.data.textures.new(name=texture_name, type="IMAGE")
             bpy.data.textures[texture_name].image = bpy.data.images.get(file_name)
             tex.use_nodes = True
+
+            textures.append(tex)
+
+        return textures
