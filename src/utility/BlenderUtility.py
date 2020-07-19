@@ -309,6 +309,13 @@ def get_all_materials():
     """
     return list(bpy.data.materials)
 
+def get_all_textures():
+    """
+    Returns a list of all textures.
+    :return: All textures. Type: list.
+    """
+    return list(bpy.data.textures)
+
 def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.
 
