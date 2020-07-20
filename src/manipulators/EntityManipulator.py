@@ -1,4 +1,5 @@
 import warnings
+from random import choice
 
 import bpy
 import numpy as np
@@ -209,7 +210,7 @@ class EntityManipulator(Module):
                                                             "use 'random_samples" config parameter of the Provider, if "
                                                             "multiple materials are returned, the first one will be "
                                                             "considered as a substitute during randomization. "
-                                                            "Type: Provider. Default: all materials."
+                                                            "Type: Provider. Default: random material."
         "cf_randomize_materials/obj_materials_cond_to_be_replaced", "A dict of materials and corresponding conditions "
                                                                     "making it possible to only replace materials with "
                                                                     "certain properties. These are similar to the "
@@ -228,7 +229,7 @@ class EntityManipulator(Module):
         set_params = {}
         sel_objs = {}
         for key in self.config.data.keys():
-            if key != 'selector':
+            if key != 'selector' and key != "mode":
                 # if its not a selector -> to the set parameters dict
                 set_params[key] = self.config.data[key]
             else:
@@ -334,8 +335,9 @@ class EntityManipulator(Module):
                 rand_config = Config(params_conf.get_raw_dict(key))
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
                 # it's default value and a postproc function
-                instructions = {"randomization_level": {Config.get_int, 0.2, None},
-                                "materials_to_replace_with": (Config.get_list, BlenderUtility.get_all_materials(), None),
+                instructions = {"randomization_level": (Config.get_float, 0.2, None),
+                                "materials_to_replace_with": (Config.get_list,
+                                                              [choice(BlenderUtility.get_all_materials())], None),
                                 "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
                 result = self._unpack_params(rand_config, instructions)
             else:
@@ -415,11 +417,13 @@ class EntityManipulator(Module):
         :param entity: An object to modify. Type: bpy.types.Object.
         :param value: Configuration data. Type: dict.
         """
-        if len(value["materials_to_replace_with"]) > 0:
-            warnings.warn("getter.Material returned more than one substitute material, the first of the returned is "
-                          "used. It means that either all materail are eligible (default value), or a subset is. "
-                          "Sampling is performed on the level of the Provider. Make sure you use 'random_samples' as "
-                          "a config parameter for the getter.Material.")
+        if len(value["materials_to_replace_with"]) > 1:
+            warnings.warn("getter.Material returned more than one substitute material, and random one of the returned "
+                          "will be used. It means that multiple materials comply with conditions passed to the "
+                          "Provider and 'random_samples' parameter is not enabled in the Provider (or multiple samples "
+                          "are returned). Sampling should be performed on the level of the Provider (make sure to use "
+                          "'random_samples': 1 as a config parameter for the getter.Material).")
+            value["materials_to_replace_with"] = [choice(value["materials_to_replace_with"])]
         if hasattr(entity, 'material_slots'):
             for mat in entity.material_slots:
                 use_mat = True
