@@ -1,4 +1,5 @@
 import os
+import glob
 
 import bpy
 
@@ -7,8 +8,10 @@ from src.utility.Utility import Utility
 
 
 class TextureLoader(Loader):
-    """ Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an image
-        is provided. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
+    """ Depending on the form of the provided path:
+        1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an
+        image is provided.
+        2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
         folder with images is provided.
 
         Example 1: Load all images in the folder in sRGB colorspace and create appropriate textures.
@@ -16,7 +19,7 @@ class TextureLoader(Loader):
         {
           "module": "loader.TextureLoader",
           "config": {
-            "path": "absolute/path/to/folder/with/assets/"
+            "path": "path/to/folder/with/assets/"
           }
         }
 
@@ -27,7 +30,7 @@ class TextureLoader(Loader):
           "config": {
             "path": {
               "provider": "sampler.Path",
-              "path": "path/to/folder/*.png"
+              "path": "path/to/folder/with/assets/*.png"
             }
           },
           "colorspace": "Raw"
@@ -65,9 +68,7 @@ class TextureLoader(Loader):
         image_paths = []
         if os.path.exists(path):
             if os.path.isdir(path):
-                path_contents = os.listdir(path)
-                for image in path_contents:
-                    image_paths.append(os.path.join(path, image))
+                image_paths = glob.glob(os.path.join(path, "*"))
             else:
                 image_paths.append(path)
         else:

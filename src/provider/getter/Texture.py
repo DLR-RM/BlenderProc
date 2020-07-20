@@ -98,23 +98,23 @@ class Texture(Provider):
         random_samples = self.config.get_int("random_samples", 0)
         has_index = self.config.has_param("index")
 
-        if has_index and random_samples:
-            raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
-        elif has_index:
+        if has_index and not random_samples:
             textures = [textures[self.config.get_int("index")]]
-        elif random_samples:
+        elif random_samples and not has_index:
             textures = sample(textures, k=min(random_samples, len(textures)))
-        raise Exception(textures)
+        elif has_index and random_samples:
+            raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
+
         return textures
 
     @staticmethod
     def perform_and_condition_check(and_condition, textures, used_textures_to_check=None):
-        """
+        """ Checks for all textures and if all given conditions are true, collects them in the return list.
 
-        :param and_condition:
-        :param textures:
-        :param used_textures_to_check:
-        :return:
+        :param and_condition: Given conditions. Type: dict.
+        :param textures: Textures, that are already in the return list. Type: list.
+        :param used_textures_to_check: Textures to perform the check on. Type: list. Default: all materials
+        :return: Textures that comply with given conditions. Type: list.
         """
         new_textures = []
         if used_textures_to_check is None:
@@ -123,7 +123,7 @@ class Texture(Provider):
         for texture in used_textures_to_check:
             if texture in new_textures or texture in textures:
                 continue
-            print(texture)
+
             select_texture = True
             for key, value in and_condition.items():
                 # check if the key is a requested custom property
