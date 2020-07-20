@@ -75,7 +75,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -125,7 +125,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -150,7 +150,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -240,7 +240,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",

@@ -63,7 +63,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",

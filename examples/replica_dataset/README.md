@@ -119,7 +119,7 @@ As before all these values are stored in the GlobalStorage and are only used if 
 
 ```yaml
 {
-  "module": "materials.MaterialManipulator",
+  "module": "manipulators.MaterialManipulator",
   "config": {
     "selector": {
       "provider": "getter.Material",
