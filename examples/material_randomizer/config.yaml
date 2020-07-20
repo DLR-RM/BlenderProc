@@ -58,9 +58,17 @@
       }
     },
     {
-      "module": "materials.MaterialRandomizer",
+      "module": "manipulators.EntityManipulator",
       "config": {
-        "randomization_level": 0.5,
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "type": "MESH"
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.5
+        }
       }
     },
     {
