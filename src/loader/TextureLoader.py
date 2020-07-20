@@ -23,7 +23,7 @@ class TextureLoader(Loader):
           }
         }
 
-        Example 2: Load a random image from the path in Non-color colorscpace and create an appropriate texture.
+        Example 2: Load a random image from the path in raw colorspace and create an appropriate texture.
 
         {
           "module": "loader.TextureLoader",
