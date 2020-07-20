@@ -44,7 +44,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Set custom properties for those planes: `manipulators.EntityManipulator` module.
 * Switch to an light emission shader for the top plane: `materials.MaterialManipulator` module.
 * Load CCTexture materials: `loader.CCMaterialLoader` module.
-* Sample a material for the other planes: `materials.MaterialRandomizer` module.
+* Sample a material for the other planes: `manupulators.EntityManipulator` module.
 * Sample upright objects poses on surface: `object.OnSurfaceSampler` module.
 * Sample point light source: `lighting.LightSampler` module.
 * Sample camera poses: `camera.CameraSampler` module.
@@ -274,24 +274,27 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Load a random CC0Texture that was downloaded from https://cc0textures.com/
 
-### Material Randomizer
+### Entity Manipulator
 ```yaml
     {
-      "module": "materials.MaterialRandomizer",
+      "module": "manipulators.EntityManipulator",
       "config": {
-        "randomization_level": 1,
-        "mode": "once_for_all",
-        "manipulated_objects": {
+        "selector": {
           "provider": "getter.Entity",
           "conditions": {
             "name": "ground_plane.*"
           }
         },
+        "mode": "once_for_all",
         "materials_to_replace_with": {
           "provider": "getter.Material",
+          "random_samples": 1,
           "conditions": {
             "cp_is_cc_texture": True
           }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 1
         }
       }
     },

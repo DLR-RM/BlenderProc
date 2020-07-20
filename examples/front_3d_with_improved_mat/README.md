@@ -41,7 +41,7 @@ python scripts/visHdf5Files.py examples/front_3d_with_improved_mat/output/0.hdf5
 * Sets the category_id of the background to 0: `manipulators.WorldManipulator`
 * Adds cameras to the scene: `camera.Front3DCameraSampler`
 * Loads the cc Materials: `loader.CCMaterialLoader` 
-* Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials: `materials.MaterialRandomizer`
+* Several material Randomizers are used to replace the floor, baseboards and walls materials with cc materials: `manupulators.EntityManipulator`
 * Renders rgb, normals: `renderer.RgbRenderer` module.
 * Renders semantic segmentation: `renderer.SegMapRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module, removes unnecessary channels for the `"distance"`
@@ -64,55 +64,61 @@ The `folder_path` if the script was used, should be `"resources/cctextures"`
 This module loads the assets which names contain a string listed in `"used_assets"`.
 These will be later used to replace the materials in the 3D-Front scenes.
 
-#### 
+#### Entity Manipulator
 
 ```yaml
-{
-  "module": "materials.MaterialRandomizer",
-  "config": {
-    "randomization_level": 0.95,
-    "manipulated_objects": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "name": "Floor.*"
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Floor.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "random_samples": 1,
+          "conditions": {
+            "cp_is_cc_texture": True
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.95
+        }
       }
     },
-    "materials_to_replace_with": {
-      "provider": "getter.Material",
-      "conditions": {
-        "cp_is_cc_texture": True  # this will return all loaded cc textures
-      }
-    }
-  }
-}
 ```
 
-This is one of the `materials.MaterialRandomizer` it swaps the materials of the selected objects, with the materials which are used to replace them.
-It will replace 95% of all materials, which are selected via the `getter.Entity`. 
+This is one of the `manipulators.EntityManipulator` which swaps the materials of the selected objects, with the materials which are used to replace them.
+It will replace 95% of all materials of object, which are selected via the `getter.Entity`. 
 The materials which are used to replace the existing ones all have to be from the CCMaterialLoader, which adds to each loaded material the custom property of `"cp_is_cc_texture"`.
 
 A further example is: 
 
 ```yaml
-{
-  "module": "materials.MaterialRandomizer",
-  "config": {
-    "randomization_level": 0.1,
-    "manipulated_objects": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "name": "Wall.*"
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Wall.*"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "random_samples": 1,
+          "conditions": {
+            "cp_is_cc_texture": True,
+            "cp_asset_name": "Marble.*"
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.1
+        }
       }
     },
-    "materials_to_replace_with": {
-      "provider": "getter.Material",
-      "conditions": {
-        "cp_is_cc_texture": True,  # this will return all loaded cc textures
-        "cp_asset_name": "Marble.*"
-      }
-    }
-  }
-}
 ```
 
 Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, which names start with `"Marble"`.

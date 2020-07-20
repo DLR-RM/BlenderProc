@@ -138,16 +138,27 @@ This module only sets up the materials which can then be used by other modules.
 ### MaterialRandomizer 
 
 ```yaml
-"module": "materials.MaterialRandomizer",
-"config": {
-  "randomization_level": 0.4,
-  "materials_to_replace_with": {
-    "provider": "getter.Material",
-    "conditions": {
-      "cp_is_cc_texture": True  # this will return all loaded cc textures
-    }
-  }
-}
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "type": "MESH"
+          }
+        },
+        "materials_to_replace_with": {
+          "provider": "getter.Material",
+          "random_samples": 1,
+          "conditions": {
+            "cp_is_cc_texture": True  # this will return one random loaded cc textures
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.4
+        }
+      }
+    },
 ```
 
 This builds up on the [material_randomizer](../material_randomizer) example.
@@ -155,7 +166,7 @@ This builds up on the [material_randomizer](../material_randomizer) example.
 We also use the `randomization_level` and set it `0.4`.
 
 Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.
-Each material loaded by CCMaterialLoader set the `is_cc_texture` custom property to true.
+Each material loaded by CCMaterialLoader set the `cp_is_cc_texture` custom property to true.
 
 ### SceneNetLighting
 

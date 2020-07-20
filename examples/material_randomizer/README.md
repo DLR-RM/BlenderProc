@@ -5,7 +5,7 @@
 <img src="rendering_switched.png" alt="alt text" width=430>
 </div>
 
-In this example we demonstrate how to switch materials  
+In this example we demonstrate how to switch materials.
 
 ## Usage
 
@@ -32,27 +32,35 @@ python scripts/visHdf5Files.py examples/material_randomizer/output/*.hdf5
 * Loads `scene.obj`: `loader.ObjectLoader` module.
 * Creates a point light: `lighting.LightLoader` module.
 * Sets two camera positions: `camera.CameraLoader` module.
-* Selects materials based in the: `materials.MaterialRandomizer` module.
+* Selects materials based in the: `manipulators.EntityManipulator` module.
 * Renders rgb: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
 
-### ObjectManipulator
+### Entity Manipulator
 
 ```yaml
-{
-  "module": "materials.MaterialRandomizer",
-  "config": {
-    "randomization_level": 0.5,
-  }
-},
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "type": "MESH"
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.5
+        }
+      }
+    },
 ```
 
-The focus of this example is the MaterialRandomizer module, which allow us to change the material of the objects randomly. 
+The focus of this example is the fucntionality of the `manupulators.EntityManipulator` module, which allows us to change the material of the objects randomly. 
  * Sets the `randomization_level` to 0.5, which means that a material has the change of 0.5 to be replaced with another one.
 
-It is also possible to use selectors to select the group of objects, which materials should be changed and another selector to select the materials, which should be used to replace them. 
+Select the pool of objects for which we randimize materials with certain probability, and select material substitute. If no `getter.Material` is called, a random material from all of the materials will be used as substitution. 
 
 Check [object_manipulation](../object_manipulation) for more information about selectors.
 
