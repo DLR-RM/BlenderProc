@@ -100,8 +100,8 @@ class BopWriter(WriterInterface):
         "dataset", "Annotations for objects of this dataset will be saved. Type: string."
         "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
                                     "Type: bool. Default: False"
-        "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to "
-                            "failed physics. Default: 5. Type float."
+        "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to"
+                             "failed physics. Type: float. Default: 5."
     """
 
     def __init__(self, config):
@@ -127,7 +127,7 @@ class BopWriter(WriterInterface):
         # Output paths.
         base_path = self._determine_output_dir(False)
         self.dataset_dir = os.path.join(base_path, 'bop_data', self.dataset)
-        self.chunks_dir = os.path.join(self.dataset_dir, 'train_synt')
+        self.chunks_dir = os.path.join(self.dataset_dir, 'train_pbr')
         self.camera_path = os.path.join(self.dataset_dir, 'camera.json')
         self.rgb_tpath = os.path.join(
             self.chunks_dir, '{chunk_id:06d}', 'rgb', '{im_id:06d}' + '{im_type}')

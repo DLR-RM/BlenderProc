@@ -3,7 +3,7 @@ import warnings
 import bpy
 
 import src.utility.BlenderUtility as BlenderUtility
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.main.Module import Module
 from src.utility.Config import Config
 
@@ -75,6 +75,7 @@ class EntityManipulator(Module):
             "cf_add_modifier": {
               "name": "Solidify",
               "thickness": 0.001
+            }
           }
         }
 
@@ -332,7 +333,7 @@ class EntityManipulator(Module):
         :param entity: An entity to modify. Type: bpy.types.Object
         :param value: Configuration data. Type: dict.
         """
-        Loader.change_shading_mode([entity], value)
+        LoaderInterface.change_shading_mode([entity], value)
 
     def _add_displace(self, entity, value):
         """ Adds a displace modifier with texture to an object.

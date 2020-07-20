@@ -1,10 +1,10 @@
 import bpy
 
-from src.renderer.Renderer import Renderer
+from src.renderer.RendererInterface import RendererInterface
 from src.utility.Utility import Utility
 
 
-class RgbRenderer(Renderer):
+class RgbRenderer(RendererInterface):
     """ Renders rgb images for each registered keypoint.
 
     Images are stored as PNG-files or JPEG-files with 8bit color depth.
@@ -16,7 +16,7 @@ class RgbRenderer(Renderer):
         "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
     """
     def __init__(self, config):
-        Renderer.__init__(self, config)
+        RendererInterface.__init__(self, config)
         self._texture_less_mode = config.get_bool('render_texture_less', False)
         self._image_type = config.get_string('image_type', 'PNG')
 

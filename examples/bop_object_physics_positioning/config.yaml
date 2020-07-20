@@ -41,6 +41,7 @@
         "mm2m": True,
         "sample_objects": True,
         "num_of_objs_to_sample": 3,
+        "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
         },
@@ -55,7 +56,6 @@
         "mm2m": True,
         "sample_objects": True,
         "num_of_objs_to_sample": 10,
-        "obj_instances_limit": 1,
         "add_properties": {
           "cp_physics": True
         },
@@ -168,7 +168,7 @@
           }
         },
         "cp_physics": False,
-        "cp_category_id": 333
+        
       }
     },
     {

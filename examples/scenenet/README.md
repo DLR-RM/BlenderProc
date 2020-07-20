@@ -64,6 +64,9 @@ The same as in the basic example.
 This module loads the SceneNet data object, specified via the `file_path`. 
 All objects included in this `.obj` file get a randomly selected texture from the `texture_folder`.
 The `category_id` of each object are set based on their name, check the [table](../../resources/scenenet/CategoryLabeling.csv) for more information on the labels.
+Be aware if the `unknown_texture_folder` value is not set, that the unknown folder will be assumed to be inside of the `texture_folder` with the name `unknown`.
+This folder does *not* exist after downloading the texture files, it has to be manually generated. 
+By selecting random texture and putting them in this `unknown_texture_folder`, which can be used on unknown structures.
 
 ### SceneNetLighting
 
@@ -122,5 +125,7 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 
 * [shapenet_with_scenenet](../shapenet_with_scenenet): Using shapenet combined with scenenet
 * [scenenet_with_cctextures](../scenenet_with_cctextures): An example on how to use CCTextures with scenenet.
+* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
 * [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.

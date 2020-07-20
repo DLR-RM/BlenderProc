@@ -16,6 +16,7 @@ It will give you an idea about how, why and when certain things happen.
 * [debugging](debugging): what happens during the execution of the pipeline and certain modules it is sometimes useful to use blender directly
 * [camera sampling](camera_sampling): Sampling of different camera positions inside of a shape with constraints for the rotation.
 * [light sampling](light_sampling): Sampling of light positions, this is the same behavior needed for the object and camera sampling.
+* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
 * [object pose sampling](object_pose_sampling): Shows a more complex use of a 6D pose sampler.
 * [physics_positioning](physics_positioning): Overview of an easy to use module we provide for using physics in your simulations.
 * [entity manipulation](entity_manipulation): Changing various parameters of entities via selecting them through config file.
@@ -37,7 +38,7 @@ We provide example configs that interface with the BOP datasets.
 
 ### Dataset related examples
 
-We are providing limited dataset support, for example for ShapeNet, SceneNet, SUNCG, Replica, Rock Essentials and others.
+We are providing limited dataset support, for example for ShapeNet, SceneNet, 3D-Front, SUNCG, Replica, Rock Essentials and others.
 These can be found in:
 * [replica_dataset](replica_dataset)
 * [shapenet](shapenet)
@@ -45,6 +46,8 @@ These can be found in:
 * [shapenet_with_suncg](shapenet_with_suncg)
 * [scenenet](scenenet)
 * [scenenet_with_cctextures](scenenet_with_cctextures)
+* [front_3d](../front_3d)
+* [front_3d_with_improved_mat](../front_3d_with_improved_mat)
 * [suncg_basic](suncg_basic)
 * [suncg_with_cam_sampling](suncg_with_cam_sampling)
 * [suncg_with_improved_mat](suncg_with_improved_mat)

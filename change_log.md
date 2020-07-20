@@ -7,6 +7,41 @@
 
 # Version History
 
+## Version 1.5.1: 17th July 2020
+- adding support for 3D-Front: https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset
+- added to example on how to use 3D-Front
+- fixed visualization of newly generated SegMapRenderer results
+- fixed combining several coco annotations
+- added option for the "class" key for default values in the SegMapRenderer
+- fixed a bug in the SegMapRenderer when used in debug mode
+
+## Version 1.5.0: 14th July 2020
+- rename depth to distance (this is the difference between taking at each pixel the Z coordinate (in the camera coordinate system) or the distance from the optical center, as sensors usually produce depth and not distance, we changed this)
+- create postprocessing module to calculate the depth out of the distance image
+- rewriting of the SegMapRenderer, it now supports the mapping of any attribute or custom property of an object to an image or a csv file
+- reworking of the used coco examples to better work with this new SegMapRenderer
+- adapting CocoAnnotationsWriter to write category_ids which must be defined in a Loader or in a .blend file
+- adding support for a supercategory inside of the coco annotations tool (useful for bop dataset names)
+- add texture provider, which can generate random textures, which can be used in a displacement modifier
+- added to the EntityManipulator: 
+  - option to automatically generate a UV mapping for an object
+  - added option for displacement modifier adding to objects
+  - added an example for the entity_displacement_modifier usage
+- the sampler.Value now supports gaussian sampling
+- reworked some parts of the Hdf5Writer, to better work with depth and distance
+- added a check to the CocoUtility to avoid that the bounding box has a area of zero
+- remove the provider.ContentGetter as it was confusing, now it works directly without it
+- add an Interface in the naming of some modules, if they are not supposed to be run by the pipeline directly
+- change the sample amount for the FlowRenderer to 1 as a higher sampling density integrates over several objects in one pixel
+- added a step function in the alpha mode of the renderer to avoid artifacts, when rendering semantic segmentations
+- support for setting different fx/fy values in the camera module
+- remove the pixel_aspect_x/pixel_aspect_y/resolution_x/resolution_y from the renderer is now in Camera
+- fixed a bug when the unknown texture folder in the scenenet dataset was not created before
+- improved the loading of camera parameters from files
+- added a feature for supporting changes of the "category_id" for the WorldManipulator
+- improved the visHdf5/saveHdf5/generate_nice_vis scripts
+- switches to blender 2.83.2
+
 ## Version 1.4.1: 3rd June 2020
 
 - switches to blender 2.83

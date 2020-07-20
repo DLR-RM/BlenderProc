@@ -28,6 +28,11 @@ Visualize the generated data and labels:
 python scripts/visHdf5Files.py examples/bop_object_pose_sampling/output/0.hdf5
 ```
 
+Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:
+```
+python scripts/vis_coco_annotation.py /path/to/output_dir
+``` 
+
 ## Steps
 
 * Loads object models and camera intrinsics from specified BOP dataset: `loader.BopLoader` module.
@@ -60,17 +65,93 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
     },
 ```
 
-Following modules handle the sampling.
+### CameraObjectSampler
+
+```yaml
+    {
+      "module": "composite.CameraObjectSampler",
+      "config": {
+        "total_noof_cams": 10,
+        "noof_cams_per_scene": 5,
+        "object_pose_sampler": {
+          "module": "object.ObjectPoseSampler",
+          "config": {
+            "max_iterations": 1000,
+            "pos_sampler": {
+              "provider": "sampler.Uniform3d",
+              "max": [0.2, 0.2, 0.2],
+              "min": [-0.2, -0.2, -0.2]
+            },
+            "rot_sampler": {
+              "provider": "sampler.Uniform3d",
+              "max": [0, 0, 0],
+              "min": [6.28, 6.28, 6.28]
+            }
+          }
+        },
+        "camera_pose_sampler": {
+          "module": "camera.CameraSampler",
+          "config": {
+            "cam_poses": [
+              {
+                "location": {
+                  "provider": "sampler.Shell",
+                  "center": [0, 0, 0],
+                  "radius_min": 1,
+                  "radius_max": 1.2,
+                  "elevation_min": 1,
+                  "elevation_max": 89
+                },
+                "rotation": {
+                  "format": "look_at",
+                  "value": {
+                    "provider": "getter.POI",
+                    "parameters": {}
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+```
 
  `composite.CameraObjectSampler` alternates between sampling new cameras using a `camera.CameraSampler` and sampling new object poses using a `object.ObjectPoseSampler`. Additionally, here you set the parameters
 
 - `noof_cams_per_scene` after which the object poses are resampled
 - `total_noof_cams` to generate
 
-Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:
+### CocoAnnotationsWriter
+
+```yaml
+    {
+      "module": "writer.CocoAnnotationsWriter",
+      "config": {
+        "supercategory": "<args:1>"
+      }
+    },
 ```
-python scripts/vis_coco_annotation.py /path/to/output_dir
-``` 
+Writes CocoAnnotations of all objects from the given BOP dataset (`"supercategory"`).
+
+### BopWriter
+
+```yaml
+    {
+      "module": "writer.BopWriter",
+      "config": {
+        "dataset": "<args:1>",
+        "append_to_existing_output": True,
+        "postprocessing_modules": {
+          "distance": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
+      }
+    }
+```
+
+Writes object to camera poses and intrinsics of the given `"dataset": "<args:1>"` in BOP format. Converts Blender distance images to depth images. If output folder exists `"append_to_existing_output": True`.
 
 ## More examples
 

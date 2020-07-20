@@ -4,7 +4,7 @@ from src.main.Module import Module
 from src.utility.ItemCollection import ItemCollection
 
 
-class LightModule(Module):
+class LightInterface(Module):
     """ 
     **Configuration**:
 

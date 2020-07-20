@@ -7,12 +7,12 @@ import bpy
 import mathutils
 import numpy as np
 
-from src.camera.CameraModule import CameraModule
+from src.camera.CameraInterface import CameraInterface
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.ItemCollection import ItemCollection
 
 
-class CameraSampler(CameraModule):
+class CameraSampler(CameraInterface):
     """ A general camera sampler.
 
         First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.
@@ -74,7 +74,8 @@ class CameraSampler(CameraModule):
         "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries "
                             "containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical "
                             "threshold in case of max or min. The operators are combined in conjunction (i.e boolean "
-                            "AND). Type: dict. Default: {}.
+                            "AND). This can also be used to avoid the background in images, with the"
+                            "no_background: True option. Type: dict. Default: {}.
         "excluded_objs_in_proximity_check", "A list of objects, returned by getter.Entity to remove some objects from"
                                             "the proximity checks defined in 'proximity_checks'."
                                             "Type: list. Default: []"
@@ -105,12 +106,12 @@ class CameraSampler(CameraModule):
                                     "check that the variance is increased. Type: float. Default: sys.float_info.min."
         "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor "
                                            "or a table. Type: list. Default: []."
-        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraModule "
+        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraInterface "
                              "for more info. Type: dict. Default: {}."
     """
 
     def __init__(self, config):
-        CameraModule.__init__(self, config)
+        CameraInterface.__init__(self, config)
         self.bvh_tree = None
 
         self.rotations = []
@@ -344,31 +345,38 @@ class CameraSampler(CameraModule):
             else:
                 range_distance = self.proximity_checks["min"]
 
+        no_range_distance = False
+        if "no_background" in self.proximity_checks and self.proximity_checks["no_background"]:
+            # when no background is on, it can not be combined with a reduced range distance
+            no_range_distance = True
 
         # Go in discrete grid-like steps over plane
         position = cam2world_matrix.to_translation()
         for x in range(0, self.sqrt_number_of_rays):
             for y in range(0, self.sqrt_number_of_rays):
                 # Compute current point on plane
-                end = frame[0] + vec_x * x / (self.sqrt_number_of_rays - 1) + vec_y * y / (self.sqrt_number_of_rays - 1)
+                end = frame[0] + vec_x * x / float(self.sqrt_number_of_rays - 1) \
+                      + vec_y * y / float(self.sqrt_number_of_rays - 1)
                 # Send ray from the camera position through the current point on the plane
-                _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
+                if no_range_distance:
+                    _, _, _, dist = self.bvh_tree.ray_cast(position, end - position)
+                else:
+                    _, _, _, dist = self.bvh_tree.ray_cast(position, end - position, range_distance)
 
                 # Check if something was hit and how far it is away
                 if dist is not None:
-                    if "min" in self.proximity_checks:
-                        pass
-                    if dist <= self.proximity_checks["min"]:
+                    if "min" in self.proximity_checks and dist <= self.proximity_checks["min"]:
                         return False
-                    if "max" in self.proximity_checks:
-                        if dist >= self.proximity_checks["max"]:
-                            return False
+                    if "max" in self.proximity_checks and dist >= self.proximity_checks["max"]:
+                        return False
                     if "avg" in self.proximity_checks:
                         sum += dist
                     if "var" in self.proximity_checks:
                         if not "avg" in self.proximity_checks:
                             sum += dist
                         sum_sq += dist * dist
+                elif "no_background" in self.proximity_checks and self.proximity_checks["no_background"]:
+                    return False
 
         if "avg" in self.proximity_checks:
             avg = sum / (self.sqrt_number_of_rays * self.sqrt_number_of_rays)
@@ -438,11 +446,11 @@ class CameraSampler(CameraModule):
 
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for
         # each object more/less, excluding floor, ceiling and walls
-        scene_variance = len(objects_hit.keys()) / 3
-        for object_hit in objects_hit.keys():
+        scene_variance = len(objects_hit) / 3
+        for object_hit_value in objects_hit.values():
             # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even
             # distribution of the objects in the scene
-            scene_variance *= 1 - objects_hit[object_hit] / num_of_rays
+            scene_variance *= 1 - object_hit_value / num_of_rays
 
         score = scene_variance * (score / num_of_rays)
         return score

@@ -11,7 +11,7 @@ from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.Utility import Utility
 
 
-class Renderer(Module):
+class RendererInterface(Module):
     """
     **Configuration**:
 
@@ -20,12 +20,7 @@ class Renderer(Module):
 
         "output_file_prefix", "The file prefix that should be used when writing the rendering to file. Type: String."
         "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
-
-        "resolution_x", "The render image width. "
-                        "Type: int. Default: 512, except the CameraModule loaded something else."
-        "resolution_y", "The render image height. "
-                        "Type: int. Default: 512, except the CameraModule loaded something else."
-
+        
         "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark "
                    "areas. Type: int. Default: 256, (not true for all Renderes)."
         "use_adaptive_sampling", "Combined with the maximum sample amount, it is also possible to set the amount of "
@@ -40,8 +35,6 @@ class Renderer(Module):
                   "to true. Type: int."
         "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set "
                   "to true. Type: int."
-        "pixel_aspect_x", "The aspect ratio to use for the camera viewport. Can be different from the resolution "
-                          "aspect ratio to distort the image. Type: float. Default: 1.0"
         "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering. "
                                        "Type: int. Default: 3"
 
@@ -66,6 +59,9 @@ class Renderer(Module):
         "volume_bounces", "Maximum number of volumetric scattering events. Type: int. Default: 0"
 
         "render_distance", "If true, the distance is also rendered to file. Type: bool. Default: False."
+        "use_mist_distance", "If true, the distance is sampled over several iterations, useful for motion blur or"
+                             "soft edges, if this is turned off, only one sample is taken to determine the depth."
+                             "Type: bool. Default: True."
         "distance_output_file_prefix", "The file prefix that should be used when writing distance to file. "
                                        "Type: string. Default: 'distance_'"
         "distance_output_key", "The key which should be used for storing the distance in a merged file. "
@@ -94,6 +90,36 @@ class Renderer(Module):
         Module.__init__(self, config)
         self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
+
+    def _disable_all_denoiser(self):
+        """ Disables all denoiser.
+
+        At the moment this includes the cycles and the intel denoiser.
+        """
+        # Disable cycles denoiser
+        bpy.context.view_layer.cycles.use_denoising = False
+
+        # Disable intel denoiser
+        if bpy.context.scene.use_nodes:
+            nodes = bpy.context.scene.node_tree.nodes
+            links = bpy.context.scene.node_tree.links
+
+            # Go through all existing denoiser nodes
+            for denoiser_node in Utility.get_nodes_with_type(nodes, 'CompositorNodeDenoise'):
+                in_node = denoiser_node.inputs['Image']
+                out_node = denoiser_node.outputs['Image']
+
+                # If it is fully included into the node tree
+                if in_node.is_linked and out_node.is_linked:
+                    # There is always only one input link
+                    in_link = in_node.links[0]
+                    # Connect from_socket of the incoming link with all to_sockets of the out going links
+                    for link in out_node.links:
+                        links.new(in_link.from_socket, link.to_socket)
+
+                # Finally remove the denoiser node
+                nodes.remove(denoiser_node)
+
 
     def _configure_renderer(self, default_samples=256, use_denoiser=False, default_denoiser="Intel"):
         """
@@ -124,25 +150,18 @@ class Renderer(Module):
             bpy.context.scene.render.threads_mode = "FIXED"
             bpy.context.scene.render.threads = number_of_threads
         
-        # Collect camera and camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-        
-        if not 'loaded_resolution' in cam:
-            bpy.context.scene.render.resolution_x = self.config.get_int("resolution_x", 512)
-            bpy.context.scene.render.resolution_y = self.config.get_int("resolution_y", 512)
-            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
         print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
 
         bpy.context.scene.render.resolution_percentage = 100
         # Lightning settings to reduce training time
         bpy.context.scene.render.engine = 'CYCLES'
 
+        # Make sure there is no denoiser active
+        self._disable_all_denoiser()
         if use_denoiser:
             denoiser = self.config.get_string("denoiser", default_denoiser)
             if denoiser.upper() == "INTEL":
                 # The intel denoiser is activated via the compositor
-                bpy.context.view_layer.cycles.use_denoising = False
                 bpy.context.scene.use_nodes = True
                 nodes = bpy.context.scene.node_tree.nodes
                 links = bpy.context.scene.node_tree.links
@@ -199,38 +218,56 @@ class Renderer(Module):
     def _write_distance_to_file(self):
         """ Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. """
 
-        # Mist settings
+        # z-buffer/mist settings
         distance_start = self.config.get_float("distance_start", 0.1)
         distance_range = self.config.get_float("distance_range", 25.0)
         GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
-        bpy.context.scene.world.mist_settings.start = distance_start
-        bpy.context.scene.world.mist_settings.depth = distance_range
-        bpy.context.scene.world.mist_settings.falloff = self.config.get_string("distance_falloff", "LINEAR")
 
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
-        bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
 
         tree = bpy.context.scene.node_tree
         links = tree.links
-
         # Use existing render layer
         render_layer_node = tree.nodes.get('Render Layers')
-        # Create a mapper node to map from 0-1 to SI units
-        mapper_node = tree.nodes.new("CompositorNodeMapRange")
 
-        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
-        # map the values 0-1 to range distance_start to distance_range
-        mapper_node.inputs['To Min'].default_value = distance_start
-        mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+        # use either mist rendering or the z-buffer
+        # mists uses an interpolation during the sample per pixel
+        # while the z buffer only returns the closest object per pixel
+        use_mist_as_distance = self.config.get_bool("use_mist_distance", True)
+        if use_mist_as_distance:
+            bpy.context.scene.world.mist_settings.start = distance_start
+            bpy.context.scene.world.mist_settings.depth = distance_range
+            bpy.context.scene.world.mist_settings.falloff = self.config.get_string("distance_falloff", "LINEAR")
+
+            bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
+            # Create a mapper node to map from 0-1 to SI units
+            mapper_node = tree.nodes.new("CompositorNodeMapRange")
+            links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
+            # map the values 0-1 to range distance_start to distance_range
+            mapper_node.inputs['To Min'].default_value = distance_start
+            mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+            final_output = mapper_node.outputs['Value']
+        else:
+            bpy.context.view_layer.use_pass_z = True
+            # add min and max nodes to perform the clipping to the desired range
+            min_node = tree.nodes.new("CompositorNodeMath")
+            min_node.operation = "MINIMUM"
+            min_node.inputs[1].default_value = distance_start + distance_range
+            links.new(render_layer_node.outputs["Depth"], min_node.inputs[0])
+            max_node = tree.nodes.new("CompositorNodeMath")
+            max_node.operation = "MAXIMUM"
+            max_node.inputs[1].default_value = distance_start
+            links.new(min_node.outputs["Value"], max_node.inputs[0])
+            final_output = max_node.outputs["Value"]
 
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = self._determine_output_dir()
         output_file.format.file_format = "OPEN_EXR"
         output_file.file_slots.values()[0].path = self.config.get_string("distance_output_file_prefix", "distance_")
 
-        # Feed the Mist output of the render layer to the input of the file IO layer
-        links.new(mapper_node.outputs['Value'], output_file.inputs['Image'])
+        # Feed the Z-Buffer or Mist output of the render layer to the input of the file IO layer
+        links.new(final_output, output_file.inputs['Image'])
 
     def _render(self, default_prefix, custom_file_path=None):
         """ Renders each registered keypoint.
@@ -302,11 +339,11 @@ class Renderer(Module):
                                 # add the alpha channel of the image to the mix shader node as a factor
                                 links.new(texture_node.outputs['Alpha'], mix_node.inputs['Fac'])
                             else:
-                                bright_contrast_node = nodes.new("ShaderNodeBrightContrast")
-                                # extreme high contrast to avoid blurry edges
-                                bright_contrast_node.inputs['Contrast'].default_value = 1000.0
-                                links.new(texture_node.outputs['Alpha'], bright_contrast_node.inputs['Color'])
-                                links.new(bright_contrast_node.outputs['Color'], mix_node.inputs['Fac'])
+                                # Map all alpha values to 0 or 1 by applying the step function: 1 if x > 0.5 else 0
+                                step_function_node = nodes.new("ShaderNodeMath")
+                                step_function_node.operation = "GREATER_THAN"
+                                links.new(texture_node.outputs['Alpha'], step_function_node.inputs['Value'])
+                                links.new(step_function_node.outputs['Value'], mix_node.inputs['Fac'])
 
                             links.new(node_connected_to_the_output.outputs[0], mix_node.inputs[2])
                             transparent_node = nodes.new(type='ShaderNodeBsdfTransparent')
@@ -454,7 +491,7 @@ class Renderer(Module):
         """
         use_stereo = self.config.get_bool("stereo", False)
 
-        super(Renderer, self)._register_output(default_prefix,
+        super(RendererInterface, self)._register_output(default_prefix,
                                                default_key,
                                                suffix,
                                                version,

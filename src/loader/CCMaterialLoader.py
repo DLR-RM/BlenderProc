@@ -208,8 +208,7 @@ class CCMaterialLoader(Module):
                             current_output = normal_texture.outputs["Color"]
 
                         normal_map = nodes.new("ShaderNodeNormalMap")
-                        # TODO figure out the correct value here
-                        normal_map.inputs["Strength"].default_value = 2.0
+                        normal_map.inputs["Strength"].default_value = 1.0
                         normal_map.location.x = 1.0 / 5.0 * x_texture_node
                         normal_map.location.y = normal_y_value
                         links.new(current_output, normal_map.inputs["Color"])

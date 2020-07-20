@@ -3,11 +3,11 @@ import re
 
 import bpy
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 
 
-class BlendLoader(Loader):
+class BlendLoader(LoaderInterface):
     """ Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
         bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
 
@@ -39,7 +39,7 @@ class BlendLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
         # supported pairs of {ID type/section names: datablock parameter names}
         self.known_datablock_names = {"/Camera": "cameras",
                                       "/Collection": "collections",
