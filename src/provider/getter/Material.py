@@ -1,4 +1,5 @@
 import re
+from random import sample
 
 import mathutils
 
@@ -227,5 +228,15 @@ class Material(Provider):
         else:
             # only one condition was given, treat it as and condition
             materials = self.perform_and_condition_check(conditions, [])
+
+        random_samples = self.config.get_int("random_samples", 0)
+        has_index = self.config.has_param("index")
+
+        if has_index and random_samples:
+            raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
+        elif has_index:
+            materials = [materials[self.config.get_int("index")]]
+        elif random_samples:
+            materials = sample(materials, k=min(random_samples, len(materials)))
 
         return materials
