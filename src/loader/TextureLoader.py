@@ -1,18 +1,22 @@
 import os
 import glob
+import warnings
 
 import bpy
 
-from src.loader.Loader import Loader
+from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 
 
-class TextureLoader(Loader):
+class TextureLoader(LoaderInterface):
     """ Depending on the form of the provided path:
         1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an
         image is provided.
         2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
         folder with images is provided.
+
+        NOTE: Same image file can be loaded once to avoid unnecessary overhead. If you really need the same image in
+        different colorspaces, then have a copy per desired colorspace and load them in different instances of this Loader.
 
         Example 1: Load all images in the folder in sRGB colorspace and create appropriate textures.
 
@@ -47,7 +51,7 @@ class TextureLoader(Loader):
     """
 
     def __init__(self, config):
-        Loader.__init__(self, config)
+        LoaderInterface.__init__(self, config)
 
     def run(self):
         """ Loads images and creates image textures. """
@@ -84,17 +88,26 @@ class TextureLoader(Loader):
         :param colorspace: Colorspace type of the assets. Type: string.
         :return: Created textures. Type: list.
         """
+        existing = [image.filepath for image in bpy.data.images]
         textures = []
         for image_path in image_paths:
             dir_path = os.path.dirname(image_path)
             file_name = os.path.basename(image_path)
-            bpy.ops.image.open(filepath=image_path, directory=dir_path)
-            bpy.data.images[file_name].colorspace_settings.name = colorspace
-            texture_name = "ct_{}".format(os.path.splitext(file_name)[0])
-            tex = bpy.data.textures.new(name=texture_name, type="IMAGE")
-            bpy.data.textures[texture_name].image = bpy.data.images.get(file_name)
-            tex.use_nodes = True
-
-            textures.append(tex)
+            if image_path not in existing:
+                bpy.ops.image.open(filepath=image_path, directory=dir_path)
+                existing.append(image_path)
+                # take the last loaded image (the very last is Render Result, so we take -2)
+                loaded_image = bpy.data.images[-2]
+                loaded_image.colorspace_settings.name = colorspace
+                texture_name = "ct_{}".format(loaded_image.name)
+                tex = bpy.data.textures.new(name=texture_name, type="IMAGE")
+                tex.image = bpy.data.images.get(file_name)
+                tex.use_nodes = True
+                textures.append(tex)
+            else:
+                warnings.warn("Image {} has been already loaded and a corresponding texture was created. Following the "
+                              "save behaviour of reducing the overhead, it is skipped. So, if you really need to load the "
+                              "same image again (for example, in a different or in the same colorspace), use the copy "
+                              "of the file.".format(image_path))
 
         return textures
