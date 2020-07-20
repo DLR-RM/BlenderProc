@@ -1,10 +1,12 @@
 import warnings
 
 import bpy
+import numpy as np
 
 import src.utility.BlenderUtility as BlenderUtility
 from src.loader.LoaderInterface import LoaderInterface
 from src.main.Module import Module
+from src.provider.getter.Material import Material
 from src.utility.Config import Config
 
 
@@ -162,6 +164,10 @@ class EntityManipulator(Module):
                "supported custom function names."
         "value", "Value of the attribute/custom prop. to set or input value(s) for a custom function. Type: string, "
                  "int, bool or float, list/Vector."
+        "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
+                 "Type: int."
+        "random_samples", "If set, this Provider returns random_samples objects from the pool of selected ones. Define "
+                          "index or random_samples property, only one is allowed at a time. Type: int. Default: False."
 
     **Custom functions**
 
@@ -194,6 +200,21 @@ class EntityManipulator(Module):
         "cf_add_uv_mapping", "Adds a uv map to an object if uv map is missing. Type: dict."
         "cf_add_uv_mapping/projection", "Name of the projection as str. Type: str. Default: []."
                                         "Available: ["cube", "cylinder", "smart", "sphere"]"
+        "cf_randomize_materials", "Randomizes the materials for the selected objects with certain probability."
+        "cf_randomize_materials/randomization_level", "Expected fraction of the selected objects for which the texture "
+                                                      "should be randomized. Type: float. Range: [0, 1]. Default: 0.2."
+        "cf_randomize_materials/materials_to_replace_with", "Material(s) to participate in randomization. Sampling "
+                                                            "from the pool of elegible material (that comply with "
+                                                            "conditions is performed in the Provider). Make sure you "
+                                                            "use 'random_samples" config parameter of the Provider, if "
+                                                            "multiple materials are returned, the first one will be "
+                                                            "considered as a substitute during randomization. "
+                                                            "Type: Provider. Default: all materials."
+        "cf_randomize_materials/obj_materials_cond_to_be_replaced", "A dict of materials and corresponding conditions "
+                                                                    "making it possible to only replace materials with "
+                                                                    "certain properties. These are similar to the "
+                                                                    "conditions mentioned in the getter.Material. "
+                                                                    "Type: dict. Default: {}."
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -263,6 +284,8 @@ class EntityManipulator(Module):
                     self._add_displace(entity, value)
                 elif key_copy == "add_uv_mapping" and requested_cf:
                     self._add_uv_mapping(entity, value)
+                elif key_copy == "randomize_materials" and requested_cf:
+                    self._randomize_materials(entity, value)
                 # if key had a cp_ prefix - treat it as a custom property
                 # values will be overwritten for existing custom property,
                 # but if the name is new then new custom property will be created
@@ -307,6 +330,14 @@ class EntityManipulator(Module):
                 instructions = {"projection": (Config.get_string, None, str.lower)}
                 # unpack
                 result = self._unpack_params(uv_config, instructions)
+            elif key == "cf_randomize_materials":
+                rand_config = Config(params_conf.get_raw_dict(key))
+                # instruction about unpacking the data: key, corresponding Config method to extract the value,
+                # it's default value and a postproc function
+                instructions = {"randomization_level": {Config.get_int, 0.2, None},
+                                "materials_to_replace_with": (Config.get_list, BlenderUtility.get_all_materials(), None),
+                                "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
+                result = self._unpack_params(rand_config, instructions)
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -377,6 +408,27 @@ class EntityManipulator(Module):
                                     .format(value["projection"]))
 
                 bpy.ops.object.editmode_toggle()
+
+    def _randomize_materials(self, entity, value):
+        """ Replaces each material of an entity with certain probability.
+
+        :param entity: An object to modify. Type: bpy.types.Object.
+        :param value: Configuration data. Type: dict.
+        """
+        if len(value["materials_to_replace_with"]) > 0:
+            warnings.warn("getter.Material returned more than one substitute material, the first of the returned is "
+                          "used. It means that either all materail are eligible (default value), or a subset is. "
+                          "Sampling is performed on the level of the Provider. Make sure you use 'random_samples' as "
+                          "a config parameter for the getter.Material.")
+        if hasattr(entity, 'material_slots'):
+            for mat in entity.material_slots:
+                use_mat = True
+                if value["obj_materials_cond_to_be_replaced"]:
+                    use_mat = len(Material.perform_and_condition_check(value["obj_materials_cond_to_be_replaced"], [],
+                                                                       [mat.material])) == 1
+                if use_mat:
+                    if np.random.uniform(0, 1) <= value["randomization_level"]:
+                        mat.material = value["materials_to_replace_with"][0]
 
     def _unpack_params(self, param_config, instructions):
         """ Unpacks the data from a config object following the instructions in the dict.
