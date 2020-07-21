@@ -1,4 +1,6 @@
 import datetime
+from itertools import groupby
+
 import numpy as np
 from skimage import measure
 
@@ -6,13 +8,15 @@ from skimage import measure
 class CocoUtility:
 
     @staticmethod
-    def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, supercategory, existing_coco_annotations=None):
+    def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, supercategory,
+                                  mask_encoding_format, existing_coco_annotations=None):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
         :param image_paths: A list of paths which points to the rendered segmentation maps.
         :param inst_attribute_maps: mapping with idx, class and optionally supercategory/bop_dataset_name
         :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset
+        :param mask_encoding_format: Encoding format of the binary mask. Type: string.
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
         :return: dict containing coco annotations
         """
@@ -31,7 +35,9 @@ class CocoUtility:
                 inst_supercategory = inst["supercategory"]
                 
             if supercategory == inst_supercategory:
-                cat_dict = {'id': int(inst["category_id"]), 'name': inst["category_id"], 'supercategory': inst_supercategory}
+                cat_dict = {'id': int(inst["category_id"]),
+                            'name': inst["category_id"],
+                            'supercategory': inst_supercategory}
                 if cat_dict not in categories:
                     categories.append(cat_dict)
                 instance_2_category_map[int(inst["idx"])] = int(inst["category_id"])
@@ -73,7 +79,11 @@ class CocoUtility:
                     # Calc object mask
                     binary_inst_mask = np.where(segmentation_map == inst, 1, 0)
                     # Add coco info for object in this image
-                    annotation = CocoUtility.create_annotation_info(len(annotations), image_id, instance_2_category_map[inst], binary_inst_mask)
+                    annotation = CocoUtility.create_annotation_info(len(annotations),
+                                                                    image_id,
+                                                                    instance_2_category_map[inst],
+                                                                    binary_inst_mask,
+                                                                    mask_encoding_format)
                     if annotation is not None:
                         annotations.append(annotation)
 
@@ -144,13 +154,14 @@ class CocoUtility:
         return image_info
 
     @staticmethod
-    def create_annotation_info(annotation_id, image_id, category_id, binary_mask, tolerance=2):
+    def create_annotation_info(annotation_id, image_id, category_id, binary_mask, mask_encoding_format, tolerance=2):
         """Creates info section of coco annotation
 
         :param annotation_id: integer to uniquly identify the annotation
         :param image_id: integer to uniquly identify image
         :param category_id: Id of the category
         :param binary_mask: A binary image mask of the object with the shape [H, W].
+        :param mask_encoding_format: Encoding format of the mask. Type: string.
         :param tolerance: The tolerance for fitting polygons to the objects mask.
         """
 
@@ -162,13 +173,20 @@ class CocoUtility:
         else:
             return None
 
-        segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
+        if mask_encoding_format == 'rle':
+            is_crowd = 1
+            segmentation = CocoUtility.binary_mask_to_rle(binary_mask)
+        elif mask_encoding_format == 'polygon':
+            is_crowd = 0
+            segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
+        else:
+            raise RuntimeError("Unknown encoding format: {}".format(mask_encoding_format))
 
         annotation_info = {
             "id": annotation_id,
             "image_id": image_id,
             "category_id": category_id,
-            "iscrowd": 0,
+            "iscrowd": is_crowd,
             "area": [area],
             "bbox": bounding_box,
             "segmentation": segmentation,
@@ -212,7 +230,8 @@ class CocoUtility:
         """Converts a binary mask to COCO polygon representation
 
          :param binary_mask: a 2D binary numpy array where '1's represent the object
-         :param tolerance: Maximum distance from original points of polygon to approximated polygonal chain. If tolerance is 0, the original coordinate array is returned.
+         :param tolerance: Maximum distance from original points of polygon to approximated polygonal chain. If
+                           tolerance is 0, the original coordinate array is returned.
         """
         polygons = []
         # pad mask to close contours of shapes which start and end at an edge
@@ -237,3 +256,14 @@ class CocoUtility:
             polygons.append(polygon.tolist())
 
         return polygons
+
+    @staticmethod
+    def binary_mask_to_rle(binary_mask):
+        rle = {'counts': [], 'size': list(binary_mask.shape)}
+        counts = rle.get('counts')
+        for i, (value, elements) in enumerate(groupby(binary_mask.ravel(order='F'))):
+            if i == 0 and value == 1:
+                counts.append(0)
+            counts.append(len(list(elements)))
+
+        return rle
