@@ -413,10 +413,11 @@ class EntityManipulator(Module):
         :param entity: An object to modify. Type: bpy.types.Object.
         :param value: Configuration data. Type: dict.
         """
-        if len(value["materials_to_replace_with"]) > 1:
-            raise RuntimeError("getter.Material returned more than one substitute material, namely: {}. Please, make "
-                               "sure you enabled sampling in the Providers config by using 'random_samples': 1 as a "
-                               "config parameter.".format(value["materials_to_replace_with"]))
+        if len(value["materials_to_replace_with"]) != 1:
+            raise RuntimeError("getter.Material returned more than one or no substitute material, namely this much: {}. "
+                               "Please, make sure you enabled sampling in the Providers config by using "
+                               "'random_samples': 1 as a config parameter, and that conditions are not too strict such "
+                               "that some amterials can meet them".format(len(value["materials_to_replace_with"])))
         if hasattr(entity, 'material_slots'):
             for mat in entity.material_slots:
                 use_mat = True
