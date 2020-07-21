@@ -76,15 +76,15 @@ These will be later used to replace the materials in the 3D-Front scenes.
             "name": "Floor.*"
           }
         },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "random_samples": 1,
-          "conditions": {
-            "cp_is_cc_texture": True
-          }
-        },
         "cf_randomize_materials": {
-          "randomization_level": 0.95
+          "randomization_level": 0.95,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True
+            }
+          }
         }
       }
     },
@@ -106,16 +106,16 @@ A further example is:
             "name": "Wall.*"
           }
         },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "random_samples": 1,
-          "conditions": {
-            "cp_is_cc_texture": True,
-            "cp_asset_name": "Marble.*"
-          }
-        },
         "cf_randomize_materials": {
-          "randomization_level": 0.1
+          "randomization_level": 0.1,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True,
+              "cp_asset_name": "Marble.*"
+            }
+          }
         }
       }
     },

@@ -147,15 +147,15 @@ This module only sets up the materials which can then be used by other modules.
             "type": "MESH"
           }
         },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "random_samples": 1,
-          "conditions": {
-            "cp_is_cc_texture": True  # this will return one random loaded cc textures
-          }
-        },
         "cf_randomize_materials": {
-          "randomization_level": 0.4
+          "randomization_level": 0.4,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True  # this will return one random loaded cc textures
+            }
+          }
         }
       }
     },

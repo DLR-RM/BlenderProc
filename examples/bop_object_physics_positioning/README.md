@@ -289,15 +289,15 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           }
         },
         "mode": "once_for_all",
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "random_samples": 1,
-          "conditions": {
-            "cp_is_cc_texture": True
-          }
-        },
         "cf_randomize_materials": {
-          "randomization_level": 1
+          "randomization_level": 1,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True
+            }
+          }
         }
       }
     },
