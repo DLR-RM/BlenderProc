@@ -414,12 +414,9 @@ class EntityManipulator(Module):
         :param value: Configuration data. Type: dict.
         """
         if len(value["materials_to_replace_with"]) > 1:
-            warnings.warn("getter.Material returned more than one substitute material, and random one of the returned "
-                          "will be used. It means that multiple materials comply with conditions passed to the "
-                          "Provider and 'random_samples' parameter is not enabled in the Provider (or multiple samples "
-                          "are returned). Sampling should be performed on the level of the Provider (make sure to use "
-                          "'random_samples': 1 as a config parameter for the getter.Material).")
-            value["materials_to_replace_with"] = [choice(value["materials_to_replace_with"])]
+            raise RuntimeError("getter.Material returned more than one substitute material, namely: {}. Please, make "
+                               "sure you enabled sampling in the Providers config by using 'random_samples': 1 as a "
+                               "config parameter.".format(value["materials_to_replace_with"]))
         if hasattr(entity, 'material_slots'):
             for mat in entity.material_slots:
                 use_mat = True
