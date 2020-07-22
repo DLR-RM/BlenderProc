@@ -15,7 +15,7 @@ class MaterialManipulator(Module):
                    strength factor of 1.5.
 
         {
-          "module": "materials.MaterialManipulator",
+          "module": "manipulators.MaterialManipulator",
           "config": {
             "selector": {
               "provider": "getter.Material",
@@ -30,7 +30,7 @@ class MaterialManipulator(Module):
         Example 2: Set base color of all materials matching the name pattern to white.
 
         {
-          "module": "materials.MaterialManipulator",
+          "module": "manipulators.MaterialManipulator",
           "config": {
             "selector": {
               "provider": "getter.Material",
@@ -46,7 +46,7 @@ class MaterialManipulator(Module):
                    color of energy 15.
 
         {
-          "module": "materials.MaterialManipulator",
+          "module": "manipulators.MaterialManipulator",
           "config": {
             "selector": {
               "provider": "getter.Material",
