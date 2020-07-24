@@ -16,6 +16,7 @@
 - fixed a bug in the SUNCG material loading, where for a few objects the diffuse material was confused with an alpha material
 - add set_properties for `Front3DLoader`
 - fixed the `min_interest_score` that it works with more than just SUNCG
+- fix a bug in the visHdf5 scripts with distance maps which had several channels
 - improved documentation for `min_interest_score` and `check_pose_novelty_translation`
 
 ## Version 1.5.1: 17th July 2020
