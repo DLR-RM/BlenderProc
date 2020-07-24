@@ -438,7 +438,6 @@ class CameraSampler(CameraInterface):
                 if hit:
                     is_of_special_dataset = "is_suncg" in hit_object or "is_3d_front" in hit_object
                     if is_of_special_dataset and "type" in hit_object and hit_object["type"] == "Object":
-                        is_suncg_mode = True
                         # calculate the score based on the type of the object,
                         # wall, floor and ceiling objects have 0 score
                         if "coarse_grained_class" in hit_object:
