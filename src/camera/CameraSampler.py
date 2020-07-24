@@ -444,7 +444,7 @@ class CameraSampler(CameraInterface):
                             object_class = hit_object["coarse_grained_class"]
                             objects_hit[object_class] += 1
                             if object_class in self.special_objects:
-                                score = self.special_objects_weight
+                                score += self.special_objects_weight
                             else:
                                 score += 1
                         else:
@@ -452,7 +452,7 @@ class CameraSampler(CameraInterface):
                     elif "category_id" in hit_object:
                         object_class = hit_object["category_id"]
                         if object_class in self.special_objects:
-                            score = self.special_objects_weight
+                            score += self.special_objects_weight
                         else:
                             score += 1
                         objects_hit[object_class] += 1
