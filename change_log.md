@@ -3,9 +3,20 @@
 
 - Add support for all YCB objects (not just BOP)
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
+- Add support for BlenderKit
 - Improve the documentation 
 
 # Version History
+
+## Version 1.6.0: 24th July 2020
+- added an `TextureLoader`, which can load images and store them as blender textures
+- added a provider to access these loaded textures
+- removed the `MaterialRandomizer`
+- moved the whole functionality from the `MaterialRandomizer` to the `EntityManipulator`
+- fixed a bug in the SUNCG material loading, where for a few objects the diffuse material was confused with an alpha material
+- add set_properties for `Front3DLoader`
+- fixed the `min_interest_score` that it works with more than just SUNCG
+- improved documentation for `min_interest_score` and `check_pose_novelty_translation`
 
 ## Version 1.5.1: 17th July 2020
 - adding support for 3D-Front: https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset
