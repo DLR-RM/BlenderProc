@@ -474,7 +474,7 @@ class CameraSampler(CameraInterface):
         :param cam2world_matrix: camera pose to check
         """
 
-        def _variance_constraint(array, new_val, old_var, diff_threshold):
+        def _variance_constraint(array, new_val, old_var, diff_threshold, mode):
             array.append(new_val)
             var = np.var(array)
 
@@ -483,7 +483,7 @@ class CameraSampler(CameraInterface):
                 return False
 
             diff = ((var - old_var) / old_var) * 100.0
-
+            print("Variance difference {}: {}".format(mode, diff))
             if diff < diff_threshold:  # Check if the variance increased sufficiently
                 array.pop()
                 return False
@@ -496,12 +496,12 @@ class CameraSampler(CameraInterface):
         if len(self.translations) != 0 and len(self.rotations) != 0:  # First pose is always novel
 
             if self.check_pose_novelty_rot:
-                if not _variance_constraint(self.rotations, rotation, self.var_rot, self.min_var_diff_rot):
+                if not _variance_constraint(self.rotations, rotation, self.var_rot, self.min_var_diff_rot, "rotation"):
                     return False
 
             if self.check_pose_novelty_translation:
                 if not _variance_constraint(self.translations, translation, self.var_translation,
-                                            self.min_var_diff_translation):
+                                            self.min_var_diff_translation, "translation"):
                     return False
         else:
             self.translations.append(translation)
