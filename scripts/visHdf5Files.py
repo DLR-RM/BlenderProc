@@ -46,6 +46,9 @@ def vis_data(key, data, full_hdf5_data, file_label):
                         if colormap_key.startswith("channel_") and colormap_value.isdigit():
                             channel_labels[int(colormap_value)] = colormap_key[len("channel_"):]
 
+        # Make sure we have three dimensions
+        if len(data.shape) == 2:
+            data = data[:, :, None]
         # Go through all channels
         for i in range(data.shape[2]):
             # Try to determine label
@@ -60,6 +63,12 @@ def vis_data(key, data, full_hdf5_data, file_label):
             plt.imshow(data[:, :, i], cmap='jet')
 
     elif key in args.other_non_rgb_keys:
+        # Make sure the data has only one channel, otherwise matplotlib will treat it as an rgb image
+        if len(data.shape) == 3:
+            if data.shape[2] != 1:
+                print("Warning: The data with key '" + key + "' has more than one channel which would not allow using a jet color map. Therefore only the first channel is visualized.")
+            data = data[:, :, 0]
+        
         plt.imshow(data, cmap='jet')
     elif key in args.rgb_keys:
         plt.imshow(data)
@@ -80,7 +89,7 @@ def vis_file(path):
 
                 # Visualize every key
                 for key in keys:
-                    vis_data(key, data[key], data, os.path.basename(path))
+                    vis_data(key, np.array(data[key]), data, os.path.basename(path))
 
         else:
             print("The path is not a file")
