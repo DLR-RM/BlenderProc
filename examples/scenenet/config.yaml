@@ -29,11 +29,14 @@
     {
       "module": "camera.CameraSampler",
       "config": {
+        "check_pose_novelty_translation": True,
+        "min_var_diff_translation": 5.0,
         "cam_poses": [{
           "number_of_samples": 5,
           "proximity_checks": {
             "min": 1.0
           },
+          "min_interest_score": 0.9,
           "location": {
             "provider": "sampler.UpperRegionSampler",
             "min_height": 1.5,

@@ -79,47 +79,60 @@ We now have to light up the scene by making all lamps and the ceiling emit light
 ### CameraSampler
 
 ```yaml
+
 {
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [{
-    "number_of_samples": 5, # amount of camera samples
-    "proximity_checks": {
-      "min": 1.0
-    },
-    "location": {
-      "provider": "sampler.UpperRegionSampler",
-      "min_height": 1.5,
-      "max_height": 1.8,
-      "to_sample_on": {
+  "module": "camera.CameraSampler",
+  "config": {
+    # this tries to maximize the variance of the translations used 
+    # for the cameras
+    "check_pose_novelty_translation": True,
+    "min_var_diff_translation": 5.0,
+    "cam_poses": [{
+      "number_of_samples": 5, # amount of camera samples
+      "proximity_checks": {
+        "min": 1.0
+      },
+      "min_interest_score": 0.9, 
+      "location": {
+        "provider": "sampler.UpperRegionSampler",
+        "min_height": 1.5,
+        "max_height": 1.8,
+        "to_sample_on": {
+          "provider": "getter.Entity",
+          "index": 0,
+          "conditions": {
+            "cp_category_id": 2  # 2 stands for floor
+          }
+        }
+      },
+      "rotation": {
+        "value": {
+          "provider":"sampler.Uniform3d",
+          "max":[1.2217, 0, 6.283185307],
+          "min":[1.2217, 0, 0]
+        }
+      },
+      "check_if_pose_above_object_list": {
         "provider": "getter.Entity",
-        "index": 0,
         "conditions": {
-          "cp_category_id": 2  # 2 stands for floor
+          "cp_category_id": 2,
+          "type": "MESH"
         }
       }
-    },
-    "rotation": {
-      "value": {
-        "provider":"sampler.Uniform3d",
-        "max":[1.2217, 0, 6.283185307],
-        "min":[1.2217, 0, 0]
-      }
-    },
-    "check_if_pose_above_object_list": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "cp_category_id": 2,
-        "type": "MESH"
-      }
-    }
-  }]
+    }]
+  }
 }
 ```
 
 We sample here five random camera poses, where the location is above the object with the `category_id: 2`, which is the floor.
 So all cameras will be sampled above the floor, with a certain height.
-In the end, we perform a check with `check_if_pose_above_object_lis` that the sampled pose is directly above a floor and not an object.
+In the end, we perform a check with `check_if_pose_above_object_list` that the sampled pose is directly above a floor and not an object.
+Furthermore, we use a `min_interest_score` here, which tries to increase the amount of objects in a scene. 
+In order to avoid that all scenes are at the exact same location, we also include a translation variance check, which checks if a certain variance change 
+was achieved by adding this new camera pose. All of these steps ensure that the cameras are spread through the scene and are focusing on many objects.
+
+Be aware that it might be possible, if the values are to high, that the CameraSampler will try for a very long time new poses to fulfill the given conditions.
+Best is always to check with low values and then increasing them until they don't work anymore.
 
 ## More examples
 
