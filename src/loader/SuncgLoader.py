@@ -66,7 +66,8 @@ class SuncgLoader(LoaderInterface):
 
                 # Metadata is directly stored in the objects custom data
                 metadata = {
-                    "type": node["type"]
+                    "type": node["type"],
+                    "is_suncg": True
                 }
 
                 if "modelId" in node:

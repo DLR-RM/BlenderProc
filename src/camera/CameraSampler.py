@@ -92,7 +92,7 @@ class CameraSampler(CameraInterface):
                                "min_interest_score to interest_score_range. Must be bigger than 0. Type: float. "
                                "Default: 0.1."
         "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, "
-                           "uses the coarse_grained_class. Type: list. Default: []."
+                           "uses the coarse_grained_class or if not SUNCG, the category_id. Type: list. Default: []."
         "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of "
                                   "the scene. Type: float. Default: 2.0."
         "check_pose_novelty_rot", "Checks that a sampled new pose is novel with respect to the rotation component. "
@@ -401,7 +401,11 @@ class CameraSampler(CameraInterface):
     def _scene_coverage_score(self, cam, cam2world_matrix):
         """ Evaluate the interestingness/coverage of the scene.
 
-        Least interesting objects: walls, ceilings, floors.
+        This module tries to look at as many objects at possible, this might lead to
+        a focus on the same objects from similar angles.
+
+        Only for SUNCG:
+            Least interesting objects: walls, ceilings, floors.
 
         :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param cam2world_matrix: The world matrix which describes the camera orientation to check.
@@ -410,7 +414,6 @@ class CameraSampler(CameraInterface):
 
         num_of_rays = self.sqrt_number_of_rays * self.sqrt_number_of_rays
         score = 0.0
-        scene_variance = 0.0
         objects_hit = defaultdict(int)
 
         # Get position of the corners of the near plane
@@ -431,28 +434,38 @@ class CameraSampler(CameraInterface):
                 # Send ray from the camera position through the current point on the plane
                 hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, end - position)
 
-                # calculate the score based on the type of the object, wall, floor and ceiling objects have 0 score
-                if hit and "type" in hit_object and hit_object["type"] == "Object":
-                    if "coarse_grained_class" in hit_object:
-                        object_class = hit_object["coarse_grained_class"]
-                        objects_hit[object_class] += 1
-                        if object_class in self.special_objects:
-                            score += self.special_objects_weight
+                if hit:
+                    if "is_suncg" in hit_object and "type" in hit_object and hit_object["type"] == "Object":
+                        is_suncg_mode = True
+                        # calculate the score based on the type of the object,
+                        # wall, floor and ceiling objects have 0 score
+                        if "coarse_grained_class" in hit_object:
+                            object_class = hit_object["coarse_grained_class"]
+                            objects_hit[object_class] += 1
+                            if object_class in self.special_objects:
+                                score = self.special_objects_weight
+                            else:
+                                score += 1
                         else:
                             score += 1
+                    elif "category_id" in hit_object:
+                        object_class = hit_object["category_id"]
+                        if object_class in self.special_objects:
+                            score = self.special_objects_weight
+                        else:
+                            score += 1
+                        objects_hit[object_class] += 1
                     else:
+                        objects_hit[hit_object] += 1
                         score += 1
-
-
         # For a scene with three different objects, the starting variance is 1.0, increases/decreases by '1/3' for
         # each object more/less, excluding floor, ceiling and walls
-        scene_variance = len(objects_hit) / 3
+        scene_variance = len(objects_hit) / 3.0
         for object_hit_value in objects_hit.values():
-            # For an object taking half of the scene, the scene_variance is halved, this pentalizes non-even
+            # For an object taking half of the scene, the scene_variance is halved, this penalizes non-even
             # distribution of the objects in the scene
-            scene_variance *= 1 - object_hit_value / num_of_rays
-
-        score = scene_variance * (score / num_of_rays)
+            scene_variance *= 1.0 - object_hit_value / float(num_of_rays)
+        score = scene_variance * (score / float(num_of_rays))
         return score
 
     def _check_novel_pose(self, cam2world_matrix):
