@@ -166,7 +166,7 @@ if len(required_packages) > 0:
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
 
-    pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.7", "site-packages")
+    pre_python_package_path = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "lib", "python3.7", "site-packages")
     used_env = dict(os.environ, PYTHONPATH=packages_path + ":" + pre_python_package_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
     installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
