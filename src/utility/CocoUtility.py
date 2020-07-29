@@ -169,7 +169,7 @@ class CocoUtility:
             "image_id": image_id,
             "category_id": category_id,
             "iscrowd": 0,
-            "area": [area],
+            "area": area,
             "bbox": bounding_box,
             "segmentation": segmentation,
             "width": binary_mask.shape[1],
