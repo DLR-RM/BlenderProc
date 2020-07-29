@@ -61,6 +61,9 @@ class BlendLoader(LoaderInterface):
         else:
             entities = None
 
+        bpy.ops.object.select_all(action='SELECT')
+        previously_loaded_objects = set(bpy.context.selected_objects)
+
         with bpy.data.libraries.load(path) as (data_from, data_to):
             # check if defined ID is supported
             if load_from in self.known_datablock_names.keys():
@@ -82,3 +85,7 @@ class BlendLoader(LoaderInterface):
                                 "\nIf your ID exists, but not supported, please append a new pair of "
                                 "{type ID(folder name): parameter name} to the 'known_datablock_names' dict. Use this "
                                 "for finding your parameter name: " + str(dir(data_from)))
+        bpy.ops.object.select_all(action='SELECT')
+        newly_loaded_objects = list(set(bpy.context.selected_objects) - previously_loaded_objects)
+        self._set_properties(newly_loaded_objects)
+        bpy.ops.object.select_all(action='DESELECT')
