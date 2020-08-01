@@ -44,23 +44,19 @@ def get_category(_id):
 
 font = ImageFont.load_default()
 # Add bounding boxes and masks
-annot = 0
 for idx, annotation in enumerate(annotations):
     if annotation["image_id"] == image_idx:
-        #print(annot)
         bb = annotation['bbox']
         draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
         draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
         if annotation["iscrowd"]:
             im.putalpha(128)
             an_sg = annotation["segmentation"]
-            an_sz = (annotation["segmentation"]["size"][0], annotation["segmentation"]["size"][1])
-            item = mask.decode(mask.frPyObjects(an_sg, an_sz[0], an_sz[1])).astype(np.uint8)
-            print(item)
+            item = mask.decode(mask.frPyObjects(an_sg, an_sg["size"][0], an_sg["size"][1])).astype(np.uint8)
             item = Image.fromarray(item, mode='L')
             overlay = Image.new('RGBA', im.size)
             draw_ov = ImageDraw.Draw(overlay)
-            draw_ov.bitmap((0, 0), item, fill=(255, 255, 255, 127))
+            draw_ov.bitmap((0, 0), item, fill=(255, 0, 0, 128))
             Image.alpha_composite(im, overlay)
         else:
             item = annotation["segmentation"][0]
@@ -68,7 +64,6 @@ for idx, annotation in enumerate(annotations):
             pdraw = ImageDraw.Draw(poly)
             pdraw.polygon(item, fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))
             im.paste(poly, mask=poly)
-    annot += 1
 if save:
     im.save(os.path.join(base_path, 'coco_annotated_{}.png'.format(image_idx)), "PNG")
 im.show()
