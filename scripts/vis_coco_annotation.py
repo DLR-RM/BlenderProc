@@ -31,9 +31,6 @@ if os.path.exists(im_path):
 else:
     im = Image.open(im_path.replace('png', 'jpg'))
 
-draw = ImageDraw.Draw(im)
-
-
 def get_category(_id):
     category = [category["name"] for category in categories if category["id"] == _id]
     if len(category) != 0:
@@ -43,21 +40,22 @@ def get_category(_id):
 
 
 font = ImageFont.load_default()
-# Add bounding boxes and masks
+# Add bounding boxes and masks1
 for idx, annotation in enumerate(annotations):
     if annotation["image_id"] == image_idx:
+        draw = ImageDraw.Draw(im)
         bb = annotation['bbox']
         draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
         draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
         if annotation["iscrowd"]:
             im.putalpha(128)
             an_sg = annotation["segmentation"]
-            item = mask.decode(mask.frPyObjects(an_sg, an_sg["size"][0], an_sg["size"][1])).astype(np.uint8)
+            item = mask.decode(mask.frPyObjects(an_sg, im.size[1], im.size[0])).astype(np.uint8) * 255
             item = Image.fromarray(item, mode='L')
             overlay = Image.new('RGBA', im.size)
             draw_ov = ImageDraw.Draw(overlay)
             draw_ov.bitmap((0, 0), item, fill=(255, 0, 0, 128))
-            Image.alpha_composite(im, overlay)
+            im = Image.alpha_composite(im, overlay)
         else:
             item = annotation["segmentation"][0]
             poly = Image.new('RGBA', im.size)
