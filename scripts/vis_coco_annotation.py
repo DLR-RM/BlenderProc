@@ -40,7 +40,7 @@ def get_category(_id):
 
 
 font = ImageFont.load_default()
-# Add bounding boxes and masks1
+# Add bounding boxes and masks
 for idx, annotation in enumerate(annotations):
     if annotation["image_id"] == image_idx:
         draw = ImageDraw.Draw(im)
