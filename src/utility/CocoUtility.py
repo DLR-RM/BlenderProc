@@ -165,13 +165,11 @@ class CocoUtility:
         :param tolerance: The tolerance for fitting polygons to the objects mask.
         """
 
-        if np.any(binary_mask):
-            bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
-            area = bounding_box[2] * bounding_box[3]
-            if area < 1:
-                return None
-        else:
+        area = CocoUtility.calc_binary_mask_area(binary_mask)
+        if area < 1:
             return None
+
+        bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
 
         if mask_encoding_format == 'rle':
             is_crowd = 1
@@ -187,7 +185,7 @@ class CocoUtility:
             "image_id": image_id,
             "category_id": category_id,
             "iscrowd": is_crowd,
-            "area": [area],
+            "area": area,
             "bbox": bounding_box,
             "segmentation": segmentation,
             "width": binary_mask.shape[1],
@@ -209,9 +207,18 @@ class CocoUtility:
         rmin, rmax = np.where(rows)[0][[0, -1]]
         cmin, cmax = np.where(cols)[0][[0, -1]]
         # Calc height and width
-        h = rmax - rmin
-        w = cmax - cmin
+        h = rmax - rmin + 1
+        w = cmax - cmin + 1
         return [int(cmin), int(rmin), int(w), int(h)]
+
+    @staticmethod
+    def calc_binary_mask_area(binary_mask):
+        """ Returns the area of the given binary mask which is the defined as the number of 1s in the mask.
+
+        :param binary_mask: A binary image mask with the shape [H, W].
+        :return: The computed area
+        """
+        return binary_mask.sum().tolist()
 
     @staticmethod
     def close_contour(contour):
