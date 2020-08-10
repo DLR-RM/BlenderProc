@@ -52,6 +52,9 @@ class Front3DLoader(LoaderInterface):
         if not os.path.exists(self.mapping_file):
             raise Exception("The mapping file could not be found: {}".format(self.mapping_file))
         _, self.mapping = LabelIdMapping.read_csv_mapping(self.mapping_file)
+        # a list of all newly created objects
+        self.created_objects = []
+
 
 
     def run(self):
@@ -72,6 +75,12 @@ class Front3DLoader(LoaderInterface):
         all_loaded_furniture = self._load_furniture_objs(data)
 
         self._move_and_duplicate_furniture(data, all_loaded_furniture)
+
+        # add an identifier to the obj
+        for obj in self.created_objects:
+            obj["is_3d_front"] = True
+
+        LoaderInterface._set_properties(self.created_objects)
 
     def _create_mesh_objects_from_file(self, data: dir):
         """
@@ -95,6 +104,7 @@ class Front3DLoader(LoaderInterface):
             mesh = bpy.data.meshes.new(used_obj_name + "_mesh")  # add the new mesh
             # link this mesh inside of a new object
             obj = bpy.data.objects.new(mesh.name, mesh)
+            self.created_objects.append(obj)
             # link the object in the collection
             col.objects.link(obj)
             # set the name of the new object to the category_id name
@@ -316,6 +326,7 @@ class Front3DLoader(LoaderInterface):
                             else:
                                 # if it is the first time use the object directly
                                 new_obj = obj
+                            self.created_objects.append(new_obj)
                             new_obj["is_used"] = True
                             new_obj["room_id"] = room_id
                             new_obj["type"] = "Object"  # is an object used for the interesting score

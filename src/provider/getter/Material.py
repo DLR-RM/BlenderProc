@@ -1,4 +1,5 @@
 import re
+from random import sample
 
 import mathutils
 
@@ -74,6 +75,8 @@ class Material(Provider):
         "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
         "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
                  "Type: int."
+        "random_samples", "If set, this Provider returns random_samples objects from the pool of selected ones. Define "
+                          "index or random_samples property, only one is allowed at a time. Type: int. Default: False."
 
     **Custom functions**
 
@@ -227,5 +230,15 @@ class Material(Provider):
         else:
             # only one condition was given, treat it as and condition
             materials = self.perform_and_condition_check(conditions, [])
+
+        random_samples = self.config.get_int("random_samples", 0)
+        has_index = self.config.has_param("index")
+
+        if has_index and not random_samples:
+            materials = [materials[self.config.get_int("index")]]
+        elif random_samples and not has_index:
+            materials = sample(materials, k=min(random_samples, len(materials)))
+        elif has_index and random_samples:
+            raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
 
         return materials

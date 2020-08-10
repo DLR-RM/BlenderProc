@@ -38,13 +38,13 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Load T-LESS BOP models: `loader.BopLoader` module.
 * Load LM BOP models: `loader.BopLoader` module.
 * Load `<args:1>` (YCB-V) BOP models: `loader.BopLoader` module.
-* Sample colors for T-LESS models: `materials.MaterialManipulator` module.
-* Sample roughness and specular values for all objects: `materials.MaterialManipulator` module.
+* Sample colors for T-LESS models: `manipulators.MaterialManipulator` module.
+* Sample roughness and specular values for all objects: `manipulators.MaterialManipulator` module.
 * Construct planes: `constructor.BasicMeshInitializer` module.
 * Set custom properties for those planes: `manipulators.EntityManipulator` module.
-* Switch to an light emission shader for the top plane: `materials.MaterialManipulator` module.
+* Switch to an light emission shader for the top plane: `manipulators.MaterialManipulator` module.
 * Load CCTexture materials: `loader.CCMaterialLoader` module.
-* Sample a material for the other planes: `materials.MaterialRandomizer` module.
+* Sample a material for the other planes: `manupulators.EntityManipulator` module.
 * Sample objects poses: `object.ObjectPoseSampler` module.
 * Perform physics simulation: `object.PhysicsPositioning` module.
 * Sample point light source: `lighting.LightSampler` module.
@@ -110,7 +110,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 ```yaml
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -129,7 +129,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -237,7 +237,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 ```yaml
 
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -277,23 +277,26 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Load a random CC0Texture that was downloaded from https://cc0textures.com/
 
-### Material Randomizer
+### Entity Manipulator
 ```yaml
     {
-      "module": "materials.MaterialRandomizer",
+      "module": "manipulators.EntityManipulator",
       "config": {
-        "randomization_level": 1,
-        "mode": "once_for_all",
-        "manipulated_objects": {
+        "selector": {
           "provider": "getter.Entity",
           "conditions": {
             "name": "ground_plane.*"
           }
         },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "conditions": {
-            "cp_is_cc_texture": True
+        "mode": "once_for_all",
+        "cf_randomize_materials": {
+          "randomization_level": 1,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True
+            }
           }
         }
       }

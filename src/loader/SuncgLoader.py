@@ -66,7 +66,8 @@ class SuncgLoader(LoaderInterface):
 
                 # Metadata is directly stored in the objects custom data
                 metadata = {
-                    "type": node["type"]
+                    "type": node["type"],
+                    "is_suncg": True
                 }
 
                 if "modelId" in node:
@@ -336,8 +337,10 @@ class SuncgLoader(LoaderInterface):
         else:
             mat_type = "diffuse"
             principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-            color = principled_node.inputs["Base Color"].default_value
-            value = "_".join([str(int(255.*ele)) for ele in color])
+            used_keys = list(principled_node.inputs["Base Color"].default_value)
+            alpha = principled_node.inputs['Alpha'].default_value
+            used_keys.append(alpha)
+            value = "_".join([str(int(255.*ele)) for ele in used_keys])
         return mat_type, value
 
     def _recreate_material_nodes(self, mat, force_texture):

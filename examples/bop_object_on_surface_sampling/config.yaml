@@ -62,7 +62,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -81,7 +81,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -171,7 +171,7 @@
       }
     },
     {
-      "module": "materials.MaterialManipulator",
+      "module": "manipulators.MaterialManipulator",
       "config": {
         "selector": {
           "provider": "getter.Material",
@@ -201,20 +201,23 @@
       }
     },
     {
-      "module": "materials.MaterialRandomizer",
+      "module": "manipulators.EntityManipulator",
       "config": {
-        "randomization_level": 1,
-        "mode": "once_for_all",
-        "manipulated_objects": {
+        "selector": {
           "provider": "getter.Entity",
           "conditions": {
             "name": "ground_plane.*"
           }
         },
-        "materials_to_replace_with": {
-          "provider": "getter.Material",
-          "conditions": {
-            "cp_is_cc_texture": True
+        "mode": "once_for_all",
+        "cf_randomize_materials": {
+          "randomization_level": 1,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True
+            }
           }
         }
       }

@@ -44,7 +44,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
 
 ```yaml
 {
-  "module": "materials.MaterialManipulator",
+  "module": "manipulators.MaterialManipulator",
   "config": {
     "selector": {
       "provider": "getter.Material",
@@ -56,7 +56,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
   }
 },
 {
-  "module": "materials.MaterialManipulator",
+  "module": "manipulators.MaterialManipulator",
   "config": {
     "selector": {
       "provider": "getter.Material",

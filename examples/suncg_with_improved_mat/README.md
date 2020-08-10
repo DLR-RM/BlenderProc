@@ -107,7 +107,7 @@ After sampling a pose the pose is only accepted if it is valid according to the 
 
 
 ```yaml
-"module": "materials.MaterialManipulator",
+"module": "manipulators.MaterialManipulator",
 "config": {
   "selector": {
     "provider": "getter.Material",
