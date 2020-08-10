@@ -213,7 +213,7 @@ class CocoUtility:
 
     @staticmethod
     def calc_binary_mask_area(binary_mask):
-        """ Returns the area of the given binary mask which is the defined as the number of 1s in the mask.
+        """ Returns the area of the given binary mask which is defined as the number of 1s in the mask.
 
         :param binary_mask: A binary image mask with the shape [H, W].
         :return: The computed area
