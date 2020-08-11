@@ -80,7 +80,7 @@ class Front3DLoader(LoaderInterface):
         for obj in self.created_objects:
             obj["is_3d_front"] = True
 
-        LoaderInterface._set_properties(self.created_objects)
+        self._set_properties(self.created_objects)
 
     def _create_mesh_objects_from_file(self, data: dir):
         """

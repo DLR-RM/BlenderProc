@@ -61,6 +61,8 @@ class BlendLoader(LoaderInterface):
         else:
             entities = None
 
+        previously_loaded_objects = set(bpy.context.scene.objects)
+
         with bpy.data.libraries.load(path) as (data_from, data_to):
             # check if defined ID is supported
             if load_from in self.known_datablock_names.keys():
@@ -82,3 +84,5 @@ class BlendLoader(LoaderInterface):
                                 "\nIf your ID exists, but not supported, please append a new pair of "
                                 "{type ID(folder name): parameter name} to the 'known_datablock_names' dict. Use this "
                                 "for finding your parameter name: " + str(dir(data_from)))
+        newly_loaded_objects = list(set(bpy.context.scene.objects) - previously_loaded_objects)
+        self._set_properties(newly_loaded_objects)
