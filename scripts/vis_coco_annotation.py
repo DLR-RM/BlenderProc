@@ -1,7 +1,10 @@
-from PIL import Image, ImageFont, ImageDraw
-import json
 import argparse
+import json
 import os
+
+from pycocotools import mask
+import numpy as np
+from PIL import Image, ImageFont, ImageDraw
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--conf', dest='conf', default='coco_annotations.json', help='coco annotation json file')
@@ -26,9 +29,7 @@ im_path = os.path.join(base_path, "rgb_{:04d}.png".format(image_idx))
 if os.path.exists(im_path):
     im = Image.open(im_path)
 else:
-    im = Image.open(im_path.replace('png','jpg'))
-
-draw = ImageDraw.Draw(im)
+    im = Image.open(im_path.replace('png', 'jpg'))
 
 def get_category(_id):
     category = [category["name"] for category in categories if category["id"] == _id]
@@ -37,17 +38,30 @@ def get_category(_id):
     else:
         raise Exception("Category {} is not defined in {}".format(_id, os.path.join(base_path, conf)))
 
+
 font = ImageFont.load_default()
 # Add bounding boxes and masks
 for idx, annotation in enumerate(annotations):
     if annotation["image_id"] == image_idx:
+        draw = ImageDraw.Draw(im)
         bb = annotation['bbox']
         draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
         draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
-        poly = Image.new('RGBA', im.size)
-        pdraw = ImageDraw.Draw(poly)
-        pdraw.polygon(annotation["segmentation"][0], fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))
-        im.paste(poly, mask=poly)
+        if annotation["iscrowd"]:
+            im.putalpha(255)
+            an_sg = annotation["segmentation"]
+            item = mask.decode(mask.frPyObjects(an_sg, im.size[1], im.size[0])).astype(np.uint8) * 255
+            item = Image.fromarray(item, mode='L')
+            overlay = Image.new('RGBA', im.size)
+            draw_ov = ImageDraw.Draw(overlay)
+            draw_ov.bitmap((0, 0), item, fill=(255, 0, 0, 128))
+            im = Image.alpha_composite(im, overlay)
+        else:
+            item = annotation["segmentation"][0]
+            poly = Image.new('RGBA', im.size)
+            pdraw = ImageDraw.Draw(poly)
+            pdraw.polygon(item, fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))
+            im.paste(poly, mask=poly)
 if save:
-    im.save(os.path.join(base_path,'coco_annotated_{}.png'.format(image_idx)), "PNG")
+    im.save(os.path.join(base_path, 'coco_annotated_{}.png'.format(image_idx)), "PNG")
 im.show()
