@@ -119,8 +119,8 @@ class CameraSampler(CameraInterface):
         self.translations = []
 
         self.var_rot, self.var_translation   = 0.0, 0.0
-        self.check_pose_novelty_rot = self.config.get_bool("check_pose_novelty_rot", False)
-        self.check_pose_novelty_translation = self.config.get_bool("check_pose_novelty_translation", False)
+        self.check_pose_novelty_rot = self.config.get_bool("check_pose_novelty_rot", True)
+        self.check_pose_novelty_translation = self.config.get_bool("check_pose_novelty_translation", True)
 
         self.min_var_diff_rot = self.config.get_float("min_var_diff_rot", sys.float_info.min)
         if self.min_var_diff_rot == -1.0:
