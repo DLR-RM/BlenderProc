@@ -97,9 +97,9 @@ class CameraSampler(CameraInterface):
         "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of "
                                   "the scene. Type: float. Default: 2.0."
         "check_pose_novelty_rot", "Checks that a sampled new pose is novel with respect to the rotation component. "
-                                  "Type: bool. Default: True"
+                                  "Type: bool. Default: False"
         "check_pose_novelty_translation", "Checks that a sampled new pose is novel with respect to the translation "
-                                          "component. Type: bool. Default: True."
+                                          "component. Type: bool. Default: False."
         "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses "
                             "sampled by this parameter's value in percentage. If set to -1, then it would only check "
                             "that the variance is increased. Type: float. Default: sys.float_info.min."
@@ -119,8 +119,8 @@ class CameraSampler(CameraInterface):
         self.translations = []
 
         self.var_rot, self.var_translation   = 0.0, 0.0
-        self.check_pose_novelty_rot = self.config.get_bool("check_pose_novelty_rot", True)
-        self.check_pose_novelty_translation = self.config.get_bool("check_pose_novelty_translation", True)
+        self.check_pose_novelty_rot = self.config.get_bool("check_pose_novelty_rot", False)
+        self.check_pose_novelty_translation = self.config.get_bool("check_pose_novelty_translation", False)
 
         self.min_var_diff_rot = self.config.get_float("min_var_diff_rot", sys.float_info.min)
         if self.min_var_diff_rot == -1.0:
