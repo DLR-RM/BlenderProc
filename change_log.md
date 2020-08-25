@@ -3,10 +3,16 @@
 
 - Add support for all YCB objects (not just BOP)
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
-- Add support for BlenderKit
+- Add support for BlenderKit (download is done, easy using is still missing)
 - Improve the documentation 
 
 # Version History
+
+## Version 1.6.1: 25th August 2020
+- fixed bbox computation in the Coco Annotations
+- fixed visualization of Coco Annotations
+- add set properties fct. to BlenderLoader
+- adds a script to download all materials from BlenderKit (not used yet)
 
 ## Version 1.6.0: 24th July 2020
 - added an `TextureLoader`, which can load images and store them as blender textures
