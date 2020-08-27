@@ -54,7 +54,8 @@ class CameraLoader(CameraInterface):
         # A dict specifying the length of parameters that require more than one argument. If not specified, 1 is assumed.
         self.number_of_arguments_per_parameter = {
             "location": 3,
-            "rotation/value": 3
+            "rotation/value": 3,
+            "cam2world_matrix": 16
         }
         self.cam_pose_collection = ItemCollection(self._add_cam_pose, self.config.get_raw_dict("default_cam_param", {}))
 
