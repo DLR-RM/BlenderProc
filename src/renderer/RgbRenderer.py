@@ -14,11 +14,18 @@ class RgbRenderer(RendererInterface):
         "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
                                 "materials, Type: bool. Default: False."
         "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
+        "enable_shutter", "Enable Blender shutter feature for motion blur or rolling shutter, Type: bool. Default: False"
+        "shutter_length", "Shutter length (in frames), Type: float. Default: 0.1"
+        "scanline_exposure", "Time as fraction of the shutter length one scanline is exposed. If set to 1, this creates "
+                                "a pure motion blur effect, if set to 0 a pure rolling shutter effect, Type: float. Default: 1.0"
     """
     def __init__(self, config):
         RendererInterface.__init__(self, config)
         self._texture_less_mode = config.get_bool('render_texture_less', False)
         self._image_type = config.get_string('image_type', 'PNG')
+        self._enable_shutter = config.get_bool('enable_shutter', False)
+        self._shutter_length = config.get_float('shutter_length', 0.1)
+        self._scanline_exposure = config.get_float('scanline_exposure', 1)
 
     def change_to_texture_less_render(self):
         """
@@ -72,6 +79,17 @@ class RgbRenderer(RendererInterface):
 
             if self._use_alpha_channel:
                 self.add_alpha_channel_to_textures(blurry_edges=True)
+
+            # motion blur & rolling shutter
+            if self._enable_shutter:
+                bpy.context.scene.render.use_motion_blur = True
+                bpy.context.scene.render.motion_blur_shutter = self._shutter_length
+
+                # enable rolling shutter
+                if self._scanline_exposure < 1.0:
+                    print("enable rolling shutter")
+                    bpy.context.scene.cycles.rolling_shutter_type= 'TOP'
+                    bpy.context.scene.cycles.rolling_shutter_duration = self._scanline_exposure
 
             self._render("rgb_")
 
