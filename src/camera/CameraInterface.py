@@ -141,8 +141,8 @@ class CameraInterface(Module):
 
             # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
             max_resolution = max(width, height)
-            cam.shift_x = -(cx - width / 2.0) / max_resolution
-            cam.shift_y = (cy - height / 2.0) / max_resolution
+            cam.shift_x = -(cx - (width - 1.0) / 2.0) / max_resolution
+            cam.shift_y = (cy - (height - 1.0) / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
             cam.angle = config.get_float("fov", 0.691111)
