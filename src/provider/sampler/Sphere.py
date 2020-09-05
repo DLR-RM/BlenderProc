@@ -69,7 +69,7 @@ class Sphere(Provider):
             magnitude = radius
         # If sampling from the interior set it to scaled radius
         elif mode == "INTERIOR":
-            magnitude = radius * np.cbrt(np.random.unform())
+            magnitude = radius * np.cbrt(np.random.uniform())
         else:
             raise Exception("Unknown sampling mode: " + mode)
         
