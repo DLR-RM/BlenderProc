@@ -38,7 +38,7 @@ for window in bpy.context.window_manager.windows:
             break
 
 # Store temp files in the same directory for debugging
-temp_dir = "temp_debug"
+temp_dir = "examples/debugging/temp"
 
 try:
     # In this debug case the rendering is avoided, everything is executed except the final render step
