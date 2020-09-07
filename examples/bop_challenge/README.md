@@ -40,6 +40,16 @@ python run.py examples/bop_challenge/<config_dataset.yaml>
 
 This creates 25 images of a single scene. To create a whole dataset, simply run the command multiple times.
 
+### Note
+
+To save some time and not copy functionality we use the bop_toolkit to generate the masks and also the scene_gt_info.
+
+In particular:
+
+https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_masks.py
+https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_info.py
+
+Don't forget to set the paths to your generated BOP dataset in bop_toolkit_lib/config.py.
 
 
 
