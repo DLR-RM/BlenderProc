@@ -59,13 +59,15 @@ python scripts/visHdf5Files.py examples/motion_blur_rolling_shutter/output/0.hdf
         "samples": 350,
         "render_distance": True,
         "distance_output_key": "distance",
-        "enable_shutter" : True,
-        "shutter_length" : 0.8,
-        "scanline_exposure" : 0.05
+        "enable_motion_blur" : True,
+        "motion_blur_length" : 0.8,
+        "enable_rolling_shutter" : True,
+        "rolling_shutter_length" : 0.05
       }
 }
 ```
 
-* `enable_shutter` enables the shutter feature of Blender.
-* `shutter_length` sets the time the shutter is open as fraction of the time between two frames. A value of `1` thus leaves the shutter open for the full time. The shutter opens half the `shutter_length` before the keyframe pose and closes half the time after.
-* `scanline_exposure` sets the time one scanline is exposed. If this value is set to `1` (the default), no rolling shutter effect is created but just motion blur. If set to `0`, a pure rolling shutter effect is achieved.
+* `enable_motion_blur` enables the motion blur feature of Blender used for motion blur and rolling shutter simulation.
+* `motion_blur_length` sets the time the shutter is open as fraction of the time between two frames. A value of `1` thus leaves the shutter open for the full time. The shutter opens half the `motion_blur_length` before the keyframe pose and closes half the time after.
+* `enable_rolling_shutter` enables rolling shutter simulation. Rows are exposed from top to bottom. `enable_motion_blur` has to be activated and `motion_blur_length` set to a value bigger than `0`.
+* `rolling_shutter_length` sets the time one scanline is exposed as fraction of the `motion_blur_length`. If this value is set to `1`, no rolling shutter effect is created but just motion blur. If set to `0`, a pure rolling shutter effect is achieved.
