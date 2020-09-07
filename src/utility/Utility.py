@@ -10,6 +10,7 @@ import numpy as np
 
 class Utility:
     working_dir = ""
+    temp_dir = ""
     used_temp_id = None
 
     @staticmethod
@@ -103,22 +104,12 @@ class Utility:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
-    def get_temporary_directory(config_object):
-        ''' 
+    def get_temporary_directory():
+        """
         :return: default temporary directory, shared memory if it exists
-        '''
+        """
+        return Utility.temp_dir
 
-        # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
-        if os.path.exists("/dev/shm"):
-            default_temp_dir = "/dev/shm"
-        else:
-            default_temp_dir = "/tmp"
-        if Utility.used_temp_id is None:
-            Utility.used_temp_id = str(uuid.uuid4().hex)
-        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + Utility.used_temp_id))
-
-        return temp_dir
-    
     @staticmethod
     def merge_dicts(source, destination):
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
