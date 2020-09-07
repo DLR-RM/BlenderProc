@@ -51,7 +51,7 @@
         "samples": 350,
         "render_distance": True,
         "distance_output_key": "distance",
-        "enable_motion_blur" : True,
+        "use_motion_blur" : True,
         "motion_blur_length" : 0.5
       }
     },

@@ -51,9 +51,9 @@
         "samples": 350,
         "render_distance": True,
         "distance_output_key": "distance",
-        "enable_motion_blur" : True,
+        "use_motion_blur" : True,
         "motion_blur_length" : 0.8,
-        "enable_rolling_shutter" : True,
+        "use_rolling_shutter" : True,
         "rolling_shutter_length" : 0.05
       }
     },
