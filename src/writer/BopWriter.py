@@ -229,8 +229,9 @@ class BopWriter(WriterInterface):
         cam_K[0] = syn_cam_K[0]
         cam_K[4] = syn_cam_K[4]
  
-        cam_K[2] = width/2. - shift_x * max_resolution
-        cam_K[5] = height/2. + shift_y * max_resolution
+        # NOTE changed to convention of (0,0) being the CENTER of the top-left pixel
+        cam_K[2] = (width-1.)/2. - shift_x * max_resolution
+        cam_K[5] = (height-1.)/2. + shift_y * max_resolution
 
         return cam_K
 
