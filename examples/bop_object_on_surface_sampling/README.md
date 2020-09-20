@@ -42,7 +42,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Sample roughness and specular values for all objects: `manipulators.MaterialManipulator` module.
 * Construct planes: `constructor.BasicMeshInitializer` module.
 * Set custom properties for those planes: `manipulators.EntityManipulator` module.
-* Switch to an light emission shader for the top plane: `manipulators.MaterialManipulator` module.
+* Switch to a light emission shader for the top plane: `manipulators.MaterialManipulator` module.
 * Load CCTexture materials: `loader.CCMaterialLoader` module.
 * Sample a material for the other planes: `manupulators.EntityManipulator` module.
 * Sample upright objects poses on surface: `object.OnSurfaceSampler` module.
