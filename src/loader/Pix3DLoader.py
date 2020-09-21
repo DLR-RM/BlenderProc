@@ -74,9 +74,9 @@ class Pix3DLoader(LoaderInterface):
 
         self._set_properties(loaded_obj)
 
-        if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
-            for obj in loaded_obj:
-                obj['category_id'] = LabelIdMapping.label_id_map["void"]
+        # if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
+        #     for obj in loaded_obj:
+        #         obj['category_id'] = LabelIdMapping.label_id_map["void"]
 
     def _correct_materials(self, objects):
         """
