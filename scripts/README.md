@@ -13,3 +13,4 @@ Here we collect some useful scripts, to work with the in- or output of BlenderPr
 Download scripts:
 * [download_cc_textures.py](download_cc_textures.py): downloads all textures available on [cc0textures.com](http://cc0textures.com) and saves them under resources
 * [download_scenenet.py](download_scenenet.py): downloads the data from SceneNet, the download link for the [texture]( http://tinyurl.com/zpc9ppb) is also provided.
+* [download_pix3d.py](download_pix3d.py): downloads the data from Pix3D [website](http://pix3d.csail.mit.edu/).

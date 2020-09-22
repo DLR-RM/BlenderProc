@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import progressbar
 
 def flow_to_rgb(flow):
     """
@@ -21,3 +22,21 @@ def flow_to_rgb(flow):
     hsv[..., 2] = cv2.normalize(mag, None, 0, 1, cv2.NORM_MINMAX)
 
     return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+
+class ProgressBar():
+    """
+    Utility class for monitoring the download progress of a file.
+    """
+    def __init__(self):
+        self.pbar = None
+
+    def __call__(self, block_num, block_size, total_size):
+        if not self.pbar:
+            self.pbar=progressbar.ProgressBar(maxval=total_size)
+            self.pbar.start()
+
+        downloaded = block_num * block_size
+        if downloaded < total_size:
+            self.pbar.update(downloaded)
+        else:
+            self.pbar.finish()
