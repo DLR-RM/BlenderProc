@@ -27,13 +27,15 @@ class Pix3DLoader(LoaderInterface):
        :header: "Parameter", "Description"
 
        "data_path", "The path to the Pix3D folder. Type: string."
-       "category", "The category to use for example: 'bed', check the data_path/img, data_path/mask or data_path/model folder for more categories. Type: string."
+       "category", "The category to use for example: 'bed', check the data_path/model folder for more categories."
+                   "Type: string. Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'"
+                   ", 'wardrobe']"
     """
 
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
 
-        self._data_path = Utility.resolve_path(self.config.get_string("data_path"))
+        self._data_path = Utility.resolve_path(self.config.get_string("data_path", "resources/pix3d"))
         self._used_category = self.config.get_string("used_category")
 
         annotation_file_path = os.path.join(self._data_path, "pix3d.json")

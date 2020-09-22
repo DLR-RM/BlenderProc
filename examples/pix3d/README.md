@@ -4,9 +4,9 @@
 <img src="rendering.jpg" alt="Front readme image" width=300>
 </p>
 
-The focus of this example is the `loader.Pix3DLoader`, which can be used to load objects from the Pix3D dataset.
+The focus of this example is the `loader.Pix3DLoader`, which can be used to load objects from the [Pix3D](http://pix3d.csail.mit.edu/) dataset.
 
-See [the pix3d web page](http://pix3d.csail.mit.edu/) for downloading the data, we can not provide a script for downloading as you have to have an account to download the data.
+We provide a script to download the .obj files, please see the scripts [folder](https://github.com/DLR-RM/BlenderProc/tree/master/scripts).
 
 ## Usage
 
@@ -49,13 +49,13 @@ python scripts/visHdf5Files.py examples/pix3d/output/*.hdf5
 
 The same as in the basic example.
 
-### ShapeNetLoader 
+### Pix3DLoader 
 
 ```yaml
 "module": "loader.Pix3DLoader",
 "config": {
   "data_path": "<args:0>",
-  "used_category": "02801938"
+  "used_category": "bed"
 }
 ```
 This module loads a Pix3D Object, it only needs the path to the `Pix3D` folder, which is saved in `data_path`.

@@ -7,6 +7,8 @@ import os
 from urllib.request import urlretrieve, build_opener, install_opener
 import subprocess
 
+from utils import ProgressBar
+
 
 if __name__ == "__main__":
     # setting the default header, else the server does not allow the download
@@ -21,11 +23,11 @@ if __name__ == "__main__":
     if not os.path.exists(pix3d_dir):
         os.makedirs(pix3d_dir)
 
-    # download the zip file, which contains all the obj files
+    # download the zip file, which contains all the obj files. Size ~3.5 GB
     print("Download the zip file, may take a while:")
     pix3d_url = "http://pix3d.csail.mit.edu/data/pix3d.zip"
     zip_file_path = os.path.join(pix3d_dir, "pix3d.zip")
-    urlretrieve(pix3d_url, zip_file_path)
+    urlretrieve(pix3d_url, zip_file_path, ProgressBar())
 
     # unzip the zip file
     print("Unzip the zip file.")
@@ -33,3 +35,5 @@ if __name__ == "__main__":
     subprocess.call(cmd, shell=True, cwd=os.path.dirname(zip_file_path))
 
     os.remove(zip_file_path)
+    os.remove(os.path.join(pix3d_dir, "img"))
+    os.remove(os.path.join(pix3d_dir, "mask"))
