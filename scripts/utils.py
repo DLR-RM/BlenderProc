@@ -24,6 +24,9 @@ def flow_to_rgb(flow):
     return cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
 
 class ProgressBar():
+    """
+    Utility class for monitoring the download progress of a file.
+    """
     def __init__(self):
         self.pbar = None
 

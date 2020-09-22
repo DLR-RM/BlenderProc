@@ -6,6 +6,7 @@ if version_info.major == 2:
 import os
 from urllib.request import urlretrieve, build_opener, install_opener
 import subprocess
+import shutil
 
 from utils import ProgressBar
 
@@ -35,5 +36,5 @@ if __name__ == "__main__":
     subprocess.call(cmd, shell=True, cwd=os.path.dirname(zip_file_path))
 
     os.remove(zip_file_path)
-    os.remove(os.path.join(pix3d_dir, "img"))
-    os.remove(os.path.join(pix3d_dir, "mask"))
+    shutil.rmtree(os.path.join(pix3d_dir, "img"))
+    shutil.rmtree(os.path.join(pix3d_dir, "mask"))

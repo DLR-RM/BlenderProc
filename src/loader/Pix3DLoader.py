@@ -26,7 +26,7 @@ class Pix3DLoader(LoaderInterface):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "data_path", "The path to the Pix3D folder. Type: string."
+       "data_path", "The path to the Pix3D folder. Type: str. Default: 'resources/pix3d'."
        "category", "The category to use for example: 'bed', check the data_path/model folder for more categories."
                    "Type: string. Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'"
                    ", 'wardrobe']"
