@@ -22,7 +22,6 @@ Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating i
 * [General](#general)
 * [Functionality](#functionality)
 * [Examples](#examples)
-* [First step](#first-step)
 * [Source code](#source-code)
 * [Contributions](#contributions)
 * [Change log](#change-log)
