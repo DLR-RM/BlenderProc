@@ -4,8 +4,6 @@
 <img src="readme.jpg" alt="Front readme image" width=500>
 </p>
 
-## [>>> All infos regarding BlenderProc4BOP and the BOP challenge 2020 <<<](https://github.com/DLR-RM/BlenderProc/blob/master/README_BlenderProc4BOP.md)
-
 A procedural Blender pipeline for photorealistic training image generation.
 
 Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating it from time to time) and our [workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf) on sim2real transfer presented at RSS 2020.
@@ -47,13 +45,15 @@ This runs all modules specified in the config file in a step-by-step fashion in 
 
 The following modules are already implemented and ready to use:
 
-* Loading: *.obj, SunCG, Replica scenes, BOP datasets.
-* Lighting: Set, sample lights, automatic lighting of SunCG scenes.
+* Loading: *.obj, *.ply, SunCG, Replica scenes, BOP datasets, etc.
+* Objects: Sample object poses, apply physics and collision checking.
+* Materials: Set or sample physically-based materials and textures
+* Lighting: Set or sample lights, automatic lighting of SunCG scenes.
 * Cameras: set, sample or load camera poses from file.
-* Rendering: RGB, distance, normal and segmentation images.
-* Merging: .hdf5 containers.
+* Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
+* Writing: .hdf5 containers, COCO & BOP annotations.
 
-For advanced usage which is not covered by these modules, own modules can easily be implemented.
+..and many more. For advanced/custom functionalities, you can easily write and integrate your [own modules](https://github.com/DLR-RM/BlenderProc/tree/master/src#writing-your-own-modules).
 
 ## Examples
 
@@ -61,7 +61,8 @@ For advanced usage which is not covered by these modules, own modules can easily
 * [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a distance images.
 * [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a distance images.
 * [Replica dataset](examples/replica_dataset): Load a replica room, sample camera poses and render normal images.
-* [COCO annotations](examples/coco_annotations): Write to a .json file containing COCO annotations for the objects in the scene.
+* [COCO annotations](examples/coco_annotations): Write COCO annotations to a .json file for selected objects in the scene.
+* [BOP Challenge](https://github.com/DLR-RM/BlenderProc/blob/master/README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
 
 ... And much more!
 
