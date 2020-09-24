@@ -57,6 +57,8 @@ The following modules are already implemented and ready to use:
 
 ## Examples
 
+We provide a lot of [examples](examples) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc.
+
 * [Basic scene](examples/basic/): Basic example 
 * [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a distance images.
 * [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a distance images.
@@ -66,17 +68,13 @@ The following modules are already implemented and ready to use:
 
 ... And much more!
 
-## First step
-
-Now head on to the [examples](examples) and check the README there: get some basic understanding of the config files, start exploring our examples and get an idea about the power of BlenderProc.
-
 ## Source Code
 
-Now it's a good time to take a look at the [source code](src): all modules are there. Explore and look at the short guide about writing your own modules.
+Now it's a good time to take a look at the [source code](src): All modules are there. Explore and look at the short guide about writing your own modules.
 
 ## Contributions
 
-Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Show it, then. Check the [contributions guidelines](CONTRIBUTING.md).
+Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Start a PR. Check the [contributions guidelines](CONTRIBUTING.md).
 
 ## Change log
 
