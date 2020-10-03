@@ -23,9 +23,11 @@
         "sub_dataset_id": "CMU",
         "body_model_gender": "male",
         "subject_id": "10",
-        "sequence_id": "4",
-        "frame_id": "10",
-      }
+        "sequence_id": "1",
+        "frame_id": "600",
+        "cf_set_shading": "SMOOTH"
+      },
+      
     },
     {
       "module": "lighting.LightLoader",
@@ -44,7 +46,7 @@
       "config": {
         "cam_poses": [
           {
-            "number_of_samples": 1,
+            "number_of_samples": 5,
             "location": {
               "provider":"sampler.Sphere",
               "center":[0, 0, 0],

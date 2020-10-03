@@ -1,0 +1,116 @@
+
+# AMASS Dataset
+<p align="center">
+<img src="rendering.png" alt="Front readme image" width=400>
+</p>
+
+AMASS (Archive of Motion Capture as Surface Shapes) is a large database of human motion unifying different optical marker-based motion capture datasets by representing them within a common framework and parameterization. AMASS is readily useful for generating training data for deep learning.
+
+## Get The Dataset
+As you are required to agree to the Use Of Terms for this dataset, we can not provide a download script.
+
+However, we will give you a step by step explanation on how to get access.
+
+1. Visit the following websites, sign up as user after you agree to the terms of use.
+	1. `https://amass.is.tue.mpg.de/`
+	2. `https://mano.is.tue.mpg.de/`
+	3. `https://smpl.is.tue.mpg.de/`
+2. wait till receive the confirmation vie e-mail, once you confirm your account you can access download sections.
+3. download the following files which represent the body models and extract them inside folder `resources/AMASS/body_models`
+	1. from `https://smpl.is.tue.mpg.de/downloads` download the following file
+
+	<img src="instructions_screenshots/smpl_model.png" width=350> 
+	
+	2. from `https://mano.is.tue.mpg.de/downloads`download the following file 
+
+	<img src="instructions_screenshots/dmpl_model.png" width=350> 
+	
+5. explore the collection of mation capture dataset that are supported by AMASS and choose the motion capture dataset and motion sequence that you want to generate a pose from. for now, we only provide support for CMU motion capture dataset *(we're planning to support the rest of the datasets in the near future)*, so you have to choose a pose from the variaty of poses that could be extracted from this dataset.
+	1. for example, after exploring different motion sequences in CMU mocap dataset, we are interested in generating a body pose represents a person kicks a ball. (you can expore all motion sequences categories for CMU dataset through dataset website `http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%`. go to website and select all motion tab to see differnt motions)
+	2. from differnet motion categories there, we are interested in kick soccer ball category (note it is listed as subject # 10, we need this number among other identifiers to identify the pose we are interested in.)
+6. From AMASS download page `https://amass.is.tue.mpg.de/dataset`, many differnt motion capture dataset are listed, choose the one you are interested to generate a pose from and download Body data, for example we choose CMU motion capture dataset to download.
+	<img src="instructions_screenshots/mocap_dataset_download.png"> 
+	download the dataset and extract it under `resources/AMASS` folder.
+
+
+## Usage
+Execute in the BlenderProc main directory:
+
+```
+python run.py examples/amass_human_poses/config.yaml resources/AMASS examples/front_3d/output 
+```
+
+* `examples/front_3d/config.yaml`: path to the configuration file with pipeline configuration.
+
+## Visualization
+
+In the output folder you will find multiple `.hdf5` files. These can be visualized with the script:
+
+```
+python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
+```
+
+## Steps
+* AMASSLoader first check the taxonomy.json file for the currently supported datasets
+* loads the body parameters for the selected pose from dataset
+* Loads the parametric body model from the downloader body models
+* feed the the pose paramters inside the parametric model and generate a mesh equivalent to the selected pose
+* Adds cameras to the scene: `camera.Front3DCameraSampler`
+* Renders rgb, normals: `renderer.RgbRenderer` module.
+* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
+
+
+## Config file
+
+
+### AMASSLoader
+
+```yaml
+{
+  "module": "loader.AMASSLoader",
+  "config": {
+    "data_path": "<args:0>",
+    "sub_dataset_id": "CMU",
+    "body_model_gender": "male",
+    "subject_id": "10",
+    "sequence_id": "1",
+    "frame_id": "600",
+    "cf_set_shading": "SMOOTH"
+  },
+      
+}
+```
+
+* `sub_dataset_id `: one of the motion capture dataset included inside AMASS dataset, the name is exectally equivalent to the names mentioned in the downlaod page of AMASS Dataset `https://amass.is.tue.mpg.de/dataset` **Note: only CMU motion capture dataset is currently supported by AMASSLoader module**
+* `body_model_gender `: select gender of the model that will represent the selected pose. available options are: `[male, female, neutral]`
+* `subject_id `: represents the category of the motion, which type of motion the pose will be extracted from. refer to every motion capture dataset included in AMASS dataset to see the set of supported motion categerios. for CMU dataset, you can have a look on the different supported motion categories over their website `http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%` and configure the number equivalent to category id. *for this example, we are interested in kick soccer ball category, so we chose the subject_id to be equal 10*
+* `sequence_id`: every categories have more than one sequence of people performing the same motion using differnt scenarios. Hint: you can watch the videos from the original dataset website to select a a specific sequence or you can just leave the default value which is equal to 1.
+* `frame_id`: which frame in the sequence contains the represented pose. this parameter id dependent on the length of the sequence and no of fps in which the motion is recorded. Usually you can obtain the length of the sequence and fps values from dataset website or leave it blank and the loader will choose a random pose.
+
+### CameraSampler
+
+```yaml
+"module": "camera.CameraSampler",
+"config": {
+  "cam_poses": [
+    {
+      "number_of_samples": 5,
+      "location": {
+        "provider":"sampler.Sphere",
+        "center": [0, 0, 0],
+        "radius": 3,
+        "mode": "SURFACE"
+      },
+      "rotation": {
+        "format": "look_at",
+        "value": {
+          "provider": "getter.POI"
+        }
+      }
+    }
+  ]
+}
+```
+
+We sample here five random camera poses, where the location is on a sphere with a radius of 3 around the object. 
+Each cameras rotation is such that it looks directly at the object and the camera faces upwards in Z direction.
