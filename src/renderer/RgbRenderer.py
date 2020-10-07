@@ -14,6 +14,7 @@ class RgbRenderer(RendererInterface):
         "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
                                 "materials, Type: bool. Default: False."
         "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
+        "transparent_background", "Whether to render the background as transparent or not, Type: bool. Default: False."
     """
     def __init__(self, config):
         RendererInterface.__init__(self, config)
@@ -60,7 +61,7 @@ class RgbRenderer(RendererInterface):
 
             # In case a previous renderer changed these settings
             #Store as RGB by default unless the user specifies store_alpha as true in yaml
-            bpy.context.scene.render.image_settings.color_mode = "RGBA" if self.config.get_bool("render_alpha", False) else "RGB"
+            bpy.context.scene.render.image_settings.color_mode = "RGBA" if self.config.get_bool("transparent_background", False) else "RGB"
             #set the background as transparent if transparent_background is true in yaml
             bpy.context.scene.render.film_transparent = self.config.get_bool("transparent_background", False)
             bpy.context.scene.render.image_settings.file_format = self._image_type

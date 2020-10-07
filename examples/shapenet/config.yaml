@@ -20,7 +20,7 @@
       "module": "loader.ShapeNetLoader",
       "config": {
         "data_path": "<args:0>",
-        "used_synset_id": "03001627"
+        "used_synset_id": "02801938"
       }
     },
     {
@@ -61,7 +61,6 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "transparent_background": False,
-        "render_alpha": False,
         "render_normals": True,
         "samples": 350,
         "render_distance": true
@@ -70,7 +69,7 @@
     {
       "module": "writer.Hdf5Writer",
       "config": {
-        "store_alpha": False,
+        "transparent_background": False,
         "postprocessing_modules": {
           "distance": [
             {
