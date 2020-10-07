@@ -1,0 +1,82 @@
+# Args: <path_to_pix3d> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
+    },
+    {
+      "module": "loader.Pix3DLoader",
+      "config": {
+        "data_path": "<args:0>",
+        "used_category": "bed"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [
+          {
+            "number_of_samples": 5,
+            "location": {
+              "provider":"sampler.Sphere",
+              "center":[0, 0, 0],
+              "radius": 2,
+              "mode": "SURFACE"
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "provider": "getter.POI"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "render_normals": True,
+        "samples": 350,
+        "render_distance": true
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "distance": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
