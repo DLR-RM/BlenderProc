@@ -59,7 +59,10 @@ class RgbRenderer(RendererInterface):
             self._configure_renderer(use_denoiser=True, default_denoiser="Intel")
 
             # In case a previous renderer changed these settings
-            bpy.context.scene.render.image_settings.color_mode = "RGB"
+            #Store as RGB by default unless the user specifies store_alpha as true in yaml
+            bpy.context.scene.render.image_settings.color_mode = "RGBA" if self.config.get_bool("render_alpha", False) else "RGB"
+            #set the background as transparent if transparent_background is true in yaml
+            bpy.context.scene.render.film_transparent = self.config.get_bool("transparent_background", False)
             bpy.context.scene.render.image_settings.file_format = self._image_type
             bpy.context.scene.render.image_settings.color_depth = "8"
 

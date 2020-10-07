@@ -132,7 +132,8 @@ class WriterInterface(Module):
         file_ending = file_path[file_path.rfind(".") + 1:].lower()
 
         if file_ending in ["exr", "png", "jpg"]:
-            return load_image(file_path)
+            #no_channels is 4 if store_alpha is true in config
+            return load_image(file_path, num_channels = 3 + self.config.get_bool("store_alpha", False))
         elif file_ending in ["npy", "npz"]:
             return self._load_npy(file_path)
         elif file_ending in ["csv"]:

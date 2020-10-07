@@ -91,6 +91,37 @@ The position will be in the center of the scene.
 We sample here five random camera poses, where the location is on a sphere with a radius of 2 around the object. 
 Each cameras rotation is such that it looks directly at the object and the camera faces upwards in Z direction.
 
+## HD5 Writer
+```
+"module": "writer.Hdf5Writer",
+    "config": {
+    "store_alpha": False,
+    "postprocessing_modules": {
+      "distance": [
+        {
+          "module": "postprocessing.TrimRedundantChannels",
+          "config": {}
+        }
+      ]
+    }
+}
+```
+To store alpha values in the hd5 files, use the store_alpha parameter.
+
+## RGB Renderer
+```
+"module": "renderer.RgbRenderer",
+  "config": {
+    "transparent_background": False,
+    "render_alpha": False,
+    "render_normals": True,
+    "samples": 350,
+    "render_distance": true
+  }
+}
+```
+To render with alpha values, set render_alpha to True. To render a transparent background, set transparent_background to True.
+
 ## More examples
 
 * [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
