@@ -153,9 +153,11 @@ if len(required_packages) > 0:
     if platform == "linux" or platform == "linux2":
         python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
         packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+        pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.7", "site-packages")
     elif platform == "darwin":
         python_bin_folder = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "bin")
         packages_path = os.path.abspath(os.path.join(blender_path, "Contents", "Resources", "custom-python-packages"))
+        pre_python_package_path = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "lib", "python3.7", "site-packages")
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
     subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
@@ -165,8 +167,7 @@ if len(required_packages) > 0:
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
-
-    pre_python_package_path = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "lib", "python3.7", "site-packages")
+        
     used_env = dict(os.environ, PYTHONPATH=packages_path + ":" + pre_python_package_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
     installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
