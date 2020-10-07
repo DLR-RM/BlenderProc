@@ -24,8 +24,8 @@ class WriterInterface(Module):
                               "attributes that can be used here. Type: list."
        "output_file_prefix", "The prefix of the file that should be created. Type: string."
        "output_key", "The key which should be used for storing the output in a merged file. Type: string."
-       "transparent_background", "If true, the background will be set to transparent and the alpha channel will be "
-                                "written to file. Type: bool. Default: False."
+       "transparent_background", "If true, the alpha channel will be written to file. Type: bool. Default: False."
+                                
     """
     def __init__(self, config):
         Module.__init__(self, config)
