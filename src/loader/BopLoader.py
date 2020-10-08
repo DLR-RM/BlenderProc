@@ -290,7 +290,7 @@ class BopLoader(LoaderInterface):
                         new_file_ply_content = new_file_ply_content.replace("property float texture_v",
                                                                             "property float t")
                     model_name = os.path.basename(model_path)
-                    tmp_ply_file = os.path.join(Utility.get_temporary_directory(self.config), model_name)
+                    tmp_ply_file = os.path.join(self._temp_dir, model_name)
                     with open(tmp_ply_file, "w") as file:
                         file.write(new_file_ply_content)
                     bpy.ops.import_mesh.ply(filepath=tmp_ply_file)

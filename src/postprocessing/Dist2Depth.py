@@ -39,8 +39,8 @@ class Dist2Depth(Module):
 
         # Compute Intrinsics from Blender attributes (can change)
         f = width / (2 * np.tan(cam.angle / 2.))
-        cx = width / 2. - cam.shift_x * max_resolution
-        cy = height / 2. + cam.shift_y * max_resolution
+        cx = (width - 1.0) / 2. - cam.shift_x * max_resolution
+        cy = (height - 1.0) / 2. + cam.shift_y * max_resolution
 
         xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
         

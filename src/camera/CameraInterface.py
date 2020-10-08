@@ -55,7 +55,8 @@ class CameraInterface(Module):
         "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float."
         "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed "
                "to be the angle between forward vector and one side of the frustum). Type: float. Default: 0.691111."
-        "cam_K", "Camera Matrix K. Type: list. Default: []."
+        "cam_K", "Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left "
+                 "pixel - this is the convention e.g. used in OpenCV. Type: list. Default: []."
         "resolution_x", "Width resolution of the camera. Type: int. Default: 512. "
         "resolution_y", "Height resolution of the camera. Type: int. Default: 512. "
         "cam2world_matrix", "4x4 camera extrinsic matrix. Type: list of floats. Default: []."
@@ -139,10 +140,11 @@ class CameraInterface(Module):
             elif fx < fy:
                 bpy.context.scene.render.pixel_aspect_x = fy/fx
 
-            # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim 
+            # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim
+            # NOTE changed to convention of (0,0) being the CENTER of the top-left pixel
             max_resolution = max(width, height)
-            cam.shift_x = -(cx - width / 2.0) / max_resolution
-            cam.shift_y = (cy - height / 2.0) / max_resolution
+            cam.shift_x = -(cx - (width - 1.0) / 2.0) / max_resolution
+            cam.shift_y = (cy - (height - 1.0) / 2.0) / max_resolution
         else:
             # Set FOV (Default value is the same as the default blender value)
             cam.angle = config.get_float("fov", 0.691111)

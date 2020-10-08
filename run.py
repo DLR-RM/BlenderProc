@@ -4,6 +4,7 @@ from os.path import join
 import tarfile
 import subprocess
 import shutil
+import signal
 from sys import platform, version_info
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -11,7 +12,7 @@ else:
     from urllib import urlretrieve
     import contextlib
 
-
+import uuid
 from src.utility.ConfigParser import ConfigParser
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -19,7 +20,9 @@ parser.add_argument('config', default=None, nargs='?', help='The path to the con
 parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
 parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true', help='If given, all python packages configured inside the configuration file will be reinstalled.')
 parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
-parser.add_argument('--batch_process',help='Renders a batch of house-cam combinations, by reading a file containing the combinations on each line, where each line is the standard placeholder arguments for rendering a single scene separated by spaces. The value of this option is the path to the index file, no need to add placeholder arguments.')
+parser.add_argument('--batch_process', help='Renders a batch of house-cam combinations, by reading a file containing the combinations on each line, where each line is the standard placeholder arguments for rendering a single scene separated by spaces. The value of this option is the path to the index file, no need to add placeholder arguments.')
+parser.add_argument('--temp-dir', dest='temp_dir', default=None, help="The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically. Type: string. Default: \"/dev/shm\" or \"/tmp/\" depending on which is available.")
+parser.add_argument('--keep-temp-dir', dest='keep_temp_dir', action='store_true', help="If set, the temporary directory is not removed in the end.")
 parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
 args = parser.parse_args()
 
@@ -46,9 +49,9 @@ if "custom_blender_path" not in setup_config:
         blender_install_path = "blender"
 
     # Determine configured version
-    # right new only support blender-2.83.2
-    major_version = "2.83"
-    minor_version = "2"
+    # right new only support blender-2.90
+    major_version = "2.90"
+    minor_version = "0"
     blender_version = "blender-{}.{}".format(major_version, minor_version)
     if platform == "linux" or platform == "linux2":
         blender_version += "-linux64"
@@ -167,7 +170,6 @@ if len(required_packages) > 0:
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
-        
     used_env = dict(os.environ, PYTHONPATH=packages_path + ":" + pre_python_package_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
     installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
@@ -217,12 +219,42 @@ else:
 repo_root_directory = os.path.dirname(os.path.realpath(__file__))
 path_src_run = os.path.join(repo_root_directory, "src/run.py")
 
+# Determine perfect temp dir
+if args.temp_dir is None:
+    if os.path.exists("/dev/shm"):
+        temp_dir = "/dev/shm"
+    else:
+        temp_dir = "/tmp"
+else:
+    temp_dir = args.temp_dir
+# Generate unique directory name in temp dir
+temp_dir = os.path.join(temp_dir, "blender_proc_" + str(uuid.uuid4().hex))
+# Create the temp dir
+print("Using temporary directory: " + temp_dir)
+if not os.path.exists(temp_dir):
+    os.makedirs(temp_dir)
+
+
 if not args.batch_process:
-    p = subprocess.Popen([blender_run_path, "--background", "--python-exit-code", "2", "--python", path_src_run, "--", args.config] + args.args,
+    p = subprocess.Popen([blender_run_path, "--background", "--python-exit-code", "2", "--python", path_src_run, "--", args.config, temp_dir] + args.args,
                          env=dict(os.environ, PYTHONPATH=""), cwd=repo_root_directory)
 else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
-    p = subprocess.Popen([blender_run_path, "--background", "--python-exit-code", "2", "--python", path_src_run, "--",  args.config, "--batch-process", args.batch_process],
+    p = subprocess.Popen([blender_run_path, "--background", "--python-exit-code", "2", "--python", path_src_run, "--",  args.config, temp_dir, "--batch-process", args.batch_process],
                          env=dict(os.environ, PYTHONPATH=""), cwd=repo_root_directory)
+
+
+def clean_temp_dir():
+    # If temp dir should not be kept and temp dir still exists => remove it
+    if not args.keep_temp_dir and os.path.exists(temp_dir):
+        print("Cleaning temporary directory")
+        shutil.rmtree(temp_dir)
+
+# Listen for SIGTERM signal, so we can properly cleanup and and terminate the child process
+def handle_sigterm(signum, frame):
+    clean_temp_dir()
+    p.terminate()
+signal.signal(signal.SIGTERM, handle_sigterm)
+
 try:
     p.wait()
 except KeyboardInterrupt:
@@ -231,5 +263,8 @@ except KeyboardInterrupt:
     except OSError:
         pass
     p.wait()
+
+# Clean up
+clean_temp_dir()
 
 exit(p.returncode)
