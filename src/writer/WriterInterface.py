@@ -24,7 +24,7 @@ class WriterInterface(Module):
                               "attributes that can be used here. Type: list."
        "output_file_prefix", "The prefix of the file that should be created. Type: string."
        "output_key", "The key which should be used for storing the output in a merged file. Type: string."
-       "transparent_background", "If true, the alpha channel will be written to file. Type: bool. Default: False."
+       "write_alpha_channel", "If true, the alpha channel will be written to file. Type: bool. Default: False."
                                 
     """
     def __init__(self, config):
@@ -135,7 +135,7 @@ class WriterInterface(Module):
 
         if file_ending in ["exr", "png", "jpg"]:
             #num_channels is 4 if transparent_background is true in config
-            return load_image(file_path, num_channels = 3 + self.config.get_bool("transparent_background", False))
+            return load_image(file_path, num_channels = 3 + self.config.get_bool("write_alpha_channel", False))
         elif file_ending in ["npy", "npz"]:
             return self._load_npy(file_path)
         elif file_ending in ["csv"]:
