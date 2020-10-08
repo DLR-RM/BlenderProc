@@ -60,6 +60,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
+        "transparent_background": False,
         "render_normals": True,
         "samples": 350,
         "render_distance": true
@@ -68,6 +69,7 @@
     {
       "module": "writer.Hdf5Writer",
       "config": {
+        "transparent_background": False,
         "postprocessing_modules": {
           "distance": [
             {
