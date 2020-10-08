@@ -44,6 +44,15 @@ def save_array_as_image(array, key, file_path):
         else:
             plt.imsave(file_path, val)
 
+    elif len(array.shape) == 3 and array.shape[2] == 4:
+        val = process_img(array, key)
+        plt.imsave(file_path, val)
+
+    #error message if shape is incorrect
+    else:
+        print("Can't save numpy array with shape {} as an image".format(array.shape))
+
+
 
 def convert_hdf(base_file_path, output_folder=None):
     if os.path.exists(base_file_path):

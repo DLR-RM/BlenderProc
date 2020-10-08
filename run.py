@@ -170,7 +170,6 @@ if len(required_packages) > 0:
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
-
     used_env = dict(os.environ, PYTHONPATH=packages_path + ":" + pre_python_package_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
     installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
