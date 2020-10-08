@@ -37,10 +37,10 @@ However, we will give you a step by step explanation on how to get access.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/amass_human_poses/config.yaml resources/AMASS examples/front_3d/output 
+python run.py examples/amass_human_poses/config.yaml resources/AMASS examples/amass_human_poses/output 
 ```
 
-* `examples/front_3d/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/amass_human_poses/config.yaml`: path to the configuration file with pipeline configuration.
 
 ## Visualization
 

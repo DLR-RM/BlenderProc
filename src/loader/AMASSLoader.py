@@ -50,8 +50,13 @@ class AMASSLoader(LoaderInterface):
     # 'TotalCapture', 'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT',
     # 'H36M', 'TCD_handMocap', 'BML']
 
-    # dictionary contains mocap dataset name and path to its sub folder within the main dataset
+    # dictionary contains mocap dataset name and path to its sub folder within the main dataset, dictionary will
+    # be filled from taxonomy.json file which indicates the supported datastests
     supported_mocap_datasets = {}
+
+    # hex values for human skin tone to sample from
+    human_skin_colors = ['2D221E', '3C2E28', '4B3932', '5A453C', '695046', '785C50', '87675A', '967264', 'A57E6E',
+                         'B48A78', 'C39582', 'D2A18C', 'E1AC96', 'F0B8A0', 'FFC3AA', 'FFCEB4', 'FFDABE', 'FFE5C8']
 
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
@@ -103,7 +108,7 @@ class AMASSLoader(LoaderInterface):
                     # use GPU to accelerate mesh calculations
                     comp_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
                     # controls the global root orientation
-                    root_orient = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id + 1, :3]).to(comp_device)
+                    # root_orient = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id + 1, :3]).to(comp_device)
                     # controls the body
                     pose_body = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id + 1, 3:66]).to(comp_device)
                     # controls the finger articulation
@@ -140,8 +145,9 @@ class AMASSLoader(LoaderInterface):
         :return: parametric model instance BodyModel and face mesh values
         """
         bm_path = os.path.join(data_path, 'body_models/smplh', used_body_model_gender, 'model.npz')  # body model
-        dmpl_path = os.path.join(data_path, 'body_models/dmpls', used_body_model_gender,
-                                 'model.npz')  # deformation model
+        dmpl_path = os.path.join(data_path, 'body_models/dmpls', used_body_model_gender, 'model.npz')  # deformation model
+        if not os.path.exists(bm_path) or not os.path.exists(dmpl_path):
+            raise Exception("Parametric Body model doesn't exist, please follow download instructions section in AMASS Example")
         comp_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         body_model = BodyModel(bm_path=bm_path, num_betas=num_betas, num_dmpls=num_dmpls, path_dmpl=dmpl_path).to(
             comp_device)
@@ -242,10 +248,12 @@ class AMASSLoader(LoaderInterface):
 
                 # Create a principled node and set the default color
                 principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-                # Define human skin tone colors
-                principled_node.inputs["Base Color"].default_value = mathutils.Vector([141, 85, 36, 255]) / 255.0
+                # Pick random skin color value
+                skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
+                skin_tone_rgb = list(int(skin_tone_hex[i:i+2], 16) for i in (0, 2, 4))
+                principled_node.inputs["Base Color"].default_value = mathutils.Vector([*skin_tone_rgb, 255]) / 255.0
                 principled_node.inputs["Subsurface"].default_value = 0.2
-                principled_node.inputs["Subsurface Color"].default_value = mathutils.Vector([141, 85, 36, 255]) / 255.0
+                principled_node.inputs["Subsurface Color"].default_value = mathutils.Vector([*skin_tone_rgb, 255]) / 255.0
 
                 texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
                 if texture_nodes and len(texture_nodes) > 1:
