@@ -87,9 +87,12 @@ if __name__ == "__main__":
             if file_path.endswith(".png"):
                 convert_png_to_multiples(file_path, file_path)
             elif file_path.endswith(".hdf5"):
-                tmp_path = "/dev/shm"
-                if not os.path.exists(tmp_path):
-                    tmp_path = "/tmp/"
+                if sys.platform != "win32":
+                    tmp_path = "/dev/shm"
+                    if not os.path.exists(tmp_path):
+                        tmp_path = "/tmp/"
+                else:
+                    tmp_path = os.getenv("TEMP")
                 tmp_path = os.path.join(tmp_path, "blender_proc_vis_gen_image")
                 if os.path.exists(tmp_path):
                     for file in glob.glob(os.path.join(tmp_path, "*")):
