@@ -51,12 +51,12 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
 ```
 
 ## Steps
-* AMASSLoader first check the taxonomy.json file for the currently supported datasets
-* loads the body parameters for the selected pose from dataset
+* AMASSLoader first checks the taxonomy.json file for the currently supported datasets
+* Loads the body parameters for the selected pose from dataset
 * Loads the parametric body model from the downloader body models
-* feed the the pose paramters inside the parametric model and generate a mesh equivalent to the selected pose
-* Adds cameras to the scene: `camera.Front3DCameraSampler`
-* Renders rgb, normals: `renderer.RgbRenderer` module.
+* Feed the the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose
+* Adds cameras to the scene: `camera.CameraSampler`
+* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 
@@ -81,11 +81,11 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
 }
 ```
 
-* `sub_dataset_id `: one of the motion capture dataset included inside AMASS dataset, the name is exectally equivalent to the names mentioned in the downlaod page of AMASS Dataset `https://amass.is.tue.mpg.de/dataset` **Note: only CMU motion capture dataset is currently supported by AMASSLoader module**
-* `body_model_gender `: select gender of the model that will represent the selected pose. available options are: `[male, female, neutral]`
-* `subject_id `: represents the category of the motion, which type of motion the pose will be extracted from. refer to every motion capture dataset included in AMASS dataset to see the set of supported motion categerios. for CMU dataset, you can have a look on the different supported motion categories over their website `http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%` and configure the number equivalent to category id. *for this example, we are interested in kick soccer ball category, so we chose the subject_id to be equal 10*
-* `sequence_id`: every categories have more than one sequence of people performing the same motion using differnt scenarios. Hint: you can watch the videos from the original dataset website to select a a specific sequence or you can just leave the default value which is equal to 1.
-* `frame_id`: which frame in the sequence contains the represented pose. this parameter id dependent on the length of the sequence and no of fps in which the motion is recorded. Usually you can obtain the length of the sequence and fps values from dataset website or leave it blank and the loader will choose a random pose.
+* `sub_dataset_id `: one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset [https://amass.is.tue.mpg.de/dataset](https://amass.is.tue.mpg.de/dataset) **Note: only the CMU motion capture dataset is currently supported by the AMASSLoader module**
+* `body_model_gender `: select gender of the model that will represent the selected pose. Available options are: `[male, female, neutral]`
+* `subject_id `: represents the category of the motion, which type of motion the pose will be extracted from. This refers to every motion capture dataset included in AMASS dataset to see the set of supported motion categories. For the CMU dataset, you can have a look on the different supported motion categories on their website [http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%](http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%) and configure the number equivalent to the category id. *For this example, we are interested in the "kick soccer ball" category, so we chose the subject_id to be `10`.*
+* `sequence_id`: every category has more than one sequence of people performing the same motion using different scenarios. Hint: You can watch the videos on the original dataset website to select a a specific sequence or you can just leave the default value which is `1`.
+* `frame_id`: which frame in the sequence contains the represented pose. This parameter id dependents on the length of the sequence and the fps in which the motion is recorded. Usually you can obtain the length of the sequence and fps values from the dataset website or leave it blank and the loader will choose a random pose.
 
 ### CameraSampler
 
