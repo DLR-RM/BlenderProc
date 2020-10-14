@@ -55,7 +55,7 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
 ## Steps
 * AMASSLoader first checks the taxonomy.json file for the currently supported datasets
 * Loads the body parameters for the selected pose from dataset
-* Loads the parametric body model from the downloader body models
+* Loads the parametric body model from the downloaded body models
 * Feed the the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose
 * Adds cameras to the scene: `camera.CameraSampler`
 * Renders rgb, normals and distance: `renderer.RgbRenderer` module.
@@ -77,7 +77,6 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
     "subject_id": "10",
     "sequence_id": "1",
     "frame_id": "600",
-    "cf_set_shading": "SMOOTH"
   },
       
 }
