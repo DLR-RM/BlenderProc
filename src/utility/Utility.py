@@ -1,4 +1,5 @@
 import os
+import sys
 import uuid
 import bpy
 import time
@@ -109,10 +110,13 @@ class Utility:
         '''
 
         # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
-        if os.path.exists("/dev/shm"):
-            default_temp_dir = "/dev/shm"
+        if sys.platform != "win32":
+            if os.path.exists("/dev/shm"):
+                default_temp_dir = "/dev/shm"
+            else:
+                default_temp_dir = "/tmp"
         else:
-            default_temp_dir = "/tmp"
+            default_temp_dir = os.getenv("TEMP")
         if Utility.used_temp_id is None:
             Utility.used_temp_id = str(uuid.uuid4().hex)
         temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + Utility.used_temp_id))

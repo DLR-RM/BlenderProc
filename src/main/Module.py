@@ -28,8 +28,8 @@ class Module:
        "output_dir", "The path to a directory where all persistent output files should be stored. If it doesn't exist,"
                      "it is created automatically. Type: string. Default: ""."
        "temp_dir", "The path to a directory where all temporary output files should be stored. If it doesn't exist,"
-                   "it is created automatically. Type: string. Default: "/dev/shm" or "/tmp/" depending on what"
-                   "is available."
+                   "it is created automatically. Type: string. Default: "/dev/shm" or ""/tmp/" depending on what"
+                   "is available for Linux and MacOS, and "<env:TEMP>" for Windows."
     """
 
     def __init__(self, config):
