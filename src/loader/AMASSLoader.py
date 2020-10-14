@@ -65,11 +65,11 @@ class AMASSLoader(LoaderInterface):
        :header: "Parameter", "Description"
 
        "data_path", "The path to the AMASS Dataset folder in resources folder. Type: string. Default: 'resources/AMASS'."
-       "_used_sub_dataset_id", "Identifier for the sub dataset, the dataset which the human pose object should be extracted from. Type: srtring." 
-       "_used_body_model_gender", "The model gender, pose will represented using male, female or neutral body shape. Type: string." 
-       "_used_subject_id", "Type of motion from which the pose should be extracted, this is dataset dependent parameter. Type: int." 
-       "_used_sequence_id", "Sequence id in the dataset, sequences are the motion recorded to represent certain action. Type: int." 
-       "_used_frame_id", "Frame id in a selected motion sequence. Type: int."
+       "sub_dataset_id", "Identifier for the sub dataset, the dataset which the human pose object should be extracted from. Type: srtring." 
+       "body_model_gender", "The model gender, pose will represented using male, female or neutral body shape. Type: string." 
+       "subject_id", "Type of motion from which the pose should be extracted, this is dataset dependent parameter. Type: int." 
+       "sequence_id", "Sequence id in the dataset, sequences are the motion recorded to represent certain action. Type: int." 
+       "frame_id", "Frame id in a selected motion sequence. Type: int."
     """
 
     # list of all possible supported mocap datasets: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced',
