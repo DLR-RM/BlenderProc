@@ -19,7 +19,7 @@ from human_body_prior.body_model.body_model import BodyModel
 class AMASSLoader(LoaderInterface):
     """
     AMASS is a large database of human motion unifying 15 different optical marker-based motion capture datasets by representing them within a common framework and parameterization. all mocap data are convereted into realistic 3D human meshes represented by a rigged body model called SMPL, which provides a standard skeletal representation as well as a fully rigged surface mesh. Warning: Only part of AMASS Database is currently supported by the loader! please refer to AMASSLoader example for more information about the currently supported datasets.
-    any human pose recorded in these motions could be reconstructed using the following parameters: sub dataset identifier, sequence id, frame id and model gender which will represent the pose, these parameters specify the exact pose to be generated based on the selected mocap dataset and motion category recorded in this dataset.
+    Any human pose recorded in these motions could be reconstructed using the following parameters: `"sub dataset identifier"`, `"sequence id"`, `"frame id"` and `"model gender"` which will represent the pose, these parameters specify the exact pose to be generated based on the selected mocap dataset and motion category recorded in this dataset.
 
     As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
 
@@ -29,7 +29,7 @@ class AMASSLoader(LoaderInterface):
     Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other
     module is loaded first in the config file.
 
-    Example 1: generate a pose of human kicking a ball (male model). by looking into different categories recorded in mocap datasets supported by AMASS database, we can see that in CMU dataset, category number 10 contains multiple trials of human kicking a ball.
+    Example 1: generate a pose of a human kicking a ball (male model). There are different categories recorded in the mocap datasets inside of the AMASS database, for the CMU dataset we can see that the category number `10` contains multiple trials of humans kicking a ball.
 
     {
         "module": "loader.AMASSLoader",
@@ -44,7 +44,7 @@ class AMASSLoader(LoaderInterface):
       },
     }
 
-    Example 2: generate a pose of human picking up golf ball (female model). from CMU dataset, choose subject number 64 which contains multiple trials of human playing golf, when frame_id is not specified, random frame will be chosen from the motion trial
+    Example 2: Generate a pose of human picking up a golf ball (female model). Here we choose from the CMU dataset the subject number 64, which contains multiple trials of a human playing golf, when the frame_id is not specified a random frame will be chosen from the motion trial.
 
     {
         "module": "loader.AMASSLoader",
@@ -163,7 +163,7 @@ class AMASSLoader(LoaderInterface):
 
         else:
             raise Exception(
-                "The requested mocap dataset is not yest supported, please choose anothe one from the following "
+                "The requested mocap dataset is not yet supported, please choose another one from the following "
                 "supported datasets: {}".format(
                     [key for key, value in AMASSLoader.supported_mocap_datasets.items()]))
 
@@ -221,7 +221,7 @@ class AMASSLoader(LoaderInterface):
     @staticmethod
     def _write_body_mesh_to_obj_file(body_represenstation, faces, data_path):
         """
-        write the generated pose as obj file on the desk.
+        Writes the generated pose as an obj file to the disk.
         :param body_represenstation: parameters generated from the BodyModel model which represent the obj pose and shape.
         :param faces: face parametric model which is used to generate the face mesh.
         :param data_path: path to the AMASS dataset root folder
@@ -287,7 +287,7 @@ class AMASSLoader(LoaderInterface):
                 nodes = material.node_tree.nodes
                 links = material.node_tree.links
 
-                # Create a principled node and set the default color
+                # Get the principled node and set the default color
                 principled_node = Utility.get_the_one_node_with_type(
                     nodes, "BsdfPrincipled")
                 # Pick random skin color value
