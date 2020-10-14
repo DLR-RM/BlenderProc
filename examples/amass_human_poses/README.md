@@ -15,7 +15,7 @@ However, we will give you a step by step explanation on how to get access.
 	1. `https://amass.is.tue.mpg.de/`
 	2. `https://mano.is.tue.mpg.de/`
 	3. `https://smpl.is.tue.mpg.de/`
-2. wait till receive the confirmation vie e-mail, once you confirm your account you can access download sections.
+2. Wait till you receive the confirmation vie e-mail, once you confirm your account you can access the download sections.
 3. download the following files which represent the body models and extract them inside folder `resources/AMASS/body_models`
 	1. from `https://smpl.is.tue.mpg.de/downloads` download the following file
 
@@ -25,12 +25,12 @@ However, we will give you a step by step explanation on how to get access.
 
 	<img src="instructions_screenshots/dmpl_model.png" width=350> 
 	
-5. explore the collection of mation capture dataset that are supported by AMASS and choose the motion capture dataset and motion sequence that you want to generate a pose from. for now, we only provide support for CMU motion capture dataset *(we're planning to support the rest of the datasets in the near future)*, so you have to choose a pose from the variaty of poses that could be extracted from this dataset.
-	1. for example, after exploring different motion sequences in CMU mocap dataset, we are interested in generating a body pose represents a person kicks a ball. (you can expore all motion sequences categories for CMU dataset through dataset website `http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%`. go to website and select all motion tab to see differnt motions)
-	2. from differnet motion categories there, we are interested in kick soccer ball category (note it is listed as subject # 10, we need this number among other identifiers to identify the pose we are interested in.)
-6. From AMASS download page `https://amass.is.tue.mpg.de/dataset`, many differnt motion capture dataset are listed, choose the one you are interested to generate a pose from and download Body data, for example we choose CMU motion capture dataset to download.
+5. Explore the collection of motion capture dataset that are supported by AMASS and choose the motion capture dataset and motion sequence that you want to generate a pose from. For now, we only provide support for CMU motion capture dataset *(we're planning to support the rest of the datasets in the near future)*, so you have to choose a pose from the variety of poses that could be extracted from this dataset.
+	1. For example, after exploring different motion sequences in CMU mocap dataset, we are now interested in generating a body pose, where a person kicks a ball. (You can explore all motion sequences categories for CMU dataset through the dataset website `http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%`. Go to the website and select all motion tab to see different motions)
+	2. From the different motion categories available there, we are interested in the "kick soccer ball" category (note it is listed as subject # 10, we need this number among other identifiers to identify the pose.)
+6. On the AMASS download page `https://amass.is.tue.mpg.de/dataset` many different motion capture dataset are listed, choose the one you are interested in to generate a pose from and download the body data. For example, we choose here the CMU motion capture dataset to download.
 	<img src="instructions_screenshots/mocap_dataset_download.png"> 
-	download the dataset and extract it under `resources/AMASS` folder.
+	Download the dataset and extract it under the `resources/AMASS` folder.
 
 
 ## Usage
