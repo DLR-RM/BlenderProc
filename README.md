@@ -40,6 +40,8 @@ python run.py config.yaml <additional arguments>
 
 This runs all modules specified in the config file in a step-by-step fashion in the configured order.
 
+Currently, BlenderProc officialy supports Linux and MacOS. There is also a community driven support for Windows.
+
 ## Functionality
 
 The following modules are already implemented and ready to use:
