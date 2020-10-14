@@ -18,11 +18,8 @@ from human_body_prior.body_model.body_model import BodyModel
 
 class AMASSLoader(LoaderInterface):
     """
-    AMASS is a large dataset of human motions. it unifies multiple datasets by fitting the SMPL body model to mocap (
-    motion capture) markers. The dataset includes SMPL-H body shapes and poses as well as DMPL soft tissue motions
-    parameters for every frame in every motion sequence for the sub datasets. any human pose recorded in these
-    motions could be reconstructed using the following parameters: sub dataset identifier, sequence id, frame id and
-    model gender which will represent the pose, these parameters specify the exact pose to be generated.
+    AMASS is a large database of human motion unifying 15 different optical marker-based motion capture datasets by representing them within a common framework and parameterization. all mocap data are convereted into realistic 3D human meshes represented by a rigged body model called SMPL, which provides a standard skeletal representation as well as a fully rigged surface mesh. Warning: Only part of AMASS Database is currently supported by the loader! please refer to AMASSLoader example for more information about the currently supported datasets.
+    any human pose recorded in these motions could be reconstructed using the following parameters: sub dataset identifier, sequence id, frame id and model gender which will represent the pose, these parameters specify the exact pose to be generated based on the selected mocap dataset and motion category recorded in this dataset.
 
     As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
 
@@ -32,18 +29,47 @@ class AMASSLoader(LoaderInterface):
     Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other
     module is loaded first in the config file.
 
+    Example 1: generate a pose of human kicking a ball (male model). by looking into different categories recorded in mocap datasets supported by AMASS database, we can see that in CMU dataset, category number 10 contains multiple trials of human kicking a ball.
+
+    {
+        "module": "loader.AMASSLoader",
+        "config": {
+        "data_path": "<args:0>",
+        "sub_dataset_id": "CMU",
+        "body_model_gender": "male",
+        "subject_id": "10",
+        "sequence_id": "1",
+        "frame_id": "600",
+        "cf_set_shading": "SMOOTH"
+      },
+    }
+
+    Example 2: generate a pose of human picking up golf ball (female model). from CMU dataset, choose subject number 64 which contains multiple trials of human playing golf, when frame_id is not specified, random frame will be chosen from the motion trial
+
+    {
+        "module": "loader.AMASSLoader",
+        "config": {
+        "data_path": "<args:0>",
+        "sub_dataset_id": "CMU",
+        "body_model_gender": "female",
+        "subject_id": "64",
+        "sequence_id": "27",
+        "frame_id": "",
+        "cf_set_shading": "SMOOTH"
+      },
+    }
+
     **Configuration**:
 
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "data_path", "The path to the AMASS Dataset folder in resources folder. Type: string. Default:
-       'resources/AMASS'." "_used_sub_dataset_id", "Identifier for the sub dataset, the dataset which the human pose
-       object should be extracted from. Type: srtring." "_used_body_model_gender", "The model gender,
-       pose will represented using male, female or neutral body shape. Type: string." "_used_subject_id",
-       "Type of motion from which the pose should be extracted, this is dataset dependent parameter. Type: int."
-       "_used_sequence_id", "Sequence id in the dataset, sequences are the motion recorded to represent certain
-       action. Type: int." "_used_frame_id", "Frame id in a selected motion sequence. Type: int."
+       "data_path", "The path to the AMASS Dataset folder in resources folder. Type: string. Default: 'resources/AMASS'."
+       "_used_sub_dataset_id", "Identifier for the sub dataset, the dataset which the human pose object should be extracted from. Type: srtring." 
+       "_used_body_model_gender", "The model gender, pose will represented using male, female or neutral body shape. Type: string." 
+       "_used_subject_id", "Type of motion from which the pose should be extracted, this is dataset dependent parameter. Type: int." 
+       "_used_sequence_id", "Sequence id in the dataset, sequences are the motion recorded to represent certain action. Type: int." 
+       "_used_frame_id", "Frame id in a selected motion sequence. Type: int."
     """
 
     # list of all possible supported mocap datasets: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced',
@@ -60,9 +86,11 @@ class AMASSLoader(LoaderInterface):
 
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
-        self._data_path = Utility.resolve_path(self.config.get_string("data_path", "resources/AMASS"))
+        self._data_path = Utility.resolve_path(
+            self.config.get_string("data_path", "resources/AMASS"))
         # Body Model Specs
-        self._used_body_model_gender = self.config.get_string("body_model_gender")
+        self._used_body_model_gender = self.config.get_string(
+            "body_model_gender")
         self._num_betas = 10  # number of body parameters
         self._num_dmpls = 8  # number of DMPL parameters
         # Pose Specs
@@ -71,16 +99,17 @@ class AMASSLoader(LoaderInterface):
         self._used_sequence_id = self.config.get_string("sequence_id")
         self._used_frame_id = self.config.get_string("frame_id")
         # Get the currently supported mocap datasets by this loader
-        taxonomy_file_path = os.path.join(self._data_path, "taxonomy.json")  # TODO: file maintaince responsibility
-        AMASSLoader._get_supported_mocap_datasets(taxonomy_file_path, self._data_path)
+        # TODO: file maintaince responsibility
+        taxonomy_file_path = os.path.join(self._data_path, "taxonomy.json")
+        AMASSLoader._get_supported_mocap_datasets(
+            taxonomy_file_path, self._data_path)
 
     @staticmethod
-    def _get_pose_coefficients(used_sub_dataset_id, used_body_model_gender, used_subject_id,
+    def _get_pose_coefficients(used_sub_dataset_id, used_subject_id,
                                used_sequence_id, used_frame_id):
         """
         Get the pose parameters used to generate mesh object represents the pose
-        :param used_sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
-        :param used_body_model_gender: The model gender, pose will represented using male, female or neutral body shape. Type: string.
+        :param used_sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from
         :param used_subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter
         :param used_frame_id: Frame id in a selected motion sequence.
         :return: body pose and shape parameters
@@ -100,21 +129,25 @@ class AMASSLoader(LoaderInterface):
                 # get the number of supported frames
                 no_of_frames_per_sequence = sequence_body_data['poses'].shape[0]
                 if used_frame_id is None or "":
-                    frame_id = random.randint(0, no_of_frames_per_sequence)  # pick a random id
+                    frame_id = random.randint(
+                        0, no_of_frames_per_sequence)  # pick a random id
                 else:
                     frame_id = int(used_frame_id)
                 # Extract Body Model coefficients
                 if frame_id in range(0, no_of_frames_per_sequence):
                     # use GPU to accelerate mesh calculations
-                    comp_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+                    comp_device = torch.device(
+                        "cuda" if torch.cuda.is_available() else "cpu")
                     # controls the global root orientation
                     # root_orient = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id + 1, :3]).to(comp_device)
                     # controls the body
-                    pose_body = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id + 1, 3:66]).to(comp_device)
+                    pose_body = torch.Tensor(
+                        sequence_body_data['poses'][frame_id:frame_id + 1, 3:66]).to(comp_device)
                     # controls the finger articulation
                     # pose_hand = torch.Tensor(sequence_body_data['poses'][frame_id:frame_id+1, 66:]).to(comp_device)
                     # controls the body shape
-                    betas = torch.Tensor(sequence_body_data['betas'][:10][np.newaxis]).to(comp_device)
+                    betas = torch.Tensor(
+                        sequence_body_data['betas'][:10][np.newaxis]).to(comp_device)
                     # controls soft tissue dynamics
                     # dmpls = torch.Tensor(sequence_body_data['dmpls'][frame_id:frame_id+1]).to(comp_device)
 
@@ -122,11 +155,11 @@ class AMASSLoader(LoaderInterface):
                 else:
                     raise Exception(
                         "Requested frame id is beyond sequence range, for the selected sequence, chooose frame id "
-                        "within the following range: [{}, {}]".format(
-                            0, no_of_frames_per_sequence))
+                        "within the following range: [{}, {}]".format(0, no_of_frames_per_sequence))
 
             else:
-                raise Exception("Invalid sequence/subject category identifiers, please choose a valid one")
+                raise Exception(
+                    "Invalid sequence/subject category identifiers, please choose a valid one")
 
         else:
             raise Exception(
@@ -144,11 +177,15 @@ class AMASSLoader(LoaderInterface):
         :param data_path: path to the AMASS dataset root folder.
         :return: parametric model instance BodyModel and face mesh values
         """
-        bm_path = os.path.join(data_path, 'body_models/smplh', used_body_model_gender, 'model.npz')  # body model
-        dmpl_path = os.path.join(data_path, 'body_models/dmpls', used_body_model_gender, 'model.npz')  # deformation model
+        bm_path = os.path.join(data_path, 'body_models/smplh',
+                               used_body_model_gender, 'model.npz')  # body model
+        dmpl_path = os.path.join(data_path, 'body_models/dmpls',
+                                 used_body_model_gender, 'model.npz')  # deformation model
         if not os.path.exists(bm_path) or not os.path.exists(dmpl_path):
-            raise Exception("Parametric Body model doesn't exist, please follow download instructions section in AMASS Example")
-        comp_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            raise Exception(
+                "Parametric Body model doesn't exist, please follow download instructions section in AMASS Example")
+        comp_device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu")
         body_model = BodyModel(bm_path=bm_path, num_betas=num_betas, num_dmpls=num_dmpls, path_dmpl=dmpl_path).to(
             comp_device)
         faces = body_model.f.detach().cpu().numpy()
@@ -168,9 +205,11 @@ class AMASSLoader(LoaderInterface):
                 for block in loaded_data:
                     if "sub_data_id" in block:
                         sub_dataset_id = block["sub_data_id"]
-                        AMASSLoader.supported_mocap_datasets[sub_dataset_id] = os.path.join(data_path, block["path"])
+                        AMASSLoader.supported_mocap_datasets[sub_dataset_id] = os.path.join(
+                            data_path, block["path"])
         else:
-            raise Exception("The taxonomy file could not be found: {}".format(taxonomy_file_path))
+            raise Exception(
+                "The taxonomy file could not be found: {}".format(taxonomy_file_path))
 
     @staticmethod
     def _clean_up_temp_dir(data_path):
@@ -197,7 +236,8 @@ class AMASSLoader(LoaderInterface):
         # Write to an .obj file
         outmesh_path = os.path.join(mesh_output_path, obj_file_name)
         with open(outmesh_path, 'w') as fp:
-            for v in body_represenstation.v[0].detach().cpu().numpy():  # convert from tensor to numpy
+            # convert from tensor to numpy
+            for v in body_represenstation.v[0].detach().cpu().numpy():
                 fp.write('v %f %f %f\n' % (v[0], v[1], v[2]))
             for f in faces + 1:  # Faces are 1-based, not 0-based in obj files
                 fp.write('f %d %d %d\n' % (f[0], f[1], f[2]))
@@ -209,8 +249,8 @@ class AMASSLoader(LoaderInterface):
         """
         # selected_obj = self._files_with_fitting_ids
         pose_body, betas = AMASSLoader._get_pose_coefficients(self._used_sub_dataset_id,
-                                                              self._used_body_model_gender,
-                                                              self._used_subject_id, self._used_sequence_id,
+                                                              self._used_subject_id,
+                                                              self._used_sequence_id,
                                                               self._used_frame_id)
         # load parametric Model
         body_model, faces = AMASSLoader._load_parametric_body_model(self._used_body_model_gender, self._num_betas,
@@ -219,7 +259,8 @@ class AMASSLoader(LoaderInterface):
         # Generate Body representations using SMPL model
         body_repr = body_model(pose_body=pose_body, betas=betas)
         # Generate .obj file represents the selected pose
-        generated_obj = AMASSLoader._write_body_mesh_to_obj_file(body_repr, faces, self._data_path)
+        generated_obj = AMASSLoader._write_body_mesh_to_obj_file(
+            body_repr, faces, self._data_path)
 
         loaded_obj = Utility.import_objects(generated_obj)
 
@@ -247,17 +288,23 @@ class AMASSLoader(LoaderInterface):
                 links = material.node_tree.links
 
                 # Create a principled node and set the default color
-                principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                principled_node = Utility.get_the_one_node_with_type(
+                    nodes, "BsdfPrincipled")
                 # Pick random skin color value
                 skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
-                skin_tone_rgb = list(int(skin_tone_hex[i:i+2], 16) for i in (0, 2, 4))
-                principled_node.inputs["Base Color"].default_value = mathutils.Vector([*skin_tone_rgb, 255]) / 255.0
+                skin_tone_rgb = list(
+                    int(skin_tone_hex[i:i+2], 16) for i in (0, 2, 4))
+                principled_node.inputs["Base Color"].default_value = mathutils.Vector(
+                    [*skin_tone_rgb, 255]) / 255.0
                 principled_node.inputs["Subsurface"].default_value = 0.2
-                principled_node.inputs["Subsurface Color"].default_value = mathutils.Vector([*skin_tone_rgb, 255]) / 255.0
+                principled_node.inputs["Subsurface Color"].default_value = mathutils.Vector(
+                    [*skin_tone_rgb, 255]) / 255.0
 
-                texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
+                texture_nodes = Utility.get_nodes_with_type(
+                    nodes, "ShaderNodeTexImage")
                 if texture_nodes and len(texture_nodes) > 1:
-                    principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                    principled_bsdf = Utility.get_the_one_node_with_type(
+                        nodes, "BsdfPrincipled")
                     # find the image texture node which is connect to alpha
                     node_connected_to_the_alpha = None
                     for node_links in principled_bsdf.inputs["Alpha"].links:
