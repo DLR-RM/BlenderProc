@@ -81,7 +81,7 @@ class AMASSLoader(LoaderInterface):
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
         self._data_path = Utility.resolve_path(
-            self.config.get_string("data_path", "resources/AMASS"))
+            self.config.get_string("data_path", os.path.join("resources", "AMASS")))
         # Body Model Specs
         self._used_body_model_gender = self.config.get_string(
             "body_model_gender")

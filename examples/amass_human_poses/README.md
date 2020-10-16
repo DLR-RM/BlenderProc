@@ -11,7 +11,7 @@ As you are required to agree to the Use Of Terms for this dataset, we can not pr
 
 However, we will give you a step by step explanation on how to get access.
 
-1. Visit the following websites, sign up as user after you agree to the terms of use.
+1. Visit the following websites and sign up as user after you agree to the terms of use on all of them separately. The first corresponds to the dataset and the other two to the parametric model to generate the mesh.
 	1. `https://amass.is.tue.mpg.de/`
 	2. `https://mano.is.tue.mpg.de/`
 	3. `https://smpl.is.tue.mpg.de/`
