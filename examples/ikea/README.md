@@ -1,6 +1,6 @@
 # IKEA 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=300>
+<img src="rendered_example.png" alt="normals and color rendering of example table" width=300>
 </p>
 
 The focus of this example is the `loader.IKEALoader`, which can be used to load objects from the [IKEA dataset](http://ikea.csail.mit.edu/).
@@ -83,11 +83,10 @@ The `obj_style` = `null` means the object does not have to belong to a specific 
    "number_of_samples": 5,
    "location": {
      "provider":"sampler.PartSphere",
-     "center": [0, 0, 0],
+     "center": [0, 0, 20],
      "radius": 8,
      "part_sphere_vector": [1, 0, 0],
-     "mode": "SURFACE",
-     "distance_above_center": 4.0
+     "mode": "SURFACE"
    },
    "rotation": {
      "format": "look_at",
@@ -98,8 +97,8 @@ The `obj_style` = `null` means the object does not have to belong to a specific 
  }
 ]}
 ```
-We sample five different camera poses, where the location is on the upper hemisphere of a sphere located `4.0m` above the center with a radius of `8`. 
-The camera positions are sampled from the upper hemisphere to ensure that their view is not "below" the object, which is specifically important for tables.   
+For sampling camera poses we used the ``sampler.PartSphere`` which uses only the upper half of the sphere cut along the x-axis (defined by `part_sphere_vector`). 
+The center of the sphere is moved in z-direction and camera positions are sampled from the upper hemisphere to ensure that their view is not "below" the object, which is specifically important for tables.   
 Each cameras rotation is computed to look directly at a sampled point of interest ``POI`` of the object and the camera faces upwards in Z direction.
 
 ## More examples

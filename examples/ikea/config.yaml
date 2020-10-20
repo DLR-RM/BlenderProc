@@ -44,11 +44,10 @@
           "number_of_samples": 5,
           "location": {
             "provider":"sampler.PartSphere",
-            "center": [0, 0, 0],
+            "center": [0, 0, 20],
             "radius": 8,
             "part_sphere_vector": [1, 0, 0],
-            "mode": "SURFACE",
-            "distance_above_center": 4.0
+            "mode": "SURFACE"
           },
           "rotation": {
             "format": "look_at",
