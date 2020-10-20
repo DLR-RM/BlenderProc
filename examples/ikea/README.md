@@ -1,0 +1,109 @@
+# IKEA 
+<p align="center">
+<img src="rendering.jpg" alt="Front readme image" width=300>
+</p>
+
+The focus of this example is the `loader.IKEALoader`, which can be used to load objects from the [IKEA dataset](http://ikea.csail.mit.edu/).
+The IKEA dataset consists of 218 3D models of IKEA furniture collected from Google 3D Warehouse. <br>
+If you use this dataset please cite <br>
+> ```
+>@article{lpt2013ikea,
+>   title={{Parsing IKEA Objects: Fine Pose Estimation}},
+>   author={Joseph J. Lim and Hamed Pirsiavash and Antonio Torralba},
+>   journal={ICCV},
+>   year={2013}
+>}
+
+
+A script to download the .obj files is provided in the [scripts folder](../../scripts).
+
+## Usage
+
+Execute in the BlenderProc main directory:
+
+```
+python run.py examples/pix3d/config.yaml <PATH_TO_Pix3D> examples/pix3d/output
+``` 
+
+* `examples/pix3d/config.yaml`: path to the configuration file with pipeline configuration.
+* `<PATH_TO_Pix3D>`: path to the downloaded pix3d dataset, get it [here](http://pix3d.csail.mit.edu/) 
+* `examples/pix3d/output`: path to the output directory.
+
+## Visualization
+
+In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
+
+```
+python scripts/visHdf5Files.py examples/ikea/output/*.hdf5
+``` 
+
+## Steps
+
+* The IKEALoader loads all the object paths with the type and style specified in the config file.
+* If there are multiple options it picks one randomly or if style or type is not specified it picks one randomly.
+* The selected object is loaded.  
+ 
+
+## Config file
+
+### Global
+
+```yaml
+"module": "main.Initializer",
+"config": {
+  "global": {
+    "output_dir": "<args:1>",
+  }
+}
+```
+
+The same as in the basic example.
+
+### IKEALoader 
+
+```yaml
+"module": "loader.IKEALoader",
+"config": {
+  "data_dir": "<args:0>",
+  "obj_type": "table",
+  "obj_style": null,
+}
+```
+This module loads an IKEA Object, it only needs the path to the directory of the dataset, which is saved in `data_dir`. <br>
+The `obj_type` = `table` means an object of type 'table' will be loaded. <br>
+The `obj_style` = `null` means the object does not have to belong to a specific IKEA product series (e.g. HEMNES)
+
+### CameraSampler
+
+```yaml
+"module": "camera.CameraSampler",
+"config": {
+ "cam_poses": [
+ {
+   "number_of_samples": 5,
+   "location": {
+     "provider":"sampler.PartSphere",
+     "center": [0, 0, 0],
+     "radius": 8,
+     "part_sphere_vector": [1, 0, 0],
+     "mode": "SURFACE",
+     "distance_above_center": 4.0
+   },
+   "rotation": {
+     "format": "look_at",
+     "value": {
+       "provider": "getter.POI"
+     }
+   }
+ }
+]}
+```
+We sample five different camera poses, where the location is on the upper hemisphere of a sphere located `4.0m` above the center with a radius of `8`. 
+The camera positions are sampled from the upper hemisphere to ensure that their view is not "below" the object, which is specifically important for tables.   
+Each cameras rotation is computed to look directly at a sampled point of interest ``POI`` of the object and the camera faces upwards in Z direction.
+
+## More examples
+
+* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
+* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
+* [AMASS_human_poses](../amass_human_poses): More on sampling human motion capture.
