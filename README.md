@@ -16,6 +16,7 @@ Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating i
 </p>
 </a>
 
+There is also an extended introduction video to BlenderProc, it covers the basics and a bit of the background story and how it all started. It can be found [here](https://www.youtube.com/watch?v=1AvY_iS6xQA).
 
 ## Contents
 
