@@ -70,7 +70,7 @@ class IKEALoader(LoaderInterface):
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_type in key]
         if len(object_lst) == 0:
-            print('WARNING: There were no objects found macthing the type {}'.format(obj_type))
+            print('There were no objects found macthing the type {}'.format(obj_type))
         return object_lst
 
     def _get_object_by_style(self, obj_style):
@@ -81,7 +81,7 @@ class IKEALoader(LoaderInterface):
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_style in key.lower()]
         if len(object_lst) == 0:
-            print('WARNING: There were no objects found macthing the style {}'.format(obj_style))
+            print('There were no objects found macthing the style {}'.format(obj_style))
         return object_lst
 
     def run(self):
@@ -90,26 +90,26 @@ class IKEALoader(LoaderInterface):
             If there are multiple options it picks one randomly or if style or type is None it picks one randomly.
             Loads the selected object via file path.
         """
-        # List of object names with type 'table': to be specified in config file for camera sampling
-        pose_above_object_list = [name.split('/')[-1] for name in self._get_object_by_type('table')]
-        print(pose_above_object_list)
-
         if self._obj_type is not None and self._obj_style is not None:
             object_lst = [obj[0] for (key, obj) in self._obj_dict.items() \
                           if self._obj_style in key.lower() and self._obj_type in key]
             if not object_lst:
                 selected_obj = random.choice(self._obj_dict.get(random.choice(list(self._obj_dict.keys()))))
-                print("WARNING: could not find object of type {} and style {} \n Selecting random object...".format(
+                print("Could not find object of type {} and style {} \n Selecting random object...".format(
                     self._obj_type, self._obj_style))
             else:
                 # Multiple objects with same type and style are possible: select randomly from list.
                 selected_obj = random.choice(object_lst)
         elif self._obj_type is not None:
-            selected_obj = random.choice(self._get_object_by_type(self._obj_type))
+            object_lst = self._get_object_by_type(self._obj_type)
+            selected_obj = random.choice(object_lst)
         elif self._obj_style is not None:
-            selected_obj = random.choice(self._get_object_by_style(self._obj_style))
+            object_lst = self._get_object_by_style(self._obj_style)
+            selected_obj = random.choice(object_lst)
         else:
-            selected_obj = random.choice(self._obj_dict.get(random.choice(list(self._obj_dict.keys()))))
+            random_key = random.choice(list(self._obj_dict.keys()))
+            # One key can have multiple object files as value: select randomly from list.
+            selected_obj = random.choice(self._obj_dict.get(random_key))
 
         print("Selected object: ", os.path.basename(selected_obj))
         loaded_obj = Utility.import_objects(selected_obj)
