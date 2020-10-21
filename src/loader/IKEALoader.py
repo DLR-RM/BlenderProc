@@ -97,7 +97,7 @@ class IKEALoader(LoaderInterface):
         if self._obj_type is not None and self._obj_style is not None:
             object_lst = [obj[0] for (key, obj) in self._obj_dict.items() \
                           if self._obj_style in key.lower() and self._obj_type in key]
-            if len(object_lst) == 0:
+            if not object_lst:
                 selected_obj = random.choice(self._obj_dict.get(random.choice(list(self._obj_dict.keys()))))
                 print("WARNING: could not find object of type {} and style {} \n Selecting random object...".format(
                     self._obj_type, self._obj_style))
