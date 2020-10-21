@@ -22,12 +22,12 @@ A script to download the .obj files is provided in the [scripts folder](../../sc
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/pix3d/config.yaml <PATH_TO_Pix3D> examples/pix3d/output
+python run.py examples/ikea/config.yaml <PATH_TO_IKEA> examples/ikea/output
 ``` 
 
-* `examples/pix3d/config.yaml`: path to the configuration file with pipeline configuration.
-* `<PATH_TO_Pix3D>`: path to the downloaded pix3d dataset, get it [here](http://pix3d.csail.mit.edu/) 
-* `examples/pix3d/output`: path to the output directory.
+* `examples/ikea/config.yaml`: path to the configuration file with pipeline configuration.
+* `<PATH_TO_IKEA>`: path to the downloaded IKEA dataset, see the [scripts folder](../../scripts) for the download script. 
+* `examples/ikea/output`: path to the output directory.
 
 ## Visualization
 
@@ -45,19 +45,6 @@ python scripts/visHdf5Files.py examples/ikea/output/*.hdf5
  
 
 ## Config file
-
-### Global
-
-```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:1>",
-  }
-}
-```
-
-The same as in the basic example.
 
 ### IKEALoader 
 
