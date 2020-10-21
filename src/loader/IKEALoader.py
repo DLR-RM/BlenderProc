@@ -111,6 +111,6 @@ class IKEALoader(LoaderInterface):
         else:
             selected_obj = random.choice(self._obj_dict.get(random.choice(list(self._obj_dict.keys()))))
 
-        print("Selected object: ", selected_obj.split("/")[-1])
+        print("Selected object: ", os.path.basename(selected_obj))
         loaded_obj = Utility.import_objects(selected_obj)
         self._set_properties(loaded_obj)
