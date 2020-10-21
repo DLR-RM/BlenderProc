@@ -40,7 +40,7 @@ python scripts/visHdf5Files.py examples/ikea/output/*.hdf5
 ## Steps
 
 * The IKEALoader loads all the object paths with the type and style specified in the config file.
-* If there are multiple options it picks one randomly or if style or type is not specified it picks one randomly.
+* If there are multiple options it picks one randomly or if the style or the type is not specified it picks one randomly.
 * The selected object is loaded.  
  
 
