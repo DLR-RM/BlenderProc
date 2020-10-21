@@ -26,7 +26,7 @@ class IKEALoader(LoaderInterface):
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
 
-        self._data_dir = Utility.resolve_path(self.config.get_string("data_dir", "resources/IKEA"))
+        self._data_dir = Utility.resolve_path(self.config.get_string("data_dir", os.path.join("resources", "IKEA")))
 
         self._obj_dict = dict()
         self._generate_object_dict()
