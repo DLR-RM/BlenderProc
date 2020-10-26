@@ -1,5 +1,6 @@
 import os
 import random
+import warnings
 
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
@@ -70,7 +71,7 @@ class IKEALoader(LoaderInterface):
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_type in key]
         if len(object_lst) == 0:
-            print('There were no objects found macthing the type {}'.format(obj_type))
+            warnings.warn("There were no objects found matching the type: {}.".format(obj_type), category=Warning)
         return object_lst
 
     def _get_object_by_style(self, obj_style):
@@ -81,7 +82,7 @@ class IKEALoader(LoaderInterface):
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_style in key.lower()]
         if len(object_lst) == 0:
-            print('There were no objects found macthing the style {}'.format(obj_style))
+            warnings.warn("There were no objects found matching the style: {}.".format(obj_style), category=Warning)
         return object_lst
 
     def run(self):
@@ -95,8 +96,8 @@ class IKEALoader(LoaderInterface):
                           if self._obj_style in key.lower() and self._obj_type in key]
             if not object_lst:
                 selected_obj = random.choice(self._obj_dict.get(random.choice(list(self._obj_dict.keys()))))
-                print("Could not find object of type {} and style {} \n Selecting random object...".format(
-                    self._obj_type, self._obj_style))
+                warnings.warn("Could not find object of type: {}, and style: {}. Selecting random object...".format(
+                    self._obj_type, self._obj_style), category=Warning)
             else:
                 # Multiple objects with same type and style are possible: select randomly from list.
                 selected_obj = random.choice(object_lst)
