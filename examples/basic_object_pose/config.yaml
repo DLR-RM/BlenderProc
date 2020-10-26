@@ -12,14 +12,14 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:2>"
+          "output_dir": "<args:1>"
         }
       }
     },
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>"
+        "path": "<args:0>"
       },
     },
     {
@@ -28,14 +28,14 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "name" : "Suzanne",
             "type": "MESH"
           }
         },
-        "matrix_world": [[0.9989916682243347, -0.03249780833721161, 0.0309765487909317, 0.14350244402885437],
-        [-0.04397217929363251, -0.8474851250648499, 0.5289946794509888, -0.2128345370292663],
-        [0.00906099658459425, -0.529823362827301, -0.8480595946311951, 5.43374633789062],
-        [0.,0.,0.,1.]],
+      "matrix_world":[[0.331458, -0.6064861, 0.7227108, 0],
+        [-0.9415833, -0.2610635, 0.2127592, 0],
+        [0.05963787, -0.7510136, -0.6575879, 0],
+        [-0.04474526765165, 0.08970402424862098, 0.6823395750305427, 1]],
+       "scale": [0.001, 0.001, 0.001], 
       },
     },
     {
@@ -53,13 +53,12 @@
     {
       "module": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>",
-        "file_format": "cam2world_matrix",
+          #"path": "<args:0>",
+          #"file_format": "cam2world_matrix",
         "default_cam_param": {
-          "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
+          "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
           "resolution_x": 1280,
-          "resolution_y": 720,
-          "fov": 1,
+          "resolution_y": 720
         }
       }
     },
@@ -69,9 +68,6 @@
         "output_key": "colors",
         "samples": 350,
         "render_normals": True,
-        "normals_output_key": "normals",
-        "render_distance": True,
-        "distance_output_key": "distance"
       }
     },
     {
