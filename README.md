@@ -39,6 +39,8 @@ An exemplary `config.yaml` can be found in the respective example folder.
 python run.py config.yaml <additional arguments>
 ```
 
+Make sure that the `USER` is set in your environment variables (especially on Windows), which is required to set up blender in the `config.yaml`.
+
 This runs all modules specified in the config file in a step-by-step fashion in the configured order.
 
 Currently, BlenderProc officialy supports Linux and MacOS. There is also a community driven support for Windows.
