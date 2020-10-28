@@ -38,8 +38,8 @@ if "custom_blender_path" not in setup_config:
     if "blender_install_path" in setup_config:
         blender_install_path = os.path.expanduser(setup_config["blender_install_path"])
         if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
-            user_name = os.getenv("USER")
-            home_path = os.getenv("HOME")
+            user_name = os.getenv("USERNAME") if platform == "win32" else os.getenv("USER")
+            home_path = os.getenv("USERPROFILE") if platform == "win32" else os.getenv("HOME")
             print("Warning: Changed install path from {}... to {}..., there is no /home_local/ "
                   "on this machine.".format(join("/home_local", user_name), home_path))
             # Replace the seperator from '/' to the os-specific one
