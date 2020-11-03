@@ -58,8 +58,8 @@ class IKEALoader(LoaderInterface):
             :param path: (str) path to object
             :return: (boolean) texture file exists
         """
-        name = path.split("/")[-1].split(".")[0]
-        obj_dir = "/".join(path.split("/")[:-1])
+        name = os.path.basename(path).split(".")[0]
+        obj_dir = os.path.dirname(path)
         mtl_path = os.path.join(obj_dir, name + ".mtl")
         return os.path.exists(mtl_path)
 
@@ -70,7 +70,7 @@ class IKEALoader(LoaderInterface):
             :return: (list) list of available objects with specified type
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_type in key]
-        if len(object_lst) == 0:
+        if not object_lst:
             warnings.warn("There were no objects found matching the type: {}.".format(obj_type), category=Warning)
         return object_lst
 
@@ -81,7 +81,7 @@ class IKEALoader(LoaderInterface):
             :return: (list) list of available objects with specified style
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_style in key.lower()]
-        if len(object_lst) == 0:
+        if not object_lst:
             warnings.warn("There were no objects found matching the style: {}.".format(obj_style), category=Warning)
         return object_lst
 
