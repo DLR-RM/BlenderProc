@@ -1,11 +1,12 @@
 import os
+import math
 import uuid
 import bpy
 import time
 import inspect
 import importlib
 from src.utility.Config import Config
-from mathutils import Vector
+from mathutils import Matrix, Vector
 import numpy as np
 
 class Utility:
@@ -86,6 +87,36 @@ class Utility:
             return Vector(output)
         else:
             return output
+
+    @staticmethod
+    def transform_matrix_to_blender_coord_frame(matrix, source_frame):
+        """ Transforms the given homog into the blender coordinate frame.
+
+        :param matrix: The matrix to convert in form of a mathutils.Matrix.
+        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame of the
+        source frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+        :return: The converted point is in form of a mathutils.Matrix.
+        """
+        assert len(source_frame) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
+        output = np.eye(4)
+        for i, axis in enumerate(source_frame):
+            axis = axis.upper()
+
+            if axis.endswith("X"):
+                output[:4,0] = matrix.col[0]
+            elif axis.endswith("Y"):
+                output[:4,1] = matrix.col[1]
+            elif axis.endswith("Z"):
+                output[:4,2] = matrix.col[2]
+            else:
+                raise Exception("Invalid axis: " + axis)
+
+            if axis.startswith("-"):
+                output[:3, i] *= -1
+
+        output[:4,3] = matrix.col[3]
+        output = Matrix(output)
+        return output
 
     @staticmethod
     def resolve_path(path):

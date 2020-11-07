@@ -217,6 +217,7 @@ class CameraInterface(Module):
                 rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
 
             cam2world_matrix = Matrix.Translation(Vector(position)) @ rotation_matrix.to_4x4()
-        else:
+        else: 
             cam2world_matrix = Matrix(np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32))
+            cam2world_matrix = Utility.transform_matrix_to_blender_coord_frame(cam2world_matrix, self.source_frame)
         return cam2world_matrix
