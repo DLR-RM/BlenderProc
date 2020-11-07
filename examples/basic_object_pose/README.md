@@ -8,7 +8,8 @@ In this example we demonstrate a basic functionality of BlenderProc.
 
 ## Usage
 
-Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically downloaded blender 2.83, see the config-file if you want to change the installation path:
+Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically
+downloaded blender, see the config-file if you want to change the installation path:
 
 ```
 python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/camera_positions examples/basic_object_pose/scene.obj examples/basic_object_pose/output

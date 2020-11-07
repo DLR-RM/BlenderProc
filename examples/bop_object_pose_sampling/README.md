@@ -56,6 +56,7 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
     {
       "name": "loader.BopLoader",
       "config": {
+        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/<args:1>",
         "mm2m": True,
         "split": "val",
