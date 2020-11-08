@@ -23,19 +23,20 @@
       },
     },
     {
-     "module": "manipulators.EntityManipulator",
+      "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "type": "MESH"
+            "name": 'Suzanne',
+            "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera
           }
         },
-        "matrix_world":[[0.331458, -0.6064861, 0.7227108, 0],
-            [-0.9415833, -0.2610635, 0.2127592, 0],
-            [0.05963787, -0.7510136, -0.6575879, 0],
-            [-0.04474526765165, 0.08970402424862098, 0.6823395750305427, 1]],
-        "scale": [0.001, 0.001, 0.001], 
+
+        "matrix_world":[[0.9933392405509949, -0.10091305524110794, 0.05562061816453934, 0],
+        [0.058787018060684204, 0.028677593916654587, -0.9978585243225098, 0],
+        [ 0.09910188615322113, 0.9944818615913391, 0.03441895917057991, 0],
+        [ 0.07594418525695801, 0.6459312438964844, -9.357473373413086, 1.0]], 
       },
     },
     {
@@ -55,7 +56,6 @@
       "config": {
         "path": "<args:2>",
         "file_format": "cam2world_matrix",
-        "source_frame": ["X", "-Y", "-Z"],
         "default_cam_param": {
           "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
           "resolution_x": 1280,
