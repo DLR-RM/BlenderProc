@@ -85,7 +85,7 @@ we change some of the camera parameters.
 ```
 
 * The camera pose is defined in a file whose path is again given via the command line (`examples/basic_object_pose/camera_positions` - contains 1 cam pose).
-* The file format is the 16 values of the camera psoe 4x4 matrix, space separated.
+* The file format is the 16 values of the camera pose 4x4 matrix, space separated.
 * The `default_cam_param` is where we could optionally set the camera parameters e.g. intrinsics matrix "cam_K", fov, resolution.
 * This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
