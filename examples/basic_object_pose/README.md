@@ -12,14 +12,15 @@ Execute in the BlenderProc main directory, if this is the first time BlenderProc
 downloaded blender, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/camera_positions examples/basic_object_pose/scene.obj examples/basic_object_pose/output
+python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/camera_positions examples/basic_object_pose/obj_000004.ply hb examples/basic_object_pose/output
 ```
 
 * `examples/basic_object_pose/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `examples/basic_object_pose/camera_positions`: text file with parameters of camera pose.
-* `examples/basic_object_pose/scene.obj`: path to the object file with the basic scene.
+* `examples/basic_object_pose/obj_000004.ply`: path to the object file with a basic object from the `hb` dataset.
+* `hb` needed for the `bop_writer` module.
 * `examples/basic_object_pose/output`: path to the output directory.
 
 ## Visualization
@@ -32,11 +33,13 @@ python scripts/visHdf5Files.py examples/basic_object_pose/output/0.hdf5
 
 ## Steps
 
-* Loads `scene.obj`: `loader.ObjectLoader` module.
+* Loads `obj_00004.ply`: `loader.ObjectLoader` module.
 * Selects objects and change their pose based on the condition: `manipulators.EntityManipulator` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
 * Renders rgb, normals and distance: `renderer.RgbRenderer` module.
+* Writes the data in `bop_dataset` format: `writer.BopWriter` module, this is explained in more details in the bop
+  examples.
 * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
@@ -44,23 +47,40 @@ python scripts/visHdf5Files.py examples/basic_object_pose/output/0.hdf5
 The only difference between this example and the basic example is that we change the object pose after we load it, and
 we change some of the camera parameters.
 
+### ObjectLoader
+```
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:1>", 
+        "add_properties": {
+            "cp_bop_dataset_name": "hb",
+            "cp_category_id": "1"
+        }, 
+      },
+    },
+```
+* Load an object while adding custom properties to it, since this object is from a `bop` datase and we use the
+  `bop_writer` later in the `config`, adding both `bop_dataset_name` and `category_id` is required for it run, further
+  explination of the `bop_writer` and `bop` datasets are provided in the `bop` examples.
+
 ### EntityManipulator
 
 ```yaml
     {
-     "module": "manipulators.EntityManipulator",
+      "module": "manipulators.EntityManipulator",
       "config": {
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "name" : "Suzanne",
-            "type": "MESH"
+            "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera
           }
         },
-        "matrix_world": [[0.9989916682243347, -0.03249780833721161, 0.0309765487909317, 0.14350244402885437],
-        [-0.04397217929363251, -0.8474851250648499, 0.5289946794509888, -0.2128345370292663],
-        [0.00906099658459425, -0.529823362827301, -0.8480595946311951, 5.43374633789062],
-        [0.,0.,0.,1.]],
+        "matrix_world":
+            [[0.331458, -0.6064861, 0.7227108, 0],
+            [-0.9415833, -0.2610635, 0.2127592, 0],
+            [ 0.05963787, -0.7510136, -0.6575879, 0],
+            [ -44.74526765165741, 89.70402424862098, 682.3395750305427, 1.0]],
       },
     },
 ```
@@ -75,17 +95,19 @@ we change some of the camera parameters.
       "config": {
         "path": "<args:0>",
         "file_format": "cam2world_matrix",
+        "source_frame": ["X", "-Y", "-Z"],
         "default_cam_param": {
-          "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
-          "resolution_x": 1280,
-          "resolution_y": 720,
+          "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
+          "resolution_x": 640,
+          "resolution_y": 480
         }
       }
     },
 ```
 
 * The camera pose is defined in a file whose path is again given via the command line (`examples/basic_object_pose/camera_positions` - contains 1 cam pose).
-* The file format is the 16 values of the camera pose 4x4 matrix, space separated.
+* The file format is the 16 values of the camera pose 4x4 matrix, space separated, in this case it is just the identity.
+* Change the camera source frame to match blender frame (this changes from OpenCV coordinate frame to blender's).
 * The `default_cam_param` is where we could optionally set the camera parameters e.g. intrinsics matrix "cam_K", fov, resolution.
 * This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
