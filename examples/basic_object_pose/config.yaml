@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <dataset_name> <output_dir>
+# Args: <obj_file> <dataset_name> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -13,14 +13,14 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:3>"
+          "output_dir": "<args:2>"
         }
       }
     },
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>", 
+        "path": "<args:0>", 
         "add_properties": {
             "cp_bop_dataset_name": "hb",
             "cp_category_id": "1"
@@ -58,8 +58,9 @@
     {
       "module": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>",
-        "file_format": "cam2world_matrix",
+        "cam_poses": [
+            "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+        ], 
         "source_frame": ["X", "-Y", "-Z"],
         "default_cam_param": {
           "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
@@ -79,7 +80,7 @@
     {
       "module": "writer.BopWriter",
       "config": {
-        "dataset": "<args:2>",
+        "dataset": "<args:1>",
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}

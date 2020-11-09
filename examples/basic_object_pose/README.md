@@ -12,13 +12,12 @@ Execute in the BlenderProc main directory, if this is the first time BlenderProc
 downloaded blender, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/camera_positions examples/basic_object_pose/obj_000004.ply hb examples/basic_object_pose/output
+python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/obj_000004.ply hb examples/basic_object_pose/output
 ```
 
 * `examples/basic_object_pose/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
-* `examples/basic_object_pose/camera_positions`: text file with parameters of camera pose.
 * `examples/basic_object_pose/obj_000004.ply`: path to the object file with a basic object from the `hb` dataset.
 * `hb` needed for the `bop_writer` module.
 * `examples/basic_object_pose/output`: path to the output directory.
@@ -52,7 +51,7 @@ we change some of the camera parameters.
     {
       "module": "loader.ObjectLoader",
       "config": {
-        "path": "<args:1>", 
+        "path": "<args:0>", 
         "add_properties": {
             "cp_bop_dataset_name": "hb",
             "cp_category_id": "1"
@@ -93,8 +92,9 @@ we change some of the camera parameters.
     {
       "module": "camera.CameraLoader",
       "config": {
-        "path": "<args:0>",
-        "file_format": "cam2world_matrix",
+        "cam_poses": [
+            "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+        ], 
         "source_frame": ["X", "-Y", "-Z"],
         "default_cam_param": {
           "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
@@ -105,8 +105,7 @@ we change some of the camera parameters.
     },
 ```
 
-* The camera pose is defined in a file whose path is again given via the command line (`examples/basic_object_pose/camera_positions` - contains 1 cam pose).
-* The file format is the 16 values of the camera pose 4x4 matrix, space separated, in this case it is just the identity.
+* The camera pose is defined by its world matrix, in this case it is just the identity.
 * Change the camera source frame to match blender frame (this changes from OpenCV coordinate frame to blender's).
 * The `default_cam_param` is where we could optionally set the camera parameters e.g. intrinsics matrix "cam_K", fov, resolution.
 * This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
