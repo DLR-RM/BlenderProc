@@ -1,49 +1,10 @@
 import bpy
 import bmesh
+import mathutils
 from mathutils import Vector
 
 import numpy as np
 
-
-def triangulate(obj, transform=True, triangulate=True, apply_modifiers=False):
-    """
-    :obj: object to triangulate, must be a mesh
-    :transform: transform to world coordinates if True
-    :triangulate: perform triangulation if True
-    :apply_modifiers: applies modifiers if any and True
-    Returns a transformed, triangulated copy of the mesh (much smaller in size and can be used for quicker maths)
-    """
-    assert(obj.type == 'MESH')
-
-    if apply_modifiers and obj.modifiers:
-        me = obj.to_mesh(bpy.context.scene, True, 'PREVIEW', calc_tessface=False)
-        bm = bmesh.new()
-        bm.from_mesh(me)
-        bpy.data.meshes.remove(me)
-    else:
-        me = obj.data
-        if obj.mode == 'EDIT':
-            bm_orig = bmesh.from_edit_mesh(me)
-            bm = bm_orig.copy()
-        else:
-            bm = bmesh.new()
-            bm.from_mesh(me)
-
-    # Remove custom data layers to save memory
-    for elem in (bm.faces, bm.edges, bm.verts, bm.loops):
-        for layers_name in dir(elem.layers):
-            if not layers_name.startswith("_"):
-                layers = getattr(elem.layers, layers_name)
-                for layer_name, layer in layers.items():
-                    layers.remove(layer)
-
-    if transform:
-        bm.transform(obj.matrix_world)
-
-    if triangulate:
-        bmesh.ops.triangulate(bm, faces=bm.faces)
-
-    return bm
 
 def local_to_world(cords, world):
     """
@@ -53,6 +14,7 @@ def local_to_world(cords, world):
     """
     return [world @ Vector(cord) for cord in cords]
 
+
 def get_bounds(obj):
     """
     :param obj: a mesh object
@@ -60,7 +22,8 @@ def get_bounds(obj):
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
-def check_bb_intersection(obj1,obj2):
+
+def check_bb_intersection(obj1, obj2):
     """
     Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
         The surrounding/including axis-aligned bounding box is calculated and used to check the intersection
@@ -70,6 +33,7 @@ def check_bb_intersection(obj1,obj2):
     returns a boolean
     """
     b1w = get_bounds(obj1)
+
     def min_and_max_point(bb):
         """
         Find the minimum and maximum point of the bounding box
@@ -78,6 +42,7 @@ def check_bb_intersection(obj1,obj2):
         """
         values = np.array(bb)
         return np.min(values, axis=0), np.max(values, axis=0)
+
     # get min and max point of the axis-aligned bounding box
     min_b1, max_b1 = min_and_max_point(b1w)
     b2w = get_bounds(obj2)
@@ -91,91 +56,89 @@ def check_bb_intersection(obj1,obj2):
         def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
             # returns true if the min and max values are overlapping
             return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
+
         collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
     return collide
 
 
-def check_intersection(obj, obj2, cache = None):
+def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
     """
-    Checks if the two objects are colliding, the code is from:
-        https://blender.stackexchange.com/questions/9073/how-to-check-if-two-meshes-intersect-in-python
+    Checks if the two objects are intersecting.
 
-    The check is performed along the edges from the object, which has less edges.
+    This will use BVH trees to check whether the objects are overlapping.
+
+    It is further also checked if one object is completely inside the other.
+    This check requires that both objects are watertight, have correct normals and are coherent.
+    If this is not the case it can be disabled via the parameter skip_inside_check.
 
     :param obj1: object 1 to check for intersection, must be a mesh
     :param obj2: object 2 to check for intersection, must be a mesh
-    returns a boolean and the cache of the objects, which already have been triangulated
+    :param skip_inside_check: Disables checking whether one object is completely inside the other.
+    :return: True, if they are intersecting
     """
-    assert(obj != obj2)
 
-    if cache is None:
-        cache = {}
-    
-    assert(type(cache) == type({})) # cache must be a dict
+    if bvh_cache is None:
+        bvh_cache = {}
 
-    # Triangulate (Load from cache if available)
-    if obj.name in cache:
-        bm = cache[obj.name]
+    # create bvhtree for obj1
+    if obj1.name not in bvh_cache:
+        obj1_BVHtree = create_bvh_tree_for_object(obj1)
+        bvh_cache[obj1.name] = obj1_BVHtree
     else:
-        bm = triangulate(obj, transform=True, triangulate=True)
-        cache[obj.name] = bm
+        obj1_BVHtree = bvh_cache[obj1.name]
 
-    if obj2.name in cache:
-        bm2 = cache[obj2.name]
+    # create bvhtree for obj2
+    if obj2.name not in bvh_cache:
+        obj2_BVHtree = create_bvh_tree_for_object(obj2)
+        bvh_cache[obj2.name] = obj2_BVHtree
     else:
-        bm2 = triangulate(obj2, transform=True, triangulate=True)
-        cache[obj2.name] = bm2
+        obj2_BVHtree = bvh_cache[obj2.name]
 
-    # If bm has more edges, use bm2 instead for looping over its edges
-    # (so we cast less rays from the simpler object to the more complex object)
-    if len(bm.edges) > len(bm2.edges):
-        bm2, bm = bm, bm2
+    # Check whether both meshes intersect
+    inter = len(obj1_BVHtree.overlap(obj2_BVHtree)) > 0
 
-    # Create a real mesh 
-    scene = bpy.context.scene
-    me_tmp = bpy.data.meshes.new(name="~temp~")
-    bm2.to_mesh(me_tmp)
-    bm2.free()
-    obj_tmp = bpy.data.objects.new(name=me_tmp.name, object_data=me_tmp)
-    scene.collection.objects.link(obj_tmp)
-    bpy.context.view_layer.update()
-    
-    # this ray_cast is performed in object coordinates, but both objects were moved in world coordinates
-    # so the world_matrix is the identity matrix
-    ray_cast = obj_tmp.ray_cast
+    # Optionally check whether obj2 is contained in obj1
+    if not inter and not skip_inside_check:
+        inter = is_point_inside_object(obj1, obj1_BVHtree, obj2.matrix_world @ obj2.data.vertices[0].co)
 
-    intersect = False
+    # Optionally check whether obj1 is contained in obj2
+    if not inter and not skip_inside_check:
+        inter = is_point_inside_object(obj2, obj2_BVHtree, obj1.matrix_world @ obj1.data.vertices[0].co)
 
-    EPS_NORMAL = 0.000001
-    EPS_CENTER = 0.01  # should always be bigger
+    return inter, bvh_cache
 
-    #for ed in me_tmp.edges:
-    for ed in bm.edges:
-        v1, v2 = ed.verts
 
-        # setup the edge with an offset
-        co_1 = v1.co.copy()
-        co_2 = v2.co.copy()
-        co_mid = (co_1 + co_2) * 0.5
-        no_mid = (v1.normal + v2.normal).normalized() * EPS_NORMAL
-        # interpolation between co_1 and co_mid, with a small value to get away from the original co_1
-        # plus the average direction of the normal to get away from the object itself
-        co_1 = co_1.lerp(co_mid, EPS_CENTER) + no_mid
-        co_2 = co_2.lerp(co_mid, EPS_CENTER) + no_mid
+def create_bvh_tree_for_object(obj):
+    """ Creates a fresh BVH tree for the given object
 
-        t, co, no, index = ray_cast(co_1, (co_2 - co_1).normalized(), distance=ed.calc_length())
-        if index != -1:
-            intersect = True
-            break
+    :param obj: The object
+    :return: The BVH tree
+    """
+    bm = bmesh.new()
+    bm.from_mesh(obj.data)
+    bm.transform(obj.matrix_world)
+    obj_BVHtree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+    return obj_BVHtree
 
-    scene.collection.objects.unlink(obj_tmp)
-    bpy.data.objects.remove(obj_tmp)
-    bpy.data.meshes.remove(me_tmp)
 
-    # new method to udpate scene
-    bpy.context.view_layer.update()
+def is_point_inside_object(obj, obj_BVHtree, point):
+    """ Checks whether the given point is inside the given object.
 
-    return intersect, cache
+    This only works if the given object is watertight and has correct normals
+
+    :param obj: The object
+    :param obj_BVHtree: A bvh tree of the object
+    :param point: The point to check
+    :return: True, if the point is inside the object
+    """
+    # Look for closest point on object
+    nearest, normal, _, _ = obj_BVHtree.find_nearest(point)
+    # Compute direction
+    p2 = nearest - point
+    # Compute dot production between direction and normal vector
+    a = p2.normalized().dot((obj.rotation_euler.to_matrix() @ normal).normalized())
+    return a >= 0.0
+
 
 def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
     """
@@ -187,6 +150,7 @@ def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
         max_val = np.max([list(uv_coords.uv) for uv_coords in layer.data])
         return max_val > 1e-7
     return False
+
 
 def vector_to_euler(vector, vector_type):
     """
@@ -205,6 +169,7 @@ def vector_to_euler(vector, vector_type):
         raise Exception("Unknown vector type: " + vector_type)
 
     return euler_angles
+
 
 def add_object_only_with_vertices(vertices, name='NewVertexObject'):
     """
@@ -229,6 +194,7 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
     bm.to_mesh(mesh)
     bm.free()
     return obj
+
 
 def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='NewDirectionObject'):
     """
@@ -295,12 +261,14 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     bm.free()
     return obj
 
+
 def get_all_mesh_objects():
     """
     Returns a list of all mesh objects in the scene
     :return: a list of all mesh objects
     """
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
+
 
 def get_all_materials():
     """
@@ -309,12 +277,14 @@ def get_all_materials():
     """
     return list(bpy.data.materials)
 
+
 def get_all_textures():
     """
     Returns a list of all textures.
     :return: All textures. Type: list.
     """
     return list(bpy.data.textures)
+
 
 def load_image(file_path, num_channels=3):
     """ Load the image at the given path returns its pixels as a numpy array.
@@ -337,6 +307,7 @@ def load_image(file_path, num_channels=3):
         img = (img * 255).astype(np.uint8)
     return img[:, :, :num_channels]
 
+
 def get_bound_volume(obj):
     """ Gets the volume of a possible orientated bounding box.
     :param obj: Mesh object.
@@ -356,6 +327,7 @@ def get_bound_volume(obj):
     diag = max_point - min_point
     # use the diagonal to calculate the volume of the box
     return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
+
 
 def duplicate_objects(objects):
     """
