@@ -97,7 +97,7 @@ class BopWriter(WriterInterface):
     .. csv-table::
         :header: "Keyword", "Description"
 
-        "dataset", "Annotations for objects of this dataset will be saved. Type: string."
+        "dataset", "Annotations for objects of this dataset will be saved. Type: string. Default: custom_dataset."
         "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
                                     "Type: bool. Default: False"
         "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to"
@@ -108,7 +108,7 @@ class BopWriter(WriterInterface):
         WriterInterface.__init__(self, config)
 
         # Parse configuration.
-        self.dataset = self.config.get_string("dataset")
+        self.dataset = self.config.get_string("dataset", "custom_dataset")
 
         self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
 

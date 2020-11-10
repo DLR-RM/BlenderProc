@@ -12,14 +12,13 @@ Execute in the BlenderProc main directory, if this is the first time BlenderProc
 downloaded blender, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/obj_000004.ply hb examples/basic_object_pose/output
+python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/obj_000004.ply examples/basic_object_pose/output
 ```
 
 * `examples/basic_object_pose/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `examples/basic_object_pose/obj_000004.ply`: path to the object file with a basic object from the `hb` dataset.
-* `hb` needed for the `bop_writer` module.
 * `examples/basic_object_pose/output`: path to the output directory.
 
 ## Visualization
@@ -53,14 +52,12 @@ we change some of the camera parameters.
       "config": {
         "path": "<args:0>", 
         "add_properties": {
-            "cp_bop_dataset_name": "hb",
             "cp_category_id": "1"
         }, 
       },
     },
 ```
-* Load an object while adding custom properties to it, since this object is from a `bop` datase and we use the
-  `bop_writer` later in the `config`, adding both `bop_dataset_name` and `category_id` is required for it run, further
+* Load an object while adding custom properties to it, `category_id` is required for the `bop_writer` to run, further
   explination of the `bop_writer` and `bop` datasets are provided in the `bop` examples.
 
 ### EntityManipulator

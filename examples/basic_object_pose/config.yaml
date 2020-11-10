@@ -1,4 +1,4 @@
-# Args: <obj_file> <dataset_name> <output_dir>
+# Args: <obj_file> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -13,7 +13,7 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:2>"
+          "output_dir": "<args:1>"
         }
       }
     },
@@ -22,8 +22,7 @@
       "config": {
         "path": "<args:0>", 
         "add_properties": {
-            "cp_bop_dataset_name": "hb",
-            "cp_category_id": "1"
+          "cp_category_id": "1"
         }, 
       },
     },
@@ -80,7 +79,6 @@
     {
       "module": "writer.BopWriter",
       "config": {
-        "dataset": "<args:1>",
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}
