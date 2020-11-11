@@ -37,9 +37,10 @@
         },  
         "matrix_world":
             [[0.331458, -0.6064861, 0.7227108, 0],
-            [-0.9415833, -0.2610635, 0.2127592, 0],
-            [ 0.05963787, -0.7510136, -0.6575879, 0],
-            [ -44.74526765165741, 89.70402424862098, 682.3395750305427, 1.0]],
+             [-0.9415833, -0.2610635, 0.2127592, 0],
+             [0.05963787, -0.7510136, -0.6575879, 0],
+             [-0.04474526765165741, 0.08970402424862098, 0.6823395750305427, 1.0]],
+        "scale": [0.001, 0.001, 0.001] # Scale 3D model from mm to m
       },
     },
     {
@@ -60,7 +61,7 @@
         "cam_poses": [
             "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
         ], 
-        "source_frame": ["X", "-Y", "-Z"],
+        "source_frame": ["X", "-Y", "-Z"], #OpenCV to Blender coordinates
         "default_cam_param": {
           "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
           "resolution_x": 640,
@@ -71,14 +72,15 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 350,
+        "samples": 100,
         "render_distance": True,
-        "render_normals": True,
       }
     },
     {
       "module": "writer.BopWriter",
       "config": {
+        "m2mm": True, # original bop annotations in mm (default)
+        "append_to_existing_output": True,
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}
@@ -86,17 +88,5 @@
         }
       }
     },
-    {
-      "module": "writer.Hdf5Writer",
-      "config": {
-        "postprocessing_modules": {
-          "distance": [
-            {
-              "module": "postprocessing.TrimRedundantChannels",
-            }
-          ]
-        }
-      }
-    }
   ]
 }
