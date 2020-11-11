@@ -174,8 +174,8 @@ class RendererInterface(Module):
                 denoise_node = nodes.new("CompositorNodeDenoise")
 
                 # Link nodes
-                render_layer_node = nodes.get('Render Layers')
-                composite_node = nodes.get('Composite')
+                render_layer_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeRLayers')
+                composite_node = Utility.get_the_one_node_with_type(nodes, 'CompositorNodeComposite')
                 Utility.insert_node_instead_existing_link(links,
                                                           render_layer_node.outputs['Image'],
                                                           denoise_node.inputs['Image'],
@@ -229,7 +229,7 @@ class RendererInterface(Module):
         tree = bpy.context.scene.node_tree
         links = tree.links
         # Use existing render layer
-        render_layer_node = tree.nodes.get('Render Layers')
+        render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
         # use either mist rendering or the z-buffer
         # mists uses an interpolation during the sample per pixel
@@ -387,7 +387,7 @@ class RendererInterface(Module):
         links = tree.links
 
         # Use existing render layer
-        render_layer_node = tree.nodes.get('Render Layers')
+        render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
         separate_rgba = tree.nodes.new("CompositorNodeSepRGBA")
         space_between_nodes_x = 200
