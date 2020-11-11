@@ -289,7 +289,6 @@
     {
       "module": "camera.CameraSampler",
       "config": {
-        # "source_frame": ["X", "-Y", "-Z"], #OpenCV to Blender coordinates
         "cam_poses": [
         {
           "proximity_checks": {
