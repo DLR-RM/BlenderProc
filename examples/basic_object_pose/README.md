@@ -1,7 +1,8 @@
 # Basic scene
 
 <p align="center">
-<img src="rendering_0.jpg" alt="Front readme image" width=375>
+<img src="rendering_0.jpg" alt="Front readme image" width=200>
+<img src="hb_val_3_0.png" alt="Front readme image" width=200>
 </p>
 
 In this example we demonstrate a basic functionality of BlenderProc.
@@ -34,9 +35,10 @@ python scripts/visHdf5Files.py examples/basic_object_pose/output/0.hdf5
 * Loads `obj_00004.ply`: `loader.ObjectLoader` module.
 * Selects objects and change their pose based on the condition: `manipulators.EntityManipulator` module.
 * Creates a point light : `lighting.LightLoader` module.
-* Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
+* Loads camera positions: `camera.CameraLoader` module.
+* Sets vertex colors as material: `manipulators.MaterialManipulator` module.
 * Renders rgb and distance: `renderer.RgbRenderer` module.
-* Writes the data in `bop_dataset` format: `writer.BopWriter` module, this is explained in more details in the bop
+* Writes data, intrinsics and extrinsics in `bop_dataset` format: `writer.BopWriter` module, this is explained in more details in the bop
   examples.
 
 ## Config file
@@ -105,6 +107,23 @@ python scripts/visHdf5Files.py examples/basic_object_pose/output/0.hdf5
 * The `default_cam_param` is where we can set the camera parameters e.g. intrinsics matrix "cam_K", fov, resolution.
 * This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). 
 
+#### Material Manipulator
+```yaml
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "ply_material"
+          }
+        },
+        "cf_change_to_vertex_color": "Col"
+      }
+    },
+```
+* Required to render vertex colors defined in ply file
+
 #### Bop Writer
 
 ```yaml
@@ -132,3 +151,4 @@ python scripts/visHdf5Files.py examples/basic_object_pose/output/0.hdf5
 * [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
 * [light_sampling](../light_sampling): Introduction to sampling for lights.
 * [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
+* [bop_scene_replication](../bop_scene_replication): Replicate scenes of all BOP datasets using the BopLoader
