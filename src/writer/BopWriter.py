@@ -102,13 +102,15 @@ class BopWriter(WriterInterface):
                                     "Type: bool. Default: False"
         "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to"
                              "failed physics. Type: float. Default: 5."
+        "m2mm", "Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. "
+                "This is needed if BopLoader option mm2m is used. Type: bool. Default: True"  
     """
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
 
         # Parse configuration.
-        self.dataset = self.config.get_string("dataset", "custom_dataset")
+        self.dataset = self.config.get_string("dataset", "")
 
         self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
 
@@ -120,6 +122,9 @@ class BopWriter(WriterInterface):
 
         # Multiply the output depth image with this factor to get depth in mm.
         self.depth_scale = 0.1
+
+        # Output translation gt in mm
+        self._scale = 1000. if self.config.get_bool("m2mm", True) else 1.
 
         # Format of the depth images.
         depth_ext = '.png'
@@ -149,18 +154,24 @@ class BopWriter(WriterInterface):
     def run(self):
         """ Stores frames and annotations for objects from the specified dataset.
         """
-        # Select objects from the specified dataset.
+        
         all_mesh_objects = get_all_mesh_objects()
-        self.dataset_objects = []
-        for obj in all_mesh_objects:
-            if "bop_dataset_name" in obj:
-                if obj["bop_dataset_name"] == self.dataset:
-                    self.dataset_objects.append(obj)
+	
+        # Select objects from the specified dataset.
+        if self.dataset:
+            self.dataset_objects = []
+            for obj in all_mesh_objects:
+                if "bop_dataset_name" in obj:
+                    if obj["bop_dataset_name"] == self.dataset:
+                        self.dataset_objects.append(obj)
+        else:
+            self.dataset_objects = all_mesh_objects
 
         # Check if there is any object from the specified dataset.
         if not self.dataset_objects:
             raise Exception("The scene does not contain any object from the "
-                            "specified dataset: {}".format(self.dataset))
+                            "specified dataset: {}. Either remove the dataset parameter "
+                            "or assign custom property 'bop_dataset_name' to selected objects".format(self.dataset))
 
         # Get the camera.
         cam_ob = bpy.context.scene.camera
@@ -267,7 +278,6 @@ class BopWriter(WriterInterface):
 
         # Blender to opencv coordinates.
         H_c2w_opencv = H_c2w @ Matrix.Rotation(math.radians(-180), 4, "X")
-
         frame_gt = []
         for idx, obj in enumerate(self.dataset_objects):
             object_rotation = self._get_object_attribute(obj, 'rotation_euler')
@@ -279,7 +289,7 @@ class BopWriter(WriterInterface):
 
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
             cam_R_m2c = list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2])
-            cam_t_m2c = list(cam_H_m2c.to_translation() * 1000.)
+            cam_t_m2c = list(cam_H_m2c.to_translation() * self._scale)
 
             # ignore examples that fell through the plane
             if not np.linalg.norm(cam_t_m2c) > self._ignore_dist_thres * 1000.:
