@@ -1,11 +1,11 @@
-# Basic scene
+# Basic Object Pose
 
 <p align="center">
 <img src="rendering_0.jpg" alt="Front readme image" width=375>
 <img src="hb_val_3_0.png" alt="Front readme image" width=375>
 </p>
 
-In this example we demonstrate a basic functionality of BlenderProc.
+In this example we show how to load and render a 3D model in specified extrinsics and intrinsics with BlenderProc.
 
 ## Usage
 
