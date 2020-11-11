@@ -70,6 +70,18 @@
       }
     },
     {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "ply_material"
+          }
+        },
+        "cf_change_to_vertex_color": "Col"
+      }
+    },
+    {
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 100,
