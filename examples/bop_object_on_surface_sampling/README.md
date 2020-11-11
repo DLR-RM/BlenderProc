@@ -59,7 +59,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"], 
         "bop_dataset_path": "<args:0>/tless",
         "model_type": "cad",
         "mm2m": True,
@@ -73,7 +72,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/lm",
         "model_type": "",
         "mm2m": True,
@@ -88,7 +86,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/<args:1>",
         "model_type": "",
         "mm2m": True,
@@ -441,7 +438,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * The camera rotation is defined by `"look_at"` a point of interest (`"getter.POI"`) plus a sampled `"inplane_rot"` in the specified range.
 * The `"getter.POI"` is defined by the object closest to the mean position of all objects that are returned by the `"getter.Entity"` Provider, i.e. `"random_samples": 10` objects from the target BOP dataset `"cp_bop_dataset_name": "<args:1>"`.
 * Camera poses undergo `"proximity_checks"` with respect to all objects besides ground_plane (`"excluded_objs_in_proximity_check"`) to ensure that no objects are closer than `"min": 0.3` meters.
-
 
 ### Rgb Renderer
 

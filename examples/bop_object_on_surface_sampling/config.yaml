@@ -50,7 +50,6 @@
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/<args:1>",
         "model_type": "",
         "mm2m": True,
@@ -290,6 +289,7 @@
     {
       "module": "camera.CameraSampler",
       "config": {
+        # "source_frame": ["X", "-Y", "-Z"], #OpenCV to Blender coordinates
         "cam_poses": [
         {
           "proximity_checks": {

@@ -60,7 +60,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/tless",
         "model_type": "cad",
         "mm2m": True,
@@ -74,7 +73,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/lm",
         "model_type": "",
         "mm2m": True,
@@ -89,7 +87,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     {
       "module": "loader.BopLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/<args:1>",
         "model_type": "",
         "mm2m": True,
