@@ -35,15 +35,12 @@ python scripts/visHdf5Files.py examples/basic_object_pose/output/0.hdf5
 * Selects objects and change their pose based on the condition: `manipulators.EntityManipulator` module.
 * Creates a point light : `lighting.LightLoader` module.
 * Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
+* Renders rgb and distance: `renderer.RgbRenderer` module.
 * Writes the data in `bop_dataset` format: `writer.BopWriter` module, this is explained in more details in the bop
   examples.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
 
 ## Config file
 
-The only difference between this example and the basic example is that we change the object pose after we load it, and
-we change some of the camera parameters.
 
 ### ObjectLoader
 ```
@@ -57,8 +54,7 @@ we change some of the camera parameters.
       },
     },
 ```
-* Load an object while adding custom properties to it, `category_id` is required for the `bop_writer` to run, further
-  explination of the `bop_writer` and `bop` datasets are provided in the `bop` examples.
+* Loads an object and adds a custom property `category_id`. This is required by the `bop_writer` to write object poses in `bop_format`.
 
 ### EntityManipulator
 
@@ -74,14 +70,16 @@ we change some of the camera parameters.
         },
         "matrix_world":
             [[0.331458, -0.6064861, 0.7227108, 0],
-            [-0.9415833, -0.2610635, 0.2127592, 0],
-            [ 0.05963787, -0.7510136, -0.6575879, 0],
-            [ -44.74526765165741, 89.70402424862098, 682.3395750305427, 1.0]],
+             [-0.9415833, -0.2610635, 0.2127592, 0],
+             [0.05963787, -0.7510136, -0.6575879, 0],
+             [-0.04474526765165741, 0.08970402424862098, 0.6823395750305427, 1.0]],
+        "scale": [0.001, 0.001, 0.001]
       },
     },
 ```
 
-* Changes the object world matrix.
+* Set the object pose `matrix_world` in meter  
+* `scale` the original model from mm to meter in every dimension. Note: Remove when object is already in meter! 
 
 #### CameraLoader
 
@@ -104,10 +102,30 @@ we change some of the camera parameters.
 
 * The camera pose is defined by its world matrix, in this case it is just the identity.
 * Change the camera source frame to match blender frame (this changes from OpenCV coordinate frame to blender's).
-* The `default_cam_param` is where we could optionally set the camera parameters e.g. intrinsics matrix "cam_K", fov, resolution.
-* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
+* The `default_cam_param` is where we can set the camera parameters e.g. intrinsics matrix "cam_K", fov, resolution.
+* This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). 
 
-=> Creates the files `campose_0000.npy` and `campose_0001.npy` 
+#### Bop Writer
+
+```yaml
+    {
+      "module": "writer.BopWriter",
+      "config": {
+        "m2mm": True,
+        "append_to_existing_output": True,
+        "postprocessing_modules": {
+          "distance": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
+      }
+    }
+```
+
+* Saves all pose and camera information that is provided in BOP datasets.
+* `"m2mm"` (default=True) converts the pose to mm as in the original bop annotations. Set to False if you want it in meters.
+* `"append_to_existing_output"` means that if the same output folder is chosen, data will be accumulated and not overwritten
+* `postprocessing.Dist2Depth` to convert the distance images from Blender to actual depth images.
 
 ## More examples
 
