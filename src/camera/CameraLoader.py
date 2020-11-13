@@ -78,8 +78,3 @@ class CameraLoader(CameraInterface):
         # Set intrinsics and extrinsics from config
         self._set_cam_intrinsics(cam, config)
         self._set_cam_extrinsics(cam_ob, config)
-
-        # Store new cam pose as next frame
-        frame_id = bpy.context.scene.frame_end
-        self._insert_key_frames(cam, cam_ob, frame_id)
-        bpy.context.scene.frame_end = frame_id + 1

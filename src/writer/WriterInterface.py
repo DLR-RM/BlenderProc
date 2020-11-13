@@ -7,6 +7,7 @@ import numpy as np
 
 from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
+from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 
 class WriterInterface(Module):
@@ -70,19 +71,19 @@ class WriterInterface(Module):
         elif attribute_name == "name":
             return item.name
         elif attribute_name == "location":
-            return Utility.transform_point_to_blender_coord_frame(item.location, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(item.location, self.destination_frame)
         elif attribute_name == "rotation_euler":
-            return Utility.transform_point_to_blender_coord_frame(item.rotation_euler, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(item.rotation_euler, self.destination_frame)
         elif attribute_name == "rotation_forward_vec":
             # Calc forward vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             forward = rot_mat @ mathutils.Vector([0, 0, -1])
-            return Utility.transform_point_to_blender_coord_frame(forward, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(forward, self.destination_frame)
         elif attribute_name == "rotation_up_vec":
             # Calc up vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             up = rot_mat @ mathutils.Vector([0, 1, 0])
-            return Utility.transform_point_to_blender_coord_frame(up, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(up, self.destination_frame)
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]
             # Make sure the requested custom property exist

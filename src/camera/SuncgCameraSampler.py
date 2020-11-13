@@ -3,6 +3,7 @@ import random
 import bpy
 
 from src.camera.CameraSampler import CameraSampler
+from src.utility.CameraUtility import CameraUtility
 
 
 class SuncgCameraSampler(CameraSampler):
@@ -59,8 +60,10 @@ class SuncgCameraSampler(CameraSampler):
         # Check if sampled pose is valid
         if self._is_pose_valid(floor_obj, cam, cam_ob, cam2world_matrix):
             # Set camera extrinsics as the pose is valid
-            cam_ob.matrix_world = cam2world_matrix
+            frame = CameraUtility.add_camera_pose(cam2world_matrix)
             cam_ob["room_id"] = room_id
+            # As the room id depends on the camera pose and therefore on the keyframe, we also need to add keyframes for the room id
+            cam_ob.keyframe_insert(data_path='["room_id"]', frame=frame)
             return True
         else:
             return False
@@ -95,16 +98,3 @@ class SuncgCameraSampler(CameraSampler):
             if obj.parent == room_obj and "type" in obj and obj["type"] == "Floor":
                 return obj
         return None
-
-    def _insert_key_frames(self, cam, cam_ob, frame_id):
-        """ Insert key frames for all relevant camera attributes.
-
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        :param frame_id: The frame number where key frames should be inserted.
-        """
-        # As the room id depends on the camera pose and therefore on the keyframe, we also need to add keyframes for the room id
-        cam_ob.keyframe_insert(data_path='["room_id"]', frame=frame_id)
-
-        # Add the usual key frames
-        super()._insert_key_frames(cam, cam_ob, frame_id)

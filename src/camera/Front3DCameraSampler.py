@@ -5,6 +5,8 @@ import bpy
 
 from src.camera.CameraSampler import CameraSampler
 from src.utility.BlenderUtility import get_all_mesh_objects, get_bounds
+from src.utility.CameraUtility import CameraUtility
+
 
 class Front3DCameraSampler(CameraSampler):
     """
@@ -86,7 +88,7 @@ class Front3DCameraSampler(CameraSampler):
         # Check if sampled pose is valid
         if self._is_pose_valid(floor_obj, cam, cam_ob, cam2world_matrix):
             # Set camera extrinsics as the pose is valid
-            cam_ob.matrix_world = cam2world_matrix
+            CameraUtility.add_camera_pose(cam2world_matrix)
             return True
         else:
             return False

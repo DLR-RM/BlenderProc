@@ -8,6 +8,7 @@ import mathutils
 import numpy as np
 
 from src.camera.CameraInterface import CameraInterface
+from src.utility.CameraUtility import CameraUtility
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.ItemCollection import ItemCollection
 
@@ -192,10 +193,6 @@ class CameraSampler(CameraInterface):
                 all_tries += 1
                 # Sample a new cam pose and check if its valid
                 if self.sample_and_validate_cam_pose(cam, cam_ob, config):
-                    # Store new cam pose as next frame
-                    frame_id = bpy.context.scene.frame_end
-                    self._insert_key_frames(cam, cam_ob, frame_id)
-                    bpy.context.scene.frame_end = frame_id + 1
                     break
 
             if tries >= self.max_tries:
@@ -226,7 +223,7 @@ class CameraSampler(CameraInterface):
 
         if self._is_pose_valid(cam, cam_ob, cam2world_matrix):
             # Set camera extrinsics as the pose is valid
-            cam_ob.matrix_world = cam2world_matrix
+            CameraUtility.add_camera_pose(cam2world_matrix)
             return True
         else:
             return False

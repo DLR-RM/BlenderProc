@@ -53,39 +53,6 @@ class Utility:
 
         return modules
 
-    @staticmethod
-    def transform_point_to_blender_coord_frame(point, frame_of_point):
-        """ Transforms the given point into the blender coordinate frame.
-
-        Example: [1, 2, 3] and ["X", "-Z", "Y"] => [1, -3, 2]
-
-        :param point: The point to convert in form of a list or mathutils.Vector.
-        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame the point is in. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
-        :return: The converted point also in form of a list or mathutils.Vector.
-        """
-        assert len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
-
-        output = []
-        for i, axis in enumerate(frame_of_point):
-            axis = axis.upper()
-
-            if axis.endswith("X"):
-                output.append(point[0])
-            elif axis.endswith("Y"):
-                output.append(point[1])
-            elif axis.endswith("Z"):
-                output.append(point[2])
-            else:
-                raise Exception("Invalid axis: " + axis)
-
-            if axis.startswith("-"):
-                output[-1] *= -1
-
-        # Depending on the given type, return a vector or a list
-        if isinstance(point, Vector):
-            return Vector(output)
-        else:
-            return output
 
     @staticmethod
     def resolve_path(path):
