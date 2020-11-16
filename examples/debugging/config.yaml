@@ -39,7 +39,7 @@
       "config": {
         "path": "examples/debugging/camera_positions",
         "file_format": "location rotation/value",
-        "default_cam_param": {
+        "intrinsics": {
           "fov": 1
         }
       }

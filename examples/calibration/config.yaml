@@ -38,14 +38,16 @@
     "module": "camera.CameraLoader",
     "config": {
       "cam_poses": [{
-        "cam_K": [550.,   0., 519.5,
-                  0., 400., 339.5,
-                  0.,   0.,   1.],
-        "resolution_x": 640,
-        "resolution_y": 480,
         "location": [0,0,0],
         "rotation_euler": [0,0,0]
-      }]
+      }],
+      "intrinsics": {
+        "resolution_x": 640,
+        "resolution_y": 480,
+        "cam_K": [ 550.,   0., 519.5,
+                   0., 400., 339.5,
+                   0.,   0.,   1. ],
+      }
     }
   },
   {

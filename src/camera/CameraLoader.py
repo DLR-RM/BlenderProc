@@ -1,6 +1,7 @@
 import bpy
 
 from src.camera.CameraInterface import CameraInterface
+from src.utility.Config import Config
 from src.utility.ItemCollection import ItemCollection
 
 
@@ -39,14 +40,15 @@ class CameraLoader(CameraInterface):
     .. csv-table::
        :header: "Parameter", "Description"
 
-       "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See the next table for which "
+       "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See CameraInterface for which "
                     "properties can be set. Type: list of dicts. Default: []."
        "path", "Optionally, a path to a file which specifies one camera position per line. The lines has to be "
                "formatted as specified in 'file_format'. Type: string. Default: ""."
        "file_format", "A string which specifies how each line of the given file is formatted. The string should contain "
                       "the keywords of the corresponding properties separated by a space. See next table for allowed "
                       "properties. Type: string. Default: ""."
-       "default_cam_param", "A dictionary containing camera intrinsic parameters. Type: dict. Default: {}."
+       "default_cam_param", "A dict which can be used to specify properties across all cam poses. Type: dict. Default: {}."
+       "intrinsics", "A dictionary containing camera intrinsic parameters. Type: dict. Default: {}."
     """
 
     def __init__(self, config):
@@ -60,6 +62,9 @@ class CameraLoader(CameraInterface):
         self.cam_pose_collection = ItemCollection(self._add_cam_pose, self.config.get_raw_dict("default_cam_param", {}))
 
     def run(self):
+        # Set intrinsics
+        self._set_cam_intrinsics(bpy.context.scene.camera.data, Config(self.config.get_raw_dict("intrinsics", {})))
+
         self.cam_pose_collection.add_items_from_dicts(self.config.get_list("cam_poses", []))
         self.cam_pose_collection.add_items_from_file(self.config.get_string("path", ""),
                                                      self.config.get_string("file_format", ""),
@@ -73,8 +78,6 @@ class CameraLoader(CameraInterface):
 
         # Collect camera object
         cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
 
-        # Set intrinsics and extrinsics from config
-        self._set_cam_intrinsics(cam, config)
+        # Set extrinsics from config
         self._set_cam_extrinsics(cam_ob, config)

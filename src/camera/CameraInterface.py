@@ -19,13 +19,15 @@ class CameraInterface(Module):
           "module": "camera.CameraLoader",
           "config": {
             "path": "<args:0>",
-            "file_format": "location rotation/value _ _ _ fov _ _",
+            "file_format": "location rotation/value _ _ _ _ _ _",
             "source_frame": ["X", "-Z", "Y"],
             "default_cam_param": {
               "rotation": {
                 "format": "forward_vec"
-              },
-              "fov_is_half": true
+              }
+            },
+            "intrinsics: {
+              "fov": 1
             }
           }
         }
@@ -39,7 +41,10 @@ class CameraInterface(Module):
                         "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
                         "will be transformed to (1, -3, 2). Type: list. Default: ["X", "Y", "Z"]. "
                         "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
-        "default_cam_param", "Properties across all cam poses. See the next table for details. Type: dict."
+        "cam_poses", "A list of dicts, where each dict specifies one cam pose. See the next table for details about specific properties. Type: list."
+        "default_cam_param", "Properties across all cam poses. Type: dict."
+        "set_intrinsics", "If False, the intrinsic camera parameters are not changed. Type: bool. Default: True.",
+        "intrinsics", "A dictionary containing camera intrinsic parameters. See the last table for details. Type: dict. Default: {}."
 
     **Properties per cam pose**:
 
@@ -54,16 +59,20 @@ class CameraInterface(Module):
                            "as Up-Vector), 'look_at' (camera will be turned such as it looks at 'value' location, which "
                            "can be defined as a fixed or sampled XYZ location)."
         "rotation/inplane_rot", "A rotation angle in radians around the Z axis. Type: float. Default: 0.0"
+        "cam2world_matrix", "4x4 camera extrinsic matrix. Type: list of floats. Default: []."
+
+    **Intrinsic camera parameters**:
+
+    .. csv-table::
+        :header: "Keyword", "Description"
+
+        "cam_K", "Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left "
+                 "pixel - this is the convention e.g. used in OpenCV. Type: list. Default: []."
         "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float."
         "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed "
                "to be the angle between forward vector and one side of the frustum). Type: float. Default: 0.691111."
-        "cam_K", "Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left "
-                 "pixel - this is the convention e.g. used in OpenCV. Type: list. Default: []."
         "resolution_x", "Width resolution of the camera. Type: int. Default: 512. "
         "resolution_y", "Height resolution of the camera. Type: int. Default: 512. "
-        "cam2world_matrix", "4x4 camera extrinsic matrix. Type: list of floats. Default: []."
-        "fov_is_half", "Set to true if the given FOV specifies the angle between forward vector and one side of the "
-                       "frustum. Type: bool. Default: False."
         "pixel_aspect_x", "Pixel aspect ratio x. Type: float. Default: 1."
         "pixel_aspect_y", "Pixel aspect ratio y. Type: float. Default: 1."
         "clip_start", "Near clipping. Type: float. Default: 0.1."
@@ -74,7 +83,6 @@ class CameraInterface(Module):
         "convergence_distance", "The convergence point for the stereo cameras (i.e. distance from the projector to the "
                                 "projection screen). Type: float. Default: 1.95."
         "interocular_distance", "Distance between the camera pair. Type: float. Default: 0.065.",
-        "set_intrinsics", "If False, the intrsic camera parameters are not changed. Type: bool. Default: True.",
     """
 
     def __init__(self, config):
@@ -95,7 +103,7 @@ class CameraInterface(Module):
         :param cam: The camera which contains only camera specific attributes.
         :param config: A configuration object with cam intrinsics.
         """
-        if config.get_bool("set_intrinsics", True):
+        if self.config.get_bool("set_intrinsics", True):
             width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
 
             # Clipping (Default values are the same as default blender values)
