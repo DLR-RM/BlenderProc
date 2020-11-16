@@ -104,8 +104,8 @@ class BopLoader(LoaderInterface):
 
             # TLESS exception because images are cropped
             if self.bop_dataset_name in ['tless']:
-                cam_p['K'][2] = split_p['im_size'][0] / 2
-                cam_p['K'][5] = split_p['im_size'][1] / 2
+                cam_p['K'][0, 2] = split_p['im_size'][0] / 2
+                cam_p['K'][1, 2] = split_p['im_size'][1] / 2
 
             # set camera intrinsics
             CameraUtility.set_intrinsics_from_K_matrix(cam_p['K'], split_p['im_size'][0], split_p['im_size'][1])
@@ -162,18 +162,12 @@ class BopLoader(LoaderInterface):
                 cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
                 # set camera intrinsics
                 CameraUtility.set_intrinsics_from_K_matrix(cam_K, split_p['im_size'][0], split_p['im_size'][1])
-                print(cam_K)
-                print(CameraUtility.get_intrinsics_as_K_matrix())
-                exit(0)
 
-                # Store new cam pose as next frame
-                frame_id = bpy.context.scene.frame_end
-                # Copy object poses to next key frame (to be sure)
+                # set camera extrinsics as next frame
+                frame_id = CameraUtility.add_camera_pose(cam_H_c2w)
+                # Copy object poses to key frame (to be sure)
                 for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
-                # set camera extrinsics
-                CameraUtility.add_camera_pose(cam_H_c2w, frame_id)
-                bpy.context.scene.frame_end = frame_id + 1
 
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.

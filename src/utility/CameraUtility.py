@@ -41,10 +41,10 @@ class CameraUtility:
         return forward_vec.to_track_quat('-Z', up_axis).to_matrix()
 
     @staticmethod
-    def set_intrinsics_from_blender_params(focal_length_in_mm, image_width, image_height, clip_start=0.1, clip_end=1000, pixel_aspect_x=1, pixel_aspect_y=1, shift_x=0, shift_y=0):
+    def set_intrinsics_from_blender_params(lens, image_width, image_height, clip_start=0.1, clip_end=1000, pixel_aspect_x=1, pixel_aspect_y=1, shift_x=0, shift_y=0, lens_unit="MILLIMETERS"):
         """ Sets the camera intrinsics using blenders represenation.
 
-        :param focal_length_in_mm: The focal length in millimeters.
+        :param lens: Either the focal length in millimeters or the FOV in radians, depending on the given lens_unit.
         :param image_width: The image width in pixels.
         :param image_height: The image height in pixels.
         :param clip_start: Clipping start.
@@ -53,15 +53,22 @@ class CameraUtility:
         :param pixel_aspect_y: The pixel aspect ratio along y.
         :param shift_x: The shift in x direction.
         :param shift_y: The shift in y direction.
+        :param lens_unit: Either FOV or MILLIMETERS depending on whether the lens is defined as focal length in millimeters or as FOV in radians.
         """
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
         # Set focal length
-        cam.lens_unit = 'MILLIMETERS'
-        if focal_length_in_mm < 1:
-            raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(focal_length_in_mm))
-        cam.lens = focal_length_in_mm
+        if lens_unit == 'MILLIMETERS':
+            cam.lens_unit = lens_unit
+            if lens < 1:
+                raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(lens))
+            cam.lens = lens
+        elif lens_unit == "FOV":
+            cam.lens_unit = lens_unit
+            cam.angle = lens
+        else:
+            raise Exception("No such lens unit: " + lens_unit)
 
         # Set resolution
         bpy.context.scene.render.resolution_x = image_width

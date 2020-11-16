@@ -73,7 +73,8 @@ class CameraInterface(Module):
                                    "are parallel). Type: string. Default: "OFFAXIS"."
         "convergence_distance", "The convergence point for the stereo cameras (i.e. distance from the projector to the "
                                 "projection screen). Type: float. Default: 1.95."
-        "interocular_distance", "Distance between the camera pair. Type: float. Default: 0.065."
+        "interocular_distance", "Distance between the camera pair. Type: float. Default: 0.065.",
+        "set_intrinsics", "If False, the intrsic camera parameters are not changed. Type: bool. Default: True.",
     """
 
     def __init__(self, config):
@@ -94,40 +95,41 @@ class CameraInterface(Module):
         :param cam: The camera which contains only camera specific attributes.
         :param config: A configuration object with cam intrinsics.
         """
-        width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
+        if config.get_bool("set_intrinsics", True):
+            width, height = config.get_int("resolution_x", 512), config.get_int("resolution_y", 512)
 
-        # Clipping (Default values are the same as default blender values)
-        clip_start = config.get_float("clip_start", 0.1)
-        clip_end = config.get_float("clip_end", 1000)
+            # Clipping (Default values are the same as default blender values)
+            clip_start = config.get_float("clip_start", 0.1)
+            clip_end = config.get_float("clip_end", 1000)
 
-        # Convert intrinsics from loader/config to Blender format
-        cam.lens_unit = 'FOV'
-        if config.has_param("cam_K"):
-            if config.has_param("fov"):
-                print('WARNING: FOV defined in config is ignored. Mutually exclusive with cam_K')
-            if config.has_param("pixel_aspect_x"):
-                print('WARNING: pixel_aspect_x defined in config is ignored. Mutually exclusive with cam_K')
-            
-            cam_K = np.array(config.get_list("cam_K")).reshape(3, 3).astype(np.float32)
-            
-            CameraUtility.set_intrinsics_from_K_matrix(cam_K, width, height, clip_start, clip_end)
-        else:
-            # Set FOV (Default value is the same as the default blender value)
-            fov = config.get_float("fov", 0.691111)
-            # FOV is sometimes also given as the angle between forward vector and one side of the frustum
-            if config.get_bool("fov_is_half", False):
-                fov *= 2
+            # Convert intrinsics from loader/config to Blender format
+            cam.lens_unit = 'FOV'
+            if config.has_param("cam_K"):
+                if config.has_param("fov"):
+                    print('WARNING: FOV defined in config is ignored. Mutually exclusive with cam_K')
+                if config.has_param("pixel_aspect_x"):
+                    print('WARNING: pixel_aspect_x defined in config is ignored. Mutually exclusive with cam_K')
 
-            # Set Pixel Aspect Ratio
-            pixel_aspect_x = config.get_float("pixel_aspect_x", 1.)
-            pixel_aspect_y = config.get_float("pixel_aspect_y", 1.)
+                cam_K = np.array(config.get_list("cam_K")).reshape(3, 3).astype(np.float32)
 
-            CameraUtility.set_intrinsics_from_blender_params(fov, width, height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, 0, 0)
+                CameraUtility.set_intrinsics_from_K_matrix(cam_K, width, height, clip_start, clip_end)
+            else:
+                # Set FOV (Default value is the same as the default blender value)
+                fov = config.get_float("fov", 0.691111)
+                # FOV is sometimes also given as the angle between forward vector and one side of the frustum
+                if config.get_bool("fov_is_half", False):
+                    fov *= 2
 
-            if bpy.context.scene.render.pixel_aspect_x != 1:
-                print('WARNING: Using non-square pixel aspect ratio. Can influence intrinsics.')
+                # Set Pixel Aspect Ratio
+                pixel_aspect_x = config.get_float("pixel_aspect_x", 1.)
+                pixel_aspect_y = config.get_float("pixel_aspect_y", 1.)
 
-        CameraUtility.set_stereo_parameters(config.get_string("stereo_convergence_mode", "OFFAXIS"), config.get_float("convergence_distance", 1.95), config.get_float("interocular_distance", 0.065))
+                CameraUtility.set_intrinsics_from_blender_params(fov, width, height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, 0, 0, lens_unit="FOV")
+
+                if bpy.context.scene.render.pixel_aspect_x != 1:
+                    print('WARNING: Using non-square pixel aspect ratio. Can influence intrinsics.')
+
+            CameraUtility.set_stereo_parameters(config.get_string("stereo_convergence_mode", "OFFAXIS"), config.get_float("convergence_distance", 1.95), config.get_float("interocular_distance", 0.065))
 
     def _set_cam_extrinsics(self, cam_ob, config):
         """ Sets camera extrinsics according to the config.
