@@ -165,6 +165,12 @@ class BopLoader(LoaderInterface):
 
                 # set camera extrinsics as next frame
                 frame_id = CameraUtility.add_camera_pose(cam_H_c2w)
+
+                # Add key frame for camera shift, as it changes from frame to frame in the tless replication
+                cam = bpy.context.scene.camera.data
+                cam.keyframe_insert(data_path='shift_x', frame=frame_id)
+                cam.keyframe_insert(data_path='shift_y', frame=frame_id)
+
                 # Copy object poses to key frame (to be sure)
                 for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
