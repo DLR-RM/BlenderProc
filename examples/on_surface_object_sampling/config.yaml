@@ -12,8 +12,11 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-        "output_dir": "<args:2>",
-        "output_is_temp": False
+          "output_dir": "<args:2>",
+          "output_is_temp": False
+        },
+        "camera_intrinsics": {
+          "fov": 1
         }
       }
     },
@@ -111,10 +114,7 @@
       "module": "camera.CameraLoader",
       "config": {
         "path": "<args:0>",
-        "file_format": "location rotation/value",
-        "intrinsics": {
-          "fov": 1
-        }
+        "file_format": "location rotation/value"
       }
     },
     {

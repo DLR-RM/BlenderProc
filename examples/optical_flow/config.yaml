@@ -13,6 +13,9 @@
       "config": {
         "global": {
           "output_dir": "<args:2>"
+        },
+        "camera_intrinsics": {
+          "fov": 1
         }
       }
     },
@@ -38,10 +41,7 @@
       "module": "camera.CameraLoader",
       "config": {
         "path": "<args:0>",
-        "file_format": "location rotation/value",
-        "intrinsics": {
-          "fov": 1
-        }
+        "file_format": "location rotation/value"
       }
     },
     {

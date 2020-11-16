@@ -367,7 +367,6 @@
       "config": {
         "cam_poses": [
         {
-          "set_intrinsics": False,
           "proximity_checks": {
             "min": 0.3
           },

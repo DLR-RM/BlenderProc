@@ -43,17 +43,16 @@ Mean error:  0.04055031146662476
 
 ## Config file
 
-### Camera loader
+### Initializer
 
 ```yaml
-{
-    "module": "camera.CameraLoader",
-    "config": {
-      "cam_poses": [{
-        "location": [0,0,0],
-        "rotation_euler": [0,0,0]
-      }],
-      "intrinsics": {
+  {
+    "module": "main.Initializer",
+    "config":{
+      "global": {
+        "output_dir": "examples/calibration/output"
+      },
+      "camera_intrinsics": {
         "resolution_x": 640,
         "resolution_y": 480,
         "cam_K": [ 550.,   0., 519.5,
@@ -66,7 +65,6 @@ Mean error:  0.04055031146662476
 
 Here we set the camera intrinsics, specifically the K matrix and the image resolution are set.
 If everything works fine, the K matrix should be identical to the one estimated by opencv based on the renderings.
-Additionally, we set all location and rotation parameters to zero.
 
 ### Calibrationboard Sampler
 

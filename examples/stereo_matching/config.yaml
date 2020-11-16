@@ -20,7 +20,15 @@
           "output_dir": "<args:2>",
           "resolution_x": 1280,
           "resolution_y": 720
-        }
+        },
+        "camera_intrinsics": {
+          "interocular_distance": 0.05,
+          "stereo_convergence_mode": "PARALLEL",
+          "convergence_distance": 0.00001,
+          "cam_K": [ 650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1 ],
+          "resolution_x": 1280,
+          "resolution_y": 720
+        },
       }
     },
     {
@@ -39,15 +47,7 @@
           "rotation": {
             "format": "forward_vec"
           }
-        },
-        "intrinsics": {
-          "interocular_distance": 0.05,
-          "stereo_convergence_mode": "PARALLEL",
-          "convergence_distance": 0.00001,
-          "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
-          "resolution_x": 1280,
-          "resolution_y": 720
-        },
+        }
       }
     },
     {

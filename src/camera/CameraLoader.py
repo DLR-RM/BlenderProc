@@ -62,9 +62,6 @@ class CameraLoader(CameraInterface):
         self.cam_pose_collection = ItemCollection(self._add_cam_pose, self.config.get_raw_dict("default_cam_param", {}))
 
     def run(self):
-        # Set intrinsics
-        self._set_cam_intrinsics(bpy.context.scene.camera.data, Config(self.config.get_raw_dict("intrinsics", {})))
-
         self.cam_pose_collection.add_items_from_dicts(self.config.get_list("cam_poses", []))
         self.cam_pose_collection.add_items_from_file(self.config.get_string("path", ""),
                                                      self.config.get_string("file_format", ""),
