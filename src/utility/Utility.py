@@ -441,10 +441,12 @@ class Utility:
                     # load a .ply mesh
                     bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
                     # add a default material to ply file
-                    cur_obj = bpy.context.selected_objects[-1]
                     mat = bpy.data.materials.new(name="ply_material")
                     mat.use_nodes = True
-                    cur_obj.data.materials.append(mat)
+                    loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
+                    for obj in loaded_objects:
+                        obj.data.materials.append(mat)
+
                 # return all currently selected objects
                 return list(set(bpy.context.selected_objects) - previously_selected_objects)
         else:
