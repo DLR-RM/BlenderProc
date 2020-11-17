@@ -13,9 +13,6 @@
       "config": {
         "global": {
           "output_dir": "examples/debugging/output"
-        },
-        "camera_intrinsics": {
-          "fov": 1
         }
       }
     },
@@ -41,7 +38,10 @@
       "module": "camera.CameraLoader",
       "config": {
         "path": "examples/debugging/camera_positions",
-        "file_format": "location rotation/value"
+        "file_format": "location rotation/value",
+        "intrinsics": {
+          "fov": 1
+        }
       }
     },
     {

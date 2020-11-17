@@ -13,9 +13,6 @@
       "config": {
         "global": {
           "output_dir": "<args:1>"
-        },
-        "camera_intrinsics": {
-          "fov": 1
         }
       }
     },
@@ -53,7 +50,10 @@
             "value": [1.84, 0, 0.5]
           }
         }
-        ]
+        ],
+        "intrinsics": {
+          "fov": 1
+        }
       }
     },
     {

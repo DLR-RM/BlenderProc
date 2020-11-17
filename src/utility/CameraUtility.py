@@ -103,29 +103,6 @@ class CameraUtility:
         cam.stereo.interocular_distance = interocular_distance
 
     @staticmethod
-    def old_set_intrinsics(cam_K, width, height):
-        # Convert focal lengths to FOV
-        angle = 2 * np.arctan(width / (2 * cam_K[0][0]))
-
-        fx, fy = cam_K[0][0], cam_K[1][1]
-        cx, cy = cam_K[0][2], cam_K[1][2]
-
-        # If fx!=fy change pixel aspect ratio
-        pixel_aspect_x = pixel_aspect_y = 1
-        if fx > fy:
-            pixel_aspect_y = fx / fy
-        elif fx < fy:
-            pixel_aspect_x = fy / fx
-
-        # Convert principal point cx,cy in px to blender cam shift in proportion to larger image dim
-        # NOTE changed to convention of (0,0) being the CENTER of the top-left pixel
-        max_resolution = max(width, height)
-        shift_x = -(cx - (width - 1.0) / 2.0) / max_resolution
-        shift_y = (cy - (height - 1.0) / 2.0) / max_resolution * (pixel_aspect_y / pixel_aspect_x)
-
-        print("old", angle, shift_x, shift_y, pixel_aspect_x, pixel_aspect_y)
-
-    @staticmethod
     def set_intrinsics_from_K_matrix(K, image_width, image_height, clip_start=0.1, clip_end=1000):
         """ Set the camera intrinsics via a K matrix.
 
@@ -144,11 +121,6 @@ class CameraUtility:
         """
         if not isinstance(K, Matrix):
             K = Matrix(K)
-
-        #K[0][0] = 750
-        #print(K)
-
-        #CameraUtility.old_set_intrinsics(K, image_width, image_height)
 
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
@@ -178,8 +150,6 @@ class CameraUtility:
         # Finally set all intrinsics
         CameraUtility.set_intrinsics_from_blender_params(f_in_mm, image_width, image_height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, shift_x, shift_y)
 
-        #print("new", cam.angle, cam.shift_x, cam.shift_y, pixel_aspect_x, pixel_aspect_y)
-        #exit(0)
     @staticmethod
     def get_sensor_size(cam):
         """ Returns the sensor size in millimeters based on the configured sensor_fit.

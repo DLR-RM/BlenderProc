@@ -38,15 +38,11 @@ python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
 
 ### Global settings
 
-They are set in the main.Initializer
+There are set in the main.Initializer
 ```yaml
 "config": {
   "global": {
     "output_dir": "<args:2>",
-    "pixel_aspect_x": 1.333333333
-  },
-  "camera_intrinsics": {
-    "fov": 1,
     "pixel_aspect_x": 1.333333333
   }
 }
@@ -54,8 +50,6 @@ They are set in the main.Initializer
 
 Next to setting the output directory for all modules, we also set the `pixel_aspect_x` parameter for all modules.
 This is necessary to coincide with the aspect ratio assumed by the `scn2cam` script which generated the camera poses.  
-
-In the initializer module we further set the FOV and pixel aspect ratio to the same values used by `scn2cam`.
 
 ### SuncgLoader
 
@@ -85,6 +79,10 @@ The `SuncgLoader` also sets the `category_id` of each object, such that semantic
       "rotation": {
         "format": "forward_vec"
       }
+    },
+    "intrinsics": {
+      "fov": 1,
+      "pixel_aspect_x": 1.333333333
     }
   }
 },
@@ -99,6 +97,7 @@ It's also necessary here to specify a different `source_frame`, as `scn2cam` doe
 In `default_cam_param` we set parameters which are the same across all cam poses: 
 We change the `rotation/format`. This is necessary as rotations are specified via a forward vector in the camera file. 
 
+In the `intrinsics`, we further set the FOV and pixel aspect ratio to the same values used by `scn2cam`.
 
 ### SuncgLighting
 

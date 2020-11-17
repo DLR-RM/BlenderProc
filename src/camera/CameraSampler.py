@@ -164,6 +164,9 @@ class CameraSampler(CameraInterface):
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
         self._above_objects = config.get_list("check_if_pose_above_object_list", [])
 
+        # Set camera intrinsics
+        self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
+
         if self.proximity_checks:
             # needs to build an bvh tree
             self._init_bvh_tree()

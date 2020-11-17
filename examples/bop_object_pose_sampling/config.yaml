@@ -75,6 +75,7 @@
           "config": {
             "cam_poses": [
               {
+                "set_intrinsics": False,
                 "location": {
                   "provider": "sampler.Shell",
                   "center": [0, 0, 0],
