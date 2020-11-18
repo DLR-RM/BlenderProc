@@ -46,6 +46,11 @@ class Initializer(Module):
         self._default_init()
 
     def run(self):
+        # Set language if necessary
+        if bpy.context.preferences.view.language != "en_US":
+            print("Setting blender language settings to english during this run")
+            bpy.context.preferences.view.language = "en_US"
+
         prefs = bpy.context.preferences.addons['cycles'].preferences
         # Use cycles
         bpy.context.scene.render.engine = 'CYCLES'
