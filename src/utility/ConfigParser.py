@@ -229,7 +229,7 @@ class ConfigParser:
         if len(unfilled_placeholders) > 0:
             self.log("There was an error while parsing the config.\nThe following placeholders could not be filled:\n")
             self._print_placeholders(unfilled_placeholders, {PlaceholderTypes.ARG: "Missing arguments:", PlaceholderTypes.ENV: "Missing environment variables:"})
-            exit(0)
+            raise Exception("Missing arguments")
 
     def _fill_placeholder_at_path(self, path, old, new):
         """ Replaces the given placeholder with the given value at the given path

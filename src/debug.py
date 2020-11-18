@@ -26,6 +26,7 @@ for module in list(sys.modules.keys()):
 from src.main.Pipeline import Pipeline
 
 config_path = "examples/debugging/config.yaml"
+args = []  # Put in here arguments to use for filling the placeholders in the config file.
 
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:
@@ -43,7 +44,7 @@ temp_dir = "examples/debugging/temp"
 try:
     # In this debug case the rendering is avoided, everything is executed except the final render step
     # For the RgbRenderer the undo is avoided to have a direct way of rendering in debug
-    pipeline = Pipeline(config_path, [], working_dir, temp_dir, avoid_rendering=True)
+    pipeline = Pipeline(config_path, args, working_dir, temp_dir, avoid_rendering=True)
     pipeline.run()
 finally:
     # Revert back to previous view
