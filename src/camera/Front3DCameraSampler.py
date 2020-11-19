@@ -6,6 +6,7 @@ import bpy
 from src.camera.CameraSampler import CameraSampler
 from src.utility.BlenderUtility import get_all_mesh_objects, get_bounds
 from src.utility.CameraUtility import CameraUtility
+from src.utility.Config import Config
 
 
 class Front3DCameraSampler(CameraSampler):
@@ -71,7 +72,7 @@ class Front3DCameraSampler(CameraSampler):
         floor_obj = random.choice(self.used_floors)
 
         # Sample/set intrinsics
-        self._set_cam_intrinsics(cam, config)
+        self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
 
         # Sample camera extrinsics (we do not set them yet for performance reasons)
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)

@@ -16,16 +16,16 @@ class CameraLoader(CameraInterface):
           "config": {
             "path": "<args:0>",
             "file_format": "location rotation/value",
-            "default_cam_param": {
+            "intrinsics": {
               "fov": 1
             }
           }
         }
 
-        Example 2: More examples for parameters in "default_cam_param". Here cam_K is a camera matrix. Check
-                   CameraInterface for more info on "default_cam_param".
+        Example 2: More examples for parameters in "intrinsics". Here cam_K is a camera matrix. Check
+                   CameraInterface for more info on "intrinsics".
 
-        "default_cam_param": {
+        "intrinsics": {
           "fov_is_half": true,
           "interocular_distance": 0.05,
           "stereo_convergence_mode": "PARALLEL",

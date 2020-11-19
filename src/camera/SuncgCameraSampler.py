@@ -4,6 +4,7 @@ import bpy
 
 from src.camera.CameraSampler import CameraSampler
 from src.utility.CameraUtility import CameraUtility
+from src.utility.Config import Config
 
 
 class SuncgCameraSampler(CameraSampler):
@@ -47,7 +48,7 @@ class SuncgCameraSampler(CameraSampler):
         room_obj, floor_obj = self.rooms[room_id]
 
         # Sample/set intrinsics
-        self._set_cam_intrinsics(cam, config)
+        self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
 
         # Sample camera extrinsics (we do not set them yet for performance reasons)
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
