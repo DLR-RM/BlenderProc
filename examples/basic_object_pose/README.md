@@ -141,6 +141,5 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
 ## More examples
 
 * [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
-* [light_sampling](../light_sampling): Introduction to sampling for lights.
-* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
+* [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
 * [bop_scene_replication](../bop_scene_replication): Replicate scenes of all BOP datasets using the BopLoader
