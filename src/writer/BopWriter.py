@@ -101,7 +101,7 @@ class BopWriter(WriterInterface):
 		   "Type: string. Default: ''"
         "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
                                     "Type: bool. Default: False"
-        "ignore_dist_thres", "Distance in meters between camera and object after which it is ignored. Mostly due to"
+        "ignore_dist_thres", "Distance between camera and object after which object is ignored. Mostly due to"
                              "failed physics. Type: float. Default: 5."
         "m2mm", "Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. "
                 "This is needed if BopLoader option mm2m is used. Type: bool. Default: True"  
@@ -290,18 +290,22 @@ class BopWriter(WriterInterface):
 
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
             cam_R_m2c = list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2])
-            cam_t_m2c = list(cam_H_m2c.to_translation() * self._scale)
+            cam_t_m2c = cam_H_m2c.to_translation()
 
             # ignore examples that fell through the plane
-            if not np.linalg.norm(cam_t_m2c) > self._ignore_dist_thres * 1000.:
+            if not np.linalg.norm(list(cam_t_m2c)) > self._ignore_dist_thres:
+                cam_t_m2c = list(cam_t_m2c * self._scale)
                 frame_gt.append({
                     'cam_R_m2c': cam_R_m2c,
                     'cam_t_m2c': cam_t_m2c,
                     'obj_id': self._get_object_attribute(obj, 'id')
                 })
             else:
-                print('ignored obj, ', self._get_object_attribute(obj, 'id'))
-
+                print('ignored obj, ', self._get_object_attribute(obj, 'id'), 'because either ')
+                print('(1) it is too far (e.g. fell through a plane during physics sim)')
+                print('or')
+                print('(2) the object pose has not been given in meters')
+                
         return frame_gt
 
     def _get_frame_camera(self):
