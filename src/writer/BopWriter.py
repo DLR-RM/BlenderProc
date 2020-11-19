@@ -278,7 +278,7 @@ class BopWriter(WriterInterface):
             camera_rotation, 'XYZ').to_matrix().to_4x4()
 
         # Blender to opencv coordinates.
-	H_c2w_opencv = Utility.transform_matrix_to_blender_coord_frame(H_c2w, ["X", "-Y", "-Z"])
+        H_c2w_opencv = Utility.transform_matrix_to_blender_coord_frame(H_c2w, ["X", "-Y", "-Z"])
         frame_gt = []
         for idx, obj in enumerate(self.dataset_objects):
             object_rotation = self._get_object_attribute(obj, 'rotation_euler')
