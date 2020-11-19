@@ -140,7 +140,7 @@
     {
       "module": "camera.CameraSampler",
       "config": {
-        "default_cam_param": {
+        "intrinsics": {
           "resolution_x": 640,
           "resolution_y": 480
         },

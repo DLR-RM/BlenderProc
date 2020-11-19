@@ -40,8 +40,7 @@ python scripts/visHdf5Files.py example/replica_dataset/0.hdf5
   "global": {
     "output_dir": "<args:1>",
     "data_set_name": "office_1",
-    "data_path": "<args:0>",
-    "pixel_aspect_x": 1.333333333
+    "data_path": "<args:0>"
   }
 },
 ```
@@ -87,7 +86,7 @@ As before all these values are stored in the GlobalStorage and are only used if 
 {
   "module": "camera.ReplicaCameraSampler",
   "config": {
-    "default_cam_param": {
+    "intrinsics": {
       "pixel_aspect_x": 1.333333333
     },
     "is_replica_object": True,

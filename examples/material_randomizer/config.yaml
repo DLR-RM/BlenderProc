@@ -52,7 +52,7 @@
           }
         }
         ],
-        "default_cam_param": {
+        "intrinsics": {
           "fov": 1
         }
       }

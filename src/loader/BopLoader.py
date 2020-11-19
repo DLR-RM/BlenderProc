@@ -11,6 +11,7 @@ from src.camera.CameraInterface import CameraInterface
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.Config import Config
+from src.utility.CameraUtility import CameraUtility
 
 
 class BopLoader(LoaderInterface):
@@ -100,27 +101,20 @@ class BopLoader(LoaderInterface):
         bpy.context.scene.render.resolution_x = cam_p['im_size'][0]
         bpy.context.scene.render.resolution_y = cam_p['im_size'][1]
 
-        # Collect camera and camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-
-        cam['loaded_intrinsics'] = cam_p['K']
-        cam['loaded_resolution'] = split_p['im_size'][0], split_p['im_size'][1]
-
-        # TLESS exception because images are cropped
-        if self.bop_dataset_name in ['tless']:
-            cam['loaded_intrinsics'][2] = split_p['im_size'][0]/2
-            cam['loaded_intrinsics'][5] = split_p['im_size'][1]/2   
-        
-        config = Config({"source_frame": self.source_frame})
-        camera_module = CameraInterface(config)
-        camera_module._set_cam_intrinsics(cam, config)
-
         loaded_objects = []
 
         # only load all/selected objects here, use other modules for setting poses
         # e.g. camera.CameraSampler / object.ObjectPoseSampler
         if self.scene_id == -1:
+
+            # TLESS exception because images are cropped
+            if self.bop_dataset_name in ['tless']:
+                cam_p['K'][0, 2] = split_p['im_size'][0] / 2
+                cam_p['K'][1, 2] = split_p['im_size'][1] / 2
+
+            # set camera intrinsics
+            CameraUtility.set_intrinsics_from_K_matrix(cam_p['K'], split_p['im_size'][0], split_p['im_size'][1])
+
             obj_ids = self.obj_ids if self.obj_ids else model_p['obj_ids']
             # if sampling is enabled
             if self.sample_objects:
@@ -171,18 +165,20 @@ class BopLoader(LoaderInterface):
                         
 
                 cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
-                #set camera intrinsics and extrinsics 
-                config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), "cam_K": list(cam_K.flatten())})
-                camera_module._set_cam_intrinsics(cam, config)
-                camera_module._set_cam_extrinsics(cam_ob, config)
+                # set camera intrinsics
+                CameraUtility.set_intrinsics_from_K_matrix(cam_K, split_p['im_size'][0], split_p['im_size'][1])
 
-                # Store new cam pose as next frame
-                frame_id = bpy.context.scene.frame_end
-                # Copy object poses to next key frame (to be sure)
+                # set camera extrinsics as next frame
+                frame_id = CameraUtility.add_camera_pose(cam_H_c2w)
+
+                # Add key frame for camera shift, as it changes from frame to frame in the tless replication
+                cam = bpy.context.scene.camera.data
+                cam.keyframe_insert(data_path='shift_x', frame=frame_id)
+                cam.keyframe_insert(data_path='shift_y', frame=frame_id)
+
+                # Copy object poses to key frame (to be sure)
                 for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
-                camera_module._insert_key_frames(cam, cam_ob, frame_id)
-                bpy.context.scene.frame_end = frame_id + 1
 
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
