@@ -10,6 +10,7 @@ import bpy
 from mathutils import Euler, Matrix, Vector
 
 from src.utility.BlenderUtility import get_all_mesh_objects, load_image
+from src.utility.CameraUtility import CameraUtility
 from src.utility.Utility import Utility
 from src.writer.WriterInterface import WriterInterface
 
@@ -192,8 +193,6 @@ class BopWriter(WriterInterface):
             return cam.angle_x * 0.5
         elif attribute_name == "half_fov_y":
             return cam.angle_y * 0.5
-        elif attribute_name == 'loaded_intrinsics':
-            return cam['loaded_intrinsics']
 
         return super()._get_attribute(cam_ob, attribute_name)
 
@@ -209,32 +208,6 @@ class BopWriter(WriterInterface):
 
         return super()._get_attribute(object, attribute_name)
 
-    def get_camK_from_blender_attributes(self, cam_pose):
-        """ Constructs the camera matrix K.
-
-        :param cam_pose: Camera info.
-        :return: camera matrix K as 9x1 list.
-        """
-        shift_x = self._get_camera_attribute(cam_pose, 'shift_x')
-        shift_y = self._get_camera_attribute(cam_pose, 'shift_y')
-        syn_cam_K = self._get_camera_attribute(cam_pose, 'loaded_intrinsics')
-        width = bpy.context.scene.render.resolution_x
-        height = bpy.context.scene.render.resolution_y
-
-        cam_K = [0.] * 9
-        cam_K[-1] = 1
-
-        max_resolution = max(width, height)
-        
-        cam_K[0] = syn_cam_K[0]
-        cam_K[4] = syn_cam_K[4]
- 
-        # NOTE changed to convention of (0,0) being the CENTER of the top-left pixel
-        cam_K[2] = (width-1.)/2. - shift_x * max_resolution
-        cam_K[5] = (height-1.)/2. + shift_y * max_resolution
-
-        return cam_K
-
     def _write_camera(self):
         """ Writes camera.json into dataset_dir.
         """
@@ -242,12 +215,12 @@ class BopWriter(WriterInterface):
         width = bpy.context.scene.render.resolution_x
         height = bpy.context.scene.render.resolution_y
 
-        cam_K = self.get_camK_from_blender_attributes(self.cam_pose)
-        camera = {'cx': cam_K[2],
-                  'cy': cam_K[5],
+        cam_K = CameraUtility.get_intrinsics_as_K_matrix()
+        camera = {'cx': cam_K[0][2],
+                  'cy': cam_K[1][2],
                   'depth_scale': self.depth_scale,
-                  'fx': cam_K[0],
-                  'fy': cam_K[4],
+                  'fx': cam_K[0][0],
+                  'fy': cam_K[1][1],
                   'height': height,
                   'width': width}
 
@@ -297,7 +270,7 @@ class BopWriter(WriterInterface):
         """ Returns camera parameters for the active camera.
         """
         return {
-            'cam_K': list(self.get_camK_from_blender_attributes(self.cam_pose)),
+            'cam_K': np.hstack(CameraUtility.get_intrinsics_as_K_matrix()).tolist(),
             'depth_scale': self.depth_scale
         }
 

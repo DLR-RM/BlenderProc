@@ -46,7 +46,7 @@
       "config": {
         "path": "<args:0>",
         "file_format": "location rotation/value",
-        "default_cam_param": {
+        "intrinsics": {
           "fov": 1
         }
       }

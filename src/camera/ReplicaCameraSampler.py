@@ -5,6 +5,8 @@ import random
 import bpy
 
 from src.camera.CameraSampler import CameraSampler
+from src.utility.CameraUtility import CameraUtility
+from src.utility.Config import Config
 from src.utility.Utility import Utility
 
 
@@ -75,7 +77,7 @@ class ReplicaCameraSampler(CameraSampler):
         :return: True, if the sampled pose was valid
         """
         # Sample/set intrinsics
-        self._set_cam_intrinsics(cam, config)
+        self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
 
         # Sample camera extrinsics (we do not set them yet for performance reasons)
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
@@ -88,7 +90,7 @@ class ReplicaCameraSampler(CameraSampler):
         # Check if sampled pose is valid
         if self._is_pose_valid(cam, cam_ob, cam2world_matrix):
             # Set camera extrinsics as the pose is valid
-            cam_ob.matrix_world = cam2world_matrix
+            CameraUtility.add_camera_pose(cam2world_matrix)
             return True
         else:
             return False

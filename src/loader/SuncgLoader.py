@@ -7,6 +7,7 @@ import bpy
 from mathutils import Matrix
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
 
@@ -202,8 +203,8 @@ class SuncgLoader(LoaderInterface):
         :return: The corrected bbox.
         """
         return {
-            "min": Utility.transform_point_to_blender_coord_frame(bbox["min"], ["X", "-Z", "Y"]),
-            "max": Utility.transform_point_to_blender_coord_frame(bbox["max"], ["X", "-Z", "Y"])
+            "min": MathUtility.transform_point_to_blender_coord_frame(bbox["min"], ["X", "-Z", "Y"]),
+            "max": MathUtility.transform_point_to_blender_coord_frame(bbox["max"], ["X", "-Z", "Y"])
         }
 
     def _load_box(self, node, material_adjustments, transform, parent):
