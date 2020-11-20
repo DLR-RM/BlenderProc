@@ -29,7 +29,7 @@ class CameraStateWriter(WriterInterface):
         cam = cam_ob.data
         cam_pose = (cam, cam_ob)
 
-        self.write_attributes_to_file(self.object_writer, [cam_pose], "campose_", "campose", ["id", "location", "rotation_euler", "cam2world_matrix", "fov_x", "fov_y", "shift_x", "shift_y", "cam_K"])
+        self.write_attributes_to_file(self.object_writer, [cam_pose], "campose_", "campose", ["id", "cam2world_matrix", "cam_K"])
 
     def _get_attribute(self, cam_pose, attribute_name):
         """ Returns the value of the requested attribute for the given object.
