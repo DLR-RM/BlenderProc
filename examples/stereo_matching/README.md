@@ -61,17 +61,18 @@ Make sure these python packages are included.
 Indicate the desired output image resolution globally inside of the settings of the `"main.Initializer"`.
 
 ```
-{
+    {  
       "module": "camera.CameraLoader",
       "config": {
         "path": "<args:0>",
-        "file_format": "location rotation/value _ _ _ fov _ _",
+        "file_format": "location rotation/value _ _ _ _ _ _",
         "source_frame": ["X", "-Z", "Y"],
         "default_cam_param": {
           "rotation": {
             "format": "forward_vec"
-          },
-          "fov_is_half": true,
+          }
+        },
+        "intrinsics": {
           "interocular_distance": 0.05,
           "stereo_convergence_mode": "PARALLEL",
           "convergence_distance": 0.00001,
@@ -89,7 +90,7 @@ Here we specify the camera parameters, some notable points are:
     * Check `camera.CameraModule`'s documentation for more info.
 * `Convergence_distance` is the distance from the cameras to the aforementioned plane they converge to in case of `OFF-AXIS` convergence mode. In this case, this parameter is ignored by Blender, but it is added here for clarification.
 * Adding a camera matrix in `cam_K`.
-* Adding the image resolution once again in `default_cam_param`, since this nested parameter is not on the same level as the global parameters, and thus the global parameters won't affect any configuration inside `default_cam_param`.
+* Adding the image resolution once again in `intrinsics`, since this nested parameter is not on the same level as the global parameters, and thus the global parameters won't affect any configuration inside `intrinsics`.
 
 ```yaml
 {

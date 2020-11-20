@@ -8,7 +8,10 @@ import bpy
 
 from src.main.Module import Module
 from src.main.GlobalStorage import GlobalStorage
+from src.utility.CameraUtility import CameraUtility
 from src.utility.Config import Config
+from src.utility.DefaultConfig import DefaultConfig
+
 
 class Initializer(Module):
     """ Does some basic initialization of the blender project.
@@ -88,6 +91,10 @@ class Initializer(Module):
         cam_ob = bpy.data.objects.new("Camera", cam)
         bpy.context.scene.collection.objects.link(cam_ob)
         bpy.context.scene.camera = cam_ob
+
+        # Set default intrinsics
+        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, "FOV")
+        CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
 
         random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
         if random_seed:

@@ -46,6 +46,7 @@ python scripts/visHdf5Files.py example/bop_scene_replication/0.hdf5
     {
       "module": "loader.BopLoader",
       "config": {
+        "source_frame": ["X", "-Y", "-Z"],
         "bop_dataset_path": "<args:0>/<args:1>",
         "mm2m": True,
         "split": "test", # careful, some BOP datasets only have test sets
