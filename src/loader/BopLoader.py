@@ -27,6 +27,10 @@ class BopLoader(LoaderInterface):
        :header: "Parameter", "Description"
 
        "cam_type", "Camera type. Type: string. Optional. Default value: ''."
+       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
+                "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
+                "will be transformed to (1, -3, 2). Type: list. Default: ["X", "-Y", "-Z"]. "
+                "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
        "sys_paths", "System paths to append. Type: list."
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
@@ -55,6 +59,7 @@ class BopLoader(LoaderInterface):
             self.obj_instances_limit = self.config.get_int("obj_instances_limit", -1)
 
         self.cam_type = self.config.get_string("cam_type", "")
+        self.source_frame = self.config.get_list("source_frame", ["X", "-Y", "-Z"])
         self.bop_dataset_path = self.config.get_string("bop_dataset_path")
         self.scene_id = self.config.get_int("scene_id", -1)
         self.obj_ids = self.config.get_list("obj_ids", [])
@@ -188,13 +193,11 @@ class BopLoader(LoaderInterface):
         print('-----------------------------')
         print("Cam: {}".format(cam_H_c2w))
         print('-----------------------------')
-
-        # transform from OpenCV to blender coords
-        cam_H_c2w = cam_H_c2w @ Matrix.Rotation(math.radians(180), 4, "X")
-
+ 
         return cam_H_c2w
 
-    def set_object_pose(self, cur_obj, inst, scale):
+
+    def set_object_pose(self, cur_obj, inst, scale): 
         """ Set object pose for current obj
 
         :param cur_obj: Current object. Type: bpy.types.Object.
