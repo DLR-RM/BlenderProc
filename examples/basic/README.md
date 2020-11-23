@@ -123,11 +123,11 @@ It also initializes the GlobalStorage, which contains two parts:
   "config": {
     "path": "<args:0>",
     "file_format": "location rotation/value",
-    "default_cam_param": {
+    "intrinsics": {
       "fov": 1
     }
   }
-}
+},
 ```
 
 * This module imports the camera poses which defines from where the renderings should be taken.
@@ -138,7 +138,7 @@ It also initializes the GlobalStorage, which contains two parts:
 location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
 
-* The FOV is the same for all cameras and is therefore set inside `default_cam_param`.
+* The FOV is set via `intrinsics/fov`.
 * This module also writes the cam poses into extra `.npy` files located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0000.npy` and `campose_0001.npy` 

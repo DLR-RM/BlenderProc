@@ -69,7 +69,7 @@
     {
       "module": "writer.Hdf5Writer",
       "config": {
-        "transparent_background": False,
+        "write_alpha_channel": False,
         "postprocessing_modules": {
           "distance": [
             {

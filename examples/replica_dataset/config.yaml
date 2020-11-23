@@ -37,7 +37,7 @@
     {
       "module": "camera.ReplicaCameraSampler",
       "config": {
-        "default_cam_param": {
+        "intrinsics": {
           "pixel_aspect_x": 1.333333333
         },
         "is_replica_object": True,
@@ -68,7 +68,7 @@
         "selector": {
           "provider": "getter.Material",
           "conditions": {
-            "name": "ReplicaMaterial"
+            "name": "ply_material"
           }
         },
         "cf_change_to_vertex_color": "Col"

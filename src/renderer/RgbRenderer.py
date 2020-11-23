@@ -15,11 +15,25 @@ class RgbRenderer(RendererInterface):
                                 "materials, Type: bool. Default: False."
         "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
         "transparent_background", "Whether to render the background as transparent or not, Type: bool. Default: False."
+        "use_motion_blur", "Use Blender motion blur feature which is required for motion blur and rolling shutter simulation. "
+                                "This feature only works if camera poses follow a continous trajectory as Blender performs a Bezier "
+                                "interpolation between keyframes and therefore arbitrary results are to be expected if camera poses "
+                                "are discontinuous (e.g. when sampled), Type: bool. Default: False"
+        "motion_blur_length", "Motion blur effect length (in frames), Type: float. Default: 0.1"
+        "use_rolling_shutter", "Use rolling shutter simulation (top to bottom). This depends on the setting enable_motion_blur "
+        "being activated and a motion_blur_length > 0, Type: bool. Default: False"
+        "rolling_shutter_length", "Time as fraction of the motion_blur_length one scanline is exposed when enable_rolling_shutter is "
+                                    "activated. If set to 1, this creates a pure motion blur effect, if set to 0 a pure rolling "
+                                    "shutter effect, Type: float. Default: 0.2"
     """
     def __init__(self, config):
         RendererInterface.__init__(self, config)
         self._texture_less_mode = config.get_bool('render_texture_less', False)
         self._image_type = config.get_string('image_type', 'PNG')
+        self._use_motion_blur = config.get_bool('use_motion_blur', False)
+        self._motion_blur_length = config.get_float('motion_blur_length', 0.1)
+        self._use_rolling_shutter = config.get_bool('use_rolling_shutter', False)
+        self._rolling_shutter_length = config.get_float('rolling_shutter_length', 0.2)
 
     def change_to_texture_less_render(self):
         """
@@ -76,6 +90,23 @@ class RgbRenderer(RendererInterface):
 
             if self._use_alpha_channel:
                 self.add_alpha_channel_to_textures(blurry_edges=True)
+
+            # motion blur
+            if self._use_motion_blur:
+                bpy.context.scene.render.use_motion_blur = True
+                bpy.context.scene.render.motion_blur_shutter = self._motion_blur_length
+
+            # rolling shutter
+            if self._use_rolling_shutter:
+                bpy.context.scene.cycles.rolling_shutter_type= 'TOP'
+                bpy.context.scene.cycles.rolling_shutter_duration = self._rolling_shutter_length
+
+                if not self._use_motion_blur:
+                    raise UserWarning("Cannot enable rolling shutter because motion blur is not enabled, "
+                                        "see setting use_motion_blur in renderer.RgbRenderer module.")
+                if self._motion_blur_length <= 0:
+                    raise UserWarning("Cannot enable rolling shutter because no motion blur length is specified, "
+                                        "see setting motion_blur_length in renderer.RgbRenderer module.")
 
             self._render("rgb_")
 

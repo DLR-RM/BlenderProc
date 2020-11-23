@@ -9,13 +9,14 @@ from src.main.GlobalStorage import GlobalStorage
 
 class Pipeline:
 
-    def __init__(self, config_path, args, working_dir, should_perform_clean_up=True, avoid_rendering=False):
+    def __init__(self, config_path, args, working_dir, temp_dir, should_perform_clean_up=True, avoid_rendering=False):
         """
         Inits the pipeline, by calling the constructors of all modules mentioned in the config.
 
         :param config_path path to the config
         :param args arguments which were provided to the run.py and are specified in the config file
         :param working_dir the current working dir usually the place where the run.py sits
+        :param working_dir the directory where to put temporary files during the execution
         :param should_perform_clean_up if the generated temp file should be deleted at the end
         :param avoid_rendering if this is true all renderes are not executed (except the RgbRenderer,
                                where only the rendering call to blender is avoided) with this it is possible to debug
@@ -33,10 +34,8 @@ class Pipeline:
         if avoid_rendering:
             GlobalStorage.add_to_config_before_init("avoid_rendering", True)
 
-        config_object = Config(config)
-        self._do_clean_up_temp_dir = config_object.get_bool("delete_temporary_files_afterwards", True)
-        self._temp_dir = Utility.get_temporary_directory(config_object)
-        os.makedirs(self._temp_dir, exist_ok=True)
+        Utility.temp_dir = Utility.resolve_path(temp_dir)
+        os.makedirs(Utility.temp_dir, exist_ok=True)
 
         self.modules = Utility.initialize_modules(config["modules"])
 
@@ -78,11 +77,6 @@ class Pipeline:
         """ Remove all custom properties registered at global entities like the scene. """
         for key in bpy.context.scene.keys():
             del bpy.context.scene[key]
-    
-    def _clean_up_temp_dir(self):
-        """ Cleans up temporary directory """
-        if self._do_clean_up_temp_dir:
-            shutil.rmtree(self._temp_dir)
 
     def run(self):
         """ Runs each module and measuring their execution time. """
@@ -90,4 +84,3 @@ class Pipeline:
             for module in self.modules:
                 with Utility.BlockStopWatch("Running module " + module.__class__.__name__):
                     module.run()
-            self._clean_up_temp_dir()

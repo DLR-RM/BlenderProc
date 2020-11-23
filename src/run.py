@@ -34,8 +34,9 @@ from src.main.Pipeline import Pipeline
 from src.utility.Utility import Utility
 
 config_path = argv[0]
+temp_dir = argv[1]
 if batch_index_file == None:
-    pipeline = Pipeline(config_path, argv[1:], working_dir)
+    pipeline = Pipeline(config_path, argv[2:], working_dir, temp_dir)
     pipeline.run()
 else:
     with open(Utility.resolve_path(batch_index_file), "r") as f:
@@ -43,5 +44,5 @@ else:
 
         for line in lines:
             args = line.split(" ")
-            pipeline = Pipeline(config_path, args, working_dir)
+            pipeline = Pipeline(config_path, args, working_dir, temp_dir)
             pipeline.run()

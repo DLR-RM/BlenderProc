@@ -59,6 +59,8 @@ class ShapeNetLoader(LoaderInterface):
                         if synset_id == used_synset_id or used_synset_id in block["children"]:
                             id_path = os.path.join(data_path, synset_id)
                             files.extend(glob.glob(os.path.join(id_path, "*", "models", "*.obj")))
+            # Sort files to make random choice deterministic
+            files.sort()
             return files
         else:
             raise Exception("The taxonomy file could not be found: {}".format(path_to_taxonomy_file))

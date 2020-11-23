@@ -27,9 +27,6 @@ class Module:
                          "the output_dir is used. Type: bool."
        "output_dir", "The path to a directory where all persistent output files should be stored. If it doesn't exist,"
                      "it is created automatically. Type: string. Default: ""."
-       "temp_dir", "The path to a directory where all temporary output files should be stored. If it doesn't exist,"
-                   "it is created automatically. Type: string. Default: "/dev/shm" or "/tmp/" depending on what"
-                   "is available for Linux and MacOS, and "<env:TEMP>" for Windows."
     """
 
     def __init__(self, config):
@@ -43,8 +40,7 @@ class Module:
         self._output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
         os.makedirs(self._output_dir, exist_ok=True)
 
-        self._temp_dir = Utility.get_temporary_directory(self.config)
-        os.makedirs(self._temp_dir, exist_ok=True)
+        self._temp_dir = Utility.get_temporary_directory()
 
     def _determine_output_dir(self, output_is_temp_default=True):
         """ Returns the directory where to store output file created by this module.

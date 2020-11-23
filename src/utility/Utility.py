@@ -1,16 +1,17 @@
 import os
-import sys
+import math
 import uuid
 import bpy
 import time
 import inspect
 import importlib
 from src.utility.Config import Config
-from mathutils import Vector
+from mathutils import Matrix, Vector
 import numpy as np
 
 class Utility:
     working_dir = ""
+    temp_dir = ""
     used_temp_id = None
 
     @staticmethod
@@ -53,39 +54,36 @@ class Utility:
 
         return modules
 
+
     @staticmethod
-    def transform_point_to_blender_coord_frame(point, frame_of_point):
-        """ Transforms the given point into the blender coordinate frame.
+    def transform_matrix_to_blender_coord_frame(matrix, source_frame):
+        """ Transforms the given homog into the blender coordinate frame.
 
-        Example: [1, 2, 3] and ["X", "-Z", "Y"] => [1, -3, 2]
-
-        :param point: The point to convert in form of a list or mathutils.Vector.
-        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame the point is in. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
-        :return: The converted point also in form of a list or mathutils.Vector.
+        :param matrix: The matrix to convert in form of a mathutils.Matrix.
+        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame of the
+        source frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+        :return: The converted point is in form of a mathutils.Matrix.
         """
-        assert len(frame_of_point) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
-
-        output = []
-        for i, axis in enumerate(frame_of_point):
+        assert len(source_frame) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
+        output = np.eye(4)
+        for i, axis in enumerate(source_frame):
             axis = axis.upper()
 
             if axis.endswith("X"):
-                output.append(point[0])
+                output[:4,0] = matrix.col[0]
             elif axis.endswith("Y"):
-                output.append(point[1])
+                output[:4,1] = matrix.col[1]
             elif axis.endswith("Z"):
-                output.append(point[2])
+                output[:4,2] = matrix.col[2]
             else:
                 raise Exception("Invalid axis: " + axis)
 
             if axis.startswith("-"):
-                output[-1] *= -1
+                output[:3, i] *= -1
 
-        # Depending on the given type, return a vector or a list
-        if isinstance(point, Vector):
-            return Vector(output)
-        else:
-            return output
+        output[:4,3] = matrix.col[3]
+        output = Matrix(output)
+        return output
 
     @staticmethod
     def resolve_path(path):
@@ -104,25 +102,12 @@ class Utility:
             return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
-    def get_temporary_directory(config_object):
-        ''' 
+    def get_temporary_directory():
+        """
         :return: default temporary directory, shared memory if it exists
-        '''
+        """
+        return Utility.temp_dir
 
-        # Per default, use shared memory as temporary directory. If that doesn't exist on the current system, switch back to tmp.
-        if sys.platform != "win32":
-            if os.path.exists("/dev/shm"):
-                default_temp_dir = "/dev/shm"
-            else:
-                default_temp_dir = "/tmp"
-        else:
-            default_temp_dir = os.getenv("TEMP")
-        if Utility.used_temp_id is None:
-            Utility.used_temp_id = str(uuid.uuid4().hex)
-        temp_dir = Utility.resolve_path(os.path.join(config_object.get_string("temp_dir", default_temp_dir),  "blender_proc_" + Utility.used_temp_id))
-
-        return temp_dir
-    
     @staticmethod
     def merge_dicts(source, destination):
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
@@ -422,6 +407,13 @@ class Utility:
                 elif filepath.endswith('.ply'):
                     # load a .ply mesh
                     bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+                    # add a default material to ply file
+                    mat = bpy.data.materials.new(name="ply_material")
+                    mat.use_nodes = True
+                    loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
+                    for obj in loaded_objects:
+                        obj.data.materials.append(mat)
+
                 # return all currently selected objects
                 return list(set(bpy.context.selected_objects) - previously_selected_objects)
         else:

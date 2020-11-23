@@ -11,6 +11,7 @@ from src.camera.CameraInterface import CameraInterface
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.Config import Config
+from src.utility.CameraUtility import CameraUtility
 
 
 class BopLoader(LoaderInterface):
@@ -26,6 +27,10 @@ class BopLoader(LoaderInterface):
        :header: "Parameter", "Description"
 
        "cam_type", "Camera type. Type: string. Optional. Default value: ''."
+       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
+                "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
+                "will be transformed to (1, -3, 2). Type: list. Default: ["X", "-Y", "-Z"]. "
+                "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
        "sys_paths", "System paths to append. Type: list."
        "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
        "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
@@ -54,6 +59,7 @@ class BopLoader(LoaderInterface):
             self.obj_instances_limit = self.config.get_int("obj_instances_limit", -1)
 
         self.cam_type = self.config.get_string("cam_type", "")
+        self.source_frame = self.config.get_list("source_frame", ["X", "-Y", "-Z"])
         self.bop_dataset_path = self.config.get_string("bop_dataset_path")
         self.scene_id = self.config.get_int("scene_id", -1)
         self.obj_ids = self.config.get_list("obj_ids", [])
@@ -95,27 +101,20 @@ class BopLoader(LoaderInterface):
         bpy.context.scene.render.resolution_x = cam_p['im_size'][0]
         bpy.context.scene.render.resolution_y = cam_p['im_size'][1]
 
-        # Collect camera and camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-
-        cam['loaded_intrinsics'] = cam_p['K']
-        cam['loaded_resolution'] = split_p['im_size'][0], split_p['im_size'][1]
-
-        # TLESS exception because images are cropped
-        if self.bop_dataset_name in ['tless']:
-            cam['loaded_intrinsics'][2] = split_p['im_size'][0]/2
-            cam['loaded_intrinsics'][5] = split_p['im_size'][1]/2   
-        
-        config = Config({})
-        camera_module = CameraInterface(config)
-        camera_module._set_cam_intrinsics(cam, config)
-
         loaded_objects = []
 
         # only load all/selected objects here, use other modules for setting poses
         # e.g. camera.CameraSampler / object.ObjectPoseSampler
         if self.scene_id == -1:
+
+            # TLESS exception because images are cropped
+            if self.bop_dataset_name in ['tless']:
+                cam_p['K'][0, 2] = split_p['im_size'][0] / 2
+                cam_p['K'][1, 2] = split_p['im_size'][1] / 2
+
+            # set camera intrinsics
+            CameraUtility.set_intrinsics_from_K_matrix(cam_p['K'], split_p['im_size'][0], split_p['im_size'][1])
+
             obj_ids = self.obj_ids if self.obj_ids else model_p['obj_ids']
             # if sampling is enabled
             if self.sample_objects:
@@ -166,18 +165,20 @@ class BopLoader(LoaderInterface):
                         
 
                 cam_H_c2w = self._compute_camera_to_world_trafo(cam_H_m2w_ref, cam_H_m2c_ref)
-                #set camera intrinsics and extrinsics 
-                config = Config({"cam2world_matrix": list(cam_H_c2w.flatten()), "cam_K": list(cam_K.flatten())})
-                camera_module._set_cam_intrinsics(cam, config)
-                camera_module._set_cam_extrinsics(cam_ob, config)
+                # set camera intrinsics
+                CameraUtility.set_intrinsics_from_K_matrix(cam_K, split_p['im_size'][0], split_p['im_size'][1])
 
-                # Store new cam pose as next frame
-                frame_id = bpy.context.scene.frame_end
-                # Copy object poses to next key frame (to be sure)
+                # set camera extrinsics as next frame
+                frame_id = CameraUtility.add_camera_pose(cam_H_c2w)
+
+                # Add key frame for camera shift, as it changes from frame to frame in the tless replication
+                cam = bpy.context.scene.camera.data
+                cam.keyframe_insert(data_path='shift_x', frame=frame_id)
+                cam.keyframe_insert(data_path='shift_y', frame=frame_id)
+
+                # Copy object poses to key frame (to be sure)
                 for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
-                camera_module._insert_key_frames(cam, cam_ob, frame_id)
-                bpy.context.scene.frame_end = frame_id + 1
 
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
@@ -192,13 +193,11 @@ class BopLoader(LoaderInterface):
         print('-----------------------------')
         print("Cam: {}".format(cam_H_c2w))
         print('-----------------------------')
-
-        # transform from OpenCV to blender coords
-        cam_H_c2w = cam_H_c2w @ Matrix.Rotation(math.radians(180), 4, "X")
-
+ 
         return cam_H_c2w
 
-    def set_object_pose(self, cur_obj, inst, scale):
+
+    def set_object_pose(self, cur_obj, inst, scale): 
         """ Set object pose for current obj
 
         :param cur_obj: Current object. Type: bpy.types.Object.
@@ -290,7 +289,7 @@ class BopLoader(LoaderInterface):
                         new_file_ply_content = new_file_ply_content.replace("property float texture_v",
                                                                             "property float t")
                     model_name = os.path.basename(model_path)
-                    tmp_ply_file = os.path.join(Utility.get_temporary_directory(self.config), model_name)
+                    tmp_ply_file = os.path.join(self._temp_dir, model_name)
                     with open(tmp_ply_file, "w") as file:
                         file.write(new_file_ply_content)
                     bpy.ops.import_mesh.ply(filepath=tmp_ply_file)

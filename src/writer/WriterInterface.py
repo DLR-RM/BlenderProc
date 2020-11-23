@@ -7,6 +7,7 @@ import numpy as np
 
 from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
+from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 
 class WriterInterface(Module):
@@ -24,7 +25,7 @@ class WriterInterface(Module):
                               "attributes that can be used here. Type: list."
        "output_file_prefix", "The prefix of the file that should be created. Type: string."
        "output_key", "The key which should be used for storing the output in a merged file. Type: string."
-       "transparent_background", "If true, the alpha channel will be written to file. Type: bool. Default: False."
+       "write_alpha_channel", "If true, the alpha channel will be written to file. Type: bool. Default: False."
                                 
     """
     def __init__(self, config):
@@ -70,19 +71,23 @@ class WriterInterface(Module):
         elif attribute_name == "name":
             return item.name
         elif attribute_name == "location":
-            return Utility.transform_point_to_blender_coord_frame(item.location, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(item.location, self.destination_frame)
         elif attribute_name == "rotation_euler":
-            return Utility.transform_point_to_blender_coord_frame(item.rotation_euler, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(item.rotation_euler, self.destination_frame)
         elif attribute_name == "rotation_forward_vec":
             # Calc forward vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             forward = rot_mat @ mathutils.Vector([0, 0, -1])
-            return Utility.transform_point_to_blender_coord_frame(forward, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(forward, self.destination_frame)
         elif attribute_name == "rotation_up_vec":
             # Calc up vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             up = rot_mat @ mathutils.Vector([0, 1, 0])
-            return Utility.transform_point_to_blender_coord_frame(up, self.destination_frame)
+            return MathUtility.transform_point_to_blender_coord_frame(up, self.destination_frame)
+        elif attribute_name == "cam2world_matrix":
+            # Transform to matrix_world to given destination frame
+            cam2world_matrix = Utility.transform_matrix_to_blender_coord_frame(item.matrix_world, self.destination_frame)
+            return [[x for x in c] for c in cam2world_matrix]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]
             # Make sure the requested custom property exist
@@ -135,7 +140,7 @@ class WriterInterface(Module):
 
         if file_ending in ["exr", "png", "jpg"]:
             #num_channels is 4 if transparent_background is true in config
-            return load_image(file_path, num_channels = 3 + self.config.get_bool("transparent_background", False))
+            return load_image(file_path, num_channels = 3 + self.config.get_bool("write_alpha_channel", False))
         elif file_ending in ["npy", "npz"]:
             return self._load_npy(file_path)
         elif file_ending in ["csv"]:
