@@ -6,6 +6,7 @@ import zipfile
 import subprocess
 import shutil
 import signal
+import sys
 from sys import platform, version_info
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -245,10 +246,13 @@ path_src_run = os.path.join(repo_root_directory, "src/run.py")
 
 # Determine perfect temp dir
 if args.temp_dir is None:
-    if os.path.exists("/dev/shm"):
-        temp_dir = "/dev/shm"
+    if sys.platform != "win32":
+        if os.path.exists("/dev/shm"):
+            temp_dir = "/dev/shm"
+        else:
+            temp_dir = "/tmp"
     else:
-        temp_dir = "/tmp"
+        temp_dir = os.getenv("TEMP")
 else:
     temp_dir = args.temp_dir
 # Generate unique directory name in temp dir
