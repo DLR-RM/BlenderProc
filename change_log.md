@@ -15,13 +15,13 @@
 - fixed collision checks between meshes, so the ObjectPoseSampler is not generating colliding object poses anymore
 - added motion blur and rolling shutter support
 - fixed cleanup of temporary directories in the case of an error
-- removed bug in dist2depth computation due to mixed conventions of pixel origin
+set pixel origin to the center of a pixel, slightly affecting intrinsics and depth outputs
 - fixed coco annotations if background is not visible
 - added loader for Pix3D dataset
 - added support for transparent background
 - fixed wrong image size in coco annotations
 - fixed blender proc if non-english language is configured
-- when loading ply files a defaul material is now added
+- when loading ply files a default material is now added
 - fixed setting matrix_world via the entity manipulator
 - fixed the scenenet examples (corrects physics positioning and camera sampling)
 
