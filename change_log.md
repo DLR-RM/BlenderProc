@@ -9,15 +9,18 @@
 # Version History
 
 ## Version 1.7.0: 24th November 2020
-- switch to blender 2.90
+- switch to blender 2.91
 - added an example of how to set object poses via a transformation matrix and set camera extrinsics / intrinsics via a transformation matrix and a K matrix
 - added camera utility class which makes it easier to set and retrieve intrinsics via any K matrix
-- fixed collision checks between meshes, so the ObjectPoseSampler is not generating colliding object poses anymore
-- added motion blur and rolling shutter support
-- fixed cleanup of temporary directories in the case of an error
-set pixel origin to the center of a pixel, slightly affecting intrinsics and depth outputs
-- fixed coco annotations if background is not visible
 - added loader for Pix3D dataset
+- added loader for AMASS dataset
+- added loader for the ikea dataset
+- added community driven support for Windows
+- added motion blur and rolling shutter support
+- fixed collision checks between meshes, so the ObjectPoseSampler is not generating colliding object poses anymore
+- fixed cleanup of temporary directories in the case of an error
+- set pixel origin to the center of a pixel, slightly affecting intrinsics and depth outputs
+- fixed coco annotations if background is not visible
 - added support for transparent background
 - fixed wrong image size in coco annotations
 - fixed blender proc if non-english language is configured
