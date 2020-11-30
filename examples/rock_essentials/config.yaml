@@ -198,7 +198,7 @@
         "max_simulation_time": 5,
         "check_object_interval": 1,
         "solver_iters": 25,
-        "steps_per_sec": 200
+        "substeps_per_frame": 35
       }
     },
     {

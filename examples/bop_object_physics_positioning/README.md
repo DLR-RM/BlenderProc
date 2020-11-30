@@ -350,7 +350,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "max_simulation_time": 10,
         "check_object_interval": 1,
         "solver_iters": 25,
-        "steps_per_sec": 100,
+        "substeps_per_frame": 20,
         "friction": 100.0,
         "linear_damping": 0.99,
         "angular_damping": 0.99,
@@ -368,7 +368,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * `"min_simulation_time", "max_simulation_time"` in seconds
 * `"check_object_interval"` after which objects are checked to stand still  
 * `"solver_iters": 25` increase if physics glitches occur.
-* `"steps_per_sec": 100` increase if physics glitches occur.
+* `"substeps_per_frame": 20` increase if physics glitches occur.
 * `"friction": 100.0, "linear_damping": 0.99, "angular_damping": 0.99` ensure inert physics properties so that objects don't spread too much
 * Give ground planes a BOX collision shape since they behave better using `"objs_with_box_collision_shape"`
 

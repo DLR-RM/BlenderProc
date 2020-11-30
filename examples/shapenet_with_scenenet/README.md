@@ -133,7 +133,7 @@ Finally, we add a solidify modifier to get a correct physics interaction.
 "module": "object.PhysicsPositioning",
 "config": {
   "solver_iters": 30,
-  "steps_per_sec": 250,
+  "substeps_per_frame": 40,
   "min_simulation_time": 0.5,
   "max_simulation_time": 4,
   "check_object_interval": 0.25,
@@ -145,7 +145,7 @@ Finally, we add a solidify modifier to get a correct physics interaction.
 
 We then run the physics simulation, for more information about that please see the [example/physiscs_positioning](../physics_positioning).
 The high mass factor and the small collision margin guarantee that the object does not move too much.
-Important here are the amount of `solver_iters` and `steps_per_sec` as they have to be high, as lot of objects in the ShapeNet dataset consist out of thin small pieces.
+Important here are the amount of `solver_iters` and `substeps_per_frame` as they have to be high, as lot of objects in the ShapeNet dataset consist out of thin small pieces.
 Without this they might slide into the SceneNet objects.
 
 ### CameraSampler
