@@ -268,7 +268,7 @@ class CameraSampler(CameraInterface):
         :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
         """
         # Send a ray straight down and check if the first hit object is the query object
-        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer,
+        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
                                                                  position,
                                                                  mathutils.Vector([0, 0, -1]))
         return hit and hit_object == object
@@ -433,7 +433,7 @@ class CameraSampler(CameraInterface):
                 # Compute current point on plane
                 end = frame[0] + vec_x * x / float(self.sqrt_number_of_rays - 1) + vec_y * y / float(self.sqrt_number_of_rays - 1)
                 # Send ray from the camera position through the current point on the plane
-                hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer, position, end - position)
+                hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, position, end - position)
 
                 if hit:
                     is_of_special_dataset = "is_suncg" in hit_object or "is_3d_front" in hit_object
