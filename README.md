@@ -16,6 +16,7 @@ Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating i
 </p>
 </a>
 
+There is also an extended introduction video to BlenderProc, it covers the basics and a bit of the background story and how it all started. It can be found [here](https://www.youtube.com/watch?v=1AvY_iS6xQA).
 
 ## Contents
 
@@ -39,6 +40,8 @@ python run.py config.yaml <additional arguments>
 ```
 
 This runs all modules specified in the config file in a step-by-step fashion in the configured order.
+
+Currently, BlenderProc officialy supports Linux and MacOS. There is also a community driven support for Windows.
 
 ## Functionality
 
