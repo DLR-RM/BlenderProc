@@ -24,6 +24,8 @@ python run.py examples/shapenet_with_scenenet/config.yaml <PATH_TO_SCENE_NET_OBJ
 * `<PATH_TO_ShapeNetCore.v2>`: path to the downloaded shape net core v2 dataset, get it [here](http://www.shapenet.org/) 
 * `examples/shapenet_with_scenenet/output`: path to the output directory.
 
+As this example requires a bed to be present in the scene, it will only work with the `1Bedroom/*` SceneNet scenes.
+
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
@@ -139,7 +141,8 @@ Finally, we add a solidify modifier to get a correct physics interaction.
   "check_object_interval": 0.25,
   "mass_scaling": True,
   "mass_factor": 2000,
-  "collision_margin": 0.00001
+  "collision_margin": 0.00001,
+  "collision_shape": "MESH"
 }
 ```
 

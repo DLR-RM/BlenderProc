@@ -58,8 +58,8 @@ class SceneNetLoader(LoaderInterface):
         """
         Run the module, loads all the objects and set the properties correctly (including the category_id)
         """
-        # load the objects
-        loaded_objects = Utility.import_objects(filepath=self._file_path)
+        # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
+        loaded_objects = Utility.import_objects(filepath=self._file_path, use_image_search=False)
         loaded_objects.sort(key=lambda ele: ele.name)
         # sample materials for each object
         self._random_sample_materials_for_each_obj(loaded_objects)
@@ -137,7 +137,8 @@ class SceneNetLoader(LoaderInterface):
         #  Some category names in scenenet objects are written differently than in nyu_idset.csv
         normalize_name = {"floor-mat": "floor_mat", "refrigerator": "refridgerator", "shower-curtain": "shower_curtain", 
         "nightstand": "night_stand", "Other-structure": "otherstructure", "Other-furniture": "otherfurniture",
-        "Other-prop": "otherprop"}
+        "Other-prop": "otherprop", "floor_tiles_floor_tiles_0125": "floor", "ground": "floor", "floor_enclose": "floor",
+        "floor_base_object01_56": "floor"}
 
         if LabelIdMapping.label_id_map:
             for obj in loaded_objects:
@@ -149,9 +150,8 @@ class SceneNetLoader(LoaderInterface):
 
                 if obj_name in LabelIdMapping.label_id_map:
                     obj["category_id"] = LabelIdMapping.label_id_map[obj_name]
-                # Check whether the object's name without the plural 's' at the end exists in the mapping.
-                # This is also another case where object names in SceneNet is different from nyu_idset.csv
-                elif obj_name.endswith("s") and obj_name[:-1] in LabelIdMapping.label_id_map:
+                # Check whether the object's name without suffixes like 's', '1' or '2' exist in the mapping.
+                elif obj_name[:-1] in LabelIdMapping.label_id_map:
                     obj["category_id"] = LabelIdMapping.label_id_map[obj_name[:-1]]
                 elif "painting" in obj_name:
                     obj["category_id"] = LabelIdMapping.label_id_map["picture"]
