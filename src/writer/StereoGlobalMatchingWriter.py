@@ -37,12 +37,6 @@ class StereoGlobalMatchingWriter(RendererInterface):
        "avoid_rendering", "If true, exit. Type: bool. Optional. Default: False."
        "output_disparity", "Additionally outputs the disparity map. Type: bool. Default: False"
        "rgb_output_key", "The key for the rgb data in the output. Type: string. Optional. default: colors."
-       "resolution_x", "The resolution of the camera in x-direction. Necessary when checking, if there are obstacles "
-                       "in front of the camera. Type: int. Optional. Default: 512."
-       "resolution_y", "The resolution of the camera in y-direction. Necessary when checking, if there are obstacles "
-                       "in front of the camera. Type: int. Optional. Default: 512."
-       "pixel_aspect_x", "The aspect ratio of the camera's viewport. Necessary when checking, if there are obstacles "
-                         "in front of the camera. Type: float. Optional. Default: 1."
 
     """
 
@@ -149,15 +143,9 @@ class StereoGlobalMatchingWriter(RendererInterface):
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        if not 'loaded_resolution' in cam:
-            self.width = self.config.get_int("resolution_x", 512)
-            self.height = self.config.get_int("resolution_y", 512)
-            bpy.context.scene.render.pixel_aspect_x = self.config.get_float("pixel_aspect_x", 1)
-        elif 'loaded_resolution' in cam:
-            self.width, self.height = cam['loaded_resolution']
-        else:
-            raise Exception("Resolution missing in stereo global matching!")
-        print('Resolution: {}, {}'.format(bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_y))
+        self.width = bpy.context.scene.render.resolution_x
+        self.height = bpy.context.scene.render.resolution_y
+        print('Resolution: {}, {}'.format(self.width, self.height))
 
         self.baseline = cam.stereo.interocular_distance
         if not self.baseline:

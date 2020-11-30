@@ -47,7 +47,7 @@ class SceneNetLighting(Module):
                 obj_name = obj.name
                 if "." in obj_name:
                     obj_name = obj_name[:obj_name.find(".")]
-                obj_name = obj_name.replace("_", "")
+                obj_name = obj_name.replace("_", "").lower()
                 # remove all digits from the string
                 obj_name = ''.join([i for i in obj_name if not i.isdigit()])
                 if "lamp" in obj_name or "ceiling" in obj_name:

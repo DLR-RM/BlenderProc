@@ -83,7 +83,8 @@
         "check_object_interval": 0.25,
         "mass_scaling": True,
         "mass_factor": 2000,
-        "collision_margin": 0.00001
+        "collision_margin": 0.00001,
+        "collision_shape": "MESH"
       }
     },
     {

@@ -64,15 +64,11 @@ class ObjectPoseSampler(Module):
         objects = self.config.get_list("objects_to_sample", get_all_mesh_objects())
 
         # cache to fasten collision detection
-        cache = {}
+        bvh_cache = {}
 
         # for every selected object
         for obj in objects:
             if obj.type == "MESH":
-
-                print("Trying to put ", obj.name)
-                prior_location = obj.location
-                prior_rotation = obj.rotation_euler
                 no_collision = True
 
                 # Try max_iter amount of times
@@ -81,12 +77,14 @@ class ObjectPoseSampler(Module):
                     # Put the top object in queue at the sampled point in space
                     position = self.config.get_vector3d("pos_sampler")
                     rotation = self.config.get_vector3d("rot_sampler")
-                    # assign it a new position
+                    # assign it a new pose
                     obj.location = position
-                    # and a rotation
                     obj.rotation_euler = rotation
-                    # then update scene
                     bpy.context.view_layer.update()
+                    # Remove bvh cache, as object has changed
+                    if obj.name in bvh_cache:
+                        del bvh_cache[obj.name]
+
                     no_collision = True
 
                     # Now check for collisions
@@ -96,26 +94,22 @@ class ObjectPoseSampler(Module):
                         # if they do
                         if intersection:
                             # then check for more refined collisions
-                            intersection, cache = check_intersection(obj, already_placed)
+                            intersection, bvh_cache = check_intersection(obj, already_placed, bvh_cache=bvh_cache)
 
                         if intersection:
                             no_collision = False
                             break
 
-                    # If no collision then keep the position, else: reset
+                    # If no collision then keep the position
                     if no_collision:
-                        print("No collision detected, moving forward!")
-                        placed.append(obj)
-                        # then stop trying and keep assigned position and orientation
                         break
-                    # if any collisions then reset object to initial state
-                    else:
-                        print("Collision detected, retrying!!")
-                        obj.location = prior_location
-                        obj.rotation_euler = prior_rotation 
-                        bpy.context.view_layer.update()
+
+                placed.append(obj)
+
                 if not no_collision:
-                    print("Giving up on ", obj.name)
+                    print("Could not place " + obj.name + " without a collision.")
+                else:
+                    print("It took " + str(i + 1) + " tries to place " + obj.name)
 
     def insert_key_frames(self, obj, frame_id):
         """ Insert key frames for given object pose

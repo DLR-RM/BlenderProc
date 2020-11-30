@@ -143,8 +143,8 @@ class CocoUtility:
         image_info = {
             "id": image_id,
             "file_name": file_name,
-            "width": image_size[0],
-            "height": image_size[1],
+            "width": image_size[1],
+            "height": image_size[0],
             "date_captured": datetime.datetime.utcnow().isoformat(' '),
             "license": 1,
             "coco_url": "",

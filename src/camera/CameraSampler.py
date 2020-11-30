@@ -8,7 +8,9 @@ import mathutils
 import numpy as np
 
 from src.camera.CameraInterface import CameraInterface
+from src.utility.CameraUtility import CameraUtility
 from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.Config import Config
 from src.utility.ItemCollection import ItemCollection
 
 
@@ -57,7 +59,11 @@ class CameraSampler(CameraInterface):
     .. csv-table::
         :header: "Parameter", "Description"
 
+        "intrinsics", "A dict which contains the intrinsic camera parameters. Check CameraInterface "
+                      "for more info. Type: dict. Default: {}."
         "cam_poses", "Camera poses configuration list. Each cell contains a separate config data. Type: list."
+        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraInterface "
+                             "for more info. Type: dict. Default: {}."
 
     **Properties per cam pose**:
 
@@ -107,8 +113,6 @@ class CameraSampler(CameraInterface):
                                     "check that the variance is increased. Type: float. Default: sys.float_info.min."
         "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor "
                                            "or a table. Type: list. Default: []."
-        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraInterface "
-                             "for more info. Type: dict. Default: {}."
     """
 
     def __init__(self, config):
@@ -160,6 +164,9 @@ class CameraSampler(CameraInterface):
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
         self._above_objects = config.get_list("check_if_pose_above_object_list", [])
 
+        # Set camera intrinsics
+        self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
+
         if self.proximity_checks:
             # needs to build an bvh tree
             self._init_bvh_tree()
@@ -192,10 +199,6 @@ class CameraSampler(CameraInterface):
                 all_tries += 1
                 # Sample a new cam pose and check if its valid
                 if self.sample_and_validate_cam_pose(cam, cam_ob, config):
-                    # Store new cam pose as next frame
-                    frame_id = bpy.context.scene.frame_end
-                    self._insert_key_frames(cam, cam_ob, frame_id)
-                    bpy.context.scene.frame_end = frame_id + 1
                     break
 
             if tries >= self.max_tries:
@@ -218,15 +221,12 @@ class CameraSampler(CameraInterface):
         :param config: The config object describing how to sample
         :return: True, if the sampled pose was valid
         """
-        # Sample/set camera intrinsics
-        self._set_cam_intrinsics(cam, config)
-
         # Sample camera extrinsics (we do not set them yet for performance reasons)
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
 
         if self._is_pose_valid(cam, cam_ob, cam2world_matrix):
             # Set camera extrinsics as the pose is valid
-            cam_ob.matrix_world = cam2world_matrix
+            CameraUtility.add_camera_pose(cam2world_matrix)
             return True
         else:
             return False

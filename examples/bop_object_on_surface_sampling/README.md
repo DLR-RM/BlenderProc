@@ -101,7 +101,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Here we are sampling BOP objects from 3 different datasets.
 * We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `"<args:1>"` (e.g. ycbv in this case).
-* `"cf_set_shading": "SMOOTH"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.  
+* `"cf_set_shading": "SMOOTH"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects. 
 * Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` module overwrites these intrinsics. In this example, `"<args:1>"`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
 
 ### Material Manipulator
@@ -438,7 +438,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * The camera rotation is defined by `"look_at"` a point of interest (`"getter.POI"`) plus a sampled `"inplane_rot"` in the specified range.
 * The `"getter.POI"` is defined by the object closest to the mean position of all objects that are returned by the `"getter.Entity"` Provider, i.e. `"random_samples": 10` objects from the target BOP dataset `"cp_bop_dataset_name": "<args:1>"`.
 * Camera poses undergo `"proximity_checks"` with respect to all objects besides ground_plane (`"excluded_objs_in_proximity_check"`) to ensure that no objects are closer than `"min": 0.3` meters.
-
 
 ### Rgb Renderer
 

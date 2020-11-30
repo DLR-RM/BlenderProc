@@ -2,9 +2,11 @@ import argparse
 import os
 from os.path import join
 import tarfile
+import zipfile
 import subprocess
 import shutil
 import signal
+import sys
 from sys import platform, version_info
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -40,11 +42,14 @@ if "custom_blender_path" not in setup_config:
     if "blender_install_path" in setup_config:
         blender_install_path = os.path.expanduser(setup_config["blender_install_path"])
         if blender_install_path.startswith("/home_local") and not os.path.exists("/home_local"):
-            user_name = os.getenv("USER")
-            home_path = os.getenv("HOME")
+            user_name = os.getenv("USERNAME") if platform == "win32" else os.getenv("USER")
+            home_path = os.getenv("USERPROFILE") if platform == "win32" else os.getenv("HOME")
             print("Warning: Changed install path from {}... to {}..., there is no /home_local/ "
                   "on this machine.".format(join("/home_local", user_name), home_path))
-            blender_install_path = blender_install_path.replace(join("/home_local", user_name), home_path, 1)
+            # Replace the seperator from '/' to the os-specific one
+            # Since all example config files use '/' as seperator
+            blender_install_path = blender_install_path.replace('/'.join(["/home_local", user_name]), home_path, 1)
+            blender_install_path = blender_install_path.replace('/', os.path.sep)
     else:
         blender_install_path = "blender"
 
@@ -59,6 +64,9 @@ if "custom_blender_path" not in setup_config:
     elif platform == "darwin":
         blender_version += "-macOS"
         blender_path = os.path.join(blender_install_path, "Blender.app")
+    elif platform == "win32":
+        blender_version += "-windows64"
+        blender_path = os.path.join(blender_install_path, blender_version)
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
 
@@ -79,6 +87,8 @@ if "custom_blender_path" not in setup_config:
             url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.xz"
         elif platform == "darwin":
             url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".dmg"
+        elif platform == "win32":
+            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".zip"
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
         try:
@@ -127,6 +137,9 @@ if "custom_blender_path" not in setup_config:
             # removing the downloaded image again
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
+        elif platform == "win32":
+            with zipfile.ZipFile(file_tmp) as z:
+                z.extractall(blender_install_path)
 else:
     blender_path = os.path.expanduser(setup_config["custom_blender_path"])
 
@@ -155,28 +168,35 @@ if len(required_packages) > 0:
     # Install pip
     if platform == "linux" or platform == "linux2":
         python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
+        python_bin = os.path.join(python_bin_folder, "python3.7m")
         packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
         pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "python3.7", "site-packages")
     elif platform == "darwin":
         python_bin_folder = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "bin")
-        packages_path = os.path.abspath(os.path.join(blender_path, "Contents", "Resources", "custom-python-packages"))
+        python_bin = os.path.join(python_bin_folder, "python3.7m")
+        packages_path = os.path.abspath(os.path.join(
+            blender_path, "Contents", "Resources", "custom-python-packages"))
         pre_python_package_path = os.path.join(blender_path, "Contents", "Resources", major_version, "python", "lib", "python3.7", "site-packages")
+    elif platform == "win32":
+        python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
+        python_bin = os.path.join(python_bin_folder, "python")
+        packages_path = os.path.abspath(os.path.join(blender_path, "custom-python-packages"))
+        pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "site-packages")
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
-    subprocess.Popen(["./python3.7m", "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
+    subprocess.Popen([python_bin, "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH="")).wait()
     # Make sure pip is up-to-date
-    subprocess.Popen(["./python3.7m", "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH=""), cwd=python_bin_folder).wait()
+    subprocess.Popen([python_bin, "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH="")).wait()
 
     # Make sure to not install into the default site-packages path, as this would overwrite already pre-installed packages
     if not os.path.exists(packages_path):
         os.mkdir(packages_path)
-
     used_env = dict(os.environ, PYTHONPATH=packages_path + ":" + pre_python_package_path)
     # Collect already installed packages by calling pip list (outputs: <package name>==<version>)
-    installed_packages = subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
-                                                  "--path={}".format(pre_python_package_path)], cwd=python_bin_folder)
-    installed_packages += subprocess.check_output(["./python3.7m", "-m", "pip", "list", "--format=freeze",
-                                                  "--path={}".format(packages_path)], cwd=python_bin_folder)
+    installed_packages = subprocess.check_output([python_bin, "-m", "pip", "list", "--format=freeze",
+                                                "--path={}".format(pre_python_package_path)])
+    installed_packages += subprocess.check_output([python_bin, "-m", "pip", "list", "--format=freeze",
+                                               "--path={}".format(packages_path)])
 
     # Split up strings into two lists (names and versions)
     installed_packages_name, installed_packages_versions = zip(*[str(line).lower().split('==') for line in installed_packages.splitlines()])
@@ -203,17 +223,21 @@ if len(required_packages) > 0:
             # If there is already a different version installed
             if not already_installed:
                 # Remove the old version (We have to do this manually, as we are using --target with pip install. There old version are not removed)
-                subprocess.Popen(["./python3.7m", "-m", "pip", "uninstall", package_name, "-y"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=python_bin_folder).wait()
+                subprocess.Popen([python_bin, "-m", "pip", "uninstall", package_name, "-y"],
+                                 env=dict(os.environ, PYTHONPATH=packages_path)).wait()
 
         # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
         if not already_installed or args.reinstall_packages:
-            subprocess.Popen(["./python3.7m", "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path), cwd=python_bin_folder).wait()
+            subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path,
+                              "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
 
 # Run script
 if platform == "linux" or platform == "linux2":
     blender_run_path = os.path.join(blender_path, "blender")
 elif platform == "darwin":
     blender_run_path = os.path.join(blender_path, "Contents", "MacOS", "Blender")
+elif platform == "win32":
+    blender_run_path = os.path.join(blender_path, "blender")
 else:
     raise Exception("This system is not supported yet: {}".format(platform))
 
@@ -222,10 +246,13 @@ path_src_run = os.path.join(repo_root_directory, "src/run.py")
 
 # Determine perfect temp dir
 if args.temp_dir is None:
-    if os.path.exists("/dev/shm"):
-        temp_dir = "/dev/shm"
+    if sys.platform != "win32":
+        if os.path.exists("/dev/shm"):
+            temp_dir = "/dev/shm"
+        else:
+            temp_dir = "/tmp"
     else:
-        temp_dir = "/tmp"
+        temp_dir = os.getenv("TEMP")
 else:
     temp_dir = args.temp_dir
 # Generate unique directory name in temp dir

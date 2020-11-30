@@ -9,6 +9,13 @@ class Config:
     def __init__(self, data):
         self.data = data
 
+    def is_empty(self):
+        """ Checks if the config contains no parameters.
+
+        :return: True, if the config is empty
+        """
+        return len(self.data) == 0
+
     def has_param(self, name, block=None):
         """ Check if parameter is defined in config 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations"]

@@ -74,7 +74,7 @@ However, they increase the render time slightly and that's why they are usually 
 
 This module loads the SceneNet data object, specified via the `file_path`. 
 All objects included in this `.obj` file get a randomly selected texture from the `texture_folder`.
-The `category_id` of each object are set based on their name, check the [table](../../resources/scenenet_with_cctextures/CategoryLabeling.csv) for more information on the labels.
+The `category_id` of each object are set based on their name, check the [table](../../resources/id_mappings/nyu_idset.csv) for more information on the labels.
 
 ### CameraSampler
 

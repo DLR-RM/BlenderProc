@@ -14,6 +14,7 @@ class RgbRenderer(RendererInterface):
         "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
                                 "materials, Type: bool. Default: False."
         "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
+        "transparent_background", "Whether to render the background as transparent or not, Type: bool. Default: False."
         "use_motion_blur", "Use Blender motion blur feature which is required for motion blur and rolling shutter simulation. "
                                 "This feature only works if camera poses follow a continous trajectory as Blender performs a Bezier "
                                 "interpolation between keyframes and therefore arbitrary results are to be expected if camera poses "
@@ -73,7 +74,10 @@ class RgbRenderer(RendererInterface):
             self._configure_renderer(use_denoiser=True, default_denoiser="Intel")
 
             # In case a previous renderer changed these settings
-            bpy.context.scene.render.image_settings.color_mode = "RGB"
+            #Store as RGB by default unless the user specifies store_alpha as true in yaml
+            bpy.context.scene.render.image_settings.color_mode = "RGBA" if self.config.get_bool("transparent_background", False) else "RGB"
+            #set the background as transparent if transparent_background is true in yaml
+            bpy.context.scene.render.film_transparent = self.config.get_bool("transparent_background", False)
             bpy.context.scene.render.image_settings.file_format = self._image_type
             bpy.context.scene.render.image_settings.color_depth = "8"
 

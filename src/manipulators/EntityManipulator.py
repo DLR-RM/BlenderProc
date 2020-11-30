@@ -9,7 +9,7 @@ from src.loader.LoaderInterface import LoaderInterface
 from src.main.Module import Module
 from src.provider.getter.Material import Material
 from src.utility.Config import Config
-
+from mathutils import Matrix
 
 class EntityManipulator(Module):
     """ Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
@@ -271,7 +271,12 @@ class EntityManipulator(Module):
 
                 # as an attribute of this value
                 if hasattr(entity, key_copy) and not requested_cp:
+                    # Some properties like matrix_world would interpret numpy arrays / lists as column-wise matrices.
+                    # To make sure matrices are always interpreted row-wise, we first convert them to a mathutils matrix.
+                    if isinstance(getattr(entity, key_copy), Matrix):
+                        value = Matrix(value)
                     setattr(entity, key_copy, value)
+
                 # custom functions
                 elif key_copy == "add_modifier" and requested_cf:
                     self._add_modifier(entity, value)
@@ -288,7 +293,7 @@ class EntityManipulator(Module):
                 # but if the name is new then new custom property will be created
                 elif requested_cp:
                     entity[key_copy] = value
-
+                    
         bpy.context.view_layer.update()
 
     def _get_the_set_params(self, params_conf):
