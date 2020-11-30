@@ -11,9 +11,9 @@ if not dir in sys.path:
 
 # Add path to custom packages inside the blender main directory
 if platform == "linux" or platform == "linux2":
-    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
+    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages"))
 elif platform == "darwin":
-    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "Resources", "custom-python-packages"))
+    packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "..", "Resources", "custom-python-packages"))
 else:
     raise Exception("This system is not supported yet: {}".format(platform))
 sys.path.append(packages_path)
