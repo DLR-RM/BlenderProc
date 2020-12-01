@@ -8,7 +8,7 @@
 
 # Version History
 
-## Version 1.7.0: 24th November 2020
+## Version 1.7.0: 1st December 2020
 - switch to blender 2.91
 - added an example of how to set object poses via a transformation matrix and set camera extrinsics / intrinsics via a transformation matrix and a K matrix
 - added camera utility class which makes it easier to set and retrieve intrinsics via any K matrix
