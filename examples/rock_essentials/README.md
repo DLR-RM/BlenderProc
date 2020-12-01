@@ -177,7 +177,7 @@ This module allows us to set a texture for selected ground planes which have a R
     "max_simulation_time": 5,
     "check_object_interval": 1,
     "solver_iters": 25,
-    "steps_per_sec": 250
+    "substeps_per_frame": 40
   }
 },
 ```
@@ -185,7 +185,7 @@ This module allows us to set a texture for selected ground planes which have a R
 Sometimes small objects that are `"physics": True` (just like rocks) can bug through the plane which is `"physics": True` (just like our ground plane) during the animation.
 To counter this, we are setting two new parameters to `object.PhysicsPositioning` module:
 * `"solver_iters"`: Number of constraint solver iterations made per simulation step.
-* `"steps_per_sec"`: Number of simulation steps taken per second. 
+* `"substeps_per_frame"`: Number of simulation steps taken per frame. 
 
 Which usually helps.
 

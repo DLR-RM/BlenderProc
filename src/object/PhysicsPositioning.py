@@ -27,7 +27,7 @@ class PhysicsPositioning(Module):
         "max_simulation_time", "The maximum number of seconds to simulate. Type: int. Default: 40.0"
         "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve "
                             "stability, but also make objects hover a bit. Type: float. Default: 0.001."
-        "steps_per_sec", "Number of simulation steps taken per second. Type: int. Default: 60."
+        "substeps_per_frame", "Number of simulation steps taken per frame. Type: int. Default: 10."
         "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Default: 10."
         "collision_mesh_source", "Source of the mesh used to create collision shape. Type: string. Default: 'FINAL'. "
                                  "Available: 'BASE', 'DEFORM', 'FINAL'."
@@ -50,7 +50,9 @@ class PhysicsPositioning(Module):
         self.object_stopped_rotation_threshold = self.config.get_float("object_stopped_rotation_threshold", 0.1)
         self.collision_margin = self.config.get_float("collision_margin", 0.001)
         self.collision_mesh_source = self.config.get_string('collision_mesh_source', 'FINAL')
-        self.steps_per_sec = self.config.get_int("steps_per_sec", 60)
+        if config.has_param("steps_per_sec"):
+            raise Exception("You are using the outdated parameter steps_per_sec. Please update your config by switching to substeps_per_frame (was changed in blender 2.91).")
+        self.substeps_per_frame = self.config.get_int("substeps_per_frame", 10)
         self.solver_iters = self.config.get_int("solver_iters", 10)
         self.mass_scaling = self.config.get_bool("mass_scaling", False)
         self.mass_factor = self.config.get_float("mass_factor", 1)
@@ -74,7 +76,7 @@ class PhysicsPositioning(Module):
             shift = locations_before_origin_shift[obj] - locations_after_origin_shift[obj]
             origin_shift.update({obj: shift})
 
-        bpy.context.scene.rigidbody_world.steps_per_second = self.steps_per_sec
+        bpy.context.scene.rigidbody_world.substeps_per_frame = self.substeps_per_frame
         bpy.context.scene.rigidbody_world.solver_iterations = self.solver_iters
 
         obj_poses_before_sim = self._get_pose()

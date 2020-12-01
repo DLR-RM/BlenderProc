@@ -274,7 +274,7 @@
         "max_simulation_time": 10,
         "check_object_interval": 1,
         "solver_iters": 25,
-        "steps_per_sec": 100,
+        "substeps_per_frame": 20,
         "friction": 100.0,
         "linear_damping": 0.99,
         "angular_damping": 0.99,

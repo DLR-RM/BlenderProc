@@ -77,7 +77,7 @@
       "module": "object.PhysicsPositioning",
       "config": {
         "solver_iters": 30,
-        "steps_per_sec": 250,
+        "substeps_per_frame": 40,
         "min_simulation_time": 0.5,
         "max_simulation_time": 4,
         "check_object_interval": 0.25,

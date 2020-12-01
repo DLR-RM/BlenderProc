@@ -3,7 +3,7 @@ import sys
 import os
 
 # Add path to custom packages inside the blender main directory
-sys.path.append(os.path.join(os.path.dirname(sys.executable), "custom-python-packages"))
+sys.path.append(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages"))
 
 # Read args
 sys.argv = ["/usr/bin/sphinx-build"] + sys.argv[sys.argv.index("--") + 1:]
