@@ -29,6 +29,34 @@
       }
     },
     {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>"
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "type": "MESH"
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.4,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True  # this will return one random loaded cc textures
+            }
+          }
+        }
+      }
+    },
+    {
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [{
@@ -63,34 +91,6 @@
             }
           }
         }]
-      }
-    },
-    {
-      "module": "loader.CCMaterialLoader",
-      # you can use the scripts/download_cc_textures.py to download them
-      "config": {
-        "folder_path": "<args:2>"
-      }
-    },
-    {
-      "module": "manipulators.EntityManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "type": "MESH"
-          }
-        },
-        "cf_randomize_materials": {
-          "randomization_level": 0.4,
-          "materials_to_replace_with": {
-            "provider": "getter.Material",
-            "random_samples": 1,
-            "conditions": {
-              "cp_is_cc_texture": True  # this will return one random loaded cc textures
-            }
-          }
-        }
       }
     },
     {
