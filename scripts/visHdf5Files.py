@@ -6,9 +6,6 @@ from matplotlib import pyplot as plt
 import sys
 import json
 
-sys.path.append(os.path.join(os.path.dirname(__file__)))
-from utils import flow_to_rgb
-
 parser = argparse.ArgumentParser("Script to visualize hdf5 files")
 
 parser.add_argument('hdf5_paths', nargs='+', help='Path to hdf5 file/s')
@@ -29,6 +26,14 @@ def vis_data(key, data, full_hdf5_data, file_label):
         plt.title("{} in {}".format(key, file_label))
 
     if key in args.flow_keys:
+        try:
+            # This import here is ugly, but else everytime someone uses this script it demands opencv and the progressbar
+            sys.path.append(os.path.join(os.path.dirname(__file__)))
+            from utils import flow_to_rgb
+        except ImportError:
+            raise ImportError("Using .hdf5 containers, which contain flow images needs opencv-python and progressbar "
+                              "to be installed!")
+
         # Visualize optical flow
         plt.imshow(flow_to_rgb(data), cmap='jet')
     elif key in args.segmap_keys:
