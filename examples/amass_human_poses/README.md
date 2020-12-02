@@ -32,7 +32,29 @@ However, we will give you a step by step explanation on how to get access.
 6. On the AMASS download page `https://amass.is.tue.mpg.de/dataset` many different motion capture dataset are listed, choose the one you are interested in to generate a pose from and download the body data. For example, we choose here the CMU motion capture dataset to download.
 	<img src="instructions_screenshots/mocap_dataset_download.png"> 
 	Download the dataset and extract it under the `resources/AMASS` folder.
-
+7. In the end the structure of the `resource/AMASS` folder should be, this might mean you need to create some folders or move some data: 
+```shell script
+- resources
+    - AMASS
+        - body_models
+            - dmpls  
+                - female  
+                - LICENSE.txt  
+                - male  
+                - neutral
+            - smplh
+                - female  
+                - LICENSE.txt  
+                - info.txt
+                - male  
+                - neutral
+        - CMU
+            - CMU 
+                - 01
+                  ...
+                - 144
+        - taxonomy.json
+```
 
 ## Usage
 Execute in the BlenderProc main directory:

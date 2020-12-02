@@ -211,6 +211,13 @@ if len(required_packages) > 0:
         else:
             package_name, package_version = package.lower(), None
 
+        # If the package is given via git, extract package name from url
+        if package_name.startswith("git+"):
+            # Extract part after last slash
+            package_name = package_name[package_name.rfind("/") + 1:]
+            # Replace underscores with dashes as its done by pip
+            package_name = package_name.replace("_", "-")
+
         # Check if package is installed
         already_installed = package_name in installed_packages_name
 

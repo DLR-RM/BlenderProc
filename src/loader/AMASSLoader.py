@@ -197,13 +197,11 @@ class AMASSLoader(LoaderInterface):
         :param faces: face parametric model which is used to generate the face mesh. Type: numpy.array
         :return: path to generated obj file. Type: string.
         """
-        # Get a temporary for the generated mesh
-        temp_dir = Utility.get_temporary_directory(self.config)
         # Generate temp object with name = timestamp
         starttime = datetime.now().replace(microsecond=0)
         obj_file_name = datetime.strftime(starttime, '%Y%m%d_%H%M') + ".obj"
         # Write to an .obj file
-        outmesh_path = os.path.join(temp_dir, obj_file_name)
+        outmesh_path = os.path.join(self._temp_dir, obj_file_name)
         with open(outmesh_path, 'w') as fp:
             fp.write("".join(['v {:f} {:f} {:f}\n'.format(v[0], v[1], v[2])
                               for v in body_represenstation.v[0].detach().cpu().numpy()]))
