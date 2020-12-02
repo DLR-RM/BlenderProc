@@ -115,3 +115,26 @@ class IKEALoader(LoaderInterface):
         print("Selected object: ", os.path.basename(selected_obj))
         loaded_obj = Utility.import_objects(selected_obj)
         self._set_properties(loaded_obj)
+
+        # extract the file unit from the .obj file to convert every object to meters
+        file_unit = ""
+        with open(selected_obj, "r") as file:
+            first_lines = [next(file) for x in range(5)]
+            for line in first_lines:
+                if "File units" in line:
+                    file_unit = line.strip().split(" ")[-1]
+                    if file_unit not in ["inches", "meters", "centimeters", "millimeters"]:
+                        raise Exception("The file unit type could not be found, check the selected "
+                                        "file: {}".format(selected_obj))
+                    break
+
+        # convert all objects to meters
+        for obj in loaded_obj:
+            if file_unit == "inches":
+                obj.scale *= 0.0254
+            elif file_unit == "centimeters":
+                obj.scale *= 0.01
+            elif file_unit == "millimeters":
+                obj.scale *= 0.001
+            else:
+                raise Exception("The file unit type: {} is not defined".format(file_unit))
