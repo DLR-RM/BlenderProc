@@ -1,0 +1,782 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.camera.CameraSampler &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.camera.CameraSampler</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.camera.CameraSampler</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numbers</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">import</span> <span class="nn">bmesh</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">mathutils</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">src.camera.CameraInterface</span> <span class="kn">import</span> <span class="n">CameraInterface</span>
+<span class="kn">from</span> <span class="nn">src.utility.CameraUtility</span> <span class="kn">import</span> <span class="n">CameraUtility</span>
+<span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_mesh_objects</span>
+<span class="kn">from</span> <span class="nn">src.utility.Config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">src.utility.ItemCollection</span> <span class="kn">import</span> <span class="n">ItemCollection</span>
+
+
+<div class="viewcode-block" id="CameraSampler"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">[docs]</a><span class="k">class</span> <span class="nc">CameraSampler</span><span class="p">(</span><span class="n">CameraInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A general camera sampler.</span>
+
+<span class="sd">        First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.</span>
+<span class="sd">        If that&#39;s not the case a new camera pose is sampled instead.</span>
+
+<span class="sd">        Supported cam pose validation methods:</span>
+<span class="sd">        - Checking if the distance to objects is in a configured range</span>
+<span class="sd">        - Checking if the scene coverage/interestingness score is above a configured threshold</span>
+<span class="sd">        - Checking if a candidate pose is sufficiently different than the sampled poses so far</span>
+
+<span class="sd">        Example 1: Sampling 10 camera poses.</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;module&quot;: &quot;camera.SuncgCameraSampler&quot;,</span>
+<span class="sd">          &quot;config&quot;: {</span>
+<span class="sd">            &quot;cam_poses&quot;: [</span>
+<span class="sd">            {</span>
+<span class="sd">              &quot;number_of_samples&quot;: 10,</span>
+<span class="sd">              &quot;proximity_checks&quot;: {</span>
+<span class="sd">                &quot;min&quot;: 1.0</span>
+<span class="sd">              },</span>
+<span class="sd">              &quot;min_interest_score&quot;: 0.4,</span>
+<span class="sd">              &quot;location&quot;: {</span>
+<span class="sd">                &quot;provider&quot;:&quot;sampler.Uniform3d&quot;,</span>
+<span class="sd">                &quot;max&quot;:[0, 0, 2],</span>
+<span class="sd">                &quot;min&quot;:[0, 0, 0.5]</span>
+<span class="sd">              },</span>
+<span class="sd">              &quot;rotation&quot;: {</span>
+<span class="sd">                &quot;value&quot;: {</span>
+<span class="sd">                  &quot;provider&quot;:&quot;sampler.Uniform3d&quot;,</span>
+<span class="sd">                  &quot;max&quot;:[1.2217, 0, 6.283185307],</span>
+<span class="sd">                  &quot;min&quot;:[1.2217, 0, 0]</span>
+<span class="sd">                }</span>
+<span class="sd">              }</span>
+<span class="sd">            }</span>
+<span class="sd">            ]</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">        :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;intrinsics&quot;, &quot;A dict which contains the intrinsic camera parameters. Check CameraInterface &quot;</span>
+<span class="sd">                      &quot;for more info. Type: dict. Default: {}.&quot;</span>
+<span class="sd">        &quot;cam_poses&quot;, &quot;Camera poses configuration list. Each cell contains a separate config data. Type: list.&quot;</span>
+<span class="sd">        &quot;default_cam_param&quot;, &quot;A dict which can be used to specify properties across all cam poses. Check CameraInterface &quot;</span>
+<span class="sd">                             &quot;for more info. Type: dict. Default: {}.&quot;</span>
+
+<span class="sd">    **Properties per cam pose**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">        :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;number_of_samples&quot;, &quot;The number of camera poses that should be sampled. Note depending on some constraints &quot;</span>
+<span class="sd">                             &quot;(e.g. interest scores), the sampler might not return all of the camera poses if the &quot;</span>
+<span class="sd">                             &quot;number of tries exceeded the configured limit. Type: int. Default: 1.&quot;</span>
+<span class="sd">        &quot;max_tries&quot;, &quot;The maximum number of tries that should be made to sample the requested number of cam poses per &quot;</span>
+<span class="sd">                     &quot;interest score. Type: int. Default: 100000000.&quot;</span>
+<span class="sd">        &quot;sqrt_number_of_rays&quot;, &quot;The square root of the number of rays which will be used to determine, if there is an &quot;</span>
+<span class="sd">                               &quot;obstacle in front of the camera. Type: int. Default: 10.&quot;</span>
+<span class="sd">        &quot;proximity_checks&quot;, &quot;A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries &quot;</span>
+<span class="sd">                            &quot;containing thresholds in the form of {&quot;min&quot;: 1.0, &quot;max&quot;:4.0} or just the numerical &quot;</span>
+<span class="sd">                            &quot;threshold in case of max or min. The operators are combined in conjunction (i.e boolean &quot;</span>
+<span class="sd">                            &quot;AND). This can also be used to avoid the background in images, with the&quot;</span>
+<span class="sd">                            &quot;no_background: True option. Type: dict. Default: {}.</span>
+<span class="sd">        &quot;excluded_objs_in_proximity_check&quot;, &quot;A list of objects, returned by getter.Entity to remove some objects from&quot;</span>
+<span class="sd">                                            &quot;the proximity checks defined in &#39;proximity_checks&#39;.&quot;</span>
+<span class="sd">                                            &quot;Type: list. Default: []&quot;</span>
+<span class="sd">        &quot;min_interest_score&quot;, &quot;Arbitrary threshold to discard cam poses with less interesting views. Type: float. &quot;</span>
+<span class="sd">                              &quot;Default: 0.0.&quot;</span>
+<span class="sd">        &quot;interest_score_range&quot;, &quot;The maximum of the range of interest scores that would be used to sample the camera &quot;</span>
+<span class="sd">                                &quot;poses. Interest score range example: min_interest_score = 0.8, interest_score_range = &quot;</span>
+<span class="sd">                                &quot;1.0, interest_score_step = 0.1 interest score list = [1.0, 0.9, 0.8]. The sampler &quot;</span>
+<span class="sd">                                &quot;would reject any pose with score less than 1.0. If max tries is reached, it would &quot;</span>
+<span class="sd">                                &quot;switch to 0.9 and so on. min_interest_score = 0.8, interest_score_range = 0.8, &quot;</span>
+<span class="sd">                                &quot;interest_score_step = 0.1 (or any value bigger than 0) interest score list = [0.8]. &quot;</span>
+<span class="sd">                                &quot;Type: float. Default: min_interest_score.&quot;</span>
+<span class="sd">        &quot;interest_score_step&quot;, &quot;Step size for the list of interest scores that would be tried in the range from &quot;</span>
+<span class="sd">                               &quot;min_interest_score to interest_score_range. Must be bigger than 0. Type: float. &quot;</span>
+<span class="sd">                               &quot;Default: 0.1.&quot;</span>
+<span class="sd">        &quot;special_objects&quot;, &quot;Objects that weights differently in calculating whether the scene is interesting or not, &quot;</span>
+<span class="sd">                           &quot;uses the coarse_grained_class or if not SUNCG, 3D Front, the category_id.&quot;</span>
+<span class="sd">                           &quot;Type: list. Default: [].&quot;</span>
+<span class="sd">        &quot;special_objects_weight&quot;, &quot;Weighting factor for more special objects, used to estimate the interestingness of &quot;</span>
+<span class="sd">                                  &quot;the scene. Type: float. Default: 2.0.&quot;</span>
+<span class="sd">        &quot;check_pose_novelty_rot&quot;, &quot;Checks that a sampled new pose is novel with respect to the rotation component. &quot;</span>
+<span class="sd">                                  &quot;Type: bool. Default: False&quot;</span>
+<span class="sd">        &quot;check_pose_novelty_translation&quot;, &quot;Checks that a sampled new pose is novel with respect to the translation &quot;</span>
+<span class="sd">                                          &quot;component. Type: bool. Default: False.&quot;</span>
+<span class="sd">        &quot;min_var_diff_rot&quot;, &quot;Considers a pose novel if it increases the variance of the rotation component of all poses &quot;</span>
+<span class="sd">                            &quot;sampled by this parameter&#39;s value in percentage. If set to -1, then it would only check &quot;</span>
+<span class="sd">                            &quot;that the variance is increased. Type: float. Default: sys.float_info.min.&quot;</span>
+<span class="sd">        &quot;min_var_diff_translation&quot;, &quot;Same as min_var_diff_rot but for translation. If set to -1, then it would only &quot;</span>
+<span class="sd">                                    &quot;check that the variance is increased. Type: float. Default: sys.float_info.min.&quot;</span>
+<span class="sd">        &quot;check_if_pose_above_object_list&quot;, &quot;A list of objects, where each camera has to be above, could be the floor &quot;</span>
+<span class="sd">                                           &quot;or a table. Type: list. Default: [].&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">CameraInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bvh_tree</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">translations</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_rot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_translation</span>   <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_pose_novelty_rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;check_pose_novelty_rot&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_pose_novelty_translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;check_pose_novelty_translation&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_rot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;min_var_diff_rot&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_rot</span> <span class="o">==</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_rot</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;min_var_diff_translation&quot;</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_translation</span> <span class="o">==</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_translation</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">min</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam_pose_collection</span> <span class="o">=</span> <span class="n">ItemCollection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sample_cam_poses</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;default_cam_param&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+
+<div class="viewcode-block" id="CameraSampler.run"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets camera poses. &quot;&quot;&quot;</span>
+
+        <span class="n">source_specs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;cam_poses&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">source_spec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">source_specs</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cam_pose_collection</span><span class="o">.</span><span class="n">add_item</span><span class="p">(</span><span class="n">source_spec</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CameraSampler._sample_cam_poses"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._sample_cam_poses">[docs]</a>    <span class="k">def</span> <span class="nf">_sample_cam_poses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Samples camera poses according to the given config</span>
+
+<span class="sd">        :param config: The config object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cam_ob</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">cam_ob</span><span class="o">.</span><span class="n">data</span>
+
+        <span class="c1"># Set global parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_bvh_tree_inited</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;sqrt_number_of_rays&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;max_tries&quot;</span><span class="p">,</span> <span class="mi">100000000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;proximity_checks&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">excluded_objects_in_proximity_check</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;excluded_objs_in_proximity_check&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;min_interest_score&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interest_score_range</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;interest_score_range&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interest_score_step</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;interest_score_step&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">special_objects</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;special_objects&quot;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">special_objects_weight</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;special_objects_weight&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_above_objects</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;check_if_pose_above_object_list&quot;</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="c1"># Set camera intrinsics</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_cam_intrinsics</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">Config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;intrinsics&quot;</span><span class="p">,</span> <span class="p">{})))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+            <span class="c1"># needs to build an bvh tree</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_init_bvh_tree</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest_score_step</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Must have an interest score step size bigger than 0&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Determine the number of camera poses to sample</span>
+        <span class="n">number_of_poses</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;number_of_samples&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sampling &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">number_of_poses</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; cam poses&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest_score_range</span><span class="p">:</span>
+            <span class="n">step_size</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>    
+            <span class="n">step_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interest_score_range</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">interest_score_step</span>
+            <span class="n">step_size</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># To include last value</span>
+        <span class="c1"># Decreasing order</span>
+        <span class="n">interest_scores</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interest_score_range</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span><span class="p">,</span> <span class="n">step_size</span><span class="p">)</span>
+        <span class="n">score_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">all_tries</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># max_tries is now applied per each score</span>
+        <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span> <span class="o">=</span> <span class="n">interest_scores</span><span class="p">[</span><span class="n">score_index</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying a min_interest_score value: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_poses</span><span class="p">):</span>
+            <span class="c1"># Do until a valid pose has been found or the max number of tries has been reached</span>
+            <span class="k">while</span> <span class="n">tries</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span><span class="p">:</span>
+                <span class="n">tries</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">all_tries</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="c1"># Sample a new cam pose and check if its valid</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample_and_validate_cam_pose</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">cam_ob</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">tries</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">score_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">interest_scores</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1"># If we tried all score values</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Maximum number of tries reached!&quot;</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="c1"># Otherwise, try a different lower score and reset the number of trials</span>
+                <span class="n">score_index</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span> <span class="o">=</span> <span class="n">interest_scores</span><span class="p">[</span><span class="n">score_index</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trying a different min_interest_score value: </span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span><span class="p">)</span>
+                <span class="n">tries</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">all_tries</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; tries were necessary&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CameraSampler.sample_and_validate_cam_pose"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler.sample_and_validate_cam_pose">[docs]</a>    <span class="k">def</span> <span class="nf">sample_and_validate_cam_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam</span><span class="p">,</span> <span class="n">cam_ob</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.</span>
+
+<span class="sd">        :param cam: The camera which contains only camera specific attributes.</span>
+<span class="sd">        :param cam_ob: The object linked to the camera which determines general properties like location/orientation</span>
+<span class="sd">        :param config: The config object describing how to sample</span>
+<span class="sd">        :return: True, if the sampled pose was valid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Sample camera extrinsics (we do not set them yet for performance reasons)</span>
+        <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cam2world_matrix_from_cam_extrinsics</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_pose_valid</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">cam_ob</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">):</span>
+            <span class="c1"># Set camera extrinsics as the pose is valid</span>
+            <span class="n">CameraUtility</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="CameraSampler._is_pose_valid"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._is_pose_valid">[docs]</a>    <span class="k">def</span> <span class="nf">_is_pose_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam</span><span class="p">,</span> <span class="n">cam_ob</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Determines if the given pose is valid.</span>
+
+<span class="sd">        - Checks if the distance to objects is in the configured range</span>
+<span class="sd">        - Checks if the scene coverage score is above the configured threshold</span>
+
+<span class="sd">        :param cam: The camera which contains only camera specific attributes.</span>
+<span class="sd">        :param cam_ob: The object linked to the camera which determines general properties like location/orientation</span>
+<span class="sd">        :param cam2world_matrix: The sampled camera extrinsics in form of a camera to world frame transformation matrix.</span>
+<span class="sd">        :return: True, if the pose is valid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perform_obstacle_in_view_check</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_coverage_score</span><span class="p">(</span><span class="n">cam</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_interest_score</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">check_pose_novelty_rot</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pose_novelty_translation</span><span class="p">)</span> <span class="ow">and</span> \
+        <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_novel_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_above_objects</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_above_objects</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position_is_above_object</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="o">.</span><span class="n">to_translation</span><span class="p">(),</span> <span class="n">obj</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CameraSampler._position_is_above_object"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._position_is_above_object">[docs]</a>    <span class="k">def</span> <span class="nf">_position_is_above_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Make sure the given position is straight above the given object with no obstacles in between.</span>
+
+<span class="sd">        :param position: The position to check.</span>
+<span class="sd">        :param object: The query object to use.</span>
+<span class="sd">        :return: True, if a ray sent into negative z-direction starting from the position hits the object first.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Send a ray straight down and check if the first hit object is the query object</span>
+        <span class="n">hit</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">depsgraph</span><span class="p">,</span>
+                                                                 <span class="n">position</span><span class="p">,</span>
+                                                                 <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">hit</span> <span class="ow">and</span> <span class="n">hit_object</span> <span class="o">==</span> <span class="nb">object</span></div>
+
+
+<div class="viewcode-block" id="CameraSampler._init_bvh_tree"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._init_bvh_tree">[docs]</a>    <span class="k">def</span> <span class="nf">_init_bvh_tree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a bvh tree which contains all mesh objects in the scene.</span>
+
+<span class="sd">        Such a tree is later used for fast raycasting.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create bmesh which will contain the meshes of all objects</span>
+        <span class="n">bm</span> <span class="o">=</span> <span class="n">bmesh</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+        <span class="c1"># Go through all mesh objects</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_all_mesh_objects</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">excluded_objects_in_proximity_check</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="c1"># Add object mesh to bmesh (the newly added vertices will be automatically selected)</span>
+            <span class="n">bm</span><span class="o">.</span><span class="n">from_mesh</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="c1"># Apply world matrix to all selected vertices</span>
+            <span class="n">bm</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;SELECT&quot;</span><span class="p">})</span>
+            <span class="c1"># Deselect all vertices</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bm</span><span class="o">.</span><span class="n">verts</span><span class="p">:</span>
+                <span class="n">v</span><span class="o">.</span><span class="n">select</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Create tree from bmesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bvh_tree</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">bvhtree</span><span class="o">.</span><span class="n">BVHTree</span><span class="o">.</span><span class="n">FromBMesh</span><span class="p">(</span><span class="n">bm</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_bvh_tree_inited</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CameraSampler._perform_obstacle_in_view_check"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._perform_obstacle_in_view_check">[docs]</a>    <span class="k">def</span> <span class="nf">_perform_obstacle_in_view_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check if there is an obstacle in front of the camera which is less than the configured</span>
+<span class="sd">            &quot;min_dist_to_obstacle&quot; away from it.</span>
+
+<span class="sd">        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).</span>
+<span class="sd">        :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.</span>
+<span class="sd">        :return: True, if there are no obstacles too close to the cam.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>  <span class="c1"># if no checks are in the settings all positions are accepted</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_bvh_tree_inited</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The bvh tree should be inited before this function is called!&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get position of the corners of the near plane</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">view_frame</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
+        <span class="c1"># Bring to world space</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="p">[</span><span class="n">cam2world_matrix</span> <span class="o">@</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">frame</span><span class="p">]</span>
+
+        <span class="c1"># Compute vectors along both sides of the plane</span>
+        <span class="n">vec_x</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vec_y</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="nb">sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">sum_sq</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="n">range_distance</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">float_info</span><span class="o">.</span><span class="n">max</span>
+
+        <span class="c1"># Input validation</span>
+        <span class="k">for</span> <span class="n">operator</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">operator</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span> <span class="ow">or</span> <span class="n">operator</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="n">operator</span><span class="p">],</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Threshold must be a number in perform_obstacle_in_view_check&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">operator</span> <span class="o">==</span> <span class="s2">&quot;avg&quot;</span> <span class="ow">or</span> <span class="n">operator</span> <span class="o">==</span> <span class="s2">&quot;var&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;min&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="n">operator</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;max&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="n">operator</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Please specify the accepted interval for the avg and var operators &quot;</span>
+                                    <span class="s2">&quot;in perform_obstacle_in_view_check&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="n">operator</span><span class="p">][</span><span class="s2">&quot;min&quot;</span><span class="p">],</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">)</span> \
+                        <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="n">operator</span><span class="p">][</span><span class="s2">&quot;max&quot;</span><span class="p">],</span> <span class="n">numbers</span><span class="o">.</span><span class="n">Number</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Threshold must be a number in perform_obstacle_in_view_check&quot;</span><span class="p">)</span>
+
+
+        <span class="c1"># If there are no average or variance operators, we can decrease the ray range distance for efficiency</span>
+        <span class="k">if</span> <span class="s2">&quot;avg&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span> <span class="ow">and</span> <span class="s2">&quot;var&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;max&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+                <span class="c1"># Cap distance values at a value slightly higher than the max threshold</span>
+                <span class="n">range_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">range_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]</span>
+
+        <span class="n">no_range_distance</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">&quot;no_background&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;no_background&quot;</span><span class="p">]:</span>
+            <span class="c1"># when no background is on, it can not be combined with a reduced range distance</span>
+            <span class="n">no_range_distance</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Go in discrete grid-like steps over plane</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">cam2world_matrix</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">):</span>
+                <span class="c1"># Compute current point on plane</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> \
+                      <span class="o">+</span> <span class="n">vec_y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Send ray from the camera position through the current point on the plane</span>
+                <span class="k">if</span> <span class="n">no_range_distance</span><span class="p">:</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bvh_tree</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bvh_tree</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">,</span> <span class="n">range_distance</span><span class="p">)</span>
+
+                <span class="c1"># Check if something was hit and how far it is away</span>
+                <span class="k">if</span> <span class="n">dist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;min&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span> <span class="ow">and</span> <span class="n">dist</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">]:</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="s2">&quot;max&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span> <span class="ow">and</span> <span class="n">dist</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">]:</span>
+                        <span class="k">return</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="s2">&quot;avg&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+                        <span class="nb">sum</span> <span class="o">+=</span> <span class="n">dist</span>
+                    <span class="k">if</span> <span class="s2">&quot;var&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;avg&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+                            <span class="nb">sum</span> <span class="o">+=</span> <span class="n">dist</span>
+                        <span class="n">sum_sq</span> <span class="o">+=</span> <span class="n">dist</span> <span class="o">*</span> <span class="n">dist</span>
+                <span class="k">elif</span> <span class="s2">&quot;no_background&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;no_background&quot;</span><span class="p">]:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="s2">&quot;avg&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+            <span class="n">avg</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">)</span>
+            <span class="c1"># Check that the average distance is not within the accepted interval</span>
+            <span class="k">if</span> <span class="n">avg</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;avg&quot;</span><span class="p">][</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">avg</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;avg&quot;</span><span class="p">][</span><span class="s2">&quot;min&quot;</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="s2">&quot;var&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;avg&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">:</span>
+                <span class="n">avg</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">)</span>
+            <span class="n">sq_avg</span> <span class="o">=</span> <span class="n">avg</span> <span class="o">*</span> <span class="n">avg</span>
+
+            <span class="n">avg_sq</span> <span class="o">=</span> <span class="n">sum_sq</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">)</span>
+
+            <span class="n">var</span> <span class="o">=</span> <span class="n">avg_sq</span> <span class="o">-</span> <span class="n">sq_avg</span>
+            <span class="c1"># Check that the variance value of the distance is not within the accepted interval</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;var&quot;</span><span class="p">][</span><span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">var</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proximity_checks</span><span class="p">[</span><span class="s2">&quot;var&quot;</span><span class="p">][</span><span class="s2">&quot;min&quot;</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="CameraSampler._scene_coverage_score"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._scene_coverage_score">[docs]</a>    <span class="k">def</span> <span class="nf">_scene_coverage_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Evaluate the interestingness/coverage of the scene.</span>
+
+<span class="sd">        This module tries to look at as many objects at possible, this might lead to</span>
+<span class="sd">        a focus on the same objects from similar angles.</span>
+
+<span class="sd">        Only for SUNCG and 3D Front:</span>
+<span class="sd">            Least interesting objects: walls, ceilings, floors.</span>
+
+<span class="sd">        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).</span>
+<span class="sd">        :param cam2world_matrix: The world matrix which describes the camera orientation to check.</span>
+<span class="sd">        :return: the scoring of the scene.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">num_of_rays</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">objects_hit</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Get position of the corners of the near plane</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">cam</span><span class="o">.</span><span class="n">view_frame</span><span class="p">(</span><span class="n">scene</span><span class="o">=</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">)</span>
+        <span class="c1"># Bring to world space</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="p">[</span><span class="n">cam2world_matrix</span> <span class="o">@</span> <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">frame</span><span class="p">]</span>
+
+        <span class="c1"># Compute vectors along both sides of the plane</span>
+        <span class="n">vec_x</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vec_y</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Go in discrete grid-like steps over plane</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">cam2world_matrix</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span><span class="p">):</span>
+                <span class="c1"># Compute current point on plane</span>
+                <span class="n">end</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">vec_y</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sqrt_number_of_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># Send ray from the camera position through the current point on the plane</span>
+                <span class="n">hit</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">hit_object</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ray_cast</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">depsgraph</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">hit</span><span class="p">:</span>
+                    <span class="n">is_of_special_dataset</span> <span class="o">=</span> <span class="s2">&quot;is_suncg&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span> <span class="ow">or</span> <span class="s2">&quot;is_3d_front&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span>
+                    <span class="k">if</span> <span class="n">is_of_special_dataset</span> <span class="ow">and</span> <span class="s2">&quot;type&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span> <span class="ow">and</span> <span class="n">hit_object</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Object&quot;</span><span class="p">:</span>
+                        <span class="c1"># calculate the score based on the type of the object,</span>
+                        <span class="c1"># wall, floor and ceiling objects have 0 score</span>
+                        <span class="k">if</span> <span class="s2">&quot;coarse_grained_class&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span><span class="p">:</span>
+                            <span class="n">object_class</span> <span class="o">=</span> <span class="n">hit_object</span><span class="p">[</span><span class="s2">&quot;coarse_grained_class&quot;</span><span class="p">]</span>
+                            <span class="n">objects_hit</span><span class="p">[</span><span class="n">object_class</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="k">if</span> <span class="n">object_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_objects</span><span class="p">:</span>
+                                <span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_objects_weight</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">elif</span> <span class="s2">&quot;category_id&quot;</span> <span class="ow">in</span> <span class="n">hit_object</span><span class="p">:</span>
+                        <span class="n">object_class</span> <span class="o">=</span> <span class="n">hit_object</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">object_class</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_objects</span><span class="p">:</span>
+                            <span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">special_objects_weight</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">objects_hit</span><span class="p">[</span><span class="n">object_class</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">objects_hit</span><span class="p">[</span><span class="n">hit_object</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># For a scene with three different objects, the starting variance is 1.0, increases/decreases by &#39;1/3&#39; for</span>
+        <span class="c1"># each object more/less, excluding floor, ceiling and walls</span>
+        <span class="n">scene_variance</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">objects_hit</span><span class="p">)</span> <span class="o">/</span> <span class="mf">3.0</span>
+        <span class="k">for</span> <span class="n">object_hit_value</span> <span class="ow">in</span> <span class="n">objects_hit</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="c1"># For an object taking half of the scene, the scene_variance is halved, this penalizes non-even</span>
+            <span class="c1"># distribution of the objects in the scene</span>
+            <span class="n">scene_variance</span> <span class="o">*=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">object_hit_value</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_of_rays</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">scene_variance</span> <span class="o">*</span> <span class="p">(</span><span class="n">score</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">num_of_rays</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">score</span></div>
+
+<div class="viewcode-block" id="CameraSampler._check_novel_pose"><a class="viewcode-back" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler._check_novel_pose">[docs]</a>    <span class="k">def</span> <span class="nf">_check_novel_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam2world_matrix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Checks if a newly sampled pose is novel based on variance checks.</span>
+
+<span class="sd">        :param cam2world_matrix: camera pose to check</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">_variance_constraint</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">new_val</span><span class="p">,</span> <span class="n">old_var</span><span class="p">,</span> <span class="n">diff_threshold</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
+            <span class="n">array</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_val</span><span class="p">)</span>
+            <span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">var</span> <span class="o">&lt;</span> <span class="n">old_var</span><span class="p">:</span>
+                <span class="n">array</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="n">diff</span> <span class="o">=</span> <span class="p">((</span><span class="n">var</span> <span class="o">-</span> <span class="n">old_var</span><span class="p">)</span> <span class="o">/</span> <span class="n">old_var</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variance difference </span><span class="si">{}</span><span class="s2">: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">diff</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="n">diff_threshold</span><span class="p">:</span>  <span class="c1"># Check if the variance increased sufficiently</span>
+                <span class="n">array</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="n">translation</span> <span class="o">=</span> <span class="n">cam2world_matrix</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span>
+        <span class="n">rotation</span>    <span class="o">=</span> <span class="n">cam2world_matrix</span><span class="o">.</span><span class="n">to_euler</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translations</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># First pose is always novel</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pose_novelty_rot</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">_variance_constraint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_rot</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_rot</span><span class="p">,</span> <span class="s2">&quot;rotation&quot;</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pose_novelty_translation</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">_variance_constraint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translations</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">var_translation</span><span class="p">,</span>
+                                            <span class="bp">self</span><span class="o">.</span><span class="n">min_var_diff_translation</span><span class="p">,</span> <span class="s2">&quot;translation&quot;</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">translations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">translation</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rotation</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">var_translation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">translations</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span> </div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+src\.lighting\.SceneNetLighting module
+======================================
+
+.. automodule:: src.lighting.SceneNetLighting
+    :members:
+    :undoc-members:
+    :show-inheritance:

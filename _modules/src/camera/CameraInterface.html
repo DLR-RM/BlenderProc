@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.camera.CameraInterface &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.camera.CameraInterface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.camera.CameraInterface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">Euler</span>
+
+<span class="kn">from</span> <span class="nn">src.main.Module</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">src.utility.CameraUtility</span> <span class="kn">import</span> <span class="n">CameraUtility</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+<span class="kn">from</span> <span class="nn">src.utility.MathUtility</span> <span class="kn">import</span> <span class="n">MathUtility</span>
+
+
+<div class="viewcode-block" id="CameraInterface"><a class="viewcode-back" href="../../../src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">[docs]</a><span class="k">class</span> <span class="nc">CameraInterface</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,</span>
+<span class="sd">        in addition to setting stereo parameters.</span>
+
+<span class="sd">        Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config</span>
+<span class="sd">                   parameters here, it has to be in a child class of CameraInterface.</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;module&quot;: &quot;camera.CameraLoader&quot;,</span>
+<span class="sd">          &quot;config&quot;: {</span>
+<span class="sd">            &quot;path&quot;: &quot;&lt;args:0&gt;&quot;,</span>
+<span class="sd">            &quot;file_format&quot;: &quot;location rotation/value _ _ _ _ _ _&quot;,</span>
+<span class="sd">            &quot;source_frame&quot;: [&quot;X&quot;, &quot;-Z&quot;, &quot;Y&quot;],</span>
+<span class="sd">            &quot;default_cam_param&quot;: {</span>
+<span class="sd">              &quot;rotation&quot;: {</span>
+<span class="sd">                &quot;format&quot;: &quot;forward_vec&quot;</span>
+<span class="sd">              }</span>
+<span class="sd">            },</span>
+<span class="sd">            &quot;intrinsics: {</span>
+<span class="sd">              &quot;fov&quot;: 1</span>
+<span class="sd">            }</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">        :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;source_frame&quot;, &quot;Can be used if the given positions and rotations are specified in frames different from the &quot;</span>
+<span class="sd">                        &quot;blender frame. Has to be a list of three strings. Example: [&#39;X&#39;, &#39;-Z&#39;, &#39;Y&#39;]: Point (1,2,3) &quot;</span>
+<span class="sd">                        &quot;will be transformed to (1, -3, 2). Type: list. Default: [&quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;]. &quot;</span>
+<span class="sd">                        &quot;Available: [&#39;X&#39;, &#39;Y&#39;, &#39;Z&#39;, &#39;-X&#39;, &#39;-Y&#39;, &#39;-Z&#39;].&quot;</span>
+<span class="sd">        &quot;cam_poses&quot;, &quot;A list of dicts, where each dict specifies one cam pose. See the next table for details about specific properties. Type: list.&quot;</span>
+<span class="sd">        &quot;default_cam_param&quot;, &quot;Properties across all cam poses. Type: dict.&quot;</span>
+<span class="sd">        &quot;intrinsics&quot;, &quot;A dictionary containing camera intrinsic parameters. See the last table for details. Type: dict. Default: {}.&quot;</span>
+
+<span class="sd">    **Properties per cam pose**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">        :header: &quot;Keyword&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;location&quot;, &quot;The position of the camera, specified as a list of three values (xyz). Type: mathutils.Vector.&quot;</span>
+<span class="sd">        &quot;rotation/value&quot;, &quot;Specifies the rotation of the camera. Per default rotations are specified as three euler &quot;</span>
+<span class="sd">                          &quot;angles. Type: mathutils.Vector.&quot;</span>
+<span class="sd">        &quot;rotation/format&quot;, &quot;Describes the form in which the rotation is specified. Type: string. Available: &#39;euler&#39; &quot;</span>
+<span class="sd">                           &quot;(three Euler angles), &#39;forward_vec&#39;(specified with a forward vector: the Y-Axis is assumed &quot;</span>
+<span class="sd">                           &quot;as Up-Vector), &#39;look_at&#39; (camera will be turned such as it looks at &#39;value&#39; location, which &quot;</span>
+<span class="sd">                           &quot;can be defined as a fixed or sampled XYZ location).&quot;</span>
+<span class="sd">        &quot;rotation/inplane_rot&quot;, &quot;A rotation angle in radians around the Z axis. Type: float. Default: 0.0&quot;</span>
+<span class="sd">        &quot;cam2world_matrix&quot;, &quot;4x4 camera extrinsic matrix. Type: list of floats. Default: [].&quot;</span>
+
+<span class="sd">    **Intrinsic camera parameters**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">        :header: &quot;Keyword&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;cam_K&quot;, &quot;Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left &quot;</span>
+<span class="sd">                 &quot;pixel - this is the convention e.g. used in OpenCV. Type: list. &quot;</span>
+<span class="sd">        &quot;shift&quot;, &quot;Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float.&quot;</span>
+<span class="sd">        &quot;fov&quot;, &quot;The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed &quot;</span>
+<span class="sd">               &quot;to be the angle between forward vector and one side of the frustum). Type: float. &quot;</span>
+<span class="sd">        &quot;resolution_x&quot;, &quot;Width resolution of the camera. Type: int. &quot;</span>
+<span class="sd">        &quot;resolution_y&quot;, &quot;Height resolution of the camera. Type: int. &quot;</span>
+<span class="sd">        &quot;pixel_aspect_x&quot;, &quot;Pixel aspect ratio x. Type: float.&quot;</span>
+<span class="sd">        &quot;pixel_aspect_y&quot;, &quot;Pixel aspect ratio y. Type: float.&quot;</span>
+<span class="sd">        &quot;clip_start&quot;, &quot;Near clipping. Type: float.&quot;</span>
+<span class="sd">        &quot;clip_end&quot;, &quot;Far clipping. Type: float. &quot;</span>
+<span class="sd">        &quot;stereo_convergence_mode&quot;, &quot;How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards &quot;</span>
+<span class="sd">                                   &quot;to converge in the convergence plane, or parallel where they do not converge and &quot;</span>
+<span class="sd">                                   &quot;are parallel). Type: string..&quot;</span>
+<span class="sd">        &quot;convergence_distance&quot;, &quot;The convergence point for the stereo cameras (i.e. distance from the projector to the &quot;</span>
+<span class="sd">                                &quot;projection screen). Type: float.&quot;</span>
+<span class="sd">        &quot;interocular_distance&quot;, &quot;Distance between the camera pair. Type: float.&quot;,</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;source_frame&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">])</span>
+
+<div class="viewcode-block" id="CameraInterface._set_cam_intrinsics"><a class="viewcode-back" href="../../../src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface._set_cam_intrinsics">[docs]</a>    <span class="k">def</span> <span class="nf">_set_cam_intrinsics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets camera intrinsics from a source with following priority</span>
+
+<span class="sd">           1. from config function parameter if defined</span>
+<span class="sd">           2. from custom properties of cam if set in Loader</span>
+<span class="sd">           3. default config</span>
+<span class="sd">                resolution_x/y: 512 </span>
+<span class="sd">                pixel_aspect_x: 1</span>
+<span class="sd">                clip_start:   : 0.1</span>
+<span class="sd">                clip_end      : 1000</span>
+<span class="sd">                fov           : 0.691111</span>
+<span class="sd">        :param cam: The camera which contains only camera specific attributes.</span>
+<span class="sd">        :param config: A configuration object with cam intrinsics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">is_empty</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="n">width</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;resolution_x&quot;</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;resolution_y&quot;</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span><span class="p">)</span>
+
+        <span class="c1"># Clipping</span>
+        <span class="n">clip_start</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;clip_start&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">clip_start</span><span class="p">)</span>
+        <span class="n">clip_end</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;clip_end&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">clip_end</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;cam_K&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;fov&quot;</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: FOV defined in config is ignored. Mutually exclusive with cam_K&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;pixel_aspect_x&quot;</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: pixel_aspect_x defined in config is ignored. Mutually exclusive with cam_K&#39;</span><span class="p">)</span>
+
+            <span class="n">cam_K</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;cam_K&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+            <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_K_matrix</span><span class="p">(</span><span class="n">cam_K</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">clip_start</span><span class="p">,</span> <span class="n">clip_end</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Set FOV</span>
+            <span class="n">fov</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;fov&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">angle</span><span class="p">)</span>
+
+            <span class="c1"># Set Pixel Aspect Ratio</span>
+            <span class="n">pixel_aspect_x</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;pixel_aspect_x&quot;</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">pixel_aspect_x</span><span class="p">)</span>
+            <span class="n">pixel_aspect_y</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;pixel_aspect_y&quot;</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">pixel_aspect_y</span><span class="p">)</span>
+
+            <span class="c1"># Set camera shift</span>
+            <span class="n">shift_x</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;shift_x&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">shift_x</span><span class="p">)</span>
+            <span class="n">shift_y</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;shift_y&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">shift_y</span><span class="p">)</span>
+
+            <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_blender_params</span><span class="p">(</span><span class="n">fov</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">clip_start</span><span class="p">,</span> <span class="n">clip_end</span><span class="p">,</span> <span class="n">pixel_aspect_x</span><span class="p">,</span> <span class="n">pixel_aspect_y</span><span class="p">,</span> <span class="n">shift_x</span><span class="p">,</span> <span class="n">shift_y</span><span class="p">,</span> <span class="n">lens_unit</span><span class="o">=</span><span class="s2">&quot;FOV&quot;</span><span class="p">)</span>
+
+        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_stereo_parameters</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;stereo_convergence_mode&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">stereo</span><span class="o">.</span><span class="n">convergence_mode</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;convergence_distance&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">stereo</span><span class="o">.</span><span class="n">convergence_distance</span><span class="p">),</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;interocular_distance&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="o">.</span><span class="n">stereo</span><span class="o">.</span><span class="n">interocular_distance</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="CameraInterface._set_cam_extrinsics"><a class="viewcode-back" href="../../../src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface._set_cam_extrinsics">[docs]</a>    <span class="k">def</span> <span class="nf">_set_cam_extrinsics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam_ob</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets camera extrinsics according to the config.</span>
+
+<span class="sd">        :param cam_ob: The object linked to the camera which determines general properties like location/orientation</span>
+<span class="sd">        :param config: A configuration object with cam extrinsics.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cam2world_matrix_from_cam_extrinsics</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CameraInterface._cam2world_matrix_from_cam_extrinsics"><a class="viewcode-back" href="../../../src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface._cam2world_matrix_from_cam_extrinsics">[docs]</a>    <span class="k">def</span> <span class="nf">_cam2world_matrix_from_cam_extrinsics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Determines camera extrinsics by using the given config and returns them in form of a cam to world frame transformation matrix.</span>
+
+<span class="sd">        :param config: The configuration object.</span>
+<span class="sd">        :return: The cam to world transformation matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;cam2world_matrix&quot;</span><span class="p">):</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="n">MathUtility</span><span class="o">.</span><span class="n">transform_point_to_blender_coord_frame</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_vector3d</span><span class="p">(</span><span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_frame</span><span class="p">)</span>
+
+            <span class="c1"># Rotation</span>
+            <span class="n">rotation_format</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;rotation/format&quot;</span><span class="p">,</span> <span class="s2">&quot;euler&quot;</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_vector3d</span><span class="p">(</span><span class="s2">&quot;rotation/value&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># Transform to blender coord frame</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">MathUtility</span><span class="o">.</span><span class="n">transform_point_to_blender_coord_frame</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_frame</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">rotation_format</span> <span class="o">==</span> <span class="s2">&quot;euler&quot;</span><span class="p">:</span>
+                <span class="c1"># Rotation, specified as euler angles</span>
+                <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">Euler</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;XYZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+            <span class="k">elif</span> <span class="n">rotation_format</span> <span class="o">==</span> <span class="s2">&quot;forward_vec&quot;</span><span class="p">:</span>
+                <span class="c1"># Convert forward vector to euler angle (Assume Up = Z)</span>
+                <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">rotation_format</span> <span class="o">==</span> <span class="s2">&quot;look_at&quot;</span><span class="p">:</span>
+                <span class="c1"># Convert forward vector to euler angle (Assume Up = Z)</span>
+                <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">rotation_from_forward_vec</span><span class="p">((</span><span class="n">value</span> <span class="o">-</span> <span class="n">position</span><span class="p">)</span><span class="o">.</span><span class="n">normalized</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No such rotation format:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rotation_format</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">rotation_format</span> <span class="o">==</span> <span class="s2">&quot;look_at&quot;</span> <span class="ow">or</span> <span class="n">rotation_format</span> <span class="o">==</span> <span class="s2">&quot;forward_vec&quot;</span><span class="p">:</span>
+                <span class="n">inplane_rot</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;rotation/inplane_rot&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">rotation_matrix</span> <span class="o">@</span> <span class="n">Euler</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">inplane_rot</span><span class="p">))</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+
+            <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">position</span><span class="p">))</span> <span class="o">@</span> <span class="n">rotation_matrix</span><span class="o">.</span><span class="n">to_4x4</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> 
+            <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;cam2world_matrix&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+            <span class="n">cam2world_matrix</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">transform_matrix_to_blender_coord_frame</span><span class="p">(</span><span class="n">cam2world_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">source_frame</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cam2world_matrix</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

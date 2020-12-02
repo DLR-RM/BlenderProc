@@ -1,0 +1,375 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.main.Initializer &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.main.Initializer</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.main.Initializer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">random</span> <span class="k">as</span> <span class="n">np_random</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">platform</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+
+<span class="kn">from</span> <span class="nn">src.main.Module</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">src.main.GlobalStorage</span> <span class="kn">import</span> <span class="n">GlobalStorage</span>
+<span class="kn">from</span> <span class="nn">src.utility.CameraUtility</span> <span class="kn">import</span> <span class="n">CameraUtility</span>
+<span class="kn">from</span> <span class="nn">src.utility.Config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">src.utility.DefaultConfig</span> <span class="kn">import</span> <span class="n">DefaultConfig</span>
+
+
+<div class="viewcode-block" id="Initializer"><a class="viewcode-back" href="../../../src.main.Initializer.html#src.main.Initializer.Initializer">[docs]</a><span class="k">class</span> <span class="nc">Initializer</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Does some basic initialization of the blender project.</span>
+
+<span class="sd">     - Sets background color</span>
+<span class="sd">     - Configures computing device</span>
+<span class="sd">     - Creates camera</span>
+<span class="sd">     - sets the device type to the fastest option possible -&gt; OPTIX &gt; CUDA &gt; OPEN_CL</span>
+
+<span class="sd">     If you want deterministic outputs use the environment variable: &quot;BLENDER_PROC_RANDOM_SEED&quot; and set it to</span>
+<span class="sd">     the desired seed. (random and numpy random are effected by this)</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">       :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">       &quot;horizon_color&quot;, &quot;A list of three elements specifying rgb of the world&#39;s horizon/background color.&quot;</span>
+<span class="sd">                        &quot;Type: list. Default: [0.535, 0.633, 0.608].&quot;</span>
+<span class="sd">       &quot;global&quot;, &quot;A dictionary of all global set attributes, which are used if a module does not provide a certain &quot;</span>
+<span class="sd">                 &quot;key. Type: dict. Default: {}.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+        <span class="c1"># setting up the GlobalStorage</span>
+        <span class="n">global_config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">init_global</span><span class="p">(</span><span class="n">global_config</span><span class="p">)</span>
+
+        <span class="c1"># call the init again to make sure all values from the global config where read correctly, too</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_default_init</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Initializer.run"><a class="viewcode-back" href="../../../src.main.Initializer.html#src.main.Initializer.Initializer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Set language if necessary</span>
+        <span class="k">if</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">preferences</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">language</span> <span class="o">!=</span> <span class="s2">&quot;en_US&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting blender language settings to english during this run&quot;</span><span class="p">)</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">preferences</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="s2">&quot;en_US&quot;</span>
+
+        <span class="n">prefs</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">preferences</span><span class="o">.</span><span class="n">addons</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">preferences</span>
+        <span class="c1"># Use cycles</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="s1">&#39;CYCLES&#39;</span>
+
+        <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+            <span class="c1"># there is no gpu support in mac os so use the cpu with maximum power</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;CPU&quot;</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">threads</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="s2">&quot;GPU&quot;</span>
+            <span class="n">preferences</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">preferences</span><span class="o">.</span><span class="n">addons</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">preferences</span>
+            <span class="k">for</span> <span class="n">device_type</span> <span class="ow">in</span> <span class="n">preferences</span><span class="o">.</span><span class="n">get_device_types</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="p">):</span>
+                <span class="n">preferences</span><span class="o">.</span><span class="n">get_devices_for_type</span><span class="p">(</span><span class="n">device_type</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">gpu_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;OPTIX&quot;</span><span class="p">,</span> <span class="s2">&quot;CUDA&quot;</span><span class="p">]:</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">preferences</span><span class="o">.</span><span class="n">devices</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">device</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">gpu_type</span><span class="p">:</span>
+                        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">preferences</span><span class="o">.</span><span class="n">addons</span><span class="p">[</span><span class="s1">&#39;cycles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">preferences</span><span class="o">.</span><span class="n">compute_device_type</span> <span class="o">=</span> <span class="n">gpu_type</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Device </span><span class="si">{}</span><span class="s1"> of type </span><span class="si">{}</span><span class="s1"> found and used.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">device</span><span class="o">.</span><span class="n">type</span><span class="p">))</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="c1"># make sure that all visible GPUs are used</span>
+            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">prefs</span><span class="o">.</span><span class="n">get_devices</span><span class="p">():</span>
+                <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+                    <span class="n">d</span><span class="o">.</span><span class="n">use</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># setting the frame end, will be changed by the camera loader modules</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Sets background color</span>
+        <span class="n">world</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">worlds</span><span class="p">[</span><span class="s1">&#39;World&#39;</span><span class="p">]</span>
+        <span class="n">world</span><span class="o">.</span><span class="n">color</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_list</span><span class="p">(</span><span class="s2">&quot;horizon_color&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.535</span><span class="p">,</span> <span class="mf">0.633</span><span class="p">,</span> <span class="mf">0.608</span><span class="p">])</span>
+
+        <span class="c1"># Create the camera</span>
+        <span class="n">cam</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">cameras</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Camera&quot;</span><span class="p">)</span>
+        <span class="n">cam_ob</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Camera&quot;</span><span class="p">,</span> <span class="n">cam</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">cam_ob</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">cam_ob</span>
+
+        <span class="c1"># Set default intrinsics</span>
+        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_intrinsics_from_blender_params</span><span class="p">(</span><span class="n">DefaultConfig</span><span class="o">.</span><span class="n">fov</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">resolution_y</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">clip_start</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">clip_end</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">pixel_aspect_x</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">pixel_aspect_y</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">shift_x</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">shift_y</span><span class="p">,</span> <span class="s2">&quot;FOV&quot;</span><span class="p">)</span>
+        <span class="n">CameraUtility</span><span class="o">.</span><span class="n">set_stereo_parameters</span><span class="p">(</span><span class="n">DefaultConfig</span><span class="o">.</span><span class="n">stereo_convergence_mode</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">stereo_convergence_distance</span><span class="p">,</span> <span class="n">DefaultConfig</span><span class="o">.</span><span class="n">stereo_interocular_distance</span><span class="p">)</span>
+
+        <span class="n">random_seed</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BLENDER_PROC_RANDOM_SEED&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">random_seed</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Got random seed: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">random_seed</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">random_seed</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+            <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span>
+            <span class="n">np_random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_seed</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

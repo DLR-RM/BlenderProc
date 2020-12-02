@@ -1,0 +1,7 @@
+src\.loader\.BlendLoader module
+===============================
+
+.. automodule:: src.loader.BlendLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

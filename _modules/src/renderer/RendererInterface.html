@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.renderer.RendererInterface &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.renderer.RendererInterface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.renderer.RendererInterface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">addon_utils</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">mathutils</span>
+
+<span class="kn">from</span> <span class="nn">src.main.GlobalStorage</span> <span class="kn">import</span> <span class="n">GlobalStorage</span>
+<span class="kn">from</span> <span class="nn">src.main.Module</span> <span class="kn">import</span> <span class="n">Module</span>
+<span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_mesh_objects</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+
+
+<div class="viewcode-block" id="RendererInterface"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">[docs]</a><span class="k">class</span> <span class="nc">RendererInterface</span><span class="p">(</span><span class="n">Module</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">        :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;output_file_prefix&quot;, &quot;The file prefix that should be used when writing the rendering to file. Type: String.&quot;</span>
+<span class="sd">        &quot;output_key&quot;, &quot;The key which should be used for storing the rendering in a merged file. Type: String&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;samples&quot;, &quot;Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark &quot;</span>
+<span class="sd">                   &quot;areas. Type: int. Default: 256, (not true for all Renderes).&quot;</span>
+<span class="sd">        &quot;use_adaptive_sampling&quot;, &quot;Combined with the maximum sample amount, it is also possible to set the amount of &quot;</span>
+<span class="sd">                                 &quot;noise left per pixel. This means pixel is sampled until the noise level is smaller &quot;</span>
+<span class="sd">                                 &quot;than specified or the maximum amount of samples were reached. &quot;</span>
+<span class="sd">                                 &quot;Do not use this with Non-RGB-Renders! Only used if specified&quot; in config. &quot;</span>
+<span class="sd">                                 &quot;Type: float. Default: 0.0&quot;</span>
+
+<span class="sd">        &quot;auto_tile_size&quot;, &quot;If true, then the number of render tiles is set automatically using the &quot;</span>
+<span class="sd">                          &quot;render_auto_tile_size addon. Type: bool. Default: True.&quot;</span>
+<span class="sd">        &quot;tile_x&quot;, &quot;The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set &quot;</span>
+<span class="sd">                  &quot;to true. Type: int.&quot;</span>
+<span class="sd">        &quot;tile_y&quot;, &quot;The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set &quot;</span>
+<span class="sd">                  &quot;to true. Type: int.&quot;</span>
+<span class="sd">        &quot;simplify_subdivision_render&quot;, &quot;Global maximum subdivision level during rendering. Speeds up rendering. &quot;</span>
+<span class="sd">                                       &quot;Type: int. Default: 3&quot;</span>
+
+<span class="sd">        &quot;denoiser&quot;, &quot;The denoiser to use. Set to &#39;Blender&#39;, if the Blender&#39;s built-in denoiser should be used or &quot;</span>
+<span class="sd">                    &quot;set to &#39;Intel&#39;, if you want to use the Intel Open Image Denoiser, performs much better. &quot;</span>
+<span class="sd">                    &quot;Type: string. Default: &quot;Intel&quot; Available: [&quot;Intel&quot;, &quot;Blender&quot;].&quot;</span>
+<span class="sd">        &quot;max_bounces&quot;, &quot;Total maximum number of bounces. Type: int. Default: 3&quot;</span>
+<span class="sd">        &quot;min_bounces&quot;, &quot;Total minimum number of bounces. Type: int. Default: 1&quot;</span>
+<span class="sd">        &quot;diffuse_bounces&quot;, &quot;Maximum number of diffuse reflection bounces, bounded by total maximum. &quot;</span>
+<span class="sd">                           &quot;Type: int. Default: 3&quot;</span>
+<span class="sd">        &quot;glossy_bounces&quot;, &quot;Maximum number of glossy reflection bounces, bounded by total maximum. &quot;</span>
+<span class="sd">                          &quot;Be careful the default is set to zero to improve rendering time, but it removes all indirect &quot;</span>
+<span class="sd">                          &quot;glossy rays from the rendering process. Type: int. Default: 0&quot;</span>
+<span class="sd">        &quot;ao_bounces_render&quot;, &quot;Approximate indirect light with background tinted ambient occlusion at the &quot;</span>
+<span class="sd">                             &quot;specified bounce. Type: int. Default: 3&quot;</span>
+<span class="sd">        &quot;transmission_bounces&quot;, &quot;Maximum number of transmission bounces, bounded by total maximum. &quot;</span>
+<span class="sd">                                &quot;Be careful the default is set to zero to improve rendering time, but it removes all &quot;</span>
+<span class="sd">                                &quot;indirect transmission rays from the rendering process. Type: int. Default: 0&quot;</span>
+<span class="sd">        &quot;transparency_bounces&quot;, &quot;Maximum number of transparency bounces, bounded by total maximum. A higher value &quot;</span>
+<span class="sd">                                &quot;helps if a lot of transparency objects are stacked after each other. &quot;</span>
+<span class="sd">                                &quot;Type: int. Default: 8&quot;</span>
+<span class="sd">        &quot;volume_bounces&quot;, &quot;Maximum number of volumetric scattering events. Type: int. Default: 0&quot;</span>
+
+<span class="sd">        &quot;render_distance&quot;, &quot;If true, the distance is also rendered to file. Type: bool. Default: False.&quot;</span>
+<span class="sd">        &quot;use_mist_distance&quot;, &quot;If true, the distance is sampled over several iterations, useful for motion blur or&quot;</span>
+<span class="sd">                             &quot;soft edges, if this is turned off, only one sample is taken to determine the depth.&quot;</span>
+<span class="sd">                             &quot;Type: bool. Default: True.&quot;</span>
+<span class="sd">        &quot;distance_output_file_prefix&quot;, &quot;The file prefix that should be used when writing distance to file. &quot;</span>
+<span class="sd">                                       &quot;Type: string. Default: &#39;distance_&#39;&quot;</span>
+<span class="sd">        &quot;distance_output_key&quot;, &quot;The key which should be used for storing the distance in a merged file. &quot;</span>
+<span class="sd">                               &quot;Type: string. Default: &#39;distance&#39;.&quot;</span>
+<span class="sd">        &quot;distance_start&quot;, &quot;Starting distance of the distance, measured from the camera. Type: float. Default: 0.1&quot;</span>
+<span class="sd">        &quot;distance_range&quot;, &quot;Total distance in which the distance is measured. &quot;</span>
+<span class="sd">                          &quot;distance_end = distance_start + distance_range. Type: float. Default: 25.0&quot;</span>
+<span class="sd">        &quot;distance_falloff&quot;, &quot;Type of transition used to fade distance. Type: string. Default: &#39;Linear&#39;. &quot;</span>
+<span class="sd">                            &quot;Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]&quot;</span>
+
+<span class="sd">        &quot;use_alpha&quot;, &quot;If true, the alpha channel stored in .png textures is used. Type: bool. Default: False&quot;</span>
+<span class="sd">        &quot;stereo&quot;, &quot;If true, renders a pair of stereoscopic images for each camera position. Type: bool. Default: False&quot;</span>
+<span class="sd">        &quot;avoid_rendering&quot;, &quot;This mode is only used during debugging, when all settings should be executed but the &quot;</span>
+<span class="sd">                           &quot;actual rendering call is omitted. Type: bool. Default: False&quot;</span>
+<span class="sd">        &quot;cpu_threads&quot;, &quot;Set number of cpu cores used for rendering (1 thread is always used for coordination &quot;</span>
+<span class="sd">                       &quot;if more than one cpu thread means GPU-only rendering). Type: int. Default: 1&quot;</span>
+
+<span class="sd">        &quot;render_normals&quot;, &quot;If true, the normals are also rendered. Type: bool. Default: False&quot;</span>
+<span class="sd">        &quot;normals_output_file_prefix&quot;, &quot;The file prefix that should be used when writing normals. &quot;</span>
+<span class="sd">                                      &quot;Type: string. Default: &#39;normals_&#39;&quot;</span>
+<span class="sd">        &quot;normals_output_key&quot;, &quot;The key which is used for storing the normal in a merged file. &quot;</span>
+<span class="sd">                              &quot;Type: string. Default: &#39;normal&#39;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_avoid_rendering</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;avoid_rendering&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">addon_utils</span><span class="o">.</span><span class="n">enable</span><span class="p">(</span><span class="s2">&quot;render_auto_tile_size&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="RendererInterface._disable_all_denoiser"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface._disable_all_denoiser">[docs]</a>    <span class="k">def</span> <span class="nf">_disable_all_denoiser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Disables all denoiser.</span>
+
+<span class="sd">        At the moment this includes the cycles and the intel denoiser.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Disable cycles denoiser</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Disable intel denoiser</span>
+        <span class="k">if</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+
+            <span class="c1"># Go through all existing denoiser nodes</span>
+            <span class="k">for</span> <span class="n">denoiser_node</span> <span class="ow">in</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;CompositorNodeDenoise&#39;</span><span class="p">):</span>
+                <span class="n">in_node</span> <span class="o">=</span> <span class="n">denoiser_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]</span>
+                <span class="n">out_node</span> <span class="o">=</span> <span class="n">denoiser_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]</span>
+
+                <span class="c1"># If it is fully included into the node tree</span>
+                <span class="k">if</span> <span class="n">in_node</span><span class="o">.</span><span class="n">is_linked</span> <span class="ow">and</span> <span class="n">out_node</span><span class="o">.</span><span class="n">is_linked</span><span class="p">:</span>
+                    <span class="c1"># There is always only one input link</span>
+                    <span class="n">in_link</span> <span class="o">=</span> <span class="n">in_node</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c1"># Connect from_socket of the incoming link with all to_sockets of the out going links</span>
+                    <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">out_node</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+                        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">in_link</span><span class="o">.</span><span class="n">from_socket</span><span class="p">,</span> <span class="n">link</span><span class="o">.</span><span class="n">to_socket</span><span class="p">)</span>
+
+                <span class="c1"># Finally remove the denoiser node</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">denoiser_node</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="RendererInterface._configure_renderer"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface._configure_renderer">[docs]</a>    <span class="k">def</span> <span class="nf">_configure_renderer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_samples</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">use_denoiser</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default_denoiser</span><span class="o">=</span><span class="s2">&quot;Intel&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets many different render parameters which can be adjusted via the config.</span>
+
+<span class="sd">        :param default_samples: Default number of samples to render for each pixel</span>
+<span class="sd">        :param use_denoiser: If true, a denoiser is used, only use this on color information</span>
+<span class="sd">        :param default_denoiser: Either &quot;Intel&quot; or &quot;Blender&quot;, &quot;Intel&quot; performs much better in most cases</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;samples&quot;</span><span class="p">,</span> <span class="n">default_samples</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;use_adaptive_sampling&quot;</span><span class="p">):</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_adaptive_sampling</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">adaptive_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;use_adaptive_sampling&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;auto_tile_size&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ats_settings</span><span class="o">.</span><span class="n">is_enabled</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">ats_settings</span><span class="o">.</span><span class="n">is_enabled</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">tile_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;tile_x&quot;</span><span class="p">)</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">tile_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;tile_y&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Set number of cpu cores used for rendering (1 thread is always used for coordination =&gt; 1</span>
+        <span class="c1"># cpu thread means GPU-only rendering)</span>
+        <span class="n">number_of_threads</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;cpu_threads&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># If set to 0, use number of cores (default)</span>
+        <span class="k">if</span> <span class="n">number_of_threads</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">threads_mode</span> <span class="o">=</span> <span class="s2">&quot;FIXED&quot;</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">threads</span> <span class="o">=</span> <span class="n">number_of_threads</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Resolution: </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span><span class="p">))</span>
+
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_percentage</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="c1"># Lightning settings to reduce training time</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="s1">&#39;CYCLES&#39;</span>
+
+        <span class="c1"># Make sure there is no denoiser active</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_disable_all_denoiser</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">use_denoiser</span><span class="p">:</span>
+            <span class="n">denoiser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;denoiser&quot;</span><span class="p">,</span> <span class="n">default_denoiser</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">denoiser</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;INTEL&quot;</span><span class="p">:</span>
+                <span class="c1"># The intel denoiser is activated via the compositor</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+
+                <span class="c1"># The denoiser gets normal and diffuse color as input</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_normal</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_diffuse_color</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># Add denoiser node</span>
+                <span class="n">denoise_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeDenoise&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Link nodes</span>
+                <span class="n">render_layer_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;CompositorNodeRLayers&#39;</span><span class="p">)</span>
+                <span class="n">composite_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;CompositorNodeComposite&#39;</span><span class="p">)</span>
+                <span class="n">Utility</span><span class="o">.</span><span class="n">insert_node_instead_existing_link</span><span class="p">(</span><span class="n">links</span><span class="p">,</span>
+                                                          <span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">],</span>
+                                                          <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">],</span>
+                                                          <span class="n">denoise_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">],</span>
+                                                          <span class="n">composite_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">])</span>
+
+                <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;DiffCol&#39;</span><span class="p">],</span> <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Albedo&#39;</span><span class="p">])</span>
+                <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">],</span> <span class="n">denoise_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">denoiser</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;BLENDER&quot;</span><span class="p">:</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No such denoiser: &quot;</span> <span class="o">+</span> <span class="n">denoiser</span><span class="p">)</span>
+
+        <span class="n">simplify_subdivision_render</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;simplify_subdivision_render&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">simplify_subdivision_render</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_simplify</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">simplify_subdivision_render</span> <span class="o">=</span> <span class="n">simplify_subdivision_render</span>
+
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">diffuse_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;diffuse_bounces&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">glossy_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;glossy_bounces&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">ao_bounces_render</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;ao_bounces_render&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">max_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;max_bounces&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">min_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;min_bounces&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">transmission_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;transmission_bounces&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">transparent_max_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;transparency_bounces&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">volume_bounces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;volume_bounces&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">debug_bvh_type</span> <span class="o">=</span> <span class="s2">&quot;STATIC_BVH&quot;</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">debug_use_spatial_splits</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># Setting use_persistent_data to True makes the rendering getting slower and slower (probably a blender bug)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_persistent_data</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Enable Stereoscopy</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_multiview</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;stereo&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_multiview</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">views_format</span> <span class="o">=</span> <span class="s2">&quot;STEREO_3D&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s1">&#39;use_alpha&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RendererInterface._write_distance_to_file"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface._write_distance_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">_write_distance_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Configures the renderer, s.t. the z-values computed for the next rendering are directly written to file. &quot;&quot;&quot;</span>
+
+        <span class="c1"># z-buffer/mist settings</span>
+        <span class="n">distance_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;distance_start&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">distance_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;distance_range&quot;</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">)</span>
+        <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;renderer_distance_end&quot;</span><span class="p">,</span> <span class="n">distance_start</span> <span class="o">+</span> <span class="n">distance_range</span><span class="p">)</span>
+
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_compositing</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">links</span>
+        <span class="c1"># Use existing render layer</span>
+        <span class="n">render_layer_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;CompositorNodeRLayers&#39;</span><span class="p">)</span>
+
+        <span class="c1"># use either mist rendering or the z-buffer</span>
+        <span class="c1"># mists uses an interpolation during the sample per pixel</span>
+        <span class="c1"># while the z buffer only returns the closest object per pixel</span>
+        <span class="n">use_mist_as_distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;use_mist_distance&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_mist_as_distance</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">distance_start</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="n">distance_range</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">mist_settings</span><span class="o">.</span><span class="n">falloff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;distance_falloff&quot;</span><span class="p">,</span> <span class="s2">&quot;LINEAR&quot;</span><span class="p">)</span>
+
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_mist</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Enable distance pass</span>
+            <span class="c1"># Create a mapper node to map from 0-1 to SI units</span>
+            <span class="n">mapper_node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMapRange&quot;</span><span class="p">)</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Mist&quot;</span><span class="p">],</span> <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">])</span>
+            <span class="c1"># map the values 0-1 to range distance_start to distance_range</span>
+            <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;To Min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">distance_start</span>
+            <span class="n">mapper_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;To Max&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">distance_start</span> <span class="o">+</span> <span class="n">distance_range</span>
+            <span class="n">final_output</span> <span class="o">=</span> <span class="n">mapper_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">use_pass_z</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># add min and max nodes to perform the clipping to the desired range</span>
+            <span class="n">min_node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+            <span class="n">min_node</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;MINIMUM&quot;</span>
+            <span class="n">min_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">distance_start</span> <span class="o">+</span> <span class="n">distance_range</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Depth&quot;</span><span class="p">],</span> <span class="n">min_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">max_node</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+            <span class="n">max_node</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;MAXIMUM&quot;</span>
+            <span class="n">max_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">distance_start</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">min_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">max_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">final_output</span> <span class="o">=</span> <span class="n">max_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">]</span>
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeOutputFile&quot;</span><span class="p">)</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">()</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">file_format</span> <span class="o">=</span> <span class="s2">&quot;OPEN_EXR&quot;</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">file_slots</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;distance_output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;distance_&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Feed the Z-Buffer or Mist output of the render layer to the input of the file IO layer</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">final_output</span><span class="p">,</span> <span class="n">output_file</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="RendererInterface._render"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface._render">[docs]</a>    <span class="k">def</span> <span class="nf">_render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_prefix</span><span class="p">,</span> <span class="n">custom_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Renders each registered keypoint.</span>
+
+<span class="sd">        :param default_prefix: The default prefix of the output files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;render_distance&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_distance_to_file</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;render_normals&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_write_normal_to_file</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">custom_file_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span>
+                                                             <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;output_file_prefix&quot;</span><span class="p">,</span>
+                                                                                    <span class="n">default_prefix</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">custom_file_path</span>
+
+        <span class="c1"># Skip if there is nothing to render</span>
+        <span class="k">if</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">!=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">get_all_mesh_objects</span><span class="p">())</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There are no mesh-objects to render, &quot;</span>
+                                <span class="s2">&quot;please load an object before invoking the renderer.&quot;</span><span class="p">)</span>
+            <span class="c1"># As frame_end is pointing to the next free frame, decrease it by one, as</span>
+            <span class="c1"># blender will render all frames in [frame_start, frame_ned]</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avoid_rendering</span><span class="p">:</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">animation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">write_still</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># Revert changes</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">+=</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="RendererInterface.add_alpha_channel_to_textures"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface.add_alpha_channel_to_textures">[docs]</a>    <span class="k">def</span> <span class="nf">add_alpha_channel_to_textures</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blurry_edges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds transparency to all textures, which contain an .png image as an image input</span>
+
+<span class="sd">        :param blurry_edges: If True, the edges of the alpha channel might be blurry,</span>
+<span class="sd">                             this causes errors if the alpha channel should only be 0 or 1</span>
+
+<span class="sd">        Be careful, when you replace the original texture with something else (Segmentation, ...),</span>
+<span class="sd">        the necessary texture node gets lost. By copying it into a new material as done in the SegMapRenderer, you</span>
+<span class="sd">        can keep the transparency even for those nodes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span><span class="p">:</span>
+            <span class="n">obj_with_mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;materials&#39;</span><span class="p">)]</span>
+            <span class="c1"># walk over all objects, which have materials</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">obj_with_mats</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                    <span class="n">texture_node</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="c1"># check each node of the material</span>
+                    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">slot</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                        <span class="c1"># if it is a texture image node</span>
+                        <span class="k">if</span> <span class="s1">&#39;TexImage&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="s1">&#39;.png&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># contains an alpha channel</span>
+                                <span class="n">texture_node</span> <span class="o">=</span> <span class="n">node</span>
+                    <span class="c1"># this material contains an alpha png texture</span>
+                    <span class="k">if</span> <span class="n">texture_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">nodes</span> <span class="o">=</span> <span class="n">slot</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                        <span class="n">links</span> <span class="o">=</span> <span class="n">slot</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+                        <span class="n">node_connected_to_the_output</span><span class="p">,</span> <span class="n">material_output</span> <span class="o">=</span> \
+                            <span class="n">Utility</span><span class="o">.</span><span class="n">get_node_connected_to_the_output_and_unlink_it</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">material</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">node_connected_to_the_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeMixShader&#39;</span><span class="p">)</span>
+
+                            <span class="c1"># avoid blurry edges on the edges important for Normal, SegMapRenderer and others</span>
+                            <span class="k">if</span> <span class="n">blurry_edges</span><span class="p">:</span>
+                                <span class="c1"># add the alpha channel of the image to the mix shader node as a factor</span>
+                                <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Fac&#39;</span><span class="p">])</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># Map all alpha values to 0 or 1 by applying the step function: 1 if x &gt; 0.5 else 0</span>
+                                <span class="n">step_function_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;ShaderNodeMath&quot;</span><span class="p">)</span>
+                                <span class="n">step_function_node</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;GREATER_THAN&quot;</span>
+                                <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">],</span> <span class="n">step_function_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">])</span>
+                                <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">step_function_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Fac&#39;</span><span class="p">])</span>
+
+                            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">node_connected_to_the_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                            <span class="n">transparent_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeBsdfTransparent&#39;</span><span class="p">)</span>
+                            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">transparent_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;BSDF&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="c1"># connect to material output</span>
+                            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Shader&#39;</span><span class="p">],</span> <span class="n">material_output</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Surface&#39;</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not find shader node, which is connected to the material output &quot;</span>
+                                            <span class="s2">&quot;for: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="RendererInterface.add_alpha_texture_node"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface.add_alpha_texture_node">[docs]</a>    <span class="k">def</span> <span class="nf">add_alpha_texture_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">used_material</span><span class="p">,</span> <span class="n">new_material</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds to a predefined new_material a texture node from an existing material (used_material)</span>
+<span class="sd">        This is necessary to connect it later on in the add_alpha_channel_to_textures</span>
+<span class="sd">        :param used_material: existing material, which might contain a texture node with a .png texture</span>
+<span class="sd">        :param new_material: a new material, which will get a copy of this texture node</span>
+<span class="sd">        :return: the modified new_material, if no texture node was found, the original new_material</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># find out if there is an .png file used here</span>
+        <span class="n">texture_node</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">used_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="c1"># if it is a texture image node</span>
+            <span class="k">if</span> <span class="s1">&#39;TexImage&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;.png&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># contains an alpha channel</span>
+                    <span class="n">texture_node</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="c1"># this material contains an alpha png texture</span>
+        <span class="k">if</span> <span class="n">texture_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_mat_alpha</span> <span class="o">=</span> <span class="n">new_material</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># copy the material</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">new_mat_alpha</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="c1"># copy the texture node into the new material to make sure it is used</span>
+            <span class="n">new_tex_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeTexImage&#39;</span><span class="p">)</span>
+            <span class="n">new_tex_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">texture_node</span><span class="o">.</span><span class="n">image</span>
+            <span class="c1"># use the new material</span>
+            <span class="k">return</span> <span class="n">new_mat_alpha</span>
+        <span class="k">return</span> <span class="n">new_material</span></div>
+
+<div class="viewcode-block" id="RendererInterface._write_normal_to_file"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface._write_normal_to_file">[docs]</a>    <span class="k">def</span> <span class="nf">_write_normal_to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">use_compositing</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">node_tree</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">links</span>
+
+        <span class="c1"># Use existing render layer</span>
+        <span class="n">render_layer_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;CompositorNodeRLayers&#39;</span><span class="p">)</span>
+
+        <span class="n">separate_rgba</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeSepRGBA&quot;</span><span class="p">)</span>
+        <span class="n">space_between_nodes_x</span> <span class="o">=</span> <span class="mi">200</span>
+        <span class="n">space_between_nodes_y</span> <span class="o">=</span> <span class="o">-</span><span class="mi">300</span>
+        <span class="n">separate_rgba</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span>
+        <span class="n">separate_rgba</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">space_between_nodes_y</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">render_layer_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Normal&quot;</span><span class="p">],</span> <span class="n">separate_rgba</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Image&quot;</span><span class="p">])</span>
+
+        <span class="n">combine_rgba</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeCombRGBA&quot;</span><span class="p">)</span>
+        <span class="n">combine_rgba</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">14</span>
+
+        <span class="n">c_channels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">multiplication_values</span> <span class="o">=</span> <span class="p">[[],[],[]]</span>
+        <span class="n">channel_results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">row_index</span><span class="p">,</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c_channels</span><span class="p">):</span>
+            <span class="c1"># matrix multiplication</span>
+            <span class="n">mulitpliers</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">multiply</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+                <span class="n">multiply</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;MULTIPLY&quot;</span>
+                <span class="n">multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># setting at the end for all frames</span>
+                <span class="n">multiply</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">column</span> <span class="o">*</span> <span class="n">space_between_nodes_x</span> <span class="o">+</span> <span class="n">offset</span>
+                <span class="n">multiply</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">row_index</span> <span class="o">*</span> <span class="n">space_between_nodes_y</span>
+                <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">separate_rgba</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="n">c_channels</span><span class="p">[</span><span class="n">column</span><span class="p">]],</span> <span class="n">multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">mulitpliers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">multiply</span><span class="p">)</span>
+                <span class="n">multiplication_values</span><span class="p">[</span><span class="n">row_index</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">multiply</span><span class="p">)</span>
+
+            <span class="n">first_add</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+            <span class="n">first_add</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;ADD&quot;</span>
+            <span class="n">first_add</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">offset</span>
+            <span class="n">first_add</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">row_index</span> <span class="o">*</span> <span class="n">space_between_nodes_y</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mulitpliers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">first_add</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mulitpliers</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">first_add</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">second_add</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+            <span class="n">second_add</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;ADD&quot;</span>
+            <span class="n">second_add</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span> <span class="n">offset</span>
+            <span class="n">second_add</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">row_index</span> <span class="o">*</span> <span class="n">space_between_nodes_y</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">first_add</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">second_add</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mulitpliers</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">second_add</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="n">channel_results</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span> <span class="o">=</span> <span class="n">second_add</span>
+
+        <span class="c1"># set the matrix accordingly</span>
+        <span class="n">rot_around_x_axis</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="o">-</span><span class="mf">90.0</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+        <span class="n">cam_ob</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span><span class="p">):</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_set</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="n">used_rotation_matrix</span> <span class="o">=</span> <span class="n">cam_ob</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@</span> <span class="n">rot_around_x_axis</span>
+            <span class="k">for</span> <span class="n">row_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">column_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">current_multiply</span> <span class="o">=</span> <span class="n">multiplication_values</span><span class="p">[</span><span class="n">row_index</span><span class="p">][</span><span class="n">column_index</span><span class="p">]</span>
+                    <span class="n">current_multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">used_rotation_matrix</span><span class="p">[</span><span class="n">column_index</span><span class="p">][</span><span class="n">row_index</span><span class="p">]</span>
+                    <span class="n">current_multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keyframe_insert</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="s1">&#39;default_value&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="mi">8</span> <span class="o">*</span> <span class="n">space_between_nodes_x</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">channel</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">c_channels</span><span class="p">):</span>
+            <span class="n">multiply</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+            <span class="n">multiply</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;MULTIPLY&quot;</span>
+            <span class="n">multiply</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">offset</span>
+            <span class="n">multiply</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">index</span> <span class="o">*</span> <span class="n">space_between_nodes_y</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">channel_results</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span>
+                <span class="n">multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">multiply</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">add</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeMath&quot;</span><span class="p">)</span>
+            <span class="n">add</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;ADD&quot;</span>
+            <span class="n">add</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">offset</span>
+            <span class="n">add</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">index</span> <span class="o">*</span> <span class="n">space_between_nodes_y</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">multiply</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">add</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">add</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">output_channel</span> <span class="o">=</span> <span class="n">channel</span>
+            <span class="k">if</span> <span class="n">channel</span> <span class="o">==</span> <span class="s2">&quot;G&quot;</span><span class="p">:</span>
+                <span class="n">output_channel</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span>
+            <span class="k">elif</span> <span class="n">channel</span> <span class="o">==</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span>
+                <span class="n">output_channel</span> <span class="o">=</span> <span class="s2">&quot;G&quot;</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">add</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Value&quot;</span><span class="p">],</span> <span class="n">combine_rgba</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">output_channel</span><span class="p">])</span>
+
+        <span class="n">output_file</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;CompositorNodeOutputFile&quot;</span><span class="p">)</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">base_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">()</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">format</span><span class="o">.</span><span class="n">file_format</span> <span class="o">=</span> <span class="s2">&quot;OPEN_EXR&quot;</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">file_slots</span><span class="o">.</span><span class="n">values</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;normals_output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;normals_&quot;</span><span class="p">)</span>
+        <span class="n">output_file</span><span class="o">.</span><span class="n">location</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">space_between_nodes_x</span> <span class="o">*</span> <span class="mi">15</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">combine_rgba</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Image&quot;</span><span class="p">],</span> <span class="n">output_file</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Image&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="RendererInterface._register_output"><a class="viewcode-back" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface._register_output">[docs]</a>    <span class="k">def</span> <span class="nf">_register_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_prefix</span><span class="p">,</span> <span class="n">default_key</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">unique_for_camposes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">output_key_parameter_name</span><span class="o">=</span><span class="s2">&quot;output_key&quot;</span><span class="p">,</span> <span class="n">output_file_prefix_parameter_name</span><span class="o">=</span><span class="s2">&quot;output_file_prefix&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Registers new output type using configured key and file prefix.</span>
+
+<span class="sd">        If distance rendering is enabled, this will also register the corresponding distance output type.</span>
+
+<span class="sd">        :param default_prefix: The default prefix of the generated files.</span>
+<span class="sd">        :param default_key: The default key which should be used for storing the output in merged file.</span>
+<span class="sd">        :param suffix: The suffix of the generated files.</span>
+<span class="sd">        :param version: The version number which will be stored at key_version in the final merged file.</span>
+<span class="sd">        :param unique_for_camposes: True if the registered output is unique for all the camera poses</span>
+<span class="sd">        :param output_key_parameter_name: The parameter name to use for retrieving the output key from the config.</span>
+<span class="sd">        :param output_file_prefix_parameter_name: The parameter name to use for retrieving the output file prefix from the config.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">use_stereo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;stereo&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">RendererInterface</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_register_output</span><span class="p">(</span><span class="n">default_prefix</span><span class="p">,</span>
+                                               <span class="n">default_key</span><span class="p">,</span>
+                                               <span class="n">suffix</span><span class="p">,</span>
+                                               <span class="n">version</span><span class="p">,</span>
+                                               <span class="n">stereo</span><span class="o">=</span><span class="n">use_stereo</span><span class="p">,</span>
+                                               <span class="n">unique_for_camposes</span><span class="o">=</span><span class="n">unique_for_camposes</span><span class="p">,</span>
+                                               <span class="n">output_key_parameter_name</span><span class="o">=</span><span class="n">output_key_parameter_name</span><span class="p">,</span>
+                                               <span class="n">output_file_prefix_parameter_name</span><span class="o">=</span><span class="n">output_file_prefix_parameter_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;render_distance&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_output_entry</span><span class="p">({</span>
+                <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;distance_output_key&quot;</span><span class="p">,</span> <span class="s2">&quot;distance&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;distance_output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;distance_&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;.exr&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stereo&quot;</span><span class="p">:</span> <span class="n">use_stereo</span>
+            <span class="p">})</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;render_normals&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_add_output_entry</span><span class="p">({</span>
+                <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;normals_output_key&quot;</span><span class="p">,</span> <span class="s2">&quot;normals&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;normals_output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;normals_&quot;</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;.exr&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;stereo&quot;</span><span class="p">:</span> <span class="n">use_stereo</span>
+            <span class="p">})</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

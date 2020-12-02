@@ -1,0 +1,7 @@
+src\.loader\.ShapeNetLoader module
+==================================
+
+.. automodule:: src.loader.ShapeNetLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

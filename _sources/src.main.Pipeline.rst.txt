@@ -1,0 +1,7 @@
+src\.main\.Pipeline module
+==========================
+
+.. automodule:: src.main.Pipeline
+    :members:
+    :undoc-members:
+    :show-inheritance:

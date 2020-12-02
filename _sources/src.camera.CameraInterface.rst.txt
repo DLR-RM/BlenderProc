@@ -1,0 +1,7 @@
+src\.camera\.CameraInterface module
+===================================
+
+.. automodule:: src.camera.CameraInterface
+    :members:
+    :undoc-members:
+    :show-inheritance:

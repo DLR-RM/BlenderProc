@@ -1,0 +1,7 @@
+src\.loader\.TextureLoader module
+=================================
+
+.. automodule:: src.loader.TextureLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

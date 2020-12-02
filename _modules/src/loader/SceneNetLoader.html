@@ -1,0 +1,429 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.loader.SceneNetLoader &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.loader.SceneNetLoader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.loader.SceneNetLoader</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+
+<span class="kn">from</span> <span class="nn">src.loader.LoaderInterface</span> <span class="kn">import</span> <span class="n">LoaderInterface</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+<span class="kn">from</span> <span class="nn">src.utility.LabelIdMapping</span> <span class="kn">import</span> <span class="n">LabelIdMapping</span>
+
+
+<div class="viewcode-block" id="SceneNetLoader"><a class="viewcode-back" href="../../../src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">[docs]</a><span class="k">class</span> <span class="nc">SceneNetLoader</span><span class="p">(</span><span class="n">LoaderInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads all SceneNet objects at the given &quot;file_path&quot;.</span>
+
+<span class="sd">    The textures for each object are sampled based on the name of the object, if the name is not represented in the</span>
+<span class="sd">    texture folder the unknown folder is used. This folder does not exists, after downloading the texture dataset.</span>
+<span class="sd">    Make sure to create and put some textures, you want to use for these instances there.</span>
+
+<span class="sd">    All objects get &quot;category_id&quot; set based on the data in the &quot;resources/id_mappings/nyu_idset.csv&quot;</span>
+
+<span class="sd">    Each object will have the custom property &quot;is_scene_net_obj&quot;.</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">       :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+<span class="sd">       &quot;file_path&quot;, &quot;The path to the .obj file from SceneNet. Type: str.&quot;</span>
+<span class="sd">       &quot;texture_folder&quot;, &quot;The path to the texture folder used to sample the textures. Type: str.&quot;</span>
+<span class="sd">       &quot;unknown_texture_folder&quot;, &quot;The path to the textures, which are used if the the texture type is unknown.&quot;</span>
+<span class="sd">                                 &quot;The default path does not exist if the dataset was just downloaded, it has to be&quot;</span>
+<span class="sd">                                 &quot;created manually. Type: str. Default: ${texture_folder}/unknown&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">LoaderInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_file_path</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;file_path&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_texture_folder</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;texture_folder&quot;</span><span class="p">))</span>
+
+        <span class="c1"># the default unknown texture folder is not included inside of the scenenet texture folder</span>
+        <span class="n">default_unknown_texture_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_texture_folder</span><span class="p">,</span> <span class="s2">&quot;unknown&quot;</span><span class="p">)</span>
+        <span class="c1"># the textures in this folder are used, if the object has no available texture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_unknown_texture_folder</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;unknown_texture_folder&quot;</span><span class="p">,</span>
+                                                            <span class="n">default_unknown_texture_folder</span><span class="p">))</span>
+
+        <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">assign_mapping</span><span class="p">(</span><span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;resources&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;id_mappings&#39;</span><span class="p">,</span> <span class="s1">&#39;nyu_idset.csv&#39;</span><span class="p">)))</span>
+
+        <span class="k">if</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;void&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: The category labeling file could not be found -&gt; no semantic segmentation available!&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SceneNetLoader.run"><a class="viewcode-back" href="../../../src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Run the module, loads all the objects and set the properties correctly (including the category_id)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># load the objects (Use use_image_search=False as some image names have a &quot;/&quot; prefix which will lead to blender search the whole root directory recursively!</span>
+        <span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">import_objects</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_file_path</span><span class="p">,</span> <span class="n">use_image_search</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">loaded_objects</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ele</span><span class="p">:</span> <span class="n">ele</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># sample materials for each object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_random_sample_materials_for_each_obj</span><span class="p">(</span><span class="n">loaded_objects</span><span class="p">)</span>
+
+        <span class="c1"># set the category ids for each object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_category_ids</span><span class="p">(</span><span class="n">loaded_objects</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+            <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;is_scene_net_obj&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># add custom properties</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_properties</span><span class="p">(</span><span class="n">loaded_objects</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SceneNetLoader._random_sample_materials_for_each_obj"><a class="viewcode-back" href="../../../src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader._random_sample_materials_for_each_obj">[docs]</a>    <span class="k">def</span> <span class="nf">_random_sample_materials_for_each_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_objects</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Random sample materials for each of the loaded objects</span>
+
+<span class="sd">        Based on the name the textures from the texture_folder will be selected</span>
+
+<span class="sd">        :param loaded_objects objects loaded from the .obj file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># for each object add a material</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">mat_slot</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                <span class="n">material</span> <span class="o">=</span> <span class="n">mat_slot</span><span class="o">.</span><span class="n">material</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+                <span class="n">principled_bsdf</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                <span class="n">texture_nodes</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;ShaderNodeTexImage&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">texture_nodes</span><span class="p">:</span>
+                    <span class="n">texture_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;ShaderNodeTexImage&quot;</span><span class="p">)</span>
+                    <span class="n">mat_name</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">name</span>
+                    <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">mat_name</span><span class="p">:</span>
+                        <span class="n">mat_name</span> <span class="o">=</span> <span class="n">mat_name</span><span class="p">[:</span><span class="n">mat_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+                    <span class="n">mat_name</span> <span class="o">=</span> <span class="n">mat_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+                    <span class="c1"># remove all digits from the string</span>
+                    <span class="n">mat_name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">mat_name</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()])</span>
+                    <span class="n">image_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_texture_folder</span><span class="p">,</span> <span class="n">mat_name</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">image_paths</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknown_texture_folder</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The unknown texture folder does not exist: </span><span class="si">{}</span><span class="s2">, check if it was &quot;</span>
+                                            <span class="s2">&quot;set correctly via the config.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknown_texture_folder</span><span class="p">))</span>
+
+                        <span class="n">image_paths</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknown_texture_folder</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">image_paths</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The unknown texture folder did not contain &quot;</span>
+                                            <span class="s2">&quot;any textures: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_unknown_texture_folder</span><span class="p">))</span>
+                    <span class="n">image_paths</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="n">image_path</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">image_paths</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image_path</span><span class="p">):</span>
+                        <span class="n">texture_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">check_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No image was found for this entity: </span><span class="si">{}</span><span class="s2">, &quot;</span>
+                                        <span class="s2">&quot;material name: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mat_name</span><span class="p">))</span>
+                    <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span> <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+            <span class="n">obj_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">obj_name</span><span class="p">:</span>
+                <span class="n">obj_name</span> <span class="o">=</span> <span class="n">obj_name</span><span class="p">[:</span><span class="n">obj_name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+            <span class="n">obj_name</span> <span class="o">=</span> <span class="n">obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;wall&quot;</span> <span class="ow">in</span> <span class="n">obj_name</span> <span class="ow">or</span> <span class="s2">&quot;floor&quot;</span> <span class="ow">in</span> <span class="n">obj_name</span> <span class="ow">or</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">in</span> <span class="n">obj_name</span><span class="p">:</span>
+                <span class="c1"># set the shading of all polygons to flat</span>
+                <span class="k">for</span> <span class="n">poly</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">polygons</span><span class="p">:</span>
+                    <span class="n">poly</span><span class="o">.</span><span class="n">use_smooth</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="SceneNetLoader._set_category_ids"><a class="viewcode-back" href="../../../src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader._set_category_ids">[docs]</a>    <span class="k">def</span> <span class="nf">_set_category_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loaded_objects</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the category ids for the objs based on the .csv file loaded in LabelIdMapping</span>
+
+<span class="sd">        Each object will have a custom property with a label, can be used by the SegMapRenderer.</span>
+
+<span class="sd">        :param loaded_objects objects loaded from the .obj file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#  Some category names in scenenet objects are written differently than in nyu_idset.csv</span>
+        <span class="n">normalize_name</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;floor-mat&quot;</span><span class="p">:</span> <span class="s2">&quot;floor_mat&quot;</span><span class="p">,</span> <span class="s2">&quot;refrigerator&quot;</span><span class="p">:</span> <span class="s2">&quot;refridgerator&quot;</span><span class="p">,</span> <span class="s2">&quot;shower-curtain&quot;</span><span class="p">:</span> <span class="s2">&quot;shower_curtain&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;nightstand&quot;</span><span class="p">:</span> <span class="s2">&quot;night_stand&quot;</span><span class="p">,</span> <span class="s2">&quot;Other-structure&quot;</span><span class="p">:</span> <span class="s2">&quot;otherstructure&quot;</span><span class="p">,</span> <span class="s2">&quot;Other-furniture&quot;</span><span class="p">:</span> <span class="s2">&quot;otherfurniture&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Other-prop&quot;</span><span class="p">:</span> <span class="s2">&quot;otherprop&quot;</span><span class="p">,</span> <span class="s2">&quot;floor_tiles_floor_tiles_0125&quot;</span><span class="p">:</span> <span class="s2">&quot;floor&quot;</span><span class="p">,</span> <span class="s2">&quot;ground&quot;</span><span class="p">:</span> <span class="s2">&quot;floor&quot;</span><span class="p">,</span> <span class="s2">&quot;floor_enclose&quot;</span><span class="p">:</span> <span class="s2">&quot;floor&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;floor_base_object01_56&quot;</span><span class="p">:</span> <span class="s2">&quot;floor&quot;</span><span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+                <span class="n">obj_name</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="c1"># If it&#39;s one of the cases that the category have different names in both idsets.</span>
+                <span class="k">if</span> <span class="n">obj_name</span> <span class="ow">in</span> <span class="n">normalize_name</span><span class="p">:</span>
+                    <span class="n">obj_name</span> <span class="o">=</span> <span class="n">normalize_name</span><span class="p">[</span><span class="n">obj_name</span><span class="p">]</span>  <span class="c1"># Then normalize it.</span>
+
+                <span class="k">if</span> <span class="n">obj_name</span> <span class="ow">in</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">:</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="n">obj_name</span><span class="p">]</span>
+                <span class="c1"># Check whether the object&#39;s name without suffixes like &#39;s&#39;, &#39;1&#39; or &#39;2&#39; exist in the mapping.</span>
+                <span class="k">elif</span> <span class="n">obj_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">:</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="n">obj_name</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+                <span class="k">elif</span> <span class="s2">&quot;painting&quot;</span> <span class="ow">in</span> <span class="n">obj_name</span><span class="p">:</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;picture&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This object was not specified: </span><span class="si">{}</span><span class="s2"> use objects for it.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj_name</span><span class="p">))</span>
+                    <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;otherstructure&quot;</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span></div></div>
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

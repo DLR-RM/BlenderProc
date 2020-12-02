@@ -1,0 +1,24 @@
+src\.writer package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.writer.BopWriter
+   src.writer.CameraStateWriter
+   src.writer.CocoAnnotationsWriter
+   src.writer.Hdf5Writer
+   src.writer.LightStateWriter
+   src.writer.ObjectStateWriter
+   src.writer.StereoGlobalMatchingWriter
+   src.writer.WriterInterface
+
+Module contents
+---------------
+
+.. automodule:: src.writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

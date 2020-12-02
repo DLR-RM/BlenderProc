@@ -1,0 +1,7 @@
+src\.renderer\.SegMapRenderer module
+====================================
+
+.. automodule:: src.renderer.SegMapRenderer
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+src\.lighting\.LightSampler module
+==================================
+
+.. automodule:: src.lighting.LightSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

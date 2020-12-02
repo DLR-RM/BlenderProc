@@ -1,0 +1,7 @@
+src\.lighting\.LightLoader module
+=================================
+
+.. automodule:: src.lighting.LightLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

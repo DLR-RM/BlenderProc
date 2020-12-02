@@ -1,0 +1,506 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.camera.CameraInterface module &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>src.camera.CameraInterface module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/src.camera.CameraInterface.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-src.camera.CameraInterface">
+<span id="src-camera-camerainterface-module"></span><h1>src.camera.CameraInterface module<a class="headerlink" href="#module-src.camera.CameraInterface" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="src.camera.CameraInterface.CameraInterface">
+<em class="property">class </em><code class="descclassname">src.camera.CameraInterface.</code><code class="descname">CameraInterface</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/camera/CameraInterface.html#CameraInterface"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.camera.CameraInterface.CameraInterface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.main.Module.html#src.main.Module.Module" title="src.main.Module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.main.Module.Module</span></code></a></p>
+<dl class="docutils">
+<dt>A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,</dt>
+<dd><p class="first">in addition to setting stereo parameters.</p>
+<dl class="docutils">
+<dt>Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config</dt>
+<dd>parameters here, it has to be in a child class of CameraInterface.</dd>
+</dl>
+<dl class="docutils">
+<dt>{</dt>
+<dd><p class="first">“module”: “camera.CameraLoader”,
+“config”: {</p>
+<blockquote>
+<div><p>“path”: “&lt;args:0&gt;”,
+“file_format”: “location rotation/value _ _ _ _ _ _”,
+“source_frame”: [“X”, “-Z”, “Y”],
+“default_cam_param”: {</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>“rotation”: {</dt>
+<dd>“format”: “forward_vec”</dd>
+</dl>
+<p>}</p>
+</div></blockquote>
+<p>},
+“intrinsics: {</p>
+<blockquote>
+<div>“fov”: 1</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<p class="last">}</p>
+</dd>
+</dl>
+<p class="last">}</p>
+</dd>
+</dl>
+<p><strong>Configuration</strong>:</p>
+<p><strong>Properties per cam pose</strong>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Keyword</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>location</td>
+<td>The position of the camera, specified as a list of three values (xyz). Type: mathutils.Vector.</td>
+</tr>
+<tr class="row-odd"><td>rotation/value</td>
+<td>Specifies the rotation of the camera. Per default rotations are specified as three euler</td>
+</tr>
+<tr class="row-even"><td>angles. Type: mathutils.Vector.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>rotation/format</td>
+<td>Describes the form in which the rotation is specified. Type: string. Available: ‘euler’</td>
+</tr>
+<tr class="row-even"><td>(three Euler angles), ‘forward_vec’(specified with a forward vector: the Y-Axis is assumed</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>as Up-Vector), ‘look_at’ (camera will be turned such as it looks at ‘value’ location, which</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>can be defined as a fixed or sampled XYZ location).</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>rotation/inplane_rot</td>
+<td>A rotation angle in radians around the Z axis. Type: float. Default: 0.0</td>
+</tr>
+<tr class="row-even"><td>cam2world_matrix</td>
+<td>4x4 camera extrinsic matrix. Type: list of floats. Default: [].</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Intrinsic camera parameters</strong>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="33%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Keyword</th>
+<th class="head">Description</th>
+<th class="head">&#160;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>cam_K</td>
+<td>Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>pixel - this is the convention e.g. used in OpenCV. Type: list.</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>shift</td>
+<td>Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>fov</td>
+<td>The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>to be the angle between forward vector and one side of the frustum). Type: float.</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>resolution_x</td>
+<td>Width resolution of the camera. Type: int.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>resolution_y</td>
+<td>Height resolution of the camera. Type: int.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>pixel_aspect_x</td>
+<td>Pixel aspect ratio x. Type: float.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>pixel_aspect_y</td>
+<td>Pixel aspect ratio y. Type: float.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>clip_start</td>
+<td>Near clipping. Type: float.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>clip_end</td>
+<td>Far clipping. Type: float.</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>stereo_convergence_mode</td>
+<td>How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>to converge in the convergence plane, or parallel where they do not converge and</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>are parallel). Type: string..</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>convergence_distance</td>
+<td>The convergence point for the stereo cameras (i.e. distance from the projector to the</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>projection screen). Type: float.</td>
+<td>&#160;</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>interocular_distance</td>
+<td>Distance between the camera pair. Type: float.</td>
+<td>&#160;</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="src.camera.CameraInterface.CameraInterface._cam2world_matrix_from_cam_extrinsics">
+<code class="descname">_cam2world_matrix_from_cam_extrinsics</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/camera/CameraInterface.html#CameraInterface._cam2world_matrix_from_cam_extrinsics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.camera.CameraInterface.CameraInterface._cam2world_matrix_from_cam_extrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines camera extrinsics by using the given config and returns them in form of a cam to world frame transformation matrix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> – The configuration object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The cam to world transformation matrix.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.camera.CameraInterface.CameraInterface._set_cam_extrinsics">
+<code class="descname">_set_cam_extrinsics</code><span class="sig-paren">(</span><em>cam_ob</em>, <em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/camera/CameraInterface.html#CameraInterface._set_cam_extrinsics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.camera.CameraInterface.CameraInterface._set_cam_extrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets camera extrinsics according to the config.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cam_ob</strong> – The object linked to the camera which determines general properties like location/orientation</li>
+<li><strong>config</strong> – A configuration object with cam extrinsics.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.camera.CameraInterface.CameraInterface._set_cam_intrinsics">
+<code class="descname">_set_cam_intrinsics</code><span class="sig-paren">(</span><em>cam</em>, <em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/camera/CameraInterface.html#CameraInterface._set_cam_intrinsics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.camera.CameraInterface.CameraInterface._set_cam_intrinsics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets camera intrinsics from a source with following priority</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>from config function parameter if defined</li>
+<li>from custom properties of cam if set in Loader</li>
+<li><dl class="first docutils">
+<dt>default config</dt>
+<dd>resolution_x/y: 512 
+pixel_aspect_x: 1
+clip_start:   : 0.1
+clip_end      : 1000
+fov           : 0.691111</dd>
+</dl>
+</li>
+</ol>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cam</strong> – The camera which contains only camera specific attributes.</li>
+<li><strong>config</strong> – A configuration object with cam intrinsics.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

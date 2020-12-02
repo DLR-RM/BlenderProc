@@ -1,0 +1,21 @@
+src\.main package
+=================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.main.GlobalStorage
+   src.main.Initializer
+   src.main.Module
+   src.main.Pipeline
+   src.main.Provider
+
+Module contents
+---------------
+
+.. automodule:: src.main
+    :members:
+    :undoc-members:
+    :show-inheritance:

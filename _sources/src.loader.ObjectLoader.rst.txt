@@ -1,0 +1,7 @@
+src\.loader\.ObjectLoader module
+================================
+
+.. automodule:: src.loader.ObjectLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

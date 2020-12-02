@@ -1,0 +1,22 @@
+src\.camera package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.camera.CameraInterface
+   src.camera.CameraLoader
+   src.camera.CameraSampler
+   src.camera.Front3DCameraSampler
+   src.camera.ReplicaCameraSampler
+   src.camera.SuncgCameraSampler
+
+Module contents
+---------------
+
+.. automodule:: src.camera
+    :members:
+    :undoc-members:
+    :show-inheritance:

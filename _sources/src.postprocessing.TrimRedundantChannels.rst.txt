@@ -1,0 +1,7 @@
+src\.postprocessing\.TrimRedundantChannels module
+=================================================
+
+.. automodule:: src.postprocessing.TrimRedundantChannels
+    :members:
+    :undoc-members:
+    :show-inheritance:

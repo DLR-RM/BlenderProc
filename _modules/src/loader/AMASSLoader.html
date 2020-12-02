@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.loader.AMASSLoader &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.loader.AMASSLoader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.loader.AMASSLoader</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">import</span> <span class="nn">mathutils</span>
+
+<span class="kn">from</span> <span class="nn">src.loader.LoaderInterface</span> <span class="kn">import</span> <span class="n">LoaderInterface</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+<span class="kn">from</span> <span class="nn">src.utility.LabelIdMapping</span> <span class="kn">import</span> <span class="n">LabelIdMapping</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">human_body_prior.body_model.body_model</span> <span class="kn">import</span> <span class="n">BodyModel</span>
+
+
+<div class="viewcode-block" id="AMASSLoader"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">[docs]</a><span class="k">class</span> <span class="nc">AMASSLoader</span><span class="p">(</span><span class="n">LoaderInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    AMASS is a large database of human motion unifying 15 different optical marker-based motion capture datasets by representing them within a common framework and parameterization. All of the mocap data is convereted into realistic 3D human meshes represented by a rigged body model called SMPL, which provides a standard skeletal representation as well as a fully rigged surface mesh. Warning: Only one part of the AMASS database is currently supported by the loader! Please refer to the AMASSLoader example for more information about the currently supported datasets.</span>
+
+<span class="sd">    Any human pose recorded in these motions could be reconstructed using the following parameters: `&quot;sub_dataset_identifier&quot;`, `&quot;sequence id&quot;`, `&quot;frame id&quot;` and `&quot;model gender&quot;` which will represent the pose, these parameters specify the exact pose to be generated based on the selected mocap dataset and motion category recorded in this dataset.</span>
+
+<span class="sd">    As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.</span>
+
+<span class="sd">    Finally it sets all objects to have a category_id corresponding to the void class,</span>
+<span class="sd">    so it wouldn&#39;t trigger an exception in the SegMapRenderer.</span>
+
+<span class="sd">    Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other</span>
+<span class="sd">    module is loaded first in the config file.</span>
+
+<span class="sd">    Example 1: generate a pose of a human kicking a ball (male model). There are different categories recorded in the mocap datasets inside of the AMASS database, for the CMU dataset we can see that the category number `10` contains multiple trials of humans kicking a ball.</span>
+
+<span class="sd">    {</span>
+<span class="sd">        &quot;module&quot;: &quot;loader.AMASSLoader&quot;,</span>
+<span class="sd">        &quot;config&quot;: {</span>
+<span class="sd">        &quot;data_path&quot;: &quot;&lt;args:0&gt;&quot;,</span>
+<span class="sd">        &quot;sub_dataset_id&quot;: &quot;CMU&quot;,</span>
+<span class="sd">        &quot;body_model_gender&quot;: &quot;male&quot;,</span>
+<span class="sd">        &quot;subject_id&quot;: &quot;10&quot;,</span>
+<span class="sd">        &quot;sequence_id&quot;: &quot;1&quot;,</span>
+<span class="sd">        &quot;frame_id&quot;: &quot;600&quot;,</span>
+<span class="sd">      },</span>
+<span class="sd">    }</span>
+
+<span class="sd">    Example 2: generate a pose of human picking up golf ball (female model). Here we choose from the CMU dataset the subject number 64, which contains multiple trials of a human playing golf, if frame_id is not specified (by removing it from the configuration arguments), a random frame will be chosen from the motion trial.</span>
+
+<span class="sd">    {</span>
+<span class="sd">        &quot;module&quot;: &quot;loader.AMASSLoader&quot;,</span>
+<span class="sd">        &quot;config&quot;: {</span>
+<span class="sd">        &quot;data_path&quot;: &quot;&lt;args:0&gt;&quot;,</span>
+<span class="sd">        &quot;sub_dataset_id&quot;: &quot;CMU&quot;,</span>
+<span class="sd">        &quot;body_model_gender&quot;: &quot;female&quot;,</span>
+<span class="sd">        &quot;subject_id&quot;: &quot;64&quot;,</span>
+<span class="sd">        &quot;sequence_id&quot;: &quot;27&quot;,</span>
+<span class="sd">      },</span>
+<span class="sd">    }</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">       :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">       &quot;data_path&quot;, &quot;The path to the AMASS Dataset folder in resources folder. Type: string. Default: &#39;resources/AMASS&#39;.&quot;</span>
+<span class="sd">       &quot;sub_dataset_id&quot;, &quot;Identifier for the sub dataset, the dataset which the human pose object should be extracted from. Type: srtring. Available: [&#39;CMU&#39;, &#39;Transitions_mocap&#39;, &#39;MPI_Limits&#39;, &#39;SSM_synced&#39;, &#39;TotalCapture&#39;, &#39;Eyes_Japan_Dataset&#39;, &#39;MPI_mosh&#39;, &#39;MPI_HDM05&#39;, &#39;HumanEva&#39;, &#39;ACCAD&#39;, &#39;EKUT&#39;, &#39;SFU&#39;, &#39;KIT&#39;, &#39;H36M&#39;, &#39;TCD_handMocap&#39;, &#39;BML&#39;]&quot; </span>
+<span class="sd">       &quot;body_model_gender&quot;, &quot;The model gender, pose will represented using male, female or neutral body shape. Type: string. Available:[male, female, neutral]&quot; </span>
+<span class="sd">       &quot;subject_id&quot;, &quot;Type of motion from which the pose should be extracted, this is dataset dependent parameter. Type: int.&quot; </span>
+<span class="sd">       &quot;sequence_id&quot;, &quot;Sequence id in the dataset, sequences are the motion recorded to represent certain action. Type: int.&quot; </span>
+<span class="sd">       &quot;frame_id&quot;, &quot;Frame id in a selected motion sequence. Type: int.&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># dictionary contains mocap dataset name and path to its sub folder within the main dataset, dictionary will</span>
+    <span class="c1"># be filled from taxonomy.json file which indicates the supported datastests</span>
+    <span class="n">supported_mocap_datasets</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># hex values for human skin tone to sample from</span>
+    <span class="n">human_skin_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2D221E&#39;</span><span class="p">,</span> <span class="s1">&#39;3C2E28&#39;</span><span class="p">,</span> <span class="s1">&#39;4B3932&#39;</span><span class="p">,</span> <span class="s1">&#39;5A453C&#39;</span><span class="p">,</span> <span class="s1">&#39;695046&#39;</span><span class="p">,</span> <span class="s1">&#39;785C50&#39;</span><span class="p">,</span> <span class="s1">&#39;87675A&#39;</span><span class="p">,</span> <span class="s1">&#39;967264&#39;</span><span class="p">,</span> <span class="s1">&#39;A57E6E&#39;</span><span class="p">,</span>
+                         <span class="s1">&#39;B48A78&#39;</span><span class="p">,</span> <span class="s1">&#39;C39582&#39;</span><span class="p">,</span> <span class="s1">&#39;D2A18C&#39;</span><span class="p">,</span> <span class="s1">&#39;E1AC96&#39;</span><span class="p">,</span> <span class="s1">&#39;F0B8A0&#39;</span><span class="p">,</span> <span class="s1">&#39;FFC3AA&#39;</span><span class="p">,</span> <span class="s1">&#39;FFCEB4&#39;</span><span class="p">,</span> <span class="s1">&#39;FFDABE&#39;</span><span class="p">,</span> <span class="s1">&#39;FFE5C8&#39;</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">LoaderInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_path</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;data_path&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;resources&quot;</span><span class="p">,</span> <span class="s2">&quot;AMASS&quot;</span><span class="p">)))</span>
+        <span class="c1"># Body Model Specs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_used_body_model_gender</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span>
+            <span class="s2">&quot;body_model_gender&quot;</span><span class="p">)</span>
+        <span class="c1"># These numbers are based on a recommendation from the authors. refer to visualization tutorial from the authors: https://github.com/nghorbani/amass/blob/master/notebooks/01-AMASS_Visualization.ipynb</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_betas</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># number of body parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_dmpls</span> <span class="o">=</span> <span class="mi">8</span>  <span class="c1"># number of DMPL parameters</span>
+        <span class="c1"># Pose Specs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_used_sub_dataset_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;sub_dataset_id&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_used_subject_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;subject_id&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_used_sequence_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;sequence_id&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_used_frame_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;frame_id&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="c1"># Get the currently supported mocap datasets by this loader</span>
+        <span class="n">taxonomy_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_path</span><span class="p">,</span> <span class="s2">&quot;taxonomy.json&quot;</span><span class="p">)</span>
+        <span class="n">AMASSLoader</span><span class="o">.</span><span class="n">_get_supported_mocap_datasets</span><span class="p">(</span>
+            <span class="n">taxonomy_file_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_path</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AMASSLoader._get_pose_parameters"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader._get_pose_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">_get_pose_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Extract pose and shape parameters corresponding to the requested pose from the database to be processed by the parametric model</span>
+
+<span class="sd">        :returns: tuple of arrays contains the parameters. Type: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if the sub_dataset is supported</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_used_sub_dataset_id</span> <span class="ow">in</span> <span class="n">AMASSLoader</span><span class="o">.</span><span class="n">supported_mocap_datasets</span><span class="p">:</span>
+            <span class="c1"># get  path from dictionsary</span>
+            <span class="n">sub_dataset_path</span> <span class="o">=</span> <span class="n">AMASSLoader</span><span class="o">.</span><span class="n">supported_mocap_datasets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_used_sub_dataset_id</span><span class="p">]</span>
+            <span class="c1"># concatenate path to specific</span>
+            <span class="n">subject_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                <span class="n">sub_dataset_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_used_subject_id</span><span class="p">)</span>
+            <span class="n">sequence_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">subject_path</span><span class="p">,</span>
+                                         <span class="s2">&quot;</span><span class="si">{:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_used_subject_id</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:02d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                                             <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_used_sequence_id</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;_poses.npz&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">sequence_path</span><span class="p">):</span>
+                <span class="c1"># load AMASS dataset sequence file which contains the coefficients for the whole motion sequence</span>
+                <span class="n">sequence_body_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">sequence_path</span><span class="p">)</span>
+                <span class="c1"># get the number of supported frames</span>
+                <span class="n">no_of_frames_per_sequence</span> <span class="o">=</span> <span class="n">sequence_body_data</span><span class="p">[</span><span class="s1">&#39;poses&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_used_frame_id</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">frame_id</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+                        <span class="mi">0</span><span class="p">,</span> <span class="n">no_of_frames_per_sequence</span><span class="p">)</span>  <span class="c1"># pick a random id</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">frame_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_used_frame_id</span><span class="p">)</span>
+                <span class="c1"># Extract Body Model coefficients</span>
+                <span class="k">if</span> <span class="n">frame_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no_of_frames_per_sequence</span><span class="p">):</span>
+                    <span class="c1"># use GPU to accelerate mesh calculations</span>
+                    <span class="n">comp_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+                        <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+                    <span class="c1"># parameters that control the body pose</span>
+                    <span class="c1"># refer to http://files.is.tue.mpg.de/black/papers/amass.pdf, Section 3.1 for more information about the parameter representation and the below chosen values</span>
+                    <span class="n">pose_body</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span>
+                        <span class="n">sequence_body_data</span><span class="p">[</span><span class="s1">&#39;poses&#39;</span><span class="p">][</span><span class="n">frame_id</span><span class="p">:</span><span class="n">frame_id</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span><span class="mi">66</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">comp_device</span><span class="p">)</span>
+                    <span class="c1"># parameters that control the body shape</span>
+                    <span class="n">betas</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span>
+                        <span class="n">sequence_body_data</span><span class="p">[</span><span class="s1">&#39;betas&#39;</span><span class="p">][:</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_betas</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">comp_device</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">pose_body</span><span class="p">,</span> <span class="n">betas</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                        <span class="s2">&quot;Requested frame id is beyond sequence range, for the selected sequence, chooose frame id &quot;</span>
+                        <span class="s2">&quot;within the following range: [</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no_of_frames_per_sequence</span><span class="p">))</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid sequence/subject category identifiers, please choose a valid one&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;The requested mocap dataset is not yest supported, please choose anothe one from the following &quot;</span>
+                <span class="s2">&quot;supported datasets: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">AMASSLoader</span><span class="o">.</span><span class="n">supported_mocap_datasets</span><span class="o">.</span><span class="n">items</span><span class="p">()]))</span></div>
+
+<div class="viewcode-block" id="AMASSLoader._load_parametric_body_model"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader._load_parametric_body_model">[docs]</a>    <span class="k">def</span> <span class="nf">_load_parametric_body_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; loads the parametric model that is used to generate the mesh object</span>
+
+<span class="sd">        :return:  parametric model. Type: tuple.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bm_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_path</span><span class="p">,</span> <span class="s1">&#39;body_models&#39;</span><span class="p">,</span> <span class="s1">&#39;smplh&#39;</span><span class="p">,</span>
+                               <span class="bp">self</span><span class="o">.</span><span class="n">_used_body_model_gender</span><span class="p">,</span> <span class="s1">&#39;model.npz&#39;</span><span class="p">)</span>  <span class="c1"># body model</span>
+        <span class="n">dmpl_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_path</span><span class="p">,</span> <span class="s1">&#39;body_models&#39;</span><span class="p">,</span> <span class="s1">&#39;dmpls&#39;</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">_used_body_model_gender</span><span class="p">,</span> <span class="s1">&#39;model.npz&#39;</span><span class="p">)</span>  <span class="c1"># deformation model</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">bm_path</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dmpl_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;Parametric Body model doesn&#39;t exist, please follow download instructions section in AMASS Example&quot;</span><span class="p">)</span>
+        <span class="n">comp_device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+            <span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+        <span class="n">body_model</span> <span class="o">=</span> <span class="n">BodyModel</span><span class="p">(</span><span class="n">bm_path</span><span class="o">=</span><span class="n">bm_path</span><span class="p">,</span> <span class="n">num_betas</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_betas</span><span class="p">,</span> <span class="n">num_dmpls</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_dmpls</span><span class="p">,</span> <span class="n">path_dmpl</span><span class="o">=</span><span class="n">dmpl_path</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span>
+            <span class="n">comp_device</span><span class="p">)</span>
+        <span class="n">faces</span> <span class="o">=</span> <span class="n">body_model</span><span class="o">.</span><span class="n">f</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">body_model</span><span class="p">,</span> <span class="n">faces</span></div>
+
+<div class="viewcode-block" id="AMASSLoader._get_supported_mocap_datasets"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader._get_supported_mocap_datasets">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_supported_mocap_datasets</span><span class="p">(</span><span class="n">taxonomy_file_path</span><span class="p">,</span> <span class="n">data_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; get latest updated list from taxonomoy json file about the supported mocap datasets supported in the loader module and update.supported_mocap_datasets list</span>
+
+<span class="sd">        :param taxonomy_file_path: path to taxomomy.json file which contains the supported datasets and their respective paths. Type: string.</span>
+<span class="sd">        :param data_path: path to the AMASS dataset root folder. Type: string.</span>
+<span class="sd">        :return: None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">taxonomy_file_path</span><span class="p">):</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">taxonomy_file_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">loaded_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">loaded_data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s2">&quot;sub_data_id&quot;</span> <span class="ow">in</span> <span class="n">block</span><span class="p">:</span>
+                        <span class="n">sub_dataset_id</span> <span class="o">=</span> <span class="n">block</span><span class="p">[</span><span class="s2">&quot;sub_data_id&quot;</span><span class="p">]</span>
+                        <span class="n">AMASSLoader</span><span class="o">.</span><span class="n">supported_mocap_datasets</span><span class="p">[</span><span class="n">sub_dataset_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="n">data_path</span><span class="p">,</span> <span class="n">block</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="s2">&quot;The taxonomy file could not be found: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">taxonomy_file_path</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AMASSLoader._write_body_mesh_to_obj_file"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader._write_body_mesh_to_obj_file">[docs]</a>    <span class="k">def</span> <span class="nf">_write_body_mesh_to_obj_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">body_represenstation</span><span class="p">,</span> <span class="n">faces</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; write the generated pose as obj file on the desk.</span>
+
+<span class="sd">        :param body_represenstation: parameters generated from the BodyModel model which represent the obj pose and shape. Type: torch.Tensor</span>
+<span class="sd">        :param faces: face parametric model which is used to generate the face mesh. Type: numpy.array</span>
+<span class="sd">        :return: path to generated obj file. Type: string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Get a temporary for the generated mesh</span>
+        <span class="n">temp_dir</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_temporary_directory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="c1"># Generate temp object with name = timestamp</span>
+        <span class="n">starttime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">obj_file_name</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">starttime</span><span class="p">,</span> <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">_%H%M&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.obj&quot;</span>
+        <span class="c1"># Write to an .obj file</span>
+        <span class="n">outmesh_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_dir</span><span class="p">,</span> <span class="n">obj_file_name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">outmesh_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;v </span><span class="si">{:f}</span><span class="s1"> </span><span class="si">{:f}</span><span class="s1"> </span><span class="si">{:f}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                              <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">body_represenstation</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()]))</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s1">&#39;f </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">faces</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">outmesh_path</span></div>
+
+<div class="viewcode-block" id="AMASSLoader.run"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        use the pose parameters to generate the mesh and loads it to the scene.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># selected_obj = self._files_with_fitting_ids</span>
+        <span class="n">pose_body</span><span class="p">,</span> <span class="n">betas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_pose_parameters</span><span class="p">()</span>
+        <span class="c1"># load parametric Model</span>
+        <span class="n">body_model</span><span class="p">,</span> <span class="n">faces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_parametric_body_model</span><span class="p">()</span>
+        <span class="c1"># Generate Body representations using SMPL model</span>
+        <span class="n">body_repr</span> <span class="o">=</span> <span class="n">body_model</span><span class="p">(</span><span class="n">pose_body</span><span class="o">=</span><span class="n">pose_body</span><span class="p">,</span> <span class="n">betas</span><span class="o">=</span><span class="n">betas</span><span class="p">)</span>
+        <span class="c1"># Generate .obj file represents the selected pose</span>
+        <span class="n">generated_obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_body_mesh_to_obj_file</span><span class="p">(</span><span class="n">body_repr</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+
+        <span class="n">loaded_obj</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">import_objects</span><span class="p">(</span><span class="n">generated_obj</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_correct_materials</span><span class="p">(</span><span class="n">loaded_obj</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_properties</span><span class="p">(</span><span class="n">loaded_obj</span><span class="p">)</span>
+        <span class="c1"># set the shading mode explicitly to smooth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_shading_mode</span><span class="p">(</span><span class="n">loaded_obj</span><span class="p">,</span> <span class="s2">&quot;SMOOTH&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;void&quot;</span> <span class="ow">in</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">:</span>  <span class="c1"># Check if using an id map</span>
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_obj</span><span class="p">:</span>
+                <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;category_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;void&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="AMASSLoader._correct_materials"><a class="viewcode-back" href="../../../src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader._correct_materials">[docs]</a>    <span class="k">def</span> <span class="nf">_correct_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objects</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; If the used material contains an alpha texture, the alpha texture has to be flipped to be correct</span>
+
+<span class="sd">        :param objects, objects where the material maybe wrong. Type: bpy.types.Object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">mat_slot</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                <span class="n">material</span> <span class="o">=</span> <span class="n">mat_slot</span><span class="o">.</span><span class="n">material</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+
+                <span class="c1"># Create a principled node and set the default color</span>
+                <span class="n">principled_bsdf</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span>
+                    <span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                <span class="c1"># Pick random skin color value</span>
+                <span class="n">skin_tone_hex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">AMASSLoader</span><span class="o">.</span><span class="n">human_skin_colors</span><span class="p">)</span>
+                <span class="n">skin_tone_rgb</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">skin_tone_hex</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">],</span> <span class="mi">16</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+                <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span>
+                    <span class="p">[</span><span class="o">*</span><span class="n">skin_tone_rgb</span><span class="p">,</span> <span class="mi">255</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span>
+                <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">0.2</span>
+                <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Subsurface Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span>
+                    <span class="p">[</span><span class="o">*</span><span class="n">skin_tone_rgb</span><span class="p">,</span> <span class="mi">255</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span>
+
+                <span class="n">texture_nodes</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span>
+                    <span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;ShaderNodeTexImage&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">texture_nodes</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">texture_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># find the image texture node which is connect to alpha</span>
+                    <span class="n">node_connected_to_the_alpha</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">for</span> <span class="n">node_links</span> <span class="ow">in</span> <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Alpha&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s2">&quot;ShaderNodeTexImage&quot;</span> <span class="ow">in</span> <span class="n">node_links</span><span class="o">.</span><span class="n">from_node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">:</span>
+                            <span class="n">node_connected_to_the_alpha</span> <span class="o">=</span> <span class="n">node_links</span><span class="o">.</span><span class="n">from_node</span>
+                    <span class="c1"># if a node was found which is connected to the alpha node, add an invert between the two</span>
+                    <span class="k">if</span> <span class="n">node_connected_to_the_alpha</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">invert_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;ShaderNodeInvert&quot;</span><span class="p">)</span>
+                        <span class="n">invert_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Fac&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">1.0</span>
+                        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_node_instead_existing_link</span><span class="p">(</span><span class="n">links</span><span class="p">,</span> <span class="n">node_connected_to_the_alpha</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span>
+                                                                  <span class="n">invert_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span>
+                                                                  <span class="n">invert_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span>
+                                                                  <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Alpha&quot;</span><span class="p">])</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

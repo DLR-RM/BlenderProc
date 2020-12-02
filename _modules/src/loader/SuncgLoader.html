@@ -1,0 +1,694 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.loader.SuncgLoader &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.loader.SuncgLoader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.loader.SuncgLoader</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Matrix</span>
+
+<span class="kn">from</span> <span class="nn">src.loader.LoaderInterface</span> <span class="kn">import</span> <span class="n">LoaderInterface</span>
+<span class="kn">from</span> <span class="nn">src.utility.MathUtility</span> <span class="kn">import</span> <span class="n">MathUtility</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+<span class="kn">from</span> <span class="nn">src.utility.LabelIdMapping</span> <span class="kn">import</span> <span class="n">LabelIdMapping</span>
+
+
+<div class="viewcode-block" id="SuncgLoader"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">[docs]</a><span class="k">class</span> <span class="nc">SuncgLoader</span><span class="p">(</span><span class="n">LoaderInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Loads a house.json file into blender.</span>
+
+<span class="sd">     - Loads all objects files specified in the house.json file.</span>
+<span class="sd">     - Orders them hierarchically (level -&gt; room -&gt; object)</span>
+<span class="sd">     - Writes metadata into the custom properties of each object</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. csv-table::</span>
+<span class="sd">       :header: &quot;Parameter&quot;, &quot;Description&quot;</span>
+
+<span class="sd">        &quot;path&quot;, &quot;The path to the house.json file which should be loaded. Type: string.&quot;</span>
+<span class="sd">        &quot;suncg_path&quot;, &quot;The path to the suncg root directory which should be used for loading objects, rooms, textures &quot;</span>
+<span class="sd">                      &quot;etc. Type: string. Default: is extracted from the house.json path&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">LoaderInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">house_path</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">))</span>
+        <span class="n">suncg_folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">house_path</span><span class="p">),</span> <span class="s2">&quot;../..&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;suncg_path&quot;</span><span class="p">,</span> <span class="n">suncg_folder_path</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collection_of_loaded_objs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># there are only two types of materials, textures and diffuse</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_collection_of_loaded_mats</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;texture&quot;</span><span class="p">:</span> <span class="p">{},</span> <span class="s2">&quot;diffuse&quot;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">assign_mapping</span><span class="p">(</span><span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;resources&#39;</span><span class="p">,</span> <span class="s1">&#39;id_mappings&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;nyu_idset.csv&#39;</span><span class="p">)))</span>
+
+<div class="viewcode-block" id="SuncgLoader.run"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">house_path</span><span class="p">),</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_read_model_category_mapping</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;resources&#39;</span><span class="p">,</span><span class="s1">&#39;suncg&#39;</span><span class="p">,</span><span class="s1">&#39;Better_labeling_for_NYU.csv&#39;</span><span class="p">))</span>
+
+        <span class="n">house_id</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;levels&quot;</span><span class="p">]:</span>
+            <span class="c1"># Build empty level object which acts as a parent for all rooms on the level</span>
+            <span class="n">level_obj</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Level#&quot;</span> <span class="o">+</span> <span class="n">level</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">level_obj</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Level&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;bbox&quot;</span> <span class="ow">in</span> <span class="n">level</span><span class="p">:</span>
+                <span class="n">level_obj</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_correct_bbox_frame</span><span class="p">(</span><span class="n">level</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: The level with id &quot;</span> <span class="o">+</span> <span class="n">level</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; is missing the bounding box attribute in the given house.json file!&quot;</span><span class="p">)</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">level_obj</span><span class="p">)</span>
+
+            <span class="n">room_per_object</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">level</span><span class="p">[</span><span class="s2">&quot;nodes&quot;</span><span class="p">]:</span>
+                <span class="c1"># Skip invalid nodes (This is the same behavior as in the SUNCG Toolbox)</span>
+                <span class="k">if</span> <span class="s2">&quot;valid&quot;</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">and</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;valid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Metadata is directly stored in the objects custom data</span>
+                <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span>
+                    <span class="s2">&quot;is_suncg&quot;</span><span class="p">:</span> <span class="kc">True</span>
+                <span class="p">}</span>
+
+                <span class="k">if</span> <span class="s2">&quot;modelId&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+                    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span>
+
+                    <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_fine_grained_label_map</span><span class="p">:</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fine_grained_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_fine_grained_label_map</span><span class="p">[</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]]</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;coarse_grained_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">object_coarse_grained_label_map</span><span class="p">[</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]]</span>
+                        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_label_id</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="s2">&quot;bbox&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+                    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_correct_bbox_frame</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="s2">&quot;transform&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+                    <span class="n">transform</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">][</span><span class="n">i</span><span class="o">*</span><span class="mi">4</span><span class="p">:(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)])</span>
+                    <span class="c1"># Transpose, as given transform matrix was col-wise, but blender expects row-wise</span>
+                    <span class="n">transform</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">transform</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="k">if</span> <span class="s2">&quot;materials&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+                    <span class="n">material_adjustments</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;materials&quot;</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">material_adjustments</span> <span class="o">=</span> <span class="p">[]</span>
+
+                <span class="c1"># Lookup if the object belongs to a room</span>
+                <span class="n">object_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">room_per_object</span><span class="p">:</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="n">room_per_object</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">parent</span> <span class="o">=</span> <span class="n">level_obj</span>
+
+                <span class="k">if</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Room&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_load_room</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">level_obj</span><span class="p">,</span> <span class="n">room_per_object</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Ground&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_load_ground</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Object&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_load_object</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Box&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_load_box</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rename_materials</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._rename_materials"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._rename_materials">[docs]</a>    <span class="k">def</span> <span class="nf">_rename_materials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rename all materials based on their texture if they have one</span>
+
+<span class="sd">        This makes the accessing later on easier</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                <span class="n">textures</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;ShaderNodeTexImage&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">textures</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">material</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">textures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="SuncgLoader._load_room"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._load_room">[docs]</a>    <span class="k">def</span> <span class="nf">_load_room</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">room_per_object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load the room specified in the given node.</span>
+
+<span class="sd">        :param node: The node dict which contains information from house.json..</span>
+<span class="sd">        :param metadata: A dict of metadata which will be written into the object&#39;s custom data.</span>
+<span class="sd">        :param material_adjustments: Adjustments to the materials which were specified inside house.json.</span>
+<span class="sd">        :param transform: The transformation that should be applied to the loaded objects.</span>
+<span class="sd">        :param house_id: The id of the current house.</span>
+<span class="sd">        :param parent: The parent object to which the room should be linked</span>
+<span class="sd">        :param room_per_object: A dict for object -&gt; room lookup (Will be written into)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Build empty room object which acts as a parent for all objects inside</span>
+        <span class="n">room_obj</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Room#&quot;</span> <span class="o">+</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">room_obj</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Room&quot;</span>
+        <span class="n">room_obj</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_correct_bbox_frame</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;bbox&quot;</span><span class="p">])</span>
+        <span class="n">room_obj</span><span class="p">[</span><span class="s2">&quot;roomTypes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;roomTypes&quot;</span><span class="p">]</span>
+        <span class="n">room_obj</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">room_obj</span><span class="p">)</span>
+        <span class="c1"># Store indices of all contained objects in</span>
+        <span class="k">if</span> <span class="s2">&quot;nodeIndices&quot;</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">child_id</span> <span class="ow">in</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;nodeIndices&quot;</span><span class="p">]:</span>
+                <span class="n">room_per_object</span><span class="p">[</span><span class="n">child_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">room_obj</span>
+
+        <span class="k">if</span> <span class="s2">&quot;hideFloor&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">or</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;hideFloor&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Floor&quot;</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;floor&quot;</span><span class="p">]</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fine_grained_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;floor&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_obj</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;room&quot;</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;f.obj&quot;</span><span class="p">),</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">room_obj</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;hideCeiling&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">or</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;hideCeiling&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Ceiling&quot;</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;ceiling&quot;</span><span class="p">]</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fine_grained_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ceiling&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_obj</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;room&quot;</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;c.obj&quot;</span><span class="p">),</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">room_obj</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">&quot;hideWalls&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">or</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;hideWalls&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Wall&quot;</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;wall&quot;</span><span class="p">]</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fine_grained_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;wall&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_obj</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;room&quot;</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;w.obj&quot;</span><span class="p">),</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">room_obj</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._load_ground"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._load_ground">[docs]</a>    <span class="k">def</span> <span class="nf">_load_ground</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load the ground specified in the given node.</span>
+
+<span class="sd">        :param node: The node dict which contains information from house.json..</span>
+<span class="sd">        :param metadata: A dict of metadata which will be written into the object&#39;s custom data.</span>
+<span class="sd">        :param material_adjustments: Adjustments to the materials which were specified inside house.json.</span>
+<span class="sd">        :param transform: The transformation that should be applied to the loaded objects.</span>
+<span class="sd">        :param house_id: The id of the current house.</span>
+<span class="sd">        :param parent: The parent object to which the ground should be linked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Ground&quot;</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;floor&quot;</span><span class="p">]</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fine_grained_class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ground&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_obj</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;room&quot;</span><span class="p">,</span> <span class="n">house_id</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;f.obj&quot;</span><span class="p">),</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._load_object"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._load_object">[docs]</a>    <span class="k">def</span> <span class="nf">_load_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load the object specified in the given node.</span>
+
+<span class="sd">        :param node: The node dict which contains information from house.json..</span>
+<span class="sd">        :param metadata: A dict of metadata which will be written into the object&#39;s custom data.</span>
+<span class="sd">        :param material_adjustments: Adjustments to the materials which were specified inside house.json.</span>
+<span class="sd">        :param transform: The transformation that should be applied to the loaded objects.</span>
+<span class="sd">        :param parent: The parent object to which the ground should be linked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;state&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">node</span> <span class="ow">or</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_obj</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">],</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.obj&quot;</span><span class="p">),</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_load_obj</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">],</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;modelId&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_0.obj&quot;</span><span class="p">),</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._correct_bbox_frame"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._correct_bbox_frame">[docs]</a>    <span class="k">def</span> <span class="nf">_correct_bbox_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bbox</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Corrects the coordinate frame of the given bbox.</span>
+
+<span class="sd">        :param bbox: The bbox.</span>
+<span class="sd">        :return: The corrected bbox.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="n">MathUtility</span><span class="o">.</span><span class="n">transform_point_to_blender_coord_frame</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="s2">&quot;min&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="n">MathUtility</span><span class="o">.</span><span class="n">transform_point_to_blender_coord_frame</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="s2">&quot;max&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">])</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._load_box"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._load_box">[docs]</a>    <span class="k">def</span> <span class="nf">_load_box</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Creates a cube inside blender which follows the specifications of the given node.</span>
+
+<span class="sd">        :param node: The node dict which contains information from house.json..</span>
+<span class="sd">        :param material_adjustments: Adjustments to the materials which were specified inside house.json.</span>
+<span class="sd">        :param transform: The transformation that should be applied to the loaded objects.</span>
+<span class="sd">        :param parent: The parent object to which the ground should be linked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">primitive_cube_add</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">box</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">object</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Box#&quot;</span> <span class="o">+</span> <span class="n">node</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="c1"># Scale the cube to the required dimensions</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;dimensions&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span> <span class="o">@</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;dimensions&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">))</span> <span class="o">@</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Scale</span><span class="p">(</span><span class="n">node</span><span class="p">[</span><span class="s2">&quot;dimensions&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span>
+
+        <span class="c1"># Create UV mapping (beforehand we apply the scaling from the previous step, such that the resulting uv mapping has the correct aspect)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">transform_apply</span><span class="p">(</span><span class="n">scale</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">editmode_toggle</span><span class="p">()</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">uv</span><span class="o">.</span><span class="n">cube_project</span><span class="p">()</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">editmode_toggle</span><span class="p">()</span>
+
+        <span class="c1"># Create an empty material which is filled in the next step</span>
+        <span class="n">mat</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;material_0&quot;</span><span class="p">)</span>
+        <span class="n">mat</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_transform_and_colorize_object</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+        <span class="c1"># set class to void</span>
+        <span class="n">box</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;void&quot;</span><span class="p">]</span>
+        <span class="c1"># Rotate cube to match objects loaded from .obj, has to be done after transformations have been applied</span>
+        <span class="n">box</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="mi">90</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">)</span> <span class="o">@</span> <span class="n">box</span><span class="o">.</span><span class="n">matrix_world</span>
+
+        <span class="c1"># Set the physics property of all imported boxes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_properties</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._load_obj"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._load_obj">[docs]</a>    <span class="k">def</span> <span class="nf">_load_obj</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Load the wavefront object file from the given path and adjust according to the given arguments.</span>
+
+<span class="sd">        :param path: The path to the .obj file.</span>
+<span class="sd">        :param metadata: A dict of metadata which will be written into the object&#39;s custom data.</span>
+<span class="sd">        :param material_adjustments: Adjustments to the materials which were specified inside house.json.</span>
+<span class="sd">        :param transform: The transformation that should be applied to the loaded objects.</span>
+<span class="sd">        :param parent: The parent object to which the object should be linked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: &quot;</span> <span class="o">+</span> <span class="n">path</span> <span class="o">+</span> <span class="s2">&quot; is missing&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">object_already_loaded</span> <span class="o">=</span> <span class="n">path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collection_of_loaded_objs</span>
+            <span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">import_objects</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">cached_objects</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_collection_of_loaded_objs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">object_already_loaded</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Duplicate object: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="p">))</span>
+                <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+                    <span class="c1"># the original object matrix from the .obj loader -&gt; is not an identity matrix</span>
+                    <span class="nb">object</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+                    <span class="c1"># remove all custom properties</span>
+                    <span class="n">keys</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+                        <span class="k">del</span> <span class="nb">object</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="c1"># Go through all imported objects</span>
+            <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="nb">object</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_transform_and_colorize_object</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">parent</span><span class="p">)</span>
+
+            <span class="c1"># Set the physics property of all imported objects</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_set_properties</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._transform_and_colorize_object"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._transform_and_colorize_object">[docs]</a>    <span class="k">def</span> <span class="nf">_transform_and_colorize_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Applies the given transformation to the object and refactors its materials.</span>
+
+<span class="sd">        Material is replaced with an existing material if possible or is changed according to the material_adjustments</span>
+
+<span class="sd">        :param object: The object to use.</span>
+<span class="sd">        :param material_adjustments: A list of adjustments to make. (Each element i corresponds to material_i)</span>
+<span class="sd">        :param transform: The transformation matrix to apply</span>
+<span class="sd">        :param parent: The parent object to which the object should be linked</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">parent</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">object</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
+
+        <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Apply transformation</span>
+            <span class="nb">object</span><span class="o">.</span><span class="n">matrix_world</span> <span class="o">@=</span> <span class="n">transform</span>
+
+
+        <span class="k">for</span> <span class="n">mat_slot</span> <span class="ow">in</span> <span class="nb">object</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+            <span class="n">mat</span> <span class="o">=</span> <span class="n">mat_slot</span><span class="o">.</span><span class="n">material</span>
+
+            <span class="c1"># the material name of an object contains a nr, which is mentioned in the material_adjustments</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="n">mat</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+            <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="n">index</span><span class="p">[:</span><span class="n">index</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="c1"># check if this index is mentioned in material_adjustments and if a texture is necessary</span>
+            <span class="n">force_texture</span> <span class="o">=</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">material_adjustments</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;texture&quot;</span> <span class="ow">in</span> <span class="n">material_adjustments</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_recreate_material_nodes</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">force_texture</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">material_adjustments</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_adjust_material_nodes</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">material_adjustments</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+            <span class="n">mat_type</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_type_and_value_from_mat</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+            <span class="n">current_mats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_collection_of_loaded_mats</span><span class="p">[</span><span class="n">mat_type</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">current_mats</span><span class="p">:</span>
+                <span class="n">mat_slot</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">current_mats</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># save the current material for later</span>
+                <span class="n">current_mats</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat</span></div>
+
+
+<div class="viewcode-block" id="SuncgLoader._get_type_and_value_from_mat"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._get_type_and_value_from_mat">[docs]</a>    <span class="k">def</span> <span class="nf">_get_type_and_value_from_mat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the type of the material -&gt; either diffuse or with texture (there are only two in SUNCG)</span>
+<span class="sd">        :param mat: the material where the type and value should be determined</span>
+<span class="sd">        :return mat_type, value: mat_type is either &quot;diffuse&quot; or &quot;texture&quot;, the value contains either name of the</span>
+<span class="sd">                                 image or the color mapped to an RGB string of the values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">image_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;TexImage&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># there is an image node -&gt; type texture</span>
+            <span class="n">mat_type</span> <span class="o">=</span> <span class="s2">&quot;texture&quot;</span>
+            <span class="n">image_node</span> <span class="o">=</span> <span class="n">image_node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">image_node</span><span class="o">.</span><span class="n">image</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The image does not have a texture for material: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mat</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">image_node</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[:</span><span class="n">value</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mat_type</span> <span class="o">=</span> <span class="s2">&quot;diffuse&quot;</span>
+            <span class="n">principled_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+            <span class="n">used_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span>
+            <span class="n">used_keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">255.</span><span class="o">*</span><span class="n">ele</span><span class="p">))</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">used_keys</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">mat_type</span><span class="p">,</span> <span class="n">value</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._recreate_material_nodes"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._recreate_material_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">_recreate_material_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">force_texture</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Remove all nodes and recreate a diffuse node, optionally with texture.</span>
+
+<span class="sd">        This will replace all material nodes with only a diffuse and a texturing node (to speedup rendering).</span>
+
+<span class="sd">        :param mat: The blender material</span>
+<span class="sd">        :param force_texture: True, if there always should be a texture node created even if the material has at the moment no texture</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+        <span class="n">image_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;TexImage&#39;</span><span class="p">)</span>
+        <span class="c1"># if there is no image no create one</span>
+        <span class="k">if</span> <span class="n">force_texture</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># The principled BSDF node contains all imported material properties</span>
+            <span class="n">principled_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+
+            <span class="n">uv_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeTexCoord&#39;</span><span class="p">)</span>
+            <span class="c1"># create an image node and link it</span>
+            <span class="n">image_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeTexImage&#39;</span><span class="p">)</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">uv_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;UV&#39;</span><span class="p">],</span> <span class="n">image_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Vector&#39;</span><span class="p">])</span>
+            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">image_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">],</span> <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Base Color&#39;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="SuncgLoader._adjust_material_nodes"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._adjust_material_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">_adjust_material_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mat</span><span class="p">,</span> <span class="n">adjustments</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Adjust the material node of the given material according to the given adjustments.</span>
+
+<span class="sd">        Textures or diffuse colors will be changed according to the given material_adjustments.</span>
+
+<span class="sd">        :param mat: The blender material.</span>
+<span class="sd">        :param adjustments: A dict containing a new &quot;diffuse&quot; color or a new &quot;texture&quot; path</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+
+        <span class="k">if</span> <span class="s2">&quot;diffuse&quot;</span> <span class="ow">in</span> <span class="n">adjustments</span><span class="p">:</span>
+            <span class="n">principle_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+            <span class="n">principle_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Base Color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">hex_to_rgba</span><span class="p">(</span><span class="n">adjustments</span><span class="p">[</span><span class="s2">&quot;diffuse&quot;</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="s2">&quot;texture&quot;</span> <span class="ow">in</span> <span class="n">adjustments</span><span class="p">:</span>
+            <span class="n">image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">suncg_dir</span><span class="p">,</span> <span class="s2">&quot;texture&quot;</span><span class="p">,</span> <span class="n">adjustments</span><span class="p">[</span><span class="s2">&quot;texture&quot;</span><span class="p">])</span>
+            <span class="n">image_path</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">image_path</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image_path</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span><span class="p">):</span>
+                <span class="n">image_path</span> <span class="o">+=</span> <span class="s2">&quot;.png&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">image_path</span> <span class="o">+=</span> <span class="s2">&quot;.jpg&quot;</span>
+
+            <span class="n">image_node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;ShaderNodeTexImage&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">image_path</span><span class="p">):</span>
+                <span class="n">image_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">check_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Cannot load texture, path does not exist: </span><span class="si">{}</span><span class="s2">, remove image node again&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">image_path</span><span class="p">))</span>
+                <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">image_node</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._read_model_category_mapping"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._read_model_category_mapping">[docs]</a>    <span class="k">def</span> <span class="nf">_read_model_category_mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Reads in the model category mapping csv.</span>
+
+<span class="sd">        :param path: The path to the csv file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">windows</span> <span class="o">=</span> <span class="p">[]</span>       
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_label_map</span> <span class="o">=</span> <span class="p">{}</span>      
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_fine_grained_label_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">object_coarse_grained_label_map</span> <span class="o">=</span> <span class="p">{}</span>              
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">Utility</span><span class="o">.</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>      
+            <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>        
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>      
+                <span class="bp">self</span><span class="o">.</span><span class="n">object_label_map</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;model_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;nyuv2_40class&quot;</span><span class="p">]</span>       
+                <span class="bp">self</span><span class="o">.</span><span class="n">object_fine_grained_label_map</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;model_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;fine_grained_class&quot;</span><span class="p">]</span>     
+                <span class="bp">self</span><span class="o">.</span><span class="n">object_coarse_grained_label_map</span><span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;model_id&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;coarse_grained_class&quot;</span><span class="p">]</span>     
+        
+        <span class="c1"># Use the void category as label for the world background</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="s2">&quot;void&quot;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SuncgLoader._get_label_id"><a class="viewcode-back" href="../../../src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader._get_label_id">[docs]</a>    <span class="k">def</span> <span class="nf">_get_label_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the label id for an object with the given model_id.</span>
+
+<span class="sd">        :param obj_id: The model_id of the object.</span>
+<span class="sd">        :return: The corresponding label index.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">LabelIdMapping</span><span class="o">.</span><span class="n">label_id_map</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">object_label_map</span><span class="p">[</span><span class="n">obj_id</span><span class="p">]]</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

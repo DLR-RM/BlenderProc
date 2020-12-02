@@ -1,0 +1,7 @@
+src\.debug2 module
+==================
+
+.. automodule:: src.debug2
+    :members:
+    :undoc-members:
+    :show-inheritance:

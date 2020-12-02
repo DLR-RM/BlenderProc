@@ -1,0 +1,7 @@
+src\.camera\.SuncgCameraSampler module
+======================================
+
+.. automodule:: src.camera.SuncgCameraSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

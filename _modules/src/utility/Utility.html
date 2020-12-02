@@ -1,0 +1,688 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.utility.Utility &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Camera</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Lighting</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li><a class="reference external" href="src.lighting.SceneNetLighting.html#src.lighting.SceneNetLighting.SceneNetLighting">SceneNetLighting</a></li>
+<li><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Loader</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Main</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Postprocessing</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Renderer</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Utility</span></p>
+<ul class="compound-middle">
+<li><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+<p class="compound-middle caption"><span class="compound-middle caption-text">Writer</span></p>
+<ul class="compound-last">
+<li><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.utility.Utility</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.utility.Utility</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">from</span> <span class="nn">src.utility.Config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Vector</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Utility"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility">[docs]</a><span class="k">class</span> <span class="nc">Utility</span><span class="p">:</span>
+    <span class="n">working_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">temp_dir</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">used_temp_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Utility.initialize_modules"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.initialize_modules">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">initialize_modules</span><span class="p">(</span><span class="n">module_configs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initializes the modules described in the given configuration.</span>
+
+<span class="sd">        Example for module_configs:</span>
+<span class="sd">        [{</span>
+<span class="sd">          &quot;module&quot;: &quot;base.ModuleA&quot;,</span>
+<span class="sd">          &quot;config&quot;: {...}</span>
+<span class="sd">        }, ...]</span>
+
+<span class="sd">        Here the name contains the path to the module class, starting from inside the src directory.</span>
+
+<span class="sd">        Be aware that all attributes stored in the GlobalStorage are also accessible here, even though</span>
+<span class="sd">        they are not copied into the new config.</span>
+
+<span class="sd">        :param module_configs: A list of dicts, each one describing one module.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">modules</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">module_config</span> <span class="ow">in</span> <span class="n">module_configs</span><span class="p">:</span>
+            <span class="c1"># If only the module name is given (short notation)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">module_config</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">module_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="n">module_config</span><span class="p">}</span>
+
+            <span class="c1"># Initialize config with empty config</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="c1"># Check if there is a module specific config</span>
+            <span class="k">if</span> <span class="s2">&quot;config&quot;</span> <span class="ow">in</span> <span class="n">module_config</span><span class="p">:</span>
+                <span class="c1"># Overwrite with module specific config</span>
+                <span class="n">Utility</span><span class="o">.</span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">module_config</span><span class="p">[</span><span class="s2">&quot;config&quot;</span><span class="p">],</span> <span class="n">config</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">Utility</span><span class="o">.</span><span class="n">BlockStopWatch</span><span class="p">(</span><span class="s2">&quot;Initializing module &quot;</span> <span class="o">+</span> <span class="n">module_config</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]):</span>
+                <span class="c1"># Import file and extract class</span>
+                <span class="n">module_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;src.&quot;</span> <span class="o">+</span> <span class="n">module_config</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]),</span> <span class="n">module_config</span><span class="p">[</span><span class="s2">&quot;module&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="c1"># Create module</span>
+                <span class="n">modules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module_class</span><span class="p">(</span><span class="n">Config</span><span class="p">(</span><span class="n">config</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">modules</span></div>
+
+
+<div class="viewcode-block" id="Utility.transform_matrix_to_blender_coord_frame"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.transform_matrix_to_blender_coord_frame">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">transform_matrix_to_blender_coord_frame</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Transforms the given homog into the blender coordinate frame.</span>
+
+<span class="sd">        :param matrix: The matrix to convert in form of a mathutils.Matrix.</span>
+<span class="sd">        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame of the</span>
+<span class="sd">        source frame. (Allowed values: &quot;X&quot;, &quot;Y&quot;, &quot;Z&quot;, &quot;-X&quot;, &quot;-Y&quot;, &quot;-Z&quot;)</span>
+<span class="sd">        :return: The converted point is in form of a mathutils.Matrix.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">source_frame</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;The specified coordinate frame has more or less than tree axes: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">frame_of_point</span><span class="p">)</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">axis</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">source_frame</span><span class="p">):</span>
+            <span class="n">axis</span> <span class="o">=</span> <span class="n">axis</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">):</span>
+                <span class="n">output</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">axis</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">):</span>
+                <span class="n">output</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">axis</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">):</span>
+                <span class="n">output</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid axis: &quot;</span> <span class="o">+</span> <span class="n">axis</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">axis</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">):</span>
+                <span class="n">output</span><span class="p">[:</span><span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="n">output</span><span class="p">[:</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="n">col</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="Utility.resolve_path"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.resolve_path">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">resolve_path</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns an absolute path. If given path is relative, current working directory is put in front.</span>
+
+<span class="sd">        :param path: The path to resolve.</span>
+<span class="sd">        :return: The absolute path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">path</span>
+        <span class="k">elif</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;HOME&quot;</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">Utility</span><span class="o">.</span><span class="n">working_dir</span><span class="p">),</span> <span class="n">path</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Utility.get_temporary_directory"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.get_temporary_directory">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_temporary_directory</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: default temporary directory, shared memory if it exists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">temp_dir</span></div>
+
+<div class="viewcode-block" id="Utility.merge_dicts"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.merge_dicts">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">merge_dicts</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Recursively copies all key value pairs from src to dest (Overwrites existing)</span>
+
+<span class="sd">        :param source: The source dict.</span>
+<span class="sd">        :param destination: The destination dict</span>
+<span class="sd">        :return: The modified destination dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="c1"># get node or create one</span>
+                <span class="n">node</span> <span class="o">=</span> <span class="n">destination</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">Utility</span><span class="o">.</span><span class="n">merge_dicts</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">node</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">destination</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="k">return</span> <span class="n">destination</span></div>
+
+<div class="viewcode-block" id="Utility.hex_to_rgba"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.hex_to_rgba">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">hex_to_rgba</span><span class="p">(</span><span class="nb">hex</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Converts the given hex string to rgba color values.</span>
+
+<span class="sd">        :param hex: The hex string, describing rgb.</span>
+<span class="sd">        :return: The rgba color, in form of a list. Values between 0 and 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">x</span> <span class="o">/</span> <span class="mi">255</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="nb">hex</span><span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">:])]</span> <span class="o">+</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Utility.rgb_to_hex"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.rgb_to_hex">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">rgb_to_hex</span><span class="p">(</span><span class="n">rgb</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Converts the given rgb to hex values.</span>
+
+<span class="sd">        :param rgb: tuple of three with rgb integers.</span>
+<span class="sd">        :return: Hex string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;#</span><span class="si">%02x%02x%02x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">rgb</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Utility.get_idx"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.get_idx">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_idx</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns index of an element if it exists in the list</span>
+<span class="sd">        :param array: a list with values for which == operator works.</span>
+<span class="sd">        :param item: item to find the index of</span>
+<span class="sd">        :return: index of item, -1 otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">array</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
+
+<div class="viewcode-block" id="Utility.insert_node_instead_existing_link"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.insert_node_instead_existing_link">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">insert_node_instead_existing_link</span><span class="p">(</span><span class="n">links</span><span class="p">,</span> <span class="n">source_socket</span><span class="p">,</span> <span class="n">new_node_dest_socket</span><span class="p">,</span> <span class="n">new_node_src_socket</span><span class="p">,</span> <span class="n">dest_socket</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Replaces the node between source_socket and dest_socket with a new node.</span>
+
+<span class="sd">        Before: source_socket -&gt; dest_socket</span>
+<span class="sd">        After: source_socket -&gt; new_node_dest_socket</span>
+<span class="sd">               new_node_src_socket -&gt; dest_socket</span>
+
+<span class="sd">        :param links: The collection of all links.</span>
+<span class="sd">        :param source_socket: The source socket.</span>
+<span class="sd">        :param new_node_dest_socket: The new destination for the link starting from source_socket.</span>
+<span class="sd">        :param new_node_src_socket: The new source for the link towards dest_socket.</span>
+<span class="sd">        :param dest_socket: The destination socket</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">from_socket</span> <span class="o">==</span> <span class="n">source_socket</span> <span class="ow">or</span> <span class="n">l</span><span class="o">.</span><span class="n">to_socket</span> <span class="o">==</span> <span class="n">dest_socket</span><span class="p">:</span>
+                <span class="n">links</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">source_socket</span><span class="p">,</span> <span class="n">new_node_dest_socket</span><span class="p">)</span>
+        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">new_node_src_socket</span><span class="p">,</span> <span class="n">dest_socket</span><span class="p">)</span>\</div>
+
+<div class="viewcode-block" id="Utility.get_node_connected_to_the_output_and_unlink_it"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.get_node_connected_to_the_output_and_unlink_it">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_node_connected_to_the_output_and_unlink_it</span><span class="p">(</span><span class="n">material</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Searches for the OutputMaterial in the given material and finds the connected node to it,</span>
+<span class="sd">        removes the connection between this node and the output and returns this node and the material_output</span>
+<span class="sd">        :param material_slot: material slot (</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+
+        <span class="n">material_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;OutputMaterial&#39;</span><span class="p">)</span>
+        <span class="c1"># find the node, which is connected to the output</span>
+        <span class="n">node_connected_to_the_output</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">links</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">to_node</span> <span class="o">==</span> <span class="n">material_output</span><span class="p">:</span>
+                <span class="n">node_connected_to_the_output</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">from_node</span>
+                <span class="c1"># remove this link</span>
+                <span class="n">links</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="k">return</span> <span class="n">node_connected_to_the_output</span><span class="p">,</span> <span class="n">material_output</span></div>
+
+
+<div class="viewcode-block" id="Utility.get_nodes_with_type"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.get_nodes_with_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns all nodes which are of the given node_type</span>
+<span class="sd">        :param nodes: list of nodes of the current material</span>
+<span class="sd">        :param node_type: node types</span>
+<span class="sd">        :return: list of nodes, which belong to the type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">node_type</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Utility.get_the_one_node_with_type"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.get_the_one_node_with_type">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the one nodes which is of the given node_type</span>
+
+<span class="sd">        This function will only work if there is only one of the nodes of this type.</span>
+
+<span class="sd">        :param nodes: list of nodes of the current material</span>
+<span class="sd">        :param node_type: node types</span>
+<span class="sd">        :return: node of the node type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">node_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">node</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There is not only one node of this type: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">node_type</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Utility.BlockStopWatch"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">[docs]</a>    <span class="k">class</span> <span class="nc">BlockStopWatch</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Calls a print statement to mark the start and end of this block and also measures execution time.</span>
+
+<span class="sd">        Usage: with BlockStopWatch(&#39;text&#39;):</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_name</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span> <span class="o">=</span> <span class="n">block_name</span>
+
+        <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#### Start - &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span> <span class="o">+</span> <span class="s2">&quot; ####&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;#### Finished - &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_name</span> <span class="o">+</span> <span class="s2">&quot; (took &quot;</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%.3f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; seconds) ####&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Utility.UndoAfterExecution"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">[docs]</a>    <span class="k">class</span> <span class="nc">UndoAfterExecution</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Reverts all changes done to the blender project inside this block.</span>
+
+<span class="sd">        Usage: with UndoAfterExecution():</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">check_point_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">perform_undo_op</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">check_point_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">check_point_name</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">filename</span> <span class="o">+</span> <span class="s2">&quot; - &quot;</span> <span class="o">+</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_point_name</span> <span class="o">=</span> <span class="n">check_point_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_perform_undo_op</span> <span class="o">=</span> <span class="n">perform_undo_op</span>
+
+        <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perform_undo_op</span><span class="p">:</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">undo_push</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;before &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_point_name</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_perform_undo_op</span><span class="p">:</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">undo_push</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;after &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_point_name</span><span class="p">)</span>
+                <span class="c1"># The current state points to &quot;after&quot;, now by calling undo we go back to &quot;before&quot;</span>
+                <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">ed</span><span class="o">.</span><span class="n">undo</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Utility.build_provider"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.build_provider">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_provider</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Builds up providers like sampler or getter.</span>
+
+<span class="sd">        It first builds the config and then constructs the required provider.</span>
+
+<span class="sd">        :param name: The name of the provider class.</span>
+<span class="sd">        :param parameters: A dict containing the parameters that should be used.</span>
+<span class="sd">        :return: The constructed provider.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Import class from src.utility</span>
+        <span class="n">module_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;src.provider.&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">),</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="c1"># Build configuration</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="c1"># Construct provider</span>
+        <span class="k">return</span> <span class="n">module_class</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Utility.build_provider_based_on_config"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.build_provider_based_on_config">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">build_provider_based_on_config</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Builds up the provider using the parameters described in the given config.</span>
+
+<span class="sd">        The given config should follow the following scheme:</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;&lt;name of provider class&gt;&quot;</span>
+<span class="sd">          &quot;parameters&quot;: {</span>
+<span class="sd">            &lt;provider parameters&gt;</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">        :param config: A Configuration object or a dict containing the configuration data.</span>
+<span class="sd">        :return: The constructed provider.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;provider&#39;</span><span class="p">:</span>
+                <span class="n">parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s1">&#39;provider&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Each provider needs an provider label, this one does not contain one: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">Utility</span><span class="o">.</span><span class="n">build_provider</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;provider&quot;</span><span class="p">),</span> <span class="n">parameters</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Utility.generate_equidistant_values"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.generate_equidistant_values">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">generate_equidistant_values</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">space_size_per_dimension</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; This function generates N equidistant values in a 3-dim space and returns num of them.</span>
+
+<span class="sd">        Every dimension of the space is limited by [0, K], where K is the given space_size_per_dimension.</span>
+<span class="sd">        Basically it splits a cube of shape K x K x K in to N smaller blocks. Where, N = cube_length^3</span>
+<span class="sd">        and cube_length is the smallest integer for which N &gt;= num.</span>
+
+<span class="sd">        If K is not a multiple of N, then the sum of all blocks might</span>
+<span class="sd">        not fill up the whole K ** 3 cube.</span>
+
+<span class="sd">        :param num: The total number of values required.</span>
+<span class="sd">        :param space_size_per_dimension: The side length of cube.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">num_splits_per_dimension</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># find cube_length bound of cubes to be made</span>
+        <span class="k">while</span> <span class="n">num_splits_per_dimension</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">&lt;</span> <span class="n">num</span><span class="p">:</span>
+            <span class="n">num_splits_per_dimension</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Calc the side length of a block. We do a integer division here, s.t. we get blocks with the exact same size, even though we are then not using the full space of [0, 255] ** 3</span>
+        <span class="n">block_length</span> <span class="o">=</span> <span class="n">space_size_per_dimension</span> <span class="o">//</span> <span class="n">num_splits_per_dimension</span>
+
+        <span class="c1"># Calculate the center of each block and use them as equidistant values</span>
+        <span class="n">r_mid_point</span> <span class="o">=</span> <span class="n">block_length</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_splits_per_dimension</span><span class="p">):</span>
+            <span class="n">g_mid_point</span> <span class="o">=</span> <span class="n">block_length</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_splits_per_dimension</span><span class="p">):</span>
+                <span class="n">b_mid_point</span> <span class="o">=</span> <span class="n">block_length</span> <span class="o">//</span> <span class="mi">2</span>
+                <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_splits_per_dimension</span><span class="p">):</span>
+                    <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">r_mid_point</span><span class="p">,</span> <span class="n">g_mid_point</span><span class="p">,</span> <span class="n">b_mid_point</span><span class="p">])</span>
+                    <span class="n">b_mid_point</span> <span class="o">+=</span> <span class="n">block_length</span>
+                <span class="n">g_mid_point</span> <span class="o">+=</span> <span class="n">block_length</span>
+            <span class="n">r_mid_point</span> <span class="o">+=</span> <span class="n">block_length</span>
+        <span class="k">return</span> <span class="n">values</span><span class="p">[:</span><span class="n">num</span><span class="p">],</span> <span class="n">num_splits_per_dimension</span></div>
+
+<div class="viewcode-block" id="Utility.map_back_from_equally_spaced_equidistant_values"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.map_back_from_equally_spaced_equidistant_values">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">map_back_from_equally_spaced_equidistant_values</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">num_splits_per_dimension</span><span class="p">,</span> <span class="n">space_size_per_dimension</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Maps the given values back to their original indices.</span>
+
+<span class="sd">        This function calculates for each given value the corresponding index in the list of values created by the generate_equidistant_values() method.</span>
+
+<span class="sd">        :param values: An array of shape [M, N, 3];</span>
+<span class="sd">        :param num_splits_per_dimension: The number of splits per dimension that were made when building up the equidistant values.</span>
+<span class="sd">        :return: A 2-dim array of indices corresponding to the given values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calc the side length of a block.</span>
+        <span class="n">block_length</span> <span class="o">=</span> <span class="n">space_size_per_dimension</span> <span class="o">//</span> <span class="n">num_splits_per_dimension</span>
+        <span class="c1"># Subtract a half of a block from all values, s.t. now every value points to the lower corner of a block</span>
+        <span class="n">values</span> <span class="o">-=</span> <span class="n">block_length</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="c1"># this clipping is necessary to avoid that numbers below zero are than used in an uint16</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">space_size_per_dimension</span><span class="p">)</span>
+        <span class="c1"># Calculate the block indices per dimension</span>
+        <span class="n">values</span> <span class="o">/=</span> <span class="n">block_length</span>
+        <span class="c1"># Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_splits_per_dimension</span> <span class="o">*</span> <span class="n">num_splits_per_dimension</span> <span class="o">+</span> <span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_splits_per_dimension</span> <span class="o">+</span> <span class="n">values</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="c1"># Round the values, s.t. derivations are put back to their closest index.</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Utility.import_objects"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.import_objects">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">import_objects</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">cached_objects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Import all objects for the given file and returns the loaded objects</span>
+
+<span class="sd">        In .obj files a list of objects can be saved in.</span>
+<span class="sd">        In .ply files only one object can saved so the list has always at most one element</span>
+
+<span class="sd">        :param filepath: the filepath to the location where the data is stored</span>
+<span class="sd">        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is updated in this function)</span>
+<span class="sd">        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation</span>
+<span class="sd">        :return: a list of all newly loaded objects, in the failure case an empty list is returned</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filepath</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">cached_objects</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cached_objects</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">filepath</span> <span class="ow">in</span> <span class="n">cached_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">created_obj</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">cached_objects</span><span class="p">[</span><span class="n">filepath</span><span class="p">]:</span>
+                        <span class="c1"># deselect all objects and duplicate the object</span>
+                        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">select_set</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
+                        <span class="c1"># save the duplicate in new list</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The amount of objects after the copy was more than one!&quot;</span><span class="p">)</span>
+                        <span class="n">created_obj</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">return</span> <span class="n">created_obj</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">loaded_objects</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">import_objects</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">cached_objects</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">cached_objects</span><span class="p">[</span><span class="n">filepath</span><span class="p">]</span> <span class="o">=</span> <span class="n">loaded_objects</span>
+                    <span class="k">return</span> <span class="n">loaded_objects</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># save all selected objects</span>
+                <span class="n">previously_selected_objects</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">filepath</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.obj&#39;</span><span class="p">):</span>
+                    <span class="c1"># load an .obj file:</span>
+                    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">import_scene</span><span class="o">.</span><span class="n">obj</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">filepath</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.ply&#39;</span><span class="p">):</span>
+                    <span class="c1"># load a .ply mesh</span>
+                    <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">import_mesh</span><span class="o">.</span><span class="n">ply</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="c1"># add a default material to ply file</span>
+                    <span class="n">mat</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;ply_material&quot;</span><span class="p">)</span>
+                    <span class="n">mat</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">loaded_objects</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span> <span class="o">-</span> <span class="n">previously_selected_objects</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">loaded_objects</span><span class="p">:</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+                <span class="c1"># return all currently selected objects</span>
+                <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span> <span class="o">-</span> <span class="n">previously_selected_objects</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The given filepath does not exist: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

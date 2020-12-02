@@ -1,0 +1,21 @@
+src\.lighting package
+=====================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.lighting.LightInterface
+   src.lighting.LightLoader
+   src.lighting.LightSampler
+   src.lighting.SceneNetLighting
+   src.lighting.SuncgLighting
+
+Module contents
+---------------
+
+.. automodule:: src.lighting
+    :members:
+    :undoc-members:
+    :show-inheritance:

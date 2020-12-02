@@ -1,0 +1,7 @@
+src\.writer\.ObjectStateWriter module
+=====================================
+
+.. automodule:: src.writer.ObjectStateWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

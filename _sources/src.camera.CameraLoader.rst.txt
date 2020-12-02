@@ -1,0 +1,7 @@
+src\.camera\.CameraLoader module
+================================
+
+.. automodule:: src.camera.CameraLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:
