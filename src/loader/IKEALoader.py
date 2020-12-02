@@ -32,8 +32,14 @@ class IKEALoader(LoaderInterface):
         self._obj_dict = dict()
         self._generate_object_dict()
 
-        self._obj_type = self.config.get_raw_value("obj_type", None)
-        self._obj_style = self.config.get_raw_value("obj_style", None)
+        if self.config.has_param("obj_type"):
+            self._obj_type = self.config.get_raw_value("obj_type", None)
+        else:
+            self._obj_type = None
+        if self.config.has_param("obj_style"):
+            self._obj_style = self.config.get_raw_value("obj_style", None)
+        else:
+            self._obj_style = None
 
     def _generate_object_dict(self):
         """
