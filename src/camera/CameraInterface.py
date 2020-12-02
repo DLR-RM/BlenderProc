@@ -26,7 +26,7 @@ class CameraInterface(Module):
                 "format": "forward_vec"
               }
             },
-            "intrinsics: {
+            "intrinsics": {
               "fov": 1
             }
           }
