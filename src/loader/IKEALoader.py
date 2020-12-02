@@ -1,10 +1,14 @@
 import os
 import random
 import warnings
+import numpy as np
+
+import mathutils
+import bpy
 
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
-
+from src.utility.BlenderUtility import get_bounds
 
 class IKEALoader(LoaderInterface):
     """
@@ -134,13 +138,29 @@ class IKEALoader(LoaderInterface):
                                         "file: {}".format(selected_obj))
                     break
 
-        # convert all objects to meters
         for obj in loaded_obj:
+            # convert all objects to meters
             if file_unit == "inches":
-                obj.scale *= 0.0254
+                scale = 0.0254
             elif file_unit == "centimeters":
-                obj.scale *= 0.01
+                scale = 0.01
             elif file_unit == "millimeters":
-                obj.scale *= 0.001
+                scale = 0.001
+            elif file_unit == "meters":
+                scale = 1.0
             else:
                 raise Exception("The file unit type: {} is not defined".format(file_unit))
+            if scale != 1.0:
+                # scale object down
+                bpy.ops.object.select_all(action='DESELECT')
+                obj.select_set(True)
+                bpy.ops.object.mode_set(mode='EDIT')
+                bpy.ops.transform.resize(value=(scale, scale, scale))
+                bpy.ops.object.mode_set(mode='OBJECT')
+                bpy.context.view_layer.update()
+
+            # move all object centers to the world origin and set the bounding box correctly
+            bb = get_bounds(obj)
+            bb_center = np.mean(bb, axis=0)
+            bb_min_z_value = np.min(bb, axis=0)[2]
+            obj.location -= mathutils.Vector([bb_center[0], bb_center[1], bb_min_z_value])
