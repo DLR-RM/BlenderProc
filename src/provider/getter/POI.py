@@ -6,17 +6,22 @@ from src.utility.BlenderUtility import get_bounds, get_all_mesh_objects
 
 
 class POI(Provider):
-    """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
-        that is the closest one to the mean location of the bboxes of the selected objects.
+    """
+    Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
+    that is the closest one to the mean location of the bboxes of the selected objects.
 
-        Example 1: Return a location of the object that is the closest one to the mean bbox location of all MESH objects.
+    Example 1: Return a location of the object that is the closest one to the mean bbox location of all MESH objects.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.POI"
         }
 
-        Example 2: Return a location of the object that is the closest one to the mean bbox location of MESH objects
-                   that have their custom property set to True.
+    Example 2: Return a location of the object that is the closest one to the mean bbox location of MESH objects
+    that have their custom property set to True.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.POI",

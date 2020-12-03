@@ -5,10 +5,13 @@ from src.utility.BlenderUtility import check_intersection, check_bb_intersection
 
 
 class ObjectPoseSampler(Module):
-    """ Samples positions and rotations of selected object inside the sampling volume while performing mesh and
-        bounding box collision checks.
+    """
+    Samples positions and rotations of selected object inside the sampling volume while performing mesh and
+    bounding box collision checks.
 
-        Example 1: Sample poses (locations and rotations) for objects with a suctom property `sample_pose` set to True.
+    Example 1: Sample poses (locations and rotations) for objects with a suctom property `sample_pose` set to True.
+
+    .. code-block:: yaml
 
         {
           "module": "object.ObjectPoseSampler",

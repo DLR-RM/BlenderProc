@@ -8,10 +8,13 @@ from src.utility.Utility import Utility
 
 
 class RockEssentialsGroundConstructor(LoaderInterface):
-    """ Constructs a ground plane with a material using RE PBR Rock Shader.
+    """
+    Constructs a ground plane with a material using RE PBR Rock Shader.
 
-        Example 1: Construct a scaled ground plane with 30 subdivision cuts, custom name and subdiv level value for
-                   rendering using PBR Rock Shader from the specified .blend file.
+    Example 1: Construct a scaled ground plane with 30 subdivision cuts, custom name and subdiv level value for
+    rendering using PBR Rock Shader from the specified .blend file.
+
+    .. code-block:: yaml
 
         {
           "module": "constructor.RockEssentialsGroundConstructor",

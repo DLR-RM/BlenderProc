@@ -8,68 +8,77 @@ from src.utility.Config import Config
 
 
 class RockEssentialsRockLoader(LoaderInterface):
-    """ Loads rocks/cliffs from a specified .bled Rocks Essentials file.
+    """
+    Loads rocks/cliffs from a specified .bled Rocks Essentials file.
 
     Example 1: Load two rocks from the specified .blend file.
 
-    {
-      "module": "loader.RockEssentialsRockLoader",
-      "config": {
-        "batches": [
+    .. code-block:: yaml
+
         {
-          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003']
+          "module": "loader.RockEssentialsRockLoader",
+          "config": {
+            "batches": [
+            {
+              "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+              "objects": ['Rock_Sea_Large001','Rock_Sea_Large003']
+            }
+            ]
+          }
         }
-        ]
-      }
-    }
 
     Example 2: Load 5 copies of two specified rocks from the specified .blend file.
 
-    {
-      "module": "loader.RockEssentialsRockLoader",
-      "config": {
-        "batches": [
+    .. code-block:: yaml
+
         {
-          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
-          "amount": 5
+          "module": "loader.RockEssentialsRockLoader",
+          "config": {
+            "batches": [
+            {
+              "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+              "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
+              "amount": 5
+            }
+            ]
+          }
         }
-        ]
-      }
-    }
 
     Example 3: Load 5 rocks, where each loaded rock is randomly selected out of a list of two rocks, from the specified
                .blend file.
 
-    {
-      "module": "loader.RockEssentialsRockLoader",
-      "config": {
-        "batches": [
+    .. code-block:: yaml
+
         {
-          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-          "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
-          "amount": 5,
-          "sample_objects": True
+          "module": "loader.RockEssentialsRockLoader",
+          "config": {
+            "batches": [
+            {
+              "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+              "objects": ['Rock_Sea_Large001','Rock_Sea_Large003'],
+              "amount": 5,
+              "sample_objects": True
+            }
+            ]
+          }
         }
-        ]
-      }
-    }
 
     Example 4: Load 5 random rocks from the specified .blend file.
 
-    {
-      "module": "loader.RockEssentialsRockLoader",
-      "config": {
-        "batches": [
+    .. code-block:: yaml
+
         {
-          "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
-          "amount": 5,
-          "sample_objects": True
+          "module": "loader.RockEssentialsRockLoader",
+          "config": {
+            "batches": [
+            {
+              "path": "<args:0>/Rock Essentials/Individual Rocks/Sea/Rocks_Sea_Large.blend",
+              "amount": 5,
+              "sample_objects": True
+            }
+            ]
+          }
         }
-        ]
-      }
-    }
 
     **configuration**:
 

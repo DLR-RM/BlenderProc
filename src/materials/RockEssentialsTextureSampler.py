@@ -10,12 +10,15 @@ from src.utility.Utility import Utility
 
 
 class RockEssentialsTextureSampler(LoaderInterface):
-    """ Samples a random texture data from the provided list and sets the images to each selected object (ground tiles
-        created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material assigned (they have
-        it applied by default if ground tile was constructed by aforementioned constructor module).
+    """
+    Samples a random texture data from the provided list and sets the images to each selected object (ground tiles
+    created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material assigned (they have
+    it applied by default if ground tile was constructed by aforementioned constructor module).
 
-        Example 1: For all ground planes matching a name pattern select a random set of textures with custom ambient
-                   occlusion, displacements strength and UV map scaling factor values.
+    Example 1: For all ground planes matching a name pattern select a random set of textures with custom ambient
+    occlusion, displacements strength and UV map scaling factor values.
+
+    .. code-block:: yaml
 
         {
           "module": "materials.RockEssentialsTextureSampler",

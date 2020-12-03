@@ -8,12 +8,15 @@ from src.utility.BlenderUtility import get_bounds
 
 
 class UpperRegionSampler(Provider):
-    """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
-        defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The 
-        sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
+    """
+    Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
+    defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
+    sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
 
-        Example 1: Sample a location on the surface of the first object to match the name pattern with height above this
-                   surface in range of [1.5, 1.8].
+    Example 1: Sample a location on the surface of the first object to match the name pattern with height above this
+    surface in range of [1.5, 1.8].
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.UpperRegionSampler",

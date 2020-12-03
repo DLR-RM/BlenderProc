@@ -6,9 +6,12 @@ from src.main.Provider import Provider
 
 
 class Uniform3d(Provider):
-    """ Uniformly samples a 3-dimensional vector.
+    """
+    Uniformly samples a 3-dimensional vector.
 
-        Example 1: Return a uniform;y sampled 3d vector from a range [min, max].
+    Example 1: Return a uniform;y sampled 3d vector from a range [min, max].
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Uniform3d",

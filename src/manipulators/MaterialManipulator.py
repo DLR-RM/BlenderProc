@@ -9,10 +9,13 @@ from src.utility.Utility import Utility
 
 
 class MaterialManipulator(Module):
-    """ Performs manipulation os selected materials.
+    """
+    Performs manipulation os selected materials.
 
-        Example 1: Link image texture output of the 'Material.001' material to displacement input of the shader with a
-                   strength factor of 1.5.
+    Example 1: Link image texture output of the 'Material.001' material to displacement input of the shader with a
+               strength factor of 1.5.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.MaterialManipulator",
@@ -27,7 +30,9 @@ class MaterialManipulator(Module):
           }
         }
 
-        Example 2: Set base color of all materials matching the name pattern to white.
+    Example 2: Set base color of all materials matching the name pattern to white.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.MaterialManipulator",
@@ -42,8 +47,10 @@ class MaterialManipulator(Module):
           }
         }
 
-        Example 3: For all materials matching the name pattern switch to the Emission shader with emitted light of red
-                   color of energy 15.
+    Example 3: For all materials matching the name pattern switch to the Emission shader with emitted light of red
+    color of energy 15.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.MaterialManipulator",

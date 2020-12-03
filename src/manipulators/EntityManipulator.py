@@ -12,11 +12,14 @@ from src.utility.Config import Config
 from mathutils import Matrix
 
 class EntityManipulator(Module):
-    """ Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
-        objects, Light objects, etc.
+    """
+    Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
+    objects, Light objects, etc.
 
-        Example 1: For all 'MESH' type objects with a name matching a 'Cube.*' pattern set rotation Euler vector and set
-                   custom property `physics`.
+    Example 1: For all 'MESH' type objects with a name matching a 'Cube.*' pattern set rotation Euler vector and set
+    custom property `physics`.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.EntityManipulator",
@@ -33,8 +36,10 @@ class EntityManipulator(Module):
           }
         }
 
-        Example 2: Set a shared (sampled once and set for all selected objects) location for all 'MESH' type objects
-                   with a name matching a 'Cube.*' pattern.
+    Example 2: Set a shared (sampled once and set for all selected objects) location for all 'MESH' type objects
+    with a name matching a 'Cube.*' pattern.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.EntityManipulator",
@@ -55,9 +60,11 @@ class EntityManipulator(Module):
           }
         }
 
-        Example 3: Set a unique (sampled once for each selected object) location and apply a 'Solidify' object modifier
-                   with custom 'thickness' attribute value to all 'MESH' type objects with a name matching a 'Cube.*'
-                   pattern.
+    Example 3: Set a unique (sampled once for each selected object) location and apply a 'Solidify' object modifier
+    with custom 'thickness' attribute value to all 'MESH' type objects with a name matching a 'Cube.*'
+    pattern.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.EntityManipulator",
@@ -82,7 +89,9 @@ class EntityManipulator(Module):
           }
         }
 
-        Example 4: Add a displacement modifier with a newly generated texture.
+    Example 4: Add a displacement modifier with a newly generated texture.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.EntityManipulator",
@@ -100,10 +109,12 @@ class EntityManipulator(Module):
           }
         }
 
-        Example 5: Add a displacement modifier with a newly random generated texture with custom
-                   texture, noise scale, modifier mid_level, modifier render_level and modifier strength. With
-                   prior addition of a uv_map to all object without an uv map and adding of a Subdivision Surface
-                   Modifier if the number of vertices of an object is less than 10000.
+    Example 5: Add a displacement modifier with a newly random generated texture with custom
+    texture, noise scale, modifier mid_level, modifier render_level and modifier strength. With
+    prior addition of a uv_map to all object without an uv map and adding of a Subdivision Surface
+    Modifier if the number of vertices of an object is less than 10000.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.EntityManipulator",

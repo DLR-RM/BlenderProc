@@ -5,10 +5,13 @@ from src.utility.BlenderUtility import get_all_mesh_objects
 
 
 class WorldManipulator(Module):
-    """ Allows manipulation of the current World in the scene via specifying one or more {attr name/custom prop. name/
-        custom function name: value} pairs.
+    """
+    Allows manipulation of the current World in the scene via specifying one or more {attr name/custom prop. name/
+    custom function name: value} pairs.
 
-        Example 1: Sets the World's custom property `category_id` to 123.
+    Example 1: Sets the World's custom property `category_id` to 123.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.WorldManipulator",
@@ -17,7 +20,9 @@ class WorldManipulator(Module):
           }
         }
 
-        Example 2: Sets the color and the strength of the light emitted by the background surface.
+    Example 2: Sets the color and the strength of the light emitted by the background surface.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.WorldManipulator",
@@ -27,7 +32,9 @@ class WorldManipulator(Module):
           }
         }
 
-        Example 3: Disables shader node tree of the background surface and sets a solid color to the background surface.
+    Example 3: Disables shader node tree of the background surface and sets a solid color to the background surface.
+
+    .. code-block:: yaml
 
         {
           "module": "manipulators.WorldManipulator",

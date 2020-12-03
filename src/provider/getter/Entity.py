@@ -9,9 +9,12 @@ from src.utility.Config import Config
 
 
 class Entity(Provider):
-    """ Returns a list of objects that comply with defined conditions.
+    """
+    Returns a list of objects that comply with defined conditions.
 
-        Example 1: Return a list of objects that match a name pattern.
+    Example 1: Return a list of objects that match a name pattern.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Entity",
@@ -20,10 +23,12 @@ class Entity(Provider):
           }
         }
 
-        Example 2: Returns the first object to: {match the name pattern "Suzanne", AND to be of a MESH type},
-                                                OR {match the name pattern, AND have a certain value of a cust. prop}
-                                                OR {be inside a bounding box defined by a min and max points}
-                                                OR {have a Z position in space greater than -1}
+    Example 2: Returns the first object to: {match the name pattern "Suzanne", AND to be of a MESH type},
+    OR {match the name pattern, AND have a certain value of a cust. prop}
+    OR {be inside a bounding box defined by a min and max points}
+    OR {have a Z position in space greater than -1}
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Entity",
@@ -51,7 +56,9 @@ class Entity(Provider):
           ]
         }
 
-        Example 3: Returns two random objects of MESH type.
+    Example 3: Returns two random objects of MESH type.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Entity",
