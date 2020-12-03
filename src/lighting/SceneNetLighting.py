@@ -48,7 +48,7 @@ class SceneNetLighting(Module):
         Add emission shader to the materials of the objects which are named either lamp or ceiling
 
         This will even work if the original materials have been replaced
-        :param objects, to change the materials of
+        :param objects: to change the materials of
         """
         # for each object add a material
         for obj in objects:

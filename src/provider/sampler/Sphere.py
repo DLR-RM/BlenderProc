@@ -64,9 +64,9 @@ class Sphere(Provider):
         """
         Samples a point according to the mode, the center and the radius.
 
-       :param center, A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
-       :param radius, The radius of the sphere. Type: float
-       :param mode, Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
+       :param center: A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
+       :param radius: The radius of the sphere. Type: float
+       :param mode: Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
         """
         # Sample
         direction = np.random.normal(size=3)

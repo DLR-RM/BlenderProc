@@ -90,7 +90,7 @@ class SceneNetLoader(LoaderInterface):
 
         Based on the name the textures from the texture_folder will be selected
 
-        :param loaded_objects objects loaded from the .obj file
+        :param loaded_objects: objects loaded from the .obj file
         """
         # for each object add a material
         for obj in loaded_objects:
@@ -142,7 +142,7 @@ class SceneNetLoader(LoaderInterface):
 
         Each object will have a custom property with a label, can be used by the SegMapRenderer.
 
-        :param loaded_objects objects loaded from the .obj file
+        :param loaded_objects: objects loaded from the .obj file
         """
 
         #  Some category names in scenenet objects are written differently than in nyu_idset.csv

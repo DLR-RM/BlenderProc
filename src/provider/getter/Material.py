@@ -88,7 +88,7 @@ class Material(Provider):
           - string
         * - conditions/attribute_value
           - Any value to set. 
-          - string, int, bool or float, list/Vector.
+          - string, list/Vector, int, bool or float
         * - index
           - If set, after the conditions are applied only the entity with the specified index is returned. 
           - int

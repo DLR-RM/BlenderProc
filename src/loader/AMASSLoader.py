@@ -1,10 +1,8 @@
-import glob
 import json
 import os
 import random
 from datetime import datetime
 import numpy as np
-import shutil
 
 import mathutils
 
@@ -63,7 +61,7 @@ class AMASSLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. list-table:: 
+    .. list-table::
         :widths: 25 100 10
         :header-rows: 1
 
@@ -260,7 +258,7 @@ class AMASSLoader(LoaderInterface):
     def _correct_materials(self, objects):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
-        :param objects, objects where the material maybe wrong. Type: bpy.types.Object.
+        :param objects: objects where the material maybe wrong. Type: bpy.types.Object.
         """
 
         for obj in objects:

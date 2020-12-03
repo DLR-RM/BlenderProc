@@ -52,7 +52,7 @@ class GlobalStorage(object):
 
         Adds a key value pairs from add_to_global_config_at_init
 
-        :param global_config the config to use
+        :param global_config: the config to use
         """
         GlobalStorage._global_config = global_config
         for key, value in GlobalStorage._add_to_global_config_at_init.items():
@@ -67,8 +67,9 @@ class GlobalStorage(object):
         """
         Adds values to the global config before the GlobalStorage was inited, these value can only be accessed
         after the GlobalStorage was inited.
-        :param key the key which is used in the global config to identify the value
-        :param value the value which can be identified over the key
+
+        :param key: the key which is used in the global config to identify the value
+        :param value: the value which can be identified over the key
         """
         if GlobalStorage._global_config is None:
             if key not in GlobalStorage._add_to_global_config_at_init:
@@ -89,8 +90,9 @@ class GlobalStorage(object):
         executed afterwards can then with get() access this value.
 
         These values can be added before the global config was inited as they do not depend on each other.
-        :param key which is added to the GlobalStorage
-        :param value which can be accessed by this key over the get() fct.
+
+        :param key: which is added to the GlobalStorage
+        :param value: which can be accessed by this key over the get() fct.
         """
         if key not in GlobalStorage._storage_dict.keys():
             GlobalStorage._storage_dict[key] = value
@@ -108,8 +110,9 @@ class GlobalStorage(object):
         which is executed afterwards can then with get() access this value.
 
         These values can be added before the global config was inited as they do not depend on each other.
-        :param key which is added to the GlobalStorage
-        :param value which can be accessed by this key over the get() fct.
+
+        :param key: which is added to the GlobalStorage
+        :param value: which can be accessed by this key over the get() fct.
         """
         GlobalStorage._storage_dict[key] = value
 
@@ -117,6 +120,7 @@ class GlobalStorage(object):
     def get(key):
         """
         Returns a value from the GlobalStorage, please check add() and set() for more information
+
         :param key: for which a value is searched
         :return: value for the key
         """
@@ -129,7 +133,8 @@ class GlobalStorage(object):
     def is_in_storage(key):
         """
         Checks if a key is in the GlobalStorage
-        :param key for which a value is searched
+
+        :param key: for which a value is searched
         :return: True if the key is in the storage
         """
         return key in GlobalStorage._storage_dict
@@ -138,8 +143,9 @@ class GlobalStorage(object):
     def has_param(key):
         """
         Checks if this key is in the global config not in the GlobalStorage!
-        :param key which should be checked
-        :return True if the key is in the global config
+
+        :param key: which should be checked
+        :return: True if the key is in the global config
         """
         if GlobalStorage._global_config is not None:
             return GlobalStorage._global_config.has_param(key)
@@ -154,7 +160,7 @@ class GlobalStorage(object):
         There are only a few cases where this function should be called, please read the description at the top and
         make sure you have to call this function.
 
-        :return the global config as a utility.Config object
+        :return: the global config as a utility.Config object
         """
         if GlobalStorage._global_config is not None:
             return GlobalStorage._global_config

@@ -78,8 +78,8 @@ class Texture(Provider):
             function: key of the pair must start with `cf_` prefix. See table below for supported custom functions.
           - string
         * - conditions/attribute_value
-          - Any value to set. int, bool or float, list/Vector.
-          - string
+          - Any value to set. .
+          - string, list/Vector, int, bool or float
         * - index
           - If set, after the conditions are applied only the entity with the specified index is returned. 
           - int

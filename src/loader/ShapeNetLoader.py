@@ -91,7 +91,7 @@ class ShapeNetLoader(LoaderInterface):
     def _correct_materials(self, objects):
         """
         If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
-        :param objects, objects where the material maybe wrong
+        :param objects: objects where the material maybe wrong
         """
 
         for obj in objects:

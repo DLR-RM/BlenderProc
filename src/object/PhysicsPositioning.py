@@ -273,7 +273,7 @@ class PhysicsPositioning(Module):
     def _have_objects_stopped_moving(self, last_poses, new_poses):
         """ Check if the difference between the two given poses per object is smaller than the configured threshold.
 
-        :param last_poses. Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
+        :param last_poses: Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :param new_poses: Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :return: True, if no objects are moving anymore.
         """

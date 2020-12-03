@@ -29,7 +29,7 @@ class LoaderInterface(Module):
 
         Also runs all custom property functions.
 
-        :parameter objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
+        :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
         """
 
         properties = self.config.get_raw_dict("add_properties", {})
@@ -51,7 +51,7 @@ class LoaderInterface(Module):
         """
         Changes the shading mode of all objects to either flat or smooth. All surfaces of that object are changed.
 
-        :parameter objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
+        :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
         :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH"]. Type: str
         """
         if mode.lower() == "flat":
