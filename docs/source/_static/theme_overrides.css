@@ -10,4 +10,12 @@
    .wy-table-responsive {
       overflow: visible !important;
    }
+
+   .wy-nav-content {
+       max-width: 1000px;
+   }
+
+
 }
+
+
