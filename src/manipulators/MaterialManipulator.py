@@ -97,9 +97,9 @@ class MaterialManipulator(Module):
     .. csv-table::
         :header: "Parameter", "Description"
 
-        "cf_color_link_to_displacement" "Factor that determines the strength of the displacement via linking the "
+        "cf_color_link_to_displacement", "Factor that determines the strength of the displacement via linking the "
                                         "output of the texture image to the displacement Type: float"
-        "cf_change_to_vertex_color" "The name of the vertex color layer, used for changing the material to a vertex "
+        "cf_change_to_vertex_color", "The name of the vertex color layer, used for changing the material to a vertex "
                                     "coloring mode. Type: string"
         "cf_textures", "Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.): "
                        "texture_path} pairs. Texture_type should be equal to the Shader input name in order to be "
