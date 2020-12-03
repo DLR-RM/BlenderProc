@@ -43,7 +43,7 @@ class Disk(Provider):
         "rotation", "List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used "
                    "for sampling in 3d space. Type: mathutils.Vector. Default: [0, 0, 0]."
         "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample "
-                      "from. Type: string. Default: "disk". Available: "disk", "circle", "sector", "arc"."
+                      "from. Type: string. Default: "disk". Available: ["disk", "circle", "sector", "arc"]."
         "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller "
                       "than end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than "
                       "180 degrees. Angle increases in the counterclockwise direction from the positive direction of X "
