@@ -20,9 +20,9 @@ class BlendLoader(LoaderInterface):
         {
           "module": "loader.BlendLoader",
           "config": {
-            "path": "/path/file.blend",     <-------- path to a .blend file
-            "load_from": "/Object",         <-------- folder name/ID: `/Collection`, `/Texture`, `/Material`, etc.
-            "entities": ".*abc.*"           <-------- regular expression, load everything in the folder if not given
+            "path": "/path/file.blend",     #<-------- path to a .blend file
+            "load_from": "/Object",         #<-------- folder name/ID: /Collection, /Texture, /Material, etc.
+            "entities": ".*abc.*"           #<-------- regular expression, load everything in the folder if not given
           }
         }
 
