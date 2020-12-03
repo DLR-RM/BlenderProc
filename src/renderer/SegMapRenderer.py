@@ -24,39 +24,55 @@ class SegMapRenderer(RendererInterface):
     The csv file will contain a mapping between each instance id and the corresponding custom property or attribute.
 
     Example 1:
+
+    .. code-block:: yaml
+
         config: {
             "map_by": "class"
         }
-        In this example each pixel would be mapped to the corresponding category_id of the object.
-        Each object then needs such a custom property! Even the background. If an object is missing one an Exception
-        is thrown.
+
+    In this example each pixel would be mapped to the corresponding category_id of the object.
+    Each object then needs such a custom property! Even the background. If an object is missing one an Exception
+    is thrown.
 
     Example 2:
+
+    .. code-block:: yaml
+
         "config": {
             "map_by": ["class", "instance"]
         }
-        In this example the output will be a class image and an instance image, so the output will have two channels,
-        instead of one. The first will contain the class the second the instance segmentation. This also means that
-        the class labels per instance are stored in a .csv file.
+
+    In this example the output will be a class image and an instance image, so the output will have two channels,
+    instead of one. The first will contain the class the second the instance segmentation. This also means that
+    the class labels per instance are stored in a .csv file.
 
     Example 3:
+
+    .. code-block:: yaml
+
         "config": {
             "map_by": ["class", "instance", "name"]
          }
-         It is often useful to also store a mapping between the instance and these class in a dict, This happens
-         automatically, when "instance" and another key is used.
-         All values which can not be stored in the image are stored inside of a dict. The `name`
-         attribute would be saved now in a dict as we only store ints and floats in the image.
-         If no "instance" is provided and only "name" would be there, an error would be thrown as an instance mapping
-         is than not possible
+
+    It is often useful to also store a mapping between the instance and these class in a dict, This happens
+    automatically, when "instance" and another key is used.
+    All values which can not be stored in the image are stored inside of a dict. The `name`
+    attribute would be saved now in a dict as we only store ints and floats in the image.
+    If no "instance" is provided and only "name" would be there, an error would be thrown as an instance mapping
+    is than not possible
 
     Example 4:
+
+    .. code-block:: yaml
+
         "config": {
             "map_by": "class"
             "default_values": {"class": 0}
          }
-         It is also possible to set default values, for keys object, which don't have a certain custom property.
-         This is especially useful dealing with the background, which often lacks certain object properties.
+
+    It is also possible to set default values, for keys object, which don't have a certain custom property.
+    This is especially useful dealing with the background, which often lacks certain object properties.
 
 
     .. csv-table::

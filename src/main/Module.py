@@ -11,6 +11,8 @@ class Module:
 
     All of these values can be set per Module or of the global config defined in the main.Initializer:
 
+    .. code-block:: yaml
+
       "module": "main.Initializer",
       "config":{
         "global": {

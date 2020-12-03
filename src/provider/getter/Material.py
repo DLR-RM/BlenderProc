@@ -9,9 +9,12 @@ from src.utility.Utility import Utility
 
 
 class Material(Provider):
-    """  Returns a list of materials that comply with defined conditions.
+    """
+    Returns a list of materials that comply with defined conditions.
 
-        Example 1: Return materials matching a name pattern.
+    Example 1: Return materials matching a name pattern.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Material",
@@ -20,7 +23,9 @@ class Material(Provider):
           }
         }
 
-        Example 2: Return all materials matching a name pattern which also have exactly two textures used.
+    Example 2: Return all materials matching a name pattern which also have exactly two textures used.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Material",
@@ -30,7 +35,9 @@ class Material(Provider):
           }
         }
 
-        Example 3: Return all materials matching a name pattern which also have two or more textures used.
+    Example 3: Return all materials matching a name pattern which also have two or more textures used.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Material",
@@ -40,8 +47,10 @@ class Material(Provider):
           }
         }
 
-        Example 4: Return all materials which: {match the name pattern 'wood.*' AND have two or less textures used}
-                                                OR {match the name pattern 'tile.*'}
+    Example 4: Return all materials which: {match the name pattern 'wood.*' AND have two or less textures used}
+                                            OR {match the name pattern 'tile.*'}
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Material",

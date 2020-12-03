@@ -6,10 +6,13 @@ from src.utility.ItemCollection import ItemCollection
 
 
 class CameraLoader(CameraInterface):
-    """ Loads camera poses from the configuration and sets them as separate keypoints.
-        Camera poses can be specified either directly inside the config or in an extra file.
+    """
+    Loads camera poses from the configuration and sets them as separate keypoints.
+    Camera poses can be specified either directly inside the config or in an extra file.
 
-        Example 1: Loads camera poses from file <args:0>, followed by the pose file format and setting the fov in radians.
+    Example 1: Loads camera poses from file <args:0>, followed by the pose file format and setting the fov in radians.
+
+    .. code-block:: yaml
 
         {
           "module": "camera.CameraLoader",
@@ -22,8 +25,10 @@ class CameraLoader(CameraInterface):
           }
         }
 
-        Example 2: More examples for parameters in "intrinsics". Here cam_K is a camera matrix. Check
-                   CameraInterface for more info on "intrinsics".
+    Example 2: More examples for parameters in "intrinsics". Here cam_K is a camera matrix. Check
+    CameraInterface for more info on "intrinsics".
+
+    .. code-block:: yaml
 
         "intrinsics": {
           "fov_is_half": true,

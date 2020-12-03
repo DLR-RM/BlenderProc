@@ -9,11 +9,14 @@ from src.utility.MathUtility import MathUtility
 
 
 class CameraInterface(Module):
-    """ A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,
-        in addition to setting stereo parameters.
+    """
+    A super class for camera related modules. Holding key information like camera intrinsics and extrinsics,
+    in addition to setting stereo parameters.
 
-        Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config
-                   parameters here, it has to be in a child class of CameraInterface.
+    Example 1: Setting a custom source frame while specifying the format of the rotation. Note that to set config
+    parameters here, it has to be in a child class of CameraInterface.
+
+    .. code-block:: yaml
 
         {
           "module": "camera.CameraLoader",

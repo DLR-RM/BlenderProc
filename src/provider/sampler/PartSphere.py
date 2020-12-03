@@ -5,13 +5,16 @@ from src.provider.sampler.Sphere import Sphere
 
 
 class PartSphere(Provider):
-    """ Samples a point from the surface or from the interior of solid sphere which is split in two parts.
+    """
+    Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 
-        https://math.stackexchange.com/a/87238
-        https://math.stackexchange.com/a/1585996
+    https://math.stackexchange.com/a/87238
+    https://math.stackexchange.com/a/1585996
 
-        Example 1: Sample a point from the surface of the sphere that is split by a plane with displacement of 0.5
-                   above center and a normal of [1, 0, 0].
+    Example 1: Sample a point from the surface of the sphere that is split by a plane with displacement of 0.5
+    above center and a normal of [1, 0, 0].
+
+    .. code-block:: yaml
 
         {
           "provider":"sampler.PartSphere",

@@ -6,9 +6,12 @@ from src.main.Provider import Provider
 
 
 class Color(Provider):
-    """ Uniformly samples a 4-dimensional RGBA vector.
+    """
+    Uniformly samples a 4-dimensional RGBA vector.
 
-        Example 1: Sample a RGBA grey color value using [min, max] range.
+    Example 1: Sample a RGBA grey color value using [min, max] range.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Color",

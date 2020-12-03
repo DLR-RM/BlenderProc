@@ -8,9 +8,12 @@ from src.utility.BlenderUtility import get_all_textures
 
 
 class Texture(Provider):
-    """ Returns a list of textures in accordance with defined conditions.
+    """
+    Returns a list of textures in accordance with defined conditions.
 
-        Example 1: Return a list of textures that match a name pattern.
+    Example 1: Return a list of textures that match a name pattern.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Texture",
@@ -19,8 +22,10 @@ class Texture(Provider):
           }
         }
 
-        Example 2: Returns the first texture to: {match the name pattern, AND to have nodes use enabled },
-                                                OR {match anothername pattern, AND have a certain value of a cust. prop}
+    Example 2: Returns the first texture to: {match the name pattern, AND to have nodes use enabled },
+    OR {match anothername pattern, AND have a certain value of a cust. prop}
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Texture",
@@ -36,7 +41,9 @@ class Texture(Provider):
           }
         }
 
-        Example 3: Returns two random textures with a certain value of a custom property.
+    Example 3: Returns two random textures with a certain value of a custom property.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Texture",

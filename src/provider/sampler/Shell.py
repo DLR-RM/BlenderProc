@@ -5,11 +5,14 @@ from src.main.Provider import Provider
 
 
 class Shell(Provider):
-    """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
-        of those two spheres. Has option for uniform elevation sampling.
+    """
+    Samples a point from the space in between two spheres with a double spherical angle with apex in the center
+    of those two spheres. Has option for uniform elevation sampling.
 
-        Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
-        that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
+    Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
+    that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Shell",

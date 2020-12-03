@@ -5,22 +5,29 @@ from src.main.Provider import Provider
 
 
 class Texture(Provider):
-    """ Uniformly samples a Texture for material manipulator.
+    """
+    Uniformly samples a Texture for material manipulator.
 
-        Example 1: Sample a random texture without exclusions:
+    Example 1: Sample a random texture without exclusions:
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Texture",
         }
 
-        Example 2: Sample a random texture within given textures:
+    Example 2: Sample a random texture within given textures:
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Texture",
           "textures": ["VORONOI", "MARBLE", "MAGIC"]
         }
 
-        Example 3: Add parameters for texture Voronoi (Voroni is currently the only texture supported for doing this):
+    Example 3: Add parameters for texture Voronoi (Voroni is currently the only texture supported for doing this):
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Texture",

@@ -4,9 +4,12 @@ from src.main.Provider import Provider
 
 
 class Value(Provider):
-    """ Sampling 1-d value of bool, int, or float type.
+    """
+    Sampling 1-d value of bool, int, or float type.
 
-        Example 1: Sample a float value from [10, 30) range.
+    Example 1: Sample a float value from [10, 30) range.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Value",
@@ -15,14 +18,18 @@ class Value(Provider):
           "max": 30
         }
 
-        Example 2: Sample a boolean value.
+    Example 2: Sample a boolean value.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Value",
           "type": "bool"
         }
 
-        Example 3: Sample a float value from a normal (Gaussian) distribution.
+    Example 3: Sample a float value from a normal (Gaussian) distribution.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Value",

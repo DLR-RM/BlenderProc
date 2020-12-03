@@ -32,30 +32,34 @@ class AMASSLoader(LoaderInterface):
 
     Example 1: generate a pose of a human kicking a ball (male model). There are different categories recorded in the mocap datasets inside of the AMASS database, for the CMU dataset we can see that the category number `10` contains multiple trials of humans kicking a ball.
 
-    {
-        "module": "loader.AMASSLoader",
-        "config": {
-        "data_path": "<args:0>",
-        "sub_dataset_id": "CMU",
-        "body_model_gender": "male",
-        "subject_id": "10",
-        "sequence_id": "1",
-        "frame_id": "600",
-      },
-    }
+    .. code-block:: yaml
+
+        {
+            "module": "loader.AMASSLoader",
+            "config": {
+            "data_path": "<args:0>",
+            "sub_dataset_id": "CMU",
+            "body_model_gender": "male",
+            "subject_id": "10",
+            "sequence_id": "1",
+            "frame_id": "600",
+          },
+        }
 
     Example 2: generate a pose of human picking up golf ball (female model). Here we choose from the CMU dataset the subject number 64, which contains multiple trials of a human playing golf, if frame_id is not specified (by removing it from the configuration arguments), a random frame will be chosen from the motion trial.
 
-    {
-        "module": "loader.AMASSLoader",
-        "config": {
-        "data_path": "<args:0>",
-        "sub_dataset_id": "CMU",
-        "body_model_gender": "female",
-        "subject_id": "64",
-        "sequence_id": "27",
-      },
-    }
+    .. code-block:: yaml
+
+        {
+            "module": "loader.AMASSLoader",
+            "config": {
+            "data_path": "<args:0>",
+            "sub_dataset_id": "CMU",
+            "body_model_gender": "female",
+            "subject_id": "64",
+            "sequence_id": "27",
+          },
+        }
 
     **Configuration**:
 

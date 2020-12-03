@@ -9,16 +9,19 @@ from src.utility.Utility import Utility
 
 
 class TextureLoader(LoaderInterface):
-    """ Depending on the form of the provided path:
-        1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an
-        image is provided.
-        2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
-        folder with images is provided.
+    """
+    Depending on the form of the provided path:
+    1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an
+    image is provided.
+    2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
+    folder with images is provided.
 
-        NOTE: Same image file can be loaded once to avoid unnecessary overhead. If you really need the same image in
-        different colorspaces, then have a copy per desired colorspace and load them in different instances of this Loader.
+    NOTE: Same image file can be loaded once to avoid unnecessary overhead. If you really need the same image in
+    different colorspaces, then have a copy per desired colorspace and load them in different instances of this Loader.
 
-        Example 1: Load all images in the folder in sRGB colorspace and create appropriate textures.
+    Example 1: Load all images in the folder in sRGB colorspace and create appropriate textures.
+
+    .. code-block:: yaml
 
         {
           "module": "loader.TextureLoader",
@@ -27,7 +30,9 @@ class TextureLoader(LoaderInterface):
           }
         }
 
-        Example 2: Load a random image from the path in raw colorspace and create an appropriate texture.
+    Example 2: Load a random image from the path in raw colorspace and create an appropriate texture.
+
+    .. code-block:: yaml
 
         {
           "module": "loader.TextureLoader",

@@ -6,11 +6,14 @@ from src.utility.BlenderUtility import get_bounds
 
 
 class Attribute(Provider):
-    """ Returns a value that is the result of selecting entities using getter.Entity Provider, getting the list of
-        values of selected entities' attributes/custom properties/custom-processed data, and of the optional operations
-        on this list.
+    """
+    Returns a value that is the result of selecting entities using getter.Entity Provider, getting the list of
+    values of selected entities' attributes/custom properties/custom-processed data, and of the optional operations
+    on this list.
 
-        Example 1: Get a list of locations of objects (which names match the pattern).
+    Example 1: Get a list of locations of objects (which names match the pattern).
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Attribute",
@@ -24,7 +27,9 @@ class Attribute(Provider):
           # add "transform_by": "sum" to get one value that represents the sum of those locations.
         }
 
-        Example 2: Get a list of custom property "id" values of objects (which "physics" cp value is True).
+    Example 2: Get a list of custom property "id" values of objects (which "physics" cp value is True).
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Attribute",
@@ -37,7 +42,9 @@ class Attribute(Provider):
           "get": "cp_id"
         }
 
-        Example 3: Get a list of mean coordinates of objects (which name matches the pattern) bounding boxes.
+    Example 3: Get a list of mean coordinates of objects (which name matches the pattern) bounding boxes.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.Attribute",

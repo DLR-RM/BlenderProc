@@ -5,10 +5,13 @@ from src.main.Provider import Provider
 
 
 class Disk(Provider):
-    """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
-        with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
+    """
+    Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
+    with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
 
-        Example 1: Sample a point from a 1-sphere.
+    Example 1: Sample a point from a 1-sphere.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Disk",
@@ -17,7 +20,9 @@ class Disk(Provider):
           "radius": 7
         }
 
-        Example 1: Sample a point from a sector.
+    Example 1: Sample a point from a sector.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Disk",

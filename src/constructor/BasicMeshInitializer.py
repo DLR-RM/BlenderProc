@@ -5,11 +5,14 @@ from src.utility.Config import Config
 
 
 class BasicMeshInitializer(Module):
-    """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. Can initialize a
-        default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
-        manipulation use manipulators.EntityManipulator module.
+    """
+    Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. Can initialize a
+    default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
+    manipulation use manipulators.EntityManipulator module.
 
-        Example 1: Add a plane "Ground_plane" object to the scene.
+    Example 1: Add a plane "Ground_plane" object to the scene.
+
+    .. code-block:: yaml
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -23,8 +26,10 @@ class BasicMeshInitializer(Module):
           }
         }
 
-        Example 2: Add a rotated "Cube_1" cube object, a displaced "Torus_2" torus object, and a scaled "Cone_3" cone
-                   object to the scene.
+    Example 2: Add a rotated "Cube_1" cube object, a displaced "Torus_2" torus object, and a scaled "Cone_3" cone
+    object to the scene.
+
+    .. code-block:: yaml
 
         {
           "module": "constructor.BasicMeshInitializer",

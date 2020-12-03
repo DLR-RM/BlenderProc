@@ -5,9 +5,12 @@ from src.main.Provider import Provider
 
 
 class Sphere(Provider):
-    """ Samples a point from the surface or from the interior of solid sphere
+    """
+    Samples a point from the surface or from the interior of solid sphere
 
-        Example 1: Sample a point from the surface of the solid sphere of a defined radius and center location.
+    Example 1: Sample a point from the surface of the solid sphere of a defined radius and center location.
+
+    .. code-block:: yaml
 
         {
           "provider":"sampler.Sphere",

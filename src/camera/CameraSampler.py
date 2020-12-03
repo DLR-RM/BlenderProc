@@ -15,17 +15,20 @@ from src.utility.ItemCollection import ItemCollection
 
 
 class CameraSampler(CameraInterface):
-    """ A general camera sampler.
+    """
+    A general camera sampler.
 
-        First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.
-        If that's not the case a new camera pose is sampled instead.
+    First a camera pose is sampled according to the configuration, then it is checked if the pose is valid.
+    If that's not the case a new camera pose is sampled instead.
 
-        Supported cam pose validation methods:
-        - Checking if the distance to objects is in a configured range
-        - Checking if the scene coverage/interestingness score is above a configured threshold
-        - Checking if a candidate pose is sufficiently different than the sampled poses so far
+    Supported cam pose validation methods:
+    - Checking if the distance to objects is in a configured range
+    - Checking if the scene coverage/interestingness score is above a configured threshold
+    - Checking if a candidate pose is sufficiently different than the sampled poses so far
 
-        Example 1: Sampling 10 camera poses.
+    Example 1: Sampling 10 camera poses.
+
+    .. code-block:: yaml
 
         {
           "module": "camera.SuncgCameraSampler",

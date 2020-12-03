@@ -10,9 +10,12 @@ from src.utility.Utility import Utility
 
 
 class FloorExtractor(Module):
-    """ Will search for the specified object and splits the surfaces which point upwards at a specified level away
+    """
+    Will search for the specified object and splits the surfaces which point upwards at a specified level away
 
-        Example 1:
+    Example 1:
+
+    .. code-block:: yaml
 
         {
           "module": "object.FloorExtractor",
