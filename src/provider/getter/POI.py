@@ -53,7 +53,7 @@ class POI(Provider):
 
     def run(self):
         """
-        :return: Point of interest in the scene. Type: mathutils Vector.
+        :return: Point of interest in the scene. Type: mathutils.Vector.
         """
         # Init matrix for all points of all bounding boxes
         mean_bb_points = []

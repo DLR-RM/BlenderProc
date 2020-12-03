@@ -194,7 +194,7 @@ class Config:
     def get_vector(self, name, fallback=None, dimensions=None):
         """ Returns the vector stored at the given parameter path.
 
-        If the value cannot be converted to mathutils vector, an error is thrown.
+        If the value cannot be converted to mathutils.Vector, an error is thrown.
 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param fallback: The fallback value, returned if the parameter does not exist.
@@ -209,14 +209,14 @@ class Config:
         try:
             value = mathutils.Vector(value)
         except ValueError:
-            raise TypeError("Cannot convert '" + str(value) + "' to a mathutils vector!")
+            raise TypeError("Cannot convert '" + str(value) + "' to a mathutils.Vector!")
 
         return value
 
     def get_vector2d(self, name, fallback=None):
         """ Returns the vector stored at the given parameter path.
 
-        If the value cannot be converted to an mathutils vector, an error is thrown.
+        If the value cannot be converted to an mathutils.Vector, an error is thrown.
 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param fallback: The fallback value, returned if the parameter does not exist.
@@ -227,7 +227,7 @@ class Config:
     def get_vector3d(self, name, fallback=None):
         """ Returns the vector stored at the given parameter path.
 
-        If the value cannot be converted to an mathutils vector, an error is thrown.
+        If the value cannot be converted to an mathutils.Vector, an error is thrown.
 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param fallback: The fallback value, returned if the parameter does not exist.
@@ -238,7 +238,7 @@ class Config:
     def get_vector4d(self, name, fallback=None):
         """ Returns the vector stored at the given parameter path.
 
-        If the value cannot be converted to an mathutils vector, an error is thrown.
+        If the value cannot be converted to an mathutils.Vector, an error is thrown.
 
         :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations]
         :param fallback: The fallback value, returned if the parameter does not exist.

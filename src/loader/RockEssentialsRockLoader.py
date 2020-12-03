@@ -135,7 +135,7 @@ class RockEssentialsRockLoader(LoaderInterface):
         * - scale
           - Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. Default: [1,
             1, 1].
-          - mathutils Vector
+          - mathutils.Vector
         * - HSV
           - Hue-Saturation-Value parameters of the HSV node. (3 values). Range: H: [0, 1], S: [0, 2], V: [0, 2].
             Default: rock-specific.

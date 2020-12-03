@@ -60,7 +60,7 @@ class Shell(Provider):
         """ Sample a point from a space in between two halfspheres with the same center point and a sampling cone with apex in this center.
 
         :param config: A configuration object containing the parameters required to perform sampling.
-        :return: A sampled point. Type: Mathutils vector.
+        :return: A sampled point. Type: mathutils.Vector.
         """
         # Center of both spheres
         center = np.array(self.config.get_list("center"))

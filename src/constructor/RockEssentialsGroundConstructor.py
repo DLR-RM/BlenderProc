@@ -58,7 +58,7 @@ class RockEssentialsGroundConstructor(LoaderInterface):
           - string
         * - plane_scale
           - Scale of a ground plane. Default: [10, 10, 1].
-          - mathutils Vector/list
+          - mathutils.Vector/list
         * - subdivision_cuts
           - Amount of cuts along each plane axis. Default: 50.
           - int

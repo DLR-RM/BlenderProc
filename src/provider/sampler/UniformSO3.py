@@ -33,7 +33,7 @@ class UniformSO3(Provider):
 
     def run(self):
         """
-        :return: Sampled rotation in euler angles. Type: Mathutils Vector
+        :return: Sampled rotation in euler angles. Type: mathutils.Vector
         """
         # Indicators of which axes to rotate around.
         around_x = self.config.get_bool('around_x', True)

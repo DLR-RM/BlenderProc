@@ -41,7 +41,7 @@ class Uniform3d(Provider):
 
     def run(self):
         """
-        :return: Sampled value. Type: Mathutils Vector
+        :return: Sampled value. Type: mathutils.Vector
         """
         # minimum values vector
         min = self.config.get_vector3d("min")

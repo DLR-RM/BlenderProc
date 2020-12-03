@@ -58,7 +58,7 @@ class PartSphere(Provider):
     def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
-        :return: A random point lying inside or on the surface of a solid sphere. Type: Mathutils vector
+        :return: A random point lying inside or on the surface of a solid sphere. Type: mathutils.Vector
         """
         # Center of the sphere.
         center = mathutils.Vector(self.config.get_list("center"))

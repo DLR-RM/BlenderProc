@@ -157,7 +157,7 @@ def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
 
 def vector_to_euler(vector, vector_type):
     """
-    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils Vector.
+    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.
     :param vector_type: Type of an input vector: UP or FORWARD. Type: string.
     :return: Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.
     """

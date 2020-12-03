@@ -73,7 +73,7 @@ class Value(Provider):
 
     def run(self):
         """
-        :return: Sampled value. Type: Mathutils Vector
+        :return: Sampled value. Type: mathutils.Vector
         """
         # get type of the value to sample
         val_type = self.config.get_string("type")
