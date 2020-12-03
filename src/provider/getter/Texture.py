@@ -38,7 +38,7 @@ class Texture(Provider):
           {
             "name": "ct_2.*",
             "cp_type": "custom"
-          }
+          }]
         }
 
     Example 3: Returns two random textures with a certain value of a custom property.

@@ -13,10 +13,12 @@ class Module:
 
     .. code-block:: yaml
 
-      "module": "main.Initializer",
-      "config":{
-        "global": {
-          "output_dir": "<args:X>"
+      {
+        "module": "main.Initializer",
+        "config":{
+          "global": {
+            "output_dir": "<args:X>"
+          }
         }
       }
 

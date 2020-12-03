@@ -93,7 +93,7 @@ class RendererInterface(Module):
             is turned off, only one sample is taken to determine the depth. Default: True.
           - bool
         * - distance_output_file_prefix
-          - The file prefix that should be used when writing distance to file. Default: "distance_"
+          - The file prefix that should be used when writing distance to file. Default: `"distance_"`
           - string
         * - distance_output_key
           - The key which should be used for storing the distance in a merged file. Default: `"distance"`.
@@ -127,7 +127,7 @@ class RendererInterface(Module):
           - If true, the normals are also rendered. Default: False
           - bool
         * - normals_output_file_prefix
-          - The file prefix that should be used when writing normals. Default: "normals_"
+          - The file prefix that should be used when writing normals. Default: `"normals_"`
           - string
         * - normals_output_key
           - The key which is used for storing the normal in a merged file. Default: `"normal"`
@@ -558,7 +558,7 @@ class RendererInterface(Module):
             })
         if self.config.get_bool("render_normals", False):
             self._add_output_entry({
-                "key": self.config.get_string("normals_output_key", "normals"),
+                "key": self.config.get_string("normals_output_key", "normals2"),
                 "path": os.path.join(self._determine_output_dir(),
                                      self.config.get_string("normals_output_file_prefix", "normals_")) + "%04d" + ".exr",
                 "version": "2.0.0",

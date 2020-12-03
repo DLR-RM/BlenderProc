@@ -16,6 +16,7 @@ class ClasslistDirective(Directive):
 def generate_collapsible_classlist(app, fromdocname, classes, container, caption, module_index):
 
     entries = defaultdict(list)
+    prefix = ".".join(classes[0][0].split(".")[:module_index]) + "."
     for e in classes:
         module = e[0].split(".")[module_index]
         entries[module].append(e)
@@ -24,7 +25,7 @@ def generate_collapsible_classlist(app, fromdocname, classes, container, caption
     toc += nodes.caption(caption, '', *[nodes.Text(caption)])
     for module, class_list in entries.items():
         ref = nodes.reference('', '')
-        ref['refuri'] = app.builder.get_relative_uri(fromdocname, "src." + module)
+        ref['refuri'] = app.builder.get_relative_uri(fromdocname, prefix + module)
         ref.append(nodes.Text(module.capitalize()))
         module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
         if fromdocname.startswith("src." + module):
