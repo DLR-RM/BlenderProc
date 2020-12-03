@@ -157,7 +157,7 @@ else:
 print("Using blender in " + blender_path)
 
 
-general_required_packages = ["pyyaml==5.1.2", "Sphinx==1.8.5"]
+general_required_packages = ["pyyaml==5.1.2"]
 
 required_packages = general_required_packages
 if "pip" in setup_config:

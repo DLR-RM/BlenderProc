@@ -5,7 +5,7 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXBUILD   = /home/${USER}/blender/blender-2.91.0-linux64/blender --background --python run.py --
-SPHINXPROJ    = BlenderPipeline
+SPHINXPROJ    = BlenderProc
 SOURCEDIR     = source
 BUILDDIR      = build
 

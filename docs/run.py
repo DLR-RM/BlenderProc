@@ -6,8 +6,8 @@ import os
 sys.path.append(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages"))
 
 # Read args
-sys.argv = ["/usr/bin/sphinx-build"] + sys.argv[sys.argv.index("--") + 1:]
+sys.argv = ["/usr/local/bin/sphinx-build"] + sys.argv[sys.argv.index("--") + 1:]
 
 print(sys.argv, os.getcwd())
 
-exec(open("/usr/bin/sphinx-build").read())
+exec(open("/usr/local/bin/sphinx-build").read())

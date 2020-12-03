@@ -1,0 +1,19 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py",
+      "numpy",
+      "Pillow",
+      "opencv-contrib-python",
+      "scipy",
+
+      "sphinx_rtd_theme==0.4.3",
+      "Sphinx==1.8.5"
+    ]
+  },
+  "modules": [
+  ]
+}
