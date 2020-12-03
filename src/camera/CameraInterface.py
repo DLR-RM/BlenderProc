@@ -19,20 +19,20 @@ class CameraInterface(Module):
     .. code-block:: yaml
 
         {
-          "module": "camera.CameraLoader",
-          "config": {
-            "path": "<args:0>",
-            "file_format": "location rotation/value _ _ _ _ _ _",
-            "source_frame": ["X", "-Z", "Y"],
-            "default_cam_param": {
-              "rotation": {
-                "format": "forward_vec"
-              }
-            },
-            "intrinsics": {
-              "fov": 1
+            "module": "camera.CameraLoader",
+            "config": {
+                "path": "<args:0>",
+                "file_format": "location rotation/value _ _ _ _ _ _",
+                "source_frame": ["X", "-Z", "Y"],
+                "default_cam_param": {
+                    "rotation": {
+                        "format": "forward_vec"
+                    }
+                },
+                "intrinsics": {
+                    "fov": 1
+                }
             }
-          }
         }
 
     **Configuration**:
