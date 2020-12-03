@@ -1,10 +1,14 @@
 import os
 import random
 import warnings
+import numpy as np
+
+import mathutils
+import bpy
 
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
-
+from src.utility.BlenderUtility import get_bounds
 
 class IKEALoader(LoaderInterface):
     """
@@ -32,8 +36,14 @@ class IKEALoader(LoaderInterface):
         self._obj_dict = dict()
         self._generate_object_dict()
 
-        self._obj_type = self.config.get_raw_value("obj_type", None)
-        self._obj_style = self.config.get_raw_value("obj_style", None)
+        if self.config.has_param("obj_type"):
+            self._obj_type = self.config.get_raw_value("obj_type", None)
+        else:
+            self._obj_type = None
+        if self.config.has_param("obj_style"):
+            self._obj_style = self.config.get_raw_value("obj_style", None)
+        else:
+            self._obj_style = None
 
     def _generate_object_dict(self):
         """
@@ -50,6 +60,8 @@ class IKEALoader(LoaderInterface):
                         self._obj_dict.setdefault(category, []).append(obj_path)
                         counter += 1
         print('Found {} object files in dataset belonging to {} categories'.format(counter, len(self._obj_dict)))
+        if len(self._obj_dict) == 0:
+            raise Exception("No obj file was found, check if the correct folder is provided!")
 
     @staticmethod
     def _check_material_file(path):
@@ -115,3 +127,43 @@ class IKEALoader(LoaderInterface):
         print("Selected object: ", os.path.basename(selected_obj))
         loaded_obj = Utility.import_objects(selected_obj)
         self._set_properties(loaded_obj)
+
+        # extract the file unit from the .obj file to convert every object to meters
+        file_unit = ""
+        with open(selected_obj, "r") as file:
+            first_lines = [next(file) for x in range(5)]
+            for line in first_lines:
+                if "File units" in line:
+                    file_unit = line.strip().split(" ")[-1]
+                    if file_unit not in ["inches", "meters", "centimeters", "millimeters"]:
+                        raise Exception("The file unit type could not be found, check the selected "
+                                        "file: {}".format(selected_obj))
+                    break
+
+        for obj in loaded_obj:
+            # convert all objects to meters
+            if file_unit == "inches":
+                scale = 0.0254
+            elif file_unit == "centimeters":
+                scale = 0.01
+            elif file_unit == "millimeters":
+                scale = 0.001
+            elif file_unit == "meters":
+                scale = 1.0
+            else:
+                raise Exception("The file unit type: {} is not defined".format(file_unit))
+            if scale != 1.0:
+                # scale object down
+                bpy.ops.object.select_all(action='DESELECT')
+                obj.select_set(True)
+                bpy.context.view_layer.objects.active = obj
+                bpy.ops.object.mode_set(mode='EDIT')
+                bpy.ops.transform.resize(value=(scale, scale, scale))
+                bpy.ops.object.mode_set(mode='OBJECT')
+                bpy.context.view_layer.update()
+
+            # move all object centers to the world origin and set the bounding box correctly
+            bb = get_bounds(obj)
+            bb_center = np.mean(bb, axis=0)
+            bb_min_z_value = np.min(bb, axis=0)[2]
+            obj.location -= mathutils.Vector([bb_center[0], bb_center[1], bb_min_z_value])
