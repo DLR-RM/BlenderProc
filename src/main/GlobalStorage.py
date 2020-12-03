@@ -24,6 +24,15 @@ class GlobalStorage(object):
           - This key is saved by the Renderer during distance rendering and is used in the
             StereoGlobalMatchingWriter. 
           - string
+         
+    Please add all new keys you create to this list.
+    
+    To 2. the global config is inited during the main.Initializer module, this means before that it is not possible to
+    access keys from the global config, but it is possible to add keys, which can then be later accessed for that check:
+    add_to_config_before_init(). It is usually not necessary that you will access the global config yourself as each
+    Config checks automatically if the key is stored in the global config, if it was not defined in the current module.
+    The checking order:
+    Local module then the global config if both fail the default value is used, if there is none an Exception is thrown.
     """
 
     # holds variables which are created during the execution to get information over module boundaries

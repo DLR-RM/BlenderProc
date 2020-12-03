@@ -43,7 +43,7 @@ class Front3DLoader(LoaderInterface):
           - str
         * - 3D_future_model_path
           - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
-          - str"
+          - str
         * - mapping_file
           - Path to a file, which maps the names of the objects to ids. Default:
             resources/front_3D/3D_front_mapping.csv

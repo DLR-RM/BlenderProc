@@ -70,7 +70,7 @@ class BopLoader(LoaderInterface):
             specified).
           - list
         * - model_type
-          - Default: "". Available: [reconst, cad or eval].
+          - Optionally, specify type of BOP model. Type: string. Default: "".  Default: "". Available: [reconst, cad or eval].
           - string
     """
 

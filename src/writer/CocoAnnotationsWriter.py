@@ -42,7 +42,7 @@ class CocoAnnotationsWriter(WriterInterface):
         * - append_to_existing_output
           - If true and if there is already a coco_annotations.json file in the output directory, the new coco
             annotations will be appended to the existing file. Also the rgb images will be named such that there are
-            no collisions. " Default: False.
+            no collisions. Default: False.
           - bool
         * - mask_encoding_format
           - Encoding format of the binary masks. Default: 'rle'. Available: 'rle', 'polygon'.

@@ -20,11 +20,12 @@ class LightLoader(LightInterface):
             Default: []
           - list
         * - path
-          - The lines have to be formatted as specified in 'file_format'. 
+          - The lines have to be formatted as specified in 'file_format'. Default: empty string.
           - string
         * - file_format
           - A string which specifies how each line of the given file is formatted. The string should contain the
             keywords of the corresponding properties separated by a space. See LightInterface for allowed properties. 
+            Default: empty string.
           - string
     """
 

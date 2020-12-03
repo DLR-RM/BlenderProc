@@ -38,7 +38,7 @@ class LightInterface(Module):
           - Light color, specified as a list of three values [R, G, B]. Default: [1, 1, 1]. Range: [0, inf]
           - list
         * - distance
-          - Default: 0. Range: [0, inf]
+          - Falloff distance of the light = point where light is half the original intensity. Default: 0. Range: [0, inf]
           - float
         * - energy
           - Intensity of the emission of a light source. Default: 10.

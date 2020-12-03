@@ -40,6 +40,7 @@ class Texture(Provider):
             "cp_type": "custom"
           }]
         }
+        }
 
     Example 3: Returns two random textures with a certain value of a custom property.
 
@@ -84,7 +85,7 @@ class Texture(Provider):
           - int
         * - random_samples
           - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or
-            random_samples property, only one is allowed at a time. Default: False.
+            random_samples property, only one is allowed at a time. Default: 0.
           - int
     """
 

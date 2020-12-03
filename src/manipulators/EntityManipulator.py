@@ -187,8 +187,7 @@ class EntityManipulator(Module):
             with `cf_` prefix. See table below for supported custom function names.
           - string
         * - value
-          - Value of the attribute/custom prop. to set or input value(s) for a custom function. int, bool or float,
-            list/Vector.
+          - Value of the attribute/custom prop. to set or input value(s) for a custom function.
           - string
 
     **Custom functions**
@@ -240,10 +239,10 @@ class EntityManipulator(Module):
           - str
         * - cf_randomize_materials
           - Randomizes the materials for the selected objects with certain probability.
-          -
+          - dict
         * - cf_randomize_materials/randomization_level
-          - Expected fraction of the selected objects for which the texture should be randomized. Default: 0.2.
-          - float. Range: [0, 1]
+          - Expected fraction of the selected objects for which the texture should be randomized. Default: 0.2.  Range: [0, 1]
+          - float
         * - cf_randomize_materials/materials_to_replace_with
           - Material(s) to participate in randomization. Sampling from the pool of elegible material (that comply
             with conditions is performed in the Provider). Make sure you use 'random_samples" config parameter of

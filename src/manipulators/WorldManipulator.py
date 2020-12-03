@@ -54,16 +54,15 @@ class WorldManipulator(Module):
           - Description
           - Type
         * - key
-          - Name of the attribute/custom property to change or a name of a custom function to perform on objects. "
+          - Name of the attribute/custom property to change or a name of a custom function to perform on objects.
             In order to specify, what exactly one wants to modify (e.g. attribute, custom property, etc.): For
             attribute: key of the pair must be a valid attribute name of the world. For custom property: key of the
             pair must start with `cp_` prefix. For calling custom function: key of the pair must start with `cf_`
             prefix. See table below for supported custom function names.
           - string
         * - value
-          - Value of the attribute/custom prop. to set or input value(s) for a custom function. int, bool or float,
-            list/Vector.
-          - string
+          - Value of the attribute/custom prop. to set or input value(s) for a custom function.
+          - string, list/Vector, int, bool or float
 
     **Custom functions**:
 

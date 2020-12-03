@@ -27,8 +27,8 @@ class RendererInterface(Module):
           - String
         * - output_key
           - The key which should be used for storing the rendering in a merged file. which should be used for
-            storing the rendering in a merged file. Type: String
-          - String"
+            storing the rendering in a merged file.
+          - String
         * - samples
           - Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark areas.
             Default: 256, (not true for all Renderes).
@@ -558,7 +558,7 @@ class RendererInterface(Module):
             })
         if self.config.get_bool("render_normals", False):
             self._add_output_entry({
-                "key": self.config.get_string("normals_output_key", "normals2"),
+                "key": self.config.get_string("normals_output_key", "normals"),
                 "path": os.path.join(self._determine_output_dir(),
                                      self.config.get_string("normals_output_file_prefix", "normals_")) + "%04d" + ".exr",
                 "version": "2.0.0",

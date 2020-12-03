@@ -83,7 +83,8 @@ class SegMapRenderer(RendererInterface):
           - Description
           - Type
         * - map_by
-          - Default: "class Available: [instance, class] or any custom property or attribute.
+          - Method to be used for color mapping. Default: "class". Available: [instance, class] or any custom 
+            property or attribute.
           - string
         * - default_values
           - The default values used for the keys used in map_by. Default: {}
@@ -114,7 +115,7 @@ class SegMapRenderer(RendererInterface):
         * - cf_basename
           - Adds the basename of the object to the .csv file. The basename is the name attribute, without added
             numbers to separate objects with the same name. This is used in the map_by list.
-          - None"
+          - None
     """
 
     def __init__(self, config):

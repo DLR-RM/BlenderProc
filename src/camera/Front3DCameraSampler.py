@@ -32,7 +32,8 @@ class Front3DCameraSampler(CameraSampler):
           - Description
           - Type
         * - amount_of_objects_needed_per_room
-          - This avoids that cameras are sampled in empty rooms. Default: 2
+          - The amount of objects needed per room, so that cameras are sampled in it. This avoids that cameras are 
+             sampled in empty rooms. Default: 2
           - int
     """
 
@@ -117,4 +118,3 @@ class Front3DCameraSampler(CameraSampler):
             return False
 
         return super()._is_pose_valid(cam, cam_ob, cam2world_matrix)
-

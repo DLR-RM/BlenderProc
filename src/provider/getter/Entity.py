@@ -92,8 +92,8 @@ class Entity(Provider):
             function: key of the pair must start with `cf_` prefix. See table below for supported custom functions.
           - string
         * - conditions/attribute_value
-          - Any value to set. int, bool or float, list/Vector.
-          - string
+          - Any value to set.
+          - string, list/Vector, int, bool or float
         * - index
           - If set, after the conditions are applied only the entity with the specified index is returned. 
           - int
@@ -117,8 +117,10 @@ class Entity(Provider):
           - dict
         * - cf_{inside,outside}/(min,max)
           - min and max pair defines a bounding box used for a check. cannot be mixed with /[xyz]_{min,max}
-            configuration. ([x, y, z])." cf_{inside,outside}/[xyz]_(min,max), "Alternative syntax. Defines a
-            hyperplane. Missing arguments extend the bounding box to infinity in that direction. 
+            configuration. 
+          - list ([x, y, z])
+        * - cf_{inside,outside}/[xyz]_(min,max)
+          - Alternative syntax. Defines a hyperplane. Missing arguments extend the bounding box to infinity in that direction.    
           - float
     """
 

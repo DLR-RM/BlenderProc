@@ -81,8 +81,8 @@ class MaterialManipulator(Module):
           - Materials to become subjects of manipulation.
           - Provider
         * - mode
-          - Default: "once_for_each". Available: 'once_for_each' (if samplers are called, new sampled value is set
-            to each selected material), 'once_for_all' (sampling once for all of the selected materials).
+          - Mode of operation. Default: "once_for_each". Available: 'once_for_each' (if samplers are called, new sampled 
+            value is set to each selected material), 'once_for_all' (sampling once for all of the selected materials).
           - string
 
     **Values to set**:
@@ -101,9 +101,8 @@ class MaterialManipulator(Module):
             the pair must start with `cf_` prefix. See table below for supported custom function names.
           - string
         * - value
-          - Value of the attribute/custom prop. to set or input value(s) for a custom function. int, bool or float,
-            list/Vector.
-          - string
+          - Value of the attribute/custom prop. to set or input value(s) for a custom function.
+          - string, list/Vector, int, bool or float
 
     **Available custom functions**:
 
@@ -143,8 +142,8 @@ class MaterialManipulator(Module):
         * - cf_set_*
           - Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case name of
             the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> 'base_color'). Also
-            deletes any links to this shader's input point. float, list, Vector.
-          - int
+            deletes any links to this shader's input point.
+          - list/Vector, int or float
     """
 
     def __init__(self, config):

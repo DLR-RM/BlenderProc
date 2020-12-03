@@ -30,7 +30,7 @@ class WriterInterface(Module):
             takes in the raw data and returns the processed data. 
           - dict
         * - destination_frame
-          - Default: ["X", "Y", "Z"]
+          - Used to transform point to blender coordinate frame. Default: ["X", "Y", "Z"]
           - list
         * - attributes_to_write
           - A list of attribute names that should written to file. The next table lists all attributes that can be

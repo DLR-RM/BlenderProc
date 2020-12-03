@@ -87,14 +87,14 @@ class Material(Provider):
             with `cf_` prefix. See table below for supported custom functions.
           - string
         * - conditions/attribute_value
-          - Any value to set. int, bool or float, list/Vector.
-          - string
+          - Any value to set. 
+          - string, int, bool or float, list/Vector.
         * - index
           - If set, after the conditions are applied only the entity with the specified index is returned. 
           - int
         * - random_samples
           - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or
-            random_samples property, only one is allowed at a time. Default: False.
+            random_samples property, only one is allowed at a time. Default: 0.
           - int
 
     **Custom functions**
