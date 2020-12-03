@@ -16,7 +16,7 @@ class RockEssentialsTextureSampler(LoaderInterface):
     it applied by default if ground tile was constructed by aforementioned constructor module).
 
     Example 1: For all ground planes matching a name pattern select a random set of textures with custom ambient
-               occlusion, displacements strength and UV map scaling factor values.
+    occlusion, displacements strength and UV map scaling factor values.
 
     .. code-block:: yaml
 
