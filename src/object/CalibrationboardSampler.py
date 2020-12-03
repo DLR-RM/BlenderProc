@@ -15,6 +15,7 @@ class CalibrationboardSampler(Module):
     Samples poses of a given calibration board across the camera view.
 
     **Configuration**:
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1
