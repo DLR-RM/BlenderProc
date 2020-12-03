@@ -60,6 +60,8 @@ class IKEALoader(LoaderInterface):
                         self._obj_dict.setdefault(category, []).append(obj_path)
                         counter += 1
         print('Found {} object files in dataset belonging to {} categories'.format(counter, len(self._obj_dict)))
+        if len(self._obj_dict) == 0:
+            raise Exception("No obj file was found, check if the correct folder is provided!")
 
     @staticmethod
     def _check_material_file(path):
@@ -154,6 +156,7 @@ class IKEALoader(LoaderInterface):
                 # scale object down
                 bpy.ops.object.select_all(action='DESELECT')
                 obj.select_set(True)
+                bpy.context.view_layer.objects.active = obj
                 bpy.ops.object.mode_set(mode='EDIT')
                 bpy.ops.transform.resize(value=(scale, scale, scale))
                 bpy.ops.object.mode_set(mode='OBJECT')
