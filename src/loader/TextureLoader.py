@@ -51,8 +51,8 @@ class TextureLoader(LoaderInterface):
        :header: "Parameter", "Description"
 
        "path", "The path to the folder with assets/to the asset. Type: string."
-       "colorspace", "Colorspace type to assign to loaded assets. Type: string. Available: 'Filmic Log', 'Linear',
-                     'Linear ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ'. Default: 'sRGB'."
+       "colorspace", "Colorspace type to assign to loaded assets. Type: string. Default: 'sRGB'."
+                     "Available: ['Filmic Log', 'Linear', 'Linear ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ']."
     """
 
     def __init__(self, config):

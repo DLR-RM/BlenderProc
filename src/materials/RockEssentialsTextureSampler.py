@@ -78,7 +78,7 @@ class RockEssentialsTextureSampler(LoaderInterface):
         "ambient_occlusion", "Ambient occlusion [R, G, B, A] color vector for a ground tile material's shader. "
                              "Type: mathutils.Vector. Default: [1, 1, 1, 1]."
         "uv_scaling", "Scaling factor of the UV map. Type: float. Default: 1."
-        "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Default: 1.
+        "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Default: 1."
         "images/color", "Full name of a color map image. Type: string."
         "images/roughness", "Full name of a roughness map image. Type: string."
         "images/reflection", "Full name of a reflection map image. Type: string."

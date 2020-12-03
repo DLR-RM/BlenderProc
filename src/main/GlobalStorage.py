@@ -14,8 +14,8 @@ class GlobalStorage(object):
 
     .. csv-table::
        :header: "Key", "Description"
-       "renderer_distance_end", "This key is saved by the Renderer during distance rendering and is used in
-                              the StereoGlobalMatchingWriter. Type: string."
+       "renderer_distance_end", "This key is saved by the Renderer during distance rendering and is used in"
+                                "the StereoGlobalMatchingWriter. Type: string."
 
     Please add all new keys you create to this list.
 

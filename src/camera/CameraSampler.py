@@ -84,7 +84,7 @@ class CameraSampler(CameraInterface):
                             "containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical "
                             "threshold in case of max or min. The operators are combined in conjunction (i.e boolean "
                             "AND). This can also be used to avoid the background in images, with the"
-                            "no_background: True option. Type: dict. Default: {}.
+                            "no_background: True option. Type: dict. Default: {}."
         "excluded_objs_in_proximity_check", "A list of objects, returned by getter.Entity to remove some objects from"
                                             "the proximity checks defined in 'proximity_checks'."
                                             "Type: list. Default: []"
