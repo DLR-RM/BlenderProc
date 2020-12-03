@@ -9,6 +9,7 @@ def get_neighbors_stacked(img, filter_size=3, return_list=False):
     """
     Stacks the neighbors of each pixel according to a square filter around each given pixel in the depth dimensions.
     The neighbors are represented by shifting the input image in all directions required to simulate the filter.
+
     :param img: Input image. Type: blender object of type image.
     :param filter_size: Filter size. Type: int. Default: 5..
     :param return_list: Instead of stacking in the output array, just return a list of the "neighbor" images along with the input image.

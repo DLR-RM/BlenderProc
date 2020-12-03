@@ -52,6 +52,7 @@ class ShapeNetLoader(LoaderInterface):
     def get_files_with_synset(used_synset_id, path_to_taxonomy_file, data_path):
         """
         Returns a list of a .obj file for the given synset_id
+
         :param used_synset_id: the id of the category something like: '02691156', see the data_path folder for more ids
         :param path_to_taxonomy_file: path to the taxonomy.json file, should be in the data_path, too
         :param data_path: path to the ShapeNetCore.v2 folder
@@ -91,6 +92,7 @@ class ShapeNetLoader(LoaderInterface):
     def _correct_materials(self, objects):
         """
         If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
+
         :param objects: objects where the material maybe wrong
         """
 

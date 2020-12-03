@@ -17,8 +17,10 @@ class Config:
         return len(self.data) == 0
 
     def has_param(self, name, block=None):
-        """ Check if parameter is defined in config 
-        :param name: The name of the parameter. "/" can be used to represent nested parameters (e.q. "render/iterations" results in ["render"]["iterations"]
+        """ Check if parameter is defined in config
+
+        :param name: The name of the parameter. "/" can be used to represent nested parameters \
+                     (e.q. "render/iterations" results in ["render"]["iterations"]
         :param block: A dict containing the configuration. If none, the whole data of this config object will be used.
         :return: True if parameter exists, False if not
         """

@@ -326,6 +326,7 @@ class SuncgLoader(LoaderInterface):
     def _get_type_and_value_from_mat(self, mat):
         """
         Returns the type of the material -> either diffuse or with texture (there are only two in SUNCG)
+
         :param mat: the material where the type and value should be determined
         :return: mat_type, value: mat_type is either "diffuse" or "texture", the value contains either name of the \
                                  image or the color mapped to an RGB string of the values

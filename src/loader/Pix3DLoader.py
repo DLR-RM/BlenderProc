@@ -53,6 +53,7 @@ class Pix3DLoader(LoaderInterface):
     def get_files_with_category(used_category, path_to_annotation_file, data_path):
         """
         Returns a list of a .obj file for the given category
+
         :param category: the category something like: 'bed', see the data_path folder for categories
         :param path_to_annotation_file: path to the pix3d.json file, should be in the data_path, too
         :param data_path: path to the Pix3D folder
@@ -90,6 +91,7 @@ class Pix3DLoader(LoaderInterface):
     def _correct_materials(self, objects):
         """
         If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
+
         :param objects: objects where the material maybe wrong
         """
 

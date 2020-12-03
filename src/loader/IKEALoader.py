@@ -58,8 +58,8 @@ class IKEALoader(LoaderInterface):
 
     def _generate_object_dict(self):
         """
-            Generates a dictionary of all available objects, i.e. all .obj files that have an associated .mtl file.
-            dict: {IKEA_<type>_<style> : [<path_to_obj_file>, ...]}
+        Generates a dictionary of all available objects, i.e. all .obj files that have an associated .mtl file.
+        dict: {IKEA_<type>_<style> : [<path_to_obj_file>, ...]}
         """
         counter = 0
         for path, subdirs, files in os.walk(self._data_dir):
@@ -77,9 +77,10 @@ class IKEALoader(LoaderInterface):
     @staticmethod
     def _check_material_file(path):
         """
-            Checks whether there is a texture file (.mtl) associated to the object available.
-            :param path: (str) path to object
-            :return: (boolean) texture file exists
+        Checks whether there is a texture file (.mtl) associated to the object available.
+
+        :param path: (str) path to object
+        :return: (boolean) texture file exists
         """
         name = os.path.basename(path).split(".")[0]
         obj_dir = os.path.dirname(path)
@@ -88,9 +89,10 @@ class IKEALoader(LoaderInterface):
 
     def _get_object_by_type(self, obj_type):
         """
-            Finds all available objects with a specific type.
-            :param obj_type: (str) type of object e.g. 'table'
-            :return: (list) list of available objects with specified type
+        Finds all available objects with a specific type.
+
+        :param obj_type: (str) type of object e.g. 'table'
+        :return: (list) list of available objects with specified type
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_type in key]
         if not object_lst:
@@ -99,9 +101,10 @@ class IKEALoader(LoaderInterface):
 
     def _get_object_by_style(self, obj_style):
         """
-            Finds all available objects with a specific style, i.e. IKEA product series.
-            :param obj_type: (str) type of object e.g. 'table'
-            :return: (list) list of available objects with specified style
+        Finds all available objects with a specific style, i.e. IKEA product series.
+
+        :param obj_type: (str) type of object e.g. 'table'
+        :return: (list) list of available objects with specified style
         """
         object_lst = [obj[0] for (key, obj) in self._obj_dict.items() if obj_style in key.lower()]
         if not object_lst:
@@ -110,9 +113,9 @@ class IKEALoader(LoaderInterface):
 
     def run(self):
         """
-            Chooses objects based on selected type and style.
-            If there are multiple options it picks one randomly or if style or type is None it picks one randomly.
-            Loads the selected object via file path.
+        Chooses objects based on selected type and style.
+        If there are multiple options it picks one randomly or if style or type is None it picks one randomly.
+        Loads the selected object via file path.
         """
         if self._obj_type is not None and self._obj_style is not None:
             object_lst = [obj[0] for (key, obj) in self._obj_dict.items() \

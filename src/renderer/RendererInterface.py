@@ -406,6 +406,7 @@ class RendererInterface(Module):
         """
         Adds to a predefined new_material a texture node from an existing material (used_material)
         This is necessary to connect it later on in the add_alpha_channel_to_textures
+
         :param used_material: existing material, which might contain a texture node with a .png texture
         :param new_material: a new material, which will get a copy of this texture node
         :return: the modified new_material, if no texture node was found, the original new_material

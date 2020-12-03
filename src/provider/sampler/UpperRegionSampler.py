@@ -175,6 +175,7 @@ class Region2D(object):
     def sample_point(self, face_sample_range):
         """
         Samples a point in the 2D Region
+
         :param face_sample_range: relative lengths of both face vectors between which points are sampled
         :return:
         """

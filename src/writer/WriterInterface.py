@@ -117,7 +117,9 @@ class WriterInterface(Module):
             raise Exception("No such attribute: " + attribute_name)
 
     def _apply_postprocessing(self, output_key, data, version):
-        """ Applies all postprocessing modules registered for this output type.
+        """
+        Applies all postprocessing modules registered for this output type.
+
         :param output_key: The key of the output type. Type: string
         :param data: The numpy data.
         :param version: The version number original data.
@@ -135,6 +137,7 @@ class WriterInterface(Module):
     def _load_and_postprocess(self, file_path, key, version = "1.0.0"):
         """
         Loads an image and post process it.
+
         :param file_path: Image path. Type: string.
         :param key: The image's key with regards to the hdf5 file. Type: string.
         :param version: The version number original data. Type: String. Default: 1.0.0.
