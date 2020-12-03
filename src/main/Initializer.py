@@ -26,13 +26,21 @@ class Initializer(Module):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "horizon_color", "A list of three elements specifying rgb of the world's horizon/background color."
-                        "Type: list. Default: [0.535, 0.633, 0.608]."
-       "global", "A dictionary of all global set attributes, which are used if a module does not provide a certain "
-                 "key. Type: dict. Default: {}."
+        * - Parameter
+          - Description
+          - Type
+        * - horizon_color
+          - A list of three elements specifying rgb of the world's horizon/background color. Default: [0.535, 0.633,
+            0.608].
+          - list
+        * - global
+          - A dictionary of all global set attributes, which are used if a module does not provide a certain key.
+            Default: {}.
+          - dict
     """
 
     def __init__(self, config):

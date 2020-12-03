@@ -12,15 +12,22 @@ class SuncgLighting(Module):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "lightbulb_emission_strength", "The emission strength that should be used for light bulbs."
-                                      "Type: float. Default: 15"
-       "lampshade_emission_strength", "The emission strength that should be used for lamp shades."
-                                      "Type: float. Default: 7"
-       "ceiling_emission_strength", "The emission strength that should be used for the ceiling. "
-                                    "Type: float. Default: 1.5"
+        * - Parameter
+          - Description
+          - Type
+        * - lightbulb_emission_strength
+          - The emission strength that should be used for light bulbs. Default: 15
+          - float
+        * - lampshade_emission_strength
+          - The emission strength that should be used for lamp shades. Default: 7
+          - float
+        * - ceiling_emission_strength
+          - The emission strength that should be used for the ceiling. Default: 1.5
+          - float
     """
     def __init__(self, config):
         Module.__init__(self, config)

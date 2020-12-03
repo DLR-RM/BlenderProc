@@ -14,10 +14,19 @@ class SceneNetLighting(Module):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "lampshade_emission_strength", "The strength of the lamp emission shader. Type: float Default: 15"
-       "ceiling_emission_strength", "The strength of the ceiling emission shader. Type: float Default: 2"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - lampshade_emission_strength
+          - The strength of the lamp emission shader. efault: 15
+          - float 
+        * - ceiling_emission_strength
+          - The strength of the ceiling emission shader. efault: 2
+          - float 
     """
 
     def __init__(self, config):

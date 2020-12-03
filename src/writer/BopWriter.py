@@ -95,17 +95,28 @@ class BopWriter(WriterInterface):
 
     **Attributes per object**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "dataset", "Only save annotations for objects of the specified bop dataset. Saves all object poses if not defined. "
-		   "Type: string. Default: ''"
-        "append_to_existing_output", "If true, the new frames will be appended to the existing ones. "
-                                    "Type: bool. Default: False"
-        "ignore_dist_thres", "Distance between camera and object after which object is ignored. Mostly due to"
-                             "failed physics. Type: float. Default: 5."
-        "m2mm", "Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. "
-                "This is needed if BopLoader option mm2m is used. Type: bool. Default: True"  
+        * - Parameter
+          - Description
+          - Type
+        * - dataset
+          - Only save annotations for objects of the specified bop dataset. Saves all object poses if not defined.
+            Default: ''
+          - string
+        * - append_to_existing_output
+          - If true, the new frames will be appended to the existing ones. Default: False
+          - bool
+        * - ignore_dist_thres
+          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default:
+            5.
+          - float
+        * - m2mm
+          - Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
+            is needed if BopLoader option mm2m is used. Default: True
+          - bool
     """
 
     def __init__(self, config):

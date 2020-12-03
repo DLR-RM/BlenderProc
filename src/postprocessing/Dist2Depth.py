@@ -9,11 +9,16 @@ class Dist2Depth(Module):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "depth_output_key", "The key which should be used for storing the output data in a merged file. "
-                      "Type: string. Default: 'depth'."
+        * - Parameter
+          - Description
+          - Type
+        * - depth_output_key
+          - The key which should be used for storing the output data in a merged file. Default: 'depth'.
+          - string
     """
     def __init__(self, config):
         Module.__init__(self, config)

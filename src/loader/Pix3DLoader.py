@@ -23,13 +23,20 @@ class Pix3DLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "data_path", "The path to the Pix3D folder. Type: str. Default: 'resources/pix3d'."
-       "category", "The category to use for example: 'bed', check the data_path/model folder for more categories."
-                   "Type: string. Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'"
-                   ", 'wardrobe']"
+        * - Parameter
+          - Description
+          - Type
+        * - data_path
+          - The path to the Pix3D folder. Default: 'resources/pix3d'.
+          - str
+        * - category
+          - The category to use for example: 'bed', check the data_path/model folder for more categories. Available:
+            ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'" , 'wardrobe']
+          - string
     """
 
     def __init__(self, config):

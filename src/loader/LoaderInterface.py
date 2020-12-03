@@ -7,11 +7,19 @@ class LoaderInterface(Module):
     """
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "add_properties", "Custom properties to set for loaded objects. Use 'cp_' prefix for keys. Type: dict."
-       "cf_set_shading", "Custom function to set the shading of the loaded objects."
-                         "Type: str. Available: ["FLAT", "SMOOTH"]"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - add_properties
+          - Custom properties to set for loaded objects. Use 'cp_' prefix for keys.
+          - dict
+        * - cf_set_shading
+          - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]
+          - str
     """
     def __init__(self, config):
         Module.__init__(self, config)

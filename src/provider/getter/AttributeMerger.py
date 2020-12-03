@@ -62,20 +62,35 @@ class AttributeMerger(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "elements", "List of user-configured Provider calls. Type: list."
-        "transform_by", "Name of the operation to perform on the list of Provider return values. See table below for "
-                        "supported operation names. Type: string."
-
+        * - Parameter
+          - Description
+          - Type
+        * - elements
+          - List of user-configured Provider calls.
+          - list
+        * - transform_by
+          - Name of the operation to perform on the list of Provider return values. See table below for supported
+            operation names. 
+          - string
     **Operations**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "sum", "Returns the sum of all values of the input list. Type: float (return)."
-        "avg", "Returns the average value of all values of the input list. Type: float (return)."
+        * - Parameter
+          - Description
+          - Type
+        * - sum
+          - Returns the sum of all values of the input list. (return).
+          - float
+        * - avg
+          - Returns the average value of all values of the input list. (return).
+          - float
     """
 
     def __init__(self, config):

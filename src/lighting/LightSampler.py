@@ -6,11 +6,16 @@ class LightSampler(LightInterface):
     
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "lights", "List of lights, which contain all the information to create new lights. See the LightInterface for
-                  "more information. Type: list. Default: []."
+        * - Parameter
+          - Description
+          - Type
+        * - lights
+          - more information. Default: [].
+          - list
     """
 
     def __init__(self, config):

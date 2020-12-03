@@ -60,40 +60,62 @@ class Attribute(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "entities", "List of objects selected by the getter.Entity Provider. Type: list."
-        "get", "Attribute/Custom property/custom function name on which the return value is based. Must be a valid "
-               "name of selected entities' attribute/custom property, or a custom function name. Every entity selected "
-               "must have this attribute, custom prop, or must be usable in a custom function, otherwise an exception "
-               "will be thrown. Type: string. "
-               "In order to specify, what exactly one wants to get (e.g. attribute, custom property, etc.): "
-               "For attribute: key of the pair must be a valid attribute name of the all selected entities. "
-               "For custom property: key of the pair must start with `cp_` prefix. "
-               "For calling custom function: key of the pair must start with `cf_` prefix. See table below for "
-               "supported custom function names."
-        "transform_by", "Name of the operation to perform on the list of attributes/custom property/custom data values. "
-                        "Type: string. See table below for supported operation names."
-        "index", "If set, after the conditions are applied only the corresponding value of entity with the specified "
-                 "index is returned. Type: int."
-
+        * - Parameter
+          - Description
+          - Type
+        * - entities
+          - List of objects selected by the getter.Entity Provider.
+          - list
+        * - get
+          - Attribute/Custom property/custom function name on which the return value is based. Must be a valid name
+            of selected entities' attribute/custom property, or a custom function name. Every entity selected must
+            have this attribute, custom prop, or must be usable in a custom function, otherwise an exception will be
+            thrown. " In order to specify, what exactly one wants to get (e.g. attribute, custom property, etc.):
+            For attribute: key of the pair must be a valid attribute name of the all selected entities. For custom
+            property: key of the pair must start with `cp_` prefix. For calling custom function: key of the pair
+            must start with `cf_` prefix. See table below for supported custom function names.
+          - string
+        * - transform_by
+          - Name of the operation to perform on the list of attributes/custom property/custom data values. See table
+            below for supported operation names.
+          - string.
+        * - index
+          - If set, after the conditions are applied only the corresponding value of entity with the specified index
+            is returned. 
+          - int
     **Custom functions**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "cf_bounding_box_means", "Custom function name for `get` parameter. Invokes a chain of operations which "
-                                 "returns a list of arithmetic means of coordinates of object aligned bounding boxes' "
-                                 "of selected objects in world coordinates format. Type: list (return)."
-
+        * - Parameter
+          - Description
+          - Type
+        * - cf_bounding_box_means
+          - Custom function name for `get` parameter. Invokes a chain of operations which returns a list of
+            arithmetic means of coordinates of object aligned bounding boxes' of selected objects in world
+            coordinates format. (return).
+          - list
     **Operations**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "sum", "Returns the sum of all values of the input list. Type: float (return)."
-        "avg", "Returns the average value of all values of the input list. Type: float (return)."
+        * - Parameter
+          - Description
+          - Type
+        * - sum
+          - Returns the sum of all values of the input list. (return).
+          - float
+        * - avg
+          - Returns the average value of all values of the input list. (return).
+          - float
     """
 
     def __init__(self, config):

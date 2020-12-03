@@ -20,10 +20,16 @@ class Path(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path", "A path to a folder containing files. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - A path to a folder containing files.
+          - string
     """
 
     def __init__(self, config):

@@ -19,13 +19,23 @@ class IKEALoader(LoaderInterface):
         As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
 
         **Configuration**:
-        .. csv-table::
-           :header: "Parameter", "Description"
-            "data_dir", "The directory with all the IKEA models. Type: str. Default: 'resources/IKEA'"
-            "obj_type", "The category to use for example: 'bookcase'. Type: string. Default: None."
-                        "Available: ['bed', 'bookcase', 'chair', 'desk', 'sofa', 'table', 'wardrobe']"
-            "obj_style", "The IKEA style to use for example: 'hemnes'. Type: string. Default: None."
-                         "See data_dir for other options."
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - data_dir
+          - The directory with all the IKEA models. Default: 'resources/IKEA'
+          - str
+        * - obj_type
+          - The category to use for example: 'bookcase'. Default: None. Available: ['bed', 'bookcase', 'chair',
+            'desk', 'sofa', 'table', 'wardrobe']
+          - string
+        * - obj_style
+          - The IKEA style to use for example: 'hemnes'. Default: None. See data_dir for other options.
+          - string
         """
 
     def __init__(self, config):

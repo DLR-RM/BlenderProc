@@ -13,24 +13,42 @@ class OnSurfaceSampler(Module):
         recommended to use the PhysicsPositioning module afterwards for realistically looking placements of objects on 
         the sampling surface.
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects. Type: provider."
-       "max_iterations", "Amount of tries before giving up on an object (deleting it) and moving to the next one. "
-                         "Type: int. Default: 100."
-       "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each "
-                      "object. UpperRegionSampler recommended. Type: Provider."
-       "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) "
-                      "for each object. Type: Provider."
-       "surface", "Object to place objects_to_sample on, here call an appropriate Provider (getter) which is configured "
-                  "such that it returns only one object. Type: Provider."
-       "min_distance", "Minimum distance to the closest other object. Center to center. Only objects placed by this "
-                       "Module considered. Type: float. Default: 0.25"
-       "max_distance", "Maximum distance to the closest other object. Center to center. Only objects placed by this "
-                       "Module considered. Type: float. Default: 0.6"
-       "up_direction", "Normal vector of the side of surface the objects should be placed on. Type: mathutils.Vector. "
-                       "Default: [0., 0., 1.]."
+        * - Parameter
+          - Description
+          - Type
+        * - objects_to_sample
+          - Here call an appropriate Provider (Getter) in order to select objects.
+          - provider
+        * - max_iterations
+          - Amount of tries before giving up on an object (deleting it) and moving to the next one. Default: 100.
+          - int
+        * - pos_sampler
+          - Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each object.
+            UpperRegionSampler recommended. 
+          - Provider
+        * - rot_sampler
+          - Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) for
+            each object. 
+          - Provider
+        * - surface
+          - Object to place objects_to_sample on, here call an appropriate Provider (getter) which is configured
+            such that it returns only one object. 
+          - Provider
+        * - min_distance
+          - Minimum distance to the closest other object. Center to center. Only objects placed by this Module
+            considered. Default: 0.25
+          - float
+        * - max_distance
+          - Maximum distance to the closest other object. Center to center. Only objects placed by this Module
+            considered. Default: 0.6
+          - float
+        * - up_direction
+          - Normal vector of the side of surface the objects should be placed on. Default: [0., 0., 1.].
+          - mathutils.Vector
     """
 
     def __init__(self, config):

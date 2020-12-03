@@ -23,11 +23,19 @@ class ShapeNetLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "data_path", "The path to the ShapeNetCore.v2 folder. Type: string."
-       "used_synset_id", "The synset id for example: '02691156', check the data_path folder for more ids. Type: int."
+        * - Parameter
+          - Description
+          - Type
+        * - data_path
+          - The path to the ShapeNetCore.v2 folder.
+          - string
+        * - used_synset_id
+          - The synset id for example: '02691156', check the data_path folder for more ids.
+          - int
     """
 
     def __init__(self, config):

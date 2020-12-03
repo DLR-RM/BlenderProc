@@ -14,25 +14,39 @@ class CocoAnnotationsWriter(WriterInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       
-       "avoid_rendering", "If true, no output is produced. Type: bool. Default: False"
-       "rgb_output_key", "The output key with which the rgb images were registered. Should be the same as the "
-                         "output_key of the RgbRenderer module. Type: string.Default: colors."
-       "segmap_output_key", "The output key with which the segmentation images were registered. Should be the same as "
-                            "the output_key of the SegMapRenderer module. Type: string. Default: segmap."
-       "segcolormap_output_key", "The output key with which the csv file for object name/class correspondences was "
-                                 "registered. Should be the same as the colormap_output_key of the SegMapRenderer "
-                                 "module. Type: string. Default: segcolormap."
-       "supercategory", "Name of the dataset/supercategory to filter for, e.g. a specific BOP dataset."
-                        "Type: str. Default: coco_annotations"
-       "append_to_existing_output", "If true and if there is already a coco_annotations.json file in the output "
-                                    "directory, the new coco annotations will be appended to the existing file. Also "
-                                    "the rgb images will be named such that there are no collisions. Type: bool. "
-                                    "Default: False."
-       "mask_encoding_format", "Encoding format of the binary masks. "
-                               "Type: string. Default: 'rle'. Available: 'rle', 'polygon'."
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - avoid_rendering
+          - If true, no output is produced. Default: False
+          - bool
+        * - rgb_output_key
+          - The output key with which the rgb images were registered. Should be the same as the output_key of the
+            RgbRenderer module. Default: colors.
+          - string
+        * - segmap_output_key
+          - The output key with which the segmentation images were registered. Should be the same as the output_key
+            of the SegMapRenderer module. Default: segmap.
+          - string
+        * - segcolormap_output_key
+          - The output key with which the csv file for object name/class correspondences was registered. Should be
+            the same as the colormap_output_key of the SegMapRenderer module. Default: segcolormap.
+          - string
+        * - supercategory
+          - Name of the dataset/supercategory to filter for, e.g. a specific BOP dataset. Default: coco_annotations
+          - str
+        * - append_to_existing_output
+          - If true and if there is already a coco_annotations.json file in the output directory, the new coco
+            annotations will be appended to the existing file. Also the rgb images will be named such that there are
+            no collisions. " Default: False.
+          - bool
+        * - mask_encoding_format
+          - Encoding format of the binary masks. Default: 'rle'. Available: 'rle', 'polygon'.
+          - string
     """
 
     def __init__(self, config):

@@ -23,27 +23,54 @@ class BopLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "cam_type", "Camera type. Type: string. Optional. Default value: ''."
-       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
-                "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
-                "will be transformed to (1, -3, 2). Type: list. Default: ["X", "-Y", "-Z"]. "
-                "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
-       "sys_paths", "System paths to append. Type: list."
-       "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
-       "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
-       "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
-       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. Type: int. Default: -1 (no scene "
-                   "is replicated, only BOP Objects are loaded)."
-       "sample_objects", "Toggles object sampling from the specified dataset. Type: boolean. Default: False."
-       "num_of_objs_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is "
-                                "bigger than the dataset actually contains, then all objects will be loaded. Type: int."
-       "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Default: -1 (no limit)."
-       "obj_ids", "List of object ids to load. Type: list. Default: [] (all objects from the given BOP dataset if "
-                  "scene_id is not specified)."
-       "model_type", "Optionally, specify type of BOP model. Type: string. Default: "". Available: [reconst, cad or eval]."
+        * - Parameter
+          - Description
+          - Type
+        * - cam_type
+          - Camera type. Default value: ''.
+          - string. Optional
+        * - source_frame
+          - Can be used if the given positions and rotations are specified in frames different from the blender
+            frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed
+            to (1, -3, 2). Default: ["X", "-Y", "-Z"]. " Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
+          - list
+        * - sys_paths
+          - System paths to append.
+          - list
+        * - bop_dataset_path
+          - Full path to a specific bop dataset e.g. /home/user/bop/tless.
+          - string
+        * - mm2m
+          - Specify whether to convert poses and models to meters. Default: False.
+          - bool. Optional
+        * - split
+          - Optionally, test or val split depending on BOP dataset. Default: test.
+          - string. Optional
+        * - scene_id
+          - Optionally, specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,
+            only BOP Objects are loaded).
+          - int
+        * - sample_objects
+          - Toggles object sampling from the specified dataset. Default: False.
+          - boolean
+        * - num_of_objs_to_sample
+          - Amount of objects to sample from the specified dataset. If this amount is bigger than the dataset
+            actually contains, then all objects will be loaded. 
+          - int
+        * - obj_instances_limit
+          - Limits the amount of object copies when sampling. Default: -1 (no limit).
+          - int
+        * - obj_ids
+          - List of object ids to load. Default: [] (all objects from the given BOP dataset if scene_id is not
+            specified).
+          - list
+        * - model_type
+          - Default: "". Available: [reconst, cad or eval].
+          - string
     """
 
     def __init__(self, config):

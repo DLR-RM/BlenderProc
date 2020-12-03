@@ -23,13 +23,24 @@ class SceneNetLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "file_path", "The path to the .obj file from SceneNet. Type: str."
-       "texture_folder", "The path to the texture folder used to sample the textures. Type: str."
-       "unknown_texture_folder", "The path to the textures, which are used if the the texture type is unknown."
-                                 "The default path does not exist if the dataset was just downloaded, it has to be"
-                                 "created manually. Type: str. Default: ${texture_folder}/unknown"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - file_path
+          - The path to the .obj file from SceneNet.
+          - str
+        * - texture_folder
+          - The path to the texture folder used to sample the textures.
+          - str
+        * - unknown_texture_folder
+          - The path to the textures, which are used if the the texture type is unknown. The default path does not
+            exist if the dataset was just downloaded, it has to be created manually. Default:
+            ${texture_folder}/unknown
+          - str
     """
 
     def __init__(self, config):

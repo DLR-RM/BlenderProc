@@ -25,12 +25,22 @@ class ReplicaCameraSampler(CameraSampler):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "is_replica_object", "Whether it's a Replica object. Type: bool. Default: False."
-        "height_list_path", "Path to height list. Type: string."
-        "data_set_name", "Dataset name in case is_replica_object is set to false. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - is_replica_object
+          - Whether it's a Replica object. Default: False.
+          - bool
+        * - height_list_path
+          - Path to height list.
+          - string
+        * - data_set_name
+          - Dataset name in case is_replica_object is set to false.
+          - string
     """
 
     def __init__(self, config):

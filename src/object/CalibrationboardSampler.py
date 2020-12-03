@@ -14,19 +14,47 @@ class CalibrationboardSampler(Module):
     """ Samples poses of a given calibration board across the camera view.
 
     **Configuration**:
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "board_name", "Name of the chess board object. Type: string."
-        "corner_coords", "A list of coordinates in the local coordinates system of the chess board, that should always remain visible. Type: list."
-        "small_step_size", "The smaller step size to move the board outside of the camera view. A smaller step size is used here to also get poses at the border of the camera view. Type: float. Default: 0.1"
-        "big_step_size", "The bigger step size to move the board inside of the camera view. A bigger step size is used here to not get too many similar poses. Type: float. Default: 0.2"
-        "x_min", "Min. boundary of sampling space along x-axis. Type: float. Default: -5"
-        "x_max", "Max. boundary of sampling space along y-axis. Type: float. Default: 5"
-        "y_min", "Min. boundary of sampling space along x-axis. Type: float. Default: -5"
-        "y_max", "Max. boundary of sampling space along y-axis. Type: float. Default: 5"
-        "z_planes", "A list of z-planes on which poses should be sampled. Type: list. Default: [-1, -2, -3]"
-        "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) for the chess board. Type: Provider."
+        * - Parameter
+          - Description
+          - Type
+        * - board_name
+          - Name of the chess board object.
+          - string
+        * - corner_coords
+          - A list of coordinates in the local coordinates system of the chess board, that should always remain
+            visible.
+          - list
+        * - small_step_size
+          - The smaller step size to move the board outside of the camera view. A smaller step size is used here to
+            also get poses at the border of the camera view. Default: 0.1
+          - float
+        * - big_step_size
+          - The bigger step size to move the board inside of the camera view. A bigger step size is used here to not
+            get too many similar poses. Default: 0.2
+          - float
+        * - x_min
+          - Min. boundary of sampling space along x-axis. Default: -5
+          - float
+        * - x_max
+          - Max. boundary of sampling space along y-axis. Default: 5
+          - float
+        * - y_min
+          - Min. boundary of sampling space along x-axis. Default: -5
+          - float
+        * - y_max
+          - Max. boundary of sampling space along y-axis. Default: 5
+          - float
+        * - z_planes
+          - A list of z-planes on which poses should be sampled. Default: [-1, -2, -3]
+          - list
+        * - rot_sampler
+          - Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) for the
+            chess board.
+          - Provider
     """
     def __init__(self, config):
         Module.__init__(self, config)

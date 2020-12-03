@@ -21,12 +21,22 @@ class VisNormalImage(Module):
 
     *8Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path_to_hdf5", "The file path to the hdf5 container. Type: string."
-        "max_distance", "Maximum distance to be considered. Type: float. Default: 24."
-        "normal_length", "Length of the normal edge in the scene. Type: float. Default: 0.1."
+        * - Parameter
+          - Description
+          - Type
+        * - path_to_hdf5
+          - The file path to the hdf5 container.
+          - string
+        * - max_distance
+          - Maximum distance to be considered. Default: 24.
+          - float
+        * - normal_length
+          - Length of the normal edge in the scene. Default: 0.1.
+          - float
     """
 
     def __init__(self, config):

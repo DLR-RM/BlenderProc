@@ -21,11 +21,19 @@ class Uniform3d(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "min", "A list of three values, describing the minimum values of 1st, 2nd, and 3rd dimensions. Type: list."
-        "max", "A list of three values, describing the maximum values of 1st, 2nd, and 3rd dimensions. Type: list."
+        * - Parameter
+          - Description
+          - Type
+        * - min
+          - A list of three values, describing the minimum values of 1st, 2nd, and 3rd dimensions.
+          - list
+        * - max
+          - A list of three values, describing the maximum values of 1st, 2nd, and 3rd dimensions.
+          - list
     """
 
     def __init__(self, config):

@@ -63,27 +63,56 @@ class RockEssentialsTextureSampler(LoaderInterface):
 
     **Ground plane config**:
 
-    .. csv-table::
-       :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "selector", "Objects (ground planes) with RE-specific material applied. Type: Provider."
-       "textures", "A list of dicts with texture data: images, path to the images, etc. Type: list."
+        * - Parameter
+          - Description
+          - Type
+        * - selector
+          - Objects (ground planes) with RE-specific material applied.
+          - Provider
+        * - textures
+          - A list of dicts with texture data: images, path to the images, etc.
+          - list
 
-     **Texture data**:
+    **Texture data**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path", "Path to a directory containing maps required for recreating texture. Type: string."
-        "ambient_occlusion", "Ambient occlusion [R, G, B, A] color vector for a ground tile material's shader. "
-                             "Type: mathutils.Vector. Default: [1, 1, 1, 1]."
-        "uv_scaling", "Scaling factor of the UV map. Type: float. Default: 1."
-        "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Default: 1."
-        "images/color", "Full name of a color map image. Type: string."
-        "images/roughness", "Full name of a roughness map image. Type: string."
-        "images/reflection", "Full name of a reflection map image. Type: string."
-        "images/normal", "Full name of a normal map image. Type: string."
-        "images/displacement", "Full name of a displacement map image. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - Path to a directory containing maps required for recreating texture.
+          - string
+        * - ambient_occlusion
+          - Ambient occlusion [R, G, B, A] color vector for a ground tile material's shader. Default: [1, 1, 1, 1].
+          - mathutils.Vector
+        * - uv_scaling
+          - Scaling factor of the UV map. Default: 1.
+          - float
+        * - displacement_strength
+          - Strength of a plane's displacement modifier. Default: 1.
+          - float
+        * - images/color
+          - Full name of a color map image.
+          - string
+        * - images/roughness
+          - Full name of a roughness map image.
+          - string
+        * - images/reflection
+          - Full name of a reflection map image.
+          - string
+        * - images/normal
+          - Full name of a normal map image.
+          - string
+        * - images/displacement
+          - Full name of a displacement map image.
+          - string
     """
 
     def __init__(self, config):

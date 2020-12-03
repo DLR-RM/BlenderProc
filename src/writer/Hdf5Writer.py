@@ -13,18 +13,30 @@ class Hdf5Writer(WriterInterface):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "append_to_existing_output", "If true, the names of the output hdf5 files will be chosen in a way such that "
-                                    "there are no collisions with already existing hdf5 files in the output directory. "
-                                    "Type: bool. Default: False"
-        "compression", "The compression technique that should be used when storing data in a hdf5 file. Type: string."
-        "delete_temporary_files_afterwards", "True, if all temporary files should be deleted after merging. "
-                                             "Type: bool. Default value: True."
-       "stereo_separate_keys", "If true, stereo images are saved as two separate images *_0 and *_1. Type: bool. "
-                                "Default: False (stereo images are combined into one np.array (2, ...))."
-        "avoid_rendering", "If true, exit. Type: bool. Default: False."
+        * - Parameter
+          - Description
+          - Type
+        * - append_to_existing_output
+          - If true, the names of the output hdf5 files will be chosen in a way such that there are no collisions
+            with already existing hdf5 files in the output directory. Default: False
+          - bool
+        * - compression
+          - The compression technique that should be used when storing data in a hdf5 file.
+          - string
+        * - delete_temporary_files_afterwards
+          - True, if all temporary files should be deleted after merging. Default value: True.
+          - bool
+        * - stereo_separate_keys
+          - If true, stereo images are saved as two separate images *_0 and *_1. Default: False (stereo images are
+            combined into one np.array (2, ...)).
+          - bool
+        * - avoid_rendering
+          - If true, exit. Default: False.
+          - bool
     """
 
     def __init__(self, config):

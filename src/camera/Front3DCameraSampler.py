@@ -24,11 +24,16 @@ class Front3DCameraSampler(CameraSampler):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
-        "amount_of_objects_needed_per_room", "The amount of objects needed per room, so that cameras are sampled in it.
-                                             "This avoids that cameras are sampled in empty rooms."
-                                             "Type: int. Default: 2"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - amount_of_objects_needed_per_room
+          - This avoids that cameras are sampled in empty rooms. Default: 2
+          - int
     """
 
     def __init__(self, config):

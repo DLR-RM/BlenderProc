@@ -47,12 +47,20 @@ class TextureLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "path", "The path to the folder with assets/to the asset. Type: string."
-       "colorspace", "Colorspace type to assign to loaded assets. Type: string. Default: 'sRGB'."
-                     "Available: ['Filmic Log', 'Linear', 'Linear ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ']."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - The path to the folder with assets/to the asset.
+          - string
+        * - colorspace
+          - Colorspace type to assign to loaded assets. Default: 'sRGB'. Available: ['Filmic Log', 'Linear', 'Linear
+            ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ'].
+          - string
     """
 
     def __init__(self, config):

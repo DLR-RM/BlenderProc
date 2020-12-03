@@ -8,23 +8,41 @@ class RgbRenderer(RendererInterface):
     """ Renders rgb images for each registered keypoint.
 
     Images are stored as PNG-files or JPEG-files with 8bit color depth.
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "render_texture_less", "Render all objects with a white slightly glossy texture, does not change emission "
-                                "materials, Type: bool. Default: False."
-        "image_type", "Image type of saved rendered images, Type: str. Default: 'PNG'. Available: ['PNG','JPEG']"
-        "transparent_background", "Whether to render the background as transparent or not, Type: bool. Default: False."
-        "use_motion_blur", "Use Blender motion blur feature which is required for motion blur and rolling shutter simulation. "
-                                "This feature only works if camera poses follow a continous trajectory as Blender performs a Bezier "
-                                "interpolation between keyframes and therefore arbitrary results are to be expected if camera poses "
-                                "are discontinuous (e.g. when sampled), Type: bool. Default: False"
-        "motion_blur_length", "Motion blur effect length (in frames), Type: float. Default: 0.1"
-        "use_rolling_shutter", "Use rolling shutter simulation (top to bottom). This depends on the setting enable_motion_blur "
-        "being activated and a motion_blur_length > 0, Type: bool. Default: False"
-        "rolling_shutter_length", "Time as fraction of the motion_blur_length one scanline is exposed when enable_rolling_shutter is "
-                                    "activated. If set to 1, this creates a pure motion blur effect, if set to 0 a pure rolling "
-                                    "shutter effect, Type: float. Default: 0.2"
+        * - Parameter
+          - Description
+          - Type
+        * - render_texture_less
+          - Render all objects with a white slightly glossy texture, does not change emission materials, Default:
+            False.
+          - bool
+        * - image_type
+          - Image type of saved rendered images, Default: 'PNG'. Available: ['PNG','JPEG']
+          - str
+        * - transparent_background
+          - Whether to render the background as transparent or not, Default: False.
+          - bool
+        * - use_motion_blur
+          - Use Blender motion blur feature which is required for motion blur and rolling shutter simulation. This
+            feature only works if camera poses follow a continous trajectory as Blender performs a Bezier
+            interpolation between keyframes and therefore arbitrary results are to be expected if camera poses are
+            discontinuous (e.g. when sampled), Default: False
+          - bool
+        * - motion_blur_length
+          - Motion blur effect length (in frames), Default: 0.1
+          - float
+        * - use_rolling_shutter
+          - Use rolling shutter simulation (top to bottom). This depends on the setting enable_motion_blur being
+            activated and a motion_blur_length > 0, Default: False
+          - bool
+        * - rolling_shutter_length
+          - Time as fraction of the motion_blur_length one scanline is exposed when enable_rolling_shutter is
+            activated. If set to 1, this creates a pure motion blur effect, if set to 0 a pure rolling shutter
+            effect, Default: 0.2
+          - float
     """
     def __init__(self, config):
         RendererInterface.__init__(self, config)

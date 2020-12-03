@@ -18,26 +18,45 @@ class StereoGlobalMatchingWriter(RendererInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "infer_focal_length_from_fov", "If true, then focal length would be calculated from the field of view angle, "
-                                      "otherwise the value of the focal length would be read from the config parameter: "
-                                      "'focal_length'. Type: bool. Default: False"
-       "disparity_filter", "Applies post-processing of the generated disparity map using WLS filter. Type: bool. "
-                           "Default: True"
-       "depth_completion", "Applies basic depth completion using image processing techniques. Type: bool. Default: True"
-       "focal_length", "Focal length used in the depth calculation step, should be set if 'infer_focal_length_from_fov' "
-                       "is set to false. Type: float. Default: 0.0"
-
-       "window_size", "Semi-global matching kernel size. Should be an odd number. Type: int. Optional. Default: 7"
-       "num_disparities", "Semi-global matching number of disparities. Should be > 0 and divisible by 16. Type: int. "
-                          "Default: 32"
-       "min_disparity", "Semi-global matching minimum disparity. Type: int. Optional. Default: 0"
-       "avoid_rendering", "If true, exit. Type: bool. Optional. Default: False."
-       "output_disparity", "Additionally outputs the disparity map. Type: bool. Default: False"
-       "rgb_output_key", "The key for the rgb data in the output. Type: string. Optional. default: colors."
-
+        * - Parameter
+          - Description
+          - Type
+        * - infer_focal_length_from_fov
+          - If true, then focal length would be calculated from the field of view angle, otherwise the value of the
+            focal length would be read from the config parameter: 'focal_length'. Default: False
+          - bool
+        * - disparity_filter
+          - Applies post-processing of the generated disparity map using WLS filter. Default: True
+          - bool
+        * - depth_completion
+          - Applies basic depth completion using image processing techniques. Default: True
+          - bool
+        * - focal_length
+          - Focal length used in the depth calculation step, should be set if 'infer_focal_length_from_fov' is set
+            to false. Default: 0.0
+          - float
+        * - window_size
+          - Semi-global matching kernel size. Should be an odd number. Default: 7
+          - int. Optional
+        * - num_disparities
+          - Semi-global matching number of disparities. Should be > 0 and divisible by 16. Default: 32
+          - int
+        * - min_disparity
+          - Semi-global matching minimum disparity. Default: 0
+          - int. Optional
+        * - avoid_rendering
+          - If true, exit. Default: False.
+          - bool. Optional
+        * - output_disparity
+          - Additionally outputs the disparity map. Default: False
+          - bool
+        * - rgb_output_key
+          - The key for the rgb data in the output. Optional. default: colors.
+          - string.
     """
 
     def __init__(self, config):

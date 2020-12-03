@@ -36,10 +36,16 @@ class POI(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "selector", "Objects to take part in the POI computation. Type: Provider. Default: all mesh objects."
+        * - Parameter
+          - Description
+          - Type
+        * - selector
+          - Objects to take part in the POI computation. Default: all mesh objects.
+          - Provider
     """
 
     def __init__(self, config):

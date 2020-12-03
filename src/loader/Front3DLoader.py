@@ -31,14 +31,29 @@ class Front3DLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
-        "json_path", "Path to the json file, where the house information is stored. Type: str."
-        "3D_future_model_path", "Path to the models used in the 3D-Front dataset. Type: str"
-        "mapping_file", "Path to a file, which maps the names of the objects to ids."
-                        "Type: str. Default: resources/front_3D/3D_front_mapping.csv"
-        "ceiling_light_strength", "Strength of the emission shader used in the ceiling. Type: float. Default: 0.8"
-        "lamp_light_strength", "Strength of the emission shader used in each lamp. Type: float. Default: 7.0"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - json_path
+          - Path to the json file, where the house information is stored.
+          - str
+        * - 3D_future_model_path
+          - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
+          - str"
+        * - mapping_file
+          - Path to a file, which maps the names of the objects to ids. Default:
+            resources/front_3D/3D_front_mapping.csv
+          - str
+        * - ceiling_light_strength
+          - Strength of the emission shader used in the ceiling. Default: 0.8
+          - float
+        * - lamp_light_strength
+          - Strength of the emission shader used in each lamp. Default: 7.0
+          - float
    """
 
     def __init__(self, config: Config):
