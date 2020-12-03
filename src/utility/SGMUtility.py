@@ -19,18 +19,13 @@ def fill_in_fast(depth_map, max_depth=100.0, custom_kernel=None,
                  extrapolate=False, blur_type='bilateral'):
     """Fast, in-place depth completion.
 
-    Args:
-        depth_map: projected depths
-        max_depth: max depth value for inversion
-        custom_kernel: kernel to apply initial dilation
-        extrapolate: whether to extrapolate by extending depths to top of
-            the frame, and applying a 31x31 full kernel dilation
-        blur_type:
-            'bilateral' - preserves local structure (recommended)
-            'gaussian' - provides lower RMSE
-
-    Returns:
-        depth_map: dense depth map
+    :param depth_map: projected depths
+    :param max_depth: max depth value for inversion
+    :param custom_kernel: kernel to apply initial dilation
+    :param extrapolate: whether to extrapolate by extending depths to top of the frame, and applying a 31x31 \
+                        full kernel dilation
+    :param blur_type: 'bilateral' - preserves local structure (recommended), 'gaussian' - provides lower RMSE
+    :return: depth_map: dense depth map
     """
 
     # Full kernels

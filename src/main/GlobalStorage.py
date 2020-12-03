@@ -10,6 +10,7 @@ class GlobalStorage(object):
     To 1. you can save your own keys in the GlobalStorage to access them in a later module.
         For example you have a personal renderer or loader, which has attributes, which are independent of the scene and
         the objects so custom properties for those are not the way to go. In these instances you can use these functions.
+
     Here is a list of all used global_storage_keys to avoid that your key is clashing with existing keys:
 
     .. list-table:: 
@@ -107,8 +108,8 @@ class GlobalStorage(object):
     def get(key):
         """
         Returns a value from the GlobalStorage, please check add() and set() for more information
-        :param key for which a value is searched
-        :return value for the key
+        :param key: for which a value is searched
+        :return: value for the key
         """
         if key in GlobalStorage._storage_dict:
             return GlobalStorage._storage_dict[key]
@@ -120,7 +121,7 @@ class GlobalStorage(object):
         """
         Checks if a key is in the GlobalStorage
         :param key for which a value is searched
-        :return True if the key is in the storage
+        :return: True if the key is in the storage
         """
         return key in GlobalStorage._storage_dict
 

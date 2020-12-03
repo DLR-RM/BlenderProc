@@ -52,8 +52,8 @@ class RendererInterface(Module):
           - Global maximum subdivision level during rendering. Speeds up rendering. Default: 3
           - int
         * - denoiser
-          - The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or set to
-            'Intel', if you want to use the Intel Open Image Denoiser, performs much better. Default: "Intel"
+          - The denoiser to use. Set to "Blender", if the Blender's built-in denoiser should be used or set to
+            "Intel", if you want to use the Intel Open Image Denoiser, performs much better. Default: "Intel"
             Available: ["Intel", "Blender"].
           - string
         * - max_bounces
@@ -93,10 +93,10 @@ class RendererInterface(Module):
             is turned off, only one sample is taken to determine the depth. Default: True.
           - bool
         * - distance_output_file_prefix
-          - The file prefix that should be used when writing distance to file. Default: 'distance_'
+          - The file prefix that should be used when writing distance to file. Default: "distance_"
           - string
         * - distance_output_key
-          - The key which should be used for storing the distance in a merged file. Default: 'distance'.
+          - The key which should be used for storing the distance in a merged file. Default: `"distance"`.
           - string
         * - distance_start
           - Starting distance of the distance, measured from the camera. Default: 0.1
@@ -106,7 +106,7 @@ class RendererInterface(Module):
             Default: 25.0
           - float
         * - distance_falloff
-          - Type of transition used to fade distance. Default: 'Linear'. Available: [LINEAR, QUADRATIC,
+          - Type of transition used to fade distance. Default: "Linear". Available: [LINEAR, QUADRATIC,
             INVERSE_QUADRATIC]
           - string
         * - use_alpha
@@ -127,10 +127,10 @@ class RendererInterface(Module):
           - If true, the normals are also rendered. Default: False
           - bool
         * - normals_output_file_prefix
-          - The file prefix that should be used when writing normals. Default: 'normals_'
+          - The file prefix that should be used when writing normals. Default: "normals_"
           - string
         * - normals_output_key
-          - The key which is used for storing the normal in a merged file. Default: 'normal'
+          - The key which is used for storing the normal in a merged file. Default: `"normal"`
           - string
     """
 

@@ -9,7 +9,7 @@ from src.utility.Utility import Utility
 
 
 class Hdf5Writer(WriterInterface):
-    """ For each key frame merges all registered output files into one hdf5 file
+    """ For each key frame merges all registered output files into one hdf5 file.
 
     **Configuration**:
 
@@ -31,8 +31,8 @@ class Hdf5Writer(WriterInterface):
           - True, if all temporary files should be deleted after merging. Default value: True.
           - bool
         * - stereo_separate_keys
-          - If true, stereo images are saved as two separate images *_0 and *_1. Default: False (stereo images are
-            combined into one np.array (2, ...)).
+          - If true, stereo images are saved as two separate images \*_0 and \*_1. Default: False
+            (stereo images are combined into one np.array (2, ...)).
           - bool
         * - avoid_rendering
           - If true, exit. Default: False.
@@ -117,6 +117,7 @@ class Hdf5Writer(WriterInterface):
     def _get_stereo_path_pair(self, file_path):
         """
         Returns stereoscopic file path pair for a given "normal" image file path.
+
         :param file_path: The file path of a single image. Type: string.
         :return: The pair of file paths corresponding to the stereo images,
         """

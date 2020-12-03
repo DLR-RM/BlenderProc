@@ -28,6 +28,7 @@ class FloorExtractor(Module):
         }
 
     **Configuration**:
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1

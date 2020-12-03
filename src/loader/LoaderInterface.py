@@ -15,7 +15,7 @@ class LoaderInterface(Module):
           - Description
           - Type
         * - add_properties
-          - Custom properties to set for loaded objects. Use 'cp_' prefix for keys.
+          - Custom properties to set for loaded objects. Use `cp_` prefix for keys.
           - dict
         * - cf_set_shading
           - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]

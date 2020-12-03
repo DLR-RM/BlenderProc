@@ -77,6 +77,7 @@ class CameraSampler(CameraInterface):
           - A dict which can be used to specify properties across all cam poses. Check CameraInterface for more
             info. Default: {}.
           - dict
+
     **Properties per cam pose**:
 
     .. list-table:: 

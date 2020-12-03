@@ -64,6 +64,7 @@ class WorldManipulator(Module):
           - Value of the attribute/custom prop. to set or input value(s) for a custom function. int, bool or float,
             list/Vector.
           - string
+
     **Custom functions**:
 
     .. list-table:: 

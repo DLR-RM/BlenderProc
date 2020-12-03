@@ -19,10 +19,10 @@ class FlowRenderer(RendererInterface):
           - Description
           - Type
         * - forward_flow_output_key
-          - The key which should be used for storing forward optical flow values. Default: 'forward_flow'.
+          - The key which should be used for storing forward optical flow values. Default: `"forward_flow"`.
           - string
         * - backward_flow_output_key
-          - The key which should be used for storing backward optical flow values. efault: 'backward_flow'.
+          - The key which should be used for storing backward optical flow values. Default: `"backward_flow"`.
           - string."
         * - forward_flow
           - Whether to render forward optical flow. Default: True.
@@ -35,10 +35,10 @@ class FlowRenderer(RendererInterface):
             (standard convention; False). Default: False
           - bool
         * - forward_flow_output_file_prefix
-          - The file prefix that should be used when writing forward flow to a file. Default: "forward_flow_"
+          - The file prefix that should be used when writing forward flow to a file. Default: `"forward_flow_"`
           - string
         * - backward_flow_output_file_prefix
-          - The file prefix that should be used when writing backward flow to a file. Default: "backward_flow_"
+          - The file prefix that should be used when writing backward flow to a file. Default: `"backward_flow_"`
           - string
         * - samples
           - The amount of samples rendered, this value should be 1. Only change it when you know what you are doing.

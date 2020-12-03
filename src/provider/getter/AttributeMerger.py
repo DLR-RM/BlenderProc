@@ -76,6 +76,7 @@ class AttributeMerger(Provider):
           - Name of the operation to perform on the list of Provider return values. See table below for supported
             operation names. 
           - string
+
     **Operations**:
 
     .. list-table:: 

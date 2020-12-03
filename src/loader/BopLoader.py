@@ -15,7 +15,8 @@ from src.utility.CameraUtility import CameraUtility
 
 
 class BopLoader(LoaderInterface):
-    """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
+    """
+    Loads the 3D models of any BOP dataset and allows replicating BOP scenes
     
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
     - Relative camera poses are loaded/computed with respect to a reference model
@@ -229,7 +230,8 @@ class BopLoader(LoaderInterface):
 
         :param cur_obj: Current object. Type: bpy.types.Object.
         :param inst: instance from BOP scene_gt file. Type: dict.
-        :param scale : factor to transform set pose in mm or meters. Type: dict.
+        :param scale: factor to transform set pose in mm or meters. Type: dict.
+
         """
 
         cam_H_m2c = np.eye(4)
@@ -263,8 +265,7 @@ class BopLoader(LoaderInterface):
         :param cam_id: BOP camera id. Type: int.
         :param insts: Instance from BOP scene_gt file. Type: dict.
         :param scale: Factor to transform get pose in mm or meters. Type: int.
-        :return camK : loaded camera matrix. Type: ndarray.
-        :return cam_H_m2c_ref: loaded object to camera transformation. Type: ndarray.
+        :return (camK, cam_H_m2c_ref): loaded camera matrix. Loaded object to camera transformation. Type: ndarray.
         """
 
         cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)

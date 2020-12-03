@@ -87,6 +87,7 @@ class Attribute(Provider):
           - If set, after the conditions are applied only the corresponding value of entity with the specified index
             is returned. 
           - int
+
     **Custom functions**:
 
     .. list-table:: 
@@ -101,6 +102,7 @@ class Attribute(Provider):
             arithmetic means of coordinates of object aligned bounding boxes' of selected objects in world
             coordinates format. (return).
           - list
+
     **Operations**:
 
     .. list-table:: 

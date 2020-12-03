@@ -12,13 +12,14 @@ from src.utility.BlenderUtility import get_bounds
 
 class IKEALoader(LoaderInterface):
     """
-        This class loads objects from the IKEA dataset.
+    This class loads objects from the IKEA dataset.
 
-        Objects can be selected randomly, based on object type, object style, or both.
+    Objects can be selected randomly, based on object type, object style, or both.
 
-        As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
+    As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
 
-        **Configuration**:
+    **Configuration**:
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1
@@ -36,7 +37,7 @@ class IKEALoader(LoaderInterface):
         * - obj_style
           - The IKEA style to use for example: 'hemnes'. Default: None. See data_dir for other options.
           - string
-        """
+    """
 
     def __init__(self, config):
         LoaderInterface.__init__(self, config)

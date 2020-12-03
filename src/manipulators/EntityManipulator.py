@@ -169,6 +169,7 @@ class EntityManipulator(Module):
             to each selected entity), 'once_for_all' (if samplers are called, value is sampled once and set to all
             selected entities).
           - string
+
     **Values to set**:
 
     .. list-table:: 
@@ -189,6 +190,7 @@ class EntityManipulator(Module):
           - Value of the attribute/custom prop. to set or input value(s) for a custom function. int, bool or float,
             list/Vector.
           - string
+
     **Custom functions**
 
     .. list-table:: 
@@ -476,8 +478,8 @@ class EntityManipulator(Module):
     def _unpack_params(self, param_config, instructions):
         """ Unpacks the data from a config object following the instructions in the dict.
 
-        :param instructions: Instruction for unpacking: keys, corresponding Config method to extract the value, default
-        value, and a function to perform on the value after extraction. Type: dict.
+        :param instructions: Instruction for unpacking: keys, corresponding Config method to extract the value, \
+                             default value, and a function to perform on the value after extraction. Type: dict.
         :param param_config: Structure that contains the unpacked data. Type: Config.
         :return: Unpacked data. Type: dict.
         """

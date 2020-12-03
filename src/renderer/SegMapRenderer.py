@@ -97,8 +97,9 @@ class SegMapRenderer(RendererInterface):
             class_inst_col_map
           - string
         * - output_file_prefix
-          - The file prefix that should be used when writing semantic information to a file. Default: "segmap_"
+          - The file prefix that should be used when writing semantic information to a file. Default: `"segmap_"`
           - string
+
     **Custom functions**
 
     All custom functions here are used inside of the map_by/default_values list.

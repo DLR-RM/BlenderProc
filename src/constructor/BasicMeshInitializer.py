@@ -72,6 +72,7 @@ class BasicMeshInitializer(Module):
             material (if value is True), or not (if value is False). Material's name is derived from the object's
             name. Default: True.
           - boolean
+
     **meshes_to_add cell configuration**:
 
     .. list-table:: 

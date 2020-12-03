@@ -22,10 +22,10 @@ class SceneNetLighting(Module):
           - Description
           - Type
         * - lampshade_emission_strength
-          - The strength of the lamp emission shader. efault: 15
+          - The strength of the lamp emission shader. Default: 15
           - float 
         * - ceiling_emission_strength
-          - The strength of the ceiling emission shader. efault: 2
+          - The strength of the ceiling emission shader. Default: 2
           - float 
     """
 

@@ -11,9 +11,12 @@ from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 
 class WriterInterface(Module):
-    """ Parent class for all other writers classes, it had the functionality to return objects attributes and write them to file and to load and process post processing modules
+    """
+    Parent class for all other writers classes, it had the functionality to return objects attributes and write \
+    them to file and to load and process post processing modules
 
     **Configuration**:
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1

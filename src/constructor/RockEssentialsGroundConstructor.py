@@ -43,6 +43,7 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         * - tiles
           - Ground tiles to create, each cell contains a separate tile configuration.
           - list
+
     **Ground plane properties**:
 
     .. list-table:: 

@@ -96,6 +96,7 @@ class Material(Provider):
           - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or
             random_samples property, only one is allowed at a time. Default: False.
           - int
+
     **Custom functions**
 
     .. list-table:: 

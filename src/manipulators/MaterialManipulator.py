@@ -84,6 +84,7 @@ class MaterialManipulator(Module):
           - Default: "once_for_each". Available: 'once_for_each' (if samplers are called, new sampled value is set
             to each selected material), 'once_for_all' (sampling once for all of the selected materials).
           - string
+
     **Values to set**:
 
     .. list-table:: 
@@ -103,6 +104,7 @@ class MaterialManipulator(Module):
           - Value of the attribute/custom prop. to set or input value(s) for a custom function. int, bool or float,
             list/Vector.
           - string
+
     **Available custom functions**:
 
     .. list-table:: 

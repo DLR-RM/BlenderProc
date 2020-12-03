@@ -156,10 +156,10 @@ class RockEssentialsTextureSampler(LoaderInterface):
         """ Loads images that are used as color, roughness, reflection, normal, and displacement maps.
 
         :param selected_texture: Selected texture data. Type: Config.
-        :return loaded_images: Loaded images. Type: dict.
-        :return uv_scaling: Scaling factor of the UV map. Type: float.
-        :return ambient_occlusion: Ambient occlusion color vector. Type: mathutils.Vector.
-        :return displacement_strength: Strength of a plane's displacement modifier. Type: float.
+        :return: loaded_images: Loaded images. Type: dict.
+        :return: uv_scaling: Scaling factor of the UV map. Type: float.
+        :return: ambient_occlusion: Ambient occlusion color vector. Type: mathutils.Vector.
+        :return: displacement_strength: Strength of a plane's displacement modifier. Type: float.
         """
         loaded_images = {}
         # get path to image folder

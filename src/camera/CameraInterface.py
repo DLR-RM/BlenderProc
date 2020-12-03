@@ -59,6 +59,7 @@ class CameraInterface(Module):
         * - intrinsics
           - A dictionary containing camera intrinsic parameters. See the last table for details. Default: {}.
           - dict
+
     **Properties per cam pose**:
 
     .. list-table:: 
@@ -85,6 +86,7 @@ class CameraInterface(Module):
         * - cam2world_matrix
           - 4x4 camera extrinsic matrix. Default: [].
           - list of floats
+
     **Intrinsic camera parameters**:
 
     .. list-table:: 
@@ -145,12 +147,13 @@ class CameraInterface(Module):
 
            1. from config function parameter if defined
            2. from custom properties of cam if set in Loader
-           3. default config
-                resolution_x/y: 512 
+           3. default config:
+                resolution_x/y: 512
                 pixel_aspect_x: 1
                 clip_start:   : 0.1
                 clip_end      : 1000
                 fov           : 0.691111
+
         :param cam: The camera which contains only camera specific attributes.
         :param config: A configuration object with cam intrinsics.
         """

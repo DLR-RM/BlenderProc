@@ -18,6 +18,7 @@ class LightInterface(Module):
         * - cross_source_settings
           - See the next table for which properties can be set. Default: {}.
           - dict
+
     **Properties per lights entry**:
 
     .. list-table:: 

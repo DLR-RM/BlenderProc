@@ -5,9 +5,11 @@ from src.utility.Utility import Utility
 
 
 class RgbRenderer(RendererInterface):
-    """ Renders rgb images for each registered keypoint.
+    """
+    Renders rgb images for each registered keypoint.
 
     Images are stored as PNG-files or JPEG-files with 8bit color depth.
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1

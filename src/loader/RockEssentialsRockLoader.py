@@ -92,6 +92,7 @@ class RockEssentialsRockLoader(LoaderInterface):
         * - batches
           - Rocks to load. Each cell contains separate configuration data. Default: [].
           - list
+
     **Properties per rock batch**:
 
     .. list-table:: 

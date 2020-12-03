@@ -86,11 +86,14 @@ class ItemCollection:
         """ Sets the parameter inside the given nested dict
 
         ({}, ["rotation","value"], 42) will result in:
-        {
-          "rotation": {
-            "value": 42
-          }
-        }
+
+        .. code-block:: yaml
+
+            {
+              "rotation": {
+                "value": 42
+              }
+            }
 
         :param data: The dict into which the parameter value should be written.
         :param parameter_name_parts: A list of strings which will be used as keys when creating the nested dicts and setting the value.

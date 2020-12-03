@@ -240,7 +240,7 @@ class Front3DLoader(LoaderInterface):
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
         :param data: json data dir. Should contain "furniture"
-        :return all objects which have been loaded
+        :return: all objects which have been loaded
         """
         # collect all loaded furniture objects
         all_objs = []
