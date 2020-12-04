@@ -166,18 +166,21 @@ class IKEALoader(LoaderInterface):
                 scale = 1.0
             else:
                 raise Exception("The file unit type: {} is not defined".format(file_unit))
+            # move all object centers to the world origin and set the bounding box correctly
+            bpy.ops.object.select_all(action='DESELECT')
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
             if scale != 1.0:
                 # scale object down
-                bpy.ops.object.select_all(action='DESELECT')
-                obj.select_set(True)
-                bpy.context.view_layer.objects.active = obj
                 bpy.ops.object.mode_set(mode='EDIT')
                 bpy.ops.transform.resize(value=(scale, scale, scale))
                 bpy.ops.object.mode_set(mode='OBJECT')
                 bpy.context.view_layer.update()
-
-            # move all object centers to the world origin and set the bounding box correctly
             bb = get_bounds(obj)
             bb_center = np.mean(bb, axis=0)
             bb_min_z_value = np.min(bb, axis=0)[2]
-            obj.location -= mathutils.Vector([bb_center[0], bb_center[1], bb_min_z_value])
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
+            bpy.ops.object.mode_set(mode='OBJECT')
+            bpy.context.view_layer.update()
+
