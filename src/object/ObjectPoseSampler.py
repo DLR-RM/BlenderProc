@@ -80,7 +80,7 @@ class ObjectPoseSampler(Module):
         if max_tries <= 0:
             raise ValueError("The value of max_tries must be greater than zero: {}".format(max_tries))
 
-        if objects.empty():
+        if not objects:
             raise Exception("The list of objects can not be empty!")
 
         # cache to fasten collision detection
