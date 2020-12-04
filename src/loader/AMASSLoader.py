@@ -4,9 +4,11 @@ import random
 from datetime import datetime
 import numpy as np
 
+import bpy
 import mathutils
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.utility.BlenderUtility import get_bounds
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
 
@@ -129,11 +131,10 @@ class AMASSLoader(LoaderInterface):
             # get  path from dictionsary
             sub_dataset_path = AMASSLoader.supported_mocap_datasets[self._used_sub_dataset_id]
             # concatenate path to specific
+            used_subject_id_str = "{:02d}".format(int(self._used_subject_id))
             subject_path = os.path.join(
-                sub_dataset_path, self._used_subject_id)
-            sequence_path = os.path.join(subject_path,
-                                         "{:02d}".format(int(self._used_subject_id)) + "_" + "{:02d}".format(
-                                             int(self._used_sequence_id)) + "_poses.npz")
+                sub_dataset_path, used_subject_id_str)
+            sequence_path = os.path.join(subject_path, used_subject_id_str + "_" + used_subject_id_str + "_poses.npz")
             if os.path.exists(sequence_path):
                 # load AMASS dataset sequence file which contains the coefficients for the whole motion sequence
                 sequence_body_data = np.load(sequence_path)
@@ -164,7 +165,8 @@ class AMASSLoader(LoaderInterface):
 
             else:
                 raise Exception(
-                    "Invalid sequence/subject category identifiers, please choose a valid one")
+                    "Invalid sequence/subject: {} category identifiers, please choose a "
+                    "valid one. Used path: {}".format(self._used_subject_id, sequence_path))
 
         else:
             raise Exception(
@@ -255,6 +257,16 @@ class AMASSLoader(LoaderInterface):
             for obj in loaded_obj:
                 obj['category_id'] = LabelIdMapping.label_id_map["void"]
 
+        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+        LoaderInterface.remove_x_axis_rotation(loaded_obj)
+
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        LoaderInterface.place_origin_in_world_origin(loaded_obj)
+        bpy.ops.object.select_all(action='DESELECT')
+
+
     def _correct_materials(self, objects):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
@@ -272,13 +284,22 @@ class AMASSLoader(LoaderInterface):
                     nodes, "BsdfPrincipled")
                 # Pick random skin color value
                 skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
-                skin_tone_rgb = list(
-                    int(skin_tone_hex[i:i+2], 16) for i in (0, 2, 4))
+                def hex_to_rgb(value):
+                    lv = len(value)
+                    return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
+                skin_tone_rgb = hex_to_rgb(skin_tone_hex)
+
+                # this is done to make the chance higher that the representation of skin tones is more diverse
+                skin_tone_fac = random.uniform(0.0, 1)
+                skin_tone_rgb = [value * skin_tone_fac for value in skin_tone_rgb]
                 principled_bsdf.inputs["Base Color"].default_value = mathutils.Vector(
                     [*skin_tone_rgb, 255]) / 255.0
                 principled_bsdf.inputs["Subsurface"].default_value = 0.2
                 principled_bsdf.inputs["Subsurface Color"].default_value = mathutils.Vector(
                     [*skin_tone_rgb, 255]) / 255.0
+
+                # darker skin looks better when made less specular
+                principled_bsdf.inputs["Specular"].default_value = np.mean(skin_tone_rgb) / 255.0
 
                 texture_nodes = Utility.get_nodes_with_type(
                     nodes, "ShaderNodeTexImage")
