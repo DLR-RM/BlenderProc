@@ -3,6 +3,8 @@ import json
 import os
 import random
 
+import bpy
+
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
@@ -88,6 +90,15 @@ class ShapeNetLoader(LoaderInterface):
         if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
             for obj in loaded_obj:
                 obj['category_id'] = LabelIdMapping.label_id_map["void"]
+
+        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+        LoaderInterface.remove_x_axis_rotation(loaded_obj)
+
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        LoaderInterface.place_origin_in_world_origin(loaded_obj)
+        bpy.ops.object.select_all(action='DESELECT')
 
     def _correct_materials(self, objects):
         """
