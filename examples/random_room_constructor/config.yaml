@@ -38,20 +38,6 @@
             "config": {
               "data_path": "resources/AMASS",
               "sub_dataset_id": "CMU",
-              "body_model_gender": "male",
-              "subject_id": "5",
-              "sequence_id": {
-                "provider": "sampler.Value",
-                "type": "int",
-                "min": 1,
-                "max": 20
-              },
-              "frame_id": {
-                "provider": "sampler.Value",
-                "type": "int",
-                "min": 1,
-                "max": 100
-              }
             },
             "amount_of_repetitions": 10
           },
