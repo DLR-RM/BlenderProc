@@ -12,43 +12,114 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "output"
+          "output_dir": "output",
+          "max_bounces": 200,
+          "diffuse_bounces": 200,
+          "glossy_bounces": 200,
+          "transmission_bounces": 200,
+          "transparency_bounces": 200,
+          "sys_paths": ["/home/max/workspace/bop_toolkit"]
         }
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      "config": {
+        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
       }
     },
     {
       "module": "constructor.RandomRoomConstructor",
       "config": {
-        "floor_area": 16,
+        "floor_area": 29,
         "used_loader_config": [
           {
-            "module": "loader.IKEALoader",
+            "module": "loader.AMASSLoader",
             "config": {
-              "data_dir": "resources/IKEA",
+              "data_path": "resources/AMASS",
+              "sub_dataset_id": "CMU",
+              "body_model_gender": "male",
+              "subject_id": "5",
+              "sequence_id": {
+                "provider": "sampler.Value",
+                "type": "int",
+                "min": 1,
+                "max": 20
+              },
+              "frame_id": {
+                "provider": "sampler.Value",
+                "type": "int",
+                "min": 1,
+                "max": 100
+              }
+            },
+            "amount_of_repetitions": 10
+          },
+          {
+            "module": "loader.Pix3DLoader",
+            "config": {
+              "used_category": "bed"
+            },
+            "amount_of_repetitions": 15
+          },
+          {
+            "module": "loader.Pix3DLoader",
+            "config": {
+              "used_category": "wardrobe"
+            },
+            "amount_of_repetitions": 15
+          },
+          {
+            "module": "loader.Pix3DLoader",
+            "config": {
+              "used_category": "desk"
+            },
+            "amount_of_repetitions": 15
+          },
+          {
+            "module": "loader.Pix3DLoader",
+            "config": {
+              "used_category": "chair"
+            },
+            "amount_of_repetitions": 30
+          },
+          {
+            "module": "loader.ShapeNetLoader",
+            "config": {
+              "data_path": "/media/max/Volume/linux_data/ShapeNetCore.v2",
+              "used_synset_id": "02801938"
+            },
+            "amount_of_repetitions": 15
+          },
+          {
+            "module": "loader.ShapeNetLoader",
+            "config": {
+              "data_path": "/media/max/Volume/linux_data/ShapeNetCore.v2",
+              "used_synset_id": "03938244"
+            },
+            "amount_of_repetitions": 10
+          },
+          {
+            "module": "loader.BopLoader",
+            "config": {
+              "bop_dataset_path": "/home/max/Downloads/bop/tless",
+              "model_type": "cad",
+              "mm2m": True,
+              "sample_objects": True,
+              "num_of_objs_to_sample": 20,
+              "move_origin_to_x_y_plane": True,
             }
           },
           {
-            "module": "loader.IKEALoader",
+            "module": "loader.BopLoader",
             "config": {
-              "data_dir": "resources/IKEA",
-            }
-          },
-          {
-            "module": "loader.IKEALoader",
-            "config": {
-              "data_dir": "resources/IKEA",
-            }
-          },
-          {
-            "module": "loader.IKEALoader",
-            "config": {
-              "data_dir": "resources/IKEA",
-            }
-          },
-          {
-            "module": "loader.IKEALoader",
-            "config": {
-              "data_dir": "resources/IKEA",
+              "bop_dataset_path": "/home/max/Downloads/bop/lm",
+              "model_type": "",
+              "mm2m": True,
+              "sample_objects": True,
+              "move_origin_to_x_y_plane": True,
+              "num_of_objs_to_sample": 20,
+              "cf_set_shading": "SMOOTH"
             }
           },
         ]
@@ -69,31 +140,41 @@
     {
       "module": "camera.CameraSampler",
       "config": {
-        "cam_poses": [
-          {
-            "number_of_samples": 1,
-            "location": {
-              "provider":"sampler.Uniform3d",
-              "max":[10, 10, 8],
-              "min":[-10, -10, 12]
-            },
-            "rotation": {
-              "format": "look_at",
-              "value": {
-                "provider": "getter.POI"
-              },
-              "inplane_rot": {
-                "provider": "sampler.Value",
-                "type": "float",
-                "min": -0.7854,
-                "max": 0.7854
+        "cam_poses": [{
+          "number_of_samples": 5,
+          "proximity_checks": {
+            "min": 1.2
+          },
+          "location": {
+            "provider": "sampler.UpperRegionSampler",
+            "min_height": 1.5,
+            "max_height": 1.8,
+            "to_sample_on": {
+              "provider": "getter.Entity",
+              "index": 0,
+              "conditions": {
+                "name": "Floor",
+                "type": "MESH"
               }
             }
+          },
+          "rotation": {
+            "value": {
+              "provider":"sampler.Uniform3d",
+              "max":[1.4217, 0, 6.283185307],
+              "min":[1.0, 0, 0]
+            }
+          },
+          "check_if_pose_above_object_list": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "name": "Floor",
+              "type": "MESH"
+            }
           }
-        ]
+        }]
       }
     },
-
     {
       "module": "renderer.RgbRenderer",
       "config": {

@@ -7,6 +7,8 @@ import random
 
 from src.main.Module import Module
 from src.object.ObjectPoseSampler import ObjectPoseSampler
+from src.provider.getter.Material import Material
+from src.utility.BlenderUtility import get_bound_volume
 from src.utility.Utility import Utility, Config
 
 
@@ -217,49 +219,53 @@ class RandomRoomConstructor(Module):
             raise Exception("Something went wrong, more than one object were selected after splitting floor and wall.")
         return floor_obj, wall_obj
 
-    def paint_floor_and_wall(self):
-        pass
+    def paint_floor_and_wall(self, floor_obj, wall_obj):
 
-    def sample_new_object_poses_on_face(self, list_of_objects, face_bb):
-        cur_obj = random.choice(list_of_objects)
-        object_was_duplicated = False
-        if "is_placed_random_room_constructor" in cur_obj:
-            # object was placed before needs to be duplicated first
-            bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
-            cur_obj = bpy.context.selected_objects[-1]
-            object_was_duplicated = True
+        # first create a uv mapping for the wall
+        for obj in [floor_obj, wall_obj]:
+            bpy.ops.object.select_all(action='DESELECT')
+            obj.select_set(True)
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='SELECT')
+            bpy.ops.uv.cube_project(cube_size=1.0)
+            bpy.ops.object.mode_set(mode='OBJECT')
 
+        # only select non see through materials
+        config = {"conditions": {"cp_is_cc_texture": True, "cf_principled_bsdf_Alpha_eq": 1.0}}
+        material_getter = Material(Config(config))
+        all_cc_materials = material_getter.run()
+
+        def assign_material(obj, material):
+            # first remove all existing
+            if obj.material_slots:
+                for i in range(len(obj.material_slots)):
+                    bpy.ops.object.material_slot_remove({'object': obj})
+            # add the new one
+            obj.data.materials.append(material)
+
+        assign_material(floor_obj, random.choice(all_cc_materials))
+        assign_material(wall_obj, random.choice(all_cc_materials))
+
+    def sample_new_object_poses_on_face(self, current_obj, face_bb):
         random_placed_value = [random.uniform(face_bb[0][i], face_bb[1][i]) for i in range(2)]
         random_placed_value.append(0.0)  # floor z value
 
+        random_placed_rotation = [0, 0, random.uniform(0, np.pi * 2.0)]
+
         # perform check if object can be placed there
-        no_collision = ObjectPoseSampler.check_pose_for_object(cur_obj, position=random_placed_value, rotation=None,
+        no_collision = ObjectPoseSampler.check_pose_for_object(current_obj, position=random_placed_value,
+                                                               rotation=random_placed_rotation,
                                                                bvh_cache=self.bvh_cache_for_intersection,
                                                                objects_to_check_against=self.placed_objects,
                                                                list_of_objects_with_no_inside_check=[self.wall_obj])
-        print(cur_obj.name, cur_obj.location, no_collision)
-        print("Current placed obj: ", self.placed_objects)
-        if no_collision:
-            # if there was no collision save the object in the placed list
-            self.placed_objects.append(cur_obj)
-            cur_obj["is_placed_random_room_constructor"] = True
-            return True
-        elif object_was_duplicated:
-            if cur_obj.name in self.bvh_cache_for_intersection:
-                del self.bvh_cache_for_intersection[cur_obj.name]
-            # delete the duplicated object
-            bpy.ops.object.select_all(action='DESELECT')
-            cur_obj.select_set(True)
-            bpy.ops.object.delete()
-        else:
-            if cur_obj.name in self.bvh_cache_for_intersection:
-                del self.bvh_cache_for_intersection[cur_obj.name]
-        return False
+        return no_collision
 
     def run(self):
         # construct a random room
         floor_obj, self.wall_obj = self.construct_random_room()
         self.placed_objects.extend([self.wall_obj])
+
+        self.paint_floor_and_wall(floor_obj, self.wall_obj)
 
         # use a loader module to load objects
         bpy.ops.object.select_all(action='SELECT')
@@ -271,8 +277,8 @@ class RandomRoomConstructor(Module):
             module.run()
         bpy.ops.object.select_all(action='SELECT')
         loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
-        print(loaded_objects)
 
+        # get all floor faces and save their size and bounding box for the round robin
         bpy.ops.object.select_all(action='DESELECT')
         floor_obj.select_set(True)
         bpy.ops.object.mode_set(mode='EDIT')
@@ -287,39 +293,80 @@ class RandomRoomConstructor(Module):
             list_of_verts = [v.co for v in face.verts]
             bb_min_point, bb_max_point = np.min(list_of_verts, axis=0), np.max(list_of_verts, axis=0)
             list_of_face_bb.append((bb_min_point, bb_max_point))
-        total_floor_area = sum(list_of_face_sizes)
         bpy.ops.object.mode_set(mode='OBJECT')
         bm.free()
         mesh.update()
         bpy.ops.object.select_all(action='DESELECT')
+        total_face_size = sum(list_of_face_sizes)
 
-        try_per_face = 10
-        step_size = 2  # sample one object on one square meter
-        current_accumulated_face_size = 0.0
-        for face_size, face_bb in zip(list_of_face_sizes, list_of_face_bb):
-            if face_size < step_size:
-                # face size is bigger than one step
-                current_accumulated_face_size += face_size
-                if current_accumulated_face_size > step_size:
-                    for _ in range(try_per_face):
-                        found_spot = self.sample_new_object_poses_on_face(loaded_objects, face_bb)
-                        if found_spot:
-                            break
-                    current_accumulated_face_size -= step_size
-            else:
-                # face size is bigger than one step
-                amount_of_steps = int((face_size + current_accumulated_face_size) / step_size)
-                for i in range(amount_of_steps):
-                    for _ in range(try_per_face):
-                        found_spot = self.sample_new_object_poses_on_face(loaded_objects, face_bb)
-                        if found_spot:
-                            break
-                # left over value is used in next round
-                current_accumulated_face_size = face_size - (amount_of_steps * step_size)
+        # sort them after size
+        loaded_objects.sort(key=lambda obj: get_bound_volume(obj))
+        loaded_objects.reverse()
 
-        bpy.ops.object.mode_set(mode='OBJECT')
-        bm.free()
-        mesh.update()
+        for selected_obj in loaded_objects:
+            current_obj = selected_obj
+            is_duplicated = False
+
+            def duplicate_obj(cur_obj):
+                # object was placed before needs to be duplicated first
+                bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
+                cur_obj = bpy.context.selected_objects[-1]
+                return cur_obj
+
+            # walk over all faces in a round robin
+            try_per_face = 3
+            step_size = 3  # sample one object on one square meter
+            total_acc_size = 0
+            current_i = int(random.uniform(0, 1) * len(list_of_face_sizes))
+            current_accumulated_face_size = math.fmod(sum(list_of_face_sizes[:current_i]), step_size)
+            while total_acc_size < total_face_size:
+                face_size = list_of_face_sizes[current_i]
+                face_bb = list_of_face_bb[current_i]
+                if face_size < step_size:
+                    # face size is bigger than one step
+                    current_accumulated_face_size += face_size
+                    if current_accumulated_face_size > step_size:
+                        for _ in range(try_per_face):
+                            found_spot = self.sample_new_object_poses_on_face(current_obj, face_bb)
+                            if found_spot:
+                                self.placed_objects.append(current_obj)
+                                current_obj = duplicate_obj(cur_obj=current_obj)
+                                is_duplicated = True
+                                break
+                        current_accumulated_face_size -= step_size
+                else:
+                    # face size is bigger than one step
+                    amount_of_steps = int((face_size + current_accumulated_face_size) / step_size)
+                    for i in range(amount_of_steps):
+                        for _ in range(try_per_face):
+                            found_spot = self.sample_new_object_poses_on_face(current_obj, face_bb)
+                            if found_spot:
+                                self.placed_objects.append(current_obj)
+                                current_obj = duplicate_obj(cur_obj=current_obj)
+                                is_duplicated = True
+                                break
+                    # left over value is used in next round
+                    current_accumulated_face_size = face_size - (amount_of_steps * step_size)
+                current_i = (current_i + 1) % len(list_of_face_sizes)
+                total_acc_size += face_size
+
+            # remove current obj from the bvh cache
+            if current_obj.name in self.bvh_cache_for_intersection:
+                del self.bvh_cache_for_intersection[current_obj.name]
+            # if there was no collision save the object in the placed list
+            if is_duplicated:
+                # delete the duplicated object
+                bpy.ops.object.select_all(action='DESELECT')
+                current_obj.select_set(True)
+                bpy.ops.object.delete()
+
+        # delete the loaded objects, which couldn't be placed
+        for obj in loaded_objects:
+            if obj not in self.placed_objects:
+                bpy.ops.object.select_all(action='DESELECT')
+                obj.select_set(True)
+                bpy.ops.object.delete()
+
 
 
 
