@@ -40,23 +40,23 @@ class StereoGlobalMatchingWriter(RendererInterface):
             to false. Default: 0.0
           - float
         * - window_size
-          - Semi-global matching kernel size. Should be an odd number. Default: 7
-          - int. Optional
+          - Semi-global matching kernel size. Should be an odd number. Optional. Default: 7
+          - int
         * - num_disparities
           - Semi-global matching number of disparities. Should be > 0 and divisible by 16. Default: 32
           - int
         * - min_disparity
-          - Semi-global matching minimum disparity. Default: 0
-          - int. Optional
+          - Semi-global matching minimum disparity. Optional. Default: 0
+          - int
         * - avoid_rendering
-          - If true, exit. Default: False.
-          - bool. Optional
+          - If true, exit. Optional. Default: False.
+          - bool
         * - output_disparity
           - Additionally outputs the disparity map. Default: False
           - bool
         * - rgb_output_key
           - The key for the rgb data in the output. Optional. default: colors.
-          - string.
+          - string
     """
 
     def __init__(self, config):
@@ -199,5 +199,4 @@ class StereoGlobalMatchingWriter(RendererInterface):
         self._register_output("stereo-depth_", "stereo-depth", ".npy", "1.0.0")
         if self.config.get_bool("output_disparity", False):
             self._register_output("disparity_", "disparity", ".npy", "1.0.0")
-
 

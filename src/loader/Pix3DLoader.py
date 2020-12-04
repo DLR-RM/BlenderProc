@@ -32,7 +32,7 @@ class Pix3DLoader(LoaderInterface):
           - Type
         * - data_path
           - The path to the Pix3D folder. Default: 'resources/pix3d'.
-          - str
+          - string
         * - category
           - The category to use for example: 'bed', check the data_path/model folder for more categories. Available:
             ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'" , 'wardrobe']

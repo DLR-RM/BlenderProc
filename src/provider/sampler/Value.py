@@ -50,7 +50,7 @@ class Value(Provider):
           - Type
         * - type
           - The type of a value to sample. Available: 'float', 'int', 'boolean'.
-          - string.
+          - string
         * - mode
           - The way of how to sample values. Default: 'uniform'. Available: 'uniform', 'normal'.
           - string

@@ -23,7 +23,7 @@ class FlowRenderer(RendererInterface):
           - string
         * - backward_flow_output_key
           - The key which should be used for storing backward optical flow values. Default: `"backward_flow"`.
-          - string."
+          - string
         * - forward_flow
           - Whether to render forward optical flow. Default: True.
           - bool

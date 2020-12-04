@@ -40,14 +40,14 @@ class Front3DLoader(LoaderInterface):
           - Type
         * - json_path
           - Path to the json file, where the house information is stored.
-          - str
+          - string
         * - 3D_future_model_path
           - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
-          - str
+          - string
         * - mapping_file
           - Path to a file, which maps the names of the objects to ids. Default:
             resources/front_3D/3D_front_mapping.csv
-          - str
+          - string
         * - ceiling_light_strength
           - Strength of the emission shader used in the ceiling. Default: 0.8
           - float

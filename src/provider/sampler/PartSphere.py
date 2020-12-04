@@ -38,7 +38,7 @@ class PartSphere(Provider):
           - mathutils.Vector
         * - radius
           - The radius of the sphere. dius of the sphere. Type: float
-          - float"
+          - float
         * - mode
           - Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling
             from the 2-sphere), INTERIOR (sampling from the 3-ball).

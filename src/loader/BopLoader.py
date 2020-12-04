@@ -32,8 +32,8 @@ class BopLoader(LoaderInterface):
           - Description
           - Type
         * - cam_type
-          - Camera type. Default value: ''.
-          - string. Optional
+          - Camera type. Optional. Default value: "."
+          - string
         * - source_frame
           - Can be used if the given positions and rotations are specified in frames different from the blender
             frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed
@@ -46,11 +46,11 @@ class BopLoader(LoaderInterface):
           - Full path to a specific bop dataset e.g. /home/user/bop/tless.
           - string
         * - mm2m
-          - Specify whether to convert poses and models to meters. Default: False.
-          - bool. Optional
+          - Specify whether to convert poses and models to meters. Optional. Default: False.
+          - bool
         * - split
-          - Optionally, test or val split depending on BOP dataset. Default: test.
-          - string. Optional
+          - Optionally, test or val split depending on BOP dataset. Optional. Default: test.
+          - string
         * - scene_id
           - Optionally, specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,
             only BOP Objects are loaded).
@@ -70,7 +70,7 @@ class BopLoader(LoaderInterface):
             specified).
           - list
         * - model_type
-          - Optionally, specify type of BOP model. Type: string. Default: "".  Default: "". Available: [reconst, cad or eval].
+          - Optionally, specify type of BOP model. Type: string. Default: "".  Available: [reconst, cad or eval].
           - string
     """
 

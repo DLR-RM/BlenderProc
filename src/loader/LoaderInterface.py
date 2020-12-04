@@ -19,7 +19,7 @@ class LoaderInterface(Module):
           - dict
         * - cf_set_shading
           - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]
-          - str
+          - string
     """
     def __init__(self, config):
         Module.__init__(self, config)

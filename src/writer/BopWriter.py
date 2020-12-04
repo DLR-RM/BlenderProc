@@ -110,8 +110,7 @@ class BopWriter(WriterInterface):
           - If true, the new frames will be appended to the existing ones. Default: False
           - bool
         * - ignore_dist_thres
-          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default:
-            5.
+          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 5.
           - float
         * - m2mm
           - Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This

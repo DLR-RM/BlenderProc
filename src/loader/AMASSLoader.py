@@ -75,7 +75,7 @@ class AMASSLoader(LoaderInterface):
           - Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
             Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
             'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
-          - srtring
+          - string
         * - body_model_gender
           - The model gender, pose will represented using male, female or neutral body shape. Available:[male,
             female, neutral]

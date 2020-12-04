@@ -124,11 +124,11 @@ class RockEssentialsRockLoader(LoaderInterface):
           - Flag for enabling HDM when possible. Default: False.
           - boolean
         * - reflection_amount
-          - Reflection texture value. Default: rock-specific.
-          - float (min=0, max=1)
+          - Reflection texture value. Default: rock-specific. Range: [0,1]
+          - float
         * - reflection_roughness
-          - Roughness texture value. Default: rock-specific.
-          - float (min=0, max=1)
+          - Roughness texture value. Default: rock-specific. Range: [0,1]
+          - float
         * - physics
           - Custom property for physics/rigidbody state. Default: False.
           - boolean

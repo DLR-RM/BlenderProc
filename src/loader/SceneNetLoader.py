@@ -32,15 +32,15 @@ class SceneNetLoader(LoaderInterface):
           - Type
         * - file_path
           - The path to the .obj file from SceneNet.
-          - str
+          - string
         * - texture_folder
           - The path to the texture folder used to sample the textures.
-          - str
+          - string
         * - unknown_texture_folder
           - The path to the textures, which are used if the the texture type is unknown. The default path does not
             exist if the dataset was just downloaded, it has to be created manually. Default:
             ${texture_folder}/unknown
-          - str
+          - string
     """
 
     def __init__(self, config):
@@ -169,4 +169,3 @@ class SceneNetLoader(LoaderInterface):
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
                     obj["category_id"] = LabelIdMapping.label_id_map["otherstructure".lower()]
-

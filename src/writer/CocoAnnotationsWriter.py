@@ -38,7 +38,7 @@ class CocoAnnotationsWriter(WriterInterface):
           - string
         * - supercategory
           - Name of the dataset/supercategory to filter for, e.g. a specific BOP dataset. Default: coco_annotations
-          - str
+          - string
         * - append_to_existing_output
           - If true and if there is already a coco_annotations.json file in the output directory, the new coco
             annotations will be appended to the existing file. Also the rgb images will be named such that there are

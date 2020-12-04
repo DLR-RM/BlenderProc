@@ -29,7 +29,7 @@ class IKEALoader(LoaderInterface):
           - Type
         * - data_dir
           - The directory with all the IKEA models. Default: 'resources/IKEA'
-          - str
+          - string
         * - obj_type
           - The category to use for example: 'bookcase'. Default: None. Available: ['bed', 'bookcase', 'chair',
             'desk', 'sofa', 'table', 'wardrobe']

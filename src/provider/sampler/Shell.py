@@ -44,10 +44,10 @@ class Shell(Provider):
           - float
         * - elevation_min
           - Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].
-          - float.
+          - float
         * - elevation_max
           - Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
-          - float.
+          - float
         * - uniform_elevation
           - Uniformly sample elevation angles. Default: False
           - bool

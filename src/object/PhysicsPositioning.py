@@ -66,14 +66,14 @@ class PhysicsPositioning(Module):
             material density). Default: 1.
           - float
         * - friction
-          - Resistance of object to movement. Default: 0.5
-          - float in [0, inf]
+          - Resistance of object to movement. Default: 0.5. Range: [0, inf]
+          - float
         * - angular_damping
-          - Amount of angular velocity that is lost over time. Default: 0.1
-          - float in [0, 1]
+          - Amount of angular velocity that is lost over time. Default: 0.1. Range: [0, 1]
+          - float
         * - linear_damping
-          - Amount of linear velocity that is lost over time. Default: 0.04
-          - float in [0, 1]
+          - Amount of linear velocity that is lost over time. Default: 0.04. Range: [0, 1]
+          - float
     """
 
     def __init__(self, config):

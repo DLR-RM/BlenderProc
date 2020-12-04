@@ -31,10 +31,10 @@ class Color(Provider):
           - Type
         * - min
           - A list of four values, describing the minimum values of R, G, B and A components. Range: [0; 1].
-          - list.
+          - list
         * - max
           - A list of four values, describing the maximum values of R, G, B and A components. Range: [0; 1].
-          - list.
+          - list
         * - grey
           - Sample grey values only. Default: False.
           - bool
