@@ -33,22 +33,42 @@ class RockEssentialsGroundConstructor(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "tiles", "Ground tiles to create, each cell contains a separate tile configuration. Type: list."
+        * - Parameter
+          - Description
+          - Type
+        * - tiles
+          - Ground tiles to create, each cell contains a separate tile configuration.
+          - list
 
     **Ground plane properties**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "shader_path", "Path to a .blend file that containing PBR Rock Shader in //NodeTree// section. Type: string."
-        "plane_scale", "Scale of a ground plane. Type: mathutils Vector/list. Default: [10, 10, 1]."
-        "subdivision_cuts", "Amount of cuts along each plane axis. Type: int. Default: 50."
-        "subdivision_render_levels", "Render level for a plane's subdivision modifier. Type: int. Default: 3."
-        "tile_name", "Name of the ground tile. Set one if you plan to use this module multiple times in one config. "
-                     "Type: string. Default: 'RE_ground_plane'."
+        * - Parameter
+          - Description
+          - Type
+        * - shader_path
+          - Path to a .blend file that containing PBR Rock Shader in //NodeTree// section.
+          - string
+        * - plane_scale
+          - Scale of a ground plane. Default: [10, 10, 1].
+          - mathutils.Vector/list
+        * - subdivision_cuts
+          - Amount of cuts along each plane axis. Default: 50.
+          - int
+        * - subdivision_render_levels
+          - Render level for a plane's subdivision modifier. Default: 3.
+          - int
+        * - tile_name
+          - Name of the ground tile. Set one if you plan to use this module multiple times in one config. Default:
+            'RE_ground_plane'.
+          - string
     """
 
     def __init__(self, config):

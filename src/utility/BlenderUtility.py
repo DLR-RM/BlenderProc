@@ -8,9 +8,10 @@ import numpy as np
 
 def local_to_world(cords, world):
     """
+    Returns a cords transformed to the given transformation world matrix
+
     :param cords: coordinates a tuple of 3 values for x,y,z
     :param world: world matrix <- transformation matrix
-    Returns a cords transformed to the given transformation world matrix
     """
     return [world @ Vector(cord) for cord in cords]
 
@@ -18,7 +19,7 @@ def local_to_world(cords, world):
 def get_bounds(obj):
     """
     :param obj: a mesh object
-    :returns [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
+    :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
@@ -30,7 +31,7 @@ def check_bb_intersection(obj1, obj2):
 
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    returns a boolean
+    :return: a boolean
     """
     b1w = get_bounds(obj1)
 
@@ -156,7 +157,7 @@ def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
 
 def vector_to_euler(vector, vector_type):
     """
-    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils Vector.
+    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.
     :param vector_type: Type of an input vector: UP or FORWARD. Type: string.
     :return: Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.
     """
@@ -179,7 +180,7 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
 
     :param vertices: [[float, float, float]] list of vertices
     :param name: str name of the new object
-    :return the generated obj
+    :return: the generated obj
     """
     mesh = bpy.data.meshes.new('mesh')
     # create new object
@@ -204,7 +205,7 @@ def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='
 
     :param vertices: [[float, float, float]] list of vertices
     :param name: str name of the new object
-    :return the generated obj
+    :return: the generated obj
     """
     if len(vertices) != len(normals):
         raise Exception("The lenght of the vertices and normals is not equal!")
@@ -235,7 +236,7 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
 
     :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
     :param name: name of the new cube
-    :return the generated object
+    :return: the generated object
     """
     if len(bouding_box) != 8:
         raise Exception("The amount of vertices is wrong for this bounding box!")

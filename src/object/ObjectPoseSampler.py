@@ -36,17 +36,27 @@ class ObjectPoseSampler(Module):
           }
         }
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "objects_to_sample", "Here call an appropriate Provider (Getter) in order to select objects. Type: Provider. "
-                             "Default: all mesh objects."
-        "max_iterations", "Amount of tries before giving up on an object and moving to the next one. Type: int. "
-                          "Default: 1000."
-        "pos_sampler", "Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for "
-                       "each object. Type: Provider."
-        "rot_sampler", "Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d "
-                       "vector) for each object. Type: Provider."
+        * - Parameter
+          - Description
+          - Type
+        * - objects_to_sample
+          - Here call an appropriate Provider (Getter) in order to select objects. Default: all mesh objects.
+          - Provider
+        * - max_iterations
+          - Amount of tries before giving up on an object and moving to the next one. Default: 1000.
+          - int
+        * - pos_sampler
+          - Here call an appropriate Provider (Sampler) in order to sample position (XYZ 3d vector) for each object.
+            
+          - Provider
+        * - rot_sampler
+          - Here call an appropriate Provider (Sampler) in order to sample rotation (Euler angles 3d vector) for
+            each object. 
+          - Provider
     """
 
     def __init__(self, config):

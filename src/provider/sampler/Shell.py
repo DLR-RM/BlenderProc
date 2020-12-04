@@ -26,17 +26,31 @@ class Shell(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "center", "Center which is shared by both structure-defining spheres. Type: mathutils.Vector."
-        "radius_min", "Radius of a smaller sphere. Type: float."
-        "radius_max", "Radius of a bigger sphere. Type: float."
-        "elevation_min", "Minimum angle of elevation in degrees: defines slant height of the sampling cone. "
-                         "Type: float. Range: [0, 90]."
-        "elevation_max", "Maximum angle of elevation in degrees: defines slant height of the rejection cone. "
-                         "Type: float. Range: [0, 90]."
-        "uniform_elevation", "Uniformly sample elevation angles. Type: bool. Default: False"
+        * - Parameter
+          - Description
+          - Type
+        * - center
+          - Center which is shared by both structure-defining spheres.
+          - mathutils.Vector
+        * - radius_min
+          - Radius of a smaller sphere.
+          - float
+        * - radius_max
+          - Radius of a bigger sphere.
+          - float
+        * - elevation_min
+          - Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].
+          - float
+        * - elevation_max
+          - Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
+          - float
+        * - uniform_elevation
+          - Uniformly sample elevation angles. Default: False
+          - bool
     """
 
     def __init__(self, config):
@@ -46,7 +60,7 @@ class Shell(Provider):
         """ Sample a point from a space in between two halfspheres with the same center point and a sampling cone with apex in this center.
 
         :param config: A configuration object containing the parameters required to perform sampling.
-        :return: A sampled point. Type: Mathutils vector.
+        :return: A sampled point. Type: mathutils.Vector.
         """
         # Center of both spheres
         center = np.array(self.config.get_list("center"))

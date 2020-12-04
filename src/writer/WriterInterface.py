@@ -11,22 +11,40 @@ from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 
 class WriterInterface(Module):
-    """ Parent class for all other writers classes, it had the functionality to return objects attributes and write them to file and to load and process post processing modules
+    """
+    Parent class for all other writers classes, it had the functionality to return objects attributes and write \
+    them to file and to load and process post processing modules
 
     **Configuration**:
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "postprocessing_modules", "A dict of list of postprocessing modules. The key in the dict specifies the output "
-                                "to which the postprocessing modules should be applied. Every postprocessing module "
-                                "has to have a run function which takes in the raw data and returns the processed "
-                                "data. Type: dict."
-       "destination_frame", "Used to transform point to blender coordinate frame. Type: list. Default: ["X", "Y", "Z"]"
-       "attributes_to_write", "A list of attribute names that should written to file. The next table lists all "
-                              "attributes that can be used here. Type: list."
-       "output_file_prefix", "The prefix of the file that should be created. Type: string."
-       "output_key", "The key which should be used for storing the output in a merged file. Type: string."
-       "write_alpha_channel", "If true, the alpha channel will be written to file. Type: bool. Default: False."
-                                
+
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - postprocessing_modules
+          - A dict of list of postprocessing modules. The key in the dict specifies the output to which the
+            postprocessing modules should be applied. Every postprocessing module has to have a run function which
+            takes in the raw data and returns the processed data. 
+          - dict
+        * - destination_frame
+          - Used to transform point to blender coordinate frame. Default: ["X", "Y", "Z"]
+          - list
+        * - attributes_to_write
+          - A list of attribute names that should written to file. The next table lists all attributes that can be
+            used here. 
+          - list
+        * - output_file_prefix
+          - The prefix of the file that should be created.
+          - string
+        * - output_key
+          - The key which should be used for storing the output in a merged file.
+          - string
+        * - write_alpha_channel
+          - If true, the alpha channel will be written to file. Default: False.
+          - bool
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -99,7 +117,9 @@ class WriterInterface(Module):
             raise Exception("No such attribute: " + attribute_name)
 
     def _apply_postprocessing(self, output_key, data, version):
-        """ Applies all postprocessing modules registered for this output type.
+        """
+        Applies all postprocessing modules registered for this output type.
+
         :param output_key: The key of the output type. Type: string
         :param data: The numpy data.
         :param version: The version number original data.
@@ -117,6 +137,7 @@ class WriterInterface(Module):
     def _load_and_postprocess(self, file_path, key, version = "1.0.0"):
         """
         Loads an image and post process it.
+
         :param file_path: Image path. Type: string.
         :param key: The image's key with regards to the hdf5 file. Type: string.
         :param version: The version number original data. Type: String. Default: 1.0.0.

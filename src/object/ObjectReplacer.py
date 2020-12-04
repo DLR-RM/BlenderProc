@@ -11,20 +11,34 @@ class ObjectReplacer(Module):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "replace_ratio", "Ratio of objects in the original scene, which will be replaced. Type: float. Default: 1."
-        "copy_properties", "Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. "
-                           "Type: bool. Default: True."
-        "objects_to_be_replaced", "Provider (Getter): selects objects, which should be removed from the scene, gets "
-                                  "list of objects following a certain condition. Type: Provider. Default: []."
-        "objects_to_replace_with", "Provider (Getter): selects objects, which will be tried to be added to the scene, "
-                                   "gets list of objects following a certain condition. Type: Provider. Default: []."
-        "ignore_collision_with", "Provider (Getter): selects objects, which are not checked for collisions with. "
-                                 "Type: Provider. Default: []."
-        "max_tries", "Amount of tries, which are performed while trying to replace the objects. Type: int. "
-                     "Default: 100000."
+        * - Parameter
+          - Description
+          - Type
+        * - replace_ratio
+          - Ratio of objects in the original scene, which will be replaced. Default: 1.
+          - float
+        * - copy_properties
+          - Copies the custom properties of the objects_to_be_replaced to the objects_to_replace_with. Default:
+            True.
+          - bool
+        * - objects_to_be_replaced
+          - Provider (Getter): selects objects, which should be removed from the scene, gets list of objects
+            following a certain condition. Default: [].
+          - Provider
+        * - objects_to_replace_with
+          - Provider (Getter): selects objects, which will be tried to be added to the scene, gets list of objects
+            following a certain condition. Default: [].
+          - Provider
+        * - ignore_collision_with
+          - Provider (Getter): selects objects, which are not checked for collisions with. Default: [].
+          - Provider
+        * - max_tries
+          - Amount of tries, which are performed while trying to replace the objects. Default: 100000.
+          - int
     """
 
     def __init__(self, config):

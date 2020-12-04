@@ -6,11 +6,17 @@ class LightSampler(LightInterface):
     
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "lights", "List of lights, which contain all the information to create new lights. See the LightInterface for
-                  "more information. Type: list. Default: []."
+        * - Parameter
+          - Description
+          - Type
+        * - lights
+          - List of lights, which contain all the information to create new lights. See the LightInterface for 
+            more information. Default: [].
+          - list
     """
 
     def __init__(self, config):
@@ -22,4 +28,3 @@ class LightSampler(LightInterface):
         for i, source_spec in enumerate(source_specs):
             # Add new light source based on the sampled settings
             self.light_source_collection.add_item(source_spec)
-

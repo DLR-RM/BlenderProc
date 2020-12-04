@@ -46,16 +46,28 @@ class Texture(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "textures", "A list of texture names. If not None the provider returns a uniform random sampled texture of one"
-                    "of those given texture names. Otherwise it returns a uniform random sampled texture of one of the"
-                    "available blender textures. Type: list. Default: []. Available: ['CLOUDS', 'DISTORTED_NOISE',"
-                    "'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE', 'STUCCI', 'VORONOI', 'WOOD']"
-        "noise_scale", "Scaling for noise input. Type: float. Default: 0.25. Only for VORONOI."
-        "noise_intensity", "Scales the intensity of the noise. Type: float. Default: 1.0. Only for VORONOI."
-        "nabla", "Size of derivative offset used for calculating normal. Type: float. Default: 0.03. Only for VORONOI."
+        * - Parameter
+          - Description
+          - Type
+        * - textures
+          - A list of texture names. If not None the provider returns a uniform random sampled texture of one of
+            those given texture names. Otherwise it returns a uniform random sampled texture of one of the available
+            blender textures. Default: []. Available: ['CLOUDS', 'DISTORTED_NOISE'," 'MAGIC', 'MARBLE', 'MUSGRAVE',
+            'NOISE', 'STUCCI', 'VORONOI', 'WOOD']
+          - list
+        * - noise_scale
+          - Scaling for noise input. Default: 0.25. Only for VORONOI.
+          - float
+        * - noise_intensity
+          - Scales the intensity of the noise. Default: 1.0. Only for VORONOI.
+          - float
+        * - nabla
+          - Size of derivative offset used for calculating normal. Default: 0.03. Only for VORONOI.
+          - float
     """
 
     def __init__(self, config):

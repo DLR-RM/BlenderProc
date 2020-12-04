@@ -7,11 +7,19 @@ class LoaderInterface(Module):
     """
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "add_properties", "Custom properties to set for loaded objects. Use 'cp_' prefix for keys. Type: dict."
-       "cf_set_shading", "Custom function to set the shading of the loaded objects."
-                         "Type: str. Available: ["FLAT", "SMOOTH"]"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - add_properties
+          - Custom properties to set for loaded objects. Use `cp_` prefix for keys.
+          - dict
+        * - cf_set_shading
+          - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]
+          - string
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -21,7 +29,7 @@ class LoaderInterface(Module):
 
         Also runs all custom property functions.
 
-        :parameter objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
+        :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
         """
 
         properties = self.config.get_raw_dict("add_properties", {})
@@ -43,7 +51,7 @@ class LoaderInterface(Module):
         """
         Changes the shading mode of all objects to either flat or smooth. All surfaces of that object are changed.
 
-        :parameter objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
+        :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
         :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH"]. Type: str
         """
         if mode.lower() == "flat":

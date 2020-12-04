@@ -13,13 +13,13 @@ class Pipeline:
         """
         Inits the pipeline, by calling the constructors of all modules mentioned in the config.
 
-        :param config_path path to the config
-        :param args arguments which were provided to the run.py and are specified in the config file
-        :param working_dir the current working dir usually the place where the run.py sits
-        :param working_dir the directory where to put temporary files during the execution
-        :param should_perform_clean_up if the generated temp file should be deleted at the end
-        :param avoid_rendering if this is true all renderes are not executed (except the RgbRenderer,
-                               where only the rendering call to blender is avoided) with this it is possible to debug
+        :param config_path: path to the config
+        :param args: arguments which were provided to the run.py and are specified in the config file
+        :param working_dir: the current working dir usually the place where the run.py sits
+        :param working_dir: the directory where to put temporary files during the execution
+        :param should_perform_clean_up: if the generated temp file should be deleted at the end
+        :param avoid_rendering: if this is true all renderes are not executed (except the RgbRenderer, \
+                               where only the rendering call to blender is avoided) with this it is possible to debug \
                                properly
         """
         Utility.working_dir = working_dir

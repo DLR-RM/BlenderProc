@@ -9,11 +9,19 @@ class ObjectLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "path", "The path to the 3D data file to load. Can be either path or paths not both. Type: string."
-       "paths", "A list of paths of 3D data files to load. Can be either path or paths not both. Type: list."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - The path to the 3D data file to load. Can be either path or paths not both.
+          - string
+        * - paths
+          - A list of paths of 3D data files to load. Can be either path or paths not both.
+          - list
     """
     def __init__(self, config):
         LoaderInterface.__init__(self, config)

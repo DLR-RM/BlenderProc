@@ -13,22 +13,32 @@ class Module:
 
     .. code-block:: yaml
 
-      "module": "main.Initializer",
-      "config":{
-        "global": {
-          "output_dir": "<args:X>"
+      {
+        "module": "main.Initializer",
+        "config":{
+          "global": {
+            "output_dir": "<args:X>"
+          }
         }
       }
 
     If they are set globally all modules will inherit them, if there is no module defined key available.
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "output_is_temp", "If True, all files created in this module will be written into the temp_dir. If False,"
-                         "the output_dir is used. Type: bool."
-       "output_dir", "The path to a directory where all persistent output files should be stored. If it doesn't exist,"
-                     "it is created automatically. Type: string. Default: ""."
+        * - Parameter
+          - Description
+          - Type
+        * - output_is_temp
+          - If True, all files created in this module will be written into the temp_dir. If False, the output_dir is
+            used. 
+          - bool
+        * - output_dir
+          - The path to a directory where all persistent output files should be stored. If it doesn't exist, it is
+            created automatically. Default: "".
+          - string
     """
 
     def __init__(self, config):

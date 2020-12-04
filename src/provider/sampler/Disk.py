@@ -35,23 +35,37 @@ class Disk(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header:, "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "center", "Center (in 3d space) of a 2d geometrical shape to sample from. Type: mathutils.Vector."
-        "radius", "The radius of the disk. Type: float."
-        "rotation", "List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used "
-                   "for sampling in 3d space. Type: mathutils.Vector. Default: [0, 0, 0]."
-        "sample_from", "Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample "
-                      "from. Type: string. Default: "disk". Available: "disk", "circle", "sector", "arc"."
-        "start_angle", "Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller "
-                      "than end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than "
-                      "180 degrees. Angle increases in the counterclockwise direction from the positive direction of X "
-                      "axis. Type: float. Default: 0."
-        "end_angle", "End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than "
-                    "start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 "
-                    "degrees. Angle increases in the counterclockwise direction from the positive direction of X axis. "
-                    "Type: float. Default: 180."
+        * - Parameter
+          - Description
+          - Type
+        * - center
+          - Center (in 3d space) of a 2d geometrical shape to sample from.
+          - mathutils.Vector
+        * - radius
+          - The radius of the disk.
+          - float
+        * - rotation
+          - List of three (XYZ) Euler angles that represent the rotation of the 2d geometrical structure used for
+            sampling in 3d space. Default: [0, 0, 0].
+          - mathutils.Vector
+        * - sample_from
+          - Mode of sampling. Defines the geometrical structure used for sampling, i.e. the shape to sample from.
+            Default: "disk". Available: ["disk", "circle", "sector", "arc"].
+          - string
+        * - start_angle
+          - Start angle in degrees that is used to define a sector/arc to sample from. Must be smaller than
+            end_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 degrees.
+            Angle increases in the counterclockwise direction from the positive direction of X axis. Default: 0.
+          - float
+        * - end_angle
+          - End angle in degrees that is used to define a sector/arc to sample from. Must be bigger than
+            start_angle. Arc's/sector's inner angle (between start and end) must be less or equal than 180 degrees.
+            Angle increases in the counterclockwise direction from the positive direction of X axis. Default: 180.
+          - float
     """
 
     def __init__(self, config):

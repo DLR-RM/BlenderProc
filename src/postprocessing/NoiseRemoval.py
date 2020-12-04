@@ -29,19 +29,15 @@ class NoiseRemoval(Module):
         return np.array(neighbors)
 
     def _remove_noise(self, image, noise_indices):
-
         """
-
         A function that takes an image and a few 2D indices, where these indices correspond to pixel values in
-        segmentation maps, where these values are not real labels, but some deviations from the real labels, that were g
-        enerated as a result of Blender doing some interpolation, smooting, or other numerical operations.
+        segmentation maps, where these values are not real labels, but some deviations from the real labels, that were
+        generated as a result of Blender doing some interpolation, smooting, or other numerical operations.
 
-        Parameters
-        ----------
-        image: ndarray of the .exr segmap
-        noise_indices: a list of 2D indices that correspond to the noisy pixels. One criteria of finding these pixels
-        is to use a histogram and find the pixels with
-        frequencies lower than a threshold, e.g. 100.
+        :param image: ndarray of the .exr segmap
+        :param noise_indices: a list of 2D indices that correspond to the noisy pixels. One criteria of finding \
+                              these pixels is to use a histogram and find the pixels with frequencies lower than \
+                              a threshold, e.g. 100.
         """
 
         for index in noise_indices:

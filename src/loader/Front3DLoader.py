@@ -31,14 +31,29 @@ class Front3DLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
-        "json_path", "Path to the json file, where the house information is stored. Type: str."
-        "3D_future_model_path", "Path to the models used in the 3D-Front dataset. Type: str"
-        "mapping_file", "Path to a file, which maps the names of the objects to ids."
-                        "Type: str. Default: resources/front_3D/3D_front_mapping.csv"
-        "ceiling_light_strength", "Strength of the emission shader used in the ceiling. Type: float. Default: 0.8"
-        "lamp_light_strength", "Strength of the emission shader used in each lamp. Type: float. Default: 7.0"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - json_path
+          - Path to the json file, where the house information is stored.
+          - string
+        * - 3D_future_model_path
+          - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
+          - string
+        * - mapping_file
+          - Path to a file, which maps the names of the objects to ids. Default:
+            resources/front_3D/3D_front_mapping.csv
+          - string
+        * - ceiling_light_strength
+          - Strength of the emission shader used in the ceiling. Default: 0.8
+          - float
+        * - lamp_light_strength
+          - Strength of the emission shader used in each lamp. Default: 7.0
+          - float
    """
 
     def __init__(self, config: Config):
@@ -88,6 +103,7 @@ class Front3DLoader(LoaderInterface):
         This means that the json file contains some mesh, like walls and floors, which have to built up manually.
 
         It also already adds the lighting for the ceiling
+
         :param data: json data dir. Must contain "material" and "mesh"
         """
         # extract all used materials -> there are more materials defined than used
@@ -224,8 +240,9 @@ class Front3DLoader(LoaderInterface):
         """
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
+
         :param data: json data dir. Should contain "furniture"
-        :return all objects which have been loaded
+        :return: all objects which have been loaded
         """
         # collect all loaded furniture objects
         all_objs = []
@@ -305,6 +322,7 @@ class Front3DLoader(LoaderInterface):
         Move and duplicate the furniture depending on the data in the data json dir.
         After loading each object gets a location based on the data in the json file. Some objects are used more than
         once these are duplicated and then placed.
+
         :param data: json data dir. Should contain "scene", which should contain "room"
         :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs
         """

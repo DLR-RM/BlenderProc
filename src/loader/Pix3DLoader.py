@@ -23,13 +23,20 @@ class Pix3DLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "data_path", "The path to the Pix3D folder. Type: str. Default: 'resources/pix3d'."
-       "category", "The category to use for example: 'bed', check the data_path/model folder for more categories."
-                   "Type: string. Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'"
-                   ", 'wardrobe']"
+        * - Parameter
+          - Description
+          - Type
+        * - data_path
+          - The path to the Pix3D folder. Default: 'resources/pix3d'.
+          - string
+        * - category
+          - The category to use for example: 'bed', check the data_path/model folder for more categories. Available:
+            ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'" , 'wardrobe']
+          - string
     """
 
     def __init__(self, config):
@@ -46,6 +53,7 @@ class Pix3DLoader(LoaderInterface):
     def get_files_with_category(used_category, path_to_annotation_file, data_path):
         """
         Returns a list of a .obj file for the given category
+
         :param category: the category something like: 'bed', see the data_path folder for categories
         :param path_to_annotation_file: path to the pix3d.json file, should be in the data_path, too
         :param data_path: path to the Pix3D folder
@@ -83,7 +91,8 @@ class Pix3DLoader(LoaderInterface):
     def _correct_materials(self, objects):
         """
         If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
-        :param objects, objects where the material maybe wrong
+
+        :param objects: objects where the material maybe wrong
         """
 
         for obj in objects:

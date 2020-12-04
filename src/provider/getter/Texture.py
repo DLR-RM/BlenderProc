@@ -38,7 +38,8 @@ class Texture(Provider):
           {
             "name": "ct_2.*",
             "cp_type": "custom"
-          }
+          }]
+        }
         }
 
     Example 3: Returns two random textures with a certain value of a custom property.
@@ -55,36 +56,37 @@ class Texture(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "conditions", "List of dicts/a dict of entries of format {attribute_name: attribute_value}. Entries in a dict "
-                      "are conditions connected with AND, if there multiple dicts are defined (i.e. 'conditions' is a "
-                      "list of dicts, each cell is connected by OR. Type: list/dict."
-        "conditions/attribute_name", "Name of any valid object's attribute, custom property, or custom function. Any "
-                                     "given attribute_value of the type string will be treated as a REGULAR EXPRESSION. "
-                                     "Also, any attribute_value for a custom property can be a string/int/bool/float, "
-                                     "while only attribute_value for valid attributes of objects can be a bool or a "
-                                     "list (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by the "
-                                     "'list' type). Type: string. "
-                                     "In order to specify, what exactly one wants to look for: "
-                                     "For attribute: key of the pair must be a valid attribute name. "
-                                     "For custom property: key of the pair must start with `cp_` prefix. "
-                                     "For calling custom function: key of the pair must start with `cf_` prefix. See "
-                                     "table below for supported custom functions."
-        "conditions/attribute_value", "Any value to set. Type: string, int, bool or float, list/Vector."
-        "index", "If set, after the conditions are applied only the entity with the specified index is returned. "
-                 "Type: int."
-        "random_samples": "If set, this Provider returns random_samples objects from the pool of selected ones. Define "
-                        "index or random_samples property, only one is allowed at a time. Type: int. Default: False."
-
-    **Custom functions**
-
-    .. csv-table::
-        :header: "Parameter", "Description"
-
-        ":(", "No custom functions are available at the moment, please, come back later."
-
+        * - Parameter
+          - Description
+          - Type
+        * - conditions
+          - List of dicts/a dict of entries of format {attribute_name: attribute_value}. Entries in a dict are
+            conditions connected with AND, if there multiple dicts are defined (i.e. 'conditions' is a list of
+            dicts, each cell is connected by OR. 
+          - list/dict
+        * - conditions/attribute_name
+          - Name of any valid object's attribute, custom property, or custom function. Any given attribute_value of
+            the type string will be treated as a REGULAR EXPRESSION. Also, any attribute_value for a custom property
+            can be a string/int/bool/float, while only attribute_value for valid attributes of objects can be a bool
+            or a list (mathutils.Vector, mathurils.Color and mathutils.Euler are covered by the 'list' type). " In
+            order to specify, what exactly one wants to look for: For attribute: key of the pair must be a valid
+            attribute name. For custom property: key of the pair must start with `cp_` prefix. For calling custom
+            function: key of the pair must start with `cf_` prefix. See table below for supported custom functions.
+          - string
+        * - conditions/attribute_value
+          - Any value to set. .
+          - string, list/Vector, int, bool or float
+        * - index
+          - If set, after the conditions are applied only the entity with the specified index is returned. 
+          - int
+        * - random_samples
+          - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or
+            random_samples property, only one is allowed at a time. Default: 0.
+          - int
     """
 
     def __init__(self, config):

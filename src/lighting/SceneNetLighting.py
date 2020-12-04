@@ -14,10 +14,19 @@ class SceneNetLighting(Module):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "lampshade_emission_strength", "The strength of the lamp emission shader. Type: float Default: 15"
-       "ceiling_emission_strength", "The strength of the ceiling emission shader. Type: float Default: 2"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - lampshade_emission_strength
+          - The strength of the lamp emission shader. Default: 15
+          - float 
+        * - ceiling_emission_strength
+          - The strength of the ceiling emission shader. Default: 2
+          - float 
     """
 
     def __init__(self, config):
@@ -39,7 +48,8 @@ class SceneNetLighting(Module):
         Add emission shader to the materials of the objects which are named either lamp or ceiling
 
         This will even work if the original materials have been replaced
-        :param objects, to change the materials of
+
+        :param objects: to change the materials of
         """
         # for each object add a material
         for obj in objects:

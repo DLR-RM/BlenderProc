@@ -19,72 +19,123 @@ class CameraInterface(Module):
     .. code-block:: yaml
 
         {
-          "module": "camera.CameraLoader",
-          "config": {
-            "path": "<args:0>",
-            "file_format": "location rotation/value _ _ _ _ _ _",
-            "source_frame": ["X", "-Z", "Y"],
-            "default_cam_param": {
-              "rotation": {
-                "format": "forward_vec"
-              }
-            },
-            "intrinsics": {
-              "fov": 1
+            "module": "camera.CameraLoader",
+            "config": {
+                "path": "<args:0>",
+                "file_format": "location rotation/value _ _ _ _ _ _",
+                "source_frame": ["X", "-Z", "Y"],
+                "default_cam_param": {
+                    "rotation": {
+                        "format": "forward_vec"
+                    }
+                },
+                "intrinsics": {
+                    "fov": 1
+                }
             }
-          }
         }
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
-                        "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
-                        "will be transformed to (1, -3, 2). Type: list. Default: ["X", "Y", "Z"]. "
-                        "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
-        "cam_poses", "A list of dicts, where each dict specifies one cam pose. See the next table for details about specific properties. Type: list."
-        "default_cam_param", "Properties across all cam poses. Type: dict."
-        "intrinsics", "A dictionary containing camera intrinsic parameters. See the last table for details. Type: dict. Default: {}."
+        * - Parameter
+          - Description
+          - Type
+        * - source_frame
+          - Can be used if the given positions and rotations are specified in frames different from the blender
+            frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed
+            to (1, -3, 2). Default: ["X", "Y", "Z"]. " Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
+          - list
+        * - cam_poses
+          - A list of dicts, where each dict specifies one cam pose. See the next table for details about specific
+            properties.
+          - list
+        * - default_cam_param
+          - Properties across all cam poses.
+          - dict
+        * - intrinsics
+          - A dictionary containing camera intrinsic parameters. See the last table for details. Default: {}.
+          - dict
 
     **Properties per cam pose**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "location", "The position of the camera, specified as a list of three values (xyz). Type: mathutils.Vector."
-        "rotation/value", "Specifies the rotation of the camera. Per default rotations are specified as three euler "
-                          "angles. Type: mathutils.Vector."
-        "rotation/format", "Describes the form in which the rotation is specified. Type: string. Available: 'euler' "
-                           "(three Euler angles), 'forward_vec'(specified with a forward vector: the Y-Axis is assumed "
-                           "as Up-Vector), 'look_at' (camera will be turned such as it looks at 'value' location, which "
-                           "can be defined as a fixed or sampled XYZ location)."
-        "rotation/inplane_rot", "A rotation angle in radians around the Z axis. Type: float. Default: 0.0"
-        "cam2world_matrix", "4x4 camera extrinsic matrix. Type: list of floats. Default: []."
+        * - Parameter
+          - Description
+          - Type
+        * - location
+          - The position of the camera, specified as a list of three values (xyz).
+          - mathutils.Vector
+        * - rotation/value
+          - Specifies the rotation of the camera. Per default rotations are specified as three euler angles. 
+          - mathutils.Vector
+        * - rotation/format
+          - Describes the form in which the rotation is specified. Available: 'euler' (three Euler angles),
+            'forward_vec'(specified with a forward vector: the Y-Axis is assumed as Up-Vector), 'look_at' (camera
+            will be turned such as it looks at 'value' location, which can be defined as a fixed or sampled XYZ location).
+          - string
+        * - rotation/inplane_rot
+          - A rotation angle in radians around the Z axis. Default: 0.0
+          - float
+        * - cam2world_matrix
+          - 4x4 camera extrinsic matrix. Default: [].
+          - list of floats
 
     **Intrinsic camera parameters**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "cam_K", "Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left "
-                 "pixel - this is the convention e.g. used in OpenCV. Type: list. "
-        "shift", "Principal Point deviation from center. The unit is proportion of the larger image dimension. Type: float."
-        "fov", "The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed "
-               "to be the angle between forward vector and one side of the frustum). Type: float. "
-        "resolution_x", "Width resolution of the camera. Type: int. "
-        "resolution_y", "Height resolution of the camera. Type: int. "
-        "pixel_aspect_x", "Pixel aspect ratio x. Type: float."
-        "pixel_aspect_y", "Pixel aspect ratio y. Type: float."
-        "clip_start", "Near clipping. Type: float."
-        "clip_end", "Far clipping. Type: float. "
-        "stereo_convergence_mode", "How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards "
-                                   "to converge in the convergence plane, or parallel where they do not converge and "
-                                   "are parallel). Type: string.."
-        "convergence_distance", "The convergence point for the stereo cameras (i.e. distance from the projector to the "
-                                "projection screen). Type: float."
-        "interocular_distance", "Distance between the camera pair. Type: float.",
+        * - Parameter
+          - Description
+          - Type
+        * - cam_K
+          - Camera Matrix K. Cx, cy are defined in a coordinate system with (0,0) being the CENTER of the top-left
+            pixel - this is the convention e.g. used in OpenCV. 
+          - list
+        * - shift
+          - Principal Point deviation from center. The unit is proportion of the larger image dimension.
+          - float
+        * - fov
+          - The FOV (normally the angle between both sides of the frustum, if fov_is_half is True than its assumed
+            to be the angle between forward vector and one side of the frustum). 
+          - float
+        * - resolution_x
+          - Width resolution of the camera.
+          - int
+        * - resolution_y
+          - Height resolution of the camera.
+          - int
+        * - pixel_aspect_x
+          - Pixel aspect ratio x.
+          - float
+        * - pixel_aspect_y
+          - Pixel aspect ratio y.
+          - float
+        * - clip_start
+          - Near clipping.
+          - float
+        * - clip_end
+          - Far clipping.
+          - float
+        * - stereo_convergence_mode
+          - How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the
+            convergence plane, or parallel where they do not converge and are parallel). 
+          - string.
+        * - convergence_distance
+          - The convergence point for the stereo cameras (i.e. distance from the projector to the projection
+            screen). 
+          - float
+        * - interocular_distance
+          - Distance between the camera pair.
+          - float
     """
 
     def __init__(self, config):
@@ -96,12 +147,13 @@ class CameraInterface(Module):
 
            1. from config function parameter if defined
            2. from custom properties of cam if set in Loader
-           3. default config
-                resolution_x/y: 512 
+           3. default config:
+                resolution_x/y: 512
                 pixel_aspect_x: 1
                 clip_start:   : 0.1
                 clip_end      : 1000
                 fov           : 0.691111
+
         :param cam: The camera which contains only camera specific attributes.
         :param config: A configuration object with cam intrinsics.
         """

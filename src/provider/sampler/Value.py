@@ -41,15 +41,31 @@ class Value(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "type", "The type of a value to sample. Type: string. Available: 'float', 'int', 'boolean'."
-        "mode", "The way of how to sample values. Type: string. Default: 'uniform'. Available: 'uniform', 'normal'."
-        "min", "The minimum value. Optional. Type: float/int."
-        "max", "The maximum value (excluded frm the defined range of values). Type: float/int."
-        "mean", "Mean (“centre”) of the normal (Gaussian) distribution. Type: float."
-        "std_dev", "Standard deviation (spread or “width”) of the normal (Gaussian) distribution. Type: float."
+        * - Parameter
+          - Description
+          - Type
+        * - type
+          - The type of a value to sample. Available: 'float', 'int', 'boolean'.
+          - string
+        * - mode
+          - The way of how to sample values. Default: 'uniform'. Available: 'uniform', 'normal'.
+          - string
+        * - min
+          - The minimum value. Optional.
+          - float/int
+        * - max
+          - The maximum value (excluded frm the defined range of values).
+          - float/int
+        * - mean
+          - Mean (“centre”) of the normal (Gaussian) distribution.
+          - float
+        * - std_dev
+          - Standard deviation (spread or “width”) of the normal (Gaussian) distribution.
+          - float
     """
 
     def __init__(self, config):
@@ -57,7 +73,7 @@ class Value(Provider):
 
     def run(self):
         """
-        :return: Sampled value. Type: Mathutils Vector
+        :return: Sampled value. Type: mathutils.Vector
         """
         # get type of the value to sample
         val_type = self.config.get_string("type")

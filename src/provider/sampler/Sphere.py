@@ -21,13 +21,23 @@ class Sphere(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "center", "Location of the center of the sphere. Type: mathutils.Vector."
-        "radius", "The radius of the sphere. Type: float."
-        "mode", "Mode of sampling. Determines the geometrical structure used for sampling. Type: string. "
-                "Available: SURFACE (sampling from the 2-sphere), INTERIOR (sampling from the 3-ball)."
+        * - Parameter
+          - Description
+          - Type
+        * - center
+          - Location of the center of the sphere.
+          - mathutils.Vector
+        * - radius
+          - The radius of the sphere.
+          - float
+        * - mode
+          - Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling
+            from the 2-sphere), INTERIOR (sampling from the 3-ball).
+          - string
     """
 
     def __init__(self, config):
@@ -38,7 +48,7 @@ class Sphere(Provider):
     def run(self):
         """
         :param config: A configuration object containing the parameters necessary to sample.
-        :return: A random point lying inside or on the surface of a solid sphere. Type: mathutils vector
+        :return: A random point lying inside or on the surface of a solid sphere. Type: mathutils.Vector
         """
         # Center of the sphere.
         center = np.array(self.config.get_list("center"))
@@ -54,9 +64,9 @@ class Sphere(Provider):
         """
         Samples a point according to the mode, the center and the radius.
 
-       :param center, A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
-       :param radius, The radius of the sphere. Type: float
-       :param mode, Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
+       :param center: A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
+       :param radius: The radius of the sphere. Type: float
+       :param mode: Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
         """
         # Sample
         direction = np.random.normal(size=3)

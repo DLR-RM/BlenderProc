@@ -21,19 +21,30 @@ class CCMaterialLoader(Module):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "folder_path", "The path to the downloaded cc0textures. Type: string. Default: resources/cctextures."
-       "used_assets", "A list of all asset names, you want to use. The asset-name must not be typed in completely,"
-                      "only the beginning the name starts with. By default all assets will be loaded, specified by"
-                      "an empty list. Type: list. Default: []."
-       "add_custom_properties", "A dictionary of materials and the respective properties."
-                                "Type: dict. Default: {}."
-       "preload", "If set true, only the material names are loaded and not the complete material."
-                  "Type: bool. Default: False"
-       "fill_used_empty_materials", "If set true, the preloaded materials, which are used are now loaded completely."
-                                    "Type: bool. Default: False"
+        * - Parameter
+          - Description
+          - Type
+        * - folder_path
+          - The path to the downloaded cc0textures. Default: resources/cctextures.
+          - string
+        * - used_assets
+          - A list of all asset names, you want to use. The asset-name must not be typed in completely, only the
+            beginning the name starts with. By default all assets will be loaded, specified by an empty list.
+            Default: [].
+          - list
+        * - add_custom_properties
+          - A dictionary of materials and the respective properties. Default: {}.
+          - dict
+        * - preload
+          - If set true, only the material names are loaded and not the complete material. Default: False
+          - bool
+        * - fill_used_empty_materials
+          - If set true, the preloaded materials, which are used are now loaded completely. Default: False
+          - bool
     """
 
     def __init__(self, config):

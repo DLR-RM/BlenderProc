@@ -1,10 +1,8 @@
-import glob
 import json
 import os
 import random
 from datetime import datetime
 import numpy as np
-import shutil
 
 import mathutils
 
@@ -63,15 +61,34 @@ class AMASSLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table::
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "data_path", "The path to the AMASS Dataset folder in resources folder. Type: string. Default: 'resources/AMASS'."
-       "sub_dataset_id", "Identifier for the sub dataset, the dataset which the human pose object should be extracted from. Type: srtring. Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture', 'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']" 
-       "body_model_gender", "The model gender, pose will represented using male, female or neutral body shape. Type: string. Available:[male, female, neutral]" 
-       "subject_id", "Type of motion from which the pose should be extracted, this is dataset dependent parameter. Type: int." 
-       "sequence_id", "Sequence id in the dataset, sequences are the motion recorded to represent certain action. Type: int." 
-       "frame_id", "Frame id in a selected motion sequence. Type: int."
+        * - Parameter
+          - Description
+          - Type
+        * - data_path
+          - The path to the AMASS Dataset folder in resources folder. Default: 'resources/AMASS'.
+          - string
+        * - sub_dataset_id
+          - Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
+            Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
+            'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
+          - string
+        * - body_model_gender
+          - The model gender, pose will represented using male, female or neutral body shape. Available:[male,
+            female, neutral]
+          - string
+        * - subject_id
+          - Type of motion from which the pose should be extracted, this is dataset dependent parameter.
+          - int
+        * - sequence_id
+          - Sequence id in the dataset, sequences are the motion recorded to represent certain action.
+          - int
+        * - frame_id
+          - Frame id in a selected motion sequence.
+          - int
     """
 
     # dictionary contains mocap dataset name and path to its sub folder within the main dataset, dictionary will
@@ -241,7 +258,7 @@ class AMASSLoader(LoaderInterface):
     def _correct_materials(self, objects):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
-        :param objects, objects where the material maybe wrong. Type: bpy.types.Object.
+        :param objects: objects where the material maybe wrong. Type: bpy.types.Object.
         """
 
         for obj in objects:

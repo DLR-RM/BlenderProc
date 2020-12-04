@@ -10,13 +10,25 @@ class CameraStateWriter(WriterInterface):
 
     **Attributes per object**:
 
-    .. csv-table::
-       :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "fov_x", "The horizontal FOV. Type: float."
-       "fov_y", "The vertical FOV. Type: float."
-       "half_fov_x", "Half of the horizontal FOV. Type: float."
-       "half_fov_y", "Half of the vertical FOV. Type: float."
+        * - Parameter
+          - Description
+          - Type
+        * - fov_x
+          - The horizontal FOV.
+          - float
+        * - fov_y
+          - The vertical FOV.
+          - float
+        * - half_fov_x
+          - Half of the horizontal FOV.
+          - float
+        * - half_fov_y
+          - Half of the vertical FOV.
+          - float
     """
 
     def __init__(self, config):

@@ -11,37 +11,69 @@ class PhysicsPositioning(Module):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "object_stopped_location_threshold", "The maximum difference per second and per coordinate in the location "
-                                             "vector that is allowed, such that an object is still recognized as "
-                                             "'stopped moving'. Type: float. Default: 0.01"
-        "object_stopped_rotation_threshold", "The maximum difference per second and per coordinate in the rotation "
-                                             "Euler vector that is allowed. such that an object is still recognized as "
-                                             "'stopped moving'. Type: float. Default: 0.1"
-        "min_simulation_time", "The minimum number of seconds to simulate. Type: float. Default: 4.0"
-        "check_object_interval", "The interval in seconds at which all objects should be checked if they are still "
-                                 "moving. If all objects have stopped moving, than the simulation will be stopped. "
-                                 "Type: float. Default: 2.0"
-        "max_simulation_time", "The maximum number of seconds to simulate. Type: int. Default: 40.0"
-        "collision_margin", "The margin around objects where collisions are already recognized. Higher values improve "
-                            "stability, but also make objects hover a bit. Type: float. Default: 0.001."
-        "substeps_per_frame", "Number of simulation steps taken per frame. Type: int. Default: 10."
-        "solver_iters", "Number of constraint solver iterations made per simulation step. Type: int. Default: 10."
-        "collision_mesh_source", "Source of the mesh used to create collision shape. Type: string. Default: 'FINAL'. "
-                                 "Available: 'BASE', 'DEFORM', 'FINAL'."
-        "collision_shape", "Collision shape of object in simulation. Type: string. Default: 'CONVEX_HULL'. "
-                           "Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'."
-        "objs_with_box_collision_shape", "List of objects that get 'BOX' collision shape instead 'collision_shape'."
-                                         "Result of the getter.Entity. Type: list. Default: []"
-        "mass_scaling", "Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Type: bool. Default: False."
-        "mass_factor", "Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor "
-                       "(defines material density). Type: float. Default: 1."
-        "friction", "Resistance of object to movement. Type: float in [0, inf]. Default: 0.5"
-        "angular_damping", "Amount of angular velocity that is lost over time. Type: float in [0, 1]. Default: 0.1"
-        "linear_damping", "Amount of linear velocity that is lost over time. Type: float in [0, 1]. Default: 0.04"
-        
+        * - Parameter
+          - Description
+          - Type
+        * - object_stopped_location_threshold
+          - The maximum difference per second and per coordinate in the location vector that is allowed, such that
+            an object is still recognized as 'stopped moving'. Default: 0.01
+          - float
+        * - object_stopped_rotation_threshold
+          - The maximum difference per second and per coordinate in the rotation Euler vector that is allowed. such
+            that an object is still recognized as 'stopped moving'. Default: 0.1
+          - float
+        * - min_simulation_time
+          - The minimum number of seconds to simulate. Default: 4.0
+          - float
+        * - check_object_interval
+          - The interval in seconds at which all objects should be checked if they are still moving. If all objects
+            have stopped moving, than the simulation will be stopped. Default: 2.0
+          - float
+        * - max_simulation_time
+          - The maximum number of seconds to simulate. Default: 40.0
+          - int
+        * - collision_margin
+          - The margin around objects where collisions are already recognized. Higher values improve stability, but
+            also make objects hover a bit. Default: 0.001.
+          - float
+        * - substeps_per_frame
+          - Number of simulation steps taken per frame. Default: 10.
+          - int
+        * - solver_iters
+          - Number of constraint solver iterations made per simulation step. Default: 10.
+          - int
+        * - collision_mesh_source
+          - Source of the mesh used to create collision shape. Default: 'FINAL'. Available: 'BASE', 'DEFORM',
+            'FINAL'.
+          - string
+        * - collision_shape
+          - Collision shape of object in simulation. Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE',
+            'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'.
+          - string
+        * - objs_with_box_collision_shape
+          - List of objects that get 'BOX' collision shape instead 'collision_shape'. Result of the getter.Entity.
+            Default: []
+          - list
+        * - mass_scaling
+          - Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Default: False.
+          - bool
+        * - mass_factor
+          - Scaling factor for mass. Defines the linear function mass=bounding_box_volume*mass_factor (defines
+            material density). Default: 1.
+          - float
+        * - friction
+          - Resistance of object to movement. Default: 0.5. Range: [0, inf]
+          - float
+        * - angular_damping
+          - Amount of angular velocity that is lost over time. Default: 0.1. Range: [0, 1]
+          - float
+        * - linear_damping
+          - Amount of linear velocity that is lost over time. Default: 0.04. Range: [0, 1]
+          - float
     """
 
     def __init__(self, config):
@@ -241,7 +273,7 @@ class PhysicsPositioning(Module):
     def _have_objects_stopped_moving(self, last_poses, new_poses):
         """ Check if the difference between the two given poses per object is smaller than the configured threshold.
 
-        :param last_poses. Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
+        :param last_poses: Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :param new_poses: Type: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         :return: True, if no objects are moving anymore.
         """

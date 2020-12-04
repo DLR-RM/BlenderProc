@@ -11,26 +11,37 @@ from src.utility.Utility import Utility
 
 
 class ReplicaCameraSampler(CameraSampler):
-    """ Samples valid camera poses inside replica rooms.
+    """
+    Samples valid camera poses inside replica rooms.
 
-        Works as the standard camera sampler, except the following differences:
-        - Always sets the x and y coordinate of the camera location to a value uniformly sampled inside of a room's
-          bounding box
-        - The configured z coordinate of the configured camera location is used as relative to the floor
-        - All sampled camera locations need to lie straight above the room's floor to be valid
-        - Using the scene coverage/interestingness score in the ReplicaCameraSampler does not make much sense, as the
-          3D mesh is not split into individual objects.
+    Works as the standard camera sampler, except the following differences:
+    - Always sets the x and y coordinate of the camera location to a value uniformly sampled inside of a room's \
+      bounding box
+    - The configured z coordinate of the configured camera location is used as relative to the floor
+    - All sampled camera locations need to lie straight above the room's floor to be valid
+    - Using the scene coverage/interestingness score in the ReplicaCameraSampler does not make much sense, as the \
+      3D mesh is not split into individual objects.
 
-        See parent class CameraSampler for more details.
+    See parent class CameraSampler for more details.
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "is_replica_object", "Whether it's a Replica object. Type: bool. Default: False."
-        "height_list_path", "Path to height list. Type: string."
-        "data_set_name", "Dataset name in case is_replica_object is set to false. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - is_replica_object
+          - Whether it's a Replica object. Default: False.
+          - bool
+        * - height_list_path
+          - Path to height list.
+          - string
+        * - data_set_name
+          - Dataset name in case is_replica_object is set to false.
+          - string
     """
 
     def __init__(self, config):

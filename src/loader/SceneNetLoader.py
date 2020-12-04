@@ -23,13 +23,24 @@ class SceneNetLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "file_path", "The path to the .obj file from SceneNet. Type: str."
-       "texture_folder", "The path to the texture folder used to sample the textures. Type: str."
-       "unknown_texture_folder", "The path to the textures, which are used if the the texture type is unknown."
-                                 "The default path does not exist if the dataset was just downloaded, it has to be"
-                                 "created manually. Type: str. Default: ${texture_folder}/unknown"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - file_path
+          - The path to the .obj file from SceneNet.
+          - string
+        * - texture_folder
+          - The path to the texture folder used to sample the textures.
+          - string
+        * - unknown_texture_folder
+          - The path to the textures, which are used if the the texture type is unknown. The default path does not
+            exist if the dataset was just downloaded, it has to be created manually. Default:
+            ${texture_folder}/unknown
+          - string
     """
 
     def __init__(self, config):
@@ -79,7 +90,7 @@ class SceneNetLoader(LoaderInterface):
 
         Based on the name the textures from the texture_folder will be selected
 
-        :param loaded_objects objects loaded from the .obj file
+        :param loaded_objects: objects loaded from the .obj file
         """
         # for each object add a material
         for obj in loaded_objects:
@@ -131,7 +142,7 @@ class SceneNetLoader(LoaderInterface):
 
         Each object will have a custom property with a label, can be used by the SegMapRenderer.
 
-        :param loaded_objects objects loaded from the .obj file
+        :param loaded_objects: objects loaded from the .obj file
         """
 
         #  Some category names in scenenet objects are written differently than in nyu_idset.csv
@@ -158,4 +169,3 @@ class SceneNetLoader(LoaderInterface):
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
                     obj["category_id"] = LabelIdMapping.label_id_map["otherstructure".lower()]
-

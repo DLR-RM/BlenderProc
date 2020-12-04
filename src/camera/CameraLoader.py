@@ -42,18 +42,32 @@ class CameraLoader(CameraInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "cam_poses", "Optionally, a list of dicts, where each dict specifies one cam pose. See CameraInterface for which "
-                    "properties can be set. Type: list of dicts. Default: []."
-       "path", "Optionally, a path to a file which specifies one camera position per line. The lines has to be "
-               "formatted as specified in 'file_format'. Type: string. Default: ""."
-       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain "
-                      "the keywords of the corresponding properties separated by a space. See next table for allowed "
-                      "properties. Type: string. Default: ""."
-       "default_cam_param", "A dict which can be used to specify properties across all cam poses. Type: dict. Default: {}."
-       "intrinsics", "A dictionary containing camera intrinsic parameters. Type: dict. Default: {}."
+        * - Parameter
+          - Description
+          - Type
+        * - cam_poses
+          - Optionally, a list of dicts, where each dict specifies one cam pose. See CameraInterface for which
+            properties can be set. Default: [].
+          - list of dicts
+        * - path
+          - Optionally, a path to a file which specifies one camera position per line. The lines has to be formatted
+            as specified in 'file_format'. Default: "".
+          - string
+        * - file_format
+          - A string which specifies how each line of the given file is formatted. The string should contain the
+            keywords of the corresponding properties separated by a space. See next table for allowed properties.
+            Default: "".
+          - string
+        * - default_cam_param
+          - A dict which can be used to specify properties across all cam poses. Default: {}.
+          - dict
+        * - intrinsics
+          - A dictionary containing camera intrinsic parameters. Default: {}.
+          - dict
     """
 
     def __init__(self, config):

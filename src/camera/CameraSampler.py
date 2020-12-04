@@ -59,63 +59,98 @@ class CameraSampler(CameraInterface):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "intrinsics", "A dict which contains the intrinsic camera parameters. Check CameraInterface "
-                      "for more info. Type: dict. Default: {}."
-        "cam_poses", "Camera poses configuration list. Each cell contains a separate config data. Type: list."
-        "default_cam_param", "A dict which can be used to specify properties across all cam poses. Check CameraInterface "
-                             "for more info. Type: dict. Default: {}."
+        * - Parameter
+          - Description
+          - Type
+        * - intrinsics
+          - A dict which contains the intrinsic camera parameters. Check CameraInterface for more info. Default:
+            {}.
+          - dict
+        * - cam_poses
+          - Camera poses configuration list. Each cell contains a separate config data.
+          - list
+        * - default_cam_param
+          - A dict which can be used to specify properties across all cam poses. Check CameraInterface for more
+            info. Default: {}.
+          - dict
 
     **Properties per cam pose**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "number_of_samples", "The number of camera poses that should be sampled. Note depending on some constraints "
-                             "(e.g. interest scores), the sampler might not return all of the camera poses if the "
-                             "number of tries exceeded the configured limit. Type: int. Default: 1."
-        "max_tries", "The maximum number of tries that should be made to sample the requested number of cam poses per "
-                     "interest score. Type: int. Default: 100000000."
-        "sqrt_number_of_rays", "The square root of the number of rays which will be used to determine, if there is an "
-                               "obstacle in front of the camera. Type: int. Default: 10."
-        "proximity_checks", "A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries "
-                            "containing thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical "
-                            "threshold in case of max or min. The operators are combined in conjunction (i.e boolean "
-                            "AND). This can also be used to avoid the background in images, with the"
-                            "no_background: True option. Type: dict. Default: {}.
-        "excluded_objs_in_proximity_check", "A list of objects, returned by getter.Entity to remove some objects from"
-                                            "the proximity checks defined in 'proximity_checks'."
-                                            "Type: list. Default: []"
-        "min_interest_score", "Arbitrary threshold to discard cam poses with less interesting views. Type: float. "
-                              "Default: 0.0."
-        "interest_score_range", "The maximum of the range of interest scores that would be used to sample the camera "
-                                "poses. Interest score range example: min_interest_score = 0.8, interest_score_range = "
-                                "1.0, interest_score_step = 0.1 interest score list = [1.0, 0.9, 0.8]. The sampler "
-                                "would reject any pose with score less than 1.0. If max tries is reached, it would "
-                                "switch to 0.9 and so on. min_interest_score = 0.8, interest_score_range = 0.8, "
-                                "interest_score_step = 0.1 (or any value bigger than 0) interest score list = [0.8]. "
-                                "Type: float. Default: min_interest_score."
-        "interest_score_step", "Step size for the list of interest scores that would be tried in the range from "
-                               "min_interest_score to interest_score_range. Must be bigger than 0. Type: float. "
-                               "Default: 0.1."
-        "special_objects", "Objects that weights differently in calculating whether the scene is interesting or not, "
-                           "uses the coarse_grained_class or if not SUNCG, 3D Front, the category_id."
-                           "Type: list. Default: []."
-        "special_objects_weight", "Weighting factor for more special objects, used to estimate the interestingness of "
-                                  "the scene. Type: float. Default: 2.0."
-        "check_pose_novelty_rot", "Checks that a sampled new pose is novel with respect to the rotation component. "
-                                  "Type: bool. Default: False"
-        "check_pose_novelty_translation", "Checks that a sampled new pose is novel with respect to the translation "
-                                          "component. Type: bool. Default: False."
-        "min_var_diff_rot", "Considers a pose novel if it increases the variance of the rotation component of all poses "
-                            "sampled by this parameter's value in percentage. If set to -1, then it would only check "
-                            "that the variance is increased. Type: float. Default: sys.float_info.min."
-        "min_var_diff_translation", "Same as min_var_diff_rot but for translation. If set to -1, then it would only "
-                                    "check that the variance is increased. Type: float. Default: sys.float_info.min."
-        "check_if_pose_above_object_list", "A list of objects, where each camera has to be above, could be the floor "
-                                           "or a table. Type: list. Default: []."
+        * - Parameter
+          - Description
+          - Type
+        * - number_of_samples
+          - The number of camera poses that should be sampled. Note depending on some constraints (e.g. interest
+            scores), the sampler might not return all of the camera poses if the number of tries exceeded the
+            configured limit. Default: 1.
+          - int
+        * - max_tries
+          - The maximum number of tries that should be made to sample the requested number of cam poses per interest
+            score. Default: 100000000.
+          - int
+        * - sqrt_number_of_rays
+          - The square root of the number of rays which will be used to determine, if there is an obstacle in front
+            of the camera. Default: 10.
+          - int
+        * - proximity_checks
+          - A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing
+            thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min.
+            The operators are combined in conjunction (i.e boolean AND). This can also be used to avoid the
+            background in images, with the no_background: True option. Default: {}.
+          - dict
+        * - excluded_objs_in_proximity_check
+          - A list of objects, returned by getter.Entity to remove some objects from the proximity checks defined in
+            'proximity_checks'. Default: []
+          - list
+        * - min_interest_score
+          - Arbitrary threshold to discard cam poses with less interesting views. Default: 0.0.
+          - float
+        * - interest_score_range
+          - The maximum of the range of interest scores that would be used to sample the camera poses. Interest
+            score range example: min_interest_score = 0.8, interest_score_range = 1.0, interest_score_step = 0.1
+            interest score list = [1.0, 0.9, 0.8]. The sampler would reject any pose with score less than 1.0. If
+            max tries is reached, it would switch to 0.9 and so on. min_interest_score = 0.8, interest_score_range =
+            0.8, interest_score_step = 0.1 (or any value bigger than 0) interest score list = [0.8]. Default:
+            min_interest_score.
+          - float
+        * - interest_score_step
+          - Step size for the list of interest scores that would be tried in the range from min_interest_score to
+            interest_score_range. Must be bigger than 0. " Default: 0.1.
+          - float
+        * - special_objects
+          - Objects that weights differently in calculating whether the scene is interesting or not, uses the
+            coarse_grained_class or if not SUNCG, 3D Front, the category_id. Default: [].
+          - list
+        * - special_objects_weight
+          - Weighting factor for more special objects, used to estimate the interestingness of the scene. Default:
+            2.0.
+          - float
+        * - check_pose_novelty_rot
+          - Checks that a sampled new pose is novel with respect to the rotation component. Default: False
+          - bool
+        * - check_pose_novelty_translation
+          - Checks that a sampled new pose is novel with respect to the translation component. Default: False.
+          - bool
+        * - min_var_diff_rot
+          - Considers a pose novel if it increases the variance of the rotation component of all poses sampled by
+            this parameter's value in percentage. If set to -1, then it would only check that the variance is
+            increased. Default: sys.float_info.min.
+          - float
+        * - min_var_diff_translation
+          - Same as min_var_diff_rot but for translation. If set to -1, then it would only check that the variance
+            is increased. Default: sys.float_info.min.
+          - float
+        * - check_if_pose_above_object_list
+          - A list of objects, where each camera has to be above, could be the floor or a table. Default: [].
+          - list
     """
 
     def __init__(self, config):

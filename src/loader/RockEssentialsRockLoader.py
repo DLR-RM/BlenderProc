@@ -82,32 +82,64 @@ class RockEssentialsRockLoader(LoaderInterface):
 
     **configuration**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "batches", "Rocks to load. Each cell contains separate configuration data. Type: list. Default: []."
+        * - Parameter
+          - Description
+          - Type
+        * - batches
+          - Rocks to load. Each cell contains separate configuration data. Default: [].
+          - list
 
     **Properties per rock batch**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path", "Path to a .blend file containing desired rock/cliff objects in //Object// section. Type: string."
-        "objects", "List of rock-/cliff-object names to be loaded. If not specified then `amount` property is used for "
-                   "consequential loading. Type: list. Default: []."
-        "amount", "Amount of rock-/cliff-object to load. Type: int. If not specified, the amount will be set "
-                  "to the amount of suitable objects in the current section of a blend file. Must be bigger than 0."
-        "sample_objects", "Toggles the uniform sampling of objects to load. Takes into account `objects` and `amount` "
-                          "parameters. Type: bool. Default: False. Requires 'amount' param to be defined."
-        "render_levels", "Number of subdivisions to perform when rendering. Type: int. Default: 3."
-        "high_detail_mode", "Flag for enabling HDM when possible. Type: boolean. Default: False."
-        "reflection_amount", "Reflection texture value. Type: float (min=0, max=1). Default: rock-specific."
-        "reflection_roughness", "Roughness texture value. Type: float (min=0, max=1). Default: rock-specific."
-        "physics", "Custom property for physics/rigidbody state. Type: boolean. Default: False."
-        "scale", "Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. "
-                 "Type: mathutils Vector. Default: [1, 1, 1]."
-        "HSV", "Hue-Saturation-Value parameters of the HSV node. Type: list (3 values). Range: H: [0, 1], S: [0, 2], "
-               "V: [0, 2]. Default: rock-specific."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - Path to a .blend file containing desired rock/cliff objects in //Object// section.
+          - string
+        * - objects
+          - List of rock-/cliff-object names to be loaded. If not specified then `amount` property is used for
+            consequential loading. Default: [].
+          - list
+        * - amount
+          - Amount of rock-/cliff-object to load. If not specified, the amount will be set to the amount of suitable
+            objects in the current section of a blend file. Must be bigger than 0.
+          - int
+        * - sample_objects
+          - Toggles the uniform sampling of objects to load. Takes into account `objects` and `amount` parameters.
+            Default: False. Requires 'amount' param to be defined.
+          - bool
+        * - render_levels
+          - Number of subdivisions to perform when rendering. Default: 3.
+          - int
+        * - high_detail_mode
+          - Flag for enabling HDM when possible. Default: False.
+          - boolean
+        * - reflection_amount
+          - Reflection texture value. Default: rock-specific. Range: [0,1]
+          - float
+        * - reflection_roughness
+          - Roughness texture value. Default: rock-specific. Range: [0,1]
+          - float
+        * - physics
+          - Custom property for physics/rigidbody state. Default: False.
+          - boolean
+        * - scale
+          - Scale of a rock as a 3d-vector with each value as a scaling factor per according dimension. Default: [1,
+            1, 1].
+          - mathutils.Vector
+        * - HSV
+          - Hue-Saturation-Value parameters of the HSV node. (3 values). Range: H: [0, 1], S: [0, 2], V: [0, 2].
+            Default: rock-specific.
+          - list
     """
 
     def __init__(self, config):

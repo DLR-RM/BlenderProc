@@ -13,15 +13,25 @@ class ReplicaLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "data_path", "The path to the data folder, where all rooms are saved. Type: string."
-       "data_set_name", "Name of the room (for example: apartment_0). Type: string."
-       "use_ambient_occlusion", "Use ambient occlusion to lighten up the scene, if the RgbRenderer is used. "
-                                "Type: bool. Default: False."
-       "use_smooth_shading", "Enable smooth shading on all surfaces, instead of flat shading. "
-                             "Type: bool. Default: False."
+        * - Parameter
+          - Description
+          - Type
+        * - data_path
+          - The path to the data folder, where all rooms are saved.
+          - string
+        * - data_set_name
+          - Name of the room (for example: apartment_0).
+          - string
+        * - use_ambient_occlusion
+          - Use ambient occlusion to lighten up the scene, if the RgbRenderer is used. Default: False.
+          - bool
+        * - use_smooth_shading
+          - Enable smooth shading on all surfaces, instead of flat shading. Default: False.
+          - bool
     """
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
