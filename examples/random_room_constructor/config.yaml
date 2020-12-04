@@ -26,7 +26,31 @@
             "config": {
               "data_dir": "resources/IKEA",
             }
-          }
+          },
+          {
+            "module": "loader.IKEALoader",
+            "config": {
+              "data_dir": "resources/IKEA",
+            }
+          },
+          {
+            "module": "loader.IKEALoader",
+            "config": {
+              "data_dir": "resources/IKEA",
+            }
+          },
+          {
+            "module": "loader.IKEALoader",
+            "config": {
+              "data_dir": "resources/IKEA",
+            }
+          },
+          {
+            "module": "loader.IKEALoader",
+            "config": {
+              "data_dir": "resources/IKEA",
+            }
+          },
         ]
       }
     },
