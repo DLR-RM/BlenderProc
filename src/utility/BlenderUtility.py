@@ -101,12 +101,18 @@ def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
     # Optionally check whether obj2 is contained in obj1
     if not inter and not skip_inside_check:
         inter = is_point_inside_object(obj1, obj1_BVHtree, obj2.matrix_world @ obj2.data.vertices[0].co)
-        print("Warning: Detected that " + obj2.name + " is completely inside " + obj1.name + ". This might be wrong, if " + obj1.name + " is not water tight or has incorrect normals. If that is the case, consider setting skip_inside_check to True.")
+        print("Warning: Detected that " + obj2.name + " is completely inside " + obj1.name +
+              ". This might be wrong, if " + obj1.name +
+              " is not water tight or has incorrect normals. If that is the case, consider setting "
+              "skip_inside_check to True.")
 
     # Optionally check whether obj1 is contained in obj2
     if not inter and not skip_inside_check:
         inter = is_point_inside_object(obj2, obj2_BVHtree, obj1.matrix_world @ obj1.data.vertices[0].co)
-        print("Warning: Detected that " + obj1.name + " is completely inside " + obj2.name + ". This might be wrong, if " + obj2.name + " is not water tight or has incorrect normals. If that is the case, consider setting skip_inside_check to True.")
+        print("Warning: Detected that " + obj1.name + " is completely inside " + obj2.name +
+              ". This might be wrong, if " + obj2.name + " is not water tight or has incorrect "
+                                                         "normals. If that is the case, consider "
+                                                         "setting skip_inside_check to True.")
 
     return inter, bvh_cache
 
