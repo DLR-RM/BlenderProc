@@ -6,6 +6,7 @@ import numpy as np
 import random
 
 from src.main.Module import Module
+from src.object.ObjectPoseSampler import ObjectPoseSampler
 from src.utility.Utility import Utility, Config
 
 
@@ -21,6 +22,9 @@ class RandomRoomConstructor(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
+
+        self.bvh_cache_for_intersection = {}
+        self.placed_objects = []
 
 
     def construct_random_room(self):
@@ -59,6 +63,7 @@ class RandomRoomConstructor(Module):
         new_floor = bpy.context.object
 
         new_floor.name = "Floor"
+        saved_name = new_floor.name
 
         room_length_x = fac_from_square_room * random.uniform(-1, 1) * squared_room_length + squared_room_length
         room_length_y = used_floor_areas[0] / room_length_x
@@ -81,8 +86,8 @@ class RandomRoomConstructor(Module):
             edges = [e for e in bm.edges if e.select == True]
 
             biggest_face_id = np.argmax([f.calc_area() for f in bm.faces])
-            biggset_face = bm.faces[biggest_face_id]
-            faces = [f for f in bm.faces if f == biggset_face]
+            biggest_face = bm.faces[biggest_face_id]
+            faces = [f for f in bm.faces if f == biggest_face]
             geom = []
             geom.extend(edges)
             geom.extend(faces)
@@ -162,7 +167,6 @@ class RandomRoomConstructor(Module):
             bm.free()
             mesh.update()
 
-
         # create walls based on the outer shell
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.normals_make_consistent(inside=False)
@@ -196,17 +200,66 @@ class RandomRoomConstructor(Module):
                     floor_faces.append(f)
         if found_face_to_be_deleted:
             bpy.ops.mesh.delete(type='FACE')
+        bpy.ops.mesh.select_all(action='DESELECT')
+        for f in floor_faces:
+            f.select = True
+        bpy.ops.mesh.separate(type='SELECTED')
         bpy.ops.object.mode_set(mode='OBJECT')
         bm.free()
         mesh.update()
+        wall_obj = bpy.context.scene.objects[saved_name]
+        wall_obj.select_set(False)
+        wall_obj.name = "Wall"
+        if len(bpy.context.selected_objects) == 1:
+            floor_obj = bpy.context.selected_objects[0]
+            floor_obj.name = "Floor"
+        else:
+            raise Exception("Something went wrong, more than one object were selected after splitting floor and wall.")
+        return floor_obj, wall_obj
 
     def paint_floor_and_wall(self):
         pass
 
+    def sample_new_object_poses_on_face(self, list_of_objects, face_bb):
+        cur_obj = random.choice(list_of_objects)
+        object_was_duplicated = False
+        if "is_placed_random_room_constructor" in cur_obj:
+            # object was placed before needs to be duplicated first
+            bpy.ops.object.duplicate({"object": cur_obj, "selected_objects": [cur_obj]})
+            cur_obj = bpy.context.selected_objects[-1]
+            object_was_duplicated = True
+
+        random_placed_value = [random.uniform(face_bb[0][i], face_bb[1][i]) for i in range(2)]
+        random_placed_value.append(0.0)  # floor z value
+
+        # perform check if object can be placed there
+        no_collision = ObjectPoseSampler.check_pose_for_object(cur_obj, position=random_placed_value, rotation=None,
+                                                               bvh_cache=self.bvh_cache_for_intersection,
+                                                               objects_to_check_against=self.placed_objects,
+                                                               list_of_objects_with_no_inside_check=[self.wall_obj])
+        print(cur_obj.name, cur_obj.location, no_collision)
+        print("Current placed obj: ", self.placed_objects)
+        if no_collision:
+            # if there was no collision save the object in the placed list
+            self.placed_objects.append(cur_obj)
+            cur_obj["is_placed_random_room_constructor"] = True
+            return True
+        elif object_was_duplicated:
+            if cur_obj.name in self.bvh_cache_for_intersection:
+                del self.bvh_cache_for_intersection[cur_obj.name]
+            # delete the duplicated object
+            bpy.ops.object.select_all(action='DESELECT')
+            cur_obj.select_set(True)
+            bpy.ops.object.delete()
+        else:
+            if cur_obj.name in self.bvh_cache_for_intersection:
+                del self.bvh_cache_for_intersection[cur_obj.name]
+        return False
 
     def run(self):
         # construct a random room
-        self.construct_random_room()
+        floor_obj, self.wall_obj = self.construct_random_room()
+        self.placed_objects.extend([self.wall_obj])
 
         # use a loader module to load objects
         bpy.ops.object.select_all(action='SELECT')
@@ -216,6 +269,57 @@ class RandomRoomConstructor(Module):
         for module in modules:
             print("Running module " + module.__class__.__name__)
             module.run()
+        bpy.ops.object.select_all(action='SELECT')
         loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
         print(loaded_objects)
+
+        bpy.ops.object.select_all(action='DESELECT')
+        floor_obj.select_set(True)
+        bpy.ops.object.mode_set(mode='EDIT')
+        mesh = floor_obj.data
+        bm = bmesh.from_edit_mesh(mesh)
+        bm.faces.ensure_lookup_table()
+
+        list_of_face_sizes = []
+        list_of_face_bb = []
+        for face in bm.faces:
+            list_of_face_sizes.append(face.calc_area())
+            list_of_verts = [v.co for v in face.verts]
+            bb_min_point, bb_max_point = np.min(list_of_verts, axis=0), np.max(list_of_verts, axis=0)
+            list_of_face_bb.append((bb_min_point, bb_max_point))
+        total_floor_area = sum(list_of_face_sizes)
+        bpy.ops.object.mode_set(mode='OBJECT')
+        bm.free()
+        mesh.update()
+        bpy.ops.object.select_all(action='DESELECT')
+
+        try_per_face = 10
+        step_size = 2  # sample one object on one square meter
+        current_accumulated_face_size = 0.0
+        for face_size, face_bb in zip(list_of_face_sizes, list_of_face_bb):
+            if face_size < step_size:
+                # face size is bigger than one step
+                current_accumulated_face_size += face_size
+                if current_accumulated_face_size > step_size:
+                    for _ in range(try_per_face):
+                        found_spot = self.sample_new_object_poses_on_face(loaded_objects, face_bb)
+                        if found_spot:
+                            break
+                    current_accumulated_face_size -= step_size
+            else:
+                # face size is bigger than one step
+                amount_of_steps = int((face_size + current_accumulated_face_size) / step_size)
+                for i in range(amount_of_steps):
+                    for _ in range(try_per_face):
+                        found_spot = self.sample_new_object_poses_on_face(loaded_objects, face_bb)
+                        if found_spot:
+                            break
+                # left over value is used in next round
+                current_accumulated_face_size = face_size - (amount_of_steps * step_size)
+
+        bpy.ops.object.mode_set(mode='OBJECT')
+        bm.free()
+        mesh.update()
+
+
 
