@@ -28,6 +28,17 @@ class Utility:
               "config": {...}
             }, ...]
 
+        If you want to execute a certain module several times, add the `amount_of_repetions` on the same level as the
+        module name:
+
+        .. code-block:: yaml
+
+            [{
+              "module": "base.ModuleA",
+              "config": {...},
+              "amount_of_repetitions": 3
+            }, ...]
+
         Here the name contains the path to the module class, starting from inside the src directory.
 
         Be aware that all attributes stored in the GlobalStorage are also accessible here, even though
@@ -50,11 +61,17 @@ class Utility:
                 # Overwrite with module specific config
                 Utility.merge_dicts(module_config["config"], config)
 
+            # Check if the module has a repetition counter
+            amount_of_repetitions = 1
+            if "amount_of_repetitions" in module_config:
+                amount_of_repetitions = module_config["amount_of_repetitions"]
+
             with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
-                # Import file and extract class
-                module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
-                # Create module
-                modules.append(module_class(Config(config)))
+                for i in range(amount_of_repetitions):
+                    # Import file and extract class
+                    module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
+                    # Create module
+                    modules.append(module_class(Config(config)))
 
         return modules
 
