@@ -134,7 +134,8 @@ class AMASSLoader(LoaderInterface):
             used_subject_id_str = "{:02d}".format(int(self._used_subject_id))
             subject_path = os.path.join(
                 sub_dataset_path, used_subject_id_str)
-            sequence_path = os.path.join(subject_path, used_subject_id_str + "_" + used_subject_id_str + "_poses.npz")
+            sequence_path = os.path.join(subject_path, used_subject_id_str +
+                                         "_{:02d}_poses.npz".format(self._used_sequence_id))
             if os.path.exists(sequence_path):
                 # load AMASS dataset sequence file which contains the coefficients for the whole motion sequence
                 sequence_body_data = np.load(sequence_path)
