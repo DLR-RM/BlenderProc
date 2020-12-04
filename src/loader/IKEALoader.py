@@ -142,6 +142,19 @@ class IKEALoader(LoaderInterface):
         loaded_obj = Utility.import_objects(selected_obj)
         self._set_properties(loaded_obj)
 
+        # extract the name from the path:
+        selected_dir_name = os.path.dirname(selected_obj)
+        selected_name = ""
+        if os.path.basename(selected_dir_name).startswith("IKEA_"):
+            selected_name = os.path.basename(selected_dir_name)
+        else:
+            selected_dir_name = os.path.dirname(selected_dir_name)
+            if os.path.basename(selected_dir_name).startswith("IKEA_"):
+                selected_name = os.path.basename(selected_dir_name)
+        if selected_name:
+            for obj in loaded_obj:
+                obj.name = selected_name
+
         # extract the file unit from the .obj file to convert every object to meters
         file_unit = ""
         with open(selected_obj, "r") as file:
@@ -176,11 +189,14 @@ class IKEALoader(LoaderInterface):
                 bpy.ops.transform.resize(value=(scale, scale, scale))
                 bpy.ops.object.mode_set(mode='OBJECT')
                 bpy.context.view_layer.update()
-            bb = get_bounds(obj)
-            bb_center = np.mean(bb, axis=0)
-            bb_min_z_value = np.min(bb, axis=0)[2]
-            bpy.ops.object.mode_set(mode='EDIT')
-            bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
-            bpy.ops.object.mode_set(mode='OBJECT')
-            bpy.context.view_layer.update()
+
+        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+        LoaderInterface.remove_x_axis_rotation(loaded_obj)
+
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        LoaderInterface.place_origin_in_world_origin(loaded_obj)
+        bpy.ops.object.select_all(action='DESELECT')
+
 
