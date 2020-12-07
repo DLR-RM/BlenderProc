@@ -234,6 +234,9 @@ class BopLoader(LoaderInterface):
         print('-----------------------------')
         print("Cam: {}".format(cam_H_c2w))
         print('-----------------------------')
+        
+        # transform from OpenCV to blender coords
+        cam_H_c2w = Utility.transform_matrix_to_blender_coord_frame(Matrix(cam_H_c2w), self.source_frame)
  
         return cam_H_c2w
 
