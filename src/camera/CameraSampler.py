@@ -151,6 +151,9 @@ class CameraSampler(CameraInterface):
         * - check_if_pose_above_object_list
           - A list of objects, where each camera has to be above, could be the floor or a table. Default: [].
           - list
+        * - check_if_objects_visible
+          - A list of objects, which always should be visible in the camera view. Default: [].
+          - list
     """
 
     def __init__(self, config):
@@ -201,6 +204,7 @@ class CameraSampler(CameraInterface):
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
         self._above_objects = config.get_list("check_if_pose_above_object_list", [])
+        self.check_visible_objects = config.get_list("check_if_objects_visible", [])
 
         # Set camera intrinsics
         self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
@@ -285,6 +289,12 @@ class CameraSampler(CameraInterface):
 
         if self.min_interest_score > 0 and self._scene_coverage_score(cam, cam2world_matrix) < self.min_interest_score:
             return False
+
+        if len(self.check_visible_objects) > 0:
+            visible_objects = self._visible_objects(cam, cam2world_matrix)
+            for obj in self.check_visible_objects:
+                if obj not in visible_objects:
+                    return False
 
         if (self.check_pose_novelty_rot or self.check_pose_novelty_translation) and \
         (not self._check_novel_pose(cam2world_matrix)):
@@ -436,6 +446,39 @@ class CameraSampler(CameraInterface):
                 return False
 
         return True
+
+    def _visible_objects(self, cam: bpy.types.Camera, cam2world_matrix: mathutils.Matrix):
+        """ Returns a set of objects visible from the given camera pose.
+
+        Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
+
+        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
+        :param cam2world_matrix: The world matrix which describes the camera orientation to check.
+        :return: A set of objects visible hit by the sent rays.
+        """
+        visible_objects = set()
+
+        # Get position of the corners of the near plane
+        frame = cam.view_frame(scene=bpy.context.scene)
+        # Bring to world space
+        frame = [cam2world_matrix @ v for v in frame]
+
+        # Compute vectors along both sides of the plane
+        vec_x = frame[1] - frame[0]
+        vec_y = frame[3] - frame[0]
+
+        # Go in discrete grid-like steps over plane
+        position = cam2world_matrix.to_translation()
+        for x in range(0, self.sqrt_number_of_rays):
+            for y in range(0, self.sqrt_number_of_rays):
+                # Compute current point on plane
+                end = frame[0] + vec_x * x / float(self.sqrt_number_of_rays - 1) + vec_y * y / float(self.sqrt_number_of_rays - 1)
+                # Send ray from the camera position through the current point on the plane
+                _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, position, end - position)
+                # Add hit object to set
+                visible_objects.add(hit_object)
+
+        return visible_objects
 
     def _scene_coverage_score(self, cam, cam2world_matrix):
         """ Evaluate the interestingness/coverage of the scene.
