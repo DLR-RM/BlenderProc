@@ -70,7 +70,8 @@ class FloorExtractor(Module):
               }
             },
             "compare_angle_degrees" : 7.5,
-            "compare_height": 0.15
+            "compare_height": 0.15,
+            "name_for_split_obj": "floor"
           }
         }
 
