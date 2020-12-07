@@ -447,7 +447,7 @@ class CameraSampler(CameraInterface):
 
         return True
 
-    def _visible_objects(self, cam, cam2world_matrix):
+    def _visible_objects(self, cam: bpy.types.Camera, cam2world_matrix: mathutils.Matrix):
         """ Returns a set of objects visible from the given camera pose.
 
         Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
