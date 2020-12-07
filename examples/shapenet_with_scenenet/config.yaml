@@ -93,6 +93,16 @@
         "cam_poses": [
         {
           "number_of_samples": 5,
+          "proximity_checks": {
+            "min": 0.5
+          },
+          "check_if_objects_visible": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "cp_shape_net_object": True,
+              "type": "MESH"
+            }
+          },
           "location": {
             "provider":"sampler.PartSphere",
             "center": {
