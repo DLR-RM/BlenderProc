@@ -34,6 +34,46 @@ class FloorExtractor(Module):
           }
         }
 
+    Example 2, here the ceiling is extracted and not the floor. This is done by using the `up_vector_upwards` key,
+    which is set to False here, so the polygons have to face in `[0, 0, -1]` direction. This will also flip, the search
+    mechanism, now the highest group of polygons are used, not the lowest.
+
+    .. code-block:: yaml
+
+        {
+          "module": "object.FloorExtractor",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": "wall"  # the wall object here contains the ceiling
+              }
+            },
+            "up_vector_upwards": False,  # the polygons are now facing downwards: [0, 0, -1]
+            "compare_angle_degrees" : 7.5,
+            "compare_height": 0.15,
+            "name_for_split_obj": "Ceiling"  # this is the new name of the object
+          }
+        }
+
+    Example 3, if you are using this to extract the floor of replica scenes, to place objects on top of them.
+
+    .. code-block:: yaml
+
+        {
+          "module": "object.FloorExtractor",
+          "config": {
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": "mesh"  # the wall object here contains the ceiling
+              }
+            },
+            "compare_angle_degrees" : 7.5,
+            "compare_height": 0.15
+          }
+        }
+
     **Configuration**:
 
     .. list-table:: 
