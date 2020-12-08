@@ -179,7 +179,7 @@ class MyNewPipelineModule(Loader):
           - Used for this. Contains that.
           - type          
         * - param_c/param_d
-          - sed for this/means this.
+          - Used for this/means this.
           - type   
         * - param_c/param_e
           - Used for that/means that. Default: value. Available: [value, value1, value2].
