@@ -11,45 +11,123 @@ from src.provider.getter.Material import Material
 from src.utility.BlenderUtility import get_bound_volume
 from src.utility.Utility import Utility, Config
 
-
 class RandomRoomConstructor(Module):
     """
     This module constructs random rooms with different dataset objects.
-    It first samples a random room, uses CCMaterial on the surfaces, these do not contain any alpha information.
+    It first samples a random room, uses CCMaterial on the surfaces, which contain no alpha textures, to avoid that the
+    walls or the floor is see through.
 
     Then this room is randomly filled with the objects from the proposed datasets.
 
+    It is possible to randomly construct rooms, which are not rectangular shaped, for that you can use the key
+    `amount_of_extrusions`, zero is the default, which means that the room will get no extrusions, if you specify, `3`
+    then the room will have up to 3 corridors or bigger pieces extruding from the main rectangular.
+
+    Example 1, in this first example a random room will be constructed it will have a floor area of 20 square meters.
+    The room will then be filled with 15 randomly selected objects from the Pix3D dataset. Checkout the
+    `examples/pix3d` if you want to know more on that particular dataset.
+
+    .. code-block:: yaml
+
+        {
+          "module": "constructor.RandomRoomConstructor",
+          "config": {
+            "floor_area": 20,
+            "used_loader_config": [
+              {
+                "module": "loader.Pix3DLoader",
+                "config": {
+                  "used_category": "bed"
+                },
+                "amount_of_repetitions": 15
+              }
+            ]
+          }
+        }
+
+    **Configuration**:
+
+    .. list-table::
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - floor_area
+          - The amount of floor area used for the created room, the value is specified in square meters.
+          - float
+        * - amount_of_extrusions
+          - The amount of extrusions specify how many times the room will be extruded to form more complicated shapes
+            than single rectangles. The default is zero, which means that no extrusion is performed and the room consist
+            out of one single rectangle. Default: 0.
+          - int
+        * - fac_base_from_square_room
+          - After creating a squared room, the room is reshaped to a rectangular, this factor determines the maximum
+            difference in positive and negative direction from the squared rectangular. This means it looks like this:
+            `fac * rand.uniform(-1, 1) * square_len + square_len`. Default: 0.3.
+          - float
+        * - minimum_corridor_width
+          - The minimum corridor width of an extrusions, this is used to avoid that extrusions are super slim.
+            Default: 0.9.
+          - float
+        * - wall_height
+          - This value specifies the height of the wall in meters. Default: 2.5.
+          - float
+        * - amount_of_floor_cuts
+          - This value determines how often the basic rectangle is cut vertically and horizontally. These cuts are than
+            used for selecting the edges which are then extruded. A higher amount of floor cuts leads to smaller edges,
+            if all edges are smaller than the corridor width no edge will be selected. Default: 2.
+          - int
+        * - only_use_big_edges
+          - If this is set to true, all edges, which are wider than the corridor width are sorted by their size and
+            then only the bigger half of this list is used. If this is false, the full sorted array is used.
+            Default: True.
+          - bool
+        * - create_ceiling
+          - If this is True, the ceiling is created as its own object. If this is False no ceiling will be created.
+            Default: True.
+          - bool
     """
 
+    def __init__(self, config: Config):
+        """
+        This function is called by the Pipeline object, it initialized the object and reads all important config values
 
-    def __init__(self, config):
+        :param config: The config object used for this module, specified by the .yaml file
+        """
         Module.__init__(self, config)
 
         self.bvh_cache_for_intersection = {}
         self.placed_objects = []
 
+        self.used_floor_area = self.config.get_float("floor_area")
+        self.amount_of_extrusions = self.config.get_int("amount_of_extrusions", 0)
+        self.fac_from_square_room = self.config.get_float("fac_base_from_square_room", 0.3)
+        self.corridor_width = self.config.get_float("minimum_corridor_width", 0.9)
+        self.wall_height = self.config.get_float("wall_height", 2.5)
+        # internally the first basic rectangular is counted as one
+        self.amount_of_extrusions += 1
+        self.amount_of_floor_cuts = self.config.get_int("amount_of_floor_cuts", 2)
+        self.only_use_big_edges = self.config.get_bool("only_use_big_edges", True)
+        self.create_ceiling = self.config.get_bool("create_ceiling", True)
 
     def construct_random_room(self):
         """
-        This function constructs the floor plan and builds up the wall
+        This function constructs the floor plan and builds up the wall. This can be more than just a rectangular shape.
+
+
+
         :return constructed the room object
         """
-
-        used_floor_area = self.config.get_float("floor_area")
-        wall_height = self.config.get_float("wall_height", 2.5)
-        corridor_width = self.config.get_float("minimum_corridor_width", 0.9)
-        amount_of_extrusions = self.config.get_int("amount_of_extrusions", 3)
-        fac_from_square_room = self.config.get_float("fac_base_from_square_room", 0.3)
-        amount_of_floor_cuts = self.config.get_int("amount_of_floor_cuts", 2)
-        only_use_big_edges = self.config.get_bool("only_use_big_edges", True)
 
         # if there is more than one extrusions, the used floor area must be split over all sections
         # the first section should be at least 50% - 80% big, after that the size depends on the amount of left
         # floor values
-        if amount_of_extrusions > 1:
+        if self.amount_of_extrusions > 1:
             size_sequence = []
             running_sum = 0.0
-            for i in range(amount_of_extrusions - 1):
+            for i in range(self.amount_of_extrusions - 1):
                 if i == 0:
                     size_sequence.append(random.uniform(0.5, 0.8))
                 else:
@@ -58,58 +136,80 @@ class RandomRoomConstructor(Module):
             size_sequence.append(1.0 - running_sum)
         else:
             size_sequence = [1.0]
-        used_floor_areas = [size * used_floor_area for size in size_sequence]
+        # this list of areas is then used to calculate the extrusions
+        # if there is only one element in there, it will create a rectangle
+        used_floor_areas = [size * self.used_floor_area for size in size_sequence]
 
+        # calculate the squared room length for the base room
         squared_room_length = np.sqrt(used_floor_areas[0])
+        # create a new plane and rename it to Floor
         bpy.ops.mesh.primitive_plane_add()
         new_floor = bpy.context.object
-
         new_floor.name = "Floor"
         saved_name = new_floor.name
 
-        room_length_x = fac_from_square_room * random.uniform(-1, 1) * squared_room_length + squared_room_length
+        # calculate the side length of the base room, for that the `fac_from_square_room` is used
+        room_length_x = self.fac_from_square_room * random.uniform(-1, 1) * squared_room_length + squared_room_length
+        # make sure that the floor area is still used
         room_length_y = used_floor_areas[0] / room_length_x
+        # change the plane to this size
         bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.transform.resize(value=(room_length_x * 0.5, room_length_y * 0.5, 1))
         bpy.ops.object.mode_set(mode='OBJECT')
 
-        def cut_plane(object):
+        def cut_plane(plane: bpy.types.Object):
+            """
+            Cuts the floor plane in several pieces randomly. This is used for selecting random edges for the extrusions
+            later on. This function assumes the current `plane` object is already selected and no other object is
+            selected.
 
-            x_size = object.scale[0]
-            y_size = object.scale[1]
+            :param plane: The object, which should be split in edit mode.
+            """
+
+            # save the size of the plane to determine a best split value
+            x_size = plane.scale[0]
+            y_size = plane.scale[1]
+
+            # switch to edit mode and select all faces
             bpy.ops.object.mode_set(mode='EDIT')
             bpy.ops.mesh.select_all(action='SELECT')
             bpy.ops.object.mode_set(mode='OBJECT')
 
-            me = object.data
+            # convert plane to BMesh object
+            me = plane.data
             bm = bmesh.new()
             bm.from_mesh(me)
             bm.faces.ensure_lookup_table()
-            edges = [e for e in bm.edges if e.select == True]
+            # find all selected edges
+            edges = [e for e in bm.edges if e.select]
 
             biggest_face_id = np.argmax([f.calc_area() for f in bm.faces])
             biggest_face = bm.faces[biggest_face_id]
+            # find the biggest face
             faces = [f for f in bm.faces if f == biggest_face]
             geom = []
             geom.extend(edges)
             geom.extend(faces)
 
-            cutting_point = [x_size * random.uniform(-1, 1), y_size * random.uniform(-1, 1),0]
-            if random.uniform(0, 1) < 0.5:
-                direction_axis = [1,0,0]
-            else:
-                direction_axis = [0,1,0]
+            # calculate cutting point
+            cutting_point = [x_size * random.uniform(-1, 1), y_size * random.uniform(-1, 1), 0]
+            # select a random axis to specify in which direction to cut
+            direction_axis = [1, 0, 0] if random.uniform(0, 1) < 0.5 else [0, 1, 0]
 
-            bmesh.ops.bisect_plane(bm, dist=0.01,geom=geom,plane_co=cutting_point,plane_no=direction_axis)
+            # cut the plane and update the final mesh
+            bmesh.ops.bisect_plane(bm, dist=0.01, geom=geom, plane_co=cutting_point, plane_no=direction_axis)
             bm.to_mesh(me)
             bm.free()
             me.update()
-        for i in range(amount_of_floor_cuts):
+
+        # for each floor cut perform one cut_plane
+        for i in range(self.amount_of_floor_cuts):
             cut_plane(new_floor)
 
         mesh = new_floor.data
         # do several extrusions of the basic floor plan, the first one is always the basic one
-        for i in range(1, amount_of_extrusions):
+        for i in range(1, self.amount_of_extrusions):
+            # Change to edit mode of the selected floor
             bpy.ops.object.mode_set(mode='EDIT')
             bpy.ops.mesh.select_all(action='DESELECT')
             bm = bmesh.from_edit_mesh(mesh)
@@ -119,12 +219,12 @@ class RandomRoomConstructor(Module):
             # to avoid that super small, super long pieces are created
             boundary_edges = [e for e in bm.edges if e.is_boundary]
             boundary_sizes = [(e, e.calc_length()) for e in boundary_edges]
-            boundary_sizes = [(e, s) for e, s in boundary_sizes if s > corridor_width]
+            boundary_sizes = [(e, s) for e, s in boundary_sizes if s > self.corridor_width]
 
             if len(boundary_sizes) > 0:
                 # sort the boundaries to focus only on the big ones
                 boundary_sizes.sort(key=lambda e: e[1])
-                if only_use_big_edges:
+                if self.only_use_big_edges:
                     # only select the bigger half of the selected boundaries
                     half_size = len(boundary_sizes)//2
                 else:
@@ -174,41 +274,46 @@ class RandomRoomConstructor(Module):
         bpy.ops.mesh.normals_make_consistent(inside=False)
         bm = bmesh.from_edit_mesh(mesh)
         bm.edges.ensure_lookup_table()
+
+        # select all boundary edges
         boundary_edges = [e for e in bm.edges if e.is_boundary]
         for e in boundary_edges:
             e.select = True
-        bpy.ops.mesh.extrude_region_move(TRANSFORM_OT_translate={"value": (0, 0, wall_height)})
+        # extrude all boundary edges to create the walls
+        bpy.ops.mesh.extrude_region_move(TRANSFORM_OT_translate={"value": (0, 0, self.wall_height)})
         bpy.ops.object.mode_set(mode='OBJECT')
         bm.free()
         mesh.update()
 
-        # remove the upper ceiling if it was created, sometimes blender creates it, depending if it is a simple
-        # rectangle or not
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_all(action='DESELECT')
-        bm = bmesh.from_edit_mesh(mesh)
-        up_vec = mathutils.Vector([0,0,1])
-        found_face_to_be_deleted = False
-        compare_angle = 0.1
-        floor_faces = []
-        for f in bm.faces:
-            f.select = False
-            if math.acos(f.normal @ up_vec) < compare_angle:
-                if np.abs(f.calc_center_median()[2] - wall_height) < wall_height * 0.1:
-                    found_face_to_be_deleted = True
-                    f.select = True
-                else:
-                    # these are floor faces, can be used to set the material
-                    floor_faces.append(f)
-        if found_face_to_be_deleted:
-            bpy.ops.mesh.delete(type='FACE')
-        bpy.ops.mesh.select_all(action='DESELECT')
-        for f in floor_faces:
-            f.select = True
-        bpy.ops.mesh.separate(type='SELECTED')
-        bpy.ops.object.mode_set(mode='OBJECT')
-        bm.free()
-        mesh.update()
+        if not self.create_ceiling:
+            # remove the upper ceiling if it was created, sometimes blender creates it, depending if it is a simple
+            # rectangle or not
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='DESELECT')
+            bm = bmesh.from_edit_mesh(mesh)
+            up_vec = mathutils.Vector([0, 0, 1])
+            found_face_to_be_deleted = False
+            compare_angle = 0.1
+            floor_faces = []
+            for f in bm.faces:
+                f.select = False
+                if math.acos(f.normal @ up_vec) < compare_angle:
+                    if np.abs(f.calc_center_median()[2] - self.wall_height) < self.wall_height * 0.1:
+                        found_face_to_be_deleted = True
+                        f.select = True
+                    else:
+                        # these are floor faces, can be used to set the material
+                        floor_faces.append(f)
+            if found_face_to_be_deleted:
+                bpy.ops.mesh.delete(type='FACE')
+            bpy.ops.mesh.select_all(action='DESELECT')
+            for f in floor_faces:
+                f.select = True
+            bpy.ops.mesh.separate(type='SELECTED')
+            bpy.ops.object.mode_set(mode='OBJECT')
+            bm.free()
+            mesh.update()
+
         wall_obj = bpy.context.scene.objects[saved_name]
         wall_obj.select_set(False)
         wall_obj.name = "Wall"
@@ -366,7 +471,3 @@ class RandomRoomConstructor(Module):
                 bpy.ops.object.select_all(action='DESELECT')
                 obj.select_set(True)
                 bpy.ops.object.delete()
-
-
-
-
