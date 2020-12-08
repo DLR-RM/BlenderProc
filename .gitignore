@@ -10,6 +10,7 @@ resources/scenenet/*zip
 resources/scenenet/SceneNetData
 resources/scenenet/texture*
 resources/blenderkit
+resources/IKEA
 resources/pix3d
 *.blend1
 .vscode
