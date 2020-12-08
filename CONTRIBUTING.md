@@ -124,22 +124,27 @@ This way you are required to apply the following patterns:
 
 * Pipeline Module Description
 
-Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide csv tables with parameter description/explanation along with general module description.
+Depending on the amount of the parameters required/available to configure your module, and on the way they are required to be organized in the config file, provide list tables with parameter description/explanation along with general module description.
 After the general description, please give a couple of examples with short explanation, try to show off all config parameters in them. For every parameter give a short explanation of its type, its default value, its range or available values, if applicable. The exact order is represented below.
 
 ```python
 class MyNewPipelineModule(Loader):
-    """ This module is doing this, this, and this, while incorporating that.
-    
-        Example 1: Explain what happens
+    """ 
+    This module is doing this, this, and this, while incorporating that.
+
+    Example 1: Explain what happens
+
+    .. code-block:: yaml
 
         {
           "some": "config",
           "example": "here"
         }
 
-        Example 2: Explain this more complex example
-        
+    Example 2: Explain this more complex example
+
+    .. code-block:: yaml
+
         {
           "some": "more",
           "complex": "example"
@@ -147,20 +152,38 @@ class MyNewPipelineModule(Loader):
 
     **Table for a part of config**:
     
-    .. csv-table::
-       :header: "Keyword", "Description"
-       
-       "param_a", "Used for this/means this. Type: type. Default: value. Available: [some_value, value, another_value]."
-       "param_b", "Used for that/means that. Type: type. Range: [min, max]. Default: B."
-       
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+        
+        * - Parameter
+          - Description
+          - Type
+        * - param_a
+          - Used for this/means this. Default: value. Available: [some_value, value, another_value].
+          - type          
+        * - param_b
+          - Used for this/means this. Default: B. Range: [min, max]. 
+          - type
+                 
      **Table for another part of config if needed**:
 
-    .. csv-table::
-       :header: "Keyword", "Description"
-       
-       "param_c", "Used for this. Contains that. Type: type."
-       "param_c/param_d", "Used for this/means this. Type: type."
-       "param_c/param_e", "Used for that/means that. Type: type. Default: value. Available: [value, value1, value2]."
+     .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+        
+        * - Parameter
+          - Description
+          - Type
+        * - param_c
+          - Used for this. Contains that.
+          - type          
+        * - param_c/param_d
+          - Used for this/means this.
+          - type   
+        * - param_c/param_e
+          - Used for that/means that. Default: value. Available: [value, value1, value2].
+          - type          
     """
 ```
 
