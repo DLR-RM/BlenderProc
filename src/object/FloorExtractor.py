@@ -7,7 +7,9 @@ import bpy
 import mathutils
 import numpy as np
 
+from src.loader.LoaderInterface import LoaderInterface
 from src.main.Module import Module
+from src.utility.Config import Config
 from src.utility.Utility import Utility
 
 
@@ -107,6 +109,10 @@ class FloorExtractor(Module):
           - If this is True the `up_vec` points upwards -> [0, 0, 1] if not it points downwards: [0, 0, -1] in world \
             coordinates. This vector is used for the `compare_angle_degrees` option. Default: True.
           - bool
+        * - add_properties
+          - With `add_properties` it is possible to set custom properties for the newly separated objects. Use `cp_` \
+            prefix for keys.
+          - dict
     """
 
     def __init__(self, config):
@@ -148,6 +154,7 @@ class FloorExtractor(Module):
         compare_angle = radians(self.config.get_float('compare_angle_degrees', 7.5))
         compare_height = self.config.get_float('compare_height', 0.15)
         new_name_for_object = self.config.get_string("name_for_split_obj", "Floor")
+        add_properties = self.config.get_raw_dict("add_properties", {})
 
         # set the up_vector
         up_vec = mathutils.Vector([0, 0, 1])
@@ -163,6 +170,7 @@ class FloorExtractor(Module):
                 height_list = [float(val) for val in ast.literal_eval(file.read())]
 
         bpy.ops.object.select_all(action='DESELECT')
+        newly_created_objects = []
         for obj in entities:
             if obj.type != "MESH":
                 warnings.warn("The object: {} is not a mesh but was selected in the FloorExtractor!".format(obj.name))
@@ -220,6 +228,7 @@ class FloorExtractor(Module):
                         selected_objects = [o for o in selected_objects
                                             if o != bpy.context.view_layer.objects.active]
                         selected_objects[0].name = new_name_for_object
+                        newly_created_objects.append(selected_objects[0])
                     else:
                         raise Exception("There is more than one selection after splitting, this should not happen!")
                 else:
@@ -227,6 +236,11 @@ class FloorExtractor(Module):
 
             bpy.ops.object.mode_set(mode='OBJECT')
             bpy.ops.object.select_all(action='DESELECT')
+
+        if add_properties:
+            config = Config({"add_properties": add_properties})
+            loader_interface = LoaderInterface(config)
+            loader_interface._set_properties(newly_created_objects)
 
     @staticmethod
     def get_median_face_pose(face: bmesh.types.BMFace, matrix_world: mathutils.Matrix):
