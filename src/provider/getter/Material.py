@@ -253,8 +253,12 @@ class Material(Provider):
                             select_material = False
                             break
                     elif key.startswith("principled_bsdf_"):  # must be after the amount check
+                        # This custom function can check the value of a certain Principled BSDF shader input.
+                        # For example this can be used to avoid using materials, which have an Alpha Texture by
+                        # adding they key: `"cf_principled_bsdf_Alpha_eq": 1.0`
                         if material.use_nodes:
                             value = float(value)
+                            # first check if there is only one Principled BSDF node in the material
                             nodes = material.node_tree.nodes
                             principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
                             amount_of_principled_bsdf_nodes = len(principled) if principled is not None else 0
@@ -262,15 +266,21 @@ class Material(Provider):
                                 select_material = False
                                 break
                             principled = principled[0]
+                            # then extract the input name from the key, for the Alpha example: `Alpha`
                             extracted_input_name = key[len("principled_bsdf_"):key.rfind("_")]
+                            # check if this key exists, else throw an error
                             if extracted_input_name not in principled.inputs:
                                 raise Exception("Only valid inputs of a principled node are allowed: "
                                                 "{} in: {}".format(extracted_input_name, key))
+                            # extract this input value
                             used_value = principled.inputs[extracted_input_name]
+                            # if this input value is not a default value it will be connected via the links
                             if len(used_value.links) > 0:
                                 select_material = False
                                 break
+                            # if no link is found check the default value
                             used_value = used_value.default_value
+                            # compare the given value to the default value
                             if key.endswith("min"):
                                 if not (used_value >= value):
                                     select_material = False
