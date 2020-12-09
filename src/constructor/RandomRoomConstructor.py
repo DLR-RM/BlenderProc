@@ -1,3 +1,5 @@
+import warnings
+
 import bpy
 import bmesh
 import mathutils
@@ -6,9 +8,10 @@ import numpy as np
 import random
 
 from src.main.Module import Module
+from src.object.FloorExtractor import FloorExtractor
 from src.object.ObjectPoseSampler import ObjectPoseSampler
 from src.provider.getter.Material import Material
-from src.utility.BlenderUtility import get_bound_volume
+from src.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
 from src.utility.Utility import Utility, Config
 
 class RandomRoomConstructor(Module):
@@ -88,6 +91,10 @@ class RandomRoomConstructor(Module):
           - If this is True, the ceiling is created as its own object. If this is False no ceiling will be created.
             Default: True.
           - bool
+        * - assign_material_to_ceiling
+          - If this is True a material from the CCMaterial set is assigned to the ceiling. This is only possible if a
+            ceiling was created. Default: False.
+          - bool
     """
 
     def __init__(self, config: Config):
@@ -111,6 +118,13 @@ class RandomRoomConstructor(Module):
         self.amount_of_floor_cuts = self.config.get_int("amount_of_floor_cuts", 2)
         self.only_use_big_edges = self.config.get_bool("only_use_big_edges", True)
         self.create_ceiling = self.config.get_bool("create_ceiling", True)
+        self.assign_material_to_ceiling = self.config.get_bool("assign_material_to_ceiling", False)
+        self.tries_per_face = self.config.get_int("placement_tries_per_face", 3)
+        self.amount_of_objects_per_sq_meter = self.config.get_int("amount_of_objects_per_sq_meter", 3)
+
+        self.wall_obj = None
+        self.floor_obj = None
+        self.ceiling_obj = None
 
     def construct_random_room(self):
         """
@@ -118,7 +132,6 @@ class RandomRoomConstructor(Module):
 
 
 
-        :return constructed the room object
         """
 
         # if there is more than one extrusions, the used floor area must be split over all sections
@@ -127,13 +140,23 @@ class RandomRoomConstructor(Module):
         if self.amount_of_extrusions > 1:
             size_sequence = []
             running_sum = 0.0
+            start_minimum = 0.0
             for i in range(self.amount_of_extrusions - 1):
                 if i == 0:
-                    size_sequence.append(random.uniform(0.5, 0.8))
+                    size_sequence.append(random.uniform(0.4, 0.8))
+                    start_minimum = (1.0 - size_sequence[-1]) / self.amount_of_extrusions
                 else:
-                    size_sequence.append(random.uniform(0, 1.0 - running_sum))
+                    if start_minimum < 1.0 - running_sum:
+                        size_sequence.append(random.uniform(start_minimum, 1.0 - running_sum))
+                    else:
+                        break
                 running_sum += size_sequence[-1]
-            size_sequence.append(1.0 - running_sum)
+            if 1.0 - running_sum > 1e-7:
+                size_sequence.append(1.0 - running_sum)
+            if self.amount_of_extrusions != len(size_sequence):
+                print("Amount of extrusions was reduced to: {}. To avoid rooms, which are smaller "
+                      "than 1e-7".format(len(size_sequence)))
+                self.amount_of_extrusions = len(size_sequence)
         else:
             size_sequence = [1.0]
         # this list of areas is then used to calculate the extrusions
@@ -144,9 +167,8 @@ class RandomRoomConstructor(Module):
         squared_room_length = np.sqrt(used_floor_areas[0])
         # create a new plane and rename it to Floor
         bpy.ops.mesh.primitive_plane_add()
-        new_floor = bpy.context.object
-        new_floor.name = "Floor"
-        saved_name = new_floor.name
+        self.wall_obj: bpy.types.Object = bpy.context.object
+        self.wall_obj.name = "Wall"
 
         # calculate the side length of the base room, for that the `fac_from_square_room` is used
         room_length_x = self.fac_from_square_room * random.uniform(-1, 1) * squared_room_length + squared_room_length
@@ -204,9 +226,9 @@ class RandomRoomConstructor(Module):
 
         # for each floor cut perform one cut_plane
         for i in range(self.amount_of_floor_cuts):
-            cut_plane(new_floor)
+            cut_plane(self.wall_obj)
 
-        mesh = new_floor.data
+        mesh = self.wall_obj.data
         # do several extrusions of the basic floor plan, the first one is always the basic one
         for i in range(1, self.amount_of_extrusions):
             # Change to edit mode of the selected floor
@@ -232,32 +254,66 @@ class RandomRoomConstructor(Module):
                     half_size = 0
                 used_edges = [e for e, s in boundary_sizes[half_size:]]
 
-                # select a random edge from the choose edges
-                random_edge = random.choice(used_edges)
-                # get the direction of the current edge
-                direction = np.abs(random_edge.verts[0].co - random_edge.verts[1].co)
-                # the shift value depends on the used_floor_area size
-                shift_value = used_floor_areas[i] / random_edge.calc_length()
-                # depending if the random edge is aligned with the x-axis or the y-axis,
-                # the shift is the opposite direction
-                if direction[0] < direction[1]:
-                    x_shift, y_shift = shift_value, 0
-                    # flip them if it is negative
-                    if random_edge.verts[0].co[0] < 0:
-                        x_shift *= -1
-                else:
-                    x_shift, y_shift = 0, shift_value
-                    # flip them if it is negative
-                    if random_edge.verts[0].co[1] < 0:
-                        y_shift *= -1
+                random_edge = None
+                shift_vec = None
+                edge_counter = 0
+                random_index = int(random.uniform(0, 1) * len(used_edges))
+                while edge_counter < len(used_edges):
+                    # select a random edge from the choose edges
+                    random_edge = used_edges[random_index]
+                    # get the direction of the current edge
+                    direction = np.abs(random_edge.verts[0].co - random_edge.verts[1].co)
+                    # the shift value depends on the used_floor_area size
+                    shift_value = used_floor_areas[i] / random_edge.calc_length()
 
+                    # depending if the random edge is aligned with the x-axis or the y-axis,
+                    # the shift is the opposite direction
+                    if direction[0] == 0:
+                        x_shift, y_shift = shift_value, 0
+                    else:
+                        x_shift, y_shift = 0, shift_value
+                    # calculate the vertices for the new face
+                    shift_vec = mathutils.Vector([x_shift, y_shift, 0])
+                    dir_found = False
+                    for tested_dir in [1, -1]:
+                        shift_vec *= tested_dir
+                        new_verts = [e.co for e in random_edge.verts]
+                        new_verts.extend([e + shift_vec for e in new_verts])
+                        new_verts = np.array(new_verts)
+
+                        # check if the newly constructed face is colliding with one of the others
+                        # if so generate a new face
+                        collision_face_found = False
+                        for existing_face in bm.faces:
+                            existing_verts = np.array([v.co for v in existing_face.verts])
+                            if check_bb_intersection_on_values(np.min(existing_verts, axis=0)[:2],
+                                                               np.max(existing_verts, axis=0)[:2],
+                                                               np.min(new_verts, axis=0)[:2], np.max(new_verts, axis=0)[:2],
+                                                               # by using this check an edge collision is ignored
+                                                               used_check=lambda a, b: a > b):
+                                collision_face_found = True
+                                break
+                        if not collision_face_found:
+                            dir_found = True
+                            break
+                    if dir_found:
+                        break
+                    random_index = (random_index + 1) % len(used_edges)
+                    edge_counter += 1
+                    random_edge = None
+
+                if random_edge is None:
+                    for e in used_edges:
+                        e.select = True
+                    raise Exception("No edge found to extrude up on! The reason might be that there are to many cuts"
+                                    "in the basic room or that the corridor width is too high.")
                 # extrude this edge with the calculated shift
                 random_edge.select = True
-                bpy.ops.mesh.extrude_region_move( MESH_OT_extrude_region={"use_normal_flip": False,
-                                                                          "use_dissolve_ortho_edges": False,
-                                                                          "mirror": False},
-                                                  TRANSFORM_OT_translate={"value": (x_shift, y_shift, 0),
-                                                                          "orient_type": 'GLOBAL'})
+                bpy.ops.mesh.extrude_region_move(MESH_OT_extrude_region={"use_normal_flip": False,
+                                                                         "use_dissolve_ortho_edges": False,
+                                                                         "mirror": False},
+                                                 TRANSFORM_OT_translate={"value": shift_vec,
+                                                                         "orient_type": 'GLOBAL'})
             else:
                 raise Exception("The corridor width is so big that no edge could be selected, "
                                 "reduce the corridor width or reduce the amount of floor cuts.")
@@ -275,7 +331,7 @@ class RandomRoomConstructor(Module):
         bm = bmesh.from_edit_mesh(mesh)
         bm.edges.ensure_lookup_table()
 
-        # select all boundary edges
+        # select all edges
         boundary_edges = [e for e in bm.edges if e.is_boundary]
         for e in boundary_edges:
             e.select = True
@@ -285,73 +341,159 @@ class RandomRoomConstructor(Module):
         bm.free()
         mesh.update()
 
-        if not self.create_ceiling:
-            # remove the upper ceiling if it was created, sometimes blender creates it, depending if it is a simple
-            # rectangle or not
+        def extract_plane_from_room(obj: bpy.types.Object, used_split_height: float, up_vec: mathutils.Vector,
+                                    new_name_for_obj: str):
+            """
+            Extract a plane from the current room object. This uses the FloorExtractor Module functions
+
+            :param obj: The current room object
+            :param used_split_height: The height at which the split should be performed. Usually 0 or self.wall_height
+            :param up_vec: The up_vec corresponds to the face.normal of the selected faces
+            :param new_name_for_obj: This will be the new name of the created object
+            :return: (bool, bpy.types.Object): Returns True if the object was split and also returns the object. \
+                                               Else it returns (False, None).
+            """
+            compare_height = 0.15
+            compare_angle = math.radians(7.5)
+            obj.select_set(True)
             bpy.ops.object.mode_set(mode='EDIT')
             bpy.ops.mesh.select_all(action='DESELECT')
             bm = bmesh.from_edit_mesh(mesh)
-            up_vec = mathutils.Vector([0, 0, 1])
-            found_face_to_be_deleted = False
-            compare_angle = 0.1
-            floor_faces = []
-            for f in bm.faces:
-                f.select = False
-                if math.acos(f.normal @ up_vec) < compare_angle:
-                    if np.abs(f.calc_center_median()[2] - self.wall_height) < self.wall_height * 0.1:
-                        found_face_to_be_deleted = True
-                        f.select = True
+            bm.faces.ensure_lookup_table()
+            # split the floor at the wall height
+            counter = FloorExtractor.split_at_height_value(bm, used_split_height, compare_height,
+                                                           mathutils.Vector(up_vec), compare_angle, obj.matrix_world)
+            # if any faces are selected split them up
+            if counter:
+                bpy.ops.mesh.separate(type='SELECTED')
+                bpy.ops.object.mode_set(mode='OBJECT')
+                bm.free()
+                mesh.update()
+                cur_selected_objects = bpy.context.selected_objects
+                if cur_selected_objects:
+                    if len(cur_selected_objects) == 2:
+                        cur_selected_objects = [o for o in cur_selected_objects
+                                                if o != bpy.context.view_layer.objects.active]
+                        cur_selected_objects[0].name = new_name_for_obj
+                        cur_created_obj = cur_selected_objects[0]
                     else:
-                        # these are floor faces, can be used to set the material
-                        floor_faces.append(f)
-            if found_face_to_be_deleted:
-                bpy.ops.mesh.delete(type='FACE')
+                        raise Exception("There is more than one selection after splitting, this should not happen!")
+                else:
+                    raise Exception("No floor object was constructed!")
+                bpy.ops.object.select_all(action='DESELECT')
+                return True, cur_created_obj
+            else:
+                bpy.ops.object.mode_set(mode='OBJECT')
+                bpy.ops.object.select_all(action='DESELECT')
+                return False, None
+
+        # if only one rectangle was created, the wall extrusion creates a full room with ceiling and floor, if not
+        # only the floor gets created and the ceiling is missing
+        only_rectangle_mode = False
+        for used_split_height in [(0, "Floor", [0, 0, 1]), (self.wall_height, "Ceiling", [0, 0, -1])]:
+            created, created_obj = extract_plane_from_room(self.wall_obj, used_split_height[0], used_split_height[2],
+                                                           used_split_height[1])
+            if not created and used_split_height[1] == "Floor":
+                only_rectangle_mode = True
+                break
+            elif created and created_obj is not None:
+                if "Floor" == used_split_height[1]:
+                    self.floor_obj = created_obj
+                elif "Ceiling" == used_split_height[1]:
+                    self.ceiling_obj = created_obj
+
+        if only_rectangle_mode:
+            # in this case the floor and ceiling are pointing outwards, so that normals have to be flipped
+            for used_split_height in [(0, "Floor", [0, 0, -1]), (self.wall_height, "Ceiling", [0, 0, 1])]:
+                created, created_obj = extract_plane_from_room(self.wall_obj, used_split_height[0], used_split_height[2],
+                                                               used_split_height[1])
+                # save the result accordingly
+                if created and created_obj is not None:
+                    if "Floor" == used_split_height[1]:
+                        self.floor_obj = created_obj
+                    elif "Ceiling" == used_split_height[1]:
+                        self.ceiling_obj = created_obj
+        elif self.create_ceiling:
+            # there is no ceiling -> create one
+            self.wall_obj.select_set(True)
+            bpy.ops.object.mode_set(mode='EDIT')
             bpy.ops.mesh.select_all(action='DESELECT')
-            for f in floor_faces:
-                f.select = True
+            bm = bmesh.from_edit_mesh(mesh)
+            bm.edges.ensure_lookup_table()
+            # select all upper edges and create a ceiling
+            for e in bm.edges:
+                if ((e.verts[0].co + e.verts[1].co) * 0.5)[2] >= self.wall_height:
+                    e.select = True
+            bpy.ops.mesh.edge_face_add()
+            # split the ceiling away
             bpy.ops.mesh.separate(type='SELECTED')
             bpy.ops.object.mode_set(mode='OBJECT')
             bm.free()
             mesh.update()
-
-        wall_obj = bpy.context.scene.objects[saved_name]
-        wall_obj.select_set(False)
-        wall_obj.name = "Wall"
-        if len(bpy.context.selected_objects) == 1:
-            floor_obj = bpy.context.selected_objects[0]
-            floor_obj.name = "Floor"
-        else:
-            raise Exception("Something went wrong, more than one object were selected after splitting floor and wall.")
-        return floor_obj, wall_obj
-
-    def paint_floor_and_wall(self, floor_obj, wall_obj):
-
-        # first create a uv mapping for the wall
-        for obj in [floor_obj, wall_obj]:
+            selected_objects = bpy.context.selected_objects
+            if selected_objects:
+                if len(selected_objects) == 2:
+                    selected_objects = [o for o in selected_objects
+                                        if o != bpy.context.view_layer.objects.active]
+                    selected_objects[0].name = "Ceiling"
+                    self.ceiling_obj = selected_objects[0]
+                else:
+                    raise Exception("There is more than one selection after splitting, this should not happen!")
+            else:
+                raise Exception("No floor object was constructed!")
             bpy.ops.object.select_all(action='DESELECT')
-            obj.select_set(True)
-            bpy.ops.object.mode_set(mode='EDIT')
-            bpy.ops.mesh.select_all(action='SELECT')
-            bpy.ops.uv.cube_project(cube_size=1.0)
-            bpy.ops.object.mode_set(mode='OBJECT')
+
+    def assign_materials_to_floor_wall_ceiling(self):
+        """
+        Assigns materials to the floor, wall and ceiling. These are randomly selected from the CCMaterials. This means
+        it is required that the CCMaterialLoader has been executed before, this module is run.
+        """
+
+        # first create a uv mapping for each of the three objects
+        for obj in [self.floor_obj, self.wall_obj, self.ceiling_obj]:
+            if obj is not None:
+                bpy.ops.object.select_all(action='DESELECT')
+                obj.select_set(True)
+                bpy.ops.object.mode_set(mode='EDIT')
+                bpy.ops.mesh.select_all(action='SELECT')
+                bpy.ops.uv.cube_project(cube_size=1.0)
+                bpy.ops.object.mode_set(mode='OBJECT')
 
         # only select non see through materials
         config = {"conditions": {"cp_is_cc_texture": True, "cf_principled_bsdf_Alpha_eq": 1.0}}
         material_getter = Material(Config(config))
         all_cc_materials = material_getter.run()
 
-        def assign_material(obj, material):
-            # first remove all existing
-            if obj.material_slots:
-                for i in range(len(obj.material_slots)):
-                    bpy.ops.object.material_slot_remove({'object': obj})
-            # add the new one
-            obj.data.materials.append(material)
+        def assign_material(cur_obj: bpy.types.Object, material: bpy.types.Material):
+            """
+            First all materials are removed and then the given material is assigned
 
-        assign_material(floor_obj, random.choice(all_cc_materials))
-        assign_material(wall_obj, random.choice(all_cc_materials))
+            :param cur_obj: Current object
+            :param material: Current material, which will be assigned
+            """
+            # first remove all existing
+            if cur_obj.material_slots:
+                for i in range(len(cur_obj.material_slots)):
+                    bpy.ops.object.material_slot_remove({'object': cur_obj})
+            # add the new one
+            cur_obj.data.materials.append(material)
+
+        if all_cc_materials:
+            assign_material(self.floor_obj, random.choice(all_cc_materials))
+            assign_material(self.wall_obj, random.choice(all_cc_materials))
+            if self.ceiling_obj is not None and self.assign_material_to_ceiling:
+                assign_material(self.ceiling_obj, random.choice(all_cc_materials))
+        else:
+            warnings.warn("There were no CCMaterials found, which means the CCMaterialLoader was not executed first!"
+                          "No materials have been assigned to the walls, floors and possible ceiling.")
 
     def sample_new_object_poses_on_face(self, current_obj, face_bb):
+        """
+        Sample new object poses on the current `self.floor_obj`.
+
+        :param face_bb:
+        :return: True, if there is no collision
+        """
         random_placed_value = [random.uniform(face_bb[0][i], face_bb[1][i]) for i in range(2)]
         random_placed_value.append(0.0)  # floor z value
 
@@ -367,10 +509,13 @@ class RandomRoomConstructor(Module):
 
     def run(self):
         # construct a random room
-        floor_obj, self.wall_obj = self.construct_random_room()
-        self.placed_objects.extend([self.wall_obj])
+        self.construct_random_room()
+        self.placed_objects.append(self.wall_obj)
+        if self.ceiling_obj is not None:
+            self.placed_objects.append(self.ceiling_obj)
 
-        self.paint_floor_and_wall(floor_obj, self.wall_obj)
+        # assign materials to all existing objects
+        self.assign_materials_to_floor_wall_ceiling()
 
         # use a loader module to load objects
         bpy.ops.object.select_all(action='SELECT')
@@ -385,9 +530,9 @@ class RandomRoomConstructor(Module):
 
         # get all floor faces and save their size and bounding box for the round robin
         bpy.ops.object.select_all(action='DESELECT')
-        floor_obj.select_set(True)
+        self.floor_obj.select_set(True)
         bpy.ops.object.mode_set(mode='EDIT')
-        mesh = floor_obj.data
+        mesh = self.floor_obj.data
         bm = bmesh.from_edit_mesh(mesh)
         bm.faces.ensure_lookup_table()
 
@@ -408,6 +553,10 @@ class RandomRoomConstructor(Module):
         loaded_objects.sort(key=lambda obj: get_bound_volume(obj))
         loaded_objects.reverse()
 
+        list_of_deleted_objects = []
+
+        step_size = 1.0 / self.amount_of_objects_per_sq_meter * float(len(loaded_objects))
+        current_step_size_counter = random.uniform(-step_size, step_size)
         for selected_obj in loaded_objects:
             current_obj = selected_obj
             is_duplicated = False
@@ -418,12 +567,19 @@ class RandomRoomConstructor(Module):
                 cur_obj = bpy.context.selected_objects[-1]
                 return cur_obj
 
-            # walk over all faces in a round robin
-            try_per_face = 3
-            step_size = 3  # sample one object on one square meter
+            # if the step size is bigger than the room size, certain objects need to be skipped
+            if step_size > total_face_size:
+                current_step_size_counter += total_face_size
+                if current_step_size_counter > step_size:
+                    current_step_size_counter = random.uniform(-step_size, step_size)
+                    continue
+
+            # walk over all faces in a round robin fashion
             total_acc_size = 0
+            # select a random start point
             current_i = int(random.uniform(0, 1) * len(list_of_face_sizes))
-            current_accumulated_face_size = math.fmod(sum(list_of_face_sizes[:current_i]), step_size)
+            current_accumulated_face_size = random.uniform(0, step_size + 1e-7)
+            # check if the accumulation of all visited faces is bigger than the sum of all of them
             while total_acc_size < total_face_size:
                 face_size = list_of_face_sizes[current_i]
                 face_bb = list_of_face_bb[current_i]
@@ -431,7 +587,7 @@ class RandomRoomConstructor(Module):
                     # face size is bigger than one step
                     current_accumulated_face_size += face_size
                     if current_accumulated_face_size > step_size:
-                        for _ in range(try_per_face):
+                        for _ in range(self.tries_per_face):
                             found_spot = self.sample_new_object_poses_on_face(current_obj, face_bb)
                             if found_spot:
                                 self.placed_objects.append(current_obj)
@@ -443,7 +599,7 @@ class RandomRoomConstructor(Module):
                     # face size is bigger than one step
                     amount_of_steps = int((face_size + current_accumulated_face_size) / step_size)
                     for i in range(amount_of_steps):
-                        for _ in range(try_per_face):
+                        for _ in range(self.tries_per_face):
                             found_spot = self.sample_new_object_poses_on_face(current_obj, face_bb)
                             if found_spot:
                                 self.placed_objects.append(current_obj)
@@ -461,13 +617,15 @@ class RandomRoomConstructor(Module):
             # if there was no collision save the object in the placed list
             if is_duplicated:
                 # delete the duplicated object
-                bpy.ops.object.select_all(action='DESELECT')
-                current_obj.select_set(True)
-                bpy.ops.object.delete()
+                list_of_deleted_objects.append(current_obj)
+
+        # delete all objects, which have not been placed during the operation
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in list_of_deleted_objects:
+            obj.select_set(True)
 
         # delete the loaded objects, which couldn't be placed
         for obj in loaded_objects:
             if obj not in self.placed_objects:
-                bpy.ops.object.select_all(action='DESELECT')
                 obj.select_set(True)
-                bpy.ops.object.delete()
+        bpy.ops.object.delete()

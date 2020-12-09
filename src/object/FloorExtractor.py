@@ -216,7 +216,6 @@ class FloorExtractor(Module):
                     height_value = np.min(ms.cluster_centers_)
                 else:
                     height_value = np.max(ms.cluster_centers_)
-                print(ms.cluster_centers_)
                 bpy.ops.mesh.select_all(action='DESELECT')
                 counter = FloorExtractor.split_at_height_value(bm, height_value, compare_height, up_vec,
                                                                compare_angle, obj.matrix_world)

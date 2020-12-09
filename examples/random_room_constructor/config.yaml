@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: <output_dir>
 {
   "version": 3,
   "setup": {
@@ -12,13 +12,12 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "output",
+          "output_dir": "<args:0>",
           "max_bounces": 200,
           "diffuse_bounces": 200,
           "glossy_bounces": 200,
           "transmission_bounces": 200,
-          "transparency_bounces": 200,
-          "sys_paths": ["/home/max/workspace/bop_toolkit"]
+          "transparency_bounces": 200
         }
       }
     },
@@ -31,96 +30,29 @@
     {
       "module": "constructor.RandomRoomConstructor",
       "config": {
-        "floor_area": 29,
+        "floor_area": 25,
+        "amount_of_extrusions": 5,
         "used_loader_config": [
           {
-            "module": "loader.AMASSLoader",
+            "module": "loader.IKEALoader",
             "config": {
-              "data_path": "resources/AMASS",
-              "sub_dataset_id": "CMU",
-            },
-            "amount_of_repetitions": 10
-          },
-          {
-            "module": "loader.Pix3DLoader",
-            "config": {
-              "used_category": "bed"
+              "category": ["bed", "chair", "desk", "bookshelf"]
             },
             "amount_of_repetitions": 15
-          },
-          {
-            "module": "loader.Pix3DLoader",
-            "config": {
-              "used_category": "wardrobe"
-            },
-            "amount_of_repetitions": 15
-          },
-          {
-            "module": "loader.Pix3DLoader",
-            "config": {
-              "used_category": "desk"
-            },
-            "amount_of_repetitions": 15
-          },
-          {
-            "module": "loader.Pix3DLoader",
-            "config": {
-              "used_category": "chair"
-            },
-            "amount_of_repetitions": 30
-          },
-          {
-            "module": "loader.ShapeNetLoader",
-            "config": {
-              "data_path": "/media/max/Volume/linux_data/ShapeNetCore.v2",
-              "used_synset_id": "02801938"
-            },
-            "amount_of_repetitions": 15
-          },
-          {
-            "module": "loader.ShapeNetLoader",
-            "config": {
-              "data_path": "/media/max/Volume/linux_data/ShapeNetCore.v2",
-              "used_synset_id": "03938244"
-            },
-            "amount_of_repetitions": 10
-          },
-          {
-            "module": "loader.BopLoader",
-            "config": {
-              "bop_dataset_path": "/home/max/Downloads/bop/tless",
-              "model_type": "cad",
-              "mm2m": True,
-              "sample_objects": True,
-              "num_of_objs_to_sample": 20,
-              "move_origin_to_x_y_plane": True,
-            }
-          },
-          {
-            "module": "loader.BopLoader",
-            "config": {
-              "bop_dataset_path": "/home/max/Downloads/bop/lm",
-              "model_type": "",
-              "mm2m": True,
-              "sample_objects": True,
-              "move_origin_to_x_y_plane": True,
-              "num_of_objs_to_sample": 20,
-              "cf_set_shading": "SMOOTH"
-            }
           },
         ]
       }
     },
     {
-      "module": "lighting.LightLoader",
+      "module": "lighting.SurfaceLighting",
       "config": {
-        "lights": [
-          {
-            "type": "POINT",
-            "location": [0, 0, 3],
-            "energy": 200
-          }
-        ]
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Ceiling"
+          },
+          "emission_strength": 4.0
+        }
       }
     },
     {
@@ -151,6 +83,7 @@
               "min":[1.0, 0, 0]
             }
           },
+          "min_interest_score": 0.4,
           "check_if_pose_above_object_list": {
             "provider": "getter.Entity",
             "conditions": {
@@ -164,7 +97,7 @@
     {
       "module": "renderer.RgbRenderer",
       "config": {
-        "samples": 150,
+        "samples": 350,
       }
     },
     {
