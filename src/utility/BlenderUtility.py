@@ -27,11 +27,11 @@ def get_bounds(obj):
 def check_bb_intersection(obj1, obj2):
     """
     Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
-        The surrounding/including axis-aligned bounding box is calculated and used to check the intersection
+    The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.
 
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    :return: a boolean
+    :return: True if the two bounding boxes intersect with each other
     """
     b1w = get_bounds(obj1)
 
@@ -49,6 +49,23 @@ def check_bb_intersection(obj1, obj2):
     b2w = get_bounds(obj2)
     # get min and max point of the axis-aligned bounding box
     min_b2, max_b2 = min_and_max_point(b2w)
+    return check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
+
+
+def check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2, used_check=lambda a, b: a >= b):
+    """
+    Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
+    namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
+    problems.
+
+    :param min_b1: List of minimum bounding box points for b1.
+    :param max_b1: List of maximum bounding box points for b1.
+    :param min_b2: List of minimum bounding box points for b2.
+    :param max_b2: List of maximum bounding box points for b2.
+    :param used_check: The operation used inside of the is_overlapping1D. With that it possible to change the \
+                       collision check from volume and surface check to pure surface or volume checks.
+    :return: True if the two bounding boxes intersect with each other
+    """
     collide = True
     for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
         # inspired by this:
@@ -56,7 +73,7 @@ def check_bb_intersection(obj1, obj2):
         # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
         def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
             # returns true if the min and max values are overlapping
-            return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
+            return used_check(x_max_1, x_min_2) and used_check(x_max_2, x_min_1)
 
         collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
     return collide
