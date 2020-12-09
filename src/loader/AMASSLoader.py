@@ -9,7 +9,6 @@ import bpy
 import mathutils
 
 from src.loader.LoaderInterface import LoaderInterface
-from src.utility.BlenderUtility import get_bounds
 from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
 
@@ -308,19 +307,16 @@ class AMASSLoader(LoaderInterface):
                     nodes, "BsdfPrincipled")
                 # Pick random skin color value
                 skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
-                def hex_to_rgb(value):
-                    lv = len(value)
-                    return tuple(int(value[i:i + lv // 3], 16) for i in range(0, lv, lv // 3))
-                skin_tone_rgb = hex_to_rgb(skin_tone_hex)
+                skin_tone_rgb = Utility.hex_to_rgba(skin_tone_hex)[:3]
 
                 # this is done to make the chance higher that the representation of skin tones is more diverse
                 skin_tone_fac = random.uniform(0.0, 1)
                 skin_tone_rgb = [value * skin_tone_fac for value in skin_tone_rgb]
                 principled_bsdf.inputs["Base Color"].default_value = mathutils.Vector(
-                    [*skin_tone_rgb, 255]) / 255.0
+                    [*skin_tone_rgb, 1.0])
                 principled_bsdf.inputs["Subsurface"].default_value = 0.2
                 principled_bsdf.inputs["Subsurface Color"].default_value = mathutils.Vector(
-                    [*skin_tone_rgb, 255]) / 255.0
+                    [*skin_tone_rgb, 1.0])
 
                 # darker skin looks better when made less specular
                 principled_bsdf.inputs["Specular"].default_value = np.mean(skin_tone_rgb) / 255.0
