@@ -1,9 +1,9 @@
 import warnings
+import math
 
 import bpy
 import bmesh
 import mathutils
-import math
 import numpy as np
 import random
 
@@ -13,6 +13,7 @@ from src.object.ObjectPoseSampler import ObjectPoseSampler
 from src.provider.getter.Material import Material
 from src.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
 from src.utility.Utility import Utility, Config
+
 
 class RandomRoomConstructor(Module):
     """
@@ -27,8 +28,8 @@ class RandomRoomConstructor(Module):
     then the room will have up to 3 corridors or bigger pieces extruding from the main rectangular.
 
     Example 1, in this first example a random room will be constructed it will have a floor area of 20 square meters.
-    The room will then be filled with 15 randomly selected objects from the Pix3D dataset. Checkout the
-    `examples/pix3d` if you want to know more on that particular dataset.
+    The room will then be filled with 15 randomly selected objects from the IKEA dataset, belonging to the categories
+    "bed" and "chair". Checkout the `examples/ikea` if you want to know more on that particular dataset.
 
     .. code-block:: yaml
 
@@ -38,9 +39,9 @@ class RandomRoomConstructor(Module):
             "floor_area": 20,
             "used_loader_config": [
               {
-                "module": "loader.Pix3DLoader",
+                "module": "loader.IKEALoader",
                 "config": {
-                  "used_category": "bed"
+                  "category": ["bed", "chair"]
                 },
                 "amount_of_repetitions": 15
               }
@@ -95,6 +96,15 @@ class RandomRoomConstructor(Module):
           - If this is True a material from the CCMaterial set is assigned to the ceiling. This is only possible if a
             ceiling was created. Default: False.
           - bool
+        * - placement_tries_per_face
+          - The amount of tries, which are performed per floor segment to place an object, a higher number, will
+            get a better accuracy on the `amount_of_objects_per_sq_meter` value. But, it will also increase the
+            computation time. Default: 3.
+          - int
+        * - amount_of_objects_per_sq_meter
+          - The amount of objects, which should be placed in one square meter, this value is only used as approximation.
+            Especially, if the objects have very different sizes this might lead to different results. Default: 3.0
+          - float
     """
 
     def __init__(self, config: Config):
@@ -120,7 +130,7 @@ class RandomRoomConstructor(Module):
         self.create_ceiling = self.config.get_bool("create_ceiling", True)
         self.assign_material_to_ceiling = self.config.get_bool("assign_material_to_ceiling", False)
         self.tries_per_face = self.config.get_int("placement_tries_per_face", 3)
-        self.amount_of_objects_per_sq_meter = self.config.get_int("amount_of_objects_per_sq_meter", 3)
+        self.amount_of_objects_per_sq_meter = self.config.get_float("amount_of_objects_per_sq_meter", 3.0)
 
         self.wall_obj = None
         self.floor_obj = None
@@ -130,8 +140,11 @@ class RandomRoomConstructor(Module):
         """
         This function constructs the floor plan and builds up the wall. This can be more than just a rectangular shape.
 
-
-
+        If `amount_of_extrusions` is bigger than zero, the basic rectangular shape is extended, by first performing
+        random cuts in this base rectangular shape along the axis. Then one of the edges is randomly selected and
+        from there it is extruded outwards to get to the desired `floor_area`. This process is repeated
+        `amount_of_extrusions` times. It might be that a room has less than the desired `amount_of_extrusions` if
+        the random splitting reaches the `floor_area` beforehand.
         """
 
         # if there is more than one extrusions, the used floor area must be split over all sections
@@ -248,7 +261,7 @@ class RandomRoomConstructor(Module):
                 boundary_sizes.sort(key=lambda e: e[1])
                 if self.only_use_big_edges:
                     # only select the bigger half of the selected boundaries
-                    half_size = len(boundary_sizes)//2
+                    half_size = len(boundary_sizes) // 2
                 else:
                     # use any of the selected boundaries
                     half_size = 0
@@ -288,7 +301,8 @@ class RandomRoomConstructor(Module):
                             existing_verts = np.array([v.co for v in existing_face.verts])
                             if check_bb_intersection_on_values(np.min(existing_verts, axis=0)[:2],
                                                                np.max(existing_verts, axis=0)[:2],
-                                                               np.min(new_verts, axis=0)[:2], np.max(new_verts, axis=0)[:2],
+                                                               np.min(new_verts, axis=0)[:2],
+                                                               np.max(new_verts, axis=0)[:2],
                                                                # by using this check an edge collision is ignored
                                                                used_check=lambda a, b: a > b):
                                 collision_face_found = True
@@ -405,7 +419,8 @@ class RandomRoomConstructor(Module):
         if only_rectangle_mode:
             # in this case the floor and ceiling are pointing outwards, so that normals have to be flipped
             for used_split_height in [(0, "Floor", [0, 0, -1]), (self.wall_height, "Ceiling", [0, 0, 1])]:
-                created, created_obj = extract_plane_from_room(self.wall_obj, used_split_height[0], used_split_height[2],
+                created, created_obj = extract_plane_from_room(self.wall_obj, used_split_height[0],
+                                                               used_split_height[2],
                                                                used_split_height[1])
                 # save the result accordingly
                 if created and created_obj is not None:
