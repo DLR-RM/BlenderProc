@@ -89,10 +89,10 @@ class LoaderInterface(Module):
         bpy.context.view_layer.update()
 
     @staticmethod
-    def place_origin_in_world_origin(objects: [bpy.types.Object]):
+    def move_obj_origin_to_bottom_mean_point(objects: [bpy.types.Object]):
         """
-        Moves the object center to the world origin, while the minimum Z value in the vertices determines the
-        lowest point. So that all objects are placed on the X-Y plane.
+        Moves the object center to bottom of the bounding box in Z direction and also in the middle of the X and Y
+        plane. So that all objects have a similar origin, which then makes the placement easier.
 
         :param objects: list of objects, which origin should be moved
         """

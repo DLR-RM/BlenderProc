@@ -288,7 +288,7 @@ class AMASSLoader(LoaderInterface):
 
         # move the origin of the object to the world origin and on top of the X-Y plane
         # makes it easier to place them later on, this does not change the `.location`
-        LoaderInterface.place_origin_in_world_origin(loaded_obj)
+        LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_obj)
         bpy.ops.object.select_all(action='DESELECT')
 
 

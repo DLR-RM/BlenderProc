@@ -218,7 +218,7 @@ class BopLoader(LoaderInterface):
         # This is only useful if the BOP objects are not used in a pose estimation scenario.
         move_to_origin = self.config.get_bool("move_origin_to_x_y_plane", False)
         if move_to_origin:
-            LoaderInterface.place_origin_in_world_origin(loaded_objects)
+            LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_objects)
 
 
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
