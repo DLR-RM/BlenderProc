@@ -70,7 +70,7 @@ class HavenEnvironmentLoader(LoaderInterface):
         links = world.node_tree.links
 
         # add a texture node and load the image and link it
-        texture_node = nodes.add_node(type="ShaderNodeTexEnvironment", use_transform=True)
+        texture_node = nodes.new(type="ShaderNodeTexEnvironment")
         texture_node.image = bpy.data.images.load(path_to_hdr_file, check_existing=True)
 
         # get the one output node of the world shader
@@ -78,21 +78,3 @@ class HavenEnvironmentLoader(LoaderInterface):
 
         # link the new texture node to the output
         links.new(texture_node.outputs["Color"], output_node.inputs["Surface"])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
