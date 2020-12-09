@@ -13,11 +13,15 @@ from pathlib import Path
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--resolution', default="2k")
-parser.add_argument('--format', default="jpg")
+parser.add_argument('--resolution', help="Desired resolution for the hdr images. Be aware that bigger resolutions, "
+                                         "take a lot of disc space.", default="2k")
+parser.add_argument('--format', help="Desired download format for the images.", default="jpg")
+output_dir = Path(__file__).parent / ".." / "resources" / "haven"
+parser.add_argument('--output_folder', help="Determines where the data is going to be saved.", default=output_dir)
 args = parser.parse_args()
 
-output_dir = Path(__file__).parent / ".." / "resources" / "haven"
+output_dir = Path(args.output_folder)
+
 
 def download_items(list_url, output_dir, item_download_func):
     print("Downloading " + output_dir.name + "...")
@@ -41,7 +45,8 @@ def download_items(list_url, output_dir, item_download_func):
             item_download_func(item_id, item_output)
 
 def download_texture(item_id, output_dir):
-    download_url = "https://texturehaven.com/files/textures/zip/2k/{}/{}_{}_{}.zip".format(item_id, item_id, args.resolution, args.format)
+    download_url = "https://texturehaven.com/files/textures/zip/2k/{}/{}_{}_{}.zip".format(item_id, item_id,
+                                                                                           args.resolution, args.format)
     request = requests.get(download_url)
     with zipfile.ZipFile(BytesIO(request.content)) as tar:
         tar.extractall(str(output_dir))
