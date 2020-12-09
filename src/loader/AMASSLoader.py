@@ -136,6 +136,7 @@ class AMASSLoader(LoaderInterface):
             if not self._used_subject_id:
                 # if none was selected
                 possible_subject_ids = glob.glob(os.path.join(sub_dataset_path, "*"))
+                possible_subject_ids.sort()
                 if len(possible_subject_ids) > 0:
                     used_subject_id_str = os.path.basename(random.choice(possible_subject_ids))
                 else:
@@ -146,6 +147,7 @@ class AMASSLoader(LoaderInterface):
             if self._used_sequence_id < 0:
                 # if no sequence id was selected
                 possible_sequence_ids = glob.glob(os.path.join(sub_dataset_path, used_subject_id_str, "*"))
+                possible_sequence_ids.sort()
                 if len(possible_sequence_ids) > 0:
                     used_sequence_id = os.path.basename(random.choice(possible_sequence_ids))
                     used_sequence_id = used_sequence_id[used_sequence_id.find("_")+1:used_sequence_id.rfind("_")]
