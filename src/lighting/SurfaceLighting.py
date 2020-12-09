@@ -9,6 +9,9 @@ from src.utility.Utility import Utility
 class SurfaceLighting(Module):
     """
     Adds lighting to the scene, by adding emission shader nodes to surfaces of specified objects.
+    The speciality here is that the material can still look like before and now also emit light, this can be done
+    by setting `keep_using_base_color` to `True`. If the material should not be kept this can be set to `False` and
+    with the key `emission_color` a new color can be set, if none is given it will assume `[1, 1, 1]`, which is white.
 
     **Configuration**:
 
