@@ -21,6 +21,7 @@ class SurfaceLighting(Module):
           - Type
         * - selection
           - Selection of objects, via the `getter.Entity`.
+          - Provider
         * - emission_strength
           - The strength of the emission shader. Default: 10.0.
           - float
