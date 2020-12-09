@@ -20,8 +20,8 @@
       "module": "loader.IKEALoader",
       "config": {
         "data_dir": "<args:0>",
-        "obj_type": "table",
-        "obj_style": null,
+        "category": "table",
+        "style": null,
       }
     },
     {
