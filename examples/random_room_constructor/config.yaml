@@ -98,6 +98,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 350,
+        "render_distance": True
       }
     },
     {
@@ -106,7 +107,7 @@
         "postprocessing_modules": {
           "distance": [
             {
-              "module": "postprocessing.TrimRedundantChannels",
+              "module": "postprocessing.Dist2Depth",
             }
           ]
         }

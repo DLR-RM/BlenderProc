@@ -592,7 +592,7 @@ class RandomRoomConstructor(Module):
             # walk over all faces in a round robin fashion
             total_acc_size = 0
             # select a random start point
-            current_i = random.randrange(list_of_face_sizes)
+            current_i = random.randrange(len(list_of_face_sizes))
             current_accumulated_face_size = random.uniform(0, step_size + 1e-7)
             # check if the accumulation of all visited faces is bigger than the sum of all of them
             while total_acc_size < total_face_size:
