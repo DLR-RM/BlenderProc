@@ -30,7 +30,7 @@ class SurfaceLighting(Module):
           - float
         * - keep_using_base_color
           - If this is True, the Base Color of the material is kept, this means if the material was yellow before. \
-            The light now is also yellow. Default: False.
+            The light now is also yellow. This is also true, if a texture was used before. Default: False.
           - bool
         * - emission_color
           - If `keep_using_case_color` is False it is possible to set the color of the light with an RGB value. All \

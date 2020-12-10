@@ -70,13 +70,39 @@ Be aware if the `unknown_texture_folder` value is not set, that the unknown fold
 This folder does *not* exist after downloading the texture files, it has to be manually generated. 
 By selecting random texture and putting them in this `unknown_texture_folder`, which can be used on unknown structures.
 
-### SceneNetLighting
+### SurfaceLighting
 
 ```yaml
-"module": "lighting.SceneNetLighting"
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+      "conditions": {
+        "name": ".*lamp.*"
+      }
+  },
+  "emission_strength": 15.0,
+  "keep_using_base_color": True
+}
 ```
 
-We now have to light up the scene by making all lamps and the ceiling emit light.
+The first module call will make the lamps in the scene emit light, while using the assigned material textures. 
+
+```yaml
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+    "conditions": {
+      "name": "Ceiling"
+    },
+    "emission_strength": 2.0
+  }
+}
+```
+
+The second module call will make the ceiling emit light and remove any materials placed on it.
+This can be changed if desired for more information check out the documentation of the module.
 
 ### CameraSampler
 

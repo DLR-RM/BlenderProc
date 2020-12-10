@@ -168,17 +168,39 @@ We also use the `randomization_level` and set it `0.4`.
 Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.
 Each material loaded by CCMaterialLoader set the `cp_is_cc_texture` custom property to true.
 
-### SceneNetLighting
+### SurfaceLighting
 
 ```yaml
-"module": "lighting.SceneNetLighting"
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+      "conditions": {
+        "name": ".*lamp.*"
+      }
+  },
+  "emission_strength": 15.0,
+  "keep_using_base_color": True
+}
 ```
 
-We now have to light up the scene by making all lamps and the ceiling emit light.
+The first module call will make the lamps in the scene emit light, while using the assigned material textures.
 
-This even works after the materials have been replaced, the materials of the objects are selected by the name of the object.
-So it does not matter if the materials of the object have been switched beforehand.
+```yaml
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+    "conditions": {
+      "name": "Ceiling"
+    },
+    "emission_strength": 2.0
+  }
+}
+```
 
+The second module call will make the ceiling emit light and remove any materials placed on it.
+This can be changed if desired for more information check out the documentation of the module.
 
 ## More examples
 
