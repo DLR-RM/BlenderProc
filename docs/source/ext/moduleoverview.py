@@ -3,6 +3,7 @@ from docutils import nodes
 import pdb
 from collections import defaultdict
 from sphinx import addnodes
+from pathlib import Path
 
 class classlist(nodes.General, nodes.Element):
     pass
@@ -21,14 +22,16 @@ def generate_collapsible_classlist(app, fromdocname, classes, container, caption
         module = e[0].split(".")[module_index]
         entries[module].append(e)
 
+    #print("t", fromdocname)
     toc = nodes.bullet_list()
     toc += nodes.caption(caption, '', *[nodes.Text(caption)])
     for module, class_list in entries.items():
+        #print("t2", "src." + prefix + module)
         ref = nodes.reference('', '')
         ref['refuri'] = app.builder.get_relative_uri(fromdocname, prefix + module)
         ref.append(nodes.Text(module.capitalize()))
         module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
-        if fromdocname.startswith("src." + module):
+        if fromdocname.startswith(prefix + module):
             module_item["classes"].append('current')
         toc += module_item
 
@@ -48,6 +51,34 @@ def generate_collapsible_classlist(app, fromdocname, classes, container, caption
 
     container += toc
 
+def generate_examples_sidebar(app, fromdocname, container):
+    toc = nodes.bullet_list()
+
+    ref = nodes.reference('', '')
+    ref['refuri'] = app.builder.get_relative_uri(fromdocname, "examples/index")
+    ref.append(nodes.Text("Examples"))
+    module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
+    if fromdocname.startswith("examples/"):
+        module_item["classes"].append('current')
+    toc += module_item
+
+    subtree = nodes.bullet_list()
+    module_item += subtree
+
+    examples = Path(__file__).absolute().parent.parent / "examples"
+    for example in sorted(examples.rglob("*/index.md"), key=lambda x: x.parent.name):
+        ref = nodes.reference('', '')
+        ref['refuri'] = app.builder.get_relative_uri(fromdocname, str(example).replace(str(examples), "examples").replace("index.md", "index"))
+        ref.append(nodes.Text(example.parent.name))
+        class_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l2"])
+
+        if fromdocname == ref['refuri'].replace(".html", ""):
+            class_item['classes'].append('current')
+        subtree += class_item
+
+
+    container += toc
+
 def generate_sidebar(app, fromdocname):
     env = app.builder.env
     container = nodes.compound(classes=['toctree-wrapper'])#addnodes.compact_paragraph('', '', classes=['toctree-wrapper'])
@@ -64,6 +95,7 @@ def generate_sidebar(app, fromdocname):
             group = "modules"
         classes_per_group[group][0].append(e)
 
+    generate_examples_sidebar(app, fromdocname, container)
     for key, items in classes_per_group.items():
         generate_collapsible_classlist(app, fromdocname, items[0], container, key.capitalize(), items[1])
 
@@ -90,7 +122,12 @@ def add_classlist_handler(app):
 
 def html_page_context(app, pagename, templatename, context, doctree):
     def make_toctree(collapse=True, maxdepth=-1, includehidden=True, titles_only=False):
-        fulltoc = generate_sidebar(app, "" if "title" not in context else context["title"])
+        if "page_source_suffix" in context and context["page_source_suffix"] == ".md":
+            fromdocname = context["current_page_name"]
+        else:
+            fromdocname = "" if "title" not in context else context["title"]
+
+        fulltoc = generate_sidebar(app, fromdocname)
         rendered_toc = app.builder.render_partial(fulltoc)['fragment']
         return rendered_toc
 
