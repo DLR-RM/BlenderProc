@@ -188,16 +188,17 @@ class IKEALoader(LoaderInterface):
                 scale = 1.0
             else:
                 raise Exception("The file unit type: {} is not defined".format(file_unit))
-            # move all object centers to the world origin and set the bounding box correctly
-            bpy.ops.object.select_all(action='DESELECT')
-            obj.select_set(True)
-            bpy.context.view_layer.objects.active = obj
             if scale != 1.0:
+                # move all object centers to the world origin and set the bounding box correctly
+                bpy.ops.object.select_all(action='DESELECT')
+                obj.select_set(True)
+                bpy.context.view_layer.objects.active = obj
                 # scale object down
                 bpy.ops.object.mode_set(mode='EDIT')
                 bpy.ops.transform.resize(value=(scale, scale, scale))
                 bpy.ops.object.mode_set(mode='OBJECT')
                 bpy.context.view_layer.update()
+                bpy.ops.object.select_all(action='DESELECT')
 
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
