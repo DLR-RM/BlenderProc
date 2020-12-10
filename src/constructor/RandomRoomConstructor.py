@@ -270,7 +270,7 @@ class RandomRoomConstructor(Module):
                 random_edge = None
                 shift_vec = None
                 edge_counter = 0
-                random_index = int(random.uniform(0, 1) * len(used_edges))
+                random_index = random.randrange(len(used_edges))
                 while edge_counter < len(used_edges):
                     # select a random edge from the choose edges
                     random_edge = used_edges[random_index]
@@ -592,7 +592,7 @@ class RandomRoomConstructor(Module):
             # walk over all faces in a round robin fashion
             total_acc_size = 0
             # select a random start point
-            current_i = int(random.uniform(0, 1) * len(list_of_face_sizes))
+            current_i = random.randrange(list_of_face_sizes)
             current_accumulated_face_size = random.uniform(0, step_size + 1e-7)
             # check if the accumulation of all visited faces is bigger than the sum of all of them
             while total_acc_size < total_face_size:
