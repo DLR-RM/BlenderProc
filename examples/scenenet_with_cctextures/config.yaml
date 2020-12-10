@@ -32,7 +32,8 @@
       "module": "loader.CCMaterialLoader",
       # you can use the scripts/download_cc_textures.py to download them
       "config": {
-        "folder_path": "<args:2>"
+        "folder_path": "<args:2>",
+        "preload": True
       }
     },
     {
@@ -45,7 +46,7 @@
           }
         },
         "cf_randomize_materials": {
-          "randomization_level": 0.4,
+          "randomization_level": 1.0,
           "materials_to_replace_with": {
             "provider": "getter.Material",
             "random_samples": 1,
@@ -54,6 +55,14 @@
             }
           }
         }
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>",
+        "fill_used_empty_materials": True
       }
     },
     {

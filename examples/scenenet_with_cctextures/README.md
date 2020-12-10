@@ -124,13 +124,20 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 ### CCMaterialLoader
 
 ```yaml
-"module": "loader.CCMaterialLoader"
+{
+  "module": "loader.CCMaterialLoader",
+  # you can use the scripts/download_cc_textures.py to download them
+  "config": {
+    "folder_path": "<args:2>",
+    "preload": True
+  }
+}
 ```
 
-This one line loads all the materials, which are available at [cc0textures.com](https://cc0textures.com/).
+This one line loads creates empty materials, corresponding to the materials ,which are available at [cc0textures.com](https://cc0textures.com/).
 It assumes the textures have been downloaded via the [script](../../scripts/download_cc_textures.py). 
 
-The textures have not been loaded into memory yet, only when they are really used are they loaded.
+As the loading of all the images is quite time consuming, we preload here only the structure, but not the actual images.
 Each material will have a custom property `"is_cc_texture": True`.
 
 This module only sets up the materials which can then be used by other modules.
@@ -167,6 +174,22 @@ We also use the `randomization_level` and set it `0.4`.
 
 Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.
 Each material loaded by CCMaterialLoader set the `cp_is_cc_texture` custom property to true.
+
+### CCMaterialLoader
+
+```yaml
+{
+  "module": "loader.CCMaterialLoader",
+  # you can use the scripts/download_cc_textures.py to download them
+  "config": {
+    "folder_path": "<args:2>",
+    "fill_used_empty_materials": True
+  }
+}
+```
+
+Now the empty materials, which have been used by the `manipulators.EntityManipulator` are filled with the actual images.
+If this is not done, all the materials will be empty.
 
 ### SceneNetLighting
 
