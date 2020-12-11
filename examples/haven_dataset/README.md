@@ -44,10 +44,12 @@ python scripts/visHdf5Files.py examples/haven_dataset/output/*.hdf5
 ### BlendLoader 
 
 ```yaml
-"module": "loader.BlendLoader",
-"config": {
-  "path": "<args:0>",
-  "load_from": "/Object"
+{
+  "module": "loader.BlendLoader",
+  "config": {
+    "path": "<args:0>",
+    "load_from": "/Object"
+  }
 }
 ```
 
@@ -56,9 +58,11 @@ The `BlendLoader` loads the given blend file and extracts the object from it.
 ### HavenEnvironmentLoader 
 
 ```yaml
-"module": "loader.HavenEnvironmentLoader",
-"config": {
-  "data_path": "<args:1>"
+{
+  "module": "loader.HavenEnvironmentLoader",
+  "config": {
+    "data_path": "<args:1>"
+  }
 }
 ```
 
