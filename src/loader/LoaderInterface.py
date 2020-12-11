@@ -22,7 +22,12 @@ class LoaderInterface(Module):
         * - cf_set_shading
           - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]
           - string
+        * - cf_apply_transformation
+          - Loaded objects, sometimes contain transformations, these can be applied to the mesh, so that setting a
+            new location, has the expected behavior. Else the prior location, will be replaced. Default: False.
+          - bool
     """
+
     def __init__(self, config):
         Module.__init__(self, config)
 
@@ -42,11 +47,32 @@ class LoaderInterface(Module):
                     key = key[3:]
                     obj[key] = value
                 else:
-                    raise RuntimeError("Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
-                                       "Use manipulators.Entity for setting object's attribute values.")
+                    raise RuntimeError(
+                        "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
+                        "Use manipulators.Entity for setting object's attribute values.")
         if self.config.has_param("cf_set_shading"):
             mode = self.config.get_string("cf_set_shading")
             LoaderInterface.change_shading_mode(objects, mode)
+
+        apply_transformation = self.config.get_bool("cf_apply_transformation", False)
+        if apply_transformation:
+            LoaderInterface.apply_transformation_to_objects(objects)
+
+    @staticmethod
+    def apply_transformation_to_objects(objects: [bpy.types.Object]):
+        """
+        Apply the current transformation of the object, which are saved in the location, scale or rotation attributes
+        to the mesh and sets them to their init values.
+
+        :param objects: List of objects, which should be changed
+        """
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in objects:
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+            obj.select_set(False)
+        bpy.ops.object.select_all(action='DESELECT')
 
     @staticmethod
     def change_shading_mode(objects: [bpy.types.Object], mode: str):
