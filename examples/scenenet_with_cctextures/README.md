@@ -134,7 +134,7 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 }
 ```
 
-This one line loads creates empty materials, corresponding to the materials ,which are available at [cc0textures.com](https://cc0textures.com/).
+This module loads empty materials, corresponding to the materials ,which are available at [cc0textures.com](https://cc0textures.com/).
 It assumes the textures have been downloaded via the [script](../../scripts/download_cc_textures.py). 
 
 As the loading of all the images is quite time consuming, we preload here only the structure, but not the actual images.

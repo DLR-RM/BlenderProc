@@ -27,8 +27,8 @@ for module in list(sys.modules.keys()):
 
 from src.main.Pipeline import Pipeline
 
-config_path = "examples/scenenet_with_cctextures/config.yaml"
-args = ["/home/max/workspace/BlenderProc/resources/scenenet/SceneNetData/1Bedroom/bedroom_1.obj", "/home/max/workspace/BlenderProc/resources/scenenet/texture_library", "/media/max/Volume/linux_data/haven", "output"] #["/media/max/Volume/linux_data/haven/models/ArmChair_01/ArmChair_01.blend", "/media/max/Volume/linux_data/haven"]  # Put in here arguments to use for filling the placeholders in the config file.
+config_path = "examples/debugging/config.yaml"
+args = []  # Put in here arguments to use for filling the placeholders in the config file.
 
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:
