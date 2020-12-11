@@ -21,7 +21,7 @@ A script to download the .obj files is provided in the [scripts folder](../../sc
 
 Execute in the BlenderProc main directory:
 
-```
+```shell
 python run.py examples/ikea/config.yaml <PATH_TO_IKEA> examples/ikea/output
 ``` 
 
@@ -33,7 +33,7 @@ python run.py examples/ikea/config.yaml <PATH_TO_IKEA> examples/ikea/output
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
-```
+```shell
 python scripts/visHdf5Files.py examples/ikea/output/*.hdf5
 ``` 
 
@@ -86,7 +86,7 @@ The `obj_style` = `null` means the object does not have to belong to a specific 
 ```
 For sampling camera poses we used the ``sampler.PartSphere`` which uses only the upper half of the sphere cut along the x-axis (defined by `part_sphere_vector`). 
 The center of the sphere is moved in z-direction and camera positions are sampled from the upper hemisphere to ensure that their view is not "below" the object, which is specifically important for tables.   
-Each cameras rotation is computed to look directly at a sampled point of interest ``POI`` of the object and the camera faces upwards in Z direction.
+Each camera rotation is computed to look directly at a sampled point of interest ``POI`` of the object, and the camera faces upwards in Z direction.
 
 ## More examples
 
