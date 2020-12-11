@@ -1,10 +1,11 @@
 import os
 import random
 import warnings
-import numpy as np
+from collections import OrderedDict
 
-import mathutils
 import bpy
+import mathutils
+import numpy as np
 
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
@@ -30,11 +31,11 @@ class IKEALoader(LoaderInterface):
         * - data_dir
           - The directory with all the IKEA models. Default: 'resources/IKEA'
           - string
-        * - obj_type
-          - The category to use for example: 'bookcase'. Default: None. Available: ['bed', 'bookcase', 'chair',
-            'desk', 'sofa', 'table', 'wardrobe']
-          - string
-        * - obj_style
+        * - category
+          - The category to use for example: 'bookcase'. This can also be a list of elements. Default: None.
+            Available: ['bed', 'bookcase', 'chair', 'desk', 'sofa', 'table', 'wardrobe']
+          - string/list
+        * - style
           - The IKEA style to use for example: 'hemnes'. Default: None. See data_dir for other options.
           - string
     """
@@ -47,12 +48,14 @@ class IKEALoader(LoaderInterface):
         self._obj_dict = dict()
         self._generate_object_dict()
 
-        if self.config.has_param("obj_type"):
-            self._obj_type = self.config.get_raw_value("obj_type", None)
+        if self.config.has_param("category"):
+            self._obj_categories = self.config.get_raw_value("category", None)
+            if not isinstance(self._obj_categories, list):
+                self._obj_categories = [self._obj_categories]
         else:
-            self._obj_type = None
-        if self.config.has_param("obj_style"):
-            self._obj_style = self.config.get_raw_value("obj_style", None)
+            self._obj_categories = None
+        if self.config.has_param("style"):
+            self._obj_style = self.config.get_raw_value("style", None)
         else:
             self._obj_style = None
 
@@ -73,6 +76,8 @@ class IKEALoader(LoaderInterface):
         print('Found {} object files in dataset belonging to {} categories'.format(counter, len(self._obj_dict)))
         if len(self._obj_dict) == 0:
             raise Exception("No obj file was found, check if the correct folder is provided!")
+        # to avoid randomness while accessing the dict
+        self._obj_dict = OrderedDict(self._obj_dict)
 
     @staticmethod
     def _check_material_file(path):
@@ -117,18 +122,22 @@ class IKEALoader(LoaderInterface):
         If there are multiple options it picks one randomly or if style or type is None it picks one randomly.
         Loads the selected object via file path.
         """
-        if self._obj_type is not None and self._obj_style is not None:
-            object_lst = [obj[0] for (key, obj) in self._obj_dict.items() \
-                          if self._obj_style in key.lower() and self._obj_type in key]
+        if self._obj_categories is not None and self._obj_style is not None:
+            object_lst = []
+            for obj_category in self._obj_categories:
+                object_lst.extend([obj[0] for (key, obj) in self._obj_dict.items() \
+                                  if self._obj_style in key.lower() and obj_category in key])
             if not object_lst:
                 selected_obj = random.choice(self._obj_dict.get(random.choice(list(self._obj_dict.keys()))))
                 warnings.warn("Could not find object of type: {}, and style: {}. Selecting random object...".format(
-                    self._obj_type, self._obj_style), category=Warning)
+                    self._obj_categories, self._obj_style), category=Warning)
             else:
                 # Multiple objects with same type and style are possible: select randomly from list.
                 selected_obj = random.choice(object_lst)
-        elif self._obj_type is not None:
-            object_lst = self._get_object_by_type(self._obj_type)
+        elif self._obj_categories is not None:
+            object_lst = []
+            for obj_category in self._obj_categories:
+                object_lst.extend(self._get_object_by_type(obj_category))
             selected_obj = random.choice(object_lst)
         elif self._obj_style is not None:
             object_lst = self._get_object_by_style(self._obj_style)
@@ -141,6 +150,19 @@ class IKEALoader(LoaderInterface):
         print("Selected object: ", os.path.basename(selected_obj))
         loaded_obj = Utility.import_objects(selected_obj)
         self._set_properties(loaded_obj)
+
+        # extract the name from the path:
+        selected_dir_name = os.path.dirname(selected_obj)
+        selected_name = ""
+        if os.path.basename(selected_dir_name).startswith("IKEA_"):
+            selected_name = os.path.basename(selected_dir_name)
+        else:
+            selected_dir_name = os.path.dirname(selected_dir_name)
+            if os.path.basename(selected_dir_name).startswith("IKEA_"):
+                selected_name = os.path.basename(selected_dir_name)
+        if selected_name:
+            for obj in loaded_obj:
+                obj.name = selected_name
 
         # extract the file unit from the .obj file to convert every object to meters
         file_unit = ""
@@ -167,17 +189,24 @@ class IKEALoader(LoaderInterface):
             else:
                 raise Exception("The file unit type: {} is not defined".format(file_unit))
             if scale != 1.0:
-                # scale object down
+                # move all object centers to the world origin and set the bounding box correctly
                 bpy.ops.object.select_all(action='DESELECT')
                 obj.select_set(True)
                 bpy.context.view_layer.objects.active = obj
+                # scale object down
                 bpy.ops.object.mode_set(mode='EDIT')
                 bpy.ops.transform.resize(value=(scale, scale, scale))
                 bpy.ops.object.mode_set(mode='OBJECT')
                 bpy.context.view_layer.update()
+                bpy.ops.object.select_all(action='DESELECT')
 
-            # move all object centers to the world origin and set the bounding box correctly
-            bb = get_bounds(obj)
-            bb_center = np.mean(bb, axis=0)
-            bb_min_z_value = np.min(bb, axis=0)[2]
-            obj.location -= mathutils.Vector([bb_center[0], bb_center[1], bb_min_z_value])
+        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+        LoaderInterface.remove_x_axis_rotation(loaded_obj)
+
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_obj)
+        bpy.ops.object.select_all(action='DESELECT')
+
+

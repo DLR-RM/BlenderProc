@@ -1,9 +1,11 @@
+import glob
 import json
 import os
 import random
 from datetime import datetime
 import numpy as np
 
+import bpy
 import mathutils
 
 from src.loader.LoaderInterface import LoaderInterface
@@ -77,17 +79,19 @@ class AMASSLoader(LoaderInterface):
             'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
           - string
         * - body_model_gender
-          - The model gender, pose will represented using male, female or neutral body shape. Available:[male,
-            female, neutral]
+          - The model gender, pose will represented using male, female or neutral body shape. Default: "".
+            Available:[male, female, neutral]. If none is selected a random one is choosen.
           - string
         * - subject_id
-          - Type of motion from which the pose should be extracted, this is dataset dependent parameter.
-          - int
+          - Type of motion from which the pose should be extracted, this is dataset dependent parameter. Default: "".
+            If left empty a random subject id is picked.
+          - string
         * - sequence_id
-          - Sequence id in the dataset, sequences are the motion recorded to represent certain action.
+          - Sequence id in the dataset, sequences are the motion recorded to represent certain action. Default: -1.
+            If set to -1 a random sequence id is selected.
           - int
         * - frame_id
-          - Frame id in a selected motion sequence.
+          - Frame id in a selected motion sequence. Default: -1. If none is selected a random one is picked
           - int
     """
 
@@ -105,19 +109,19 @@ class AMASSLoader(LoaderInterface):
             self.config.get_string("data_path", os.path.join("resources", "AMASS")))
         # Body Model Specs
         self._used_body_model_gender = self.config.get_string(
-            "body_model_gender")
-        # These numbers are based on a recommendation from the authors. refer to visualization tutorial from the authors: https://github.com/nghorbani/amass/blob/master/notebooks/01-AMASS_Visualization.ipynb
+            "body_model_gender", random.choice(["male", "female", "neutral"]))
+        # These numbers are based on a recommendation from the authors. refer to visualization tutorial from the
+        # authors: https://github.com/nghorbani/amass/blob/master/notebooks/01-AMASS_Visualization.ipynb
         self._num_betas = 10  # number of body parameters
         self._num_dmpls = 8  # number of DMPL parameters
         # Pose Specs
         self._used_sub_dataset_id = self.config.get_string("sub_dataset_id")
-        self._used_subject_id = self.config.get_string("subject_id")
-        self._used_sequence_id = self.config.get_string("sequence_id")
-        self._used_frame_id = self.config.get_string("frame_id", "")
+        self._used_subject_id = self.config.get_string("subject_id", "")
+        self._used_sequence_id = self.config.get_int("sequence_id", -1)
+        self._used_frame_id = self.config.get_int("frame_id", -1)
         # Get the currently supported mocap datasets by this loader
         taxonomy_file_path = os.path.join(self._data_path, "taxonomy.json")
-        AMASSLoader._get_supported_mocap_datasets(
-            taxonomy_file_path, self._data_path)
+        AMASSLoader._get_supported_mocap_datasets(taxonomy_file_path, self._data_path)
 
     def _get_pose_parameters(self):
         """ Extract pose and shape parameters corresponding to the requested pose from the database to be processed by the parametric model
@@ -126,24 +130,46 @@ class AMASSLoader(LoaderInterface):
         """
         # check if the sub_dataset is supported
         if self._used_sub_dataset_id in AMASSLoader.supported_mocap_datasets:
-            # get  path from dictionsary
+            # get path from dictionary
             sub_dataset_path = AMASSLoader.supported_mocap_datasets[self._used_sub_dataset_id]
             # concatenate path to specific
-            subject_path = os.path.join(
-                sub_dataset_path, self._used_subject_id)
-            sequence_path = os.path.join(subject_path,
-                                         "{:02d}".format(int(self._used_subject_id)) + "_" + "{:02d}".format(
-                                             int(self._used_sequence_id)) + "_poses.npz")
+            if not self._used_subject_id:
+                # if none was selected
+                possible_subject_ids = glob.glob(os.path.join(sub_dataset_path, "*"))
+                possible_subject_ids.sort()
+                if len(possible_subject_ids) > 0:
+                    used_subject_id_str = os.path.basename(random.choice(possible_subject_ids))
+                else:
+                    raise Exception("No subjects found in folder: {}".format(sub_dataset_path))
+            else:
+                used_subject_id_str = "{:02d}".format(int(self._used_subject_id))
+
+            if self._used_sequence_id < 0:
+                # if no sequence id was selected
+                possible_sequence_ids = glob.glob(os.path.join(sub_dataset_path, used_subject_id_str, "*"))
+                possible_sequence_ids.sort()
+                if len(possible_sequence_ids) > 0:
+                    used_sequence_id = os.path.basename(random.choice(possible_sequence_ids))
+                    used_sequence_id = used_sequence_id[used_sequence_id.find("_")+1:used_sequence_id.rfind("_")]
+                else:
+                    raise Exception("No sequences found in folder: {}".format(os.path.join(sub_dataset_path,
+                                                                                           used_subject_id_str)))
+            else:
+                used_sequence_id = self._used_sequence_id
+            subject_path = os.path.join(sub_dataset_path, used_subject_id_str)
+            used_subject_id_str_reduced = used_subject_id_str[:used_subject_id_str.find("_")] \
+                if "_" in used_subject_id_str else used_subject_id_str
+            sequence_path = os.path.join(subject_path, used_subject_id_str_reduced +
+                                         "_{:02d}_poses.npz".format(int(used_sequence_id)))
             if os.path.exists(sequence_path):
                 # load AMASS dataset sequence file which contains the coefficients for the whole motion sequence
                 sequence_body_data = np.load(sequence_path)
                 # get the number of supported frames
                 no_of_frames_per_sequence = sequence_body_data['poses'].shape[0]
-                if self._used_frame_id == "":
-                    frame_id = random.randint(
-                        0, no_of_frames_per_sequence)  # pick a random id
+                if self._used_frame_id < 0:
+                    frame_id = random.randint(0, no_of_frames_per_sequence)  # pick a random id
                 else:
-                    frame_id = int(self._used_frame_id)
+                    frame_id = self._used_frame_id
                 # Extract Body Model coefficients
                 if frame_id in range(0, no_of_frames_per_sequence):
                     # use GPU to accelerate mesh calculations
@@ -164,7 +190,8 @@ class AMASSLoader(LoaderInterface):
 
             else:
                 raise Exception(
-                    "Invalid sequence/subject category identifiers, please choose a valid one")
+                    "Invalid sequence/subject: {} category identifiers, please choose a "
+                    "valid one. Used path: {}".format(self._used_subject_id, sequence_path))
 
         else:
             raise Exception(
@@ -255,6 +282,16 @@ class AMASSLoader(LoaderInterface):
             for obj in loaded_obj:
                 obj['category_id'] = LabelIdMapping.label_id_map["void"]
 
+        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+        LoaderInterface.remove_x_axis_rotation(loaded_obj)
+
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_obj)
+        bpy.ops.object.select_all(action='DESELECT')
+
+
     def _correct_materials(self, objects):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
@@ -272,13 +309,19 @@ class AMASSLoader(LoaderInterface):
                     nodes, "BsdfPrincipled")
                 # Pick random skin color value
                 skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
-                skin_tone_rgb = list(
-                    int(skin_tone_hex[i:i+2], 16) for i in (0, 2, 4))
+                skin_tone_rgb = Utility.hex_to_rgba(skin_tone_hex)[:3]
+
+                # this is done to make the chance higher that the representation of skin tones is more diverse
+                skin_tone_fac = random.uniform(0.0, 1)
+                skin_tone_rgb = [value * skin_tone_fac for value in skin_tone_rgb]
                 principled_bsdf.inputs["Base Color"].default_value = mathutils.Vector(
-                    [*skin_tone_rgb, 255]) / 255.0
+                    [*skin_tone_rgb, 1.0])
                 principled_bsdf.inputs["Subsurface"].default_value = 0.2
                 principled_bsdf.inputs["Subsurface Color"].default_value = mathutils.Vector(
-                    [*skin_tone_rgb, 255]) / 255.0
+                    [*skin_tone_rgb, 1.0])
+
+                # darker skin looks better when made less specular
+                principled_bsdf.inputs["Specular"].default_value = np.mean(skin_tone_rgb) / 255.0
 
                 texture_nodes = Utility.get_nodes_with_type(
                     nodes, "ShaderNodeTexImage")

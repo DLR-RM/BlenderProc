@@ -65,6 +65,21 @@ class Material(Provider):
           ]
         }
 
+    Example 5: Return all materials which: {are cc_textures (see CCMaterialLoader) and do not have
+                                            any alpha texture used}
+
+    .. code-block:: yaml
+
+        {
+          "provider": "getter.Material",
+          "conditions": [
+          {
+            "cp_is_cc_texture": True,
+            "cf_principled_bsdf_Alpha_eq": 1.0
+          }
+          ]
+        }
+
     **Configuration**:
 
     .. list-table:: 
@@ -116,6 +131,13 @@ class Material(Provider):
             'min' = less nodes or equal than specified, 'max' = at least as many or 'eq' = for this exact amount of
             principled bsdf nodes. 
           - int
+        * - cf_principled_bsdf_{INPUT}_{min,max,eq}
+          - Returns materials that have a certain value for a certain INPUT of the principled bsdf node. Only works if
+            there is only one principled bsdf node. The INPUT can be any of the input values used of the principled
+            bsdf. By using this all materials, which do not use a float value as an input are also not selected.
+            Suffix 'min' = less nodes or equal than specified, 'max' = at least as many or 'eq' = for this exact
+            amount of principled bsdf nodes.
+          - float
     """
 
     def __init__(self, config):
@@ -230,6 +252,54 @@ class Material(Provider):
                         else:
                             select_material = False
                             break
+                    elif key.startswith("principled_bsdf_"):  # must be after the amount check
+                        # This custom function can check the value of a certain Principled BSDF shader input.
+                        # For example this can be used to avoid using materials, which have an Alpha Texture by
+                        # adding they key: `"cf_principled_bsdf_Alpha_eq": 1.0`
+                        if material.use_nodes:
+                            value = float(value)
+                            # first check if there is only one Principled BSDF node in the material
+                            nodes = material.node_tree.nodes
+                            principled = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                            amount_of_principled_bsdf_nodes = len(principled) if principled is not None else 0
+                            if amount_of_principled_bsdf_nodes != 1:
+                                select_material = False
+                                break
+                            principled = principled[0]
+                            # then extract the input name from the key, for the Alpha example: `Alpha`
+                            extracted_input_name = key[len("principled_bsdf_"):key.rfind("_")]
+                            # check if this key exists, else throw an error
+                            if extracted_input_name not in principled.inputs:
+                                raise Exception("Only valid inputs of a principled node are allowed: "
+                                                "{} in: {}".format(extracted_input_name, key))
+                            # extract this input value
+                            used_value = principled.inputs[extracted_input_name]
+                            # if this input value is not a default value it will be connected via the links
+                            if len(used_value.links) > 0:
+                                select_material = False
+                                break
+                            # if no link is found check the default value
+                            used_value = used_value.default_value
+                            # compare the given value to the default value
+                            if key.endswith("min"):
+                                if not (used_value >= value):
+                                    select_material = False
+                                    break
+                            elif key.endswith("max"):
+                                if not (used_value <= value):
+                                    select_material = False
+                                    break
+                            elif key.endswith("eq"):
+                                if not (used_value == value):
+                                    select_material = False
+                                    break
+                            else:
+                                raise Exception("This type of key is unknown: {}".format(key))
+                        else:
+                            select_material = False
+                            break
+
+
                     else:
                         select_material = False
                         break
