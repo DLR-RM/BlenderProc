@@ -8,6 +8,23 @@
 
 # Version History
 
+## Version 1.8.0: 11th December 2020
+- massively improve the documentation, by adding using github pages for our documentation: https://dlr-rm.github.io/BlenderProc/index.html
+- add a RandomRoomConstructor: 
+  - This module can generate random floor plans of single rooms, with arbitrary extrusions.
+  - It can also randomly place loaded objects without collision inside of the room
+  - By using CCTexture it is also possible to assign random materials to the floor, wall and ceiling
+- remove the SceneNetLighting module and replace it with the SurfaceLighting module, to make it more general
+- add support for the haven websites and add an example and corresponding loaders:
+  - The haven environment website: https://hdrihaven.com/
+  - The haven model website: https://3dmodelhaven.com/
+  - The haven texture website: https://texturehaven.com/
+- add option to the CameraSampler to ensure that a certain object is always in the camera view
+- improve the FloorExtractor to extract the floor and ceiling in SceneNet and other scenarios
+- improve the skin tones for AMASSLoader
+- add a proper scaling to the ikea dataset, by converting all files into SI units
+- fix the ikea dataset downloading, by removing and splitting broken pieces, we advise to redownload the dataset
+
 ## Version 1.7.0: 1st December 2020
 - switch to blender 2.91
 - added an example of how to set object poses via a transformation matrix and set camera extrinsics / intrinsics via a transformation matrix and a K matrix
