@@ -47,19 +47,20 @@ python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
     "add_properties": {
       "cp_physics": True 
       }
-    }
-},
+  }
+}
+```
+```yaml
 {
   "module": "loader.ObjectLoader",
   "config": {
     "path": "<args:1>",
     "add_properties": {
       "cp_physics": False 
-      }
     }
   }
-},
- ```
+}
+```
 
 First some spheres are loaded from the file `active.obj` (0th placeholder `<args:0>`) and their physics attribute is set to `True`, so that they will later be influenced by gravity.
 Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`). The `physics` attribute will hereby set to `False`. 
@@ -86,8 +87,9 @@ Then the plane is loaded from the file `passive.obj` (1th placeholder `<args:1>`
       "provider": "sampler.Uniform3d",
       "max": [0, 0, 0],
       "min": [6.28, 6.28, 6.28]
+    }
   }
-},
+}
 ```
 
 The `ObjectPoseSampler` is used to place `active` objects randomly above the plane. `selector` call a Provider `getter.Entity` which allows us to select objects with `True` physics property.
@@ -103,7 +105,7 @@ Pose sampling can be done by calling any two appropriate Providers (Samplers). I
     "max_simulation_time": 20,
     "check_object_interval": 1
   }
-},
+}
 ```
 
 This module now internally does a physics simulation. 

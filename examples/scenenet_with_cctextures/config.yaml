@@ -32,7 +32,8 @@
       "module": "loader.CCMaterialLoader",
       # you can use the scripts/download_cc_textures.py to download them
       "config": {
-        "folder_path": "<args:2>"
+        "folder_path": "<args:2>",
+        "preload": True
       }
     },
     {
@@ -54,6 +55,14 @@
             }
           }
         }
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>",
+        "fill_used_empty_materials": True
       }
     },
     {
