@@ -8,8 +8,7 @@ from src.provider.getter.Material import Material
 class MaterialLoaderUtility(object):
     """
     This is the base class for different MaterialLoaders. It is currently used by the
-    :class: `loader.HavenMaterialLoader` and the :class: `loader.CCMaterialLoader`.
-
+    :class:`src.loader.HavenMaterialLoader` and the :class:`src.loader.CCMaterialLoader`.
     """
 
     x_texture_node = -1500
