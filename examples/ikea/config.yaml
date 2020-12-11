@@ -44,8 +44,8 @@
           "number_of_samples": 5,
           "location": {
             "provider":"sampler.PartSphere",
-            "center": [0, 0, 20],
-            "radius": 8,
+            "center": [0, 0, 0],
+            "radius": 2.5,
             "part_sphere_vector": [1, 0, 0],
             "mode": "SURFACE"
           },
