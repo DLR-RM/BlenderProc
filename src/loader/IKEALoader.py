@@ -1,6 +1,8 @@
 import os
 import random
 import warnings
+import numpy as np
+import glob
 from collections import OrderedDict
 
 import bpy
@@ -65,14 +67,13 @@ class IKEALoader(LoaderInterface):
         dict: {IKEA_<type>_<style> : [<path_to_obj_file>, ...]}
         """
         counter = 0
-        for path, subdirs, files in os.walk(self._data_dir):
-            for name in files:
-                if '.obj' in name:
-                    category = [s for s in path.split('/') if 'IKEA_' in s][0]
-                    obj_path = os.path.join(path, name)
-                    if self._check_material_file(obj_path):
-                        self._obj_dict.setdefault(category, []).append(obj_path)
-                        counter += 1
+        obj_files = glob.glob(os.path.join(self._data_dir, "IKEA", "*", "*.obj"))
+        for obj_file in obj_files:
+            category = [s for s in obj_file.split('/') if 'IKEA_' in s][0]
+            if self._check_material_file(obj_file):
+                self._obj_dict.setdefault(category, []).append(obj_file)
+                counter += 1
+
         print('Found {} object files in dataset belonging to {} categories'.format(counter, len(self._obj_dict)))
         if len(self._obj_dict) == 0:
             raise Exception("No obj file was found, check if the correct folder is provided!")
