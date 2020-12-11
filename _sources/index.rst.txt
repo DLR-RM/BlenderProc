@@ -4,7 +4,4 @@
    contain the root `toctree` directive.
 
 
-BlenderProc Documentation
-==================
-
-.. classlist::
+.. mdinclude:: README.md

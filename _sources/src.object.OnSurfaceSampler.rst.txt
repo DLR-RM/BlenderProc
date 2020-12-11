@@ -1,0 +1,7 @@
+src\.object\.OnSurfaceSampler module
+====================================
+
+.. automodule:: src.object.OnSurfaceSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

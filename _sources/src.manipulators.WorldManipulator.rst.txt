@@ -1,0 +1,7 @@
+src\.manipulators\.WorldManipulator module
+==========================================
+
+.. automodule:: src.manipulators.WorldManipulator
+    :members:
+    :undoc-members:
+    :show-inheritance:

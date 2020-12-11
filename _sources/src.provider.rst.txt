@@ -1,0 +1,10 @@
+src\.provider package
+=====================
+
+Module contents
+---------------
+
+.. automodule:: src.provider
+    :members:
+    :undoc-members:
+    :show-inheritance:

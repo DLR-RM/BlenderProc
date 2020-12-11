@@ -1,0 +1,23 @@
+src\.object package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.object.CalibrationboardSampler
+   src.object.FloorExtractor
+   src.object.IntrinsicsChecker
+   src.object.ObjectPoseSampler
+   src.object.ObjectReplacer
+   src.object.OnSurfaceSampler
+   src.object.PhysicsPositioning
+
+Module contents
+---------------
+
+.. automodule:: src.object
+    :members:
+    :undoc-members:
+    :show-inheritance:

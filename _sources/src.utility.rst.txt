@@ -15,6 +15,7 @@ Submodules
    src.utility.ItemCollection
    src.utility.ItemWriter
    src.utility.LabelIdMapping
+   src.utility.MaterialLoaderUtility
    src.utility.MathUtility
    src.utility.SGMUtility
    src.utility.Utility

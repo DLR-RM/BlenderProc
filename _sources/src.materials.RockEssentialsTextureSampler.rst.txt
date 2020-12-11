@@ -1,0 +1,7 @@
+src\.materials\.RockEssentialsTextureSampler module
+===================================================
+
+.. automodule:: src.materials.RockEssentialsTextureSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

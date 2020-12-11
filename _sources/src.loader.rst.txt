@@ -11,6 +11,8 @@ Submodules
    src.loader.BopLoader
    src.loader.CCMaterialLoader
    src.loader.Front3DLoader
+   src.loader.HavenEnvironmentLoader
+   src.loader.HavenMaterialLoader
    src.loader.IKEALoader
    src.loader.LoaderInterface
    src.loader.ObjectLoader

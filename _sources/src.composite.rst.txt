@@ -1,0 +1,17 @@
+src\.composite package
+======================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.composite.CameraObjectSampler
+
+Module contents
+---------------
+
+.. automodule:: src.composite
+    :members:
+    :undoc-members:
+    :show-inheritance:

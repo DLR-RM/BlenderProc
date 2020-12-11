@@ -1,0 +1,19 @@
+src\.constructor package
+========================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.constructor.BasicMeshInitializer
+   src.constructor.RandomRoomConstructor
+   src.constructor.RockEssentialsGroundConstructor
+
+Module contents
+---------------
+
+.. automodule:: src.constructor
+    :members:
+    :undoc-members:
+    :show-inheritance:

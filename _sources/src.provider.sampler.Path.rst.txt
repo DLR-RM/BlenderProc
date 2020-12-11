@@ -1,0 +1,7 @@
+src\.provider\.sampler\.Path module
+===================================
+
+.. automodule:: src.provider.sampler.Path
+    :members:
+    :undoc-members:
+    :show-inheritance:

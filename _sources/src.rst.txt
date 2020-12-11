@@ -1,13 +1,6 @@
 src package
 ===========
 
-Submodules
-----------
-
-.. toctree::
-
-   src.debug2
-
 Module contents
 ---------------
 

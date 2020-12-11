@@ -1,0 +1,691 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.manipulators.MaterialManipulator module &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<ul class="compound-first">
+<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/index.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic/index.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/index.html">basic_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/index.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/index.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/index.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/index.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/index.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/calibration/index.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/index.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/index.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/debugging/index.html">debugging</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/index.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/index.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d/index.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/index.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/index.html">haven_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/ikea/index.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/index.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/index.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/index.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/index.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/index.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/index.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/index.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/index.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/pix3d/index.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/index.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/index.html">replica_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/index.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet/index.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/index.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/index.html">semantic_segmentation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet/index.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/index.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/index.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/index.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/index.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/index.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/index.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/index.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Modules</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.composite.CameraObjectSampler.html#src.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicMeshInitializer.html#src.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RandomRoomConstructor.html#src.constructor.RandomRoomConstructor.RandomRoomConstructor">RandomRoomConstructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RockEssentialsGroundConstructor.html#src.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SurfaceLighting.html#src.lighting.SurfaceLighting.SurfaceLighting">SurfaceLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.loader.AMASSLoader.html#src.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoader.html#src.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BopLoader.html#src.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.CCMaterialLoader.html#src.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Front3DLoader.html#src.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenEnvironmentLoader.html#src.loader.HavenEnvironmentLoader.HavenEnvironmentLoader">HavenEnvironmentLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenMaterialLoader.html#src.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.IKEALoader.html#src.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ObjectLoader.html#src.loader.ObjectLoader.ObjectLoader">ObjectLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Pix3DLoader.html#src.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ReplicaLoader.html#src.loader.ReplicaLoader.ReplicaLoader">ReplicaLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.RockEssentialsRockLoader.html#src.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SceneNetLoader.html#src.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ShapeNetLoader.html#src.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SuncgLoader.html#src.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.TextureLoader.html#src.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference external" href="src.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.WorldManipulator.html#src.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.materials.RockEssentialsTextureSampler.html#src.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.FloorExtractor.html#src.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.IntrinsicsChecker.html#src.object.IntrinsicsChecker.IntrinsicsChecker">IntrinsicsChecker</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectPoseSampler.html#src.object.ObjectPoseSampler.ObjectPoseSampler">ObjectPoseSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectReplacer.html#src.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.PhysicsPositioning.html#src.object.PhysicsPositioning.PhysicsPositioning">PhysicsPositioning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Provider</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.provider.getter.html">Getter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Attribute.html#src.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.AttributeMerger.html#src.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Entity.html#src.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Material.html#src.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.POI.html#src.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Texture.html#src.provider.getter.Texture.Texture">Texture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.provider.sampler.html">Sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Color.html#src.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Disk.html#src.provider.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.PartSphere.html#src.provider.sampler.PartSphere.PartSphere">PartSphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Path.html#src.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Shell.html#src.provider.sampler.Shell.Shell">Shell</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Sphere.html#src.provider.sampler.Sphere.Sphere">Sphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Texture.html#src.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Uniform3d.html#src.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UniformSO3.html#src.provider.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.UpperRegionSampler">UpperRegionSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Value.html#src.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Core</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CocoUtility.html#src.utility.CocoUtility.CocoUtility">CocoUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>src.manipulators.MaterialManipulator module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/src.manipulators.MaterialManipulator.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-src.manipulators.MaterialManipulator">
+<span id="src-manipulators-materialmanipulator-module"></span><h1>src.manipulators.MaterialManipulator module<a class="headerlink" href="#module-src.manipulators.MaterialManipulator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator">
+<em class="property">class </em><code class="descclassname">src.manipulators.MaterialManipulator.</code><code class="descname">MaterialManipulator</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.main.Module.html#src.main.Module.Module" title="src.main.Module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.main.Module.Module</span></code></a></p>
+<p>Performs manipulation os selected materials.</p>
+<dl class="docutils">
+<dt>Example 1: Link image texture output of the ‘Material.001’ material to displacement input of the shader with a</dt>
+<dd>strength factor of 1.5.</dd>
+</dl>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
+      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Material.001&quot;</span>
+      <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;cf_color_link_to_displacement&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>Example 2: Set base color of all materials matching the name pattern to white.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
+      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*material.*&quot;</span>
+      <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;cf_set_base_color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>Example 3: For all materials matching the name pattern switch to the Emission shader with emitted light of red
+color of energy 15.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;manipulators.MaterialManipulator&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Material&quot;</span><span class="p p-Indicator">,</span>
+      <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*material.*&quot;</span>
+      <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">},</span>
+    <span class="s">&quot;cf_switch_to_emission_shader&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;color&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">1</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">1</span><span class="p p-Indicator">],</span>
+      <span class="s">&quot;strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15</span>
+    <span class="p p-Indicator">}</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p><strong>Configuration</strong>:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="19%" />
+<col width="74%" />
+<col width="7%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Description</th>
+<th class="head">Type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>selector</td>
+<td>Materials to become subjects of manipulation.</td>
+<td>Provider</td>
+</tr>
+<tr class="row-odd"><td>mode</td>
+<td>Mode of operation. Default: “once_for_each”. Available: ‘once_for_each’ (if samplers are called, new sampled 
+value is set to each selected material), ‘once_for_all’ (sampling once for all of the selected materials).</td>
+<td>string</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Values to set</strong>:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="19%" />
+<col width="74%" />
+<col width="7%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Description</th>
+<th class="head">Type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>key</td>
+<td>Name of the attribute to change or a name of a custom function to perform on materials. ” In order to
+specify, what exactly one wants to modify (e.g. attribute, custom property, etc.): For attribute: key of
+the pair must be a valid attribute name of the selected material. For calling custom function: key of
+the pair must start with <cite>cf_</cite> prefix. See table below for supported custom function names.</td>
+<td>string</td>
+</tr>
+<tr class="row-odd"><td>value</td>
+<td>Value of the attribute/custom prop. to set or input value(s) for a custom function.</td>
+<td>string, list/Vector, int, bool or float</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Available custom functions</strong>:</p>
+<table border="1" class="colwidths-given docutils">
+<colgroup>
+<col width="19%" />
+<col width="74%" />
+<col width="7%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Parameter</th>
+<th class="head">Description</th>
+<th class="head">Type</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>cf_color_link_to_displacement</td>
+<td>Factor that determines the strength of the displacement via linking the output of the texture image to
+the displacement</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>cf_change_to_vertex_color</td>
+<td>The name of the vertex color layer, used for changing the material to a vertex coloring mode.</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>cf_textures</td>
+<td>Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.):
+texture_path} pairs. Texture_type should be equal to the Shader input name in order to be assigned to a
+ShaderTexImage node that will be linked to this input. Label represents to which shader input this node
+is connected.</td>
+<td>dict</td>
+</tr>
+<tr class="row-odd"><td>cf_textures/texture_path</td>
+<td>Path to a texture image.</td>
+<td>string</td>
+</tr>
+<tr class="row-even"><td>cf_switch_to_emission_shader</td>
+<td>Adds the Emission shader to the target material, sets it’s ‘color’ and ‘strength’ values, connects it to
+the Material Output node.</td>
+<td>dict</td>
+</tr>
+<tr class="row-odd"><td>cf_switch_to_emission_shader/color</td>
+<td>[R, G, B, A] vector representing the color of the emitted light.</td>
+<td>mathutils.Vector</td>
+</tr>
+<tr class="row-even"><td>cf_switch_to_emission_shader/strength</td>
+<td>Strength of the emitted light. Must be &gt;0.</td>
+<td>float</td>
+</tr>
+<tr class="row-odd"><td>cf_set_*</td>
+<td>Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case name of
+the input (use ‘_’ if those are represented by multiple nodes, e.g. ‘Base Color’ -&gt; ‘base_color’). Also
+deletes any links to this shader’s input point.</td>
+<td>list/Vector, int or float</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._get_the_set_params">
+<code class="descname">_get_the_set_params</code><span class="sig-paren">(</span><em>params_conf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._get_the_set_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._get_the_set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts actual values to set from a Config object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params_conf</strong> – Object with all user-defined data. Type: Config.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Parameters to set as {name of the parameter: it’s value} pairs. Type: dict.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._link_color_to_displacement_for_mat">
+<em class="property">static </em><code class="descname">_link_color_to_displacement_for_mat</code><span class="sig-paren">(</span><em>material</em>, <em>multiply_factor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._link_color_to_displacement_for_mat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._link_color_to_displacement_for_mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Link the output of the texture image to the displacement. Fails if there is more than one texture image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>material</strong> – Material to be modified. Type: bpy.types.Material.</li>
+<li><strong>multiply_factor</strong> – Multiplication factor of the displacement. Type: float.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._load_textures">
+<code class="descname">_load_textures</code><span class="sig-paren">(</span><em>text_paths</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._load_textures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._load_textures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads textures.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>text_paths</strong> – Texture data. Type: dict.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Loaded texture data. Type: dict.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._map_vertex_color">
+<em class="property">static </em><code class="descname">_map_vertex_color</code><span class="sig-paren">(</span><em>material</em>, <em>layer_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._map_vertex_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._map_vertex_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the material with a mapping of the vertex color to a background color node.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>material</strong> – Material to be modified. Type: bpy.types.Material.</li>
+<li><strong>layer_name</strong> – Name of the vertex color layer. Type: string.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._set_principled_shader_value">
+<em class="property">static </em><code class="descname">_set_principled_shader_value</code><span class="sig-paren">(</span><em>material</em>, <em>shader_input_key</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._set_principled_shader_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._set_principled_shader_value" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>material</strong> – Material to be modified. Type: bpy.types.Material.</li>
+<li><strong>shader_input_key</strong> – Name of the shader’s input. Type: string.</li>
+<li><strong>value</strong> – Value to set.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._set_textures">
+<code class="descname">_set_textures</code><span class="sig-paren">(</span><em>loaded_textures</em>, <em>material</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._set_textures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._set_textures" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Creates a ShaderNodeTexImage node, assigns a loaded image to it and connects it to the shader of the</dt>
+<dd>selected material.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>loaded_textures</strong> – Loaded texture data. Type: dict.</li>
+<li><strong>material</strong> – Material to be modified. Type: bpy.types.Material.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator._switch_to_emission_shader">
+<code class="descname">_switch_to_emission_shader</code><span class="sig-paren">(</span><em>material</em>, <em>value</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator._switch_to_emission_shader"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator._switch_to_emission_shader" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Adds the Emission shader to the target material, sets it’s color and strength values, connects it to</dt>
+<dd>the Material Output node.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>material</strong> – Material to be modified. Type: bpy.types.Material.</li>
+<li><strong>value</strong> – Light color and strength data. Type: dict.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.manipulators.MaterialManipulator.MaterialManipulator.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/manipulators/MaterialManipulator.html#MaterialManipulator.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.manipulators.MaterialManipulator.MaterialManipulator.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets according values of defined attributes or applies custom functions to the selected materials.
+1. Select materials.
+2. For each parameter to modify, set it’s value to all selected objects.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

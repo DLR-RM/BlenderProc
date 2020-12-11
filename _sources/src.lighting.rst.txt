@@ -9,8 +9,8 @@ Submodules
    src.lighting.LightInterface
    src.lighting.LightLoader
    src.lighting.LightSampler
-   src.lighting.SceneNetLighting
    src.lighting.SuncgLighting
+   src.lighting.SurfaceLighting
 
 Module contents
 ---------------
