@@ -43,11 +43,13 @@ python scripts/visHdf5Files.py examples/scenenet/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:2>",
-  }
+{
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:2>",
+      }
+    }
 }
 ```
 
@@ -56,10 +58,12 @@ The same as in the basic example.
 ### SceneNetLoader 
 
 ```yaml
-"module": "loader.SceneNetLoader",
-"config": {
-  "file_path": "<args:0>",
-  "texture_folder": "<args:1>"
+{
+    "module": "loader.SceneNetLoader",
+    "config": {
+      "file_path": "<args:0>",
+      "texture_folder": "<args:1>"
+    }
 }
 ```
 
@@ -73,7 +77,9 @@ By selecting random texture and putting them in this `unknown_texture_folder`, w
 ### SceneNetLighting
 
 ```yaml
-"module": "lighting.SceneNetLighting"
+{
+  "module": "lighting.SceneNetLighting"
+}
 ```
 
 We now have to light up the scene by making all lamps and the ceiling emit light.
@@ -81,7 +87,6 @@ We now have to light up the scene by making all lamps and the ceiling emit light
 ### CameraSampler
 
 ```yaml
-
 {
   "module": "camera.CameraSampler",
   "config": {

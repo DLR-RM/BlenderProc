@@ -87,7 +87,7 @@ These will be later used to replace the materials in the 3D-Front scenes.
           }
         }
       }
-    },
+    }
 ```
 
 This is one of the `manipulators.EntityManipulator` which swaps the materials of the selected objects, with the materials which are used to replace them.
@@ -118,7 +118,7 @@ A further example is:
           }
         }
       }
-    },
+    }
 ```
 
 Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, which names start with `"Marble"`.

@@ -52,13 +52,15 @@ python scripts/visHdf5Files.py examples/shapenet_with_scenenet/output/*.hdf5
 ### SceneNetLoader
 
 ```yaml
-"module": "loader.SceneNetLoader",
-"config": {
-  # after downloading the scenenet dataset it should be located inside of resources/scenenet/SceneNetData/
-  "file_path": "<args:0>",
-  "texture_folder": "<args:1>",
-  "add_properties": {
-    "cp_physics": False
+{
+  "module": "loader.SceneNetLoader",
+  "config": {
+    # after downloading the scenenet dataset it should be located inside of resources/scenenet/SceneNetData/
+    "file_path": "<args:0>",
+    "texture_folder": "<args:1>",
+    "add_properties": {
+      "cp_physics": False
+    }
   }
 }
 ```
@@ -72,14 +74,16 @@ To each loaded object do we add the custom property `cp_physics: False`, which m
 ### ShapeNetLoader 
 
 ```yaml
-"module": "loader.ShapeNetLoader",
-"config": {
-  "data_path": "<args:0>",
-  "used_synset_id": "02801938",
-  "add_properties": {
-    "cp_shape_net_object": True,
-    # set the custom property physics to True
-    "cp_physics": True
+{
+  "module": "loader.ShapeNetLoader",
+  "config": {
+    "data_path": "<args:0>",
+    "used_synset_id": "02801938",
+    "add_properties": {
+      "cp_shape_net_object": True,
+      # set the custom property physics to True
+      "cp_physics": True
+    }
   }
 }
 ```
@@ -92,34 +96,36 @@ We also add a custom property to make the selection with `EntityManipulator` in 
 ### EntityManipulator
  
 ```yaml
-"module": "manipulators.EntityManipulator",
-"config": {
-  # get all shape net objects, as we have only loaded one, this returns only one entity
-  "selector": {
-    "provider": "getter.Entity",
-    "conditions": {
-      "cp_shape_net_object": True,
-      "type": "MESH"
-    }
-  },
-  # Sets the location of this entity above a bed
-  "location": {
-    "provider": "sampler.UpperRegionSampler",
-    "min_height": 0.3,
-    "to_sample_on": {
+{
+    "module": "manipulators.EntityManipulator",
+    "config": {
+      # get all shape net objects, as we have only loaded one, this returns only one entity
+      "selector": {
         "provider": "getter.Entity",
         "conditions": {
-          "cp_category_id": 4, # 4 is the category of the bed
+          "cp_shape_net_object": True,
           "type": "MESH"
         }
-
+      },
+      # Sets the location of this entity above a bed
+      "location": {
+        "provider": "sampler.UpperRegionSampler",
+        "min_height": 0.3,
+        "to_sample_on": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "cp_category_id": 4, # 4 is the category of the bed
+              "type": "MESH"
+            }
+    
+        }
+      },
+      # by adding a modifier we avoid that the objects falls through other objects during the physics simulation
+      "cf_add_modifier": {
+        "name": "Solidify",
+        "thickness": 0.0025
+      }
     }
-  },
-  # by adding a modifier we avoid that the objects falls through other objects during the physics simulation
-  "cf_add_modifier": {
-    "name": "Solidify",
-    "thickness": 0.0025
-  }
 }
 ```
 
@@ -132,17 +138,19 @@ Finally, we add a solidify modifier to get a correct physics interaction.
 ### PhysicsPositioning
 
 ```yaml
-"module": "object.PhysicsPositioning",
-"config": {
-  "solver_iters": 30,
-  "substeps_per_frame": 40,
-  "min_simulation_time": 0.5,
-  "max_simulation_time": 4,
-  "check_object_interval": 0.25,
-  "mass_scaling": True,
-  "mass_factor": 2000,
-  "collision_margin": 0.00001,
-  "collision_shape": "MESH"
+{
+    "module": "object.PhysicsPositioning",
+    "config": {
+      "solver_iters": 30,
+      "substeps_per_frame": 40,
+      "min_simulation_time": 0.5,
+      "max_simulation_time": 4,
+      "check_object_interval": 0.25,
+      "mass_scaling": True,
+      "mass_factor": 2000,
+      "collision_margin": 0.00001,
+      "collision_shape": "MESH"
+    }
 }
 ```
 
@@ -154,42 +162,44 @@ Without this they might slide into the SceneNet objects.
 ### CameraSampler
 
 ```yaml
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [
-  {
-    "number_of_samples": 5,
-    "location": {
-      "provider":"sampler.PartSphere",
-      "center": {
-        "provider": "getter.POI",
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "cp_shape_net_object": True,
-            "type": "MESH"
-          }
-        }
-      },
-      "distance_above_center": 0.5,
-      "radius": 2,
-      "mode": "SURFACE"
-    },
-    "rotation": {
-      "format": "look_at",
-      "value": {
-        "provider": "getter.POI",
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "cp_shape_net_object": True,
-            "type": "MESH"
+{
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [
+      {
+        "number_of_samples": 5,
+        "location": {
+          "provider":"sampler.PartSphere",
+          "center": {
+            "provider": "getter.POI",
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "cp_shape_net_object": True,
+                "type": "MESH"
+              }
+            }
+          },
+          "distance_above_center": 0.5,
+          "radius": 2,
+          "mode": "SURFACE"
+        },
+        "rotation": {
+          "format": "look_at",
+          "value": {
+            "provider": "getter.POI",
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "cp_shape_net_object": True,
+                "type": "MESH"
+              }
+            }
           }
         }
       }
+      ]
     }
-  }
-  ]
 }
 ```
 

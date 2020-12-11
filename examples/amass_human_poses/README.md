@@ -92,8 +92,7 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
     "subject_id": "10",
     "sequence_id": "1",
     "frame_id": "600",
-  },
-      
+  }      
 }
 ```
 
@@ -106,25 +105,27 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
 ### CameraSampler
 
 ```yaml
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [
-    {
-      "number_of_samples": 5,
-      "location": {
-        "provider":"sampler.Sphere",
-        "center": [0, 0, 0],
-        "radius": 3,
-        "mode": "SURFACE"
-      },
-      "rotation": {
-        "format": "look_at",
-        "value": {
-          "provider": "getter.POI"
+{
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [
+        {
+          "number_of_samples": 5,
+          "location": {
+            "provider":"sampler.Sphere",
+            "center": [0, 0, 0],
+            "radius": 3,
+            "mode": "SURFACE"
+          },
+          "rotation": {
+            "format": "look_at",
+            "value": {
+              "provider": "getter.POI"
+            }
+          }
         }
-      }
+      ]
     }
-  ]
 }
 ```
 

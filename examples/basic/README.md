@@ -127,7 +127,7 @@ It also initializes the GlobalStorage, which contains two parts:
       "fov": 1
     }
   }
-},
+}
 ```
 
 * This module imports the camera poses which defines from where the renderings should be taken.
