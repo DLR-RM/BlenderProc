@@ -49,39 +49,41 @@ python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
       "scipy"
     ]
 ```
+
 Make sure these python packages are included.
 
-```
+```yaml
 "global": {
   "output_dir": "<args:2>",
   "resolution_x": 1280,
   "resolution_y": 720
 }
 ```
+
 Indicate the desired output image resolution globally inside of the settings of the `"main.Initializer"`.
 
-```
-    {  
-      "module": "camera.CameraLoader",
-      "config": {
-        "path": "<args:0>",
-        "file_format": "location rotation/value _ _ _ _ _ _",
-        "source_frame": ["X", "-Z", "Y"],
-        "default_cam_param": {
-          "rotation": {
-            "format": "forward_vec"
-          }
-        },
-        "intrinsics": {
-          "interocular_distance": 0.05,
-          "stereo_convergence_mode": "PARALLEL",
-          "convergence_distance": 0.00001,
-          "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
-          "resolution_x": 1280,
-          "resolution_y": 720
-        },
+```yaml
+{  
+  "module": "camera.CameraLoader",
+  "config": {
+    "path": "<args:0>",
+    "file_format": "location rotation/value _ _ _ _ _ _",
+    "source_frame": ["X", "-Z", "Y"],
+    "default_cam_param": {
+      "rotation": {
+        "format": "forward_vec"
       }
     },
+    "intrinsics": {
+      "interocular_distance": 0.05,
+      "stereo_convergence_mode": "PARALLEL",
+      "convergence_distance": 0.00001,
+      "cam_K": [650.018, 0, 637.962, 0, 650.018, 355.984, 0, 0 ,1],
+      "resolution_x": 1280,
+      "resolution_y": 720
+    },
+  }
+}
 ```
 Here we specify the camera parameters, some notable points are:
 * Setting the `interocular_distance` which is the stereo baseline.
@@ -94,24 +96,24 @@ Here we specify the camera parameters, some notable points are:
 
 ```yaml
 {
-      "module": "renderer.RgbRenderer",
-      "config": {
-        "render_distance": true,
-        "render_normals": true,
-        "stereo": true
-      }
-    },
+  "module": "renderer.RgbRenderer",
+  "config": {
+    "render_distance": true,
+    "render_normals": true,
+    "stereo": true
+  }
+}
 ```
 We enable stereo rendering here. Also notice the order of the modules, where the stereo RGB rendering should be added before stereo matching. Orderings generally reflect dependencies.
 
 ```yaml
 {
-      "module": "writer.StereoGlobalMatchingWriter",
-      "config": {
-        "focal_length": 650.018,
-        "disparity_filter": false
-      }
-    },
+  "module": "writer.StereoGlobalMatchingWriter",
+  "config": {
+    "focal_length": 650.018,
+    "disparity_filter": false
+  }
+}
 ```
 Finally, we add the module responsible for stereo matching. This module has the following attributes and configurations:
 * It is based on OpenCV's [implementation](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html?highlight=sgbm#stereosgbm-stereosgbm) of [stereo semi global matching](https://elib.dlr.de/73119/1/180Hirschmueller.pdf).

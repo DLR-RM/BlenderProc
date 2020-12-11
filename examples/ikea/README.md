@@ -5,15 +5,16 @@
 
 The focus of this example is the `loader.IKEALoader`, which can be used to load objects from the [IKEA dataset](http://ikea.csail.mit.edu/).
 The IKEA dataset consists of 218 3D models of IKEA furniture collected from Google 3D Warehouse. <br>
-If you use this dataset please cite <br>
-> ```
->@article{lpt2013ikea,
->   title={{Parsing IKEA Objects: Fine Pose Estimation}},
->   author={Joseph J. Lim and Hamed Pirsiavash and Antonio Torralba},
->   journal={ICCV},
->   year={2013}
->}
+If you use this dataset please cite
 
+```
+@article{lpt2013ikea,
+   title={{Parsing IKEA Objects: Fine Pose Estimation}},
+   author={Joseph J. Lim and Hamed Pirsiavash and Antonio Torralba},
+   journal={ICCV},
+   year={2013}
+}
+```
 
 A script to download the .obj files is provided in the [scripts folder](../../scripts).
 
@@ -49,11 +50,13 @@ python scripts/visHdf5Files.py examples/ikea/output/*.hdf5
 ### IKEALoader 
 
 ```yaml
-"module": "loader.IKEALoader",
-"config": {
-  "data_dir": "<args:0>",
-  "obj_type": "table",
-  "obj_style": null,
+{
+    "module": "loader.IKEALoader",
+    "config": {
+      "data_dir": "<args:0>",
+      "obj_type": "table",
+      "obj_style": null,
+    }
 }
 ```
 This module loads an IKEA Object, it only needs the path to the directory of the dataset, which is saved in `data_dir`. <br>
@@ -63,26 +66,28 @@ The `obj_style` = `null` means the object does not have to belong to a specific 
 ### CameraSampler
 
 ```yaml
-"module": "camera.CameraSampler",
-"config": {
- "cam_poses": [
- {
-   "number_of_samples": 5,
-   "location": {
-     "provider":"sampler.PartSphere",
-     "center": [0, 0, 20],
-     "radius": 8,
-     "part_sphere_vector": [1, 0, 0],
-     "mode": "SURFACE"
-   },
-   "rotation": {
-     "format": "look_at",
-     "value": {
-       "provider": "getter.POI"
+{
+    "module": "camera.CameraSampler",
+    "config": {
+     "cam_poses": [
+     {
+       "number_of_samples": 5,
+       "location": {
+         "provider":"sampler.PartSphere",
+         "center": [0, 0, 20],
+         "radius": 8,
+         "part_sphere_vector": [1, 0, 0],
+         "mode": "SURFACE"
+       },
+       "rotation": {
+         "format": "look_at",
+         "value": {
+           "provider": "getter.POI"
+         }
+       }
      }
-   }
- }
-]}
+    ]}
+}
 ```
 For sampling camera poses we used the ``sampler.PartSphere`` which uses only the upper half of the sphere cut along the x-axis (defined by `part_sphere_vector`). 
 The center of the sphere is moved in z-direction and camera positions are sampled from the upper hemisphere to ensure that their view is not "below" the object, which is specifically important for tables.   
