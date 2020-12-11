@@ -132,7 +132,10 @@ class WorldManipulator(Module):
         :param world: World to modify. Type: bpy.types.World.
         :param color: RGBA color of the emitted light. Type: mathutils.Vector.
         """
-        world.node_tree.nodes["Background"].inputs['Color'].default_value = color
+        if "Background" in world.node_tree.nodes:
+            world.node_tree.nodes["Background"].inputs['Color'].default_value = color
+        else:
+            raise Exception("This only works if the world background wasn't changed before!")
 
     def _set_bg_surface_strength(self, world, strength):
         """ Sets the strength of the emitted light by the background surface.
@@ -140,4 +143,7 @@ class WorldManipulator(Module):
         :param world: World to modify. Type: bpy.types.World.
         :param strength: Strength of the emitted light. Type: float.
         """
-        world.node_tree.nodes["Background"].inputs['Strength'].default_value = strength
+        if "Background" in world.node_tree.nodes:
+            world.node_tree.nodes["Background"].inputs['Strength'].default_value = strength
+        else:
+            raise Exception("This only works if the world background wasn't changed before!")
