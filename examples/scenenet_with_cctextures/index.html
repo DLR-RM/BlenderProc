@@ -526,30 +526,34 @@ If this is not done, all the materials will be empty.</p>
 </div>
 <div class="section" id="scenenetlighting">
 <h3>SceneNetLighting<a class="headerlink" href="#scenenetlighting" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;lighting.SurfaceLighting&quot;,
-&quot;config&quot;: {
-  &quot;selector&quot;: {
-    &quot;provider&quot;: &quot;getter.Entity&quot;,
-      &quot;conditions&quot;: {
-        &quot;name&quot;: &quot;.*lamp.*&quot;
-      }
-  },
-  &quot;emission_strength&quot;: 15.0,
-  &quot;keep_using_base_color&quot;: True
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
+          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;.*lamp.*&quot;</span>
+          <span class="p p-Indicator">}</span>
+      <span class="p p-Indicator">},</span>
+      <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15.0</span><span class="p p-Indicator">,</span>
+      <span class="s">&quot;keep_using_base_color&quot;</span><span class="p p-Indicator">:</span> <span class="nv">True</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>The first module call will make the lamps in the scene emit light, while using the assigned material textures.</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;lighting.SurfaceLighting&quot;,
-&quot;config&quot;: {
-  &quot;selector&quot;: {
-    &quot;provider&quot;: &quot;getter.Entity&quot;,
-    &quot;conditions&quot;: {
-      &quot;name&quot;: &quot;Ceiling&quot;
-    },
-    &quot;emission_strength&quot;: 2.0
-  }
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Ceiling&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">2.0</span>
+      <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>The second module call will make the ceiling emit light and remove any materials placed on it.

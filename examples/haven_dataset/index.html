@@ -383,21 +383,25 @@
 <h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="blendloader">
 <h3>BlendLoader<a class="headerlink" href="#blendloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;loader.BlendLoader&quot;,
-&quot;config&quot;: {
-  &quot;path&quot;: &quot;&lt;args:0&gt;&quot;,
-  &quot;load_from&quot;: &quot;/Object&quot;
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.BlendLoader&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;load_from&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;/Object&quot;</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">BlendLoader</span></code> loads the given blend file and extracts the object from it.</p>
 </div>
 <div class="section" id="havenenvironmentloader">
 <h3>HavenEnvironmentLoader<a class="headerlink" href="#havenenvironmentloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;loader.HavenEnvironmentLoader&quot;,
-&quot;config&quot;: {
-  &quot;data_path&quot;: &quot;&lt;args:1&gt;&quot;
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.HavenEnvironmentLoader&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;data_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:1&gt;&quot;</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>This loader will load a random HDR image and will use it as an environment background for the scene.</p>

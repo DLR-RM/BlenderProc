@@ -44,9 +44,11 @@ python scripts/visHdf5Files.py examples/random_room_constructor/output/*.hdf5
 ### CCMaterialLoader 
 
 ```yaml
-"module": "loader.CCMaterialLoader",
-"config": {
-  "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
+{
+  "module": "loader.CCMaterialLoader",
+  "config": {
+    "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
+  }
 }
 ```
 
@@ -56,19 +58,21 @@ This makes it more realistic as things like `"Asphalt"` are not commonly found i
 ### RandomRoomConstructor 
 
 ```yaml
-"module": "constructor.RandomRoomConstructor",
-"config": {
-  "floor_area": 25,
-  "amount_of_extrusions": 5,
-  "used_loader_config": [
-    {
-      "module": "loader.IKEALoader",
-      "config": {
-        "category": ["bed", "chair", "desk", "bookshelf"]
+{
+  "module": "constructor.RandomRoomConstructor",
+  "config": {
+    "floor_area": 25,
+    "amount_of_extrusions": 5,
+    "used_loader_config": [
+      {
+        "module": "loader.IKEALoader",
+        "config": {
+          "category": ["bed", "chair", "desk", "bookshelf"]
+        },
+        "amount_of_repetitions": 15
       },
-      "amount_of_repetitions": 15
-    },
-  ]
+    ]
+  }
 }
 ```
 
@@ -84,15 +88,17 @@ These objects are than randomly placed inside the room.
 ### SurfaceLighting
 
 ```yaml
-"module": "lighting.SurfaceLighting",
-"config": {
-  "selector": {
-    "provider": "getter.Entity",
-    "conditions": {
-      "name": "Ceiling"
-    },
-    "emission_strength": 4.0
-  }
+{
+    "module": "lighting.SurfaceLighting",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+        "conditions": {
+          "name": "Ceiling"
+        },
+        "emission_strength": 4.0
+      }
+    }
 }
 ```
 
@@ -102,42 +108,44 @@ This can be changed if desired for more information check out the documentation 
 ### CameraSampler
 
 ```yaml
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [{
-    "number_of_samples": 5,
-    "proximity_checks": {
-      "min": 1.2
-    },
-    "location": {
-      "provider": "sampler.UpperRegionSampler",
-      "min_height": 1.5,
-      "max_height": 1.8,
-      "to_sample_on": {
-        "provider": "getter.Entity",
-        "index": 0,
-        "conditions": {
-          "name": "Floor",
-          "type": "MESH"
+{
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [{
+        "number_of_samples": 5,
+        "proximity_checks": {
+          "min": 1.2
+        },
+        "location": {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 1.5,
+          "max_height": 1.8,
+          "to_sample_on": {
+            "provider": "getter.Entity",
+            "index": 0,
+            "conditions": {
+              "name": "Floor",
+              "type": "MESH"
+            }
+          }
+        },
+        "rotation": {
+          "value": {
+            "provider":"sampler.Uniform3d",
+            "max":[1.4217, 0, 6.283185307],
+            "min":[1.0, 0, 0]
+          }
+        },
+        "min_interest_score": 0.4,
+        "check_if_pose_above_object_list": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "Floor",
+            "type": "MESH"
+          }
         }
-      }
-    },
-    "rotation": {
-      "value": {
-        "provider":"sampler.Uniform3d",
-        "max":[1.4217, 0, 6.283185307],
-        "min":[1.0, 0, 0]
-      }
-    },
-    "min_interest_score": 0.4,
-    "check_if_pose_above_object_list": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "name": "Floor",
-        "type": "MESH"
-      }
+      }]
     }
-  }]
 }
 ```
 

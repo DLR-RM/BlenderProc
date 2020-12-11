@@ -384,10 +384,12 @@ It also uses the <code class="docutils literal notranslate"><span class="pre">Ik
 <h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="ccmaterialloader">
 <h3>CCMaterialLoader<a class="headerlink" href="#ccmaterialloader" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;loader.CCMaterialLoader&quot;,
-&quot;config&quot;: {
-  &quot;used_assets&quot;: [&quot;Bricks&quot;, &quot;Wood&quot;, &quot;Carpet&quot;, &quot;Tile&quot;, &quot;Marble&quot;]
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.CCMaterialLoader&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;used_assets&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;Bricks&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Wood&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Carpet&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Tile&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;Marble&quot;</span><span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>This module loads the <code class="docutils literal notranslate"><span class="pre">cctextures</span></code> downloaded via the script, here only the assets which have one of the names of the list in their name are used.
@@ -395,20 +397,22 @@ This makes it more realistic as things like <code class="docutils literal notran
 </div>
 <div class="section" id="randomroomconstructor">
 <h3>RandomRoomConstructor<a class="headerlink" href="#randomroomconstructor" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;constructor.RandomRoomConstructor&quot;,
-&quot;config&quot;: {
-  &quot;floor_area&quot;: 25,
-  &quot;amount_of_extrusions&quot;: 5,
-  &quot;used_loader_config&quot;: [
-    {
-      &quot;module&quot;: &quot;loader.IKEALoader&quot;,
-      &quot;config&quot;: {
-        &quot;category&quot;: [&quot;bed&quot;, &quot;chair&quot;, &quot;desk&quot;, &quot;bookshelf&quot;]
-      },
-      &quot;amount_of_repetitions&quot;: 15
-    },
-  ]
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;constructor.RandomRoomConstructor&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;floor_area&quot;</span><span class="p p-Indicator">:</span> <span class="nv">25</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;amount_of_extrusions&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;used_loader_config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
+      <span class="p p-Indicator">{</span>
+        <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.IKEALoader&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;category&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;bed&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;chair&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;desk&quot;</span><span class="p p-Indicator">,</span> <span class="s">&quot;bookshelf&quot;</span><span class="p p-Indicator">]</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;amount_of_repetitions&quot;</span><span class="p p-Indicator">:</span> <span class="nv">15</span>
+      <span class="p p-Indicator">},</span>
+    <span class="p p-Indicator">]</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">RandomRoomConstructor</span></code> constructs a random floor plane and builds the corresponding wall and ceiling.
@@ -421,16 +425,18 @@ These objects are than randomly placed inside the room.</p>
 </div>
 <div class="section" id="surfacelighting">
 <h3>SurfaceLighting<a class="headerlink" href="#surfacelighting" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;lighting.SurfaceLighting&quot;,
-&quot;config&quot;: {
-  &quot;selector&quot;: {
-    &quot;provider&quot;: &quot;getter.Entity&quot;,
-    &quot;conditions&quot;: {
-      &quot;name&quot;: &quot;Ceiling&quot;
-    },
-    &quot;emission_strength&quot;: 4.0
-  }
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;lighting.SurfaceLighting&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;selector&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+        <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Ceiling&quot;</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;emission_strength&quot;</span><span class="p p-Indicator">:</span> <span class="nv">4.0</span>
+      <span class="p p-Indicator">}</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>This module will make the ceiling emit light and remove any materials placed on it.
@@ -438,43 +444,45 @@ This can be changed if desired for more information check out the documentation 
 </div>
 <div class="section" id="camerasampler">
 <h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span>&quot;module&quot;: &quot;camera.CameraSampler&quot;,
-&quot;config&quot;: {
-  &quot;cam_poses&quot;: [{
-    &quot;number_of_samples&quot;: 5,
-    &quot;proximity_checks&quot;: {
-      &quot;min&quot;: 1.2
-    },
-    &quot;location&quot;: {
-      &quot;provider&quot;: &quot;sampler.UpperRegionSampler&quot;,
-      &quot;min_height&quot;: 1.5,
-      &quot;max_height&quot;: 1.8,
-      &quot;to_sample_on&quot;: {
-        &quot;provider&quot;: &quot;getter.Entity&quot;,
-        &quot;index&quot;: 0,
-        &quot;conditions&quot;: {
-          &quot;name&quot;: &quot;Floor&quot;,
-          &quot;type&quot;: &quot;MESH&quot;
-        }
-      }
-    },
-    &quot;rotation&quot;: {
-      &quot;value&quot;: {
-        &quot;provider&quot;:&quot;sampler.Uniform3d&quot;,
-        &quot;max&quot;:[1.4217, 0, 6.283185307],
-        &quot;min&quot;:[1.0, 0, 0]
-      }
-    },
-    &quot;min_interest_score&quot;: 0.4,
-    &quot;check_if_pose_above_object_list&quot;: {
-      &quot;provider&quot;: &quot;getter.Entity&quot;,
-      &quot;conditions&quot;: {
-        &quot;name&quot;: &quot;Floor&quot;,
-        &quot;type&quot;: &quot;MESH&quot;
-      }
-    }
-  }]
-}
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[{</span>
+        <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;proximity_checks&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.2</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;sampler.UpperRegionSampler&quot;</span><span class="p p-Indicator">,</span>
+          <span class="s">&quot;min_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.5</span><span class="p p-Indicator">,</span>
+          <span class="s">&quot;max_height&quot;</span><span class="p p-Indicator">:</span> <span class="nv">1.8</span><span class="p p-Indicator">,</span>
+          <span class="s">&quot;to_sample_on&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;index&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+              <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Floor&quot;</span><span class="p p-Indicator">,</span>
+              <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
+            <span class="p p-Indicator">}</span>
+          <span class="p p-Indicator">}</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Uniform3d&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;max&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.4217</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">6.283185307</span><span class="p p-Indicator">],</span>
+            <span class="s">&quot;min&quot;</span><span class="p p-Indicator">:[</span><span class="nv">1.0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">]</span>
+          <span class="p p-Indicator">}</span>
+        <span class="p p-Indicator">},</span>
+        <span class="s">&quot;min_interest_score&quot;</span><span class="p p-Indicator">:</span> <span class="nv">0.4</span><span class="p p-Indicator">,</span>
+        <span class="s">&quot;check_if_pose_above_object_list&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+          <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.Entity&quot;</span><span class="p p-Indicator">,</span>
+          <span class="s">&quot;conditions&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;name&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;Floor&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;type&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;MESH&quot;</span>
+          <span class="p p-Indicator">}</span>
+        <span class="p p-Indicator">}</span>
+      <span class="p p-Indicator">}]</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
 </pre></div>
 </div>
 <p>We sample here five random camera poses, where the location is above the object with the <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">&quot;Floor&quot;</span></code>, which was constructed by the <code class="docutils literal notranslate"><span class="pre">RandomRoomConstructor</span></code>.

@@ -199,31 +199,35 @@ If this is not done, all the materials will be empty.
 ### SceneNetLighting
 
 ```yaml
-"module": "lighting.SurfaceLighting",
-"config": {
-  "selector": {
-    "provider": "getter.Entity",
-      "conditions": {
-        "name": ".*lamp.*"
-      }
-  },
-  "emission_strength": 15.0,
-  "keep_using_base_color": True
+{
+    "module": "lighting.SurfaceLighting",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+          "conditions": {
+            "name": ".*lamp.*"
+          }
+      },
+      "emission_strength": 15.0,
+      "keep_using_base_color": True
+    }
 }
 ```
 
 The first module call will make the lamps in the scene emit light, while using the assigned material textures.
 
 ```yaml
-"module": "lighting.SurfaceLighting",
-"config": {
-  "selector": {
-    "provider": "getter.Entity",
-    "conditions": {
-      "name": "Ceiling"
-    },
-    "emission_strength": 2.0
-  }
+{
+    "module": "lighting.SurfaceLighting",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+        "conditions": {
+          "name": "Ceiling"
+        },
+        "emission_strength": 2.0
+      }
+    }
 }
 ```
 
