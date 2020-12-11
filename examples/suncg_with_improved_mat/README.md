@@ -49,15 +49,17 @@ python scripts/visHdf5Files.py examples/suncg_with_improved_mat/output/0.hdf5
 ## Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:1>",
-    "max_bounces": 200,
-    "diffuse_bounces": 200,
-    "glossy_bounces": 200,
-    "transmission_bounces": 200,
-    "transparency_bounces": 200
+{
+  "module": "main.Initializer",
+  "config": {
+    "global": {
+      "output_dir": "<args:1>",
+      "max_bounces": 200,
+      "diffuse_bounces": 200,
+      "glossy_bounces": 200,
+      "transmission_bounces": 200,
+      "transparency_bounces": 200
+    }
   }
 }
 ```
@@ -107,36 +109,38 @@ After sampling a pose the pose is only accepted if it is valid according to the 
 
 
 ```yaml
-"module": "manipulators.MaterialManipulator",
-"config": {
-  "selector": {
-    "provider": "getter.Material",
-    "conditions": [
-      {"name": "wood.*"},
-      {"name": "laminate.*"},
-      {"name": "beam.*"}
-    ]
-  },
-  "cf_set_Roughness": {
-     "provider": "sampler.Value",
-     "type": "float",
-     "min": 0.05,
-     "max": 0.5,
-  },
-  "cf_set_Specular": {
-    "provider": "sampler.Value",
-    "type": "float",
-    "min": 0.5,
-    "max": 1,
-  },
-  "cf_color_link_to_displacement": {
-    "provider": "sampler.Value",
-    "type": "float",
-    "min": 0.001,
-    "max": 0.15,
-  },
-  "mode": "once_for_each"
-}
+  { 
+    "module": "manipulators.MaterialManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Material",
+        "conditions": [
+          {"name": "wood.*"},
+          {"name": "laminate.*"},
+          {"name": "beam.*"}
+        ]
+      },
+      "cf_set_Roughness": {
+         "provider": "sampler.Value",
+         "type": "float",
+         "min": 0.05,
+         "max": 0.5,
+      },
+      "cf_set_Specular": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0.5,
+        "max": 1,
+      },
+      "cf_color_link_to_displacement": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0.001,
+        "max": 0.15,
+      },
+      "mode": "once_for_each"
+    }
+  }
 ```
 
 This a quite complex module call, that's why we will call through it from the top to the bottom.
@@ -149,7 +153,7 @@ This a quite complex module call, that's why we will call through it from the to
       {"name": "laminate.*"},
       {"name": "beam.*"}
     ]
-  },
+  }
 ```
 In this first part do we select all materials, which name start with wood, laminate or beam. 
 All of those are in the Suncg dataset materials, which look like wood structures.
@@ -161,7 +165,7 @@ If you want to find out how your materials are named, click on the objects durin
      "type": "float",
      "min": 0.05,
      "max": 0.5,
-  },
+  }
 ```
 
 This step is now repeated two times, with different values.
@@ -176,7 +180,7 @@ You can set any of those values there, even overwrite the `"Base Color"`, which 
     "type": "float",
     "min": 0.001,
     "max": 0.15,
-  },
+  }
 ```
 
 This last option adds displacement to your objects, so the object gets changed based on the color texture.

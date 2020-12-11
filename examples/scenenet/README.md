@@ -43,11 +43,13 @@ python scripts/visHdf5Files.py examples/scenenet/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:2>",
-  }
+{
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:2>",
+      }
+    }
 }
 ```
 
@@ -56,10 +58,12 @@ The same as in the basic example.
 ### SceneNetLoader 
 
 ```yaml
-"module": "loader.SceneNetLoader",
-"config": {
-  "file_path": "<args:0>",
-  "texture_folder": "<args:1>"
+{
+    "module": "loader.SceneNetLoader",
+    "config": {
+      "file_path": "<args:0>",
+      "texture_folder": "<args:1>"
+    }
 }
 ```
 
@@ -73,6 +77,7 @@ By selecting random texture and putting them in this `unknown_texture_folder`, w
 ### SurfaceLighting
 
 ```yaml
+<<<<<<< HEAD
 "module": "lighting.SurfaceLighting",
 "config": {
   "selector": {
@@ -107,7 +112,6 @@ This can be changed if desired for more information check out the documentation 
 ### CameraSampler
 
 ```yaml
-
 {
   "module": "camera.CameraSampler",
   "config": {

@@ -10,10 +10,16 @@ First run `config_for_pip_install.yaml` to make sure to install all packages use
 python run.py docs/config_for_pip_install.yaml
 ```
 
-You can regenerate the documentation by executing:
+Now copy markdowns files from examples and main directory:
 
 ```bash
 cd docs
+python prepare_markdown.py
+```
+
+You can regenerate the documentation by executing:
+
+```bash
 ./generate.sh
 ```
 

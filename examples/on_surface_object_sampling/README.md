@@ -79,7 +79,7 @@ python scripts/visHdf5Files.py examples/on_surface_object_sampling/output/0.hdf5
       "min": [6.28,6.28,6.28]
     }
   }
-},
+}
 ```
 
 * invoke a `getter.Entity` Provider to select `objects_to_sample` - objects we want to sample poses for.

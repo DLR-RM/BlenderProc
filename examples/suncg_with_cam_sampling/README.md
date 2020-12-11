@@ -62,6 +62,7 @@ python scripts/visHdf5Files.py examples/suncg_with_cam_sampling/output/0.hdf5
       },
     }]
   }
+}
 ```
 
 With this module we want to sample `10` valid camera poses inside the loaded SUNCG rooms. 

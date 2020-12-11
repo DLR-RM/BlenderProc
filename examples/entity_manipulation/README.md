@@ -59,7 +59,7 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
         "rotation_euler": [1, 1, 0],
         "cp_physics": True
       }
-    },
+    }
 ```
 
 The focus of this example is the EntityManipulator module and `getter.Entity` which allow us to select multiple entities based on a user-defined condition and change the attribute and custom property values of the selected entities.

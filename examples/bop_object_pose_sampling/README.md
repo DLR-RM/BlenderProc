@@ -62,7 +62,7 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
         "obj_ids": [1,1,3],
         "model_type": ""
       }
-    },
+    }
 ```
 
 ### CameraObjectSampler
@@ -114,10 +114,11 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
           }
         }
       }
-    },
+    }
 ```
 
- `composite.CameraObjectSampler` alternates between sampling new cameras using a `camera.CameraSampler` and sampling new object poses using a `object.ObjectPoseSampler`. Additionally, here you set the parameters
+
+`composite.CameraObjectSampler` alternates between sampling new cameras using a `camera.CameraSampler` and sampling new object poses using a `object.ObjectPoseSampler`. Additionally, here you set the parameters
 
 - `noof_cams_per_scene` after which the object poses are resampled
 - `total_noof_cams` to generate
@@ -130,7 +131,7 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
       "config": {
         "supercategory": "<args:1>"
       }
-    },
+    }
 ```
 Writes CocoAnnotations of all objects from the given BOP dataset (`"supercategory"`).
 

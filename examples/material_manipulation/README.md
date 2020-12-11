@@ -54,7 +54,9 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
     },
     "cf_color_link_to_displacement": 1.5
   }
-},
+}
+```
+```yaml
 {
   "module": "manipulators.MaterialManipulator",
   "config": {
@@ -72,7 +74,7 @@ python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
       }
     }
   }
-},
+}
 ```
 
 The focus of this example is the `MaterialManipulator` module and `getter.Material` which allow us to select multiple materials based on a user-defined condition and change the attribute values of the selected materials.

@@ -60,7 +60,7 @@ python scripts/visHdf5Files.py examples/object_pose_sampling/output/0.hdf5
       "min": [6.28,6.28,6.28]
     }
   }
-},
+}
 ```
  
 `object.ObjectPoseSampler` for each `passive` object in the scene places the object outside the sampling volume until there are objects remaining and `max_iterations` have not been reached, point is sampled.

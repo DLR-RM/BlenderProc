@@ -45,16 +45,18 @@ python scripts/visHdf5Files.py examples/scenenet_with_cctextures/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:2>",
-    "max_bounces": 200,
-    "diffuse_bounces": 200,
-    "glossy_bounces": 200,
-    "transmission_bounces": 200,
-    "transparency_bounces": 200
-  }
+{
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:2>",
+        "max_bounces": 200,
+        "diffuse_bounces": 200,
+        "glossy_bounces": 200,
+        "transmission_bounces": 200,
+        "transparency_bounces": 200
+      }
+    }
 }
 ```
 
@@ -65,10 +67,12 @@ However, they increase the render time slightly and that's why they are usually 
 ### SceneNetLoader 
 
 ```yaml
-"module": "loader.SceneNetLoader",
-"config": {
-  "file_path": "<args:0>",
-  "texture_folder": "<args:1>"
+{
+    "module": "loader.SceneNetLoader",
+    "config": {
+      "file_path": "<args:0>",
+      "texture_folder": "<args:1>"
+    }
 }
 ```
 
@@ -80,40 +84,41 @@ The `category_id` of each object are set based on their name, check the [table](
 
 ```yaml
 {
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [{
-    "number_of_samples": 5, # amount of camera samples
-    "proximity_checks": {
-      "min": 1.0
-    },
-    "location": {
-      "provider": "sampler.UpperRegionSampler",
-      "min_height": 1.5,
-      "max_height": 1.8,
-      "to_sample_on": {
-        "provider": "getter.Entity",
-        "index": 0,
-        "conditions": {
-          "cp_category_id": 2  # 2 stands for floor
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [{
+        "number_of_samples": 5, # amount of camera samples
+        "proximity_checks": {
+          "min": 1.0
+        },
+        "location": {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 1.5,
+          "max_height": 1.8,
+          "to_sample_on": {
+            "provider": "getter.Entity",
+            "index": 0,
+            "conditions": {
+              "cp_category_id": 2  # 2 stands for floor
+            }
+          }
+        },
+        "rotation": {
+          "value": {
+            "provider":"sampler.Uniform3d",
+            "max":[1.2217, 0, 6.283185307],
+            "min":[1.2217, 0, 0]
+          }
+        },
+        "check_if_pose_above_object_list": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_category_id": 2,
+            "type": "MESH"
+          }
         }
-      }
-    },
-    "rotation": {
-      "value": {
-        "provider":"sampler.Uniform3d",
-        "max":[1.2217, 0, 6.283185307],
-        "min":[1.2217, 0, 0]
-      }
-    },
-    "check_if_pose_above_object_list": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "cp_category_id": 2,
-        "type": "MESH"
-      }
+      }]
     }
-  }]
 }
 ```
 
@@ -124,7 +129,9 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 ### CCMaterialLoader
 
 ```yaml
-"module": "loader.CCMaterialLoader"
+{
+  "module": "loader.CCMaterialLoader"
+}
 ```
 
 This one line loads all the materials, which are available at [cc0textures.com](https://cc0textures.com/).
@@ -158,7 +165,7 @@ This module only sets up the materials which can then be used by other modules.
           }
         }
       }
-    },
+    }
 ```
 
 This builds up on the [material_randomizer](../material_randomizer) example.
@@ -171,6 +178,7 @@ Each material loaded by CCMaterialLoader set the `cp_is_cc_texture` custom prope
 ### SurfaceLighting
 
 ```yaml
+<<<<<<< HEAD
 "module": "lighting.SurfaceLighting",
 "config": {
   "selector": {

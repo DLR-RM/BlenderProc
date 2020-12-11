@@ -59,7 +59,7 @@ python scripts/visHdf5Files.py examples/light_sampling/output/0.hdf5
       }
     ]
   }
-},
+}
 ```
 
 The focus of this example is `light.LightSampler` module which allows one to sample values for various light attributes. 
