@@ -46,7 +46,7 @@
           }
         },
         "cf_randomize_materials": {
-          "randomization_level": 1.0,
+          "randomization_level": 0.4,
           "materials_to_replace_with": {
             "provider": "getter.Material",
             "random_samples": 1,
