@@ -6,6 +6,7 @@ if version_info.major == 2:
 import os
 from urllib.request import urlretrieve, build_opener, install_opener
 import glob
+import numpy as np
 import subprocess
 import shutil
 
@@ -37,7 +38,6 @@ def split_object_according_to_groups(file_path, folder):
             face_lines = np.array([[[int(e) for e in eles.split("/")] for eles in l] for l in face_lines])
             face_offset = np.min(face_lines, axis=0)
             face_offset = np.min(face_offset, axis=0) - 1
-            print(index, face_offset)
 
             final_lins = []
             for line in current_lines:
