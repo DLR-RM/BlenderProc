@@ -5,15 +5,16 @@
 
 The focus of this example is the `loader.IKEALoader`, which can be used to load objects from the [IKEA dataset](http://ikea.csail.mit.edu/).
 The IKEA dataset consists of 218 3D models of IKEA furniture collected from Google 3D Warehouse. <br>
-If you use this dataset please cite <br>
-> ```
->@article{lpt2013ikea,
->   title={{Parsing IKEA Objects: Fine Pose Estimation}},
->   author={Joseph J. Lim and Hamed Pirsiavash and Antonio Torralba},
->   journal={ICCV},
->   year={2013}
->}
+If you use this dataset please cite
 
+```
+@article{lpt2013ikea,
+   title={{Parsing IKEA Objects: Fine Pose Estimation}},
+   author={Joseph J. Lim and Hamed Pirsiavash and Antonio Torralba},
+   journal={ICCV},
+   year={2013}
+}
+```
 
 A script to download the .obj files is provided in the [scripts folder](../../scripts).
 

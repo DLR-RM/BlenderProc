@@ -17,8 +17,7 @@ However, we will give you a step by step explanation on how to get access.
 2. Wait till you receive the confirmation vie e-mail, once you confirm your account you can access the download sections.
 3. download the following files which represent the body models and extract them inside folder `resources/AMASS/body_models`
 	1. from `https://smpl.is.tue.mpg.de/downloads` download the following file <img src="instructions_screenshots/dmpl_model.png" width=350>
-	2. from `https://mano.is.tue.mpg.de/downloads`download the following file <img src="instructions_screenshots/smpl_model.png" width=350> 
-	
+	2. from `https://mano.is.tue.mpg.de/downloads` download the following file <img src="instructions_screenshots/smpl_model.png" width=350> 
 4. Explore the collection of motion capture dataset that are supported by AMASS and choose the motion capture dataset and motion sequence that you want to generate a pose from. For now, we only provide support for CMU motion capture dataset *(we're planning to support the rest of the datasets in the near future)*, so you have to choose a pose from the variety of poses that could be extracted from this dataset.
 	1. For example, after exploring different motion sequences in CMU mocap dataset, we are now interested in generating a body pose, where a person kicks a ball. (You can explore all motion sequences categories for CMU dataset through the dataset website `http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%`. Go to the website and select all motion tab to see different motions)
 	2. From the different motion categories available there, we are interested in the "kick soccer ball" category (note it is listed as subject # 10, we need this number among other identifiers to identify the pose.)
@@ -26,7 +25,8 @@ However, we will give you a step by step explanation on how to get access.
 	<img src="instructions_screenshots/mocap_dataset_download.png"> 
 	Download the dataset and extract it under the `resources/AMASS` folder.
 6. In the end the structure of the `resource/AMASS` folder should be, this might mean you need to create some folders or move some data: 
-```shell script
+
+```shell
 - resources
     - AMASS
         - body_models
@@ -97,11 +97,11 @@ python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
 }
 ```
 
-* `sub_dataset_id `: one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset [https://amass.is.tue.mpg.de/dataset](https://amass.is.tue.mpg.de/dataset) **Note: only the CMU motion capture dataset is currently supported by the AMASSLoader module**
-* `body_model_gender `: select gender of the model that will represent the selected pose. Available options are: `[male, female, neutral]`
-* `subject_id `: represents the category of the motion, which type of motion the pose will be extracted from. This refers to every motion capture dataset included in AMASS dataset to see the set of supported motion categories. For the CMU dataset, you can have a look on the different supported motion categories on their website [http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%](http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%) and configure the number equivalent to the category id. *For this example, we are interested in the "kick soccer ball" category, so we chose the subject_id to be `10`.*
-* `sequence_id`: every category has more than one sequence of people performing the same motion using different scenarios. Hint: You can watch the videos on the original dataset website to select a a specific sequence or you can just leave the default value which is `1`.
-* `frame_id`: which frame in the sequence contains the represented pose. This parameter id dependents on the length of the sequence and the fps in which the motion is recorded. Usually you can obtain the length of the sequence and fps values from the dataset website or leave it blank and the loader will choose a random pose.
+* `sub_dataset_id` : one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset https://amass.is.tue.mpg.de/dataset **Note: only the CMU motion capture dataset is currently supported by the AMASSLoader module**
+* `body_model_gender` : select gender of the model that will represent the selected pose. Available options are: `[male, female, neutral]`
+* `subject_id` : represents the category of the motion, which type of motion the pose will be extracted from. This refers to every motion capture dataset included in AMASS dataset to see the set of supported motion categories. For the CMU dataset, you can have a look on the different supported motion categories on their website [http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%](http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%) and configure the number equivalent to the category id. *For this example, we are interested in the "kick soccer ball" category, so we chose the subject_id to be `10`.*
+* `sequence_id` : every category has more than one sequence of people performing the same motion using different scenarios. Hint: You can watch the videos on the original dataset website to select a a specific sequence or you can just leave the default value which is `1`.
+* `frame_id` : which frame in the sequence contains the represented pose. This parameter id dependents on the length of the sequence and the fps in which the motion is recorded. Usually you can obtain the length of the sequence and fps values from the dataset website or leave it blank and the loader will choose a random pose.
 
 ### CameraSampler
 

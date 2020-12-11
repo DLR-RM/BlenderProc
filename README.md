@@ -46,7 +46,7 @@ Currently, BlenderProc officialy supports Linux and MacOS. There is also a commu
 
 The following modules are already implemented and ready to use:
 
-* Loading: *.obj, *.ply, SunCG, Replica scenes, BOP datasets, etc.
+* Loading: `*.obj`, `*.ply`, SunCG, Replica scenes, BOP datasets, etc.
 * Objects: Sample object poses, apply physics and collision checking.
 * Materials: Set or sample physically-based materials and textures
 * Lighting: Set or sample lights, automatic lighting of SunCG scenes.

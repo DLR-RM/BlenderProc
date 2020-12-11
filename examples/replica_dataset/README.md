@@ -131,7 +131,7 @@ As before all these values are stored in the GlobalStorage and are only used if 
 },
 ``` 
 The `materials.Manipulator` changes the material of the Replica objects so that the vertex color is renderer, this makes it possible to render colors on Replica scenes.
-##### Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.
+**Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.**
 
 If you are in need of high-res color images, do we propose that you, yourself can try to implement the texture importer for the replica dataset.
 
