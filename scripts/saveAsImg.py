@@ -6,8 +6,6 @@ import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
-sys.path.append(os.path.join(os.path.dirname(__file__)))
-from utils import flow_to_rgb
 
 
 
@@ -30,6 +28,14 @@ def process_img(img, key):
         if len(img.shape) == 3:
             img = img[:, :, 0]
     elif 'flow' in key:
+        try:
+            # This import here is ugly, but else everytime someone uses this script it demands opencv and the progressbar
+            sys.path.append(os.path.join(os.path.dirname(__file__)))
+            from utils import flow_to_rgb
+        except ImportError:
+            raise ImportError("Using .hdf5 containers, which contain flow images needs opencv-python and progressbar "
+                              "to be installed!")
+
         img = flow_to_rgb(img)
     elif "normals" in key:
         img = np.clip(img, 0.0, 1.0)

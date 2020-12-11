@@ -37,7 +37,8 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
 
 
 ### ObjectLoader
-```
+
+```yaml
     {
       "module": "loader.ObjectLoader",
       "config": {
@@ -46,7 +47,7 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
             "cp_category_id": "1"
         }, 
       },
-    },
+    }
 ```
 * Loads an object and adds a custom property `category_id`. This is required by the `bop_writer` to write object poses in `bop_format`.
 
@@ -69,7 +70,7 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
              [0, 0, 0, 1.0]],
         "scale": [0.001, 0.001, 0.001] # Scale 3D model from mm to m
       },
-    },
+    }
 ```
 
 * Set the object pose `matrix_world` in meter  
@@ -91,7 +92,7 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
           "resolution_y": 480
         }
       }
-    },
+    }
 ```
 
 * The camera pose is defined by its world matrix, in this case it is just the identity.
@@ -112,7 +113,7 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
         },
         "cf_change_to_vertex_color": "Col"
       }
-    },
+    }
 ```
 * Required to render vertex colors defined in ply file
 

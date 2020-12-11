@@ -8,9 +8,10 @@ import numpy as np
 
 def local_to_world(cords, world):
     """
+    Returns a cords transformed to the given transformation world matrix
+
     :param cords: coordinates a tuple of 3 values for x,y,z
     :param world: world matrix <- transformation matrix
-    Returns a cords transformed to the given transformation world matrix
     """
     return [world @ Vector(cord) for cord in cords]
 
@@ -18,7 +19,7 @@ def local_to_world(cords, world):
 def get_bounds(obj):
     """
     :param obj: a mesh object
-    :returns [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
+    :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
     """
     return local_to_world(obj.bound_box, obj.matrix_world)
 
@@ -26,11 +27,11 @@ def get_bounds(obj):
 def check_bb_intersection(obj1, obj2):
     """
     Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
-        The surrounding/including axis-aligned bounding box is calculated and used to check the intersection
+    The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.
 
     :param obj1: object 1  to check for intersection, must be a mesh
     :param obj2: object 2  to check for intersection, must be a mesh
-    returns a boolean
+    :return: True if the two bounding boxes intersect with each other
     """
     b1w = get_bounds(obj1)
 
@@ -48,6 +49,23 @@ def check_bb_intersection(obj1, obj2):
     b2w = get_bounds(obj2)
     # get min and max point of the axis-aligned bounding box
     min_b2, max_b2 = min_and_max_point(b2w)
+    return check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
+
+
+def check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2, used_check=lambda a, b: a >= b):
+    """
+    Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
+    namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
+    problems.
+
+    :param min_b1: List of minimum bounding box points for b1.
+    :param max_b1: List of maximum bounding box points for b1.
+    :param min_b2: List of minimum bounding box points for b2.
+    :param max_b2: List of maximum bounding box points for b2.
+    :param used_check: The operation used inside of the is_overlapping1D. With that it possible to change the \
+                       collision check from volume and surface check to pure surface or volume checks.
+    :return: True if the two bounding boxes intersect with each other
+    """
     collide = True
     for min_b1_val, max_b1_val, min_b2_val, max_b2_val in zip(min_b1, max_b1, min_b2, max_b2):
         # inspired by this:
@@ -55,7 +73,7 @@ def check_bb_intersection(obj1, obj2):
         # Checks in each dimension, if there is an overlap if this happens it must be an overlap in 3D, too.
         def is_overlapping_1D(x_min_1, x_max_1, x_min_2, x_max_2):
             # returns true if the min and max values are overlapping
-            return x_max_1 >= x_min_2 and x_max_2 >= x_min_1
+            return used_check(x_max_1, x_min_2) and used_check(x_max_2, x_min_1)
 
         collide = collide and is_overlapping_1D(min_b1_val, max_b1_val, min_b2_val, max_b2_val)
     return collide
@@ -100,12 +118,18 @@ def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
     # Optionally check whether obj2 is contained in obj1
     if not inter and not skip_inside_check:
         inter = is_point_inside_object(obj1, obj1_BVHtree, obj2.matrix_world @ obj2.data.vertices[0].co)
-        print("Warning: Detected that " + obj2.name + " is completely inside " + obj1.name + ". This might be wrong, if " + obj1.name + " is not water tight or has incorrect normals. If that is the case, consider setting skip_inside_check to True.")
+        print("Warning: Detected that " + obj2.name + " is completely inside " + obj1.name +
+              ". This might be wrong, if " + obj1.name +
+              " is not water tight or has incorrect normals. If that is the case, consider setting "
+              "skip_inside_check to True.")
 
     # Optionally check whether obj1 is contained in obj2
     if not inter and not skip_inside_check:
         inter = is_point_inside_object(obj2, obj2_BVHtree, obj1.matrix_world @ obj1.data.vertices[0].co)
-        print("Warning: Detected that " + obj1.name + " is completely inside " + obj2.name + ". This might be wrong, if " + obj2.name + " is not water tight or has incorrect normals. If that is the case, consider setting skip_inside_check to True.")
+        print("Warning: Detected that " + obj1.name + " is completely inside " + obj2.name +
+              ". This might be wrong, if " + obj2.name + " is not water tight or has incorrect "
+                                                         "normals. If that is the case, consider "
+                                                         "setting skip_inside_check to True.")
 
     return inter, bvh_cache
 
@@ -156,7 +180,7 @@ def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
 
 def vector_to_euler(vector, vector_type):
     """
-    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils Vector.
+    :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.
     :param vector_type: Type of an input vector: UP or FORWARD. Type: string.
     :return: Corresponding Euler angles XYZ-triplet. Type: mathutils Euler.
     """
@@ -179,7 +203,7 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
 
     :param vertices: [[float, float, float]] list of vertices
     :param name: str name of the new object
-    :return the generated obj
+    :return: the generated obj
     """
     mesh = bpy.data.meshes.new('mesh')
     # create new object
@@ -204,7 +228,7 @@ def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='
 
     :param vertices: [[float, float, float]] list of vertices
     :param name: str name of the new object
-    :return the generated obj
+    :return: the generated obj
     """
     if len(vertices) != len(normals):
         raise Exception("The lenght of the vertices and normals is not equal!")
@@ -235,7 +259,7 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
 
     :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
     :param name: name of the new cube
-    :return the generated object
+    :return: the generated object
     """
     if len(bouding_box) != 8:
         raise Exception("The amount of vertices is wrong for this bounding box!")

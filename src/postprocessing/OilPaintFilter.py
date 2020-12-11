@@ -9,6 +9,7 @@ def get_neighbors_stacked(img, filter_size=3, return_list=False):
     """
     Stacks the neighbors of each pixel according to a square filter around each given pixel in the depth dimensions.
     The neighbors are represented by shifting the input image in all directions required to simulate the filter.
+
     :param img: Input image. Type: blender object of type image.
     :param filter_size: Filter size. Type: int. Default: 5..
     :param return_list: Instead of stacking in the output array, just return a list of the "neighbor" images along with the input image.
@@ -43,11 +44,24 @@ class OilPaintFilter(Module):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-       "filter_size", "Mode filter size, should be an odd number. Type: int. Default: 5"
-       "edges_only", "If true, applies the filter on the edges only. For RGB images, they should be represented in uint8 arrays. Type: bool. Default: True"
-       "rgb", "Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated). Type: bool. Default: False" 
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - filter_size
+          - Mode filter size, should be an odd number. Default: 5
+          - int
+        * - edges_only
+          - If true, applies the filter on the edges only. For RGB images, they should be represented in uint8
+            arrays. Default: True
+          - bool
+        * - rgb
+          - Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated).
+            Default: False
+          - bool
     """
 
     def __init__(self, config):

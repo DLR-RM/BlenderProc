@@ -10,11 +10,10 @@ Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating i
 
 ## Overview Video
 
+<div align="center">
 <a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
-<p align="center">
-<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550>
-</p>
-</a>
+<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550> </a>
+</div>
 
 There is also an extended introduction video to BlenderProc, it covers the basics and a bit of the background story and how it all started. It can be found [here](https://www.youtube.com/watch?v=1AvY_iS6xQA).
 
@@ -35,7 +34,7 @@ The modules are selected, ordered and configured via a .yaml file.
  
 To run the blender pipeline one just has to call the `run.py` script in the main directory together with the desired config file and any additional arguments.
 An exemplary `config.yaml` can be found in the respective example folder.
-```
+```shell
 python run.py config.yaml <additional arguments>
 ```
 
@@ -47,7 +46,7 @@ Currently, BlenderProc officialy supports Linux and MacOS. There is also a commu
 
 The following modules are already implemented and ready to use:
 
-* Loading: *.obj, *.ply, SunCG, Replica scenes, BOP datasets, etc.
+* Loading: `*.obj`, `*.ply`, SunCG, Replica scenes, BOP datasets, etc.
 * Objects: Sample object poses, apply physics and collision checking.
 * Materials: Set or sample physically-based materials and textures
 * Lighting: Set or sample lights, automatic lighting of SunCG scenes.
@@ -55,7 +54,7 @@ The following modules are already implemented and ready to use:
 * Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
 * Writing: .hdf5 containers, COCO & BOP annotations.
 
-..and many more ([docu](https://dlr-rm.github.io/BlenderProc/index.html)). For advanced/custom functionalities, you can easily write and integrate your [own modules](https://github.com/DLR-RM/BlenderProc/tree/master/src#writing-your-own-modules).
+..and many more ([docu](https://dlr-rm.github.io/BlenderProc/index.html)). For advanced/custom functionalities, you can easily write and integrate your [own modules](src/README.md#writing-your-own-modules).
 
 ## Examples
 

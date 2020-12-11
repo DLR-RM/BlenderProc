@@ -15,7 +15,8 @@ from src.utility.CameraUtility import CameraUtility
 
 
 class BopLoader(LoaderInterface):
-    """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
+    """
+    Loads the 3D models of any BOP dataset and allows replicating BOP scenes
     
     - Interfaces with the bob_toolkit, allows loading of train, val and test splits
     - Relative camera poses are loaded/computed with respect to a reference model
@@ -23,27 +24,59 @@ class BopLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "cam_type", "Camera type. Type: string. Optional. Default value: ''."
-       "source_frame", "Can be used if the given positions and rotations are specified in frames different from the "
-                "blender frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) "
-                "will be transformed to (1, -3, 2). Type: list. Default: ["X", "-Y", "-Z"]. "
-                "Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z']."
-       "sys_paths", "System paths to append. Type: list."
-       "bop_dataset_path", "Full path to a specific bop dataset e.g. /home/user/bop/tless. Type: string."
-       "mm2m", "Specify whether to convert poses and models to meters. Type: bool. Optional. Default: False."
-       "split", "Optionally, test or val split depending on BOP dataset. Type: string. Optional. Default: test."
-       "scene_id", "Optionally, specify BOP dataset scene to synthetically replicate. Type: int. Default: -1 (no scene "
-                   "is replicated, only BOP Objects are loaded)."
-       "sample_objects", "Toggles object sampling from the specified dataset. Type: boolean. Default: False."
-       "num_of_objs_to_sample", "Amount of objects to sample from the specified dataset. Type: int. If this amount is "
-                                "bigger than the dataset actually contains, then all objects will be loaded. Type: int."
-       "obj_instances_limit", "Limits the amount of object copies when sampling. Type: int. Default: -1 (no limit)."
-       "obj_ids", "List of object ids to load. Type: list. Default: [] (all objects from the given BOP dataset if "
-                  "scene_id is not specified)."
-       "model_type", "Optionally, specify type of BOP model. Type: string. Default: "". Available: [reconst, cad or eval]."
+        * - Parameter
+          - Description
+          - Type
+        * - cam_type
+          - Camera type. Optional. Default value: "."
+          - string
+        * - source_frame
+          - Can be used if the given positions and rotations are specified in frames different from the blender
+            frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed
+            to (1, -3, 2). Default: ["X", "-Y", "-Z"]. " Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
+          - list
+        * - sys_paths
+          - System paths to append.
+          - list
+        * - bop_dataset_path
+          - Full path to a specific bop dataset e.g. /home/user/bop/tless.
+          - string
+        * - mm2m
+          - Specify whether to convert poses and models to meters. Optional. Default: False.
+          - bool
+        * - split
+          - Optionally, test or val split depending on BOP dataset. Optional. Default: test.
+          - string
+        * - scene_id
+          - Optionally, specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,
+            only BOP Objects are loaded).
+          - int
+        * - sample_objects
+          - Toggles object sampling from the specified dataset. Default: False.
+          - boolean
+        * - num_of_objs_to_sample
+          - Amount of objects to sample from the specified dataset. If this amount is bigger than the dataset
+            actually contains, then all objects will be loaded. 
+          - int
+        * - obj_instances_limit
+          - Limits the amount of object copies when sampling. Default: -1 (no limit).
+          - int
+        * - obj_ids
+          - List of object ids to load. Default: [] (all objects from the given BOP dataset if scene_id is not
+            specified).
+          - list
+        * - model_type
+          - Optionally, specify type of BOP model. Type: string. Default: "".  Available: [reconst, cad or eval].
+          - string
+        * - move_origin_to_x_y_plane
+          - Move center of the object to the lower side of the object, this will not work when used in combination with
+            pose estimation tasks! This is designed for the use-case where BOP objects are used as filler objects in
+            the background. Default: False
+          - bool
     """
 
     def __init__(self, config):
@@ -180,6 +213,14 @@ class BopLoader(LoaderInterface):
                 for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
 
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        # This is only useful if the BOP objects are not used in a pose estimation scenario.
+        move_to_origin = self.config.get_bool("move_origin_to_x_y_plane", False)
+        if move_to_origin:
+            LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_objects)
+
+
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.
 
@@ -193,6 +234,9 @@ class BopLoader(LoaderInterface):
         print('-----------------------------')
         print("Cam: {}".format(cam_H_c2w))
         print('-----------------------------')
+        
+        # transform from OpenCV to blender coords
+        cam_H_c2w = Utility.transform_matrix_to_blender_coord_frame(Matrix(cam_H_c2w), self.source_frame)
  
         return cam_H_c2w
 
@@ -202,7 +246,8 @@ class BopLoader(LoaderInterface):
 
         :param cur_obj: Current object. Type: bpy.types.Object.
         :param inst: instance from BOP scene_gt file. Type: dict.
-        :param scale : factor to transform set pose in mm or meters. Type: dict.
+        :param scale: factor to transform set pose in mm or meters. Type: dict.
+
         """
 
         cam_H_m2c = np.eye(4)
@@ -236,8 +281,7 @@ class BopLoader(LoaderInterface):
         :param cam_id: BOP camera id. Type: int.
         :param insts: Instance from BOP scene_gt file. Type: dict.
         :param scale: Factor to transform get pose in mm or meters. Type: int.
-        :return camK : loaded camera matrix. Type: ndarray.
-        :return cam_H_m2c_ref: loaded object to camera transformation. Type: ndarray.
+        :return (camK, cam_H_m2c_ref): loaded camera matrix. Loaded object to camera transformation. Type: ndarray.
         """
 
         cam_K = np.array(sc_camera[str(cam_id)]['cam_K']).reshape(3,3)

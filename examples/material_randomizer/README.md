@@ -54,7 +54,7 @@ python scripts/visHdf5Files.py examples/material_randomizer/output/*.hdf5
           "randomization_level": 0.5
         }
       }
-    },
+    }
 ```
 
 The focus of this example is the fucntionality of the `manupulators.EntityManipulator` module, which allows us to change the material of the objects randomly. 

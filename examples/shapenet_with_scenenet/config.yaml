@@ -28,7 +28,62 @@
       }
     },
     {
-      "module": "lighting.SceneNetLighting"
+      "module": "object.FloorExtractor",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "wall"
+          }
+        }, # this one you need to now beforehand
+        "compare_angle_degrees" : 7.5,
+        "compare_height": 0.15,
+        "name_for_split_obj": "floor",  # this is the new name of the object
+        "add_properties": {
+          "cp_category_id": 2
+        }
+      }
+    },
+    {
+      "module": "object.FloorExtractor",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "wall"  # the wall object here contains the ceiling
+          }
+        },
+        "up_vector_upwards": False,  # the polygons are now facing downwards: [0, 0, -1]
+        "compare_angle_degrees": 7.5,
+        "compare_height": 0.15,
+        "name_for_split_obj": "ceiling"
+      }
+    },
+    {
+      "module": "lighting.SurfaceLighting",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": ".*lamp.*"
+          }
+        },
+        "emission_strength": 2.0,
+        "keep_using_base_color": True
+      }
+    },
+    {
+      "module": "lighting.SurfaceLighting",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": ".*ceiling.*"
+          }
+        },
+        "emission_strength": 2.0,
+        "keep_using_base_color": True
+      }
     },
     {
       "module": "loader.ShapeNetLoader",
@@ -93,6 +148,16 @@
         "cam_poses": [
         {
           "number_of_samples": 5,
+          "proximity_checks": {
+            "min": 0.5
+          },
+          "check_if_objects_visible": {
+            "provider": "getter.Entity",
+            "conditions": {
+              "cp_shape_net_object": True,
+              "type": "MESH"
+            }
+          },
           "location": {
             "provider":"sampler.PartSphere",
             "center": {

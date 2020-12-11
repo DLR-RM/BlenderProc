@@ -5,11 +5,14 @@ from src.utility.Config import Config
 
 
 class AttributeMerger(Provider):
-    """ Similarly to getter.Attribute Provider, getter.AttributeMerger returns the result of processing of the list of
-        values, but the list is comprised of the return values of invoked providers. All return values in the list must
-        comply with the requirements. See tables below for more info.
+    """
+    Similarly to getter.Attribute Provider, getter.AttributeMerger returns the result of processing of the list of
+    values, but the list is comprised of the return values of invoked providers. All return values in the list must
+    comply with the requirements. See tables below for more info.
 
-        Example 1: Get a mathutils.Vector which represents an average vector of two Uniform3d sampler return values
+    Example 1: Get a mathutils.Vector which represents an average vector of two Uniform3d sampler return values
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.AttributeMerger",
@@ -28,8 +31,10 @@ class AttributeMerger(Provider):
           "transform_by": "avg"
         }
 
-        Example 2: Get a value which is a sum of a point sampled by sampler.Uniform3d, of an average location of all
-                   objects with names matching the pattern, and of a constant location.
+    Example 2: Get a value which is a sum of a point sampled by sampler.Uniform3d, of an average location of all
+    objects with names matching the pattern, and of a constant location.
+
+    .. code-block:: yaml
 
         {
           "provider": "getter.AttributeMerger",
@@ -57,20 +62,36 @@ class AttributeMerger(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "elements", "List of user-configured Provider calls. Type: list."
-        "transform_by", "Name of the operation to perform on the list of Provider return values. See table below for "
-                        "supported operation names. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - elements
+          - List of user-configured Provider calls.
+          - list
+        * - transform_by
+          - Name of the operation to perform on the list of Provider return values. See table below for supported
+            operation names. 
+          - string
 
     **Operations**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "sum", "Returns the sum of all values of the input list. Type: float (return)."
-        "avg", "Returns the average value of all values of the input list. Type: float (return)."
+        * - Parameter
+          - Description
+          - Type
+        * - sum
+          - Returns the sum of all values of the input list. (return).
+          - float
+        * - avg
+          - Returns the average value of all values of the input list. (return).
+          - float
     """
 
     def __init__(self, config):

@@ -8,16 +8,25 @@ class LightLoader(LightInterface):
     
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
-    
-       "lights", "A list of dicts, where each entry describes one light. See the LightInterface, for more information."
-                 "Type: list. Default: []"
-       "path", "Optionally, a path to a file which specifies one light source position, type, etc. per line.
-               "The lines have to be formatted as specified in 'file_format'. Type: string. Default: empty string."
-       "file_format", "A string which specifies how each line of the given file is formatted. The string should contain"
-                      "the keywords of the corresponding properties separated by a space. "
-                      "See LightInterface for allowed properties. Type: string. Default: empty string."
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - lights
+          - A list of dicts, where each entry describes one light. See the LightInterface, for more information.
+            Default: []
+          - list
+        * - path
+          - The lines have to be formatted as specified in 'file_format'. Default: empty string.
+          - string
+        * - file_format
+          - A string which specifies how each line of the given file is formatted. The string should contain the
+            keywords of the corresponding properties separated by a space. See LightInterface for allowed properties. 
+            Default: empty string.
+          - string
     """
 
     def __init__(self, config):

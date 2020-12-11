@@ -45,16 +45,18 @@ python scripts/visHdf5Files.py examples/scenenet_with_cctextures/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:2>",
-    "max_bounces": 200,
-    "diffuse_bounces": 200,
-    "glossy_bounces": 200,
-    "transmission_bounces": 200,
-    "transparency_bounces": 200
-  }
+{
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:2>",
+        "max_bounces": 200,
+        "diffuse_bounces": 200,
+        "glossy_bounces": 200,
+        "transmission_bounces": 200,
+        "transparency_bounces": 200
+      }
+    }
 }
 ```
 
@@ -65,10 +67,12 @@ However, they increase the render time slightly and that's why they are usually 
 ### SceneNetLoader 
 
 ```yaml
-"module": "loader.SceneNetLoader",
-"config": {
-  "file_path": "<args:0>",
-  "texture_folder": "<args:1>"
+{
+    "module": "loader.SceneNetLoader",
+    "config": {
+      "file_path": "<args:0>",
+      "texture_folder": "<args:1>"
+    }
 }
 ```
 
@@ -80,40 +84,41 @@ The `category_id` of each object are set based on their name, check the [table](
 
 ```yaml
 {
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [{
-    "number_of_samples": 5, # amount of camera samples
-    "proximity_checks": {
-      "min": 1.0
-    },
-    "location": {
-      "provider": "sampler.UpperRegionSampler",
-      "min_height": 1.5,
-      "max_height": 1.8,
-      "to_sample_on": {
-        "provider": "getter.Entity",
-        "index": 0,
-        "conditions": {
-          "cp_category_id": 2  # 2 stands for floor
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [{
+        "number_of_samples": 5, # amount of camera samples
+        "proximity_checks": {
+          "min": 1.0
+        },
+        "location": {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 1.5,
+          "max_height": 1.8,
+          "to_sample_on": {
+            "provider": "getter.Entity",
+            "index": 0,
+            "conditions": {
+              "cp_category_id": 2  # 2 stands for floor
+            }
+          }
+        },
+        "rotation": {
+          "value": {
+            "provider":"sampler.Uniform3d",
+            "max":[1.2217, 0, 6.283185307],
+            "min":[1.2217, 0, 0]
+          }
+        },
+        "check_if_pose_above_object_list": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_category_id": 2,
+            "type": "MESH"
+          }
         }
-      }
-    },
-    "rotation": {
-      "value": {
-        "provider":"sampler.Uniform3d",
-        "max":[1.2217, 0, 6.283185307],
-        "min":[1.2217, 0, 0]
-      }
-    },
-    "check_if_pose_above_object_list": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "cp_category_id": 2,
-        "type": "MESH"
-      }
+      }]
     }
-  }]
 }
 ```
 
@@ -124,13 +129,20 @@ In the end, we perform a check with `check_if_pose_above_object_lis` that the sa
 ### CCMaterialLoader
 
 ```yaml
-"module": "loader.CCMaterialLoader"
+{
+  "module": "loader.CCMaterialLoader",
+  # you can use the scripts/download_cc_textures.py to download them
+  "config": {
+    "folder_path": "<args:2>",
+    "preload": True
+  }
+}
 ```
 
-This one line loads all the materials, which are available at [cc0textures.com](https://cc0textures.com/).
+This module loads empty materials, corresponding to the materials ,which are available at [cc0textures.com](https://cc0textures.com/).
 It assumes the textures have been downloaded via the [script](../../scripts/download_cc_textures.py). 
 
-The textures have not been loaded into memory yet, only when they are really used are they loaded.
+As the loading of all the images is quite time consuming, we preload here only the structure, but not the actual images.
 Each material will have a custom property `"is_cc_texture": True`.
 
 This module only sets up the materials which can then be used by other modules.
@@ -158,7 +170,7 @@ This module only sets up the materials which can then be used by other modules.
           }
         }
       }
-    },
+    }
 ```
 
 This builds up on the [material_randomizer](../material_randomizer) example.
@@ -168,17 +180,55 @@ We also use the `randomization_level` and set it `0.4`.
 Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.
 Each material loaded by CCMaterialLoader set the `cp_is_cc_texture` custom property to true.
 
+### CCMaterialLoader
+
+```yaml
+{
+  "module": "loader.CCMaterialLoader",
+  # you can use the scripts/download_cc_textures.py to download them
+  "config": {
+    "folder_path": "<args:2>",
+    "fill_used_empty_materials": True
+  }
+}
+```
+
+Now the empty materials, which have been used by the `manipulators.EntityManipulator` are filled with the actual images.
+If this is not done, all the materials will be empty.
+
 ### SceneNetLighting
 
 ```yaml
-"module": "lighting.SceneNetLighting"
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+      "conditions": {
+        "name": ".*lamp.*"
+      }
+  },
+  "emission_strength": 15.0,
+  "keep_using_base_color": True
+}
 ```
 
-We now have to light up the scene by making all lamps and the ceiling emit light.
+The first module call will make the lamps in the scene emit light, while using the assigned material textures.
 
-This even works after the materials have been replaced, the materials of the objects are selected by the name of the object.
-So it does not matter if the materials of the object have been switched beforehand.
+```yaml
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+    "conditions": {
+      "name": "Ceiling"
+    },
+    "emission_strength": 2.0
+  }
+}
+```
 
+The second module call will make the ceiling emit light and remove any materials placed on it.
+This can be changed if desired for more information check out the documentation of the module.
 
 ## More examples
 

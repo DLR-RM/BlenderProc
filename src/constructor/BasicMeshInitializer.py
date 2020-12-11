@@ -5,11 +5,14 @@ from src.utility.Config import Config
 
 
 class BasicMeshInitializer(Module):
-    """ Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. Can initialize a
-        default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
-        manipulation use manipulators.EntityManipulator module.
+    """
+    Adds/initializes basic mesh objects in the scene. Allows setting the basic attribute values. Can initialize a
+    default 'Principled BSDF' shader-based material for each of added objects. For more precise and powerful object
+    manipulation use manipulators.EntityManipulator module.
 
-        Example 1: Add a plane "Ground_plane" object to the scene.
+    Example 1: Add a plane "Ground_plane" object to the scene.
+
+    .. code-block:: yaml
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -23,8 +26,10 @@ class BasicMeshInitializer(Module):
           }
         }
 
-        Example 2: Add a rotated "Cube_1" cube object, a displaced "Torus_2" torus object, and a scaled "Cone_3" cone
-                   object to the scene.
+    Example 2: Add a rotated "Cube_1" cube object, a displaced "Torus_2" torus object, and a scaled "Cone_3" cone
+    object to the scene.
+
+    .. code-block:: yaml
 
         {
           "module": "constructor.BasicMeshInitializer",
@@ -51,26 +56,48 @@ class BasicMeshInitializer(Module):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "meshes_to_add", "List that contains object configuration data in each cell. See table below for available "
-                         "parameters per cell. Type: list."
-        "init_materials", "Flag that controls whether the added objects will be assigned a default Principled BSDF "
-                          "shader-based material (if value is True), or not (if value is False). Material's name is "
-                          "derived from the object's name. Type: boolean. Default: True."
+        * - Parameter
+          - Description
+          - Type
+        * - meshes_to_add
+          - List that contains object configuration data in each cell. See table below for available parameters per
+            cell. 
+          - list
+        * - init_materials
+          - Flag that controls whether the added objects will be assigned a default Principled BSDF shader-based
+            material (if value is True), or not (if value is False). Material's name is derived from the object's
+            name. Default: True.
+          - boolean
 
     **meshes_to_add cell configuration**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "type", "Type of mesh object to add. Available types: 'plane', 'cube', 'circle', 'uvsphere', 'icosphere', "
-                "'cylinder', 'cone', 'torus'. Type: string."
-        "name", "Name of the mesh object. Type: string."
-        "location", "Location of the mesh object. Type: mathutils.Vector. Default: [0, 0, 0]. "
-        "rotation", "Rotation (3 Euler angles) of the mesh object. Type: mathutils.Vector. Default: [0, 0, 0]."
-        "scale", "Scale of the mesh object. Type: mathutils.Vector. Default: [1, 1, 1]."
+        * - Parameter
+          - Description
+          - Type
+        * - type
+          - Type of mesh object to add. Available types: 'plane', 'cube', 'circle', 'uvsphere', 'icosphere',
+            'cylinder', 'cone', 'torus'. 
+          - string
+        * - name
+          - Name of the mesh object.
+          - string
+        * - location
+          - Location of the mesh object. Default: [0, 0, 0].
+          - mathutils.Vector
+        * - rotation
+          - Rotation (3 Euler angles) of the mesh object. Default: [0, 0, 0].
+          - mathutils.Vector
+        * - scale
+          - Scale of the mesh object. Default: [1, 1, 1].
+          - mathutils.Vector
     """
 
     def __init__(self, config):

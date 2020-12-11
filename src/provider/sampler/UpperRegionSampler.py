@@ -8,12 +8,15 @@ from src.utility.BlenderUtility import get_bounds
 
 
 class UpperRegionSampler(Provider):
-    """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
-        defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The 
-        sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
+    """
+    Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
+    defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
+    sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
 
-        Example 1: Sample a location on the surface of the first object to match the name pattern with height above this
-                   surface in range of [1.5, 1.8].
+    Example 1: Sample a location on the surface of the first object to match the name pattern with height above this
+    surface in range of [1.5, 1.8].
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.UpperRegionSampler",
@@ -30,19 +33,37 @@ class UpperRegionSampler(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "to_sample_on", "Objects, on which to sample on. Type: Provider."
-        "min_height", "Minimum distance to the bounding box that a point is sampled on. Type: float. Default: 0.0."
-        "max_height", "Maximum distance to the bounding box that a point is sampled on. Type: float. Default: 1.0."
-        "face_sample_range", "Restricts the area on the face where objects are sampled. Specifically describes relative "
-                             "lengths of both face vectors between which points are sampled. Type: list. Default: [0.0, 1.0]"
-        "upper_dir", "The 'up' direction of the sampling box. Type: list. Default: [0.0, 0.0, 1.0]."
-        "use_upper_dir", "Toggles the sampling above the selected surface, can be done with the upper_dir or with the "
-                         "face normal, if this is true the upper_dir is used. Type: bool. Default: True."
-        "use_ray_trace_check", "Toggles using a ray casting towards the sampled object (if the object is directly below "
-                               "the sampled position is the position accepted). Type: bool. Default: False."
+        * - Parameter
+          - Description
+          - Type
+        * - to_sample_on
+          - Objects, on which to sample on.
+          - Provider
+        * - min_height
+          - Minimum distance to the bounding box that a point is sampled on. Default: 0.0.
+          - float
+        * - max_height
+          - Maximum distance to the bounding box that a point is sampled on. Default: 1.0.
+          - float
+        * - face_sample_range
+          - Restricts the area on the face where objects are sampled. Specifically describes relative lengths of
+            both face vectors between which points are sampled. Default: [0.0, 1.0]
+          - list
+        * - upper_dir
+          - The 'up' direction of the sampling box. Default: [0.0, 0.0, 1.0].
+          - list
+        * - use_upper_dir
+          - Toggles the sampling above the selected surface, can be done with the upper_dir or with the face normal,
+            if this is true the upper_dir is used. Default: True.
+          - bool
+        * - use_ray_trace_check
+          - Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
+            position is the position accepted). Default: False.
+          - bool
     """
     def __init__(self, config):
         Provider.__init__(self, config)
@@ -154,6 +175,7 @@ class Region2D(object):
     def sample_point(self, face_sample_range):
         """
         Samples a point in the 2D Region
+
         :param face_sample_range: relative lengths of both face vectors between which points are sampled
         :return:
         """

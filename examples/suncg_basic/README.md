@@ -59,7 +59,7 @@ This is necessary to coincide with the aspect ratio assumed by the `scn2cam` scr
   "config": {
     "path": "<args:1>"
   }
-},
+}
 ```
 
 This loader automatically loads a SUNCG scene/house given the corresponding `house.json` file. 
@@ -85,7 +85,7 @@ The `SuncgLoader` also sets the `category_id` of each object, such that semantic
       "pixel_aspect_x": 1.333333333
     }
   }
-},
+}
 ```
 
 Here the cam poses from the given file are loaded. 
@@ -104,7 +104,7 @@ In the `intrinsics`, we further set the FOV and pixel aspect ratio to the same v
 ```yaml
 {
   "module": "lighting.SuncgLighting",
-},
+}
 ```
 
 This module automatically sets light sources inside the loaded house.

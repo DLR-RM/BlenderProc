@@ -29,6 +29,43 @@
       }
     },
     {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>",
+        "preload": True
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "type": "MESH"
+          }
+        },
+        "cf_randomize_materials": {
+          "randomization_level": 0.4,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True  # this will return one random loaded cc textures
+            }
+          }
+        }
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      # you can use the scripts/download_cc_textures.py to download them
+      "config": {
+        "folder_path": "<args:2>",
+        "fill_used_empty_materials": True
+      }
+    },
+    {
       "module": "camera.CameraSampler",
       "config": {
         "cam_poses": [{
@@ -66,35 +103,61 @@
       }
     },
     {
-      "module": "loader.CCMaterialLoader",
-      # you can use the scripts/download_cc_textures.py to download them
-      "config": {
-        "folder_path": "<args:2>"
-      }
-    },
-    {
-      "module": "manipulators.EntityManipulator",
+      "module": "object.FloorExtractor",
       "config": {
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "type": "MESH"
+            "name": "wall"
           }
-        },
-        "cf_randomize_materials": {
-          "randomization_level": 0.4,
-          "materials_to_replace_with": {
-            "provider": "getter.Material",
-            "random_samples": 1,
-            "conditions": {
-              "cp_is_cc_texture": True  # this will return one random loaded cc textures
-            }
-          }
+        }, # this one you need to now beforehand
+        "compare_angle_degrees" : 7.5,
+        "compare_height": 0.15,
+        "name_for_split_obj": "floor",  # this is the new name of the object
+        "add_properties": {
+          "cp_category_id": 2
         }
       }
     },
     {
-      "module": "lighting.SceneNetLighting"
+      "module": "object.FloorExtractor",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "wall"  # the wall object here contains the ceiling
+          }
+        },
+        "up_vector_upwards": False,  # the polygons are now facing downwards: [0, 0, -1]
+        "compare_angle_degrees": 7.5,
+        "compare_height": 0.15,
+        "name_for_split_obj": "ceiling"
+      }
+    },
+    {
+      "module": "lighting.SurfaceLighting",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": ".*lamp.*"
+          }
+        },
+        "emission_strength": 15.0,
+        "keep_using_base_color": True
+      }
+    },
+    {
+      "module": "lighting.SurfaceLighting",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": ".*ceiling.*"
+          }
+        },
+        "emission_strength": 2.0,
+      }
     },
     {
       "module": "renderer.RgbRenderer",

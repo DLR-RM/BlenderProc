@@ -41,7 +41,7 @@ Without this idea it would not be possible to render the correct class.
     "path": "<args:1>",
     "load_from": "/Object"  # load all objects from the scene file
   }
-},
+}
 ```
 
 This loads the `.blend` file, it extracts hereby only the `/Objects` from the file, not all information stored in this `.blend` file.

@@ -52,7 +52,7 @@ python scripts/visHdf5Files.py examples/motion_blur_rolling_shutter/output/0.hdf
 
 ### RgbRenderer
 ```yaml
- {
+{
     "module": "renderer.RgbRenderer",
     "config": {
         "output_key": "colors",

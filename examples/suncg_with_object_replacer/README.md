@@ -73,7 +73,7 @@ python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
           }
         },
       }
-    },
+    }
 ```
 
 * This module replaces objects from `objects_to_be_replaced` with objects from `objects_to_replace_with`. The module uses for that the `getter.Entity` provider.

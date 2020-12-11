@@ -39,11 +39,13 @@ python scripts/visHdf5Files.py examples/pix3d/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:1>",
-  }
+{
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:1>",
+      }
+    }
 }
 ```
 
@@ -52,10 +54,12 @@ The same as in the basic example.
 ### Pix3DLoader 
 
 ```yaml
-"module": "loader.Pix3DLoader",
-"config": {
-  "data_path": "<args:0>",
-  "used_category": "bed"
+{
+    "module": "loader.Pix3DLoader",
+    "config": {
+      "data_path": "<args:0>",
+      "used_category": "bed"
+    }
 }
 ```
 This module loads a Pix3D Object, it only needs the path to the `Pix3D` folder, which is saved in `data_path`.
@@ -66,25 +70,27 @@ The position will be in the center of the scene.
 ### CameraSampler
 
 ```yaml
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [
-    {
-      "number_of_samples": 5,
-      "location": {
-        "provider":"sampler.Sphere",
-        "center": [0, 0, 0],
-        "radius": 2,
-        "mode": "SURFACE"
-      },
-      "rotation": {
-        "format": "look_at",
-        "value": {
-          "provider": "getter.POI"
+{
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [
+        {
+          "number_of_samples": 5,
+          "location": {
+            "provider":"sampler.Sphere",
+            "center": [0, 0, 0],
+            "radius": 2,
+            "mode": "SURFACE"
+          },
+          "rotation": {
+            "format": "look_at",
+            "value": {
+              "provider": "getter.POI"
+            }
+          }
         }
-      }
+      ]
     }
-  ]
 }
 ```
 

@@ -157,7 +157,7 @@ else:
 print("Using blender in " + blender_path)
 
 
-general_required_packages = ["pyyaml==5.1.2", "Sphinx==1.6.5"]
+general_required_packages = ["pyyaml==5.1.2"]
 
 required_packages = general_required_packages
 if "pip" in setup_config:
@@ -210,6 +210,13 @@ if len(required_packages) > 0:
             package_name, package_version = package.lower().split('==')
         else:
             package_name, package_version = package.lower(), None
+
+        # If the package is given via git, extract package name from url
+        if package_name.startswith("git+"):
+            # Extract part after last slash
+            package_name = package_name[package_name.rfind("/") + 1:]
+            # Replace underscores with dashes as its done by pip
+            package_name = package_name.replace("_", "-")
 
         # Check if package is installed
         already_installed = package_name in installed_packages_name

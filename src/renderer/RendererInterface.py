@@ -15,75 +15,123 @@ class RendererInterface(Module):
     """
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "output_file_prefix", "The file prefix that should be used when writing the rendering to file. Type: String."
-        "output_key", "The key which should be used for storing the rendering in a merged file. Type: String"
-        
-        "samples", "Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark "
-                   "areas. Type: int. Default: 256, (not true for all Renderes)."
-        "use_adaptive_sampling", "Combined with the maximum sample amount, it is also possible to set the amount of "
-                                 "noise left per pixel. This means pixel is sampled until the noise level is smaller "
-                                 "than specified or the maximum amount of samples were reached. "
-                                 "Do not use this with Non-RGB-Renders! Only used if specified" in config. "
-                                 "Type: float. Default: 0.0"
-
-        "auto_tile_size", "If true, then the number of render tiles is set automatically using the "
-                          "render_auto_tile_size addon. Type: bool. Default: True."
-        "tile_x", "The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set "
-                  "to true. Type: int."
-        "tile_y", "The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set "
-                  "to true. Type: int."
-        "simplify_subdivision_render", "Global maximum subdivision level during rendering. Speeds up rendering. "
-                                       "Type: int. Default: 3"
-
-        "denoiser", "The denoiser to use. Set to 'Blender', if the Blender's built-in denoiser should be used or "
-                    "set to 'Intel', if you want to use the Intel Open Image Denoiser, performs much better. "
-                    "Type: string. Default: "Intel" Available: ["Intel", "Blender"]."
-        "max_bounces", "Total maximum number of bounces. Type: int. Default: 3"
-        "min_bounces", "Total minimum number of bounces. Type: int. Default: 1"
-        "diffuse_bounces", "Maximum number of diffuse reflection bounces, bounded by total maximum. "
-                           "Type: int. Default: 3"
-        "glossy_bounces", "Maximum number of glossy reflection bounces, bounded by total maximum. "
-                          "Be careful the default is set to zero to improve rendering time, but it removes all indirect "
-                          "glossy rays from the rendering process. Type: int. Default: 0"
-        "ao_bounces_render", "Approximate indirect light with background tinted ambient occlusion at the "
-                             "specified bounce. Type: int. Default: 3"
-        "transmission_bounces", "Maximum number of transmission bounces, bounded by total maximum. "
-                                "Be careful the default is set to zero to improve rendering time, but it removes all "
-                                "indirect transmission rays from the rendering process. Type: int. Default: 0"
-        "transparency_bounces", "Maximum number of transparency bounces, bounded by total maximum. A higher value "
-                                "helps if a lot of transparency objects are stacked after each other. "
-                                "Type: int. Default: 8"
-        "volume_bounces", "Maximum number of volumetric scattering events. Type: int. Default: 0"
-
-        "render_distance", "If true, the distance is also rendered to file. Type: bool. Default: False."
-        "use_mist_distance", "If true, the distance is sampled over several iterations, useful for motion blur or"
-                             "soft edges, if this is turned off, only one sample is taken to determine the depth."
-                             "Type: bool. Default: True."
-        "distance_output_file_prefix", "The file prefix that should be used when writing distance to file. "
-                                       "Type: string. Default: 'distance_'"
-        "distance_output_key", "The key which should be used for storing the distance in a merged file. "
-                               "Type: string. Default: 'distance'."
-        "distance_start", "Starting distance of the distance, measured from the camera. Type: float. Default: 0.1"
-        "distance_range", "Total distance in which the distance is measured. "
-                          "distance_end = distance_start + distance_range. Type: float. Default: 25.0"
-        "distance_falloff", "Type of transition used to fade distance. Type: string. Default: 'Linear'. "
-                            "Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]"
-
-        "use_alpha", "If true, the alpha channel stored in .png textures is used. Type: bool. Default: False"
-        "stereo", "If true, renders a pair of stereoscopic images for each camera position. Type: bool. Default: False"
-        "avoid_rendering", "This mode is only used during debugging, when all settings should be executed but the "
-                           "actual rendering call is omitted. Type: bool. Default: False"
-        "cpu_threads", "Set number of cpu cores used for rendering (1 thread is always used for coordination "
-                       "if more than one cpu thread means GPU-only rendering). Type: int. Default: 1"
-
-        "render_normals", "If true, the normals are also rendered. Type: bool. Default: False"
-        "normals_output_file_prefix", "The file prefix that should be used when writing normals. "
-                                      "Type: string. Default: 'normals_'"
-        "normals_output_key", "The key which is used for storing the normal in a merged file. "
-                              "Type: string. Default: 'normal'"
+        * - Parameter
+          - Description
+          - Type
+        * - output_file_prefix
+          - The file prefix that should be used when writing the rendering to file.
+          - String
+        * - output_key
+          - The key which should be used for storing the rendering in a merged file. which should be used for
+            storing the rendering in a merged file.
+          - String
+        * - samples
+          - Number of samples to render for each pixel. Higher numbers take longer but remove noise in dark areas.
+            Default: 256, (not true for all Renderes).
+          - int
+        * - use_adaptive_sampling
+          - Combined with the maximum sample amount, it is also possible to set the amount of noise left per pixel.
+            This means pixel is sampled until the noise level is smaller than specified or the maximum amount of
+            samples were reached. Do not use this with Non-RGB-Renders! Only used if specified" in config. Default: 0.0
+          - float
+        * - auto_tile_size
+          - If true, then the number of render tiles is set automatically using the render_auto_tile_size addon.
+            Default: True.
+          - bool
+        * - tile_x
+          - The number of separate render tiles to use along the x-axis. Ignored if auto_tile_size is set to true. 
+          - int
+        * - tile_y
+          - The number of separate render tiles to use along the y-axis. Ignored if auto_tile_size is set to true. 
+          - int
+        * - simplify_subdivision_render
+          - Global maximum subdivision level during rendering. Speeds up rendering. Default: 3
+          - int
+        * - denoiser
+          - The denoiser to use. Set to "Blender", if the Blender's built-in denoiser should be used or set to
+            "Intel", if you want to use the Intel Open Image Denoiser, performs much better. Default: "Intel"
+            Available: ["Intel", "Blender"].
+          - string
+        * - max_bounces
+          - Total maximum number of bounces. Default: 3
+          - int
+        * - min_bounces
+          - Total minimum number of bounces. Default: 1
+          - int
+        * - diffuse_bounces
+          - Maximum number of diffuse reflection bounces, bounded by total maximum. Default: 3
+          - int
+        * - glossy_bounces
+          - Maximum number of glossy reflection bounces, bounded by total maximum. Be careful the default is set to
+            zero to improve rendering time, but it removes all indirect glossy rays from the rendering process.
+            Default: 0
+          - int
+        * - ao_bounces_render
+          - Approximate indirect light with background tinted ambient occlusion at the specified bounce. Default: 3
+          - int
+        * - transmission_bounces
+          - Maximum number of transmission bounces, bounded by total maximum. Be careful the default is set to zero
+            to improve rendering time, but it removes all indirect transmission rays from the rendering process.
+            Default: 0
+          - int
+        * - transparency_bounces
+          - Maximum number of transparency bounces, bounded by total maximum. A higher value helps if a lot of
+            transparency objects are stacked after each other. Default: 8
+          - int
+        * - volume_bounces
+          - Maximum number of volumetric scattering events. Default: 0
+          - int
+        * - render_distance
+          - If true, the distance is also rendered to file. Default: False.
+          - bool
+        * - use_mist_distance
+          - If true, the distance is sampled over several iterations, useful for motion blur or soft edges, if this
+            is turned off, only one sample is taken to determine the depth. Default: True.
+          - bool
+        * - distance_output_file_prefix
+          - The file prefix that should be used when writing distance to file. Default: `"distance_"`
+          - string
+        * - distance_output_key
+          - The key which should be used for storing the distance in a merged file. Default: `"distance"`.
+          - string
+        * - distance_start
+          - Starting distance of the distance, measured from the camera. Default: 0.1
+          - float
+        * - distance_range
+          - Total distance in which the distance is measured. distance_end = distance_start + distance_range.
+            Default: 25.0
+          - float
+        * - distance_falloff
+          - Type of transition used to fade distance. Default: "Linear". Available: [LINEAR, QUADRATIC,
+            INVERSE_QUADRATIC]
+          - string
+        * - use_alpha
+          - If true, the alpha channel stored in .png textures is used. Default: False
+          - bool
+        * - stereo
+          - If true, renders a pair of stereoscopic images for each camera position. Default: False
+          - bool
+        * - avoid_rendering
+          - This mode is only used during debugging, when all settings should be executed but the actual rendering
+            call is omitted. Default: False
+          - bool
+        * - cpu_threads
+          - Set number of cpu cores used for rendering (1 thread is always used for coordination if more than one
+            cpu thread means GPU-only rendering). Default: 1
+          - int
+        * - render_normals
+          - If true, the normals are also rendered. Default: False
+          - bool
+        * - normals_output_file_prefix
+          - The file prefix that should be used when writing normals. Default: `"normals_"`
+          - string
+        * - normals_output_key
+          - The key which is used for storing the normal in a merged file. Default: `"normal"`
+          - string
     """
 
     def __init__(self, config):
@@ -358,6 +406,7 @@ class RendererInterface(Module):
         """
         Adds to a predefined new_material a texture node from an existing material (used_material)
         This is necessary to connect it later on in the add_alpha_channel_to_textures
+
         :param used_material: existing material, which might contain a texture node with a .png texture
         :param new_material: a new material, which will get a copy of this texture node
         :return: the modified new_material, if no texture node was found, the original new_material

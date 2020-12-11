@@ -6,9 +6,12 @@ from src.main.Provider import Provider
 
 
 class Color(Provider):
-    """ Uniformly samples a 4-dimensional RGBA vector.
+    """
+    Uniformly samples a 4-dimensional RGBA vector.
 
-        Example 1: Sample a RGBA grey color value using [min, max] range.
+    Example 1: Sample a RGBA grey color value using [min, max] range.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Color",
@@ -19,14 +22,22 @@ class Color(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "min", "A list of four values, describing the minimum values of R, G, B and A components. "
-               "Type: list. Range: [0; 1]."
-        "max", "A list of four values, describing the maximum values of R, G, B and A components. "
-               "Type: list. Range: [0; 1]."
-        "grey", "Sample grey values only. Type: bool. Default: False."
+        * - Parameter
+          - Description
+          - Type
+        * - min
+          - A list of four values, describing the minimum values of R, G, B and A components. Range: [0; 1].
+          - list
+        * - max
+          - A list of four values, describing the maximum values of R, G, B and A components. Range: [0; 1].
+          - list
+        * - grey
+          - Sample grey values only. Default: False.
+          - bool
     """
 
     def __init__(self, config):

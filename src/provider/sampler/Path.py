@@ -6,9 +6,12 @@ from src.utility.Utility import Utility
 
 
 class Path(Provider):
-    """ Samples a path to one of the files in folder defined by a path.
+    """
+    Samples a path to one of the files in folder defined by a path.
 
-        Example 1: return a path to a random .obj file in the defined folder.
+    Example 1: return a path to a random .obj file in the defined folder.
+
+    .. code-block:: yaml
 
         {
           "provider": "sampler.Path",
@@ -17,10 +20,16 @@ class Path(Provider):
 
     **Configuration**:
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path", "A path to a folder containing files. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - A path to a folder containing files.
+          - string
     """
 
     def __init__(self, config):

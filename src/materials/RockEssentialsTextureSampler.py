@@ -10,12 +10,15 @@ from src.utility.Utility import Utility
 
 
 class RockEssentialsTextureSampler(LoaderInterface):
-    """ Samples a random texture data from the provided list and sets the images to each selected object (ground tiles
-        created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material assigned (they have
-        it applied by default if ground tile was constructed by aforementioned constructor module).
+    """
+    Samples a random texture data from the provided list and sets the images to each selected object (ground tiles
+    created by constructor.RockEssentialsGroundConstructor) if they have a RE-specific material assigned (they have
+    it applied by default if ground tile was constructed by aforementioned constructor module).
 
-        Example 1: For all ground planes matching a name pattern select a random set of textures with custom ambient
-                   occlusion, displacements strength and UV map scaling factor values.
+    Example 1: For all ground planes matching a name pattern select a random set of textures with custom ambient
+    occlusion, displacements strength and UV map scaling factor values.
+
+    .. code-block:: yaml
 
         {
           "module": "materials.RockEssentialsTextureSampler",
@@ -60,27 +63,56 @@ class RockEssentialsTextureSampler(LoaderInterface):
 
     **Ground plane config**:
 
-    .. csv-table::
-       :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "selector", "Objects (ground planes) with RE-specific material applied. Type: Provider."
-       "textures", "A list of dicts with texture data: images, path to the images, etc. Type: list."
+        * - Parameter
+          - Description
+          - Type
+        * - selector
+          - Objects (ground planes) with RE-specific material applied.
+          - Provider
+        * - textures
+          - A list of dicts with texture data: images, path to the images, etc.
+          - list
 
-     **Texture data**:
+    **Texture data**:
 
-    .. csv-table::
-        :header: "Keyword", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path", "Path to a directory containing maps required for recreating texture. Type: string."
-        "ambient_occlusion", "Ambient occlusion [R, G, B, A] color vector for a ground tile material's shader. "
-                             "Type: mathutils.Vector. Default: [1, 1, 1, 1]."
-        "uv_scaling", "Scaling factor of the UV map. Type: float. Default: 1."
-        "displacement_strength", "Strength of a plane's displacement modifier. Type: float. Default: 1.
-        "images/color", "Full name of a color map image. Type: string."
-        "images/roughness", "Full name of a roughness map image. Type: string."
-        "images/reflection", "Full name of a reflection map image. Type: string."
-        "images/normal", "Full name of a normal map image. Type: string."
-        "images/displacement", "Full name of a displacement map image. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - Path to a directory containing maps required for recreating texture.
+          - string
+        * - ambient_occlusion
+          - Ambient occlusion [R, G, B, A] color vector for a ground tile material's shader. Default: [1, 1, 1, 1].
+          - mathutils.Vector
+        * - uv_scaling
+          - Scaling factor of the UV map. Default: 1.
+          - float
+        * - displacement_strength
+          - Strength of a plane's displacement modifier. Default: 1.
+          - float
+        * - images/color
+          - Full name of a color map image.
+          - string
+        * - images/roughness
+          - Full name of a roughness map image.
+          - string
+        * - images/reflection
+          - Full name of a reflection map image.
+          - string
+        * - images/normal
+          - Full name of a normal map image.
+          - string
+        * - images/displacement
+          - Full name of a displacement map image.
+          - string
     """
 
     def __init__(self, config):
@@ -124,10 +156,10 @@ class RockEssentialsTextureSampler(LoaderInterface):
         """ Loads images that are used as color, roughness, reflection, normal, and displacement maps.
 
         :param selected_texture: Selected texture data. Type: Config.
-        :return loaded_images: Loaded images. Type: dict.
-        :return uv_scaling: Scaling factor of the UV map. Type: float.
-        :return ambient_occlusion: Ambient occlusion color vector. Type: mathutils.Vector.
-        :return displacement_strength: Strength of a plane's displacement modifier. Type: float.
+        :return: loaded_images: Loaded images. Type: dict.
+        :return: uv_scaling: Scaling factor of the UV map. Type: float.
+        :return: ambient_occlusion: Ambient occlusion color vector. Type: mathutils.Vector.
+        :return: displacement_strength: Strength of a plane's displacement modifier. Type: float.
         """
         loaded_images = {}
         # get path to image folder

@@ -21,12 +21,20 @@ class SuncgLoader(LoaderInterface):
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "path", "The path to the house.json file which should be loaded. Type: string."
-        "suncg_path", "The path to the suncg root directory which should be used for loading objects, rooms, textures "
-                      "etc. Type: string. Default: is extracted from the house.json path"
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - The path to the house.json file which should be loaded.
+          - string
+        * - suncg_path
+          - The path to the suncg root directory which should be used for loading objects, rooms, textures etc.
+            Default: is extracted from the house.json path
+          - string
     """
 
     def __init__(self, config):
@@ -292,7 +300,6 @@ class SuncgLoader(LoaderInterface):
             # Apply transformation
             object.matrix_world @= transform
 
-
         for mat_slot in object.material_slots:
             mat = mat_slot.material
 
@@ -316,12 +323,12 @@ class SuncgLoader(LoaderInterface):
                 # save the current material for later
                 current_mats[value] = mat
 
-
     def _get_type_and_value_from_mat(self, mat):
         """
         Returns the type of the material -> either diffuse or with texture (there are only two in SUNCG)
+
         :param mat: the material where the type and value should be determined
-        :return mat_type, value: mat_type is either "diffuse" or "texture", the value contains either name of the
+        :return: mat_type, value: mat_type is either "diffuse" or "texture", the value contains either name of the \
                                  image or the color mapped to an RGB string of the values
         """
         nodes = mat.node_tree.nodes

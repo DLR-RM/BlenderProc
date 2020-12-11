@@ -8,34 +8,46 @@ from src.utility.Utility import Utility
 
 
 class BlendLoader(LoaderInterface):
-    """ Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
-        bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
+    """
+    Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
+    bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
 
 
-        Example:
+    Example:
 
-            {
-              "module": "loader.BlendLoader",
-              "config": {
-                "path": "/path/file.blend",     <-------- path to a .blend file
-                "load_from": "/Object",         <-------- folder name/ID: `/Collection`, `/Texture`, `/Material`, etc.
-                "entities": ".*abc.*"           <-------- regular expression, load everything in the folder if not given
-              }
-            }
-            
-            Result: loading all objects from folder /Object of file.blend that match the pattern.
+    .. code-block:: yaml
+
+        {
+          "module": "loader.BlendLoader",
+          "config": {
+            "path": "/path/file.blend",     #<-------- path to a .blend file
+            "load_from": "/Object",         #<-------- folder name/ID: /Collection, /Texture, /Material, etc.
+            "entities": ".*abc.*"           #<-------- regular expression, load everything in the folder if not given
+          }
+        }
+
+    Result: loading all objects from folder /Object of file.blend that match the pattern.
 
     **Configuration**:
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "path", "Path to a .blend file. Type: string."
-       "load_from", "Name of the datablock/folder inside .blend file. Always start with '/'. See known_datablock_names "
-                    "for supported folder names/type IDs. Type: string. "
-       "entities", "Regular expression representing a name pattern of entities' (everything that can be stored in a "
-                   ".blend file's folders, see Blender's documentation for bpy.types.ID for more info) names. "
-                   "Optional. Type: string."
+        * - Parameter
+          - Description
+          - Type
+        * - path
+          - Path to a .blend file.
+          - string
+        * - load_from
+          - Name of the datablock/folder inside .blend file. Always start with '/'. See known_datablock_names for
+            supported folder names/type IDs. 
+          - string
+        * - entities
+          - Regular expression representing a name pattern of entities' (everything that can be stored in a .blend
+            file's folders, see Blender's documentation for bpy.types.ID for more info) names. Optional. 
+          - string
     """
 
     def __init__(self, config):

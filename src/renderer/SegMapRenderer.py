@@ -24,64 +24,98 @@ class SegMapRenderer(RendererInterface):
     The csv file will contain a mapping between each instance id and the corresponding custom property or attribute.
 
     Example 1:
+
+    .. code-block:: yaml
+
         config: {
             "map_by": "class"
         }
-        In this example each pixel would be mapped to the corresponding category_id of the object.
-        Each object then needs such a custom property! Even the background. If an object is missing one an Exception
-        is thrown.
+
+    In this example each pixel would be mapped to the corresponding category_id of the object.
+    Each object then needs such a custom property! Even the background. If an object is missing one an Exception
+    is thrown.
 
     Example 2:
+
+    .. code-block:: yaml
+
         "config": {
             "map_by": ["class", "instance"]
         }
-        In this example the output will be a class image and an instance image, so the output will have two channels,
-        instead of one. The first will contain the class the second the instance segmentation. This also means that
-        the class labels per instance are stored in a .csv file.
+
+    In this example the output will be a class image and an instance image, so the output will have two channels,
+    instead of one. The first will contain the class the second the instance segmentation. This also means that
+    the class labels per instance are stored in a .csv file.
 
     Example 3:
+
+    .. code-block:: yaml
+
         "config": {
             "map_by": ["class", "instance", "name"]
          }
-         It is often useful to also store a mapping between the instance and these class in a dict, This happens
-         automatically, when "instance" and another key is used.
-         All values which can not be stored in the image are stored inside of a dict. The `name`
-         attribute would be saved now in a dict as we only store ints and floats in the image.
-         If no "instance" is provided and only "name" would be there, an error would be thrown as an instance mapping
-         is than not possible
+
+    It is often useful to also store a mapping between the instance and these class in a dict, This happens
+    automatically, when "instance" and another key is used.
+    All values which can not be stored in the image are stored inside of a dict. The `name`
+    attribute would be saved now in a dict as we only store ints and floats in the image.
+    If no "instance" is provided and only "name" would be there, an error would be thrown as an instance mapping
+    is than not possible
 
     Example 4:
+
+    .. code-block:: yaml
+
         "config": {
             "map_by": "class"
             "default_values": {"class": 0}
          }
-         It is also possible to set default values, for keys object, which don't have a certain custom property.
-         This is especially useful dealing with the background, which often lacks certain object properties.
+
+    It is also possible to set default values, for keys object, which don't have a certain custom property.
+    This is especially useful dealing with the background, which often lacks certain object properties.
 
 
-    .. csv-table::
-       :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-       "map_by", "Method to be used for color mapping. Type: string. Default: "class".
-                 "Available: [instance, class] or any custom property or attribute."
-       "default_values", "The default values used for the keys used in map_by. Type: dir. Default: {}"
-       "segcolormap_output_key", "The key which should be used for storing the class instance to color mapping in"
-                                 "a merged file. Type: string. Default: "segcolormap""
-       "segcolormap_output_file_prefix", "The file prefix that should be used when writing the class instance to"
-                                         "color mapping to file. Type: string. Default: class_inst_col_map"
-       "output_file_prefix", "The file prefix that should be used when writing semantic information to a file."
-                             "Type: string, Default: "segmap_""
+        * - Parameter
+          - Description
+          - Type
+        * - map_by
+          - Method to be used for color mapping. Default: "class". Available: [instance, class] or any custom 
+            property or attribute.
+          - string
+        * - default_values
+          - The default values used for the keys used in map_by. Default: {}
+          - dir
+        * - segcolormap_output_key
+          - The key which should be used for storing the class instance to color mapping in a merged file. Default:
+            "segcolormap"
+          - string
+        * - segcolormap_output_file_prefix
+          - The file prefix that should be used when writing the class instance to color mapping to file. Default:
+            class_inst_col_map
+          - string
+        * - output_file_prefix
+          - The file prefix that should be used when writing semantic information to a file. Default: `"segmap_"`
+          - string
 
     **Custom functions**
 
     All custom functions here are used inside of the map_by/default_values list.
 
-    .. csv-table::
-        :header: "Parameter", "Description"
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-        "cf_basename", "Adds the basename of the object to the .csv file. The basename is the name attribute, without"
-                       "added numbers to separate objects with the same name. This is used in the map_by list."
-                       "Type: None"
+        * - Parameter
+          - Description
+          - Type
+        * - cf_basename
+          - Adds the basename of the object to the .csv file. The basename is the name attribute, without added
+            numbers to separate objects with the same name. This is used in the map_by list.
+          - None
     """
 
     def __init__(self, config):

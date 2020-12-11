@@ -19,10 +19,25 @@ class Utility:
         """ Initializes the modules described in the given configuration.
 
         Example for module_configs:
-        [{
-          "module": "base.ModuleA",
-          "config": {...}
-        }, ...]
+
+
+        .. code-block:: yaml
+
+            [{
+              "module": "base.ModuleA",
+              "config": {...}
+            }, ...]
+
+        If you want to execute a certain module several times, add the `amount_of_repetions` on the same level as the
+        module name:
+
+        .. code-block:: yaml
+
+            [{
+              "module": "base.ModuleA",
+              "config": {...},
+              "amount_of_repetitions": 3
+            }, ...]
 
         Here the name contains the path to the module class, starting from inside the src directory.
 
@@ -30,7 +45,7 @@ class Utility:
         they are not copied into the new config.
 
         :param module_configs: A list of dicts, each one describing one module.
-        :return:
+        :return: a list of initialized modules
         """
         modules = []
 
@@ -46,11 +61,17 @@ class Utility:
                 # Overwrite with module specific config
                 Utility.merge_dicts(module_config["config"], config)
 
+            # Check if the module has a repetition counter
+            amount_of_repetitions = 1
+            if "amount_of_repetitions" in module_config:
+                amount_of_repetitions = module_config["amount_of_repetitions"]
+
             with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
-                # Import file and extract class
-                module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
-                # Create module
-                modules.append(module_class(Config(config)))
+                for i in range(amount_of_repetitions):
+                    # Import file and extract class
+                    module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
+                    # Create module
+                    modules.append(module_class(Config(config)))
 
         return modules
 
@@ -60,8 +81,8 @@ class Utility:
         """ Transforms the given homog into the blender coordinate frame.
 
         :param matrix: The matrix to convert in form of a mathutils.Matrix.
-        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame of the
-        source frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+        :param frame_of_point: An array containing three elements, describing the axes of the coordinate frame of the \
+                               source frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
         :return: The converted point is in form of a mathutils.Matrix.
         """
         assert len(source_frame) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(frame_of_point)
@@ -148,6 +169,7 @@ class Utility:
     def get_idx(array,item):
         """
         Returns index of an element if it exists in the list
+
         :param array: a list with values for which == operator works.
         :param item: item to find the index of
         :return: index of item, -1 otherwise
@@ -162,8 +184,7 @@ class Utility:
         """ Replaces the node between source_socket and dest_socket with a new node.
 
         Before: source_socket -> dest_socket
-        After: source_socket -> new_node_dest_socket
-               new_node_src_socket -> dest_socket
+        After: source_socket -> new_node_dest_socket and new_node_src_socket -> dest_socket
 
         :param links: The collection of all links.
         :param source_socket: The source socket.
@@ -183,7 +204,8 @@ class Utility:
         """
         Searches for the OutputMaterial in the given material and finds the connected node to it,
         removes the connection between this node and the output and returns this node and the material_output
-        :param material_slot: material slot (
+
+        :param material_slot: material slot
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
@@ -204,6 +226,7 @@ class Utility:
     def get_nodes_with_type(nodes, node_type):
         """
         Returns all nodes which are of the given node_type
+
         :param nodes: list of nodes of the current material
         :param node_type: node types
         :return: list of nodes, which belong to the type
@@ -286,12 +309,14 @@ class Utility:
 
         The given config should follow the following scheme:
 
-        {
-          "provider": "<name of provider class>"
-          "parameters": {
-            <provider parameters>
-          }
-        }
+        .. code-block:: yaml
+
+            {
+              "provider": "<name of provider class>"
+              "parameters": {
+                <provider parameters>
+              }
+            }
 
         :param config: A Configuration object or a dict containing the configuration data.
         :return: The constructed provider.

@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=source
 set BUILDDIR=build
-set SPHINXPROJ=BlenderPipeline
+set SPHINXPROJ=BlenderProc
 
 if "%1" == "" goto help
 

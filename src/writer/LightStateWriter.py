@@ -6,13 +6,6 @@ from src.writer.WriterInterface import WriterInterface
 
 class LightStateWriter(WriterInterface):
     """ Writes the state of all lights for each frame to a file.
-
-    **Attributes per object**:
-
-    .. csv-table::
-     :header: "Keyword", "Description"
-
-
     """
 
     def __init__(self, config):
