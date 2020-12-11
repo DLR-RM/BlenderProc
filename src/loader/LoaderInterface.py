@@ -1,6 +1,8 @@
 import bpy
+import numpy as np
 
 from src.main.Module import Module
+from src.utility.BlenderUtility import get_bounds
 
 
 class LoaderInterface(Module):
@@ -64,3 +66,47 @@ class LoaderInterface(Module):
         for obj in objects:
             for face in obj.data.polygons:
                 face.use_smooth = is_smooth
+
+    @staticmethod
+    def remove_x_axis_rotation(objects: [bpy.types.Object]):
+        """
+        Removes the 90 degree X-axis rotation found, when loading from `.obj` files. This function rotates the mesh
+        itself not just the object, this will set the `rotation_euler` to `[0, 0, 0]`.
+
+        :param objects: list of objects, which mesh should be rotated
+        """
+
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in objects:
+            # convert object rotation into internal rotation
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            obj.rotation_euler = [0, 0, 0]
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.transform.rotate(value=np.pi * 0.5, orient_axis="X")
+            bpy.ops.object.mode_set(mode='OBJECT')
+            obj.select_set(False)
+        bpy.context.view_layer.update()
+
+    @staticmethod
+    def move_obj_origin_to_bottom_mean_point(objects: [bpy.types.Object]):
+        """
+        Moves the object center to bottom of the bounding box in Z direction and also in the middle of the X and Y
+        plane. So that all objects have a similar origin, which then makes the placement easier.
+
+        :param objects: list of objects, which origin should be moved
+        """
+
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in objects:
+            # move the object to the center
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            bb = get_bounds(obj)
+            bb_center = np.mean(bb, axis=0)
+            bb_min_z_value = np.min(bb, axis=0)[2]
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
+            bpy.ops.object.mode_set(mode='OBJECT')
+            obj.select_set(False)
+        bpy.context.view_layer.update()
