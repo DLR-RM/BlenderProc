@@ -46,7 +46,7 @@ Mean error:  0.04055031146662476
 ### Camera loader
 
 ```yaml
-{
+  {
     "module": "camera.CameraLoader",
     "config": {
       "cam_poses": [{
@@ -61,7 +61,7 @@ Mean error:  0.04055031146662476
                    0.,   0.,   1. ],
       }
     }
-  },
+  }
 ```
 
 Here we set the camera intrinsics, specifically the K matrix and the image resolution are set.
@@ -71,7 +71,7 @@ Additionally, we set all location and rotation parameters to zero.
 ### Calibrationboard Sampler
 
 ```yaml
-{
+  {
     "module": "object.CalibrationboardSampler",
     "config": {
       "board_name": "Cube",
@@ -87,7 +87,7 @@ Additionally, we set all location and rotation parameters to zero.
            [-0.429058, 0.429058, 0.004883]
       ]
     }
-  },
+  }
 ```
 
 This module samples the configured chess board across the camera view. 

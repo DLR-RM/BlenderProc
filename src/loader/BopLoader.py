@@ -72,6 +72,11 @@ class BopLoader(LoaderInterface):
         * - model_type
           - Optionally, specify type of BOP model. Type: string. Default: "".  Available: [reconst, cad or eval].
           - string
+        * - move_origin_to_x_y_plane
+          - Move center of the object to the lower side of the object, this will not work when used in combination with
+            pose estimation tasks! This is designed for the use-case where BOP objects are used as filler objects in
+            the background. Default: False
+          - bool
     """
 
     def __init__(self, config):
@@ -207,6 +212,14 @@ class BopLoader(LoaderInterface):
                 # Copy object poses to key frame (to be sure)
                 for cur_obj in cur_objs:                           
                     self._insert_key_frames(cur_obj, frame_id)
+
+        # move the origin of the object to the world origin and on top of the X-Y plane
+        # makes it easier to place them later on, this does not change the `.location`
+        # This is only useful if the BOP objects are not used in a pose estimation scenario.
+        move_to_origin = self.config.get_bool("move_origin_to_x_y_plane", False)
+        if move_to_origin:
+            LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_objects)
+
 
     def _compute_camera_to_world_trafo(self, cam_H_m2w_ref, cam_H_m2c_ref):
         """ Returns camera to world transformation in blender coords.

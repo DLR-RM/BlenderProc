@@ -53,7 +53,7 @@ python scripts/visHdf5Files.py example/bop_scene_replication/0.hdf5
         "scene_id": 1,
         "model_type": ""
       }
-    },
+    }
 ```
 
 If `scene_id` is specified, BopLoader recreates the specified scene of the BOP dataset specified by `bop_dataset_path`. All camera poses and intrinsics from the specified scene are also loaded.  

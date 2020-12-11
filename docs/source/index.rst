@@ -4,11 +4,4 @@
    contain the root `toctree` directive.
 
 
-BlenderProc
-==================
-
-A procedural Blender pipeline for photorealistic training image generation.
-
-.. figure:: cover.jpg
-  :scale: 13 %
-
+.. mdinclude:: README.md

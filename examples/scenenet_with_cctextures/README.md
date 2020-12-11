@@ -45,16 +45,18 @@ python scripts/visHdf5Files.py examples/scenenet_with_cctextures/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:2>",
-    "max_bounces": 200,
-    "diffuse_bounces": 200,
-    "glossy_bounces": 200,
-    "transmission_bounces": 200,
-    "transparency_bounces": 200
-  }
+{
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:2>",
+        "max_bounces": 200,
+        "diffuse_bounces": 200,
+        "glossy_bounces": 200,
+        "transmission_bounces": 200,
+        "transparency_bounces": 200
+      }
+    }
 }
 ```
 
@@ -65,10 +67,12 @@ However, they increase the render time slightly and that's why they are usually 
 ### SceneNetLoader 
 
 ```yaml
-"module": "loader.SceneNetLoader",
-"config": {
-  "file_path": "<args:0>",
-  "texture_folder": "<args:1>"
+{
+    "module": "loader.SceneNetLoader",
+    "config": {
+      "file_path": "<args:0>",
+      "texture_folder": "<args:1>"
+    }
 }
 ```
 
@@ -80,40 +84,41 @@ The `category_id` of each object are set based on their name, check the [table](
 
 ```yaml
 {
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [{
-    "number_of_samples": 5, # amount of camera samples
-    "proximity_checks": {
-      "min": 1.0
-    },
-    "location": {
-      "provider": "sampler.UpperRegionSampler",
-      "min_height": 1.5,
-      "max_height": 1.8,
-      "to_sample_on": {
-        "provider": "getter.Entity",
-        "index": 0,
-        "conditions": {
-          "cp_category_id": 2  # 2 stands for floor
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [{
+        "number_of_samples": 5, # amount of camera samples
+        "proximity_checks": {
+          "min": 1.0
+        },
+        "location": {
+          "provider": "sampler.UpperRegionSampler",
+          "min_height": 1.5,
+          "max_height": 1.8,
+          "to_sample_on": {
+            "provider": "getter.Entity",
+            "index": 0,
+            "conditions": {
+              "cp_category_id": 2  # 2 stands for floor
+            }
+          }
+        },
+        "rotation": {
+          "value": {
+            "provider":"sampler.Uniform3d",
+            "max":[1.2217, 0, 6.283185307],
+            "min":[1.2217, 0, 0]
+          }
+        },
+        "check_if_pose_above_object_list": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_category_id": 2,
+            "type": "MESH"
+          }
         }
-      }
-    },
-    "rotation": {
-      "value": {
-        "provider":"sampler.Uniform3d",
-        "max":[1.2217, 0, 6.283185307],
-        "min":[1.2217, 0, 0]
-      }
-    },
-    "check_if_pose_above_object_list": {
-      "provider": "getter.Entity",
-      "conditions": {
-        "cp_category_id": 2,
-        "type": "MESH"
-      }
+      }]
     }
-  }]
 }
 ```
 
@@ -165,7 +170,7 @@ This module only sets up the materials which can then be used by other modules.
           }
         }
       }
-    },
+    }
 ```
 
 This builds up on the [material_randomizer](../material_randomizer) example.
@@ -194,14 +199,36 @@ If this is not done, all the materials will be empty.
 ### SceneNetLighting
 
 ```yaml
-"module": "lighting.SceneNetLighting"
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+      "conditions": {
+        "name": ".*lamp.*"
+      }
+  },
+  "emission_strength": 15.0,
+  "keep_using_base_color": True
+}
 ```
 
-We now have to light up the scene by making all lamps and the ceiling emit light.
+The first module call will make the lamps in the scene emit light, while using the assigned material textures.
 
-This even works after the materials have been replaced, the materials of the objects are selected by the name of the object.
-So it does not matter if the materials of the object have been switched beforehand.
+```yaml
+"module": "lighting.SurfaceLighting",
+"config": {
+  "selector": {
+    "provider": "getter.Entity",
+    "conditions": {
+      "name": "Ceiling"
+    },
+    "emission_strength": 2.0
+  }
+}
+```
 
+The second module call will make the ceiling emit light and remove any materials placed on it.
+This can be changed if desired for more information check out the documentation of the module.
 
 ## More examples
 

@@ -74,7 +74,7 @@ python scripts/visHdf5Files.py examples/entity_displacement_modifier/output/0.hd
           }
         }
       }
-    },
+    }
 ```
 
 The focus of this example are the custom functions `cf_add_displacement_modifier_with_texture` and `cf_add_uv_mapping` of the EntityManipulator module.

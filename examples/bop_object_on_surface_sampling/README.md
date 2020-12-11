@@ -68,7 +68,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "cp_physics": True
         }
       }
-    },
+    }
+```
+```yaml
     {
       "module": "loader.BopLoader",
       "config": {
@@ -82,7 +84,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         },
         "cf_set_shading": "SMOOTH"
       }
-    },
+    }
+```
+```yaml
     {
       "module": "loader.BopLoader",
       "config": {
@@ -96,7 +100,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         },
         "cf_set_shading": "SMOOTH"
       }
-    },
+    }
 ```
 
 * Here we are sampling BOP objects from 3 different datasets.
@@ -125,7 +129,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "max": [1, 1, 1, 1]
         }
       }
-    },
+    }
+```
+```yaml
     {
       "module": "manipulators.MaterialManipulator",
       "config": {
@@ -156,7 +162,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "max": 1.0
         }
       }
-    },
+    }
 ```
 
 * Sample grey colors for T-LESS object's materials using `sampler.Color` Provider.
@@ -210,7 +216,9 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         }
         ]
       }
-    },
+    }
+```
+```yaml
     {
       "module": "manipulators.EntityManipulator",
       "config": {
@@ -223,7 +231,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "cp_physics": False,
         "cp_category_id": 333
       }
-    },
+    }
 ```
 
 * Construct minimal 2m x 2m x 2m room from 6 planes
@@ -256,7 +264,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           }
         }
       }
-    },
+    }
 ```
 
 * For a default material of a light plane which was created during object's initialization, switch to a Emission shader and sample `color` and `strength` values of the emitted light.
@@ -269,7 +277,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
       "config": {
         "folder_path": "<args:3>"
       }
-    },
+    }
 ```
 
 * Load a random CC0Texture that was downloaded from https://cc0textures.com/
@@ -297,7 +305,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           }
         }
       }
-    },
+    }
 ```
 
 * Sample a CCTextures material once for all loaded ground_planes.
@@ -343,7 +351,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           "max": [0, 0, 6.28]
         }
       }
-    },
+    }
 ```
 
 * Get all objects with `"cp_physics": True` and the ground plane `"name": "ground_plane0"`. Use the provider `"sampler.UpperRegionSampler"` to sample objects above the plane at specified height (`"min_height", "max_height"`), relative position on plane (`"face_sample_range"`) and rotation (`"rot_sampler"`). Here, the x and y min and max rotation values are set to 0, meaning that the sampled object will stand upright at random z axis rotation. `"object.OnSurfaceSampler"` then places the objects down to the plane. Check the [on_surface_object_sampling](../on_surface_object_sampling/README.md) example for more details. 
@@ -375,7 +383,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         }
         ]
       }
-    },
+    }
 ```
 
 * Samples an additional point light source (next to ceiling) in a `"sampler.Shell"` around the origin with a `"sampler.Color"` provider. 
@@ -431,7 +439,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         }
         ]
       }
-    },
+    }
 ```
 
 * Samples `"number_of_samples": 10` camera poses, where the camera location is sampled using a `sampler.Shell` Provider with `"uniform_elevation"` sampling. 
@@ -449,7 +457,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "render_distance": True,
         "image_type": "JPEG"
       }
-    },
+    }
 ```
 * Renders RGB using 50 `"samples"`, and saves them as jpg images with 0.95 quality. Also outputs distance images. 
 

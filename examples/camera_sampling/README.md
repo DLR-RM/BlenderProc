@@ -68,7 +68,7 @@ python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
       }
     ]
   }
-},
+}
 ```
 
 The `camera.CameraSampler` module allows sampling camera positions and orientations. 
