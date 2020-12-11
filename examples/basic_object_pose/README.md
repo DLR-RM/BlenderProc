@@ -62,13 +62,13 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
           "conditions": {
             "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera
           }
-        },
+        },  
         "matrix_world":
-            [[0.331458, -0.6064861, 0.7227108, 0],
-             [-0.9415833, -0.2610635, 0.2127592, 0],
-             [0.05963787, -0.7510136, -0.6575879, 0],
-             [-0.04474526765165741, 0.08970402424862098, 0.6823395750305427, 1.0]],
-        "scale": [0.001, 0.001, 0.001]
+            [[0.331458, -0.9415833, 0.05963787, -0.04474526765165741],
+             [-0.6064861, -0.2610635, -0.7510136, 0.08970402424862098],
+             [0.7227108, 0.2127592, -0.6575879, 0.6823395750305427],
+             [0, 0, 0, 1.0]],
+        "scale": [0.001, 0.001, 0.001] # Scale 3D model from mm to m
       },
     }
 ```
@@ -82,10 +82,10 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
     {
       "module": "camera.CameraLoader",
       "config": {
+        "source_frame": ["X", "-Y", "-Z"],
         "cam_poses": [
             "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
         ], 
-        "source_frame": ["X", "-Y", "-Z"],
         "default_cam_param": {
           "cam_K": [537.4799, 0.0, 318.8965, 0.0, 536.1447, 238.3781, 0.0, 0.0, 1.0],
           "resolution_x": 640,

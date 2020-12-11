@@ -54,7 +54,7 @@ The following modules are already implemented and ready to use:
 * Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
 * Writing: .hdf5 containers, COCO & BOP annotations.
 
-..and many more. For advanced/custom functionalities, you can easily write and integrate your [own modules](src/README.md#writing-your-own-modules).
+..and many more ([docu](https://dlr-rm.github.io/BlenderProc/index.html)). For advanced/custom functionalities, you can easily write and integrate your [own modules](src/README.md#writing-your-own-modules).
 
 ## Examples
 
