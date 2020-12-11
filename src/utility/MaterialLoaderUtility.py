@@ -16,50 +16,61 @@ class MaterialLoaderUtility(object):
     y_texture_node = 300
 
     @staticmethod
-    def create_new_material(fill_used_empty_materials: bool, material_name: str, add_custom_properties: dict):
+    def find_cc_material_by_name(material_name: str, custom_properties: dict):
         """
-        Creates a new material, if fill_used_empty_materials is False, else the material is searched in all materials
-        and returned. If fill_used_empty_materials is False, a new material gets created this material gets the
-        given custom properties and the material name.
+        Finds from all loaded materials the cc material, which has the given material_name and the given
+        custom_properties.
 
-        :param fill_used_empty_materials: If True this fct. searches for a material with this name and returns this
+        :param material_name: Name of the searched material
+        :param custom_properties: Custom properties, which have been assigned before
+        :return: bpy.types.Material: Return the searched material, if not found returns None
+        """
+        # find used cc materials with this name
+        cond = {"cp_is_cc_texture": True, "cp_asset_name": material_name}
+        for key, value in custom_properties.items():
+            cond[key] = value
+        new_mats = Material.perform_and_condition_check(cond, [])
+        if len(new_mats) == 1:
+            new_mat = new_mats[0]
+            return new_mat
+        elif len(new_mats) > 1:
+            raise Exception("There was more than one material found!")
+        else:
+            # the material was not even loaded
+            return None
+
+    @staticmethod
+    def is_material_used(material: bpy.types.Material):
+        """
+        Checks if the given material is used on any object.
+
+        :param material: Material, which should be checked
+        :return: True if the material is used
+        """
+        # check amount of usage of this material
+        return material.users != 0
+
+    @staticmethod
+    def create_new_cc_material(material_name: str, add_custom_properties: dict):
+        """
+        Creates a new material, which gets the given custom properties and the material name.
+
         :param material_name: The name of the material
         :param add_custom_properties: The custom properties, which should be added to the material
-        :return: If this is False the material was not loaded or constructed, can only be False if \
-                 `fill_used_empty_materials` is True
+        :return: bpy.types.Material: Return the newly created material
         """
-        if fill_used_empty_materials:
-            # find used cc materials with this name
-            cond = {"cp_is_cc_texture": True, "cp_asset_name": material_name}
-            for key, value in add_custom_properties.items():
-                cond[key] = value
-            new_mats = Material.perform_and_condition_check(cond, [])
-            if len(new_mats) == 1:
-                new_mat = new_mats[0]
-            elif len(new_mats) > 1:
-                raise Exception("There was more than one material found!")
+        # create a new material with the name of the asset
+        new_mat = bpy.data.materials.new(material_name)
+        new_mat["is_cc_texture"] = True
+        new_mat["asset_name"] = material_name
+        new_mat.use_nodes = True
+        for key, value in add_custom_properties.items():
+            if key.startswith("cp_"):
+                cp_key = key[len("cp_"):]
             else:
-                # the material was not even loaded
-                return None, False
-            # check amount of usage of this material
-            if new_mat.users == 0:
-                # no one is using this material skip loading
-                return None, False
-            # only loads materials which are actually used
-            print("Fill material: {}".format(material_name))
-        else:
-            # create a new material with the name of the asset
-            new_mat = bpy.data.materials.new(material_name)
-            new_mat["is_cc_texture"] = True
-            new_mat["asset_name"] = material_name
-            new_mat.use_nodes = True
-            for key, value in add_custom_properties.items():
-                if key.startswith("cp_"):
-                    cp_key = key[len("cp_"):]
-                else:
-                    raise Exception("All cp have to start with cp_")
-                new_mat[cp_key] = value
-        return new_mat, True
+                raise Exception("All cp have to start with cp_")
+            new_mat[cp_key] = value
+        return new_mat
 
     @staticmethod
     def create_image_node(nodes: bpy.types.Nodes, image_path: str, non_color_mode=False, x_location=0, y_location=0):

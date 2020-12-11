@@ -115,10 +115,19 @@ class HavenMaterialLoader(Module):
                             break
                     if not os.path.exists(base_image_path):
                         continue
-                    new_mat, keep_this_one = MaterialLoaderUtility.create_new_material(
-                        self._fill_used_empty_materials, asset, self._add_cp)
-                    if not keep_this_one or self._preload:
+
+                    # if the material was already created it only has to be searched
+                    if self._fill_used_empty_materials:
+                        new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, self._add_cp)
+                    else:
+                        new_mat = MaterialLoaderUtility.create_new_cc_material(asset, self._add_cp)
+                    if self._preload:
+                        # if preload then the material is only created but not filled
                         continue
+                    elif self._fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
+                        # now only the materials, which have been used should be filled
+                        continue
+
                     # construct all image paths
                     # the images path contain the words named in this list, but some of them are differently
                     # capitalized, e.g. Nor, NOR, NoR, ...
