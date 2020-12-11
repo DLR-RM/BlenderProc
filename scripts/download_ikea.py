@@ -9,6 +9,55 @@ import glob
 import subprocess
 import shutil
 
+
+def split_object_according_to_groups(file_path, folder):
+    """
+    Splits the given .obj file into different objects, assuming these objects have been separated via groups before.
+
+    :param file_path: Path to the .obj file
+    :param folder: Folder in which the resulting split .obj files we be saved
+    """
+    with open(file_path, "r") as file:
+        text = file.read()
+        lines = text.split("\n")
+        start_info = ""
+        for line in lines:
+            if line.strip().startswith("g "):
+                break
+            else:
+                start_info += line + "\n"
+
+        list_of_split_ids = [i for i, line in enumerate(lines) if line.strip().startswith("g ")]
+        last_i = list_of_split_ids[0]
+        group_counter = 0
+        for index, current_i in enumerate(list_of_split_ids[1:]):
+            current_text = start_info
+            current_lines = lines[last_i: current_i]
+            face_lines = [l[len("f "):].strip().split(" ") for l in current_lines if l.strip().startswith("f ")]
+            face_lines = np.array([[[int(e) for e in eles.split("/")] for eles in l] for l in face_lines])
+            face_offset = np.min(face_lines, axis=0)
+            face_offset = np.min(face_offset, axis=0) - 1
+            print(index, face_offset)
+
+            final_lins = []
+            for line in current_lines:
+                if line.strip().startswith("f "):
+                    blocks = line[len("f "):].strip().split(" ")
+                    values = [np.array([int(e) for e in eles.split("/")]) - face_offset for eles in blocks]
+                    f_line = "f " + " ".join(["/".join([str(int(e)) for e in eles]) for eles in values])
+                    final_lins.append(f_line)
+                else:
+                    final_lins.append(line)
+            last_i = current_i
+
+            amount_of_faces = sum([1 for l in final_lins if l.startswith("f ")])
+            if amount_of_faces > 10:
+                current_text += "\n".join(final_lins)
+                with open(os.path.join(folder, "{}_{}.obj".format(os.path.basename(folder), group_counter)), "w") as f:
+                    f.write(current_text)
+                group_counter += 1
+
+
 if __name__ == "__main__":
     # setting the default header, else the server does not allow the download
     opener = build_opener()
@@ -45,7 +94,7 @@ if __name__ == "__main__":
 
     nils_folder = os.path.join(ikea_dir, "IKEA_chair_NILS")
     if os.path.exists(nils_folder):
-        print(glob.glob(os.path.join(nils_folder, "*")))
+        shutil.rmtree(nils_folder)
 
     # delete all no double .obj
     for folder in glob.glob(os.path.join(ikea_dir, "*")):
@@ -90,19 +139,26 @@ if __name__ == "__main__":
         if os.path.exists(path.replace(".obj", ".mtl")):
             os.remove(path.replace(".obj", ".mtl"))
 
+    # directly remove these files:
+    path = os.path.join(ikea_dir, "IKEA_wardrobe_PAX", "4b91d887fd34890a35d389147630ded_obj0_object.obj")
+    delete_obj_file(path)
+    path = os.path.join(ikea_dir, "IKEA_chair_JOKKMOKK", "221da64f5789c4bfcf7d397dd220c7e2_obj0_object.obj")
+    delete_obj_file(path)
+    path = os.path.join(ikea_dir, "IKEA_table_JOKKMOKK", "jokkmokk_table_2_obj0_object.obj")
+    delete_obj_file(path)
+    path = os.path.join(ikea_dir, "IKEA_table_UTBY", "cfcd08bbf590325e7b190cd56debb387_obj0_object.obj")
+    delete_obj_file(path)
+    path = os.path.join(ikea_dir, "IKEA_chair_STEFAN", "7e44c6d0933417ace05f257fa4ec4037_obj0_object.obj")
+    delete_obj_file(path)
+    shutil.rmtree(os.path.join(ikea_dir, "IKEA_chair_URBAN"))
+
     # this are several couches in one object file
     first_path = os.path.join(ikea_dir, "IKEA_sofa_VRETA", "3b58f55ed32ceef86315023d0bef39b6_obj0_object.obj")
+    split_object_according_to_groups(first_path, os.path.join(ikea_dir, "IKEA_sofa_VRETA"))
+    os.remove(first_path)
 
-
-
-
-
-
-
-
-
-
-
-
+    for ele in ["d1748541564ade6cfe63adf1a76042f0_obj0_object.obj", "c5e1449fc0ee6833f072f21dd9a7251_obj0_object.obj"]:
+        path = os.path.join(ikea_dir, "IKEA_wardrobe_PAX", ele)
+        delete_obj_file(path)
 
 
