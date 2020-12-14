@@ -164,32 +164,6 @@
       }
     },
     {
-      "module": "manipulators.EntityManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": '[C|c]eiling.*',
-            "type": "MESH"
-          }
-        },
-        "cp_category_id": 22
-      }
-    },
-    {
-      "module": "manipulators.EntityManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": '[F|f]loor.*',
-            "type": "MESH"
-          }
-        },
-        "cp_category_id": 2
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "samples": 350,
