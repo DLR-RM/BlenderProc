@@ -2,6 +2,7 @@ import glob
 import json
 import os
 import random
+import pathlib
 
 import bpy
 
@@ -24,11 +25,9 @@ class ShapeNetLoader(LoaderInterface):
     Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other module is loaded first in the config file.
 
     **Configuration**:
-
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1
-
         * - Parameter
           - Description
           - Type
@@ -36,8 +35,11 @@ class ShapeNetLoader(LoaderInterface):
           - The path to the ShapeNetCore.v2 folder.
           - string
         * - used_synset_id
-          - The synset id for example: '02691156', check the data_path folder for more ids.
-          - int
+          - The synset id for example: '02691156', check the data_path folder for more ids. More information about synset id available here: http://wordnetweb.princeton.edu/perl/webwn3.0
+          - string
+        * - used_source_id
+          - The identifier of the original model on the online repository from which it was collected to build the ShapeNet dataset.
+          - string
     """
 
     def __init__(self, config):
@@ -83,13 +85,17 @@ class ShapeNetLoader(LoaderInterface):
         selected_obj = random.choice(self._files_with_fitting_synset)
         loaded_obj = Utility.import_objects(selected_obj)
 
+        for obj in loaded_obj:
+            obj["used_synset_id"] = self._used_synset_id
+            obj["used_source_id"] = pathlib.PurePath(selected_obj).parts[-3]
+        
         self._correct_materials(loaded_obj)
 
         self._set_properties(loaded_obj)
 
         if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
             for obj in loaded_obj:
-                obj['category_id'] = LabelIdMapping.label_id_map["void"]
+                obj["category_id"] = LabelIdMapping.label_id_map["void"]
 
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
@@ -128,3 +134,4 @@ class ShapeNetLoader(LoaderInterface):
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
+

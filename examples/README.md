@@ -42,6 +42,7 @@ We are providing limited dataset support, for example for ShapeNet, SceneNet, 3D
 These can be found in:
 * [replica_dataset](replica_dataset)
 * [shapenet](shapenet)
+* [shapenet_multiview](shapnet_multiview)
 * [shapenet_with_scenenet](shapenet_with_scenenet)
 * [shapenet_with_suncg](shapenet_with_suncg)
 * [scenenet](scenenet)
@@ -53,3 +54,4 @@ These can be found in:
 * [suncg_with_improved_mat](suncg_with_improved_mat)
 * [suncg_with_object_replacer](suncg_with_object_replacer)
 * [rock_essentials](rock_essentials)
+
