@@ -79,7 +79,6 @@
             "max_height": 1.8,
             "to_sample_on": {
               "provider": "getter.Entity",
-              "index": 0,
               "conditions": {
                 "cp_category_id": 2
               }
@@ -108,7 +107,7 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "name": "wall"
+            "cp_category_id": 1
           }
         }, # this one you need to now beforehand
         "compare_angle_degrees" : 7.5,
@@ -116,7 +115,8 @@
         "name_for_split_obj": "floor",  # this is the new name of the object
         "add_properties": {
           "cp_category_id": 2
-        }
+        },
+        "should_skip_if_object_is_already_there": True
       }
     },
     {
@@ -125,13 +125,17 @@
         "selector": {
           "provider": "getter.Entity",
           "conditions": {
-            "name": "wall"  # the wall object here contains the ceiling
+            "cp_category_id": 1
           }
         },
         "up_vector_upwards": False,  # the polygons are now facing downwards: [0, 0, -1]
         "compare_angle_degrees": 7.5,
         "compare_height": 0.15,
-        "name_for_split_obj": "ceiling"
+        "add_properties": {
+          "cp_category_id": 22
+        },
+        "name_for_split_obj": "ceiling",
+        "should_skip_if_object_is_already_there": True
       }
     },
     {
@@ -157,6 +161,32 @@
           }
         },
         "emission_strength": 2.0,
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": '[C|c]eiling.*',
+            "type": "MESH"
+          }
+        },
+        "cp_category_id": 22
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": '[F|f]loor.*',
+            "type": "MESH"
+          }
+        },
+        "cp_category_id": 2
       }
     },
     {
