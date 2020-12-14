@@ -244,8 +244,7 @@ class FloorExtractor(Module):
                     height_value = np.mean(list_of_median_poses)
                 else:
                     # The following bandwidth can be automatically detected using
-                    bandwidth = estimate_bandwidth(list_of_median_poses, quantile=0.2, n_samples=500)
-                    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+                    ms = MeanShift(bandwidth=0.2, bin_seeding=True)
                     ms.fit(list_of_median_poses)
 
                     # if the up vector is negative the maximum value is searched
