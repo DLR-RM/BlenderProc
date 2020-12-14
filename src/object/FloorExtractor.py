@@ -243,7 +243,6 @@ class FloorExtractor(Module):
                     # All faces are already correct
                     height_value = np.mean(list_of_median_poses)
                 else:
-                    # The following bandwidth can be automatically detected using
                     ms = MeanShift(bandwidth=0.2, bin_seeding=True)
                     ms.fit(list_of_median_poses)
 
