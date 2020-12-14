@@ -113,6 +113,10 @@ class FloorExtractor(Module):
           - With `add_properties` it is possible to set custom properties for the newly separated objects. Use `cp_` \
             prefix for keys.
           - dict
+        * - should_skip_if_object_is_already_there
+          - If this is true no extraction will be done, if an object is there, which has the same name as
+            name_for_split_obj, which would be used for the newly created object. Default: False.
+          - bool
     """
 
     def __init__(self, config):
@@ -155,6 +159,7 @@ class FloorExtractor(Module):
         compare_height = self.config.get_float('compare_height', 0.15)
         new_name_for_object = self.config.get_string("name_for_split_obj", "Floor")
         add_properties = self.config.get_raw_dict("add_properties", {})
+        should_skip_if_object_is_already_there = self.config.get_bool("should_skip_if_object_is_already_there", False)
 
         # set the up_vector
         up_vec = mathutils.Vector([0, 0, 1])
@@ -168,6 +173,25 @@ class FloorExtractor(Module):
             with open(height_file_path) as file:
                 import ast
                 height_list = [float(val) for val in ast.literal_eval(file.read())]
+
+        object_names = [obj.name for obj in bpy.context.scene.objects if obj.type == "MESH"]
+
+        def clean_up_name(name: str):
+            """
+            Clean up the given name from Floor1 to floor
+
+            :param name: given name
+            :return: str: cleaned up name
+            """
+            name = ''.join([i for i in name if not i.isdigit()])  # remove digits
+            name = name.lower().replace(".", "").strip()  # remove dots and whitespace
+            return name
+
+        object_names = [clean_up_name(name) for name in object_names]
+        if should_skip_if_object_is_already_there and new_name_for_object.lower() in object_names:
+            # if should_skip is True and if there is an object, which name is the same as the one for the newly
+            # split object, than the execution is skipped
+            return
 
         bpy.ops.object.select_all(action='DESELECT')
         newly_created_objects = []
@@ -203,19 +227,30 @@ class FloorExtractor(Module):
                 # compare angle range
                 list_of_median_poses = [FloorExtractor.get_median_face_pose(f, obj.matrix_world)[2] for f in bm.faces if
                                         FloorExtractor.check_face_angle(f, obj.matrix_world, up_vec, compare_angle)]
-
+                if not list_of_median_poses:
+                    print("Object with name: {} is skipped no faces were relevant, try with "
+                          "flipped up_vec".format(obj.name))
+                    list_of_median_poses = [FloorExtractor.get_median_face_pose(f, obj.matrix_world)[2] for f in
+                                            bm.faces if FloorExtractor.check_face_angle(f, obj.matrix_world,
+                                                                                        -up_vec, compare_angle)]
+                    if not list_of_median_poses:
+                        print("Still no success for: {} skip object.".format(obj.name))
+                        bpy.ops.object.mode_set(mode='OBJECT')
+                        bpy.ops.object.select_all(action='DESELECT')
+                        continue
                 list_of_median_poses = np.reshape(list_of_median_poses, (-1, 1))
-                # The following bandwidth can be automatically detected using
-                bandwidth = estimate_bandwidth(list_of_median_poses, quantile=0.2, n_samples=500)
-
-                ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
-                ms.fit(list_of_median_poses)
-
-                # if the up vector is negative the maximum value is searched
-                if up_vec_upwards:
-                    height_value = np.min(ms.cluster_centers_)
+                if np.var(list_of_median_poses) < 1e-4:
+                    # All faces are already correct
+                    height_value = np.mean(list_of_median_poses)
                 else:
-                    height_value = np.max(ms.cluster_centers_)
+                    ms = MeanShift(bandwidth=0.2, bin_seeding=True)
+                    ms.fit(list_of_median_poses)
+
+                    # if the up vector is negative the maximum value is searched
+                    if up_vec_upwards:
+                        height_value = np.min(ms.cluster_centers_)
+                    else:
+                        height_value = np.max(ms.cluster_centers_)
                 bpy.ops.mesh.select_all(action='DESELECT')
                 counter = FloorExtractor.split_at_height_value(bm, height_value, compare_height, up_vec,
                                                                compare_angle, obj.matrix_world)
