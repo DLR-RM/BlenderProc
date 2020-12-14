@@ -97,7 +97,6 @@ The `category_id` of each object are set based on their name, check the [table](
           "max_height": 1.8,
           "to_sample_on": {
             "provider": "getter.Entity",
-            "index": 0,
             "conditions": {
               "cp_category_id": 2  # 2 stands for floor
             }

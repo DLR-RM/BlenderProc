@@ -133,7 +133,6 @@ This can be changed if desired for more information check out the documentation 
         "max_height": 1.8,
         "to_sample_on": {
           "provider": "getter.Entity",
-          "index": 0,
           "conditions": {
             "cp_category_id": 2  # 2 stands for floor
           }
