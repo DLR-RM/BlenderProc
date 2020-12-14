@@ -23,7 +23,7 @@ python run.py examples/scenenet/config.yaml <PATH_TO_SCENE_NET_OBJ_FILE> <PATH_T
 * `<PATH_TO_TEXTURE_FOLDER>`: path to the downloaded texture files, you can find them [here](http://tinyurl.com/zpc9ppb)
 * `examples/scenenet/output`: path to the output directory.
 
-This example does not work with the scenes: `1Kitchen/1-14_labels.obj`, `1Kitchen/13_labels.obj`, `1Office/3_hereisfree_not_labelled.obj`, `1Office/1_3dmodel777_labels.obj` and `1Office/4_3dmodel777.obj`, as they all have merged floor, ceiling and walls as one object which makes sampling above the floor impossible.
+Please remove the `1Office/3_hereisfree_not_labelled.obj` at it is not supported here, as the scene is in millimeters, and the objects are not correctly placed.
 
 ## Visualization
 
