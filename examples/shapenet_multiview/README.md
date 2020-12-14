@@ -44,10 +44,12 @@ python scripts/visHdf5Files.py examples/shapenet_multiview/output/*.hdf5
 ### Global
 
 ```yaml
-"module": "main.Initializer",
-"config": {
-  "global": {
-    "output_dir": "<args:1>"
+{
+  "module": "main.Initializer",
+  "config": {
+    "global": {
+      "output_dir": "<args:1>"
+    }
   }
 }
 ```
@@ -58,10 +60,12 @@ The same as in the basic example.
 ### ShapeNetLoader 
 
 ```yaml
-"module": "loader.ShapeNetLoader",
-"config": {
-  "data_path": "<args:0>",
-  "used_synset_id": "03115762"
+{
+  "module": "loader.ShapeNetLoader",
+  "config": {
+    "data_path": "<args:0>",
+    "used_synset_id": "03115762"
+  }
 }
 ```
 
@@ -74,25 +78,27 @@ when creating this example.
 ### CameraSampler
 
 ```yaml
-"module": "camera.CameraSampler",
-"config": {
-  "cam_poses": [
-    {
-      "number_of_samples": 5,
-      "location": {
-        "provider":"sampler.Sphere",
-        "center": [0, 0, 0],
-        "radius": 2,
-        "mode": "SURFACE"
-      },
-      "rotation": {
-        "format": "look_at",
-        "value": {
-          "provider": "getter.POI"
+{
+  "module": "camera.CameraSampler",
+  "config": {
+    "cam_poses": [
+      {
+        "number_of_samples": 5,
+        "location": {
+          "provider":"sampler.Sphere",
+          "center": [0, 0, 0],
+          "radius": 2,
+          "mode": "SURFACE"
+        },
+        "rotation": {
+          "format": "look_at",
+          "value": {
+            "provider": "getter.POI"
+          }
         }
       }
-    }
-  ]
+    ]
+  }
 }
 ```
 
@@ -102,17 +108,19 @@ Each cameras rotation is such that it looks directly at the object and the camer
 
 ## RGB Renderer
 ```yaml
-"module": "renderer.RgbRenderer",
-"config": {
-  "transparent_background": False,
-  "output_key": "colors",
-  "render_distance": True,
-  "distance_output_key": "distance",
-  "distance_range": 2.5,
-  "render_normals": True,
-  "normals_output_key": "normals",
-  "use_alpha": True,
-  "samples": 512
+{
+  "module": "renderer.RgbRenderer",
+  "config": {
+    "transparent_background": False,
+    "output_key": "colors",
+    "render_distance": True,
+    "distance_output_key": "distance",
+    "distance_range": 2.5,
+    "render_normals": True,
+    "normals_output_key": "normals",
+    "use_alpha": True,
+    "samples": 512
+  }
 }
 
 ```
@@ -122,7 +130,9 @@ To render with a transparent background, specify `transparent_background` as Tru
 
 ## ShapeNet Writer
 ```yaml
-"module": "writer.ShapeNetWriter"
+{
+  "module": "writer.ShapeNetWriter"
+}
 ````
 
 This will write the ShapeNet object's `synset_id` and `source_id` to a file.
@@ -130,9 +140,11 @@ This will write the ShapeNet object's `synset_id` and `source_id` to a file.
 
 ## Camera State Writer
 ```yaml
-"module": "writer.CameraStateWriter",
-"config": {
-  "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y"]
+{
+  "module": "writer.CameraStateWriter",
+  "config": {
+    "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y"]
+  }
 }
 ```
 
@@ -141,16 +153,19 @@ This will write the camera pose and the other specified camera intrinsics to a f
 
 ## HDF5 Writer
 ```yaml
-"module": "writer.Hdf5Writer",
-"config": {
-  "write_alpha_channel": True,
-  "postprocessing_modules": {
-    "distance": [
-      {
-        "module": "postprocessing.Dist2Depth",
-        "config": {}
-      }
-    ]
+{
+  "module": "writer.Hdf5Writer",
+  "config": {
+    "write_alpha_channel": True,
+    "postprocessing_modules": {
+      "distance": [
+        {
+          "module": "postprocessing.Dist2Depth",
+          "config": {}
+        }
+      ]
+    }
+  }
 }
 ```
 
