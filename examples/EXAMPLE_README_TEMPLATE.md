@@ -46,10 +46,3 @@ Always end the description of the config section with short description of the o
 ### Some other module
 
 ...
-
-
-## More examples
-
-Optionally, finish with some recommendation about other examples that can help expand on this config file and complement this example:
-* one: more on rendering
-* or two examples: more on samplers
