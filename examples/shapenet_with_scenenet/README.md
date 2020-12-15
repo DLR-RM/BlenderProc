@@ -209,8 +209,3 @@ These objects are selected via a `getter.Entity` provider, which feeds into a `g
 Each cameras' rotation is such that it looks directly at the object, and the camera faces upwards in Z direction, we use the same selection for the center of the object as for the location.
 
 We render again and store the result inside of `.hdf5` container.
-
-## More examples
-
-* [sung_basic](../scenenet_basic): More on rendering SceneNet scenes with fixed camera poses.
-* [scenenet_with_cam_sampling](../scenenet_with_cam_sampling): More on rendering SceneNet scenes with dynamically sampled camera poses.

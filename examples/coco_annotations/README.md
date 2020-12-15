@@ -75,8 +75,3 @@ The `renderer.SegMapRenderer` needs to render both instance and class maps. The 
 ```
 
 This modules depends on output from `renderer.SegMapRenderer` and stores annotations in `coco_annotations.json`. Optionally, you can set `"supercategory": "<some_supercategory>"` in the `writer.CocoAnnotationsWriter` config to filter objects by a previously assigned custom property called `"supercategory"`.
-
-## More examples
-
-* [suncg_basic](../suncg_basic): Rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): Rendering SUNCG scenes with dynamically sampled camera poses.

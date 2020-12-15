@@ -123,10 +123,3 @@ A further example is:
 
 Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, which names start with `"Marble"`.
 Also pay attention that only 10% of all materials are replaced, to not over load the rooms with marble.
-
-## More examples
-
-* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
-

@@ -73,9 +73,4 @@ After sampling a pose the pose is only accepted if it is valid according to the 
   * Per default a camera pose is only accepted, if there is no object between it and the floor
   * As we enabled `proximity_checks` with a `min` value of `1.0`, we then only accept the pose if every object in front of it is at least 1 meter away
   * At the end we also check if the sampled view is interesting enough. Therefore a score is calculated based on the number of objects that are visible and how much space they occupy. Only if the score is above `0.4` the pose is accepted.
-
-## More examples
-
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
-* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.
+  

@@ -69,9 +69,3 @@ The focus of this example is `light.LightSampler` module which allows one to sam
 Note that for this we are using [sampler.Shell](../../src/provider/sampler) Provider which is not a part of a module, but a useful tool for introducing some "controlled randomness" into the process.
 To call a sampler for some attribute of a camera, specify a `name` of a desired sampler and define some input arguments for it, e.g. `center`, `radius_min`, `radius_max`, etc.
 Sampler returns a value based on these input parameters specified in the config file, check the documentation for the samplers for more information on the input arguments, output formats, etc.
-
-## More examples
-
-* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation
-* [camera_sampling](../camera_sampling): More on sampling for cameras.
-* [entity_manipulation](../entity_manipulation): More on the true power of Providers.
