@@ -93,9 +93,3 @@ Additionally, we set all location and rotation parameters to zero.
 This module samples the configured chess board across the camera view. 
 We only have to specificy the name of the calibration board, then how rotations should be sampled and the local coordinates of points that should always be in the camera view.
 In this example we use the outer internal corners of our chess board.
-
-## More examples
-
-* [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
-* [light_sampling](../light_sampling): Introduction to sampling for lights.
-* [entity_manipulation](../entity_manipulation): More on the true power of Providers.

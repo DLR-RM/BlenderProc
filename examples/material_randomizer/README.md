@@ -65,8 +65,3 @@ Select the pool of objects for which we randimize materials with certain probabi
 Check [object_manipulation](../object_manipulation) for more information about selectors.
 
 Check the [scenenet_with_cctextures](../scenenet_with_cctextures) for a more advanced example of the MaterialManipulator.
-
-## More examples
-
-* [camera_sampling](../camera_sampling): More on sampling for cameras.
-* [light_sampling](../light_sampling): More on sampling for lights.

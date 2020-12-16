@@ -127,10 +127,3 @@ python scripts/visHdf5Files.py examples/front_3d/output/0.hdf5
   * the average of distance values must lie between 2.5 and 3.5 meters
   * And there are no background pixels allowed, which means the camera will not look out of one of the open windows or doors
 * The location and rotation are only added here to the sampled locations. Each sampled location is in one of the rooms on the floor, we can now add a certain distance from the floor with the location sampling. The same is true for the rotation sampling. Each pose is validated against the criterias at the top and also if it is directly above the floor. So positions above a bed for example will be discarded. 
-
-## More examples
-
-* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
-

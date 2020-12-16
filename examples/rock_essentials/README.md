@@ -190,8 +190,3 @@ To counter this, we are setting two new parameters to `object.PhysicsPositioning
 * `"substeps_per_frame"`: Number of simulation steps taken per frame. 
 
 Which usually helps.
-
-## More examples
-
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.

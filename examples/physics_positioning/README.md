@@ -117,8 +117,3 @@ Nevertheless the simulation is run at least for 4 seconds and at most for 20 sec
 
 At the end of the simulation the position of all spheres is made fixed again.
 In this way we can easily sample random positions of the spheres on top of the bumpy plane.
-
-## More examples
-
-* [object_pose_sampling](../object_pose_sampling): More on sampling object positions inside simple shapes.
-* [entity_manipulation](../entity_manipulation): More on the true power of Providers.

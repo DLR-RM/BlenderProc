@@ -67,9 +67,3 @@ The `BlendLoader` loads the given blend file and extracts the object from it.
 ```
 
 This loader will load a random HDR image and will use it as an environment background for the scene.
-
-## More examples
-
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
-* [AMASS_human_poses](../amass_human_poses): More on sampling human motion capture.
