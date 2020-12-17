@@ -169,6 +169,5 @@ This will write the camera pose and the other specified camera intrinsics to a f
 }
 ```
 
-To write to a hdf5 file in which the image background will not be transparent. As the postprocessing step, `postprocessing.Dist2Depth` is applied in order to convert the distance image to an 
-actual depth image.
+To write to a hdf5 file in which the image background will not be transparent. As the postprocessing step, `postprocessing.Dist2Depth` is applied in order to convert the distance image to an actual depth image.
 
