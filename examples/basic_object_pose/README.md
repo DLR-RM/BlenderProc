@@ -138,9 +138,3 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
 * `"m2mm"` (default=True) converts the pose to mm as in the original bop annotations. Set to False if you want it in meters.
 * `"append_to_existing_output"` means that if the same output folder is chosen, data will be accumulated and not overwritten
 * `postprocessing.Dist2Depth` to convert the distance images from Blender to actual depth images.
-
-## More examples
-
-* [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
-* [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
-* [bop_scene_replication](../bop_scene_replication): Replicate scenes of all BOP datasets using the BopLoader

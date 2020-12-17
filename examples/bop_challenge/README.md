@@ -46,6 +46,3 @@ To save some time and not copy functionality we use the bop_toolkit to generate 
 https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_masks.py) and also the [scene_gt_info](https://github.com/thodan/bop_toolkit/blob/master/scripts/calc_gt_info.py). There, you will also find a Bop2coco annotations converter.
 
 Don't forget to set the paths to your generated BOP dataset in bop_toolkit_lib/config.py.
-
-
-

@@ -127,9 +127,3 @@ To render with a transparent background, specify `transparent_background` as Tru
 }
 ```
 To write to a hdf5 file with a transparent image backgound, specify transparent_background as True.
-
-## More examples
-
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
-

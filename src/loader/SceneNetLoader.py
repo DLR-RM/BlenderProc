@@ -100,8 +100,12 @@ class SceneNetLoader(LoaderInterface):
                 links = material.node_tree.links
                 principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
                 texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
-                if not texture_nodes:
-                    texture_node = nodes.new("ShaderNodeTexImage")
+                if not texture_nodes or len(texture_nodes) == 1:
+                    if len(texture_nodes) == 1:
+                        # these materials do not exist they are just named in the .mtl files
+                        texture_node = texture_nodes[0]
+                    else:
+                        texture_node = nodes.new("ShaderNodeTexImage")
                     mat_name = material.name
                     if "." in mat_name:
                         mat_name = mat_name[:mat_name.find(".")]

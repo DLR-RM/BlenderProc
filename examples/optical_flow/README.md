@@ -79,8 +79,3 @@ Zoomed version:
 ![](num_samples_zoomed.png)
 
 Following this argumentation we suggest using the default setting.
-
-## More examples
-
-* [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
-* [light_sampling](../light_sampling): Introduction to sampling for lights.

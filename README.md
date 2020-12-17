@@ -60,7 +60,7 @@ The following modules are already implemented and ready to use:
 
 ## Examples
 
-We provide a lot of [examples](examples) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc.
+We provide a lot of [examples](examples) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
 
 * [Basic scene](examples/basic/): Basic example 
 * [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a distance images.

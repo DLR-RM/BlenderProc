@@ -1,4 +1,4 @@
-# Object selection and manipulation
+# On surface object pose Sampling
 
 ![](rendering.png)
 
@@ -87,8 +87,3 @@ python scripts/visHdf5Files.py examples/on_surface_object_sampling/output/0.hdf5
 * sample positions for `objects_to_sample` via `sampler.UpperRegionSampler` (configure `min_height` and `max_height` such that sampled objects don't intersect with the `surface`).
 * `min_distance` and `max_distance` define an acceptable range between sampled objects. The smaller the range, the more `max_iterations` (default is 100) may be required to successfully place an object.
 * sample rotation for `objects_to_sample` using `sampler.Uniform3d` Provider.
-
-## More examples
-
-* [object_pose_sampling](../object_pose_sampling): Simple object pose sampling object inside simple volume.
-* [physics_positioning](../physics_positioning): More on physics simulation.

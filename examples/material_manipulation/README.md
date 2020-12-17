@@ -98,9 +98,3 @@ If one wants to have values sampled once and have them set to defined attribute/
 By the default it is `"once_for_each"`.
 
 The second `MaterialManipulator` module is yet again selecting a material: `Material.*` which equals to selecting all the materials in the scene, but this time it uses a `sampler.Path` to randomly choose one `color` .jpg image texture from the example folder to assign to the chosen material.
-
-## More examples
-
-* [entity_manipulation](../entity_manipulation): More on manipulators. 
-* [camera_sampling](../camera_sampling): More on sampling for cameras.
-* [light_sampling](../light_sampling): More on sampling for lights.

@@ -136,8 +136,3 @@ The `materials.Manipulator` changes the material of the Replica objects so that 
 **Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.**
 
 If you are in need of high-res color images, do we propose that you, yourself can try to implement the texture importer for the replica dataset.
-
-## More examples
-
-* [sung_basic](../suncg_basic): Rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): Rendering SUNCG scenes with dynamically sampled camera poses.
