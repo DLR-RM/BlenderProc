@@ -214,7 +214,7 @@ def _foo(self, bar_a, bar_b):
 ### BlenderProc Example Styleguide
 
 When you are proposing a new module or significant changes to the existing modules, new example as a part of your PR may be expected.
-To create a good example, please follow this steps:
+To create a good example, please follow these steps:
 * Create a folder with a clear descriptive name in [examples](examples/) folder.
 * In this folder provide at least a configuration config.yaml file and a README.md file.
 * And any other files that may be necessary (like rendering images, .obj files, text files with some data required by the pipeline, etc), but keep it as clean as possible and **do not include any copyrighted materials**.

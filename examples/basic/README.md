@@ -212,9 +212,3 @@ The file `0.h5py` would therefore look like the following:
 * If you want to keep them, put `"output_is_temp": False` into the config of the corresponding module or in the `Global` section.
 
 => Creates the files `0.h5py` and `1.h5py`
-
-## More examples
-
-* [camera_sampling](../camera_sampling): Introduction to sampling for cameras.
-* [light_sampling](../light_sampling): Introduction to sampling for lights.
-* [semantic_segmentation](../semantic_segmentation): Introduction to semantic segmentation

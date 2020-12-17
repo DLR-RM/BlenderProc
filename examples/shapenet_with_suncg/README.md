@@ -211,8 +211,3 @@ We sample here five random camera poses, where the location is on a sphere with 
 Each cameras rotation is such that it looks directly at the object and the camera faces upwards in Z direction, we use the same selection for the center of the object as for the location.
 
 We render again and store the result inside of `.hdf5` container.
-
-## More examples
-
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.

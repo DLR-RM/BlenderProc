@@ -97,7 +97,6 @@ The `category_id` of each object are set based on their name, check the [table](
           "max_height": 1.8,
           "to_sample_on": {
             "provider": "getter.Entity",
-            "index": 0,
             "conditions": {
               "cp_category_id": 2  # 2 stands for floor
             }
@@ -233,11 +232,3 @@ The first module call will make the lamps in the scene emit light, while using t
 
 The second module call will make the ceiling emit light and remove any materials placed on it.
 This can be changed if desired for more information check out the documentation of the module.
-
-## More examples
-
-* [shapenet_with_scenenet](../shapenet_with_scenenet): Using shapenet combined with scenenet
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
-* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
-* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.

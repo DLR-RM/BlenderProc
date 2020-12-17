@@ -191,8 +191,3 @@ The distance rendering is not affected by this, the normal rendering is effected
 
 Finally, the mode specifies if the same values are used for all materials or if each material gets its own values.
 With `"once_for_each"` we decide that each object gets its own values.
-
-## More examples
-
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [sung_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with sampled camera poses.

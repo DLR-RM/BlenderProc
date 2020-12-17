@@ -157,12 +157,3 @@ All of these steps ensure that the cameras are spread through the scene and are 
 
 Be aware that it might be possible, if the values are too high, that the CameraSampler will try for a very long time new poses to fulfill the given conditions.
 Best is always to check with low values and then increase them until they don't work anymore.
-
-## More examples
-
-* [shapenet_with_random_room_constructor](../shapenet_with_scenenet): Using shapenet combined with scenenet
-* [random_room_constructor_with_cctextures](../scenenet_with_cctextures): An example on how to use CCTextures with scenenet.
-* [front_3d](../front_3d): More on rendering 3D Front scenes with sampled camera poses.
-* [front_3d_with_improved_mat](../front_3d_with_improved_mat): More on rendering 3D Front scenes with sampled camera poses and randomized textures.
-* [sung_basic](../suncg_basic): More on rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
