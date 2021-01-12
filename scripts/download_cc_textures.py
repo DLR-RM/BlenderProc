@@ -1,19 +1,18 @@
-
 from sys import version_info
 if version_info.major == 2:
     raise Exception("This script only works with python3.x!")
 
 import os
 import csv
-from urllib.request import urlretrieve, build_opener, install_opener
 import subprocess
+import requests
 
 
 if __name__ == "__main__":
     # setting the default header, else the server does not allow the download
-    opener = build_opener()
-    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
-    install_opener(opener)
+    headers = {
+        'User-Agent': 'Mozilla/5.0'
+    }
 
     # set the download directory relative to this one
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -27,7 +26,9 @@ if __name__ == "__main__":
     # download the csv file, which contains all the download links
     csv_url = "https://cc0textures.com/api/v1/downloads_csv"
     csv_file_path = os.path.join(cc_texture_dir, "full_info.csv")
-    urlretrieve(csv_url, csv_file_path)
+    request = requests.get(csv_url, headers=headers)
+    with open(csv_file_path, "wb") as file:
+        file.write(request.content)
 
     # extract the download links with the asset name
     data = {}
@@ -55,12 +56,11 @@ if __name__ == "__main__":
         if not os.path.exists(current_folder):
             os.makedirs(current_folder)
         current_file_path = os.path.join(current_folder, "{}.zip".format(asset))
-        urlretrieve(link, current_file_path)
+        request = requests.get(link, headers=headers)
+        with open(current_file_path, "wb") as file:
+            file.write(request.content)
+
         subprocess.call(["unzip {} -d {}> /dev/null".format(current_file_path, current_folder)], shell=True)
         os.remove(current_file_path)
 
     print("Done downloading textures, saved in {}".format(cc_texture_dir))
-
-
-
-
