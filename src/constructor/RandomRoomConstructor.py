@@ -437,7 +437,7 @@ class RandomRoomConstructor(Module):
             bm.edges.ensure_lookup_table()
             # select all upper edges and create a ceiling
             for e in bm.edges:
-                if ((e.verts[0].co + e.verts[1].co) * 0.5)[2] >= self.wall_height:
+                if ((e.verts[0].co + e.verts[1].co) * 0.5)[2] >= self.wall_height - 1e-4:
                     e.select = True
             bpy.ops.mesh.edge_face_add()
             # split the ceiling away
