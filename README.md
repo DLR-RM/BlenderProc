@@ -15,7 +15,7 @@ Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating i
 <img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550> </a>
 </div>
 
-BlenderProc also has complete [documentation site](https://dlr-rm.github.io/BlenderProc/index.html).
+BlenderProc also has complete [documentation site](https://dlr-rm.github.io/BlenderProc).
 
 There is also an extended introduction video to BlenderProc, it covers the basics and a bit of the background story and how it all started. It can be found [here](https://www.youtube.com/watch?v=1AvY_iS6xQA).
 
@@ -56,18 +56,18 @@ The following modules are already implemented and ready to use:
 * Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
 * Writing: .hdf5 containers, COCO & BOP annotations.
 
-..and many more ([docu](https://dlr-rm.github.io/BlenderProc/index.html)). For advanced/custom functionalities, you can easily write and integrate your [own modules](src/README.md#writing-your-own-modules).
+..and many more ([docu](https://dlr-rm.github.io/BlenderProc)). For advanced/custom functionalities, you can easily write and integrate your [own modules](src/README.md#writing-your-own-modules).
 
 ## Examples
 
-We provide a lot of [examples](examples) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
+We provide a lot of [examples](examples/README.md) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
 
-* [Basic scene](examples/basic/): Basic example 
-* [Simple SUNCG scene](examples/suncg_basic/): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a distance images.
-* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a distance images.
-* [Replica dataset](examples/replica_dataset): Load a replica room, sample camera poses and render normal images.
-* [COCO annotations](examples/coco_annotations): Write COCO annotations to a .json file for selected objects in the scene.
-* [BOP Challenge](https://github.com/DLR-RM/BlenderProc/blob/master/README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
+* [Basic scene](examples/basic/README.md): Basic example 
+* [Simple SUNCG scene](examples/suncg_basic/README.md): Loads a SUNCG scene and camera positions from file before rendering color, normal, segmentation and a distance images.
+* [SUNCG scene with camera sampling](examples/suncg_with_cam_sampling/README.md): Loads a SUNCG scene and automatically samples camera poses in every room before rendering color, normal, segmentation and a distance images.
+* [Replica dataset](examples/replica_dataset/README.md): Load a replica room, sample camera poses and render normal images.
+* [COCO annotations](examples/coco_annotations/README.md): Write COCO annotations to a .json file for selected objects in the scene.
+* [BOP Challenge](README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
 
 ... And much more!
 

@@ -6,8 +6,8 @@
 
 The focus of this example is the `loader.ShapeNetLoader` in combination with the SceneNet loader, this is an advanced example, please make sure that you have read:
 
-* [shapenet](../shapenet): Rendering ShapeNet objects 
-* [scenenet](../scenenet): Rendering SceneNet scenes with sampled camera poses.
+* [shapenet](../shapenet/README.md): Rendering ShapeNet objects 
+* [scenenet](../scenenet/README.md): Rendering SceneNet scenes with sampled camera poses.
 
 
 ## Usage
@@ -37,7 +37,7 @@ python scripts/visHdf5Files.py examples/shapenet_with_scenenet/output/*.hdf5
 ## Steps
 
 * At first the SceneNet scene is loaded and we add the custom property `cp_physics` to make sure that the sampled ShapeNet objects, bounds of the SceneNet scene.
-* As explained in the [scenenet](../scenenet) example, the textures are randomly sampled.
+* As explained in the [scenenet](../scenenet/README.md) example, the textures are randomly sampled.
 * The ShapeNetLoader loads all the object paths with the `synset_id` = `02801938`, this id stands for the category `basket`.
 * One of them is now randomly selected and loaded.
 * Then we select that one object and change its location to be above an object with the `catgory_id = 4`, which stands for bed.
@@ -66,7 +66,7 @@ python scripts/visHdf5Files.py examples/shapenet_with_scenenet/output/*.hdf5
 ```
 
 This loader automatically loads a SceneNet scene/house given the corresponding `.obj` file. 
-The textures are randomly sampled from the texture folder, for more information see the [scenenet](../scenenet) example.
+The textures are randomly sampled from the texture folder, for more information see the [scenenet](../scenenet/README.md) example.
 The `SceneNetLoader` also sets the `category_id` of each object, such that semantic segmentation maps can be rendered in a following step.
 
 To each loaded object do we add the custom property `cp_physics: False`, which means that all of the objects behave passively in a physics simulation.
@@ -154,7 +154,7 @@ Finally, we add a solidify modifier to get a correct physics interaction.
 }
 ```
 
-We then run the physics simulation, for more information about that please see the [example/physiscs_positioning](../physics_positioning).
+We then run the physics simulation, for more information about that please see the [example/physiscs_positioning](../physics_positioning/README.md).
 The high mass factor and the small collision margin guarantee that the object does not move too much.
 Important here are the amount of `solver_iters` and `substeps_per_frame` as they have to be high, as lot of objects in the ShapeNet dataset consist out of thin small pieces.
 Without this they might slide into the SceneNet objects.
