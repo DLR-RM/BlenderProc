@@ -2,6 +2,7 @@ import os
 
 import bpy
 
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.BlenderUtility import get_all_mesh_objects
 from src.utility.Utility import Utility
 import mathutils
@@ -212,6 +213,7 @@ class RendererUtility:
         """
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
+        GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
 
         tree = bpy.context.scene.node_tree
         links = tree.links
