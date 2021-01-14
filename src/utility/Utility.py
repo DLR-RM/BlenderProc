@@ -486,7 +486,7 @@ class Utility:
         if GlobalStorage.is_in_storage("output"):
             for output in GlobalStorage.get("output"):
                 if output["key"] == key:
-                    return output.to_dict()
+                    return output
 
         return None
 
