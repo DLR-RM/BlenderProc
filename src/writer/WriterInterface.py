@@ -5,6 +5,8 @@ import bpy
 import h5py
 import numpy as np
 
+import mathutils
+
 from src.main.Module import Module
 from src.utility.BlenderUtility import load_image
 from src.utility.MathUtility import MathUtility
