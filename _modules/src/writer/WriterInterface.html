@@ -81,48 +81,7 @@
             
               <div class="toctree-wrapper compound">
 <ul class="compound-first">
-<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/index.html">amass_human_poses</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/basic/index.html">basic</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/index.html">basic_object_pose</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/index.html">bop_challenge</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/index.html">bop_object_on_surface_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/index.html">bop_object_physics_positioning</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/index.html">bop_object_pose_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/index.html">bop_scene_replication</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/calibration/index.html">calibration</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/index.html">camera_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/index.html">coco_annotations</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/debugging/index.html">debugging</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/index.html">entity_displacement_modifier</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/index.html">entity_manipulation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/front_3d/index.html">front_3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/index.html">front_3d_with_improved_mat</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/index.html">haven_dataset</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/ikea/index.html">ikea</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/index.html">light_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/index.html">material_manipulation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/index.html">material_randomizer</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/index.html">motion_blur_rolling_shutter</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/index.html">object_pose_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/index.html">on_surface_object_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/index.html">optical_flow</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/index.html">physics_positioning</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/pix3d/index.html">pix3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/index.html">random_room_constructor</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/index.html">replica_dataset</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/index.html">rock_essentials</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/scenenet/index.html">scenenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/index.html">scenenet_with_cctextures</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/index.html">semantic_segmentation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet/index.html">shapenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/index.html">shapenet_with_scenenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/index.html">shapenet_with_suncg</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/index.html">stereo_matching</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/index.html">suncg_basic</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/index.html">suncg_with_cam_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/index.html">suncg_with_improved_mat</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/index.html">suncg_with_object_replacer</a></li>
+<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -347,6 +306,8 @@
 <span class="kn">import</span> <span class="nn">bpy</span>
 <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">mathutils</span>
 
 <span class="kn">from</span> <span class="nn">src.main.Module</span> <span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">load_image</span>

@@ -81,48 +81,7 @@
             
               <div class="toctree-wrapper compound">
 <ul class="compound-first">
-<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/index.html">amass_human_poses</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/basic/index.html">basic</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/index.html">basic_object_pose</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/index.html">bop_challenge</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/index.html">bop_object_on_surface_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/index.html">bop_object_physics_positioning</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/index.html">bop_object_pose_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/index.html">bop_scene_replication</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/calibration/index.html">calibration</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/index.html">camera_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/index.html">coco_annotations</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/debugging/index.html">debugging</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/index.html">entity_displacement_modifier</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/index.html">entity_manipulation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/front_3d/index.html">front_3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/index.html">front_3d_with_improved_mat</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/index.html">haven_dataset</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/ikea/index.html">ikea</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/index.html">light_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/index.html">material_manipulation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/index.html">material_randomizer</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/index.html">motion_blur_rolling_shutter</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/index.html">object_pose_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/index.html">on_surface_object_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/index.html">optical_flow</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/index.html">physics_positioning</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/pix3d/index.html">pix3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/index.html">random_room_constructor</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/index.html">replica_dataset</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/index.html">rock_essentials</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/scenenet/index.html">scenenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/index.html">scenenet_with_cctextures</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/index.html">semantic_segmentation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet/index.html">shapenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/index.html">shapenet_with_scenenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/index.html">shapenet_with_suncg</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/index.html">stereo_matching</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/index.html">suncg_basic</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/index.html">suncg_with_cam_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/index.html">suncg_with_improved_mat</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/index.html">suncg_with_object_replacer</a></li>
+<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -456,6 +415,10 @@
 <span class="sd">          - With `add_properties` it is possible to set custom properties for the newly separated objects. Use `cp_` \</span>
 <span class="sd">            prefix for keys.</span>
 <span class="sd">          - dict</span>
+<span class="sd">        * - should_skip_if_object_is_already_there</span>
+<span class="sd">          - If this is true no extraction will be done, if an object is there, which has the same name as</span>
+<span class="sd">            name_for_split_obj, which would be used for the newly created object. Default: False.</span>
+<span class="sd">          - bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
@@ -498,6 +461,7 @@
         <span class="n">compare_height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s1">&#39;compare_height&#39;</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">)</span>
         <span class="n">new_name_for_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;name_for_split_obj&quot;</span><span class="p">,</span> <span class="s2">&quot;Floor&quot;</span><span class="p">)</span>
         <span class="n">add_properties</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;add_properties&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="n">should_skip_if_object_is_already_there</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;should_skip_if_object_is_already_there&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># set the up_vector</span>
         <span class="n">up_vec</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
@@ -511,6 +475,25 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">height_file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
                 <span class="kn">import</span> <span class="nn">ast</span>
                 <span class="n">height_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">())]</span>
+
+        <span class="n">object_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span> <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">&quot;MESH&quot;</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">clean_up_name</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Clean up the given name from Floor1 to floor</span>
+
+<span class="sd">            :param name: given name</span>
+<span class="sd">            :return: str: cleaned up name</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">name</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()])</span>  <span class="c1"># remove digits</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>  <span class="c1"># remove dots and whitespace</span>
+            <span class="k">return</span> <span class="n">name</span>
+
+        <span class="n">object_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">clean_up_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">object_names</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">should_skip_if_object_is_already_there</span> <span class="ow">and</span> <span class="n">new_name_for_object</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">object_names</span><span class="p">:</span>
+            <span class="c1"># if should_skip is True and if there is an object, which name is the same as the one for the newly</span>
+            <span class="c1"># split object, than the execution is skipped</span>
+            <span class="k">return</span>
 
         <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span>
         <span class="n">newly_created_objects</span> <span class="o">=</span> <span class="p">[]</span>
@@ -546,19 +529,30 @@
                 <span class="c1"># compare angle range</span>
                 <span class="n">list_of_median_poses</span> <span class="o">=</span> <span class="p">[</span><span class="n">FloorExtractor</span><span class="o">.</span><span class="n">get_median_face_pose</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">bm</span><span class="o">.</span><span class="n">faces</span> <span class="k">if</span>
                                         <span class="n">FloorExtractor</span><span class="o">.</span><span class="n">check_face_angle</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">,</span> <span class="n">up_vec</span><span class="p">,</span> <span class="n">compare_angle</span><span class="p">)]</span>
-
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">list_of_median_poses</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Object with name: </span><span class="si">{}</span><span class="s2"> is skipped no faces were relevant, try with &quot;</span>
+                          <span class="s2">&quot;flipped up_vec&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                    <span class="n">list_of_median_poses</span> <span class="o">=</span> <span class="p">[</span><span class="n">FloorExtractor</span><span class="o">.</span><span class="n">get_median_face_pose</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span>
+                                            <span class="n">bm</span><span class="o">.</span><span class="n">faces</span> <span class="k">if</span> <span class="n">FloorExtractor</span><span class="o">.</span><span class="n">check_face_angle</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">,</span>
+                                                                                        <span class="o">-</span><span class="n">up_vec</span><span class="p">,</span> <span class="n">compare_angle</span><span class="p">)]</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">list_of_median_poses</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Still no success for: </span><span class="si">{}</span><span class="s2"> skip object.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+                        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">mode_set</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;OBJECT&#39;</span><span class="p">)</span>
+                        <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span>
+                        <span class="k">continue</span>
                 <span class="n">list_of_median_poses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">list_of_median_poses</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-                <span class="c1"># The following bandwidth can be automatically detected using</span>
-                <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">estimate_bandwidth</span><span class="p">(</span><span class="n">list_of_median_poses</span><span class="p">,</span> <span class="n">quantile</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-
-                <span class="n">ms</span> <span class="o">=</span> <span class="n">MeanShift</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">bin_seeding</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                <span class="n">ms</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">list_of_median_poses</span><span class="p">)</span>
-
-                <span class="c1"># if the up vector is negative the maximum value is searched</span>
-                <span class="k">if</span> <span class="n">up_vec_upwards</span><span class="p">:</span>
-                    <span class="n">height_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ms</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">list_of_median_poses</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-4</span><span class="p">:</span>
+                    <span class="c1"># All faces are already correct</span>
+                    <span class="n">height_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">list_of_median_poses</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">height_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ms</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">)</span>
+                    <span class="n">ms</span> <span class="o">=</span> <span class="n">MeanShift</span><span class="p">(</span><span class="n">bandwidth</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">bin_seeding</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">ms</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">list_of_median_poses</span><span class="p">)</span>
+
+                    <span class="c1"># if the up vector is negative the maximum value is searched</span>
+                    <span class="k">if</span> <span class="n">up_vec_upwards</span><span class="p">:</span>
+                        <span class="n">height_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ms</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">height_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ms</span><span class="o">.</span><span class="n">cluster_centers_</span><span class="p">)</span>
                 <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">mesh</span><span class="o">.</span><span class="n">select_all</span><span class="p">(</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;DESELECT&#39;</span><span class="p">)</span>
                 <span class="n">counter</span> <span class="o">=</span> <span class="n">FloorExtractor</span><span class="o">.</span><span class="n">split_at_height_value</span><span class="p">(</span><span class="n">bm</span><span class="p">,</span> <span class="n">height_value</span><span class="p">,</span> <span class="n">compare_height</span><span class="p">,</span> <span class="n">up_vec</span><span class="p">,</span>
                                                                <span class="n">compare_angle</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">matrix_world</span><span class="p">)</span>

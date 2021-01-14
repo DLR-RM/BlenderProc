@@ -81,48 +81,7 @@
             
               <div class="toctree-wrapper compound">
 <ul class="compound-first">
-<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul>
-<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/index.html">amass_human_poses</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/basic/index.html">basic</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/index.html">basic_object_pose</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/index.html">bop_challenge</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/index.html">bop_object_on_surface_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/index.html">bop_object_physics_positioning</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/index.html">bop_object_pose_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/index.html">bop_scene_replication</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/calibration/index.html">calibration</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/index.html">camera_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/index.html">coco_annotations</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/debugging/index.html">debugging</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/index.html">entity_displacement_modifier</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/index.html">entity_manipulation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/front_3d/index.html">front_3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/index.html">front_3d_with_improved_mat</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/index.html">haven_dataset</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/ikea/index.html">ikea</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/index.html">light_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/index.html">material_manipulation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/index.html">material_randomizer</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/index.html">motion_blur_rolling_shutter</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/index.html">object_pose_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/index.html">on_surface_object_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/index.html">optical_flow</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/index.html">physics_positioning</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/pix3d/index.html">pix3d</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/index.html">random_room_constructor</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/index.html">replica_dataset</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/index.html">rock_essentials</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/scenenet/index.html">scenenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/index.html">scenenet_with_cctextures</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/index.html">semantic_segmentation</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet/index.html">shapenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/index.html">shapenet_with_scenenet</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/index.html">shapenet_with_suncg</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/index.html">stereo_matching</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/index.html">suncg_basic</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/index.html">suncg_with_cam_sampling</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/index.html">suncg_with_improved_mat</a></li>
-<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/index.html">suncg_with_object_replacer</a></li>
+<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -446,11 +405,16 @@ room. Default: 0.15.</td>
 <td>With <cite>add_properties</cite> it is possible to set custom properties for the newly separated objects. Use <cite>cp_</cite>             prefix for keys.</td>
 <td>dict</td>
 </tr>
+<tr class="row-odd"><td>should_skip_if_object_is_already_there</td>
+<td>If this is true no extraction will be done, if an object is there, which has the same name as
+name_for_split_obj, which would be used for the newly created object. Default: False.</td>
+<td>bool</td>
+</tr>
 </tbody>
 </table>
 <dl class="staticmethod">
 <dt id="src.object.FloorExtractor.FloorExtractor.check_face_angle">
-<em class="property">static </em><code class="descname">check_face_angle</code><span class="sig-paren">(</span><em>face: BMFace</em>, <em>matrix_world: Matrix</em>, <em>up_vector: Vector</em>, <em>cmp_angle: float</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.check_face_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.check_face_angle" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">check_face_angle</code><span class="sig-paren">(</span><em>face</em>, <em>matrix_world</em>, <em>up_vector</em>, <em>cmp_angle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.check_face_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.check_face_angle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a face.normal in world coordinates angular difference to the <cite>up_vec</cite> is closer as
 <cite>cmp_anlge</cite>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -458,10 +422,10 @@ room. Default: 0.15.</td>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>face</strong> – The face, which will be checked</li>
-<li><strong>matrix_world</strong> – The matrix_world of the object, to which the face belongs</li>
-<li><strong>up_vector</strong> – Vector, which is used for comparing the face.normal against</li>
-<li><strong>cmp_angle</strong> – Angle, which is used to compare against the up_vec in radians.</li>
+<li><strong>face</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMFace</span></code>) – The face, which will be checked</li>
+<li><strong>matrix_world</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>) – The matrix_world of the object, to which the face belongs</li>
+<li><strong>up_vector</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>) – Vector, which is used for comparing the face.normal against</li>
+<li><strong>cmp_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Angle, which is used to compare against the up_vec in radians.</li>
 </ul>
 </td>
 </tr>
@@ -474,7 +438,7 @@ room. Default: 0.15.</td>
 
 <dl class="staticmethod">
 <dt id="src.object.FloorExtractor.FloorExtractor.check_face_with">
-<em class="property">static </em><code class="descname">check_face_with</code><span class="sig-paren">(</span><em>face: BMFace</em>, <em>matrix_world: Matrix</em>, <em>height_value: float</em>, <em>cmp_height: float</em>, <em>up_vector: Vector</em>, <em>cmp_angle: float</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.check_face_with"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.check_face_with" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">check_face_with</code><span class="sig-paren">(</span><em>face</em>, <em>matrix_world</em>, <em>height_value</em>, <em>cmp_height</em>, <em>up_vector</em>, <em>cmp_angle</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.check_face_with"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.check_face_with" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the face is on a certain <cite>height_value</cite> by checking if it is inside of the band spanned by
 <cite>cmp_height</cite> -&gt; [<cite>height_value</cite> - <cite>cmp_height</cite>, <cite>height_value</cite> + <cite>cmp_height</cite>] and then if the face
 has a similar angle to the given <cite>up_vec</cite>, the difference must be smaller than <cite>cmp_angle</cite>.</p>
@@ -483,12 +447,12 @@ has a similar angle to the given <cite>up_vec</cite>, the difference must be sma
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>face</strong> – The face, which will be checked</li>
-<li><strong>matrix_world</strong> – The matrix_world of the object, to which the face belongs</li>
-<li><strong>height_value</strong> – Height value which is used for comparing the faces median point against</li>
-<li><strong>cmp_height</strong> – Defines the range in which the face median is compared to the height value.</li>
-<li><strong>up_vector</strong> – Vector, which is used for comparing the face.normal against</li>
-<li><strong>cmp_angle</strong> – Angle, which is used to compare against the up_vec in radians.</li>
+<li><strong>face</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMFace</span></code>) – The face, which will be checked</li>
+<li><strong>matrix_world</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>) – The matrix_world of the object, to which the face belongs</li>
+<li><strong>height_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Height value which is used for comparing the faces median point against</li>
+<li><strong>cmp_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Defines the range in which the face median is compared to the height value.</li>
+<li><strong>up_vector</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>) – Vector, which is used for comparing the face.normal against</li>
+<li><strong>cmp_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Angle, which is used to compare against the up_vec in radians.</li>
 </ul>
 </td>
 </tr>
@@ -501,15 +465,15 @@ has a similar angle to the given <cite>up_vec</cite>, the difference must be sma
 
 <dl class="staticmethod">
 <dt id="src.object.FloorExtractor.FloorExtractor.get_median_face_pose">
-<em class="property">static </em><code class="descname">get_median_face_pose</code><span class="sig-paren">(</span><em>face: BMFace</em>, <em>matrix_world: Matrix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.get_median_face_pose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.get_median_face_pose" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">get_median_face_pose</code><span class="sig-paren">(</span><em>face</em>, <em>matrix_world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.get_median_face_pose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.get_median_face_pose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the median face pose of all its vertices in the world coordinate frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>face</strong> – Current selected frame, its vertices are used to calculate the median</li>
-<li><strong>matrix_world</strong> – The matrix of the current object to which this face belongs</li>
+<li><strong>face</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMFace</span></code>) – Current selected frame, its vertices are used to calculate the median</li>
+<li><strong>matrix_world</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>) – The matrix of the current object to which this face belongs</li>
 </ul>
 </td>
 </tr>
@@ -530,7 +494,7 @@ has a similar angle to the given <cite>up_vec</cite>, the difference must be sma
 
 <dl class="staticmethod">
 <dt id="src.object.FloorExtractor.FloorExtractor.split_at_height_value">
-<em class="property">static </em><code class="descname">split_at_height_value</code><span class="sig-paren">(</span><em>bm: BMesh</em>, <em>height_value: float</em>, <em>compare_height: float</em>, <em>up_vector: Vector</em>, <em>cmp_angle: float</em>, <em>matrix_world: Matrix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.split_at_height_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.split_at_height_value" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="descname">split_at_height_value</code><span class="sig-paren">(</span><em>bm</em>, <em>height_value</em>, <em>compare_height</em>, <em>up_vector</em>, <em>cmp_angle</em>, <em>matrix_world</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/object/FloorExtractor.html#FloorExtractor.split_at_height_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.object.FloorExtractor.FloorExtractor.split_at_height_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Splits for a given <cite>height_value</cite> all faces, which are inside the given <cite>compare_height</cite> band and also face
 upwards. This is done by comparing the face.normal in world coordinates to the <cite>up_vector</cite> and the resulting
 angle must be smaller than <cite>compare_angle</cite>.</p>
@@ -539,12 +503,12 @@ angle must be smaller than <cite>compare_angle</cite>.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>bm</strong> – The object as BMesh in edit mode. The face should be structured, meaning a lookup was performed on                    them before.</li>
-<li><strong>height_value</strong> – Height value which is used for comparing the faces median point against</li>
-<li><strong>compare_height</strong> – Defines the range in which the face median is compared to the height value.</li>
-<li><strong>up_vector</strong> – Vector, which is used for comparing the face.normal against</li>
-<li><strong>cmp_angle</strong> – Angle, which is used to compare against the up_vec in radians.</li>
-<li><strong>matrix_world</strong> – The matrix_world of the object, to which the face belongs</li>
+<li><strong>bm</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code>) – The object as BMesh in edit mode. The face should be structured, meaning a lookup was performed on                    them before.</li>
+<li><strong>height_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Height value which is used for comparing the faces median point against</li>
+<li><strong>compare_height</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Defines the range in which the face median is compared to the height value.</li>
+<li><strong>up_vector</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>) – Vector, which is used for comparing the face.normal against</li>
+<li><strong>cmp_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Angle, which is used to compare against the up_vec in radians.</li>
+<li><strong>matrix_world</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code>) – The matrix_world of the object, to which the face belongs</li>
 </ul>
 </td>
 </tr>
