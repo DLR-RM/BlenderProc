@@ -97,7 +97,7 @@ class SegMapRendererUtility:
             RendererUtility.set_samples(1)
             RendererUtility.set_adaptive_sampling(0)
             RendererUtility.set_denoiser(None)
-            RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 0, 0)
+            RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
             # Get objects with meshes (i.e. not lights or cameras)
             objs_with_mats = get_all_mesh_objects()

@@ -78,7 +78,7 @@ class FlowRendererUtility:
             RendererUtility.set_samples(1)
             RendererUtility.set_adaptive_sampling(0)
             RendererUtility.set_denoiser(None)
-            RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 0, 0)
+            RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
             FlowRendererUtility._output_vector_field(get_forward_flow, get_backward_flow, output_dir)
 
