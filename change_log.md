@@ -8,6 +8,11 @@
 
 # Version History
 
+## Version 1.8.1: 14th January 2021
+- fixed a bug in the WriterInterface
+- fixed cc_texture downloader script in the case of weird urls
+- fixed creating the ceiling when there are rounding errors in the vertices coordinates
+
 ## Version 1.8.0: 11th December 2020
 - massively improve the documentation, by adding using github pages for our documentation: https://dlr-rm.github.io/BlenderProc/index.html
 - add a RandomRoomConstructor: 
