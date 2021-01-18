@@ -177,6 +177,8 @@ class CocoUtility:
         elif mask_encoding_format == 'polygon':
             is_crowd = 0
             segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
+            if not segmentation:
+                return None
         else:
             raise RuntimeError("Unknown encoding format: {}".format(mask_encoding_format))
 
