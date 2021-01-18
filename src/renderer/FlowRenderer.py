@@ -48,14 +48,15 @@ class FlowRenderer(RendererInterface):
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_samples=1)
 
-            FlowRendererUtility.render(
-                self._determine_output_dir(),
-                self._temp_dir,
-                self.config.get_bool('forward_flow', False),
-                self.config.get_bool('backward_flow', False),
-                self.config.get_bool('blender_image_coordinate_style', False),
-                self.config.get_string('forward_flow_output_file_prefix', 'forward_flow_'),
-                self.config.get_string("forward_flow_output_key", "forward_flow"),
-                self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_'),
-                self.config.get_string("backward_flow_output_key", "backward_flow")
-            )
+            if not self._avoid_rendering:
+                FlowRendererUtility.render(
+                    self._determine_output_dir(),
+                    self._temp_dir,
+                    self.config.get_bool('forward_flow', False),
+                    self.config.get_bool('backward_flow', False),
+                    self.config.get_bool('blender_image_coordinate_style', False),
+                    self.config.get_string('forward_flow_output_file_prefix', 'forward_flow_'),
+                    self.config.get_string("forward_flow_output_key", "forward_flow"),
+                    self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_'),
+                    self.config.get_string("backward_flow_output_key", "backward_flow")
+                )

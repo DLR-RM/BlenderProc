@@ -203,8 +203,9 @@ class RendererInterface(Module):
             )
 
         RendererUtility.set_output_format(file_format, enable_transparency=enable_transparency)
-        RendererUtility.render(
-            self._determine_output_dir(),
-            self.config.get_string(output_file_prefix_parameter_name, default_prefix),
-            self.config.get_string(output_key_parameter_name, default_key)
-        )
+        if not self._avoid_rendering:
+            RendererUtility.render(
+                self._determine_output_dir(),
+                self.config.get_string(output_file_prefix_parameter_name, default_prefix),
+                self.config.get_string(output_key_parameter_name, default_key)
+            )
