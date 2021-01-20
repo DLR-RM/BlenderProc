@@ -291,12 +291,30 @@ class BopWriter(WriterInterface):
                 
         return frame_gt
 
+    def _get_cam_in_word_pose(self):
+        """
+        :return: Homogeneous of camera in word
+        """
+        camera_rotation = self._get_camera_attribute(self.cam_pose, 'rotation_euler')
+        camera_translation = self._get_camera_attribute(self.cam_pose, 'location')
+        H_c2w = Matrix.Translation(Vector(camera_translation)) @ Euler(
+            camera_rotation, 'XYZ').to_matrix().to_4x4()
+
+        # Blender to opencv coordinates.
+        H_c2w_opencv = H_c2w @ Matrix.Rotation(math.radians(-180), 4, "X")
+        H_c2w = []
+        for i in range(4):
+            H_c2w.append(list(H_c2w_opencv[i]))
+
+        return H_c2w
+
     def _get_frame_camera(self):
         """ Returns camera parameters for the active camera.
         """
         return {
             'cam_K': np.hstack(CameraUtility.get_intrinsics_as_K_matrix()).tolist(),
-            'depth_scale': self.depth_scale
+            'depth_scale': self.depth_scale,
+            'H_c2w': self._get_cam_in_word_pose()
         }
 
     def _write_frames(self):
