@@ -10,12 +10,14 @@ from urllib.request import urlretrieve, build_opener, install_opener
 from pathlib import Path
 import uuid
 
-asset_types=["model", "material"]
-assets = []
-page = 1
+asset_types=["material","model"]
+assets = {}
 
 for asset_type in asset_types:
-    while True:
+    page = 1
+    max_pages = 10
+    while page < max_pages:
+        print ("Downloading {} assets".format(asset_type))
         print("Download metadata: page {}".format(page))
 
         # Download one page of metadata
@@ -23,7 +25,7 @@ for asset_type in asset_types:
             with urllib.request.urlopen("https://www.blenderkit.com/api/v1/search/?query=asset_type:{}+order:_score+is_free:True&addon_version=1.0.30&page={}".format(asset_type, page)) as url:
                 data = json.loads(url.read().decode())
                 # Extract results
-                assets.extend(data["results"])
+                assets.setdefault(asset_type,[]).extend(data["results"])
         except HTTPError as e:
             if e.code == 404:
                 # We reached the end
@@ -33,7 +35,8 @@ for asset_type in asset_types:
         # Goto next page
         page += 1
 
-    print("Retrieved metadata for " + str(len(assets)) + " assets")
+    total_assets = len(assets.setdefault(asset_type,[]))
+    print("Retrieved metadata for {} assets".format(total_assets))
 
     # Create ouput directory
     current_dir = Path(__file__).parent
@@ -49,14 +52,14 @@ for asset_type in asset_types:
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     install_opener(opener)
 
-    for i, asset in enumerate(assets):
+    for i, asset in enumerate(assets.setdefault(asset_type,[])):
         # Check if asset has already been downloaded
         output_path = blenderkit_mat_dir / (asset["id"] + ".blend")
         if output_path.exists():
-            print("Skipping asset: {} of {}/{}".format(asset["id"], i, len(assets)))
+            print("Skipping asset: {} of {}/{}".format(asset["id"], i, total_assets))
             continue
 
-        print("Download asset: {} of {}/{}".format(asset["id"], i, len(assets)))
+        print("Download asset: {} of {}/{}".format(asset["id"], i, total_assets))
 
         # Try to find url to blend file
         download_url = None
