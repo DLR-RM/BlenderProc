@@ -132,6 +132,7 @@ class BopWriter(WriterInterface):
 
         self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
         
+        # Save world to camera transformation
         self._save_world2cam = self.config.get_bool("save_world2cam", True)
 
         # Distance in meteres to object after which it is ignored. Mostly due to failed physics.
@@ -256,8 +257,10 @@ class BopWriter(WriterInterface):
         :return: dict containing info for scene_camera.json 
         """
         
+        cam_K = self._camera_writer._get_attribute(self.cam_pose, 'cam_K')
+        
         frame_camera_dict = {
-            'cam_K': self._camera_writer._get_attribute(self.cam_pose, 'cam_K'),
+            'cam_K': cam_K[0] + cam_K[1] + cam_K[2],
             'depth_scale': self.depth_scale
         }
         
