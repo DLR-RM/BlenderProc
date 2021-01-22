@@ -17,7 +17,7 @@ class ObjectStateWriter(WriterInterface):
             objects.append(object)
 
         self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states",
-                                      ["id", "name", "location", "rotation_euler"])
+                                      ["id", "name", "location", "rotation_euler", "matrix_world"])
 
     def _get_attribute(self, object, attribute_name):
         """ Returns the value of the requested attribute for the given object.

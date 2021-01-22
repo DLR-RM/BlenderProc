@@ -66,5 +66,7 @@ class CameraStateWriter(WriterInterface):
             return cam.angle_y * 0.5
         elif attribute_name == "cam_K":
             return [[x for x in c] for c in CameraUtility.get_intrinsics_as_K_matrix()]
+        elif attribute_name == "cam2world_matrix":
+            return super()._get_attribute(cam_ob, "matrix_world")
         else:
             return super()._get_attribute(cam_ob, attribute_name)
