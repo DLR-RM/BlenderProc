@@ -6,6 +6,7 @@ import shutil
 import bpy
 
 from src.utility.CocoUtility import CocoUtility
+from src.utility.Utility import Utility
 from src.writer.WriterInterface import WriterInterface
 
 
@@ -75,13 +76,13 @@ class CocoAnnotationsWriter(WriterInterface):
             return
 
         # Find path pattern of segmentation images
-        segmentation_map_output = self._find_registered_output_by_key(self.segmap_output_key)
+        segmentation_map_output = Utility.find_registered_output_by_key(self.segmap_output_key)
         if segmentation_map_output is None:
             raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
                             "before?".format(self.segmap_output_key))
         
         # Find path pattern of rgb images
-        rgb_output = self._find_registered_output_by_key(self.rgb_output_key)
+        rgb_output = Utility.find_registered_output_by_key(self.rgb_output_key)
         if rgb_output is None:
             raise Exception("There is no output registered with key {}. Are you sure you ran the RgbRenderer module "
                             "before?".format(self.rgb_output_key))
@@ -90,7 +91,7 @@ class CocoAnnotationsWriter(WriterInterface):
         segmentation_map_paths = []
 
         # Find path of name class mapping csv file
-        segcolormap_output = self._find_registered_output_by_key(self.segcolormap_output_key)
+        segcolormap_output = Utility.find_registered_output_by_key(self.segcolormap_output_key)
         if segcolormap_output is None:
             raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
                             "with 'map_by' set to 'instance' before?".format(self.segcolormap_output_key))

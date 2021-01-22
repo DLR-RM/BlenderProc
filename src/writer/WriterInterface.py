@@ -73,7 +73,7 @@ class WriterInterface(Module):
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
-        self._register_output(file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
+        Utility.register_output(self._determine_output_dir(), file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
 
     def _get_attribute(self, item, attribute_name):
         """ Returns the value of the requested attribute for the given item.

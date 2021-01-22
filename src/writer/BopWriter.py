@@ -356,7 +356,7 @@ class BopWriter(WriterInterface):
             chunk_camera[curr_frame_id] = self._get_frame_camera()
 
             # Copy the resulting RGB image.
-            rgb_output = self._find_registered_output_by_key("colors")
+            rgb_output = Utility.find_registered_output_by_key("colors")
             if rgb_output is None:
                 raise Exception("RGB image has not been rendered.")
             image_type = '.png' if rgb_output['path'].endswith('png') else '.jpg'
@@ -364,7 +364,7 @@ class BopWriter(WriterInterface):
             shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
             # Load the resulting dist image.
-            dist_output = self._find_registered_output_by_key("distance")
+            dist_output = Utility.find_registered_output_by_key("distance")
             if dist_output is None:
                 raise Exception("Distance image has not been rendered.")
             depth, _, _ = self._load_and_postprocess(dist_output['path'] % frame_id, "distance")

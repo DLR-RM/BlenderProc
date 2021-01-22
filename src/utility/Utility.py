@@ -5,6 +5,8 @@ import bpy
 import time
 import inspect
 import importlib
+
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
 from mathutils import Matrix, Vector
 import numpy as np
@@ -443,3 +445,68 @@ class Utility:
                 return list(set(bpy.context.selected_objects) - previously_selected_objects)
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))
+
+    @staticmethod
+    def add_output_entry(output):
+        """ Registers the given output in the scene's custom properties
+
+        :param output: A dict containing key and path of the new output type.
+        """
+        if GlobalStorage.is_in_storage("output"):
+            if not Utility.output_already_registered(output, GlobalStorage.get("output")): # E.g. multiple camera samplers
+                GlobalStorage.get("output").append(output)
+        else:
+            GlobalStorage.set("output", [output])
+
+    @staticmethod
+    def register_output(output_dir, prefix, key, suffix, version, unique_for_camposes=True):
+        """ Registers new output type using configured key and file prefix.
+
+        :param output_dir: The output directory containing the generated files.
+        :param prefix: The default prefix of the generated files.
+        :param key: The default key which should be used for storing the output in merged file.
+        :param suffix: The suffix of the generated files.
+        :param version: The version number which will be stored at key_version in the final merged file.
+        :param unique_for_camposes: True if the output to be registered is unique for all the camera poses
+        """
+
+        Utility.add_output_entry({
+            "key": key,
+            "path": os.path.join(output_dir, prefix) + ("%04d" if unique_for_camposes else "") + suffix,
+            "version": version
+        })
+
+    @staticmethod
+    def find_registered_output_by_key(key):
+        """ Returns the output which was registered with the given key.
+
+        :param key: The output key to look for.
+        :return: The dict containing all information registered for that output. If no output with the given key exists, None is returned.
+        """
+        if GlobalStorage.is_in_storage("output"):
+            for output in GlobalStorage.get("output"):
+                if output["key"] == key:
+                    return output
+
+        return None
+
+    @staticmethod
+    def output_already_registered(output, output_list):
+        """ Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
+        Also throws an error if it detects an entry having the same key but not the same path and vice versa since this
+        is ambiguous.
+
+        :param output: The output dict entry.
+        :param output_list: The list of output entries.
+        :return: bool indicating whether it already exists.
+        """
+        for _output in output_list:
+            if output["key"] == _output["key"] and output["path"] == _output["path"]:
+                print("Warning! Detected output entries with duplicate keys and paths")
+                return True
+            if output["key"] == _output["key"] or output["path"] == _output["path"]:
+                raise Exception("Can not have two output entries with the same key/path but not same path/key." +
+                                "Original entry's data: key:{} path:{}, Entry to be registered: key:{} path:{}"
+                                .format(_output["key"], _output["path"], output["key"], output["path"]))
+
+        return False
