@@ -101,16 +101,14 @@ class BlendLoader(LoaderInterface):
         path = Utility.resolve_path(self.config.get_string("path"))
 
         # get section name/Blend ID
-        load_from = self.config.get_string("load_from")
+        data_block_name = self.config.get_string("load_from")
         # get a entities' name regex if present, set to None if not
         if self.config.has_param("entities"):
             entities = self.config.get_string("entities")
         else:
             entities = None
 
-        with bpy.data.libraries.load(path) as (blend_file_data, data_to):
-            data_block_name = load_from.strip("/")
-
+        with bpy.data.libraries.load(path) as (blend_file_data, _):
             # check if defined ID is supported
             if data_block_name in self.known_datablock_names:
                 attr_name = self._find_datablock_name_match_in_blendfile(
@@ -133,9 +131,9 @@ class BlendLoader(LoaderInterface):
                     if entity_to_load in bpy.data.objects:
                         bpy.data.objects.remove(bpy.data.objects[entity_to_load], do_unlink=True)
 
-                    bpy.ops.wm.append(filepath=os.path.join( path, load_from, entity_to_load),
+                    bpy.ops.wm.append(filepath=os.path.join( path, data_block_name, entity_to_load),
                                       filename=entity_to_load,
-                                      directory=os.path.join(path + load_from))
+                                      directory=os.path.join(path, data_block_name))
 
                     added_resource = getattr(bpy.data, attr_name)[entity_to_load]
 
@@ -158,11 +156,10 @@ class BlendLoader(LoaderInterface):
             else:
                 raise Exception(
                     "Unsupported datablock/folder name: " + load_from +
-                    "\nSupported names: " +
-                    str(self.known_datablock_names.keys()) +
-                    "\nIf your ID exists, but not supported, please append a new pair of "
+                    "\nSupported names:  {}\nIf your ID exists, but not supported, please append a new pair of "
                     "{type ID(folder name): parameter name} to the 'known_datablock_names' dict. Use this "
-                    "for finding your parameter name: " + data_block_name)
+                    "for finding your parameter name: {}".format(
+                        str(self.known_datablock_names.keys()), data_block_name))
 
     def _find_datablock_name_match_in_blendfile(self, blend_file_data,
                                                 data_block_name):
@@ -197,7 +194,7 @@ class BlendLoader(LoaderInterface):
 
         return blend_file_datablock_names[index]
 
-    def _set_datablock_properties(self, resource):
+    def _set_datablock_properties(self, resource: bpy.types.ID):
         """
         Sets the custom properties of **non object** resources like materials,
         textures, images, etc.
@@ -214,6 +211,13 @@ class BlendLoader(LoaderInterface):
         """
         properties = self.config.get_raw_dict("add_properties", {})
         for key, value in properties.items():
+            if key.startswith("cp_"):
+                key = key[3:]
+                resource[key] = value
+            else:
+                raise RuntimeError(
+                    "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
+                    "Use manipulators.Entity for setting object's attribute values.")
             resource[key] = value
 
     def _get_camera_keyframes(self, camera):
