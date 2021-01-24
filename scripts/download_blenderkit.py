@@ -6,18 +6,18 @@ if version_info.major == 2:
     raise Exception("This script only works with python3.x!")
 
 import urllib.request, json
-from urllib.request import urlretrieve, build_opener, install_opener
+from urllib.request import urlretrieve, build_opener, install_opener, urlopen
 from pathlib import Path
 import uuid
 
-asset_types=["material","model"]
+asset_types = ["material", "model"]
 assets = {}
 
 for asset_type in asset_types:
     page = 1
     max_pages = 10
-    while page < max_pages:
-        print ("Downloading {} assets".format(asset_type))
+    for page in range(max_pages):
+        print("Downloading {} assets".format(asset_type))
         print("Download metadata: page {}".format(page))
 
         # Download one page of metadata
@@ -25,7 +25,7 @@ for asset_type in asset_types:
             with urllib.request.urlopen("https://www.blenderkit.com/api/v1/search/?query=asset_type:{}+order:_score+is_free:True&addon_version=1.0.30&page={}".format(asset_type, page)) as url:
                 data = json.loads(url.read().decode())
                 # Extract results
-                assets.setdefault(asset_type,[]).extend(data["results"])
+                assets.setdefault(asset_type, []).extend(data["results"])
         except HTTPError as e:
             if e.code == 404:
                 # We reached the end
@@ -35,7 +35,7 @@ for asset_type in asset_types:
         # Goto next page
         page += 1
 
-    total_assets = len(assets.setdefault(asset_type,[]))
+    total_assets = len(assets.setdefault(asset_type, []))
     print("Retrieved metadata for {} assets".format(total_assets))
 
     # Create ouput directory
@@ -52,7 +52,7 @@ for asset_type in asset_types:
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     install_opener(opener)
 
-    for i, asset in enumerate(assets.setdefault(asset_type,[])):
+    for i, asset in enumerate(assets.setdefault(asset_type, [])):
         # Check if asset has already been downloaded
         output_path = blenderkit_mat_dir / (asset["id"] + ".blend")
         if output_path.exists():
@@ -66,7 +66,7 @@ for asset_type in asset_types:
         for file in asset["files"]:
             if file["fileType"] == "blend":
                 if download_url is not None:
-                    print("Warning: asset " + asset["id"] + " has more then one blend file in downloads.")
+                    print("Warning: asset " + asset["id"] + " has more than one blend file in downloads.")
                 download_url = file["downloadUrl"]
 
         if download_url is None:
@@ -81,3 +81,4 @@ for asset_type in asset_types:
             # Download the file
             urlretrieve(file_path, str(temp_path))
             temp_path.rename(output_path)
+                        
