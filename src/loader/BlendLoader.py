@@ -160,15 +160,7 @@ class BlendLoader(LoaderInterface):
                         bpy.context.scene.frame_end = len(
                             self._get_camera_keyframes(added_resource))
 
-                    # setup proeprties. For Mesh based Objects use LoaderInterface._set_properties
-                    # that expects a mesh object and sets the polygon of the mesh to smooth/non smooth
-                    # Non mesh based objects dont have polygons.
-                    if hasattr(added_resource, 'type') and added_resource.type == 'MESH':
-                        self._set_properties([added_resource])
-                    else:
-                        # Non Mesh based object like Light, Camera wrapepd in objects
-                        # or non wrappable objects like materials, textures
-                        self._set_datablock_properties(added_resource)
+                    self._set_properties([added_resource])
             else:
                 raise Exception(
                     "Unsupported datablock/folder name: {}\nSupported names:  {}\n \
