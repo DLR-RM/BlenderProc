@@ -13,12 +13,9 @@ import uuid
 def download_blendkit_assets(asset_types):
     assets = {}
     for asset_type in asset_types:
-        max_pages = 10
-        for page in range(1, max_pages):
+        while True:
             print("Downloading {} assets".format(asset_type))
             print("Download metadata: page {}".format(page))
-
-            # Download one page of metadata
             try:
                 with urllib.request.urlopen("https://www.blenderkit.com/api/v1/search/?query=asset_type:{}+order:_score+is_free:True&addon_version=1.0.30&page={}".format(asset_type, str(page))) as url:
                     data = json.loads(url.read().decode())

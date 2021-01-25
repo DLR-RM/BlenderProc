@@ -13,25 +13,39 @@ class BlendLoader(LoaderInterface):
     This class provides functionality to load entities from a .blend file. A .blend file is a 
     blender generated  data file that wraps project resources into sections/datablocks. Resources can be
     loaded individually by name pattern matching or entire datablocks to entire project. For more
-    information about a datablock see Blender's documentation for bpy.types.ID. 
+    information about a datablock see Blender's documentation for bpy.types.ID
+    at https://docs.blender.org/api/current/bpy.types.ID.html
 
     Sections/Datablocks in a .blend File
+
     +-------------------+
-    |    Blend File     |
-    +-------------------+
+    |    .Blend File    |
+    +===================+
     |    Collections    |
+    +-------------------+
     |    Object         |
+    +-------------------+
     |    Mesh           |
+    +-------------------+
     |    Text           |
+    +-------------------+
     |    Scene          |
+    +-------------------+
     |    World          |
+    +-------------------+
     |    Workspace      |
+    +-------------------+
     |    Curve          |
+    +-------------------+
     |    Camera         |
+    +-------------------+
     |    Light          |
+    +-------------------+
     |    Material       |
+    +-------------------+
     |    Texture        |
-    |    ......         |
+    +-------------------+
+    |    more...        |
     +-------------------+
 
 
@@ -101,12 +115,14 @@ class BlendLoader(LoaderInterface):
         path = Utility.resolve_path(self.config.get_string("path"))
 
         # get section name/Blend ID
-        data_block_name = self.config.get_string("load_from")
+        load_from = self.config.get_string("load_from")
         # get a entities' name regex if present, set to None if not
         if self.config.has_param("entities"):
             entities = self.config.get_string("entities")
         else:
             entities = None
+        
+        data_block_name = load_from.strip("/")
 
         with bpy.data.libraries.load(path) as (blend_file_data, _):
             # check if defined ID is supported
@@ -155,11 +171,11 @@ class BlendLoader(LoaderInterface):
                         self._set_datablock_properties(added_resource)
             else:
                 raise Exception(
-                    "Unsupported datablock/folder name: " + load_from +
-                    "\nSupported names:  {}\nIf your ID exists, but not supported, please append a new pair of "
+                    "Unsupported datablock/folder name: {}\nSupported names:  {}\n \
+                     If your ID exists, but not supported, please append a new pair of "
                     "{type ID(folder name): parameter name} to the 'known_datablock_names' dict. Use this "
                     "for finding your parameter name: {}".format(
-                        str(self.known_datablock_names.keys()), data_block_name))
+                        str(data_block_name, self.known_datablock_names.keys()), data_block_name))
 
     def _find_datablock_name_match_in_blendfile(self, blend_file_data,
                                                 data_block_name):
@@ -204,8 +220,7 @@ class BlendLoader(LoaderInterface):
         setting the properties of the container object does not set the properties of underlying datablock like
         camera and vice versa. Setting the bpy.data.objects["Light"] and bpy.data.lights["light"] can
         have different properties. This function sets properties of all types materials, lights,
-        cameras even if they are loaded as an object. For Objects that wraps Meshes use  self._set_properties
-        instead
+        cameras even if they are loaded as an object. For Objects that wraps Meshes use self._set_properties instead
 
         :param resource: The datablock for which the properties are set
         """
@@ -218,7 +233,6 @@ class BlendLoader(LoaderInterface):
                 raise RuntimeError(
                     "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
                     "Use manipulators.Entity for setting object's attribute values.")
-            resource[key] = value
 
     def _get_camera_keyframes(self, camera):
         """
@@ -228,11 +242,30 @@ class BlendLoader(LoaderInterface):
         :return: [] kerframes
         """
         keyframes = []
+
+        # get camera animation data
         anim = camera.animation_data
         if anim is not None and anim.action is not None:
+            # The animation change over time of an object is represented by
+            # F-curve, which is part of an object's action data. 
+            # Link: https://docs.blender.org/manual/en/latest/editors/graph_editor/fcurves/introduction.html
+            # Go over all the variables involved in the animation
+            # for example for animation of translation in 3D, 
+            # we shall have fcurve for each variable x,y,z.
             for fcu in anim.action.fcurves:
+                # go over all the keyframes (bpy.types.FCurveKeyframePoints) for a variable, 
+                # and see how it changes its value per keyframe
                 for keyframe in fcu.keyframe_points:
-                    x, y = keyframe.co
-                    if x not in keyframes:
-                        keyframes.append((math.ceil(x)))
+
+                    #  a keyframe has form (frame number, value of current variable in that frame).
+                    frame, value = keyframe.co
+                    if frame not in keyframes:
+                        # frame numbers are in range (float [-inf, inf])
+                        # for example x coordinats of camera at frame 1.8
+                        # is 1.2, at frame 1.9 it can be 1.3 and so on, we would
+                        # get varous values between two frames, but we need 
+                        # total unique frames in an animation not total
+                        # number of values of animation so we round of
+                        # frame numbers and store unique frames.
+                        keyframes.append((math.ceil(frame)))
         return keyframes
