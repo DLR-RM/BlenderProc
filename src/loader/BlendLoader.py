@@ -202,30 +202,6 @@ class BlendLoader(LoaderInterface):
 
         return blend_file_datablock_names[index]
 
-    def _set_datablock_properties(self, resource: bpy.types.ID):
-        """
-        Sets the custom properties of **non object** resources like materials,
-        textures, images, etc.
-
-        Note: Some datablock types like bpy.types.Light, bpy.types.Mesh, bpy.types.Camera etc
-        are wrapped in bby.types.Object which act as a container of these object. In that case
-        setting the properties of the container object does not set the properties of underlying datablock like
-        camera and vice versa. Setting the bpy.data.objects["Light"] and bpy.data.lights["light"] can
-        have different properties. This function sets properties of all types materials, lights,
-        cameras even if they are loaded as an object. For Objects that wraps Meshes use self._set_properties instead
-
-        :param resource: The datablock for which the properties are set
-        """
-        properties = self.config.get_raw_dict("add_properties", {})
-        for key, value in properties.items():
-            if key.startswith("cp_"):
-                key = key[3:]
-                resource[key] = value
-            else:
-                raise RuntimeError(
-                    "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
-                    "Use manipulators.Entity for setting object's attribute values.")
-
     def _get_camera_keyframes(self, camera):
         """
         Get Keyframes from animation data of a Camera Object.
