@@ -64,7 +64,7 @@ class LoaderInterface(Module):
                     mode = self.config.get_string("cf_set_shading")
                     LoaderInterface.change_shading_mode([obj], mode)
 
-            # only bpy.types.Object *subclass of bpy.types.ID) have transformation 
+            # only bpy.types.Object (subclass of bpy.types.ID) have transformation 
             if hasattr(obj, 'location'): 
                 apply_transformation = self.config.get_bool("cf_apply_transformation", False)
                 if apply_transformation:

@@ -121,7 +121,7 @@ class BlendLoader(LoaderInterface):
             entities = self.config.get_string("entities")
         else:
             entities = None
-        
+
         data_block_name = load_from.strip("/")
 
         with bpy.data.libraries.load(path) as (blend_file_data, _):
@@ -145,29 +145,26 @@ class BlendLoader(LoaderInterface):
 
                     # remove the earlier existing resource with same name
                     if entity_to_load in bpy.data.objects:
-                        bpy.data.objects.remove(bpy.data.objects[entity_to_load], do_unlink=True)
+                        bpy.data.objects.remove(
+                            bpy.data.objects[entity_to_load], do_unlink=True)
 
-                    bpy.ops.wm.append(filepath=os.path.join( path, data_block_name, entity_to_load),
-                                      filename=entity_to_load,
-                                      directory=os.path.join(path, data_block_name))
+                    bpy.ops.wm.append(
+                        filepath=os.path.join(path, data_block_name,entity_to_load),
+                        filename=entity_to_load,
+                        directory=os.path.join(path, data_block_name))
 
                     added_resource = getattr(bpy.data, attr_name)[entity_to_load]
 
                     if hasattr(added_resource, 'type') and added_resource.type == 'CAMERA':
-                        bpy.context.scene.collection.objects.link(
-                            added_resource)
+                        bpy.context.scene.collection.objects.link(added_resource)
                         bpy.context.scene.camera = added_resource
                         bpy.context.scene.frame_end = len(
                             self._get_camera_keyframes(added_resource))
 
                     self._set_properties([added_resource])
             else:
-                raise Exception(
-                    "Unsupported datablock/folder name: {}\nSupported names:  {}\n \
-                     If your ID exists, but not supported, please append a new pair of "
-                    "{type ID(folder name): parameter name} to the 'known_datablock_names' dict. Use this "
-                    "for finding your parameter name: {}".format(
-                        str(data_block_name, self.known_datablock_names.keys()), data_block_name))
+                raise Exception("Unsupported datablock/folder: {}\nSupported types:  {}".format( \
+                                data_block_name, self.known_datablock_names))
 
     def _find_datablock_name_match_in_blendfile(self, blend_file_data,
                                                 data_block_name):
@@ -195,10 +192,10 @@ class BlendLoader(LoaderInterface):
         if index == -1:
             # The Datablock is valid but the .blend file does not contain the datablock. Likely
             # version not supported.
-            raise Exception("Could not match Datablock {} in the .blend file. please Verify that \
-                            the .blend file version supports {} ID. Current \
-                            Blender API Version {}".format(
-                    data_block_name, data_block_name, bpy.app.version_string))
+            raise Exception(
+                "Could not match Datablock {} in the .blend file. please Verify that"
+                "the .blend file version supports {} ID. CurrentBlender API Version {}"
+                .format(data_block_name, data_block_name, bpy.app.version_string))
 
         return blend_file_datablock_names[index]
 
@@ -207,7 +204,7 @@ class BlendLoader(LoaderInterface):
         Get Keyframes from animation data of a Camera Object.
 
         :param camera: The camera for which the keyframes are extracted
-        :return: [] keyframes
+        :return: A list of keyframes
         """
         keyframes = []
 
@@ -215,13 +212,13 @@ class BlendLoader(LoaderInterface):
         anim = camera.animation_data
         if anim is not None and anim.action is not None:
             # The animation change over time of an object is represented by
-            # F-curve, which is part of an object's action data. 
+            # F-curve, which is part of an object's action data.
             # Link: https://docs.blender.org/manual/en/latest/editors/graph_editor/fcurves/introduction.html
             # Go over all the variables involved in the animation
-            # for example for animation of translation in 3D, 
+            # for example for animation of translation in 3D,
             # we shall have fcurve for each variable x,y,z.
             for fcu in anim.action.fcurves:
-                # go over all the keyframes (bpy.types.FCurveKeyframePoints) for a variable, 
+                # go over all the keyframes (bpy.types.FCurveKeyframePoints) for a variable,
                 # and see how it changes its value per keyframe
                 for keyframe in fcu.keyframe_points:
 
@@ -231,7 +228,7 @@ class BlendLoader(LoaderInterface):
                         # frame numbers are in range (float [-inf, inf])
                         # for example x coordinats of camera at frame 1.8
                         # is 1.2, at frame 1.9 it can be 1.3 and so on, we would
-                        # get varous values between two frames, but we need 
+                        # get varous values between two frames, but we need
                         # total unique frames in an animation not total
                         # number of values of animation so we round of
                         # frame numbers and store unique frames.
