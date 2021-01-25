@@ -207,7 +207,7 @@ class BlendLoader(LoaderInterface):
         Get Keyframes from animation data of a Camera Object.
 
         :param camera: The camera for which the keyframes are extracted
-        :return: [] kerframes
+        :return: [] keyframes
         """
         keyframes = []
 

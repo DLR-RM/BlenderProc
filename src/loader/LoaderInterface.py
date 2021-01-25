@@ -34,14 +34,13 @@ class LoaderInterface(Module):
     def _set_properties(self, objects: [bpy.types.ID]):
         """ Sets all custom properties of all given resources according to the configuration.
 
-        Also runs all custom property functions. Sets the custom properties of **non object** resources like materials,
-        textures, images, etc.
+        Also runs all custom property functions.
 
         Note: Some datablock types like bpy.types.Light, bpy.types.Mesh, bpy.types.Camera etc
         are wrapped in bby.types.Object which act as a container of these object. In that case
         setting the properties of the container object does not set the properties of underlying datablock like
-        camera and vice versa. Setting the bpy.data.objects["Light"] and bpy.data.lights["light"] can
-        have different properties. This function sets properties of all types materials, lights,
+        camera and vice versa. Setting the bpy.data.objects["Light"] and bpy.data.lights["Light"] is different and each
+        has its own properties. This function sets properties of all types materials, lights,
         cameras even if they are loaded as an object.
 
         :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.ID]
