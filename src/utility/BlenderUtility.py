@@ -2,8 +2,10 @@ import bpy
 import bmesh
 import mathutils
 from mathutils import Vector
+from sys import platform
 
 import numpy as np
+import imageio
 
 
 def local_to_world(cords, world):
@@ -321,17 +323,17 @@ def load_image(file_path, num_channels=3):
     :param num_channels: Number of channels to return.
     :return: The numpy array
     """
-    # load image with blender function
-    img = bpy.data.images.load(file_path, check_existing=False)
-    # convert image to proper size
-    size = img.size
-    channels = img.channels
-    img = np.array(img.pixels).reshape(size[1], size[0], channels)
-    img = np.flip(img, axis=0)
-    if file_path.endswith('.png') or file_path.endswith('.jpg'):
-        # convert the 0 to 1 space to 0 ... 255 and save it as uint8
-        img = (img * 255).astype(np.uint8)
-    return img[:, :, :num_channels]
+    try:
+        return imageio.imread(file_path)[:, :, :num_channels]
+    except ValueError as e:
+        if platform == "darwin":
+            error = "On Mac OS you manually need to install the imageio .exr extension. This is quite simple: \n"
+            error += "Use a different python environment (not blenders internal environment), `pip install imageio`.\n"
+            error += 'And then execute the following command in this env: \n'
+            error += '`python -c "import imageio; imageio.plugins.freeimage.download()"`\n'
+            error += "Now everything should work -> run the pipeline again."
+            raise Exception(error)
+        raise e
 
 
 def get_bound_volume(obj):
