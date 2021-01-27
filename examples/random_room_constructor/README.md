@@ -7,7 +7,7 @@
 This example explains the `RandomRoomConstructor`. This module can build random rooms and place objects loaded from other modules inside of it.
 
 This current example uses the `CCMaterialLoader`. So download the textures from cc_textures we provide a script [here](../../scripts/download_cc_textures.py).
-It also uses the `IkeaLoader`, for that please see the [ikea example](../ikea). 
+It also uses the `IkeaLoader`, for that please see the [ikea example](../ikea/README.md). 
 
 Both are needed to use to this example.
 

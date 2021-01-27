@@ -5,7 +5,7 @@
 In this example we demonstrate how to manipulate a entity by adding different displacement modifiers with different textures as part of the `EntityManipulator` module.
 This is an advanced example, please make sure that you have read:
 
-* [entity_manipulator](../shapenet): Basics of `EntityManipulator` module to load entities and manipulate them. 
+* [entity_manipulator](../shapenet/README.md): Basics of `EntityManipulator` module to load entities and manipulate them. 
 ## Usage
 
 Execute this in the BlenderProc main directory:

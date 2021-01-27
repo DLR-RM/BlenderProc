@@ -62,5 +62,5 @@ For some BOP datasets you can choose the `model_type`, e.g. `reconst` or `cad` i
 
 ## More examples
 
-* [bop_object_pose_sampling](../bop_object_pose_sampling): More on sampling objects, cameras and lights.
-* [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
+* [bop_object_pose_sampling](../bop_object_pose_sampling/README.md): More on sampling objects, cameras and lights.
+* [bop_object_physics_positioning](../bop_object_physics_positioning/README.md): Drop BOP objects on planes and randomize materials

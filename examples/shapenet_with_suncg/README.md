@@ -7,9 +7,9 @@
 The focus of this example is the `loader.ShapeNetLoader` in combination with the SUNCG loader, this is an advanced example, please make sure that you have read:
 
 
-* [shapenet](../shapenet): Rendering ShapeNet objects 
-* [sung_basic](../suncg_basic): Rendering SUNCG scenes with fixed camera poses.
-* [suncg_with_cam_sampling](../suncg_with_cam_sampling): More on rendering SUNCG scenes with dynamically sampled camera poses.
+* [shapenet](../shapenet/README.md): Rendering ShapeNet objects 
+* [sung_basic](../suncg_basic/README.md): Rendering SUNCG scenes with fixed camera poses.
+* [suncg_with_cam_sampling](../suncg_with_cam_sampling/README.md): More on rendering SUNCG scenes with dynamically sampled camera poses.
 
 
 ## Usage
@@ -160,7 +160,7 @@ Finally, we add a solidify modifier to get a correct physics interaction.
 }
 ```
 
-We then run the physics simulation, for more information about that please see the [example/physiscs_positioning](../physics_positioning).
+We then run the physics simulation, for more information about that please see the [example/physiscs_positioning/README.md](../physics_positioning).
 The high mass factor and the small collision margin guarantee that the object does not move too much.
 
 ### CameraSampler
