@@ -8,6 +8,14 @@
 
 # Version History
 
+## Version 1.8.2: 27th January 2021
+- added support of stereo to SegMapRenderer
+- switched to using imageio for reading images, as the blender image loading API does not support .exr files written in stereo mode
+- added option to write world-to-cam transformations to the BopWriter
+- CocoAnnotationWriter does now in the polygon format not write empty segmentation lists anymore
+- type hints are now added to the generated documentation
+- extracted reusable rendering code from the renderer modules into utility classes 
+
 ## Version 1.8.1: 14th January 2021
 - fixed a bug in the WriterInterface
 - fixed cc_texture downloader script in the case of weird urls
