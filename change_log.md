@@ -12,7 +12,7 @@
 - added stereo mode to SegMapRenderer
 - switched to using imageio for reading images, as the blender image loading API does not support .exr files written in stereo mode
 - added option to write world-to-cam transformations to the BopWriter
-- CocoAnnotationWriter does now in the polygon format not write empty segmentation lists anymore
+- CocoAnnotationWriter does now in the polygon format not write empty segmentation lists anymore and uses iscrowd:0
 - type hints are now added to the generated documentation
 - extracted reusable rendering code from the renderer modules into utility classes 
 
