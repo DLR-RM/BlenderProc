@@ -96,10 +96,10 @@ def vis_file(path):
                 for key in keys:
                     value = np.array(data[key])
                     # Check if it is a stereo image
-                    if len(value.shape) >= 1 and value.shape[0] == 2:
+                    if len(value.shape) >= 3 and value.shape[0] == 2:
                         # Visualize both eyes separately
-                        for i in range(2):
-                            vis_data(key, value[i], data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"))
+                        for i, img in enumerate(value):
+                            vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"))
                     else:
                         vis_data(key, value, data, os.path.basename(path))
 
