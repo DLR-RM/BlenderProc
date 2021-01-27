@@ -16,38 +16,121 @@ class BlendLoader(LoaderInterface):
     information about a datablock see Blender's documentation for bpy.types.ID
     at https://docs.blender.org/api/current/bpy.types.ID.html
 
-    Sections/Datablocks in a .blend File
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
-    +-------------------+
-    |    .Blend File    |
-    +===================+
-    |    Collections    |
-    +-------------------+
-    |    Object         |
-    +-------------------+
-    |    Mesh           |
-    +-------------------+
-    |    Text           |
-    +-------------------+
-    |    Scene          |
-    +-------------------+
-    |    World          |
-    +-------------------+
-    |    Workspace      |
-    +-------------------+
-    |    Curve          |
-    +-------------------+
-    |    Camera         |
-    +-------------------+
-    |    Light          |
-    +-------------------+
-    |    Material       |
-    +-------------------+
-    |    Texture        |
-    +-------------------+
-    |    more...        |
-    +-------------------+
-
+        * - Datablock
+          - Description
+          - Type
+        * - Action
+          - A collection of F-Curves for animation
+          - bpy.types.Action
+        * - Armature
+          - Armature data-block containing a hierarchy of bones, usually used for rigging characters
+          - bpy.types.Armature
+        * - Brush
+          - Brush data-block for storing brush settings for painting and sculpting
+          - bpy.types.Brush
+        * - CacheFile
+          - Cache Files data-blocks
+          - bpy.types.CacheFile
+        * - Camera
+          - Camera data-block for storing camera settings
+          - bpy.types.Camera
+        * - Collection
+          - Collection of Object data-blocks
+          - bpy.types.Collection
+        * - Curve
+          - Curve data-block storing curves, splines and NURBS
+          - bpy.types.Curve
+        * - FreestyleLineStyle
+          - Freestyle line style, reusable by multiple line sets
+          - bpy.types.FreestyleLineStyle
+        * - GreasePencil
+          - Freehand annotation sketchbook
+          - bpy.types.GreasePencil
+        * - Image
+          - Image data-block referencing an external or packed image
+          - bpy.types.Image
+        * - Key
+          - Shape keys data-block containing different shapes of geometric data-blocks
+          - bpy.types.Key
+        * - Lattice
+          - Lattice data-block defining a grid for deforming other objects
+          - bpy.types.Lattice
+        * - Library
+          - External .blend file from which data is linked
+          - bpy.types.Library
+        * - Light
+          - Light data-block for lighting a scene
+          - bpy.types.Light
+        * - LightProbe
+          - Light Probe data-block for lighting capture objects
+          - bpy.types.LightProbe
+        * - Mask
+          - Mask data-block defining mask for compositing
+          - bpy.types.Mask
+        * - Material
+          - Material data-block to define the appearance of geometric objects for rendering
+          - bpy.types.Material
+        * - Mesh
+          - Mesh data-block defining geometric surfaces
+          - bpy.types.Mesh
+        * - MetaBall
+          - Metaball data-block to defined blobby surfaces
+          - bpy.types.MetaBall
+        * - MovieClip
+          - MovieClip data-block referencing an external movie file
+          - bpy.types.MovieClip
+        * - NodeTree
+          - Node tree consisting of linked nodes used for shading, textures and compositing
+          - bpy.types.NodeTree
+        * - Object
+          - Object data-block defining an object in a scene
+          - bpy.types.Object
+        * - PaintCurve
+          - Paint Curves data-blocks
+          - bpy.types.PaintCurve
+        * - Palette
+          - Palette data-blocks
+          - bpy.types.Palette
+        * - ParticleSettings
+          - Particle settings, reusable by multiple particle systems
+          - bpy.types.ParticleSettings
+        * - Scene
+          - Scene data-block, consisting in objects and defining time and render related settings
+          - bpy.types.Scene
+        * - Screen
+          - Screen data-block, defining the layout of areas in a window
+          - bpy.types.Screen
+        * - Sound
+          - Sound data-block referencing an external or packed sound file
+          - bpy.types.Sound
+        * - Speaker
+          - Speaker data-block for 3D audio speaker objects
+          - bpy.types.Speaker
+        * - Text
+          - Text data-block referencing an external or packed text file
+          - bpy.types.Text
+        * - Texture
+          - Texture data-block used by materials, lights, worlds and brushes
+          - bpy.types.Texture
+        * - VectorFont
+          - Vector font for Text objects
+          - bpy.types.VectorFont
+        * - Volume
+          - Volume data-block for 3D volume grids
+          - bpy.types.Volume
+        * - WindowManager
+          - Window manager data-block defining open windows and other user interface data
+          - bpy.types.WindowManager
+        * - WorkSpace
+          - Workspace data-block, defining the working environment for the user
+          - bpy.types.WorkSpace
+        * - World
+          - World data-block describing the environment and ambient lighting of a scene
+          - bpy.types.World
 
     Example:
 
@@ -140,22 +223,30 @@ class BlendLoader(LoaderInterface):
                 # get all entity's names if not
                 else:
                     entities_to_load = getattr(blend_file_data, attr_name)
-                # load entities
+                    
                 for entity_to_load in entities_to_load:
-
-                    # remove the earlier existing resource with same name
+                    # check if an entity with same name already exists, if 
+                    # it exists rename it
+                    last_obj = None
                     if entity_to_load in bpy.data.objects:
-                        bpy.data.objects.remove(
-                            bpy.data.objects[entity_to_load], do_unlink=True)
+                        last_obj = bpy.data.objects[entity_to_load]
+                        last_obj.name = last_obj.name + '.old'
 
+                    # load the new entity
                     bpy.ops.wm.append(
-                        filepath=os.path.join(path, data_block_name,entity_to_load),
+                        filepath=os.path.join(path, data_block_name, entity_to_load),
                         filename=entity_to_load,
                         directory=os.path.join(path, data_block_name))
 
+                    # get reference to loaded entity
                     added_resource = getattr(bpy.data, attr_name)[entity_to_load]
 
                     if hasattr(added_resource, 'type') and added_resource.type == 'CAMERA':
+                        # remove previous camera
+                        if last_obj is not None:
+                            bpy.data.objects.remove(last_obj, do_unlink=True)
+
+                        # add loaded camera
                         bpy.context.scene.collection.objects.link(added_resource)
                         bpy.context.scene.camera = added_resource
                         bpy.context.scene.frame_end = len(
@@ -182,12 +273,21 @@ class BlendLoader(LoaderInterface):
         blend_file_datablock_names = dir(blend_file_data)
         index = -1
         for i, attr in enumerate(blend_file_datablock_names):
-            # remove underscores like grease_pencils -> greasepencils and match with GreasePencil
-            # datablock
-            attr = attr.replace('_', '')
-            if data_block_name.lower() in attr:
-                index = i
-                break
+            # match .blend file attributes to BlendData object
+            # and find the type of those attributes. We can't
+            # find it directly using blend_file_data because its
+            # just string names.
+            # For e.g bpy.data.nodes_group is collection of datablocks
+            # of type bpy.type.NodeTree so we get get datablock name from attributes.
+            # we need to match node_groups -> type NodeTree
+            if hasattr(bpy.data, attr):
+                relevant_blend_data = getattr(bpy.data, attr)
+                # get type of the respective attribute of bpy.data.attr where
+                # attr in (objects, meshes, lights, cameras etc)
+                relevant_blend_data_type = relevant_blend_data.rna_type.identifier
+                if data_block_name in relevant_blend_data_type:
+                    index = i
+                    break
 
         if index == -1:
             # The Datablock is valid but the .blend file does not contain the datablock. Likely
