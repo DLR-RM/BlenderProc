@@ -139,121 +139,129 @@ class SegMapRendererUtility:
             there_was_an_instance_rendering = False
             list_of_used_attributes = []
 
+            # Check if stereo is enabled
+            if bpy.context.scene.render.use_multiview:
+                suffixes = ["_L", "_R"]
+            else:
+                suffixes = [""]
+
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
-                file_path = temporary_segmentation_file_path + "%04d" % frame + ".exr"
-                segmentation = load_image(file_path)
+                for suffix in suffixes:
+                    file_path = temporary_segmentation_file_path + ("%04d" % frame) + suffix + ".exr"
+                    segmentation = load_image(file_path)
+                    print(file_path, segmentation.shape)
 
-                segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation,
-                                                                                 num_splits_per_dimension,
-                                                                                 render_colorspace_size_per_dimension)
-                segmap = segmap.astype(optimal_dtype)
+                    segmap = Utility.map_back_from_equally_spaced_equidistant_values(segmentation,
+                                                                                     num_splits_per_dimension,
+                                                                                     render_colorspace_size_per_dimension)
+                    segmap = segmap.astype(optimal_dtype)
 
-                used_object_ids = np.unique(segmap)
-                max_id = np.max(used_object_ids)
-                if max_id >= len(used_objects):
-                    raise Exception("There are more object colors than there are objects")
-                combined_result_map = []
-                there_was_an_instance_rendering = False
-                list_of_used_attributes = []
-                used_channels = []
-                for channel_id in range(result_channels):
-                    resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
-                    was_used = False
-                    current_attribute = used_attributes[channel_id]
-                    org_attribute = current_attribute
+                    used_object_ids = np.unique(segmap)
+                    max_id = np.max(used_object_ids)
+                    if max_id >= len(used_objects):
+                        raise Exception("There are more object colors than there are objects")
+                    combined_result_map = []
+                    there_was_an_instance_rendering = False
+                    list_of_used_attributes = []
+                    used_channels = []
+                    for channel_id in range(result_channels):
+                        resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
+                        was_used = False
+                        current_attribute = used_attributes[channel_id]
+                        org_attribute = current_attribute
 
-                    # if the class is used the category_id attribute is evaluated
-                    if current_attribute == "class":
-                        current_attribute = "cp_category_id"
-                    # in the instance case the resulting ids are directly used
-                    if current_attribute == "instance":
-                        there_was_an_instance_rendering = True
-                        resulting_map = segmap
-                        was_used = True
-                        # a non default value was also used
-                        non_default_value_was_used = True
-                    else:
-                        if current_attribute != "cp_category_id":
-                            list_of_used_attributes.append(current_attribute)
-                        # for the current attribute remove cp_ and _csv, if present
-                        used_attribute = current_attribute
-                        if used_attribute.startswith("cp_"):
-                            used_attribute = used_attribute[len("cp_"):]
-                        # check if a default value was specified
-                        default_value_set = False
-                        if current_attribute in used_default_values or used_attribute in used_default_values:
-                            default_value_set = True
-                            if current_attribute in used_default_values:
-                                default_value = used_default_values[current_attribute]
-                            elif used_attribute in used_default_values:
-                                default_value = used_default_values[used_attribute]
-                        last_state_save_in_csv = None
-                        # this avoids that for certain attributes only the default value is written
-                        non_default_value_was_used = False
-                        # iterate over all object ids
-                        for object_id in used_object_ids:
-                            is_default_value = False
-                            # get the corresponding object via the id
-                            current_obj = used_objects[object_id]
-                            # if the current obj has a attribute with that name -> get it
-                            if hasattr(current_obj, used_attribute):
-                                used_value = getattr(current_obj, used_attribute)
-                            # if the current object has a custom property with that name -> get it
-                            elif current_attribute.startswith("cp_") and used_attribute in current_obj:
-                                used_value = current_obj[used_attribute]
-                            elif current_attribute.startswith("cf_"):
-                                if current_attribute == "cf_basename":
-                                    used_value = current_obj.name
-                                    if "." in used_value:
-                                        used_value = used_value[:used_value.rfind(".")]
-                            elif default_value_set:
-                                # if none of the above applies use the default value
-                                used_value = default_value
-                                is_default_value = True
-                            else:
-                                # if the requested current_attribute is not a custom property or a attribute
-                                # or there is a default value stored
-                                # it throws an exception
-                                raise Exception("The obj: {} does not have the "
-                                                "attribute: {}, striped: {}. Maybe try a default "
-                                                "value.".format(current_obj.name, current_attribute, used_attribute))
-
-                            # check if the value should be saved as an image or in the csv file
-                            save_in_csv = False
-                            try:
-                                resulting_map[segmap == object_id] = used_value
-                                was_used = True
-                                if not is_default_value:
-                                    non_default_value_was_used = True
-                                # save everything which is not instance also in the .csv
-                                if current_attribute != "instance":
-                                    save_in_csv = True
-                            except ValueError:
-                                save_in_csv = True
-
-                            if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
-                                raise Exception("During creating the mapping, the saving to an image or a csv file "
-                                                "switched, this might indicated that the used default value, does "
-                                                "not have the same type as the returned value, "
-                                                "for: {}".format(current_attribute))
-                            last_state_save_in_csv = save_in_csv
-                            if save_in_csv:
-                                if object_id in save_in_csv_attributes:
-                                    save_in_csv_attributes[object_id][used_attribute] = used_value
+                        # if the class is used the category_id attribute is evaluated
+                        if current_attribute == "class":
+                            current_attribute = "cp_category_id"
+                        # in the instance case the resulting ids are directly used
+                        if current_attribute == "instance":
+                            there_was_an_instance_rendering = True
+                            resulting_map = segmap
+                            was_used = True
+                            # a non default value was also used
+                            non_default_value_was_used = True
+                        else:
+                            if current_attribute != "cp_category_id":
+                                list_of_used_attributes.append(current_attribute)
+                            # for the current attribute remove cp_ and _csv, if present
+                            used_attribute = current_attribute
+                            if used_attribute.startswith("cp_"):
+                                used_attribute = used_attribute[len("cp_"):]
+                            # check if a default value was specified
+                            default_value_set = False
+                            if current_attribute in used_default_values or used_attribute in used_default_values:
+                                default_value_set = True
+                                if current_attribute in used_default_values:
+                                    default_value = used_default_values[current_attribute]
+                                elif used_attribute in used_default_values:
+                                    default_value = used_default_values[used_attribute]
+                            last_state_save_in_csv = None
+                            # this avoids that for certain attributes only the default value is written
+                            non_default_value_was_used = False
+                            # iterate over all object ids
+                            for object_id in used_object_ids:
+                                is_default_value = False
+                                # get the corresponding object via the id
+                                current_obj = used_objects[object_id]
+                                # if the current obj has a attribute with that name -> get it
+                                if hasattr(current_obj, used_attribute):
+                                    used_value = getattr(current_obj, used_attribute)
+                                # if the current object has a custom property with that name -> get it
+                                elif current_attribute.startswith("cp_") and used_attribute in current_obj:
+                                    used_value = current_obj[used_attribute]
+                                elif current_attribute.startswith("cf_"):
+                                    if current_attribute == "cf_basename":
+                                        used_value = current_obj.name
+                                        if "." in used_value:
+                                            used_value = used_value[:used_value.rfind(".")]
+                                elif default_value_set:
+                                    # if none of the above applies use the default value
+                                    used_value = default_value
+                                    is_default_value = True
                                 else:
-                                    save_in_csv_attributes[object_id] = {used_attribute: used_value}
-                    if was_used and non_default_value_was_used:
-                        used_channels.append(org_attribute)
-                        combined_result_map.append(resulting_map)
+                                    # if the requested current_attribute is not a custom property or a attribute
+                                    # or there is a default value stored
+                                    # it throws an exception
+                                    raise Exception("The obj: {} does not have the "
+                                                    "attribute: {}, striped: {}. Maybe try a default "
+                                                    "value.".format(current_obj.name, current_attribute, used_attribute))
 
-                fname = final_segmentation_file_path + "%04d" % frame
-                # combine all resulting images to one image
-                resulting_map = np.stack(combined_result_map, axis=2)
-                # remove the unneeded third dimension
-                if resulting_map.shape[2] == 1:
-                    resulting_map = resulting_map[:, :, 0]
-                np.save(fname, resulting_map)
+                                # check if the value should be saved as an image or in the csv file
+                                save_in_csv = False
+                                try:
+                                    resulting_map[segmap == object_id] = used_value
+                                    was_used = True
+                                    if not is_default_value:
+                                        non_default_value_was_used = True
+                                    # save everything which is not instance also in the .csv
+                                    if current_attribute != "instance":
+                                        save_in_csv = True
+                                except ValueError:
+                                    save_in_csv = True
+
+                                if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
+                                    raise Exception("During creating the mapping, the saving to an image or a csv file "
+                                                    "switched, this might indicated that the used default value, does "
+                                                    "not have the same type as the returned value, "
+                                                    "for: {}".format(current_attribute))
+                                last_state_save_in_csv = save_in_csv
+                                if save_in_csv:
+                                    if object_id in save_in_csv_attributes:
+                                        save_in_csv_attributes[object_id][used_attribute] = used_value
+                                    else:
+                                        save_in_csv_attributes[object_id] = {used_attribute: used_value}
+                        if was_used and non_default_value_was_used:
+                            used_channels.append(org_attribute)
+                            combined_result_map.append(resulting_map)
+
+                    fname = final_segmentation_file_path + ("%04d" % frame) + suffix
+                    # combine all resulting images to one image
+                    resulting_map = np.stack(combined_result_map, axis=2)
+                    # remove the unneeded third dimension
+                    if resulting_map.shape[2] == 1:
+                        resulting_map = resulting_map[:, :, 0]
+                    np.save(fname, resulting_map)
 
             if not there_was_an_instance_rendering:
                 if len(list_of_used_attributes) > 0:
