@@ -344,8 +344,16 @@ def load_image(file_path, num_channels=3):
         if hasattr(ssl, '_create_unverified_context'):
             ssl._create_default_https_context = prev_context
 
-        # Try again
-        return imageio.imread(file_path)[:, :, :num_channels]
+        try:
+            # Try again
+            return imageio.imread(file_path)[:, :, :num_channels]
+        except ValueError as e:
+            error = "The automatic installation of the freeimage library failed, so you need to install the imageio .exr extension manually. This is quite simple: \n"
+            error += "Use a different python environment (not blenders internal environment), `pip install imageio`.\n"
+            error += 'And then execute the following command in this env: \n'
+            error += '`python -c "import imageio; imageio.plugins.freeimage.download()"`\n'
+            error += "Now everything should work -> run the pipeline again."
+            raise Exception(error)
 
 
 
