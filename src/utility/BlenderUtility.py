@@ -326,14 +326,36 @@ def load_image(file_path, num_channels=3):
     try:
         return imageio.imread(file_path)[:, :, :num_channels]
     except ValueError as e:
-        if platform == "darwin":
-            error = "On Mac OS you manually need to install the imageio .exr extension. This is quite simple: \n"
+        print("It seems the freeimage library which is necessary to read .exr files cannot be found on your computer.")
+        print("Gonna try to download it automatically.")
+
+        # Since PEP 476 the certificate of https connections is verified per default.
+        # However, in the blender python env no local certificates seem to be found which makes certification impossible.
+        # Therefore, we have to switch certificate verification off for now.
+        import ssl
+        if hasattr(ssl, '_create_unverified_context'):
+            prev_context = ssl._create_default_https_context
+            ssl._create_default_https_context = ssl._create_unverified_context
+
+        # Download free image library
+        imageio.plugins.freeimage.download()
+
+        # Undo certificate check changes
+        if hasattr(ssl, '_create_unverified_context'):
+            ssl._create_default_https_context = prev_context
+
+        try:
+            # Try again
+            return imageio.imread(file_path)[:, :, :num_channels]
+        except ValueError as e:
+            error = "The automatic installation of the freeimage library failed, so you need to install the imageio .exr extension manually. This is quite simple: \n"
             error += "Use a different python environment (not blenders internal environment), `pip install imageio`.\n"
             error += 'And then execute the following command in this env: \n'
             error += '`python -c "import imageio; imageio.plugins.freeimage.download()"`\n'
             error += "Now everything should work -> run the pipeline again."
             raise Exception(error)
-        raise e
+
+
 
 
 def get_bound_volume(obj):
