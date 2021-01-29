@@ -225,26 +225,30 @@ class BlendLoader(LoaderInterface):
                     entities_to_load = getattr(blend_file_data, attr_name)
                     
                 for entity_to_load in entities_to_load:
-                    # check if an entity with same name already exists, if 
-                    # it exists rename it
-                    last_obj = None
-                    if entity_to_load in bpy.data.objects:
-                        last_obj = bpy.data.objects[entity_to_load]
-                        last_obj.name = last_obj.name + '.old'
+                    # store already added entities of
+                    # type attr_name
+                    previous_objects = set(getattr(bpy.data, attr_name))
 
                     # load the new entity
                     bpy.ops.wm.append(
                         filepath=os.path.join(path, data_block_name, entity_to_load),
                         filename=entity_to_load,
                         directory=os.path.join(path, data_block_name))
+                    
 
-                    # get reference to loaded entity
-                    added_resource = getattr(bpy.data, attr_name)[entity_to_load]
+                    # get current entities of type attr_name
+                    curr_objects = set(getattr(bpy.data, attr_name))
 
+                    # get the newly added entity
+                    added_resource = (curr_objects - previous_objects).pop()
+                    
+                    # if newly added entity is a camera, remove previous cameras
+                    # and set current camera as active 
                     if hasattr(added_resource, 'type') and added_resource.type == 'CAMERA':
-                        # remove previous camera
-                        if last_obj is not None:
-                            bpy.data.objects.remove(last_obj, do_unlink=True)
+                        # remove previous cameras
+                        for obj in previous_objects:
+                            if hasattr(obj, 'type') and obj.type == 'CAMERA':
+                                bpy.data.objects.remove(obj, do_unlink=True)
 
                         # add loaded camera
                         bpy.context.scene.collection.objects.link(added_resource)
