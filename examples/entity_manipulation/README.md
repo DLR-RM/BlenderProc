@@ -65,7 +65,7 @@ python scripts/visHdf5Files.py examples/entity_manipulation/output/0.hdf5
 The focus of this example is the EntityManipulator module and `getter.Entity` which allow us to select multiple entities based on a user-defined condition and change the attribute and custom property values of the selected entities.
 * `selector` - section of the `EntityManipulator` for stating the chosen `provider` and the `condition` to use for selecting.
 
-Our condition is: `"name": 'Suzanne'` *and* `"name": "MESH"`, which means that we want to select all the objects with `obj.name == 'Suzanne'` and which are of `"type": "MESH"`. In our case we have only one object which meets the requirement.
+Our condition is: `"name": 'Suzanne'` *and* `"type": "MESH"`, which means that we want to select all the objects with `obj.name == 'Suzanne'` and which are of `"type": "MESH"`. In our case we have only one object which meets the requirement.
 Yet one may define any condition where `key` is the valid name of any attribute of entities present in the scene or the name of an existing custom property.
 This way it is possible to select multiple objects. One may try this condition to try multiple object selection: `"location": [0, 0, 0]`
 
