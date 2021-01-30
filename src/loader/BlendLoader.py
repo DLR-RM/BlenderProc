@@ -225,8 +225,7 @@ class BlendLoader(LoaderInterface):
                     entities_to_load = getattr(blend_file_data, attr_name)
                     
                 for entity_to_load in entities_to_load:
-                    # store already added entities of
-                    # type attr_name
+                    # get already added entities of type attr_name
                     previous_objects = set(getattr(bpy.data, attr_name))
 
                     # load the new entity
@@ -235,7 +234,6 @@ class BlendLoader(LoaderInterface):
                         filename=entity_to_load,
                         directory=os.path.join(path, data_block_name))
                     
-
                     # get current entities of type attr_name
                     curr_objects = set(getattr(bpy.data, attr_name))
 
