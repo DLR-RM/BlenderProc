@@ -103,7 +103,7 @@ class Entity(Provider):
             random_samples property, only one is allowed at a time. Default: 0.
           - int
         * - check_empty
-          - If this is True, there has to be something returned, else an error will be thrown. Default: False.
+          - If this is True, the returned list can not be empty, if it is empty an error will be thrown. Default: False.
           - bool
 
     **Custom functions**
