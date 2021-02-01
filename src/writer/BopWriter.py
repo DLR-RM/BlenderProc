@@ -114,6 +114,10 @@ class BopWriter(WriterInterface):
         * - ignore_dist_thres
           - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 5.
           - float
+        * - depth_scale
+          - Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy 
+            and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy. Default: 1.0
+          - float
         * - m2mm
           - Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
             is needed if BopLoader option mm2m is used. Default: True
@@ -142,7 +146,7 @@ class BopWriter(WriterInterface):
         self.frames_per_chunk = 1000
 
         # Multiply the output depth image with this factor to get depth in mm.
-        self.depth_scale = 0.1
+        self.depth_scale = self.config.get_float("depth_scale", 1.0)
 
         # Output translation gt in mm
         self._scale = 1000. if self.config.get_bool("m2mm", True) else 1.
