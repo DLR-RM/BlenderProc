@@ -100,7 +100,7 @@ class Entity(Provider):
           - int
         * - random_samples
           - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or
-            random_samples property, only one is allowed at a time. Default: False.
+            random_samples property, only one is allowed at a time. Default: 0.
           - int
         * - check_empty
           - If this is True, there has to be something returned, else an error will be thrown. Default: False.
