@@ -238,6 +238,11 @@ class FloorExtractor(Module):
                         bpy.ops.object.mode_set(mode='OBJECT')
                         bpy.ops.object.select_all(action='DESELECT')
                         continue
+
+                    successful_up_vec = -up_vec
+                else:
+                    successful_up_vec = up_vec
+
                 list_of_median_poses = np.reshape(list_of_median_poses, (-1, 1))
                 if np.var(list_of_median_poses) < 1e-4:
                     # All faces are already correct
@@ -252,7 +257,7 @@ class FloorExtractor(Module):
                     else:
                         height_value = np.max(ms.cluster_centers_)
                 bpy.ops.mesh.select_all(action='DESELECT')
-                counter = FloorExtractor.split_at_height_value(bm, height_value, compare_height, up_vec,
+                counter = FloorExtractor.split_at_height_value(bm, height_value, compare_height, successful_up_vec,
                                                                compare_angle, obj.matrix_world)
                 if counter:
                     bpy.ops.mesh.separate(type='SELECTED')
