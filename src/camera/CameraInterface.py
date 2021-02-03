@@ -136,6 +136,9 @@ class CameraInterface(Module):
         * - interocular_distance
           - Distance between the camera pair.
           - float
+        * - frame
+          - The frame to set the camera pose to.
+          - int   
     """
 
     def __init__(self, config):
@@ -192,13 +195,17 @@ class CameraInterface(Module):
 
         CameraUtility.set_stereo_parameters(config.get_string("stereo_convergence_mode", cam.stereo.convergence_mode), config.get_float("convergence_distance", cam.stereo.convergence_distance), config.get_float("interocular_distance", cam.stereo.interocular_distance))
 
-    def _set_cam_extrinsics(self, config):
+    def _set_cam_extrinsics(self, config, frame: int = 1):
         """ Sets camera extrinsics according to the config.
 
+        :param frame: Optional, the frame to set the camera pose to.
         :param config: A configuration object with cam extrinsics.
         """
+        if config.has_param("frame"):
+            frame = config.get_int("frame")
+
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        CameraUtility.add_camera_pose(cam2world_matrix, frame)
 
     def _cam2world_matrix_from_cam_extrinsics(self, config):
         """ Determines camera extrinsics by using the given config and returns them in form of a cam to world frame transformation matrix.
