@@ -192,10 +192,9 @@ class CameraInterface(Module):
 
         CameraUtility.set_stereo_parameters(config.get_string("stereo_convergence_mode", cam.stereo.convergence_mode), config.get_float("convergence_distance", cam.stereo.convergence_distance), config.get_float("interocular_distance", cam.stereo.interocular_distance))
 
-    def _set_cam_extrinsics(self, cam_ob, config):
+    def _set_cam_extrinsics(self, config):
         """ Sets camera extrinsics according to the config.
 
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param config: A configuration object with cam extrinsics.
         """
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
