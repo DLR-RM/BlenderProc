@@ -48,7 +48,9 @@ python scripts/visHdf5Files.py examples/shapenet_multiview/output/*.hdf5
   "module": "main.Initializer",
   "config": {
     "global": {
-      "output_dir": "<args:1>"
+      "output_dir": "<args:1>",
+      "resolution_x": 512, 
+      "resolution_y": 512 
     }
   }
 }
@@ -64,13 +66,14 @@ The same as in the basic example.
   "module": "loader.ShapeNetLoader",
   "config": {
     "data_path": "<args:0>",
-    "used_synset_id": "03115762"
+    "used_synset_id": "02691156",
+    "used_source_id": "10155655850468db78d106ce0a280f87"
   }
 }
 ```
 
 * This module loads a ShapeNet Object, it only needs the path to the `ShapeNetCore.v2` folder, which is saved in `data_path`.
-* The `synset_id` = `03115762` is set to the id of a couch, which means a random couch will be loaded. The couch model with `source_id` = `806145e92798a35f15dd7d7985e749c1` was randomly selected 
+* The `used_synset_id` = `02691156` is set to the id of an airplane, and the `used_source_id` = `10155655850468db78d106ce0a280f87` selects one particular object of that category. If `source_id` was not specified, a random object from the same category is selected. 
 when creating this example. 
 * The position will be in the center of the scene.
 
@@ -143,7 +146,7 @@ This will write the ShapeNet object's `synset_id` and `source_id` to a file.
 {
   "module": "writer.CameraStateWriter",
   "config": {
-    "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y"]
+    "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y", "shift_x", "shift_y", "cam_K", "cam2world_matrix"]
   }
 }
 ```
