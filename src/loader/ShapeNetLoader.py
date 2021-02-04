@@ -47,17 +47,19 @@ class ShapeNetLoader(LoaderInterface):
 
         self._data_path = Utility.resolve_path(self.config.get_string("data_path"))
         self._used_synset_id = self.config.get_string("used_synset_id")
-
+        self._used_source_id = self.config.get_string("used_source_id", "")        
         taxonomy_file_path = os.path.join(self._data_path, "taxonomy.json")
-        self._files_with_fitting_synset = ShapeNetLoader.get_files_with_synset(self._used_synset_id, taxonomy_file_path,
-                                                                               self._data_path)
+        self._files_with_fitting_synset = ShapeNetLoader.get_files_with_synset(self._used_synset_id, self._used_source_id, 
+                                                                               taxonomy_file_path, self._data_path)
+        #print(self._files_with_fitting_synset)
 
     @staticmethod
-    def get_files_with_synset(used_synset_id, path_to_taxonomy_file, data_path):
+    def get_files_with_synset(used_synset_id, used_source_id, path_to_taxonomy_file, data_path):
         """
         Returns a list of a .obj file for the given synset_id
 
         :param used_synset_id: the id of the category something like: '02691156', see the data_path folder for more ids
+        :param used_source_id:
         :param path_to_taxonomy_file: path to the taxonomy.json file, should be in the data_path, too
         :param data_path: path to the ShapeNetCore.v2 folder
         :return: list of .obj files, which are in the synset_id folder, based on the given taxonomy
@@ -69,7 +71,19 @@ class ShapeNetLoader(LoaderInterface):
                 for block in loaded_data:
                     if "synsetId" in block:
                         synset_id = block["synsetId"]
-                        if synset_id == used_synset_id or used_synset_id in block["children"]:
+                        if synset_id == used_synset_id:
+                            id_path = os.path.join(data_path, synset_id)
+                            # Checking if directory exists for the used_synset_id meaning it is a parent
+                            if os.path.exists(id_path):
+                                if used_source_id == "":
+                                    files.extend(glob.glob(os.path.join(id_path, "*", "models", "*.obj")))
+                                else:
+                                    # Exact match of synset_id and source_id found
+                                    files = []
+                                    files.extend(glob.glob(os.path.join(id_path, used_source_id, "models", "*.obj")))
+                                break
+                        elif used_synset_id in block["children"]:
+                            print("Here!")
                             id_path = os.path.join(data_path, synset_id)
                             files.extend(glob.glob(os.path.join(id_path, "*", "models", "*.obj")))
             # Sort files to make random choice deterministic
@@ -82,12 +96,15 @@ class ShapeNetLoader(LoaderInterface):
         """
         Uses the loaded .obj files and picks one randomly and loads it
         """
-        selected_obj = random.choice(self._files_with_fitting_synset)
+        selected_obj = random.choice(self._files_with_fitting_synset)    
         loaded_obj = Utility.import_objects(selected_obj)
-
+        
         for obj in loaded_obj:
             obj["used_synset_id"] = self._used_synset_id
-            obj["used_source_id"] = pathlib.PurePath(selected_obj).parts[-3]
+            if self._used_source_id == "":
+                obj["used_source_id"] = pathlib.PurePath(selected_obj).parts[-3]
+            else:
+                obj["used_source_id"] = self._used_source_id
         
         self._correct_materials(loaded_obj)
 
