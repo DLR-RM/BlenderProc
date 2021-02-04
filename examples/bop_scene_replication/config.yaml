@@ -68,6 +68,7 @@
       "module": "writer.BopWriter",
       "config": {
         "dataset": "<args:1>",
+        "save_world2cam": False, # world coords are arbitrary in most real BOP datasets
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}

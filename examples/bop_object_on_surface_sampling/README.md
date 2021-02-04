@@ -485,6 +485,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 ## More examples
 
-* [bop_object_pose_sampling](../bop_object_pose_sampling): Sample BOP object and camera poses.
-* [bop_object_physics_positioning](../bop_object_physics_positioning): Drop BOP objects on planes and randomize materials
-* [bop_scene_replication](../bop_scene_replication): Replicate the scenes and cameras from BOP datasets in simulation.
+* [bop_object_pose_sampling](../bop_object_pose_sampling/README.md): Sample BOP object and camera poses.
+* [bop_object_physics_positioning](../bop_object_physics_positioning/README.md): Drop BOP objects on planes and randomize materials
+* [bop_scene_replication](../bop_scene_replication/README.md): Replicate the scenes and cameras from BOP datasets in simulation.

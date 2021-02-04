@@ -11,6 +11,7 @@ from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image
 from src.utility.SGMUtility import fill_in_fast
 from src.utility.SGMUtility import resize
+from src.utility.Utility import Utility
 
 
 class StereoGlobalMatchingWriter(RendererInterface):
@@ -156,7 +157,7 @@ class StereoGlobalMatchingWriter(RendererInterface):
             raise RuntimeError("A distance rendering has to be executed before this module is executed, "
                                "else the `renderer_distance_end` is not set!")
 
-        self.rgb_output_path = self._find_registered_output_by_key(self.rgb_output_key)["path"]
+        self.rgb_output_path = Utility.find_registered_output_by_key(self.rgb_output_key)["path"]
 
         # Collect camera and camera object
         cam_ob = bpy.context.scene.camera
@@ -196,7 +197,7 @@ class StereoGlobalMatchingWriter(RendererInterface):
 
             if self.config.get_bool("output_disparity", False):
                 np.save(os.path.join(self.output_dir, "disparity_%04d") % frame, disparity)
-        self._register_output("stereo-depth_", "stereo-depth", ".npy", "1.0.0")
+        Utility.register_output(self._determine_output_dir(), "stereo-depth_", "stereo-depth", ".npy", "1.0.0")
         if self.config.get_bool("output_disparity", False):
-            self._register_output("disparity_", "disparity", ".npy", "1.0.0")
+            Utility.register_output(self._determine_output_dir(), "disparity_", "disparity", ".npy", "1.0.0")
 

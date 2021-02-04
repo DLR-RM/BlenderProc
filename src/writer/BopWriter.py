@@ -10,10 +10,9 @@ import bpy
 from mathutils import Euler, Matrix, Vector
 
 from src.utility.BlenderUtility import get_all_mesh_objects, load_image
-from src.utility.CameraUtility import CameraUtility
 from src.utility.Utility import Utility
 from src.writer.WriterInterface import WriterInterface
-
+from src.writer.CameraStateWriter import CameraStateWriter
 
 def load_json(path, keys_to_int=False):
     """Loads content of a JSON file.
@@ -109,6 +108,9 @@ class BopWriter(WriterInterface):
         * - append_to_existing_output
           - If true, the new frames will be appended to the existing ones. Default: False
           - bool
+        * - save_world2cam
+          - If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json. Default: True
+          - bool
         * - ignore_dist_thres
           - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 5.
           - float
@@ -120,11 +122,18 @@ class BopWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
+        
+        # Create CameraWriter to write camera attibutes, use OpenCV coordinates
+        self._camera_writer = CameraStateWriter(config)
+        self._camera_writer.destination_frame = ["X", "-Y", "-Z"]
 
         # Parse configuration.
         self.dataset = self.config.get_string("dataset", "")
 
         self.append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
+        
+        # Save world to camera transformation
+        self._save_world2cam = self.config.get_bool("save_world2cam", True)
 
         # Distance in meteres to object after which it is ignored. Mostly due to failed physics.
         self._ignore_dist_thres = self.config.get_float("ignore_dist_thres", 5.)
@@ -194,110 +203,78 @@ class BopWriter(WriterInterface):
         self._write_camera()
         self._write_frames()
 
-    def _get_camera_attribute(self, cam_pose, attribute_name):
-        """ Returns the value of the requested attribute for the given object.
-
-        :param cam_pose: camera pose
-        :param attribute_name: The attribute name.
-        :return: The attribute value.
-        """
-        cam, cam_ob = cam_pose
-
-        if attribute_name == "fov_x":
-            return cam.angle_x
-        elif attribute_name == "fov_y":
-            return cam.angle_y
-        elif attribute_name == "shift_x":
-            return cam.shift_x
-        elif attribute_name == "shift_y":
-            return cam.shift_y
-        elif attribute_name == "half_fov_x":
-            return cam.angle_x * 0.5
-        elif attribute_name == "half_fov_y":
-            return cam.angle_y * 0.5
-
-        return super()._get_attribute(cam_ob, attribute_name)
-
-    def _get_object_attribute(self, object, attribute_name):
-        """ Returns the value of the requested attribute for the given object.
-
-        :param object: The mesh object.
-        :param attribute_name: The attribute name.
-        :return: The attribute value.
-        """
-        if attribute_name == "id":
-            return object["category_id"]
-
-        return super()._get_attribute(object, attribute_name)
-
     def _write_camera(self):
         """ Writes camera.json into dataset_dir.
         """
 
-        width = bpy.context.scene.render.resolution_x
-        height = bpy.context.scene.render.resolution_y
-
-        cam_K = CameraUtility.get_intrinsics_as_K_matrix()
+        cam_K = self._camera_writer._get_attribute(self.cam_pose, 'cam_K')
         camera = {'cx': cam_K[0][2],
                   'cy': cam_K[1][2],
                   'depth_scale': self.depth_scale,
                   'fx': cam_K[0][0],
                   'fy': cam_K[1][1],
-                  'height': height,
-                  'width': width}
+                  'height': bpy.context.scene.render.resolution_y,
+                  'width': bpy.context.scene.render.resolution_x}
 
         save_json(self.camera_path, camera)
 
-        return
-
     def _get_frame_gt(self):
-        """ Returns GT annotations for the active camera.
-
+        """ Returns GT pose annotations between active camera and objects.
+        
         :return: A list of GT annotations.
         """
-        camera_rotation = self._get_camera_attribute(self.cam_pose, 'rotation_euler')
-        camera_translation = self._get_camera_attribute(self.cam_pose, 'location')
-        H_c2w = Matrix.Translation(Vector(camera_translation)) @ Euler(
-            camera_rotation, 'XYZ').to_matrix().to_4x4()
-
-        # Blender to opencv coordinates.
-        H_c2w_opencv = Utility.transform_matrix_to_blender_coord_frame(H_c2w, ["X", "-Y", "-Z"])
+        
+        H_c2w_opencv = Matrix(self._camera_writer._get_attribute(self.cam_pose, 'cam2world_matrix'))
+        
         frame_gt = []
         for idx, obj in enumerate(self.dataset_objects):
-            object_rotation = self._get_object_attribute(obj, 'rotation_euler')
-            object_translation = self._get_object_attribute(obj, 'location')
-            H_m2w = Matrix.Translation(Vector(object_translation)) @ Euler(
-                object_rotation, 'XYZ').to_matrix().to_4x4()
+            
+            H_m2w = Matrix(self._get_attribute(obj, 'matrix_world'))
 
-            cam_H_m2c = (H_m2w.inverted() @ H_c2w_opencv).inverted()
-
+            cam_H_m2c = H_c2w_opencv.inverted() @ H_m2w
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
-            cam_R_m2c = list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2])
             cam_t_m2c = cam_H_m2c.to_translation()
 
             # ignore examples that fell through the plane
             if not np.linalg.norm(list(cam_t_m2c)) > self._ignore_dist_thres:
                 cam_t_m2c = list(cam_t_m2c * self._scale)
                 frame_gt.append({
-                    'cam_R_m2c': cam_R_m2c,
+                    'cam_R_m2c': list(cam_R_m2c[0]) + list(cam_R_m2c[1]) + list(cam_R_m2c[2]),
                     'cam_t_m2c': cam_t_m2c,
-                    'obj_id': self._get_object_attribute(obj, 'id')
+                    'obj_id': obj["category_id"]
                 })
             else:
-                print('ignored obj, ', self._get_object_attribute(obj, 'id'), 'because either ')
+                print('ignored obj, ', obj["category_id"], 'because either ')
                 print('(1) it is too far (e.g. fell through a plane during physics sim)')
                 print('or')
                 print('(2) the object pose has not been given in meters')
                 
         return frame_gt
-
+    
     def _get_frame_camera(self):
         """ Returns camera parameters for the active camera.
+        
+        :return: dict containing info for scene_camera.json 
         """
-        return {
-            'cam_K': np.hstack(CameraUtility.get_intrinsics_as_K_matrix()).tolist(),
+        
+        cam_K = self._camera_writer._get_attribute(self.cam_pose, 'cam_K')
+        
+        frame_camera_dict = {
+            'cam_K': cam_K[0] + cam_K[1] + cam_K[2],
             'depth_scale': self.depth_scale
         }
+        
+        if self._save_world2cam:
+            H_c2w_opencv = Matrix(self._camera_writer._get_attribute(self.cam_pose, 'cam2world_matrix'))
+            
+            H_w2c_opencv = H_c2w_opencv.inverted()
+            R_w2c_opencv = H_w2c_opencv.to_quaternion().to_matrix()
+            t_w2c_opencv = H_w2c_opencv.to_translation() * self._scale
+            
+            frame_camera_dict['cam_R_w2c'] = list(R_w2c_opencv[0]) + list(R_w2c_opencv[1]) + list(R_w2c_opencv[2])
+            frame_camera_dict['cam_t_w2c'] = list(t_w2c_opencv)
+        
+        return frame_camera_dict
 
     def _write_frames(self):
         """ Writes images, GT annotations and camera info.
@@ -356,7 +333,7 @@ class BopWriter(WriterInterface):
             chunk_camera[curr_frame_id] = self._get_frame_camera()
 
             # Copy the resulting RGB image.
-            rgb_output = self._find_registered_output_by_key("colors")
+            rgb_output = Utility.find_registered_output_by_key("colors")
             if rgb_output is None:
                 raise Exception("RGB image has not been rendered.")
             image_type = '.png' if rgb_output['path'].endswith('png') else '.jpg'
@@ -364,7 +341,7 @@ class BopWriter(WriterInterface):
             shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
             # Load the resulting dist image.
-            dist_output = self._find_registered_output_by_key("distance")
+            dist_output = Utility.find_registered_output_by_key("distance")
             if dist_output is None:
                 raise Exception("Distance image has not been rendered.")
             depth, _, _ = self._load_and_postprocess(dist_output['path'] % frame_id, "distance")
@@ -393,5 +370,3 @@ class BopWriter(WriterInterface):
                 curr_frame_id = 0
             else:
                 curr_frame_id += 1
-
-        return

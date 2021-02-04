@@ -61,7 +61,3 @@ The focus of this example is the fucntionality of the `manupulators.EntityManipu
  * Sets the `randomization_level` to 0.5, which means that a material has the change of 0.5 to be replaced with another one.
 
 Select the pool of objects for which we randimize materials with certain probability, and select material substitute. If no `getter.Material` is called, a random material from all of the materials will be used as substitution. 
-
-Check [object_manipulation](../object_manipulation) for more information about selectors.
-
-Check the [scenenet_with_cctextures](../scenenet_with_cctextures) for a more advanced example of the MaterialManipulator.
