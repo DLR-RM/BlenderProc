@@ -30,8 +30,14 @@ python scripts/visHdf5Files.py examples/shapenet/output/*.hdf5
 
 ## Steps
 
-* The ShapeNetLoader loads all the object paths with the `synset_id` = `02801938`, this id stands for the category `basket`.
-* One of them is now randomly selected and loaded 
+* Set the ShapeNet category as specified with `synset_id`: ```loader.ShapeNetLoader``` module.
+* Load model with randomly selected `source_id`: ```loader.ShapeNetLoader``` module.
+* Sample camera poses: ```camera.CameraSampler``` module.
+* Render RGB, Depth and Normal images: ```renderer.RgbRenderer``` module.
+* Write ShapeNet object data: ```writer.ShapeNetWriter``` module.
+* Write Camera Pose and Instrinsics data: ```writer.CameraStateWriter``` module.
+* Write HDF5 file: ```writer.Hdf5Writer``` module.
+
  
 
 ## Config file
@@ -55,17 +61,23 @@ The same as in the basic example.
 
 ```yaml
 {
-    "module": "loader.ShapeNetLoader",
-    "config": {
-      "data_path": "<args:0>",
-      "used_synset_id": "02801938"
-    }
+  "module": "loader.ShapeNetLoader",
+  "config": {
+    "data_path": "<args:0>",
+    "used_synset_id": "02691156",
+    "used_source_id": "10155655850468db78d106ce0a280f87"
+  }
 }
 ```
+
 This module loads a ShapeNet Object, it only needs the path to the `ShapeNetCore.v2` folder, which is saved in `data_path`.
 The `synset_id` = `02801938` is set to the id of a basket, which means a random basket will be loaded.
 
 The position will be in the center of the scene.
+
+* This module loads a ShapeNet Object, it only needs the path to the `ShapeNetCore.v2` folder, which is saved in `data_path`.
+* The `used_synset_id` = `02691156` is set to the id of an airplane, and the `used_source_id` = `10155655850468db78d106ce0a280f87` selects one particular object of that category.
+* The position will be in the center of the scene.
 
 ### CameraSampler
 
@@ -108,7 +120,7 @@ Each cameras rotation is such that it looks directly at the object and the camer
   "render_distance": True
 }
 ```
-To render with a transparent background, specify `transparent_background` as True. 
+To render with a transparent background, specify `transparent_background` as True. Depth and Normal images will also be produced. The Depth image's `distance_range` = `2.5`.
 
 
 ## HDF5 Writer
@@ -126,4 +138,4 @@ To render with a transparent background, specify `transparent_background` as Tru
   }
 }
 ```
-To write to a hdf5 file with a transparent image backgound, specify transparent_background as True.
+To write to a hdf5 file with a transparent image backgound, specify transparent_background as True. As the postprocessing step, `postprocessing.Dist2Depth` is applied in order to convert the distance image to an actual depth$
