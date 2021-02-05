@@ -5,7 +5,7 @@ import bpy
 import numpy as np
 
 from src.renderer.RendererInterface import RendererInterface
-from src.utility.BlenderUtility import load_image, get_all_mesh_objects
+from src.utility.BlenderUtility import load_image, get_all_blender_mesh_objects
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
 from src.utility.Utility import Utility
 

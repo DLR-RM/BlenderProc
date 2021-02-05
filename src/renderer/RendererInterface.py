@@ -8,7 +8,7 @@ import mathutils
 from src.main.GlobalStorage import GlobalStorage
 from src.main.Module import Module
 from src.utility.RendererUtility import RendererUtility
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.Utility import Utility
 
 

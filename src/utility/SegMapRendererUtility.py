@@ -5,7 +5,7 @@ import bpy
 import numpy as np
 
 from src.renderer.RendererInterface import RendererInterface
-from src.utility.BlenderUtility import load_image, get_all_mesh_objects
+from src.utility.BlenderUtility import load_image, get_all_blender_mesh_objects
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.RendererUtility import RendererUtility
 from src.utility.Utility import Utility
@@ -100,7 +100,7 @@ class SegMapRendererUtility:
             RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
             # Get objects with meshes (i.e. not lights or cameras)
-            objs_with_mats = get_all_mesh_objects()
+            objs_with_mats = get_all_blender_mesh_objects()
 
             colors, num_splits_per_dimension, used_objects = SegMapRendererUtility._colorize_objects_for_instance_segmentation(objs_with_mats, use_alpha_channel, render_colorspace_size_per_dimension)
 
