@@ -195,7 +195,7 @@ class CameraInterface(Module):
 
         CameraUtility.set_stereo_parameters(config.get_string("stereo_convergence_mode", cam.stereo.convergence_mode), config.get_float("convergence_distance", cam.stereo.convergence_distance), config.get_float("interocular_distance", cam.stereo.interocular_distance))
 
-    def _set_cam_extrinsics(self, config, frame: int = 1):
+    def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.
 
         :param frame: Optional, the frame to set the camera pose to.
