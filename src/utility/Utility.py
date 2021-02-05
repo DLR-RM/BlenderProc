@@ -5,6 +5,7 @@ import bpy
 import time
 import inspect
 import importlib
+import subprocess
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
@@ -76,6 +77,14 @@ class Utility:
                     modules.append(module_class(Config(config)))
 
         return modules
+
+    @staticmethod
+    def get_current_version():
+        """ Gets the git commit hash.
+
+        :return: a string, the BlenderProc version 
+        """
+        return subprocess.check_output(["git", "describe"]).strip()
 
 
     @staticmethod
