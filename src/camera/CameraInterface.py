@@ -86,6 +86,9 @@ class CameraInterface(Module):
         * - cam2world_matrix
           - 4x4 camera extrinsic matrix. Default: [].
           - list of floats
+        * - frame
+          - The frame to set the camera pose to.
+          - int
 
     **Intrinsic camera parameters**:
 
@@ -136,9 +139,7 @@ class CameraInterface(Module):
         * - interocular_distance
           - Distance between the camera pair.
           - float
-        * - frame
-          - The frame to set the camera pose to.
-          - int   
+
     """
 
     def __init__(self, config):
