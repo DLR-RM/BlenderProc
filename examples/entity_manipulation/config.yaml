@@ -62,6 +62,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "name": 'Suzanne',
             "type": "MESH"  # this guarantees that the object is a mesh, and not for example a camera

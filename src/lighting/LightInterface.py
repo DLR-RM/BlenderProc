@@ -2,6 +2,7 @@ import bpy
 
 from src.main.Module import Module
 from src.utility.ItemCollection import ItemCollection
+from src.utility.LightUtility import Light
 
 
 class LightInterface(Module):
@@ -58,14 +59,10 @@ class LightInterface(Module):
 
         :param config: A configuration object which contains all parameters relevant for the new light source.
         """
-        # Create light data, link it to the new object
-        light_data = bpy.data.lights.new(name="light", type="POINT")
-        light_obj = bpy.data.objects.new(name="light", object_data=light_data)
-        bpy.context.collection.objects.link(light_obj)
-
-        light_data.type = config.get_string("type", 'POINT')
-        light_obj.location = config.get_list("location", [0, 0, 0])
-        light_obj.rotation_euler = config.get_list("rotation", [0, 0, 0])
-        light_data.energy = config.get_float("energy", 10.)
-        light_data.color = config.get_list("color", [1, 1, 1])[:3]
-        light_data.distance = config.get_float("distance", 0)
+        light = Light()
+        light.set_type(config.get_string("type", 'POINT'))
+        light.set_location(config.get_list("location", [0, 0, 0]))
+        light.set_rotation_euler(config.get_list("rotation", [0, 0, 0]))
+        light.set_energy(config.get_float("energy", 10.))
+        light.set_color(config.get_list("color", [1, 1, 1])[:3])
+        light.set_distance(config.get_float("distance", 0))

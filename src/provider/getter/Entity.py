@@ -1,3 +1,4 @@
+import json
 import re
 from random import sample
 
@@ -99,8 +100,11 @@ class Entity(Provider):
           - int
         * - random_samples
           - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or
-            random_samples property, only one is allowed at a time. Default: False.
+            random_samples property, only one is allowed at a time. Default: 0.
           - int
+        * - check_empty
+          - If this is True, the returned list can not be empty, if it is empty an error will be thrown. Default: False.
+          - bool
 
     **Custom functions**
 
@@ -225,6 +229,16 @@ class Entity(Provider):
                 new_objects.append(obj)
         return new_objects
 
+    def _get_conditions_as_string(self):
+        """
+        Returns the used conditions as neatly formatted string
+        :return: str: containing the conditions
+        """
+        conditions = self.config.get_raw_dict('conditions')
+        text = json.dumps(conditions, indent=2, sort_keys=True)
+        def add_indent(t): return "\n".join(" " * len("Exception: ") + e for e in t.split("\n"))
+        return add_indent(text)
+
     def run(self):
         """ Processes defined conditions and compiles a list of objects.
 
@@ -251,5 +265,10 @@ class Entity(Provider):
             objects = [objects[self.config.get_int("index")]]
         elif random_samples:
             objects = sample(objects, k=min(random_samples, len(objects)))
+
+        check_if_return_is_empty = self.config.get_bool("check_empty", False)
+        if check_if_return_is_empty and not objects:
+            raise Exception(f"There were no objects selected with the following "
+                            f"condition: \n{self._get_conditions_as_string()}")
 
         return objects

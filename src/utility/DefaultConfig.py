@@ -10,6 +10,6 @@ class DefaultConfig:
     shift_x = 0
     shift_y = 0
 
-    stereo_convergence_mode = "OFFAXIS"
-    stereo_convergence_distance = 1.95
+    stereo_convergence_mode = "PARALLEL"
+    stereo_convergence_distance = 0.00001
     stereo_interocular_distance = 0.065

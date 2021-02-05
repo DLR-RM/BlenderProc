@@ -94,7 +94,14 @@ def vis_file(path):
 
                 # Visualize every key
                 for key in keys:
-                    vis_data(key, np.array(data[key]), data, os.path.basename(path))
+                    value = np.array(data[key])
+                    # Check if it is a stereo image
+                    if len(value.shape) >= 3 and value.shape[0] == 2:
+                        # Visualize both eyes separately
+                        for i, img in enumerate(value):
+                            vis_data(key, img, data, os.path.basename(path) + (" (left)" if i == 0 else " (right)"))
+                    else:
+                        vis_data(key, value, data, os.path.basename(path))
 
         else:
             print("The path is not a file")

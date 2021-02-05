@@ -152,8 +152,8 @@ class SceneNetLoader(LoaderInterface):
         #  Some category names in scenenet objects are written differently than in nyu_idset.csv
         normalize_name = {"floor-mat": "floor_mat", "refrigerator": "refridgerator", "shower-curtain": "shower_curtain", 
         "nightstand": "night_stand", "Other-structure": "otherstructure", "Other-furniture": "otherfurniture",
-        "Other-prop": "otherprop", "floor_tiles_floor_tiles_0125": "floor", "ground": "floor", "floor_enclose": "floor",
-        "floor_base_object01_56": "floor"}
+        "Other-prop": "otherprop", "floor_tiles_floor_tiles_0125": "floor", "ground": "floor", "floor_enclose": "floor", "floor_enclose2": "floor",
+        "floor_base_object01_56": "floor", "walls1_line01_12": "wall", "room_skeleton": "wall", "ceilingwall": "ceiling"}
 
         if LabelIdMapping.label_id_map:
             for obj in loaded_objects:
@@ -173,3 +173,9 @@ class SceneNetLoader(LoaderInterface):
                 else:
                     print("This object was not specified: {} use objects for it.".format(obj_name))
                     obj["category_id"] = LabelIdMapping.label_id_map["otherstructure".lower()]
+
+                # Correct names of floor and ceiling objects to make them later easier to identify (e.g. by the FloorExtractor)
+                if obj["category_id"] == LabelIdMapping.label_id_map["floor"]:
+                    obj.name = "floor"
+                elif obj["category_id"] == LabelIdMapping.label_id_map["ceiling"]:
+                    obj.name = "ceiling"

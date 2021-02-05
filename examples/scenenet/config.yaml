@@ -28,6 +28,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "cp_category_id": 1
           }
@@ -46,6 +47,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "cp_category_id": 1
           }
@@ -65,9 +67,10 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
-            "conditions": {
-              "name": ".*[l|L]amp.*"
-            }
+          "check_empty": True,
+          "conditions": {
+            "name": ".*[l|L]amp.*"
+          }
         },
         "emission_strength": 15.0,
         "keep_using_base_color": True
@@ -78,9 +81,10 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
-            "conditions": {
-              "name": ".*[c|C]eiling.*"
-            }
+          "check_empty": True,
+          "conditions": {
+            "name": ".*[c|C]eiling.*"
+          }
         },
         "emission_strength": 2.0,
       }
@@ -115,6 +119,7 @@
           },
           "check_if_pose_above_object_list": {
             "provider": "getter.Entity",
+            "check_empty": True,
             "conditions": {
               "cp_category_id": 2,
               "type": "MESH"
