@@ -82,9 +82,12 @@ class Utility:
     def get_current_version():
         """ Gets the git commit hash.
 
-        :return: a string, the BlenderProc version 
+        :return: a string, the BlenderProc version, or None if unavailable 
         """
-        repo = git.Repo(search_parent_directories=True) 
+        try:
+            repo = git.Repo(search_parent_directories=True) 
+        except:
+            return None
         return repo.head.object.hexsha
 
     @staticmethod
