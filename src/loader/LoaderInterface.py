@@ -60,6 +60,8 @@ class LoaderInterface(Module):
             if material_properties:
                 for mat_slot in obj.material_slots:
                     material = mat_slot.material
+                    if material is None:
+                        continue
                     for key, value in material_properties.items():
                         if key.startswith("cp_"):
                             key = key[3:]
