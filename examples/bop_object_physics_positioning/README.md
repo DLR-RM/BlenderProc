@@ -492,6 +492,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
       "config": {
         "dataset": "<args:1>",
         "append_to_existing_output": True,
+        "ignore_dist_thres": 10.,
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}
@@ -504,6 +505,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * Saves all pose and camera information that is provided in BOP datasets.
 * Only considers objects from the given `"dataset": "<args:1>"`
 * `"append_to_existing_output"` means that if the same output folder is chosen, data will be accumulated and not overwritten
+* `"ignore_dist_thres"` do not write object annotations for objects further than 10 meters (because of potential physics glitches)
 * We use a `postprocessing.Dist2Depth` to convert the distance images from Blender to actual depth images.
 
 ## More examples
