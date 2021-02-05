@@ -86,7 +86,8 @@
       "config": {
         "min_simulation_time": 4,
         "max_simulation_time": 20,
-        "check_object_interval": 1
+        "check_object_interval": 1,
+        "collision_shape": "MESH"
       }
     },
     {
