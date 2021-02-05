@@ -47,7 +47,7 @@ for idx, annotation in enumerate(annotations):
         bb = annotation['bbox']
         draw.rectangle(((bb[0], bb[1]), (bb[0] + bb[2], bb[1] + bb[3])), fill=None, outline="red")
         draw.text((bb[0] + 2, bb[1] + 2), get_category(annotation["category_id"]), font=font)
-        if annotation["iscrowd"]:
+        if isinstance(annotation["segmentation"], dict):
             im.putalpha(255)
             an_sg = annotation["segmentation"]
             item = mask.decode(mask.frPyObjects(an_sg, im.size[1], im.size[0])).astype(np.uint8) * 255
