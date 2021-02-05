@@ -59,7 +59,7 @@ class ShapeNetLoader(LoaderInterface):
         Returns a list of a .obj file for the given synset_id
 
         :param used_synset_id: the id of the category something like: '02691156', see the data_path folder for more ids
-        :param used_source_id:
+        :param used_source_id: object identifier of the a particular ShapeNet category, see inside any ShapeNet category for identifiers 
         :param path_to_taxonomy_file: path to the taxonomy.json file, should be in the data_path, too
         :param data_path: path to the ShapeNetCore.v2 folder
         :return: list of .obj files, which are in the synset_id folder, based on the given taxonomy
@@ -83,7 +83,6 @@ class ShapeNetLoader(LoaderInterface):
                                     files.extend(glob.glob(os.path.join(id_path, used_source_id, "models", "*.obj")))
                                 break
                         elif used_synset_id in block["children"]:
-                            print("Here!")
                             id_path = os.path.join(data_path, synset_id)
                             files.extend(glob.glob(os.path.join(id_path, "*", "models", "*.obj")))
             # Sort files to make random choice deterministic
@@ -101,7 +100,7 @@ class ShapeNetLoader(LoaderInterface):
         
         for obj in loaded_obj:
             obj["used_synset_id"] = self._used_synset_id
-            if self._used_source_id == "":
+            if not self._used_source_id:
                 obj["used_source_id"] = pathlib.PurePath(selected_obj).parts[-3]
             else:
                 obj["used_source_id"] = self._used_source_id
