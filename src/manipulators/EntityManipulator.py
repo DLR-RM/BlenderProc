@@ -237,6 +237,9 @@ class EntityManipulator(Module):
         * - cf_add_uv_mapping/projection
           - Name of the projection as str. Default: []. Available: ["cube", "cylinder", "smart", "sphere"]
           - str
+        * - cf_add_uv_mapping/forced_recalc_of_uv_maps
+          - If this is set to True, all UV maps are recalculated not just the missing ones
+          - bool
         * - cf_randomize_materials
           - Randomizes the materials for the selected objects with certain probability.
           - dict
@@ -370,7 +373,8 @@ class EntityManipulator(Module):
                 uv_config = Config(params_conf.get_raw_dict(key))
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
                 # it's default value and a postproc function
-                instructions = {"projection": (Config.get_string, None, str.lower)}
+                instructions = {"projection": (Config.get_string, None, str.lower),
+                                "forced_recalc_of_uv_maps": (Config.get_bool, False, None)}
                 # unpack
                 result = self._unpack_params(uv_config, instructions)
             elif key == "cf_randomize_materials":
@@ -437,7 +441,7 @@ class EntityManipulator(Module):
         bpy.context.view_layer.objects.active = entity
         if hasattr(entity, "data") and entity.data is not None and \
                 hasattr(entity.data, "uv_layers") and entity.data.uv_layers is not None:
-            if not BlenderUtility.check_if_uv_coordinates_are_set(entity):
+            if not BlenderUtility.check_if_uv_coordinates_are_set(entity) or value["forced_recalc_of_uv_maps"]:
                 bpy.ops.object.editmode_toggle()
                 if value["projection"] == "cube":
                     bpy.ops.uv.cube_project()
