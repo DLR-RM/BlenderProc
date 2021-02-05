@@ -187,7 +187,7 @@ class Material(Provider):
 
         # through every material
         for material in used_materials_to_check:
-            if material in new_materials or material in materials:
+            if material in new_materials or material in materials or material is None:
                 continue
 
             select_material = True
