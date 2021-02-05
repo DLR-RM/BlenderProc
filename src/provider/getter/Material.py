@@ -335,11 +335,10 @@ class Material(Provider):
                             # check if they have materials
                             if hasattr(obj, "material_slots"):
                                 for mat_slot in obj.material_slots:
-                                    if hasattr(mat_slot, "material"):
-                                        # if the material is the same as the currently checked one
-                                        if mat_slot.material == material:
-                                            found_material = True
-                                            break
+                                    # if the material is the same as the currently checked one
+                                    if mat_slot.material == material:
+                                        found_material = True
+                                        break
                             if found_material:
                                 break
                         if not found_material:
