@@ -6,7 +6,7 @@
 
 The focus of this example is the `loader.ShapeNetLoader`, which can be used to load objects from the ShapeNet dataset.
 
-See [the shape net weg page](http://www.shapenet.org/) for downloading the data, we can not provide a script for downloading as you have to have an account to download the data.
+See the [ShapeNet Webpage](http://www.shapenet.org/) for downloading the data. We cannot provide the script for downloading the ShapeNet dataset because a user account on the ShapeNet webpage is needed.
 
 ## Usage
 
@@ -31,7 +31,7 @@ python scripts/visHdf5Files.py examples/shapenet/output/*.hdf5
 ## Steps
 
 * Set the ShapeNet category as specified with `synset_id`: ```loader.ShapeNetLoader``` module.
-* Load model with randomly selected `source_id`: ```loader.ShapeNetLoader``` module.
+* Set the ShapeNet category object as specified with `source_id`: ```loader.ShapeNetLoader``` module.
 * Sample camera poses: ```camera.CameraSampler``` module.
 * Render RGB, Depth and Normal images: ```renderer.RgbRenderer``` module.
 * Write ShapeNet object data: ```writer.ShapeNetWriter``` module.
@@ -39,7 +39,6 @@ python scripts/visHdf5Files.py examples/shapenet/output/*.hdf5
 * Write HDF5 file: ```writer.Hdf5Writer``` module.
 
  
-
 ## Config file
 
 ### Global
