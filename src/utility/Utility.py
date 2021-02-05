@@ -5,7 +5,7 @@ import bpy
 import time
 import inspect
 import importlib
-import subprocess
+import git
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
@@ -84,8 +84,8 @@ class Utility:
 
         :return: a string, the BlenderProc version 
         """
-        return subprocess.check_output(["git", "describe"]).strip()
-
+        repo = git.Repo(search_parent_directories=True) 
+        return repo.head.object.hexsha
 
     @staticmethod
     def transform_matrix_to_blender_coord_frame(matrix, source_frame):
