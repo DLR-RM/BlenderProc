@@ -46,12 +46,12 @@ python scripts/visHdf5Files.py examples/shapenet/output/*.hdf5
 
 ```yaml
 {
-    "module": "main.Initializer",
-    "config": {
-      "global": {
-        "output_dir": "<args:1>",
-      }
+  "module": "main.Initializer",
+  "config": {
+    "global": {
+      "output_dir": "<args:1>",
     }
+  }
 }
 ```
 
@@ -70,39 +70,35 @@ The same as in the basic example.
 }
 ```
 
-This module loads a ShapeNet Object, it only needs the path to the `ShapeNetCore.v2` folder, which is saved in `data_path`.
-The `synset_id` = `02801938` is set to the id of a basket, which means a random basket will be loaded.
-
-The position will be in the center of the scene.
-
 * This module loads a ShapeNet Object, it only needs the path to the `ShapeNetCore.v2` folder, which is saved in `data_path`.
 * The `used_synset_id` = `02691156` is set to the id of an airplane, and the `used_source_id` = `10155655850468db78d106ce0a280f87` selects one particular object of that category.
 * The position will be in the center of the scene.
+
 
 ### CameraSampler
 
 ```yaml
 {
-    "module": "camera.CameraSampler",
-    "config": {
-      "cam_poses": [
-        {
-          "number_of_samples": 5,
-          "location": {
-            "provider":"sampler.Sphere",
-            "center": [0, 0, 0],
-            "radius": 2,
-            "mode": "SURFACE"
-          },
-          "rotation": {
-            "format": "look_at",
-            "value": {
-              "provider": "getter.POI"
-            }
+  "module": "camera.CameraSampler",
+  "config": {
+    "cam_poses": [
+      {
+        "number_of_samples": 5,
+        "location": {
+          "provider":"sampler.Sphere",
+          "center": [0, 0, 0],
+          "radius": 2,
+          "mode": "SURFACE"
+        },
+        "rotation": {
+          "format": "look_at",
+          "value": {
+            "provider": "getter.POI"
           }
         }
-      ]
-    }
+      }
+    ]
+  }
 }
 ```
 
@@ -131,11 +127,11 @@ To render with a transparent background, specify `transparent_background` as Tru
   "postprocessing_modules": {
     "distance": [
       {
-        "module": "postprocessing.TrimRedundantChannels",
+        "module": "postprocessing.Dist2Depth",
         "config": {}
       }
     ]
   }
 }
 ```
-To write to a hdf5 file with a transparent image backgound, specify transparent_background as True. As the postprocessing step, `postprocessing.Dist2Depth` is applied in order to convert the distance image to an actual depth$
+To write to a hdf5 file with a transparent image backgound, specify transparent_background as True. As the postprocessing step, `postprocessing.Dist2Depth` is applied in order to convert the distance image to an actual depth image.
