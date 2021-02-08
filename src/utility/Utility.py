@@ -88,6 +88,7 @@ class Utility:
             repo = git.Repo(search_parent_directories=True) 
         except git.InvalidGitRepositoryError as e:
             warnings.warn("Invalid git repository")
+            return None
         return repo.head.object.hexsha
 
     @staticmethod
