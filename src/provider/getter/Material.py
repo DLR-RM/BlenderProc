@@ -81,6 +81,27 @@ class Material(Provider):
           ]
         }
 
+    Example 6: Return all materials which: {belong to a certain list of objects and do not have any alpha texture used}
+
+    .. code-block:: yaml
+
+        {
+          "provider": "getter.Material",
+          "conditions": [
+          {
+            "cf_use_materials_of_objects": {
+                "provider": "getter.Entity",
+                "conditions": {
+                    "type": "MESH",
+                    "name": "Suzanne"
+                }
+            },
+            "cf_principled_bsdf_Alpha_eq": 1.0
+          }
+          ]
+        }
+
+
     **Configuration**:
 
     .. list-table:: 
@@ -142,6 +163,10 @@ class Material(Provider):
             Suffix 'min' = less nodes or equal than specified, 'max' = at least as many or 'eq' = for this exact
             amount of principled bsdf nodes.
           - float
+        * - conditions/cf_use_materials_of_objects
+          - This accepts a provider "getter.Entity", which returns a list of mesh objects, on which the materials
+            have to be in use. This can be used to return all materials, which are currently used on a certain object.
+          - Provider
     """
 
     def __init__(self, config):
@@ -162,7 +187,7 @@ class Material(Provider):
 
         # through every material
         for material in used_materials_to_check:
-            if material in new_materials or material in materials:
+            if material in new_materials or material in materials or material is None:
                 continue
 
             select_material = True
@@ -176,7 +201,7 @@ class Material(Provider):
                 if key.startswith('cf_'):
                     requested_custom_function = True
                     key = key[3:]
-                if hasattr(material, key) and not requested_custom_property:
+                if hasattr(material, key) and not requested_custom_property and not requested_custom_function:
                     # check if the type of the value of attribute matches desired
                     if isinstance(getattr(material, key), type(value)):
                         new_value = value
@@ -302,8 +327,23 @@ class Material(Provider):
                         else:
                             select_material = False
                             break
-
-
+                    elif key == "use_materials_of_objects":
+                        objects = Utility.build_provider_based_on_config(value).run()
+                        found_material = False
+                        # iterate over all selected objects
+                        for obj in objects:
+                            # check if they have materials
+                            if hasattr(obj, "material_slots"):
+                                for mat_slot in obj.material_slots:
+                                    # if the material is the same as the currently checked one
+                                    if mat_slot.material == material:
+                                        found_material = True
+                                        break
+                            if found_material:
+                                break
+                        if not found_material:
+                            select_material = False
+                            break
                     else:
                         select_material = False
                         break
