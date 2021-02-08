@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import warnings
 from math import radians
 import numpy as np
 
@@ -116,6 +117,11 @@ class Front3DLoader(LoaderInterface):
         for mesh_data in data["mesh"]:
             # extract the obj name, which also is used as the category_id name
             used_obj_name = mesh_data["type"].strip()
+            if used_obj_name == "":
+                used_obj_name = "void"
+            if "material" not in mesh_data:
+                warnings.warn(f"Material is not defined for {used_obj_name} in this file: {self.json_path}")
+                continue
             # create a new mesh
             mesh = bpy.data.meshes.new(used_obj_name + "_mesh")  # add the new mesh
             # link this mesh inside of a new object
