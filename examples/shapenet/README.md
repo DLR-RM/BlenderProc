@@ -112,11 +112,10 @@ Each cameras rotation is such that it looks directly at the object and the camer
   "transparent_background": False,
   "render_normals": True,
   "samples": 350,
-  "render_distance": True,
-  "distance_range": 2.5
+  "render_distance": True
 }
 ```
-To render with a transparent background, specify `transparent_background` as True. Depth and Normal images will also be produced. The Depth image's `distance_range` = `2.5`.
+To render with a transparent background, specify `transparent_background` as True. Depth and Normal images will also be produced.
 
 
 ## HDF5 Writer
