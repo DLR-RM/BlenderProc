@@ -22,6 +22,7 @@ class CameraUtility:
         # Add new frame if no frame is given
         if frame is None:
             frame = bpy.context.scene.frame_end
+        if bpy.context.scene.frame_end < frame + 1:
             bpy.context.scene.frame_end = frame + 1
 
         # Persist camera pose
