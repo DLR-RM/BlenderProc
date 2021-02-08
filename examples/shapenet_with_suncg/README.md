@@ -1,4 +1,4 @@
-# ShapeNet 
+# ShapeNet with SUNCG
 
 <p align="center">
 <img src="rendering.jpg" alt="Front readme image" width=300>

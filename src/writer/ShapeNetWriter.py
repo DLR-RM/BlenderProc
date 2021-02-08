@@ -5,7 +5,7 @@ from src.writer.WriterInterface import WriterInterface
 from src.utility.BlenderUtility import get_all_mesh_objects
 
 class ShapeNetWriter(WriterInterface):
-    """ Writes the state of all camera poses to a numpy file, if there was no hdf5 file to add them to.
+    """ Writes the ShapeNet object attributes in an hdf5 file.
     **Attributes per object**:
     .. list-table:: 
         :widths: 25 100 10
@@ -28,25 +28,25 @@ class ShapeNetWriter(WriterInterface):
     def run(self):
         """ Collect ShapeNet attributes and write them to a file."""
 
-        for object in get_all_mesh_objects():
-            used_synset_id = object.get("used_synset_id", "")
-            used_source_id = object.get("used_source_id", "")
+        shapenet_objects = []
 
-        shapenet_attributes = (used_synset_id, used_source_id)
-        self.write_attributes_to_file(self.object_writer, [shapenet_attributes], "shapenet_", "shapenet", ["used_synset_id", "used_source_id"])
+        for obj in get_all_mesh_objects():
+            if "used_synset_id" in obj:
+                shapenet_objects.append(obj)
 
-    def _get_attribute(self, shapenet, attribute_name):
+        self.write_attributes_to_file(self.object_writer, shapenet_objects, "shapenet_", "shapenet", ["used_synset_id", "used_source_id"])
+
+    def _get_attribute(self, shapenet_obj, attribute_name):
         """ Returns the value of the requested attribute for the given object.
-        :param shapenet: The ShapeNet object.
+        :param shapenet_obj: The ShapeNet object.
         :param attribute_name: The attribute name. Type: string.
         :return: The attribute value.
         """
-        used_synset_id, used_source_id = shapenet
 
         if attribute_name == "used_synset_id":
-            return used_synset_id
+            return shapenet_obj.get("used_synset_id", "")
         elif attribute_name == "used_source_id":
-            return used_source_id
+            return shapenet_obj.get("used_source_id", "")
         else:
             return super()._get_attribute(shapenet, attribute_name)
 
