@@ -99,4 +99,4 @@ class CameraLoader(CameraInterface):
         cam_ob = bpy.context.scene.camera
 
         # Set extrinsics from config
-        self._set_cam_extrinsics(cam_ob, config)
+        self._set_cam_extrinsics(config)
