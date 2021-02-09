@@ -244,17 +244,22 @@ class EntityManipulator(Module):
           - Randomizes the materials for the selected objects with certain probability.
           - dict
         * - cf_randomize_materials/randomization_level
-          - Expected fraction of the selected objects for which the texture should be randomized.
-            Default: 0.2. Range: [0, 1]
+          - Expected fraction of the selected objects for which the texture should be randomized. Default: 0.2.  Range: [0, 1]
           - float
         * - cf_randomize_materials/materials_to_replace_with
-          - Material(s) to participate in randomization. Sampling from the pool of eligible material (that comply
-            with conditions is performed in the Provider). Default: random material.
+          - Material(s) to participate in randomization. Sampling from the pool of elegible material (that comply
+            with conditions is performed in the Provider). Make sure you use 'random_samples" config parameter of
+            the Provider, if multiple materials are returned, the first one will be considered as a substitute
+            during randomization. Default: random material.
           - Provider
         * - cf_randomize_materials/obj_materials_cond_to_be_replaced
           - A dict of materials and corresponding conditions making it possible to only replace materials with
             certain properties. These are similar to the conditions mentioned in the getter.Material. Default: {}.
           - dict
+        * - cf_randomize_materials/add_to_objects_without_material
+          - If set to True, objects which didn't have any material before will also get a random material assigned.
+            Default: False.
+          - bool
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -381,6 +386,7 @@ class EntityManipulator(Module):
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
                 # it's default value and a postproc function
                 instructions = {"randomization_level": (Config.get_float, 0.2, None),
+                                "add_to_objects_without_material": (Config.get_bool, False, None),
                                 "materials_to_replace_with": (Config.get_list,
                                                               BlenderUtility.get_all_materials(), None),
                                 "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
@@ -463,14 +469,19 @@ class EntityManipulator(Module):
         :param value: Configuration data. Type: dict.
         """
         if hasattr(entity, 'material_slots'):
-            for mat in entity.material_slots:
-                use_mat = True
-                if value["obj_materials_cond_to_be_replaced"]:
-                    use_mat = len(Material.perform_and_condition_check(value["obj_materials_cond_to_be_replaced"], [],
-                                                                       [mat.material])) == 1
-                if use_mat:
-                    if np.random.uniform(0, 1) <= value["randomization_level"]:
-                        mat.material = choice(value["materials_to_replace_with"])
+            if entity.material_slots:
+                for mat in entity.material_slots:
+                    use_mat = True
+                    if value["obj_materials_cond_to_be_replaced"]:
+                        use_mat = len(Material.perform_and_condition_check(value["obj_materials_cond_to_be_replaced"], [],
+                                                                           [mat.material])) == 1
+                    if use_mat:
+                        if np.random.uniform(0, 1) <= value["randomization_level"]:
+                            mat.material = choice(value["materials_to_replace_with"])
+            elif value["add_to_objects_without_material"]:
+                # this object didn't have a material before
+                if np.random.uniform(0, 1) <= value["randomization_level"]:
+                    entity.data.materials.append(choice(value["materials_to_replace_with"]))
 
     def _unpack_params(self, param_config, instructions):
         """ Unpacks the data from a config object following the instructions in the dict.
