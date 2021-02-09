@@ -382,6 +382,7 @@ class EntityManipulator(Module):
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
                 # it's default value and a postproc function
                 instructions = {"randomization_level": (Config.get_float, 0.2, None),
+                                "add_to_objects_without_material": (Config.get_bool, False, None),
                                 "materials_to_replace_with": (Config.get_list,
                                                               BlenderUtility.get_all_materials(), None),
                                 "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
