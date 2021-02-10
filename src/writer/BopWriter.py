@@ -112,7 +112,11 @@ class BopWriter(WriterInterface):
           - If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json. Default: True
           - bool
         * - ignore_dist_thres
-          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 5.
+          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 100.
+          - float
+        * - depth_scale
+          - Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy 
+            and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy. Default: 1.0
           - float
         * - m2mm
           - Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
@@ -136,13 +140,13 @@ class BopWriter(WriterInterface):
         self._save_world2cam = self.config.get_bool("save_world2cam", True)
 
         # Distance in meteres to object after which it is ignored. Mostly due to failed physics.
-        self._ignore_dist_thres = self.config.get_float("ignore_dist_thres", 5.)
+        self._ignore_dist_thres = self.config.get_float("ignore_dist_thres", 100.)
 
         # Number of frames saved in each chunk.
         self.frames_per_chunk = 1000
 
         # Multiply the output depth image with this factor to get depth in mm.
-        self.depth_scale = 0.1
+        self.depth_scale = self.config.get_float("depth_scale", 1.0)
 
         # Output translation gt in mm
         self._scale = 1000. if self.config.get_bool("m2mm", True) else 1.
@@ -245,7 +249,8 @@ class BopWriter(WriterInterface):
                 })
             else:
                 print('ignored obj, ', obj["category_id"], 'because either ')
-                print('(1) it is too far (e.g. fell through a plane during physics sim)')
+                print('(1) it is further away than parameter "ignore_dist_thres: ",', self._ignore_dist_thres) 
+                print('(e.g. because it fell through a plane during physics sim)')
                 print('or')
                 print('(2) the object pose has not been given in meters')
                 

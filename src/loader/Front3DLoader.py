@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import warnings
 from math import radians
 import numpy as np
 
@@ -70,10 +71,7 @@ class Front3DLoader(LoaderInterface):
         # a list of all newly created objects
         self.created_objects = []
 
-
-
     def run(self):
-
         if not os.path.exists(self.json_path):
             raise Exception("The given path does not exists: {}".format(self.json_path))
         if not self.json_path.endswith(".json"):
@@ -116,6 +114,11 @@ class Front3DLoader(LoaderInterface):
         for mesh_data in data["mesh"]:
             # extract the obj name, which also is used as the category_id name
             used_obj_name = mesh_data["type"].strip()
+            if used_obj_name == "":
+                used_obj_name = "void"
+            if "material" not in mesh_data:
+                warnings.warn(f"Material is not defined for {used_obj_name} in this file: {self.json_path}")
+                continue
             # create a new mesh
             mesh = bpy.data.meshes.new(used_obj_name + "_mesh")  # add the new mesh
             # link this mesh inside of a new object
@@ -218,13 +221,18 @@ class Front3DLoader(LoaderInterface):
             mesh.polygons.foreach_set("loop_total", loop_total)
 
             # the uv coordinates are reshaped then the face coords are extracted
-            uv = np.reshape(np.array([float(ele) for ele in mesh_data["uv"]]), [num_vertices, 2])
-            used_uvs = uv[faces, :]
-            # and again reshaped back to the long list
-            used_uvs = np.reshape(used_uvs, [2 * num_vertex_indicies])
+            uv_mesh_data = [float(ele) for ele in mesh_data["uv"] if ele is not None]
+            # bb1737bf-dae6-4215-bccf-fab6f584046b.json includes one mesh which only has no UV mapping
+            if uv_mesh_data:
+                uv = np.reshape(np.array(uv_mesh_data), [num_vertices, 2])
+                used_uvs = uv[faces, :]
+                # and again reshaped back to the long list
+                used_uvs = np.reshape(used_uvs, [2 * num_vertex_indicies])
 
-            mesh.uv_layers.new(name="new_uv_layer")
-            mesh.uv_layers[-1].data.foreach_set("uv", used_uvs)
+                mesh.uv_layers.new(name="new_uv_layer")
+                mesh.uv_layers[-1].data.foreach_set("uv", used_uvs)
+            else:
+                warnings.warn(f"This mesh {obj.name} does not have a specified uv map!")
 
             # this update converts the upper data into a mesh
             mesh.update()
@@ -253,7 +261,7 @@ class Front3DLoader(LoaderInterface):
             obj_file = os.path.join(folder_path, "raw_model.obj")
             # if the object exists load it -> a lot of object do not exist
             # we are unsure why this is -> we assume that not all objects have been made public
-            if os.path.exists(obj_file):
+            if os.path.exists(obj_file) and not "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
                 # load all objects from this .obj file
                 objs = Utility.import_objects(filepath=obj_file)
                 # extract the name, which serves as category id
@@ -315,6 +323,8 @@ class Front3DLoader(LoaderInterface):
                             links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
 
                 all_objs.extend(objs)
+            elif "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
+                warnings.warn(f"This file {obj_file} was skipped as it can not be read by blender.")
         return all_objs
 
     def _move_and_duplicate_furniture(self, data: dir, all_loaded_furniture: list):

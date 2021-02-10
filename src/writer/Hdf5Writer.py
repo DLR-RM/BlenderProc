@@ -113,6 +113,10 @@ class Hdf5Writer(WriterInterface):
 
                     self._write_to_hdf_file(f, new_key + "_version", np.string_([new_version]))
 
+                blender_proc_version = Utility.get_current_version()
+                if blender_proc_version:
+                    self._write_to_hdf_file(f, "blender_proc_version", np.string_(blender_proc_version))
+
     def _write_to_hdf_file(self, file, key, data):
         """ Adds the given data as a new entry to the given hdf5 file.
 
