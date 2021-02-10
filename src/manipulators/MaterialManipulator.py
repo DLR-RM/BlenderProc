@@ -144,6 +144,11 @@ class MaterialManipulator(Module):
             the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> 'base_color'). Also
             deletes any links to this shader's input point.
           - list/Vector, int or float
+        * - cf_add_*
+          - Adds value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case name of
+            the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> 'base_color'). Also
+            deletes any links to this shader's input point. The values are not clipped in the end.
+          - list/Vector, int or float
     """
 
     def __init__(self, config):
@@ -208,7 +213,10 @@ class MaterialManipulator(Module):
                     self._switch_to_emission_shader(material, value)
                 elif "set_" in key_copy and requested_cf:
                     # sets the value of the principled shader
-                    self._set_principled_shader_value(material, key_copy[len("set_"):], value)
+                    self._op_principled_shader_value(material, key_copy[len("set_"):], value, "set")
+                elif "add_" in key_copy and requested_cf:
+                    # sets the value of the principled shader
+                    self._op_principled_shader_value(material, key_copy[len("add_"):], value, "add")
                 elif hasattr(material, key_copy):
                     # set the value
                     setattr(material, key_copy, value)
@@ -282,21 +290,25 @@ class MaterialManipulator(Module):
             links.new(out_point, in_point)
 
     @staticmethod
-    def _set_principled_shader_value(material, shader_input_key, value):
+    def _op_principled_shader_value(material, shader_input_key, value, operation):
         """
+        Sets or adds the given value to the shader_input_key of the principled shader in the material
 
         :param material: Material to be modified. Type: bpy.types.Material.
         :param shader_input_key: Name of the shader's input. Type: string.
         :param value: Value to set.
         """
         nodes = material.node_tree.nodes
-        links = material.node_tree.links
         principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
         shader_input_key_copy = shader_input_key.replace("_", " ").title()
         if principled_bsdf.inputs[shader_input_key_copy].links:
+            links = material.node_tree.links
             links.remove(principled_bsdf.inputs[shader_input_key_copy].links[0])
         if shader_input_key_copy in principled_bsdf.inputs:
-            principled_bsdf.inputs[shader_input_key_copy].default_value = value
+            if operation == "set":
+                principled_bsdf.inputs[shader_input_key_copy].default_value = value
+            elif operation == "add":
+                principled_bsdf.inputs[shader_input_key_copy].default_value += value
         else:
             raise Exception("Shader input key '{}' is not a part of the shader.".format(shader_input_key_copy))
 
