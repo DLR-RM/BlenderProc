@@ -28,11 +28,7 @@ class ShapeNetWriter(WriterInterface):
     def run(self):
         """ Collect ShapeNet attributes and write them to a file."""
 
-        shapenet_objects = []
-
-        for obj in get_all_mesh_objects():
-            if "used_synset_id" in obj:
-                shapenet_objects.append(obj)
+        shapenet_objects = [obj for obj in get_all_mesh_objects() if "used_synset_id" in obj]
 
         self.write_attributes_to_file(self.object_writer, shapenet_objects, "shapenet_", "shapenet", ["used_synset_id", "used_source_id"])
 
@@ -49,4 +45,3 @@ class ShapeNetWriter(WriterInterface):
             return shapenet_obj.get("used_source_id", "")
         else:
             return super()._get_attribute(shapenet, attribute_name)
-
