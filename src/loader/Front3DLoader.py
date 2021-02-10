@@ -224,13 +224,18 @@ class Front3DLoader(LoaderInterface):
             mesh.polygons.foreach_set("loop_total", loop_total)
 
             # the uv coordinates are reshaped then the face coords are extracted
-            uv = np.reshape(np.array([float(ele) for ele in mesh_data["uv"]]), [num_vertices, 2])
-            used_uvs = uv[faces, :]
-            # and again reshaped back to the long list
-            used_uvs = np.reshape(used_uvs, [2 * num_vertex_indicies])
+            uv_mesh_data = [float(ele) for ele in mesh_data["uv"] if ele is not None]
+            # bb1737bf-dae6-4215-bccf-fab6f584046b.json includes one mesh which only has no UV mapping
+            if uv_mesh_data:
+                uv = np.reshape(np.array(uv_mesh_data), [num_vertices, 2])
+                used_uvs = uv[faces, :]
+                # and again reshaped back to the long list
+                used_uvs = np.reshape(used_uvs, [2 * num_vertex_indicies])
 
-            mesh.uv_layers.new(name="new_uv_layer")
-            mesh.uv_layers[-1].data.foreach_set("uv", used_uvs)
+                mesh.uv_layers.new(name="new_uv_layer")
+                mesh.uv_layers[-1].data.foreach_set("uv", used_uvs)
+            else:
+                warnings.warn(f"This mesh {obj.name} does not have a specified uv map!")
 
             # this update converts the upper data into a mesh
             mesh.update()
