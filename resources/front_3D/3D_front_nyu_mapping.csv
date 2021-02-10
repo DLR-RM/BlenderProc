@@ -12,8 +12,10 @@ id,name
 10,shelf
 22,smartcustomizedceiling
 3,wine cabinet
+3,wine cooler
 1,wallinner
 3,sideboard / side cabinet / console table
+3,sideboard / side cabinet / console
 7,dressing table
 17,wardrobe
 35,ceiling lamp
@@ -28,8 +30,10 @@ id,name
 38,cornice
 4,bunk bed
 5,lounge chair / cafe chair / office chair
+5,lounge chair / book-chair / computer chair
 5,footstool / sofastool / bed end stool / stool
 6,three-seat / multi-seat sofa
+6,three-seat / multi-person sofa
 3,drawer chest / corner cabinet
 1,walltop
 5,armchair
@@ -60,3 +64,17 @@ id,name
 4,bed frame
 1,customizedfeaturewall
 1,baseboard
+2,slabside
+2,slabtop
+2,slabbottom
+39,clipmesh
+39,front
+39,back
+1,customized_wainscot
+3,cabinet/lightband
+38,extrusioncustomizedceilingmodel
+35,lightband
+1,extrusioncustomizedbackgroundwall
+6,two-seat sofa
+7,tea table
+4,double bed
