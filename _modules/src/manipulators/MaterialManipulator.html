@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -345,6 +350,7 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">mathutils</span>
 
 <span class="kn">from</span> <span class="nn">src.main.Module</span> <span class="kn">import</span> <span class="n">Module</span>
 <span class="kn">from</span> <span class="nn">src.utility.Config</span> <span class="kn">import</span> <span class="n">Config</span>
@@ -487,6 +493,11 @@
 <span class="sd">            the input (use &#39;_&#39; if those are represented by multiple nodes, e.g. &#39;Base Color&#39; -&gt; &#39;base_color&#39;). Also</span>
 <span class="sd">            deletes any links to this shader&#39;s input point.</span>
 <span class="sd">          - list/Vector, int or float</span>
+<span class="sd">        * - cf_add_*</span>
+<span class="sd">          - Adds value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case name of</span>
+<span class="sd">            the input (use &#39;_&#39; if those are represented by multiple nodes, e.g. &#39;Base Color&#39; -&gt; &#39;base_color&#39;). Also</span>
+<span class="sd">            deletes any links to this shader&#39;s input point. The values are not clipped in the end.</span>
+<span class="sd">          - list/Vector, int or float</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
@@ -551,7 +562,10 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_switch_to_emission_shader</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="s2">&quot;set_&quot;</span> <span class="ow">in</span> <span class="n">key_copy</span> <span class="ow">and</span> <span class="n">requested_cf</span><span class="p">:</span>
                     <span class="c1"># sets the value of the principled shader</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_set_principled_shader_value</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key_copy</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;set_&quot;</span><span class="p">):],</span> <span class="n">value</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_op_principled_shader_value</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key_copy</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;set_&quot;</span><span class="p">):],</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;set&quot;</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="s2">&quot;add_&quot;</span> <span class="ow">in</span> <span class="n">key_copy</span> <span class="ow">and</span> <span class="n">requested_cf</span><span class="p">:</span>
+                    <span class="c1"># sets the value of the principled shader</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_op_principled_shader_value</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key_copy</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;add_&quot;</span><span class="p">):],</span> <span class="n">value</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key_copy</span><span class="p">):</span>
                     <span class="c1"># set the value</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key_copy</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
@@ -624,22 +638,34 @@
             <span class="n">node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">loaded_textures</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">out_point</span><span class="p">,</span> <span class="n">in_point</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MaterialManipulator._set_principled_shader_value"><a class="viewcode-back" href="../../../src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator._set_principled_shader_value">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_set_principled_shader_value</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">shader_input_key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="MaterialManipulator._op_principled_shader_value"><a class="viewcode-back" href="../../../src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator._op_principled_shader_value">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_op_principled_shader_value</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">shader_input_key</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets or adds the given value to the shader_input_key of the principled shader in the material</span>
 
 <span class="sd">        :param material: Material to be modified. Type: bpy.types.Material.</span>
 <span class="sd">        :param shader_input_key: Name of the shader&#39;s input. Type: string.</span>
 <span class="sd">        :param value: Value to set.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
-        <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
         <span class="n">principled_bsdf</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
         <span class="n">shader_input_key_copy</span> <span class="o">=</span> <span class="n">shader_input_key</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">links</span><span class="p">:</span>
+            <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
             <span class="n">links</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">shader_input_key_copy</span> <span class="ow">in</span> <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
-            <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">if</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;set&quot;</span><span class="p">:</span>
+                <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">elif</span> <span class="n">operation</span> <span class="o">==</span> <span class="s2">&quot;add&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+                    <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">+=</span> <span class="n">value</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The shapder input key &#39;</span><span class="si">{</span><span class="n">shader_input_key_copy</span><span class="si">}</span><span class="s2">&#39; needs a value with &quot;</span>
+                                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
+                                        <span class="sa">f</span><span class="s2">&quot;dimensions, the used config value only has </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2"> dimensions.&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">)):</span>
+                        <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">shader_input_key_copy</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">value</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Shader input key &#39;</span><span class="si">{}</span><span class="s2">&#39; is not a part of the shader.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shader_input_key_copy</span><span class="p">))</span></div>
 

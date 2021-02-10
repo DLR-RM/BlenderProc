@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -354,6 +359,7 @@
 <span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">load_image</span>
 <span class="kn">from</span> <span class="nn">src.utility.SGMUtility</span> <span class="kn">import</span> <span class="n">fill_in_fast</span>
 <span class="kn">from</span> <span class="nn">src.utility.SGMUtility</span> <span class="kn">import</span> <span class="n">resize</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 
 
 <div class="viewcode-block" id="StereoGlobalMatchingWriter"><a class="viewcode-back" href="../../../src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">[docs]</a><span class="k">class</span> <span class="nc">StereoGlobalMatchingWriter</span><span class="p">(</span><span class="n">RendererInterface</span><span class="p">):</span>
@@ -499,7 +505,7 @@
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;A distance rendering has to be executed before this module is executed, &quot;</span>
                                <span class="s2">&quot;else the `renderer_distance_end` is not set!&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">rgb_output_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_registered_output_by_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rgb_output_key</span><span class="p">)[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rgb_output_path</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rgb_output_key</span><span class="p">)[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
 
         <span class="c1"># Collect camera and camera object</span>
         <span class="n">cam_ob</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span>
@@ -539,9 +545,9 @@
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;output_disparity&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">,</span> <span class="s2">&quot;disparity_</span><span class="si">%04d</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">%</span> <span class="n">frame</span><span class="p">,</span> <span class="n">disparity</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_register_output</span><span class="p">(</span><span class="s2">&quot;stereo-depth_&quot;</span><span class="p">,</span> <span class="s2">&quot;stereo-depth&quot;</span><span class="p">,</span> <span class="s2">&quot;.npy&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span> <span class="s2">&quot;stereo-depth_&quot;</span><span class="p">,</span> <span class="s2">&quot;stereo-depth&quot;</span><span class="p">,</span> <span class="s2">&quot;.npy&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;output_disparity&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_register_output</span><span class="p">(</span><span class="s2">&quot;disparity_&quot;</span><span class="p">,</span> <span class="s2">&quot;disparity&quot;</span><span class="p">,</span> <span class="s2">&quot;.npy&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span></div></div>
+            <span class="n">Utility</span><span class="o">.</span><span class="n">register_output</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span> <span class="s2">&quot;disparity_&quot;</span><span class="p">,</span> <span class="s2">&quot;disparity&quot;</span><span class="p">,</span> <span class="s2">&quot;.npy&quot;</span><span class="p">,</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">)</span></div></div>
 
 </pre></div>
 

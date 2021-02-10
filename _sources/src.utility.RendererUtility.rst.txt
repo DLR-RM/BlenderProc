@@ -1,7 +1,7 @@
-src\.renderer\.NormalRenderer module
+src\.utility\.RendererUtility module
 ====================================
 
-.. automodule:: src.renderer.NormalRenderer
+.. automodule:: src.utility.RendererUtility
     :members:
     :undoc-members:
     :show-inheritance:

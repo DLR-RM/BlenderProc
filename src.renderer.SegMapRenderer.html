@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -455,56 +460,6 @@ numbers to separate objects with the same name. This is used in the map_by list.
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="src.renderer.SegMapRenderer.SegMapRenderer._colorize_object">
-<code class="descname">_colorize_object</code><span class="sig-paren">(</span><em>obj</em>, <em>color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/SegMapRenderer.html#SegMapRenderer._colorize_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.SegMapRenderer.SegMapRenderer._colorize_object" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.</p>
-<p>This is done by replacing all nodes just with an emission node, which emits the color corresponding to the
-category of the object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>obj</strong> – The object to use.</li>
-<li><strong>color</strong> – RGB array of a color in the range of [0, self.render_colorspace_size_per_dimension].</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.renderer.SegMapRenderer.SegMapRenderer._colorize_objects_for_instance_segmentation">
-<code class="descname">_colorize_objects_for_instance_segmentation</code><span class="sig-paren">(</span><em>objects</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/SegMapRenderer.html#SegMapRenderer._colorize_objects_for_instance_segmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.SegMapRenderer.SegMapRenderer._colorize_objects_for_instance_segmentation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a different color to each object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>objects</strong> – A list of objects.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The num_splits_per_dimension of the spanned color space, the color map</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.renderer.SegMapRenderer.SegMapRenderer._set_world_background_color">
-<code class="descname">_set_world_background_color</code><span class="sig-paren">(</span><em>color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/SegMapRenderer.html#SegMapRenderer._set_world_background_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.SegMapRenderer.SegMapRenderer._set_world_background_color" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the background color of the blender world obejct.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>color</strong> – A 3-dim array containing the background color in range [0, 255]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 <dl class="method">
 <dt id="src.renderer.SegMapRenderer.SegMapRenderer.run">
 <code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/SegMapRenderer.html#SegMapRenderer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.SegMapRenderer.SegMapRenderer.run" title="Permalink to this definition">¶</a></dt>

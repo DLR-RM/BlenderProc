@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -367,6 +372,46 @@
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bpy.types.Node: The newly constructed texture node</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.MaterialLoaderUtility.MaterialLoaderUtility.add_alpha_channel_to_textures">
+<em class="property">static </em><code class="descname">add_alpha_channel_to_textures</code><span class="sig-paren">(</span><em>blurry_edges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MaterialLoaderUtility.html#MaterialLoaderUtility.add_alpha_channel_to_textures"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.add_alpha_channel_to_textures" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds transparency to all textures, which contain an .png image as an image input</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blurry_edges</strong> – If True, the edges of the alpha channel might be blurry,
+this causes errors if the alpha channel should only be 0 or 1</td>
+</tr>
+</tbody>
+</table>
+<p>Be careful, when you replace the original texture with something else (Segmentation, …),
+the necessary texture node gets lost. By copying it into a new material as done in the SegMapRenderer, you
+can keep the transparency even for those nodes.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.MaterialLoaderUtility.MaterialLoaderUtility.add_alpha_texture_node">
+<em class="property">static </em><code class="descname">add_alpha_texture_node</code><span class="sig-paren">(</span><em>used_material</em>, <em>new_material</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MaterialLoaderUtility.html#MaterialLoaderUtility.add_alpha_texture_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.add_alpha_texture_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds to a predefined new_material a texture node from an existing material (used_material)
+This is necessary to connect it later on in the add_alpha_channel_to_textures</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>used_material</strong> – existing material, which might contain a texture node with a .png texture</li>
+<li><strong>new_material</strong> – a new material, which will get a copy of this texture node</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the modified new_material, if no texture node was found, the original new_material</p>
 </td>
 </tr>
 </tbody>
@@ -560,6 +605,20 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="src.utility.MaterialLoaderUtility.MaterialLoaderUtility.change_to_texture_less_render">
+<em class="property">static </em><code class="descname">change_to_texture_less_render</code><span class="sig-paren">(</span><em>use_alpha_channel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MaterialLoaderUtility.html#MaterialLoaderUtility.change_to_texture_less_render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.change_to_texture_less_render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the materials, which do not contain a emission shader to a white slightly glossy texture</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>use_alpha_channel</strong> – If true, the alpha channel stored in .png textures is used.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="src.utility.MaterialLoaderUtility.MaterialLoaderUtility.connect_uv_maps">
 <em class="property">static </em><code class="descname">connect_uv_maps</code><span class="sig-paren">(</span><em>nodes</em>, <em>links</em>, <em>collection_of_texture_nodes</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MaterialLoaderUtility.html#MaterialLoaderUtility.connect_uv_maps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.connect_uv_maps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect all given texture nodes to a newly constructed UV node.</p>
@@ -570,13 +629,12 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>nodes</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Nodes</span></code>) – Nodes from the current material</li>
 <li><strong>links</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">NodeLinks</span></code>) – Links from the current material</li>
-<li><strong>collection_of_texture_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of :class: <a href="#id1"><span class="problematic" id="id2">`</span></a>:w</li>
+<li><strong>collection_of_texture_nodes</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of :class: <cite>bpy.type.Node</cite> of type :class: <cite>ShaderNodeTexImage</cite></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>bpy.type.Node of type :class: <cite>ShaderNodeTexImage</cite></p>
 </dd></dl>
 
 <dl class="staticmethod">

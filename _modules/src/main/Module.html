@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -406,71 +411,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;output_is_temp&quot;</span><span class="p">,</span> <span class="n">output_is_temp_default</span><span class="p">):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_temp_dir</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span></div>
-
-<div class="viewcode-block" id="Module._add_output_entry"><a class="viewcode-back" href="../../../src.main.Module.html#src.main.Module.Module._add_output_entry">[docs]</a>    <span class="k">def</span> <span class="nf">_add_output_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Registers the given output in the scene&#39;s custom properties</span>
-
-<span class="sd">        :param output: A dict containing key and path of the new output type.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;output&quot;</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_already_registered</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]):</span> <span class="c1"># E.g. multiple camera samplers</span>
-                <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">output</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">output</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="Module._register_output"><a class="viewcode-back" href="../../../src.main.Module.html#src.main.Module.Module._register_output">[docs]</a>    <span class="k">def</span> <span class="nf">_register_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default_prefix</span><span class="p">,</span> <span class="n">default_key</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">stereo</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">unique_for_camposes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output_key_parameter_name</span><span class="o">=</span><span class="s2">&quot;output_key&quot;</span><span class="p">,</span> <span class="n">output_file_prefix_parameter_name</span><span class="o">=</span><span class="s2">&quot;output_file_prefix&quot;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Registers new output type using configured key and file prefix.</span>
-
-<span class="sd">        :param default_prefix: The default prefix of the generated files.</span>
-<span class="sd">        :param default_key: The default key which should be used for storing the output in merged file.</span>
-<span class="sd">        :param suffix: The suffix of the generated files.</span>
-<span class="sd">        :param version: The version number which will be stored at key_version in the final merged file.</span>
-<span class="sd">        :param stereo: Boolean indicating whether the output of this rendering result will be stereo.</span>
-<span class="sd">        :param unique_for_camposes: True if the output to be registered is unique for all the camera poses</span>
-<span class="sd">        :param output_key_parameter_name: The parameter name to use for retrieving the output key from the config.</span>
-<span class="sd">        :param output_file_prefix_parameter_name: The parameter name to use for retrieving the output file prefix from the config.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_output_entry</span><span class="p">({</span>
-            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="n">output_key_parameter_name</span><span class="p">,</span> <span class="n">default_key</span><span class="p">),</span>
-            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="n">output_file_prefix_parameter_name</span><span class="p">,</span> <span class="n">default_prefix</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">unique_for_camposes</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">,</span>
-            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">version</span><span class="p">,</span>
-            <span class="s2">&quot;stereo&quot;</span><span class="p">:</span> <span class="n">stereo</span>
-        <span class="p">})</span></div>
-
-<div class="viewcode-block" id="Module._find_registered_output_by_key"><a class="viewcode-back" href="../../../src.main.Module.html#src.main.Module.Module._find_registered_output_by_key">[docs]</a>    <span class="k">def</span> <span class="nf">_find_registered_output_by_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns the output which was registered with the given key.</span>
-
-<span class="sd">        :param key: The output key to look for.</span>
-<span class="sd">        :return: The dict containing all information registered for that output. If no output with the given key exists, None is returned.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="s2">&quot;output&quot;</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]:</span>
-                <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">output</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
-
-        <span class="k">return</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="Module._output_already_registered"><a class="viewcode-back" href="../../../src.main.Module.html#src.main.Module.Module._output_already_registered">[docs]</a>    <span class="k">def</span> <span class="nf">_output_already_registered</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">output_list</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Checks if the given output entry already exists in the list of outputs, by checking on the key and path.</span>
-<span class="sd">        Also throws an error if it detects an entry having the same key but not the same path and vice versa since this</span>
-<span class="sd">        is ambiguous.</span>
-
-<span class="sd">        :param output: The output dict entry.</span>
-<span class="sd">        :param output_list: The list of output entries.</span>
-<span class="sd">        :return: bool indicating whether it already exists.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">_output</span> <span class="ow">in</span> <span class="n">output_list</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning! Detected output entries with duplicate keys and paths&quot;</span><span class="p">)</span>
-                <span class="k">return</span> <span class="kc">True</span>
-            <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Can not have two output entries with the same key/path but not same path/key.&quot;</span> <span class="o">+</span>
-                                <span class="s2">&quot;Original entry&#39;s data: key:</span><span class="si">{}</span><span class="s2"> path:</span><span class="si">{}</span><span class="s2">, Entry to be registered: key:</span><span class="si">{}</span><span class="s2"> path:</span><span class="si">{}</span><span class="s2">&quot;</span>
-                                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">],</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]))</span>
-
-        <span class="k">return</span> <span class="kc">False</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_dir</span></div></div>
 </pre></div>
 
            </div>

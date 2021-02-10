@@ -12,12 +12,16 @@ Submodules
    src.utility.Config
    src.utility.ConfigParser
    src.utility.DefaultConfig
+   src.utility.FlowRendererUtility
    src.utility.ItemCollection
    src.utility.ItemWriter
    src.utility.LabelIdMapping
+   src.utility.LightUtility
    src.utility.MaterialLoaderUtility
    src.utility.MathUtility
+   src.utility.RendererUtility
    src.utility.SGMUtility
+   src.utility.SegMapRendererUtility
    src.utility.Utility
 
 Module contents

@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -594,25 +599,34 @@ with <cite>cf_</cite> prefix. See table below for supported custom function name
 <td>Name of the projection as str. Default: []. Available: [“cube”, “cylinder”, “smart”, “sphere”]</td>
 <td>str</td>
 </tr>
-<tr class="row-even"><td>cf_randomize_materials</td>
+<tr class="row-even"><td>cf_add_uv_mapping/forced_recalc_of_uv_maps</td>
+<td>If this is set to True, all UV maps are recalculated not just the missing ones</td>
+<td>bool</td>
+</tr>
+<tr class="row-odd"><td>cf_randomize_materials</td>
 <td>Randomizes the materials for the selected objects with certain probability.</td>
 <td>dict</td>
 </tr>
-<tr class="row-odd"><td>cf_randomize_materials/randomization_level</td>
+<tr class="row-even"><td>cf_randomize_materials/randomization_level</td>
 <td>Expected fraction of the selected objects for which the texture should be randomized. Default: 0.2.  Range: [0, 1]</td>
 <td>float</td>
 </tr>
-<tr class="row-even"><td>cf_randomize_materials/materials_to_replace_with</td>
+<tr class="row-odd"><td>cf_randomize_materials/materials_to_replace_with</td>
 <td>Material(s) to participate in randomization. Sampling from the pool of elegible material (that comply
 with conditions is performed in the Provider). Make sure you use ‘random_samples” config parameter of
 the Provider, if multiple materials are returned, the first one will be considered as a substitute
 during randomization. Default: random material.</td>
 <td>Provider</td>
 </tr>
-<tr class="row-odd"><td>cf_randomize_materials/obj_materials_cond_to_be_replaced</td>
+<tr class="row-even"><td>cf_randomize_materials/obj_materials_cond_to_be_replaced</td>
 <td>A dict of materials and corresponding conditions making it possible to only replace materials with
 certain properties. These are similar to the conditions mentioned in the getter.Material. Default: {}.</td>
 <td>dict</td>
+</tr>
+<tr class="row-odd"><td>cf_randomize_materials/add_to_objects_without_material</td>
+<td>If set to True, objects which didn’t have any material before will also get a random material assigned.
+Default: False.</td>
+<td>bool</td>
 </tr>
 </tbody>
 </table>

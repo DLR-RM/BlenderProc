@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1 current"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -349,6 +354,7 @@
 
 <span class="kn">from</span> <span class="nn">src.renderer.RendererInterface</span> <span class="kn">import</span> <span class="n">RendererInterface</span>
 <span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">load_image</span><span class="p">,</span> <span class="n">get_all_mesh_objects</span>
+<span class="kn">from</span> <span class="nn">src.utility.SegMapRendererUtility</span> <span class="kn">import</span> <span class="n">SegMapRendererUtility</span>
 <span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 
 
@@ -463,282 +469,31 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="n">RendererInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-        <span class="c1"># As we use float16 for storing the rendering, the interval of integers which can be precisely</span>
-        <span class="c1"># stored is [-2048, 2048]. As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our</span>
-        <span class="c1"># color space which allows ~8 billion different colors/objects. This should be enough.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">render_colorspace_size_per_dimension</span> <span class="o">=</span> <span class="mi">2048</span>
-
-<div class="viewcode-block" id="SegMapRenderer._colorize_object"><a class="viewcode-back" href="../../../src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer._colorize_object">[docs]</a>    <span class="k">def</span> <span class="nf">_colorize_object</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.</span>
-
-<span class="sd">        This is done by replacing all nodes just with an emission node, which emits the color corresponding to the</span>
-<span class="sd">        category of the object.</span>
-
-<span class="sd">        :param obj: The object to use.</span>
-<span class="sd">        :param color: RGB array of a color in the range of [0, self.render_colorspace_size_per_dimension].</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Create new material emitting the given color</span>
-        <span class="n">new_mat</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;segmentation&quot;</span><span class="p">)</span>
-        <span class="n">new_mat</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">new_mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
-        <span class="n">links</span> <span class="o">=</span> <span class="n">new_mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
-        <span class="n">emission_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeEmission&#39;</span><span class="p">)</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;OutputMaterial&#39;</span><span class="p">)</span>
-
-        <span class="n">emission_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">emission_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Emission&#39;</span><span class="p">],</span> <span class="n">output</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Surface&#39;</span><span class="p">])</span>
-
-        <span class="c1"># Set material to be used for coloring all faces of the given object</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">)):</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span><span class="p">:</span>
-                    <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_alpha_texture_node</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">material</span><span class="p">,</span> <span class="n">new_mat</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_mat</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_mat</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="SegMapRenderer._set_world_background_color"><a class="viewcode-back" href="../../../src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer._set_world_background_color">[docs]</a>    <span class="k">def</span> <span class="nf">_set_world_background_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Set the background color of the blender world obejct.</span>
-
-<span class="sd">        :param color: A 3-dim array containing the background color in range [0, 255]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
-        <span class="n">nodes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Background&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">color</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
-
-<div class="viewcode-block" id="SegMapRenderer._colorize_objects_for_instance_segmentation"><a class="viewcode-back" href="../../../src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer._colorize_objects_for_instance_segmentation">[docs]</a>    <span class="k">def</span> <span class="nf">_colorize_objects_for_instance_segmentation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objects</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Sets a different color to each object.</span>
-
-<span class="sd">        :param objects: A list of objects.</span>
-<span class="sd">        :return: The num_splits_per_dimension of the spanned color space, the color map</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># + 1 for the background</span>
-        <span class="n">colors</span><span class="p">,</span> <span class="n">num_splits_per_dimension</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">generate_equidistant_values</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">objects</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-                                                                               <span class="bp">self</span><span class="o">.</span><span class="n">render_colorspace_size_per_dimension</span><span class="p">)</span>
-        <span class="c1"># this list maps ids in the image back to the objects</span>
-        <span class="n">color_map</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># Set world background label, which is always label zero</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_set_world_background_color</span><span class="p">(</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">world</span><span class="p">)</span>  <span class="c1"># add the world background as an object to this list</span>
-
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">objects</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_colorize_object</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">colors</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="n">color_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">colors</span><span class="p">,</span> <span class="n">num_splits_per_dimension</span><span class="p">,</span> <span class="n">color_map</span></div>
 
 <div class="viewcode-block" id="SegMapRenderer.run"><a class="viewcode-back" href="../../../src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># get the type of mappings which should be performed</span>
+        <span class="n">used_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;map_by&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">)</span>
+
+        <span class="n">used_default_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;default_values&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="s1">&#39;class&#39;</span> <span class="ow">in</span> <span class="n">used_default_values</span><span class="p">:</span>
+            <span class="n">used_default_values</span><span class="p">[</span><span class="s1">&#39;cp_category_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">used_default_values</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
+
         <span class="k">with</span> <span class="n">Utility</span><span class="o">.</span><span class="n">UndoAfterExecution</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_configure_renderer</span><span class="p">(</span><span class="n">default_samples</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-
-            <span class="c1"># Get objects with meshes (i.e. not lights or cameras)</span>
-            <span class="n">objs_with_mats</span> <span class="o">=</span> <span class="n">get_all_mesh_objects</span><span class="p">()</span>
-
-            <span class="n">colors</span><span class="p">,</span> <span class="n">num_splits_per_dimension</span><span class="p">,</span> <span class="n">used_objects</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colorize_objects_for_instance_segmentation</span><span class="p">(</span>
-                <span class="n">objs_with_mats</span><span class="p">)</span>
-
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">file_format</span> <span class="o">=</span> <span class="s2">&quot;OPEN_EXR&quot;</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">color_depth</span> <span class="o">=</span> <span class="s2">&quot;16&quot;</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">filter_width</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_alpha_channel_to_textures</span><span class="p">(</span><span class="n">blurry_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-            <span class="c1"># Determine path for temporary and for final output</span>
-            <span class="n">temporary_segmentation_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_temp_dir</span><span class="p">,</span> <span class="s2">&quot;seg_&quot;</span><span class="p">)</span>
-            <span class="n">final_segmentation_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span>
-                                                        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;segmap_&quot;</span><span class="p">))</span>
-
-            <span class="c1"># Render the temporary output</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">(</span><span class="s2">&quot;seg_&quot;</span><span class="p">,</span> <span class="n">custom_file_path</span><span class="o">=</span><span class="n">temporary_segmentation_file_path</span><span class="p">)</span>
-
-            <span class="c1"># Find optimal dtype of output based on max index</span>
-            <span class="k">for</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">]:</span>
-                <span class="n">optimal_dtype</span> <span class="o">=</span> <span class="n">dtype</span>
-                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">optimal_dtype</span><span class="p">)</span><span class="o">.</span><span class="n">max</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">break</span>
-
-            <span class="c1"># get the type of mappings which should be performed</span>
-            <span class="n">used_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;map_by&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">)</span>
-
-            <span class="n">used_default_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s2">&quot;default_values&quot;</span><span class="p">,</span> <span class="p">{})</span>
-            <span class="k">if</span> <span class="s1">&#39;class&#39;</span> <span class="ow">in</span> <span class="n">used_default_values</span><span class="p">:</span>
-                <span class="n">used_default_values</span><span class="p">[</span><span class="s1">&#39;cp_category_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">used_default_values</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">used_attributes</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="c1"># only one result is requested</span>
-                <span class="n">result_channels</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">used_attributes</span> <span class="o">=</span> <span class="p">[</span><span class="n">used_attributes</span><span class="p">]</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">used_attributes</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                <span class="n">result_channels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_attributes</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The type of this is not supported here: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">used_attributes</span><span class="p">))</span>
-
-            <span class="n">save_in_csv_attributes</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="c1"># define them for the avoid rendering case</span>
-            <span class="n">there_was_an_instance_rendering</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="n">list_of_used_attributes</span> <span class="o">=</span> <span class="p">[]</span>
-
-            <span class="c1"># After rendering</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avoid_rendering</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span><span class="p">):</span>  <span class="c1"># for each rendered frame</span>
-                    <span class="n">file_path</span> <span class="o">=</span> <span class="n">temporary_segmentation_file_path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">frame</span> <span class="o">+</span> <span class="s2">&quot;.exr&quot;</span>
-                    <span class="n">segmentation</span> <span class="o">=</span> <span class="n">load_image</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
-
-                    <span class="n">segmap</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">map_back_from_equally_spaced_equidistant_values</span><span class="p">(</span><span class="n">segmentation</span><span class="p">,</span>
-                                                                                     <span class="n">num_splits_per_dimension</span><span class="p">,</span>
-                                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">render_colorspace_size_per_dimension</span><span class="p">)</span>
-                    <span class="n">segmap</span> <span class="o">=</span> <span class="n">segmap</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">optimal_dtype</span><span class="p">)</span>
-
-                    <span class="n">used_object_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">segmap</span><span class="p">)</span>
-                    <span class="n">max_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">used_object_ids</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="n">max_id</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_objects</span><span class="p">):</span>
-                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There are more object colors than there are objects&quot;</span><span class="p">)</span>
-                    <span class="n">combined_result_map</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="n">there_was_an_instance_rendering</span> <span class="o">=</span> <span class="kc">False</span>
-                    <span class="n">list_of_used_attributes</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="n">used_channels</span> <span class="o">=</span> <span class="p">[]</span>
-                    <span class="k">for</span> <span class="n">channel_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">result_channels</span><span class="p">):</span>
-                        <span class="n">resulting_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">segmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">segmap</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-                        <span class="n">was_used</span> <span class="o">=</span> <span class="kc">False</span>
-                        <span class="n">current_attribute</span> <span class="o">=</span> <span class="n">used_attributes</span><span class="p">[</span><span class="n">channel_id</span><span class="p">]</span>
-                        <span class="n">org_attribute</span> <span class="o">=</span> <span class="n">current_attribute</span>
-
-                        <span class="c1"># if the class is used the category_id attribute is evaluated</span>
-                        <span class="k">if</span> <span class="n">current_attribute</span> <span class="o">==</span> <span class="s2">&quot;class&quot;</span><span class="p">:</span>
-                            <span class="n">current_attribute</span> <span class="o">=</span> <span class="s2">&quot;cp_category_id&quot;</span>
-                        <span class="c1"># in the instance case the resulting ids are directly used</span>
-                        <span class="k">if</span> <span class="n">current_attribute</span> <span class="o">==</span> <span class="s2">&quot;instance&quot;</span><span class="p">:</span>
-                            <span class="n">there_was_an_instance_rendering</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="n">resulting_map</span> <span class="o">=</span> <span class="n">segmap</span>
-                            <span class="n">was_used</span> <span class="o">=</span> <span class="kc">True</span>
-                            <span class="c1"># a non default value was also used</span>
-                            <span class="n">non_default_value_was_used</span> <span class="o">=</span> <span class="kc">True</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="k">if</span> <span class="n">current_attribute</span> <span class="o">!=</span> <span class="s2">&quot;cp_category_id&quot;</span><span class="p">:</span>
-                                <span class="n">list_of_used_attributes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_attribute</span><span class="p">)</span>
-                            <span class="c1"># for the current attribute remove cp_ and _csv, if present</span>
-                            <span class="n">used_attribute</span> <span class="o">=</span> <span class="n">current_attribute</span>
-                            <span class="k">if</span> <span class="n">used_attribute</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cp_&quot;</span><span class="p">):</span>
-                                <span class="n">used_attribute</span> <span class="o">=</span> <span class="n">used_attribute</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;cp_&quot;</span><span class="p">):]</span>
-                            <span class="c1"># check if a default value was specified</span>
-                            <span class="n">default_value_set</span> <span class="o">=</span> <span class="kc">False</span>
-                            <span class="k">if</span> <span class="n">current_attribute</span> <span class="ow">in</span> <span class="n">used_default_values</span> <span class="ow">or</span> <span class="n">used_attribute</span> <span class="ow">in</span> <span class="n">used_default_values</span><span class="p">:</span>
-                                <span class="n">default_value_set</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="k">if</span> <span class="n">current_attribute</span> <span class="ow">in</span> <span class="n">used_default_values</span><span class="p">:</span>
-                                    <span class="n">default_value</span> <span class="o">=</span> <span class="n">used_default_values</span><span class="p">[</span><span class="n">current_attribute</span><span class="p">]</span>
-                                <span class="k">elif</span> <span class="n">used_attribute</span> <span class="ow">in</span> <span class="n">used_default_values</span><span class="p">:</span>
-                                    <span class="n">default_value</span> <span class="o">=</span> <span class="n">used_default_values</span><span class="p">[</span><span class="n">used_attribute</span><span class="p">]</span>
-                            <span class="n">last_state_save_in_csv</span> <span class="o">=</span> <span class="kc">None</span>
-                            <span class="c1"># this avoids that for certain attributes only the default value is written</span>
-                            <span class="n">non_default_value_was_used</span> <span class="o">=</span> <span class="kc">False</span>
-                            <span class="c1"># iterate over all object ids</span>
-                            <span class="k">for</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">used_object_ids</span><span class="p">:</span>
-                                <span class="n">is_default_value</span> <span class="o">=</span> <span class="kc">False</span>
-                                <span class="c1"># get the corresponding object via the id</span>
-                                <span class="n">current_obj</span> <span class="o">=</span> <span class="n">used_objects</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span>
-                                <span class="c1"># if the current obj has a attribute with that name -&gt; get it</span>
-                                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">current_obj</span><span class="p">,</span> <span class="n">used_attribute</span><span class="p">):</span>
-                                    <span class="n">used_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">current_obj</span><span class="p">,</span> <span class="n">used_attribute</span><span class="p">)</span>
-                                <span class="c1"># if the current object has a custom property with that name -&gt; get it</span>
-                                <span class="k">elif</span> <span class="n">current_attribute</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cp_&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">used_attribute</span> <span class="ow">in</span> <span class="n">current_obj</span><span class="p">:</span>
-                                    <span class="n">used_value</span> <span class="o">=</span> <span class="n">current_obj</span><span class="p">[</span><span class="n">used_attribute</span><span class="p">]</span>
-                                <span class="k">elif</span> <span class="n">current_attribute</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;cf_&quot;</span><span class="p">):</span>
-                                    <span class="k">if</span> <span class="n">current_attribute</span> <span class="o">==</span> <span class="s2">&quot;cf_basename&quot;</span><span class="p">:</span>
-                                        <span class="n">used_value</span> <span class="o">=</span> <span class="n">current_obj</span><span class="o">.</span><span class="n">name</span>
-                                        <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">in</span> <span class="n">used_value</span><span class="p">:</span>
-                                            <span class="n">used_value</span> <span class="o">=</span> <span class="n">used_value</span><span class="p">[:</span><span class="n">used_value</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)]</span>
-                                <span class="k">elif</span> <span class="n">default_value_set</span><span class="p">:</span>
-                                    <span class="c1"># if none of the above applies use the default value</span>
-                                    <span class="n">used_value</span> <span class="o">=</span> <span class="n">default_value</span>
-                                    <span class="n">is_default_value</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="k">else</span><span class="p">:</span>
-                                    <span class="c1"># if the requested current_attribute is not a custom property or a attribute</span>
-                                    <span class="c1"># or there is a default value stored</span>
-                                    <span class="c1"># it throws an exception</span>
-                                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The obj: </span><span class="si">{}</span><span class="s2"> does not have the &quot;</span>
-                                                    <span class="s2">&quot;attribute: </span><span class="si">{}</span><span class="s2">, striped: </span><span class="si">{}</span><span class="s2">. Maybe try a default &quot;</span>
-                                                    <span class="s2">&quot;value.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current_obj</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">current_attribute</span><span class="p">,</span> <span class="n">used_attribute</span><span class="p">))</span>
-
-                                <span class="c1"># check if the value should be saved as an image or in the csv file</span>
-                                <span class="n">save_in_csv</span> <span class="o">=</span> <span class="kc">False</span>
-                                <span class="k">try</span><span class="p">:</span>
-                                    <span class="n">resulting_map</span><span class="p">[</span><span class="n">segmap</span> <span class="o">==</span> <span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">used_value</span>
-                                    <span class="n">was_used</span> <span class="o">=</span> <span class="kc">True</span>
-                                    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_default_value</span><span class="p">:</span>
-                                        <span class="n">non_default_value_was_used</span> <span class="o">=</span> <span class="kc">True</span>
-                                    <span class="c1"># save everything which is not instance also in the .csv</span>
-                                    <span class="k">if</span> <span class="n">current_attribute</span> <span class="o">!=</span> <span class="s2">&quot;instance&quot;</span><span class="p">:</span>
-                                        <span class="n">save_in_csv</span> <span class="o">=</span> <span class="kc">True</span>
-                                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                                    <span class="n">save_in_csv</span> <span class="o">=</span> <span class="kc">True</span>
-
-                                <span class="k">if</span> <span class="n">last_state_save_in_csv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_state_save_in_csv</span> <span class="o">!=</span> <span class="n">save_in_csv</span><span class="p">:</span>
-                                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;During creating the mapping, the saving to an image or a csv file &quot;</span>
-                                                    <span class="s2">&quot;switched, this might indicated that the used default value, does &quot;</span>
-                                                    <span class="s2">&quot;not have the same type as the returned value, &quot;</span>
-                                                    <span class="s2">&quot;for: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">current_attribute</span><span class="p">))</span>
-                                <span class="n">last_state_save_in_csv</span> <span class="o">=</span> <span class="n">save_in_csv</span>
-                                <span class="k">if</span> <span class="n">save_in_csv</span><span class="p">:</span>
-                                    <span class="k">if</span> <span class="n">object_id</span> <span class="ow">in</span> <span class="n">save_in_csv_attributes</span><span class="p">:</span>
-                                        <span class="n">save_in_csv_attributes</span><span class="p">[</span><span class="n">object_id</span><span class="p">][</span><span class="n">used_attribute</span><span class="p">]</span> <span class="o">=</span> <span class="n">used_value</span>
-                                    <span class="k">else</span><span class="p">:</span>
-                                        <span class="n">save_in_csv_attributes</span><span class="p">[</span><span class="n">object_id</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">used_attribute</span><span class="p">:</span> <span class="n">used_value</span><span class="p">}</span>
-                        <span class="k">if</span> <span class="n">was_used</span> <span class="ow">and</span> <span class="n">non_default_value_was_used</span><span class="p">:</span>
-                            <span class="n">used_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">org_attribute</span><span class="p">)</span>
-                            <span class="n">combined_result_map</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resulting_map</span><span class="p">)</span>
-
-                    <span class="n">fname</span> <span class="o">=</span> <span class="n">final_segmentation_file_path</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">frame</span>
-                    <span class="c1"># combine all resulting images to one image</span>
-                    <span class="n">resulting_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">combined_result_map</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-                    <span class="c1"># remove the unneeded third dimension</span>
-                    <span class="k">if</span> <span class="n">resulting_map</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                        <span class="n">resulting_map</span> <span class="o">=</span> <span class="n">resulting_map</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">resulting_map</span><span class="p">)</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">there_was_an_instance_rendering</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_of_used_attributes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There were attributes specified in the may_by, which could not be saved as &quot;</span>
-                                    <span class="s2">&quot;there was no </span><span class="se">\&quot;</span><span class="s2">instance</span><span class="se">\&quot;</span><span class="s2"> may_by key used. This is true for this/these &quot;</span>
-                                    <span class="s2">&quot;keys: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">list_of_used_attributes</span><span class="p">)))</span>
-                <span class="c1"># if there was no instance rendering no .csv file is generated!</span>
-                <span class="c1"># delete all saved infos about .csv</span>
-                <span class="n">save_in_csv_attributes</span> <span class="o">=</span> <span class="p">{}</span>
-
-            <span class="c1"># write color mappings to file</span>
-            <span class="k">if</span> <span class="n">save_in_csv_attributes</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_avoid_rendering</span><span class="p">:</span>
-                <span class="n">csv_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;segcolormap_output_file_prefix&quot;</span><span class="p">,</span>
-                                                                    <span class="s2">&quot;class_inst_col_map&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">)</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">csv_file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
-                    <span class="c1"># get from the first element the used field names</span>
-                    <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span>
-                    <span class="c1"># get all used object element keys</span>
-                    <span class="k">for</span> <span class="n">object_element</span> <span class="ow">in</span> <span class="n">save_in_csv_attributes</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-                        <span class="n">fieldnames</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">object_element</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-                        <span class="k">break</span>
-                    <span class="k">for</span> <span class="n">channel_name</span> <span class="ow">in</span> <span class="n">used_channels</span><span class="p">:</span>
-                        <span class="n">fieldnames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;channel_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">channel_name</span><span class="p">))</span>
-                    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
-                    <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
-                    <span class="c1"># save for each object all values in one row</span>
-                    <span class="k">for</span> <span class="n">obj_idx</span><span class="p">,</span> <span class="n">object_element</span> <span class="ow">in</span> <span class="n">save_in_csv_attributes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                        <span class="n">object_element</span><span class="p">[</span><span class="s2">&quot;idx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj_idx</span>
-                        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">channel_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">used_channels</span><span class="p">):</span>
-                            <span class="n">object_element</span><span class="p">[</span><span class="s2">&quot;channel_</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">channel_name</span><span class="p">)]</span> <span class="o">=</span> <span class="n">i</span>
-                        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">object_element</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_register_output</span><span class="p">(</span><span class="s2">&quot;segmap_&quot;</span><span class="p">,</span> <span class="s2">&quot;segmap&quot;</span><span class="p">,</span> <span class="s2">&quot;.npy&quot;</span><span class="p">,</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">save_in_csv_attributes</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_register_output</span><span class="p">(</span><span class="s2">&quot;class_inst_col_map&quot;</span><span class="p">,</span>
-                                  <span class="s2">&quot;segcolormap&quot;</span><span class="p">,</span>
-                                  <span class="s2">&quot;.csv&quot;</span><span class="p">,</span>
-                                  <span class="s2">&quot;2.0.0&quot;</span><span class="p">,</span>
-                                  <span class="n">unique_for_camposes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                  <span class="n">output_key_parameter_name</span><span class="o">=</span><span class="s2">&quot;segcolormap_output_key&quot;</span><span class="p">,</span>
-                                  <span class="n">output_file_prefix_parameter_name</span><span class="o">=</span><span class="s2">&quot;segcolormap_output_file_prefix&quot;</span><span class="p">)</span></div></div>
+                <span class="n">SegMapRendererUtility</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_temp_dir</span><span class="p">,</span>
+                    <span class="n">used_attributes</span><span class="p">,</span>
+                    <span class="n">used_default_values</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;segmap_&quot;</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;output_key&quot;</span><span class="p">,</span> <span class="s2">&quot;segmap&quot;</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;segcolormap_output_file_prefix&quot;</span><span class="p">,</span> <span class="s2">&quot;class_inst_col_map&quot;</span><span class="p">),</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;segcolormap_output_key&quot;</span><span class="p">,</span> <span class="s2">&quot;segcolormap&quot;</span><span class="p">),</span>
+                    <span class="n">use_alpha_channel</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span>
+                <span class="p">)</span></div></div>
 </pre></div>
 
            </div>

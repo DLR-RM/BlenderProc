@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -353,10 +358,9 @@
 <span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Euler</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Vector</span>
 
 <span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_mesh_objects</span><span class="p">,</span> <span class="n">load_image</span>
-<span class="kn">from</span> <span class="nn">src.utility.CameraUtility</span> <span class="kn">import</span> <span class="n">CameraUtility</span>
 <span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 <span class="kn">from</span> <span class="nn">src.writer.WriterInterface</span> <span class="kn">import</span> <span class="n">WriterInterface</span>
-
+<span class="kn">from</span> <span class="nn">src.writer.CameraStateWriter</span> <span class="kn">import</span> <span class="n">CameraStateWriter</span>
 
 <div class="viewcode-block" id="load_json"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.load_json">[docs]</a><span class="k">def</span> <span class="nf">load_json</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">keys_to_int</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Loads content of a JSON file.</span>
@@ -452,8 +456,15 @@
 <span class="sd">        * - append_to_existing_output</span>
 <span class="sd">          - If true, the new frames will be appended to the existing ones. Default: False</span>
 <span class="sd">          - bool</span>
+<span class="sd">        * - save_world2cam</span>
+<span class="sd">          - If true, camera to world transformations &quot;cam_R_w2c&quot;, &quot;cam_t_w2c&quot; are saved in scene_camera.json. Default: True</span>
+<span class="sd">          - bool</span>
 <span class="sd">        * - ignore_dist_thres</span>
-<span class="sd">          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 5.</span>
+<span class="sd">          - Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 100.</span>
+<span class="sd">          - float</span>
+<span class="sd">        * - depth_scale</span>
+<span class="sd">          - Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy </span>
+<span class="sd">            and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy. Default: 1.0</span>
 <span class="sd">          - float</span>
 <span class="sd">        * - m2mm</span>
 <span class="sd">          - Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This</span>
@@ -463,20 +474,27 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="n">WriterInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+        
+        <span class="c1"># Create CameraWriter to write camera attibutes, use OpenCV coordinates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_writer</span> <span class="o">=</span> <span class="n">CameraStateWriter</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_camera_writer</span><span class="o">.</span><span class="n">destination_frame</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">]</span>
 
         <span class="c1"># Parse configuration.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">append_to_existing_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;append_to_existing_output&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        
+        <span class="c1"># Save world to camera transformation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_world2cam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;save_world2cam&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Distance in meteres to object after which it is ignored. Mostly due to failed physics.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_dist_thres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;ignore_dist_thres&quot;</span><span class="p">,</span> <span class="mf">5.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_dist_thres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;ignore_dist_thres&quot;</span><span class="p">,</span> <span class="mf">100.</span><span class="p">)</span>
 
         <span class="c1"># Number of frames saved in each chunk.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">frames_per_chunk</span> <span class="o">=</span> <span class="mi">1000</span>
 
         <span class="c1"># Multiply the output depth image with this factor to get depth in mm.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">depth_scale</span> <span class="o">=</span> <span class="mf">0.1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">depth_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_float</span><span class="p">(</span><span class="s2">&quot;depth_scale&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
 
         <span class="c1"># Output translation gt in mm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;m2mm&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="k">else</span> <span class="mf">1.</span>
@@ -537,110 +555,79 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_write_camera</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_write_frames</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BopWriter._get_camera_attribute"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter._get_camera_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">_get_camera_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam_pose</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns the value of the requested attribute for the given object.</span>
-
-<span class="sd">        :param cam_pose: camera pose</span>
-<span class="sd">        :param attribute_name: The attribute name.</span>
-<span class="sd">        :return: The attribute value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">cam</span><span class="p">,</span> <span class="n">cam_ob</span> <span class="o">=</span> <span class="n">cam_pose</span>
-
-        <span class="k">if</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;fov_x&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cam</span><span class="o">.</span><span class="n">angle_x</span>
-        <span class="k">elif</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;fov_y&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cam</span><span class="o">.</span><span class="n">angle_y</span>
-        <span class="k">elif</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;shift_x&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cam</span><span class="o">.</span><span class="n">shift_x</span>
-        <span class="k">elif</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;shift_y&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cam</span><span class="o">.</span><span class="n">shift_y</span>
-        <span class="k">elif</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;half_fov_x&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cam</span><span class="o">.</span><span class="n">angle_x</span> <span class="o">*</span> <span class="mf">0.5</span>
-        <span class="k">elif</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;half_fov_y&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">cam</span><span class="o">.</span><span class="n">angle_y</span> <span class="o">*</span> <span class="mf">0.5</span>
-
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="n">cam_ob</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="BopWriter._get_object_attribute"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter._get_object_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">_get_object_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">object</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns the value of the requested attribute for the given object.</span>
-
-<span class="sd">        :param object: The mesh object.</span>
-<span class="sd">        :param attribute_name: The attribute name.</span>
-<span class="sd">        :return: The attribute value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">attribute_name</span> <span class="o">==</span> <span class="s2">&quot;id&quot;</span><span class="p">:</span>
-            <span class="k">return</span> <span class="nb">object</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span>
-
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">)</span></div>
-
 <div class="viewcode-block" id="BopWriter._write_camera"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter._write_camera">[docs]</a>    <span class="k">def</span> <span class="nf">_write_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Writes camera.json into dataset_dir.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">width</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span>
-
-        <span class="n">cam_K</span> <span class="o">=</span> <span class="n">CameraUtility</span><span class="o">.</span><span class="n">get_intrinsics_as_K_matrix</span><span class="p">()</span>
+        <span class="n">cam_K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_writer</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_pose</span><span class="p">,</span> <span class="s1">&#39;cam_K&#39;</span><span class="p">)</span>
         <span class="n">camera</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cx&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
                   <span class="s1">&#39;cy&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
                   <span class="s1">&#39;depth_scale&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_scale</span><span class="p">,</span>
                   <span class="s1">&#39;fx&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
                   <span class="s1">&#39;fy&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
-                  <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">height</span><span class="p">,</span>
-                  <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">width</span><span class="p">}</span>
+                  <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span><span class="p">,</span>
+                  <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">}</span>
 
-        <span class="n">save_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera_path</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span>
-
-        <span class="k">return</span></div>
+        <span class="n">save_json</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">camera_path</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="BopWriter._get_frame_gt"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter._get_frame_gt">[docs]</a>    <span class="k">def</span> <span class="nf">_get_frame_gt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Returns GT annotations for the active camera.</span>
-
+        <span class="sd">&quot;&quot;&quot; Returns GT pose annotations between active camera and objects.</span>
+<span class="sd">        </span>
 <span class="sd">        :return: A list of GT annotations.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">camera_rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera_attribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_pose</span><span class="p">,</span> <span class="s1">&#39;rotation_euler&#39;</span><span class="p">)</span>
-        <span class="n">camera_translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_camera_attribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_pose</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">)</span>
-        <span class="n">H_c2w</span> <span class="o">=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">camera_translation</span><span class="p">))</span> <span class="o">@</span> <span class="n">Euler</span><span class="p">(</span>
-            <span class="n">camera_rotation</span><span class="p">,</span> <span class="s1">&#39;XYZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">to_4x4</span><span class="p">()</span>
-
-        <span class="c1"># Blender to opencv coordinates.</span>
-        <span class="n">H_c2w_opencv</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">transform_matrix_to_blender_coord_frame</span><span class="p">(</span><span class="n">H_c2w</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">])</span>
+        
+        <span class="n">H_c2w_opencv</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_writer</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_pose</span><span class="p">,</span> <span class="s1">&#39;cam2world_matrix&#39;</span><span class="p">))</span>
+        
         <span class="n">frame_gt</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">obj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset_objects</span><span class="p">):</span>
-            <span class="n">object_rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_object_attribute</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;rotation_euler&#39;</span><span class="p">)</span>
-            <span class="n">object_translation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_object_attribute</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;location&#39;</span><span class="p">)</span>
-            <span class="n">H_m2w</span> <span class="o">=</span> <span class="n">Matrix</span><span class="o">.</span><span class="n">Translation</span><span class="p">(</span><span class="n">Vector</span><span class="p">(</span><span class="n">object_translation</span><span class="p">))</span> <span class="o">@</span> <span class="n">Euler</span><span class="p">(</span>
-                <span class="n">object_rotation</span><span class="p">,</span> <span class="s1">&#39;XYZ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">to_4x4</span><span class="p">()</span>
+            
+            <span class="n">H_m2w</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;matrix_world&#39;</span><span class="p">))</span>
 
-            <span class="n">cam_H_m2c</span> <span class="o">=</span> <span class="p">(</span><span class="n">H_m2w</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span> <span class="o">@</span> <span class="n">H_c2w_opencv</span><span class="p">)</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
-
+            <span class="n">cam_H_m2c</span> <span class="o">=</span> <span class="n">H_c2w_opencv</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span> <span class="o">@</span> <span class="n">H_m2w</span>
             <span class="n">cam_R_m2c</span> <span class="o">=</span> <span class="n">cam_H_m2c</span><span class="o">.</span><span class="n">to_quaternion</span><span class="p">()</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
-            <span class="n">cam_R_m2c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
             <span class="n">cam_t_m2c</span> <span class="o">=</span> <span class="n">cam_H_m2c</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span>
 
             <span class="c1"># ignore examples that fell through the plane</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cam_t_m2c</span><span class="p">))</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_dist_thres</span><span class="p">:</span>
                 <span class="n">cam_t_m2c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_t_m2c</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span><span class="p">)</span>
                 <span class="n">frame_gt</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-                    <span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">:</span> <span class="n">cam_R_m2c</span><span class="p">,</span>
+                    <span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
                     <span class="s1">&#39;cam_t_m2c&#39;</span><span class="p">:</span> <span class="n">cam_t_m2c</span><span class="p">,</span>
-                    <span class="s1">&#39;obj_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_object_attribute</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">)</span>
+                    <span class="s1">&#39;obj_id&#39;</span><span class="p">:</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span>
                 <span class="p">})</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ignored obj, &#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_object_attribute</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;id&#39;</span><span class="p">),</span> <span class="s1">&#39;because either &#39;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(1) it is too far (e.g. fell through a plane during physics sim)&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ignored obj, &#39;</span><span class="p">,</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">],</span> <span class="s1">&#39;because either &#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(1) it is further away than parameter &quot;ignore_dist_thres: &quot;,&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_dist_thres</span><span class="p">)</span> 
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(e.g. because it fell through a plane during physics sim)&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(2) the object pose has not been given in meters&#39;</span><span class="p">)</span>
                 
         <span class="k">return</span> <span class="n">frame_gt</span></div>
-
+    
 <div class="viewcode-block" id="BopWriter._get_frame_camera"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter._get_frame_camera">[docs]</a>    <span class="k">def</span> <span class="nf">_get_frame_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Returns camera parameters for the active camera.</span>
+<span class="sd">        </span>
+<span class="sd">        :return: dict containing info for scene_camera.json </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s1">&#39;cam_K&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">(</span><span class="n">CameraUtility</span><span class="o">.</span><span class="n">get_intrinsics_as_K_matrix</span><span class="p">())</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
+        
+        <span class="n">cam_K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_camera_writer</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_pose</span><span class="p">,</span> <span class="s1">&#39;cam_K&#39;</span><span class="p">)</span>
+        
+        <span class="n">frame_camera_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;cam_K&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
             <span class="s1">&#39;depth_scale&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth_scale</span>
-        <span class="p">}</span></div>
+        <span class="p">}</span>
+        
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_world2cam</span><span class="p">:</span>
+            <span class="n">H_c2w_opencv</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_camera_writer</span><span class="o">.</span><span class="n">_get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cam_pose</span><span class="p">,</span> <span class="s1">&#39;cam2world_matrix&#39;</span><span class="p">))</span>
+            
+            <span class="n">H_w2c_opencv</span> <span class="o">=</span> <span class="n">H_c2w_opencv</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+            <span class="n">R_w2c_opencv</span> <span class="o">=</span> <span class="n">H_w2c_opencv</span><span class="o">.</span><span class="n">to_quaternion</span><span class="p">()</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+            <span class="n">t_w2c_opencv</span> <span class="o">=</span> <span class="n">H_w2c_opencv</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scale</span>
+            
+            <span class="n">frame_camera_dict</span><span class="p">[</span><span class="s1">&#39;cam_R_w2c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">R_w2c_opencv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">R_w2c_opencv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">R_w2c_opencv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">frame_camera_dict</span><span class="p">[</span><span class="s1">&#39;cam_t_w2c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">t_w2c_opencv</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">frame_camera_dict</span></div>
 
 <div class="viewcode-block" id="BopWriter._write_frames"><a class="viewcode-back" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter._write_frames">[docs]</a>    <span class="k">def</span> <span class="nf">_write_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Writes images, GT annotations and camera info.</span>
@@ -699,7 +686,7 @@
             <span class="n">chunk_camera</span><span class="p">[</span><span class="n">curr_frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_frame_camera</span><span class="p">()</span>
 
             <span class="c1"># Copy the resulting RGB image.</span>
-            <span class="n">rgb_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">)</span>
+            <span class="n">rgb_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">rgb_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;RGB image has not been rendered.&quot;</span><span class="p">)</span>
             <span class="n">image_type</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span> <span class="k">if</span> <span class="n">rgb_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;.jpg&#39;</span>
@@ -707,7 +694,7 @@
             <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">rgb_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="n">frame_id</span><span class="p">,</span> <span class="n">rgb_fpath</span><span class="p">)</span>
 
             <span class="c1"># Load the resulting dist image.</span>
-            <span class="n">dist_output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">)</span>
+            <span class="n">dist_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">dist_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Distance image has not been rendered.&quot;</span><span class="p">)</span>
             <span class="n">depth</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_and_postprocess</span><span class="p">(</span><span class="n">dist_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="n">frame_id</span><span class="p">,</span> <span class="s2">&quot;distance&quot;</span><span class="p">)</span>
@@ -735,9 +722,7 @@
                 <span class="n">curr_chunk_id</span> <span class="o">+=</span> <span class="mi">1</span>
                 <span class="n">curr_frame_id</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">curr_frame_id</span> <span class="o">+=</span> <span class="mi">1</span>
-
-        <span class="k">return</span></div></div>
+                <span class="n">curr_frame_id</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
 </pre></div>
 
            </div>

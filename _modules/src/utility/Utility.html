@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -348,6 +353,9 @@
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">git</span>
+
+<span class="kn">from</span> <span class="nn">src.main.GlobalStorage</span> <span class="kn">import</span> <span class="n">GlobalStorage</span>
 <span class="kn">from</span> <span class="nn">src.utility.Config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Matrix</span><span class="p">,</span> <span class="n">Vector</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -418,6 +426,18 @@
 
         <span class="k">return</span> <span class="n">modules</span></div>
 
+<div class="viewcode-block" id="Utility.get_current_version"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.get_current_version">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_current_version</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot; Gets the git commit hash.</span>
+
+<span class="sd">        :return: a string, the BlenderProc version, or None if unavailable </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">repo</span> <span class="o">=</span> <span class="n">git</span><span class="o">.</span><span class="n">Repo</span><span class="p">(</span><span class="n">search_parent_directories</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> 
+        <span class="k">except</span> <span class="n">git</span><span class="o">.</span><span class="n">InvalidGitRepositoryError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Invalid git repository&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">repo</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">hexsha</span></div>
 
 <div class="viewcode-block" id="Utility.transform_matrix_to_blender_coord_frame"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.transform_matrix_to_blender_coord_frame">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">transform_matrix_to_blender_coord_frame</span><span class="p">(</span><span class="n">matrix</span><span class="p">,</span> <span class="n">source_frame</span><span class="p">):</span>
@@ -785,7 +805,104 @@
                 <span class="c1"># return all currently selected objects</span>
                 <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">selected_objects</span><span class="p">)</span> <span class="o">-</span> <span class="n">previously_selected_objects</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The given filepath does not exist: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span></div></div>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The given filepath does not exist: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filepath</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Utility.add_output_entry"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.add_output_entry">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_output_entry</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Registers the given output in the scene&#39;s custom properties</span>
+
+<span class="sd">        :param output: A dict containing key and path of the new output type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">is_in_storage</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Utility</span><span class="o">.</span><span class="n">output_already_registered</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">)):</span> <span class="c1"># E.g. multiple camera samplers</span>
+                <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">output</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Utility.register_output"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.register_output">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">register_output</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">suffix</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">unique_for_camposes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Registers new output type using configured key and file prefix.</span>
+
+<span class="sd">        :param output_dir: The output directory containing the generated files.</span>
+<span class="sd">        :param prefix: The default prefix of the generated files.</span>
+<span class="sd">        :param key: The default key which should be used for storing the output in merged file.</span>
+<span class="sd">        :param suffix: The suffix of the generated files.</span>
+<span class="sd">        :param version: The version number which will be stored at key_version in the final merged file.</span>
+<span class="sd">        :param unique_for_camposes: True if the output to be registered is unique for all the camera poses</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Utility</span><span class="o">.</span><span class="n">add_output_entry</span><span class="p">({</span>
+            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+            <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%04d</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">unique_for_camposes</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">,</span>
+            <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="n">version</span>
+        <span class="p">})</span></div>
+
+<div class="viewcode-block" id="Utility.find_registered_output_by_key"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.find_registered_output_by_key">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">find_registered_output_by_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns the output which was registered with the given key.</span>
+
+<span class="sd">        :param key: The output key to look for.</span>
+<span class="sd">        :return: The dict containing all information registered for that output. If no output with the given key exists, None is returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">is_in_storage</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">key</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">output</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Utility.output_already_registered"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.output_already_registered">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">output_already_registered</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">output_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Checks if the given output entry already exists in the list of outputs, by checking on the key and path.</span>
+<span class="sd">        Also throws an error if it detects an entry having the same key but not the same path and vice versa since this</span>
+<span class="sd">        is ambiguous.</span>
+
+<span class="sd">        :param output: The output dict entry.</span>
+<span class="sd">        :param output_list: The list of output entries.</span>
+<span class="sd">        :return: bool indicating whether it already exists.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">_output</span> <span class="ow">in</span> <span class="n">output_list</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning! Detected output entries with duplicate keys and paths&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Can not have two output entries with the same key/path but not same path/key.&quot;</span> <span class="o">+</span>
+                                <span class="s2">&quot;Original entry&#39;s data: key:</span><span class="si">{}</span><span class="s2"> path:</span><span class="si">{}</span><span class="s2">, Entry to be registered: key:</span><span class="si">{}</span><span class="s2"> path:</span><span class="si">{}</span><span class="s2">&quot;</span>
+                                <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">_output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">],</span> <span class="n">_output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;key&quot;</span><span class="p">],</span> <span class="n">output</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="Utility.insert_keyframe"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.insert_keyframe">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">insert_keyframe</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Inserts a keyframe for the given object and data path at the specified frame number:</span>
+
+<span class="sd">        :param obj: The blender object to use.</span>
+<span class="sd">        :param data_path: The data path of the attribute.</span>
+<span class="sd">        :param frame: The frame number to use. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_current</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">keyframe_insert</span><span class="p">(</span><span class="n">data_path</span><span class="o">=</span><span class="n">data_path</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="KeyFrame"><a class="viewcode-back" href="../../../src.utility.Utility.html#src.utility.Utility.KeyFrame">[docs]</a><span class="k">class</span> <span class="nc">KeyFrame</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the frame number for its complete block.</span>
+
+<span class="sd">        :param frame: The frame number to set. If None is given, nothing is changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prev_frame</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prev_frame</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_current</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frame</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prev_frame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prev_frame</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

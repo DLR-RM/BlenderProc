@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -346,6 +351,7 @@
 <span class="kn">import</span> <span class="nn">bpy</span>
 
 <span class="kn">from</span> <span class="nn">src.provider.getter.Material</span> <span class="kn">import</span> <span class="n">Material</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 
 
 <div class="viewcode-block" id="MaterialLoaderUtility"><a class="viewcode-back" href="../../../src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">[docs]</a><span class="k">class</span> <span class="nc">MaterialLoaderUtility</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -673,8 +679,7 @@
 
 <span class="sd">        :param nodes: Nodes from the current material</span>
 <span class="sd">        :param links: Links from the current material</span>
-<span class="sd">        :param collection_of_texture_nodes: List of :class: `:w</span>
-<span class="sd">        bpy.type.Node of type :class: `ShaderNodeTexImage`</span>
+<span class="sd">        :param collection_of_texture_nodes: List of :class: `bpy.type.Node` of type :class: `ShaderNodeTexImage`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">collection_of_texture_nodes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">texture_coords</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;ShaderNodeTexCoord&quot;</span><span class="p">)</span>
@@ -685,7 +690,131 @@
             <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_coords</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;UV&quot;</span><span class="p">],</span> <span class="n">mapping_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Vector&quot;</span><span class="p">])</span>
             <span class="k">for</span> <span class="n">texture_node</span> <span class="ow">in</span> <span class="n">collection_of_texture_nodes</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">texture_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mapping_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Vector&quot;</span><span class="p">],</span> <span class="n">texture_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Vector&quot;</span><span class="p">])</span></div></div>
+                    <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mapping_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Vector&quot;</span><span class="p">],</span> <span class="n">texture_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Vector&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MaterialLoaderUtility.add_alpha_channel_to_textures"><a class="viewcode-back" href="../../../src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.add_alpha_channel_to_textures">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_alpha_channel_to_textures</span><span class="p">(</span><span class="n">blurry_edges</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds transparency to all textures, which contain an .png image as an image input</span>
+
+<span class="sd">        :param blurry_edges: If True, the edges of the alpha channel might be blurry,</span>
+<span class="sd">                             this causes errors if the alpha channel should only be 0 or 1</span>
+
+<span class="sd">        Be careful, when you replace the original texture with something else (Segmentation, ...),</span>
+<span class="sd">        the necessary texture node gets lost. By copying it into a new material as done in the SegMapRenderer, you</span>
+<span class="sd">        can keep the transparency even for those nodes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj_with_mats</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;materials&#39;</span><span class="p">)]</span>
+        <span class="c1"># walk over all objects, which have materials</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">obj_with_mats</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                <span class="n">material</span> <span class="o">=</span> <span class="n">slot</span><span class="o">.</span><span class="n">material</span>
+                <span class="k">if</span> <span class="n">material</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="c1"># this can happen if a material slot was created but no material was assigned</span>
+                    <span class="k">continue</span>
+                <span class="n">texture_node</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="c1"># check each node of the material</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                    <span class="c1"># if it is a texture image node</span>
+                    <span class="k">if</span> <span class="s1">&#39;TexImage&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="s1">&#39;.png&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># contains an alpha channel</span>
+                            <span class="n">texture_node</span> <span class="o">=</span> <span class="n">node</span>
+                <span class="c1"># this material contains an alpha png texture</span>
+                <span class="k">if</span> <span class="n">texture_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                    <span class="n">links</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
+                    <span class="n">node_connected_to_the_output</span><span class="p">,</span> <span class="n">material_output</span> <span class="o">=</span> \
+                        <span class="n">Utility</span><span class="o">.</span><span class="n">get_node_connected_to_the_output_and_unlink_it</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">node_connected_to_the_output</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">mix_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeMixShader&#39;</span><span class="p">)</span>
+
+                        <span class="c1"># avoid blurry edges on the edges important for Normal, SegMapRenderer and others</span>
+                        <span class="k">if</span> <span class="n">blurry_edges</span><span class="p">:</span>
+                            <span class="c1"># add the alpha channel of the image to the mix shader node as a factor</span>
+                            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Fac&#39;</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="c1"># Map all alpha values to 0 or 1 by applying the step function: 1 if x &gt; 0.5 else 0</span>
+                            <span class="n">step_function_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;ShaderNodeMath&quot;</span><span class="p">)</span>
+                            <span class="n">step_function_node</span><span class="o">.</span><span class="n">operation</span> <span class="o">=</span> <span class="s2">&quot;GREATER_THAN&quot;</span>
+                            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Alpha&#39;</span><span class="p">],</span> <span class="n">step_function_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">])</span>
+                            <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">step_function_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Value&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Fac&#39;</span><span class="p">])</span>
+
+                        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">node_connected_to_the_output</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="n">transparent_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeBsdfTransparent&#39;</span><span class="p">)</span>
+                        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">transparent_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;BSDF&#39;</span><span class="p">],</span> <span class="n">mix_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="c1"># connect to material output</span>
+                        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mix_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Shader&#39;</span><span class="p">],</span> <span class="n">material_output</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Surface&#39;</span><span class="p">])</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Could not find shader node, which is connected to the material output &quot;</span>
+                                        <span class="s2">&quot;for: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="MaterialLoaderUtility.add_alpha_texture_node"><a class="viewcode-back" href="../../../src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.add_alpha_texture_node">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add_alpha_texture_node</span><span class="p">(</span><span class="n">used_material</span><span class="p">,</span> <span class="n">new_material</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds to a predefined new_material a texture node from an existing material (used_material)</span>
+<span class="sd">        This is necessary to connect it later on in the add_alpha_channel_to_textures</span>
+
+<span class="sd">        :param used_material: existing material, which might contain a texture node with a .png texture</span>
+<span class="sd">        :param new_material: a new material, which will get a copy of this texture node</span>
+<span class="sd">        :return: the modified new_material, if no texture node was found, the original new_material</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">used_material</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># this can happen if a material slot was created but no material was assigned</span>
+            <span class="k">return</span> <span class="n">used_material</span>
+        <span class="c1"># find out if there is an .png file used here</span>
+        <span class="n">texture_node</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">used_material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="c1"># if it is a texture image node</span>
+            <span class="k">if</span> <span class="s1">&#39;TexImage&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s1">&#39;.png&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="c1"># contains an alpha channel</span>
+                    <span class="n">texture_node</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="c1"># this material contains an alpha png texture</span>
+        <span class="k">if</span> <span class="n">texture_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_mat_alpha</span> <span class="o">=</span> <span class="n">new_material</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># copy the material</span>
+            <span class="n">nodes</span> <span class="o">=</span> <span class="n">new_mat_alpha</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="c1"># copy the texture node into the new material to make sure it is used</span>
+            <span class="n">new_tex_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeTexImage&#39;</span><span class="p">)</span>
+            <span class="n">new_tex_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">texture_node</span><span class="o">.</span><span class="n">image</span>
+            <span class="c1"># use the new material</span>
+            <span class="k">return</span> <span class="n">new_mat_alpha</span>
+        <span class="k">return</span> <span class="n">new_material</span></div>
+
+
+<div class="viewcode-block" id="MaterialLoaderUtility.change_to_texture_less_render"><a class="viewcode-back" href="../../../src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility.change_to_texture_less_render">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">change_to_texture_less_render</span><span class="p">(</span><span class="n">use_alpha_channel</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Changes the materials, which do not contain a emission shader to a white slightly glossy texture</span>
+
+<span class="sd">        :param use_alpha_channel: If true, the alpha channel stored in .png textures is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_mat</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;TextureLess&quot;</span><span class="p">)</span>
+        <span class="n">new_mat</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">new_mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+
+        <span class="n">principled_bsdf</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+
+        <span class="c1"># setting the color values for the shader</span>
+        <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Specular&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">0.65</span>  <span class="c1"># specular</span>
+        <span class="n">principled_bsdf</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Roughness&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">0.2</span>  <span class="c1"># roughness</span>
+
+        <span class="k">for</span> <span class="nb">object</span> <span class="ow">in</span> <span class="p">[</span><span class="n">obj</span> <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span> <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;materials&#39;</span><span class="p">)]:</span>
+            <span class="c1"># replace all materials with the new texture less material</span>
+            <span class="k">for</span> <span class="n">slot</span> <span class="ow">in</span> <span class="nb">object</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                <span class="n">emission_shader</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="c1"># check if the material contains an emission shader:</span>
+                <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">slot</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                    <span class="c1"># check if one of the shader nodes is a Emission Shader</span>
+                    <span class="k">if</span> <span class="s1">&#39;Emission&#39;</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">bl_idname</span><span class="p">:</span>
+                        <span class="n">emission_shader</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                <span class="c1"># only replace materials, which do not contain any emission shader</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">emission_shader</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">use_alpha_channel</span><span class="p">:</span>
+                        <span class="n">slot</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">add_alpha_texture_node</span><span class="p">(</span><span class="n">slot</span><span class="o">.</span><span class="n">material</span><span class="p">,</span> <span class="n">new_mat</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">slot</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">new_mat</span></div></div>
 </pre></div>
 
            </div>

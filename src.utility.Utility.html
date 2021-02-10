@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2 current"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -345,6 +350,12 @@
   <div class="section" id="module-src.utility.Utility">
 <span id="src-utility-utility-module"></span><h1>src.utility.Utility module<a class="headerlink" href="#module-src.utility.Utility" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
+<dt id="src.utility.Utility.KeyFrame">
+<em class="property">class </em><code class="descclassname">src.utility.Utility.</code><code class="descname">KeyFrame</code><span class="sig-paren">(</span><em>frame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#KeyFrame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.KeyFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+</dd></dl>
+
+<dl class="class">
 <dt id="src.utility.Utility.Utility">
 <em class="property">class </em><code class="descclassname">src.utility.Utility.</code><code class="descname">Utility</code><a class="reference internal" href="_modules/src/utility/Utility.html#Utility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
@@ -362,6 +373,20 @@
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Reverts all changes done to the blender project inside this block.</p>
 <p>Usage: with UndoAfterExecution():</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.Utility.Utility.add_output_entry">
+<em class="property">static </em><code class="descname">add_output_entry</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.add_output_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.add_output_entry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers the given output in the scene’s custom properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> – A dict containing key and path of the new output type.</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="staticmethod">
@@ -412,6 +437,22 @@
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="src.utility.Utility.Utility.find_registered_output_by_key">
+<em class="property">static </em><code class="descname">find_registered_output_by_key</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.find_registered_output_by_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.find_registered_output_by_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the output which was registered with the given key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – The output key to look for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dict containing all information registered for that output. If no output with the given key exists, None is returned.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="src.utility.Utility.Utility.generate_equidistant_values">
 <em class="property">static </em><code class="descname">generate_equidistant_values</code><span class="sig-paren">(</span><em>num</em>, <em>space_size_per_dimension</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.generate_equidistant_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.generate_equidistant_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function generates N equidistant values in a 3-dim space and returns num of them.</p>
@@ -429,6 +470,20 @@ not fill up the whole K ** 3 cube.</p>
 <li><strong>space_size_per_dimension</strong> – The side length of cube.</li>
 </ul>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.Utility.Utility.get_current_version">
+<em class="property">static </em><code class="descname">get_current_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.get_current_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.get_current_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the git commit hash.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string, the BlenderProc version, or None if unavailable</td>
 </tr>
 </tbody>
 </table>
@@ -602,6 +657,25 @@ they are not copied into the new config.</p>
 </dd></dl>
 
 <dl class="staticmethod">
+<dt id="src.utility.Utility.Utility.insert_keyframe">
+<em class="property">static </em><code class="descname">insert_keyframe</code><span class="sig-paren">(</span><em>obj</em>, <em>data_path</em>, <em>frame=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.insert_keyframe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.insert_keyframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inserts a keyframe for the given object and data path at the specified frame number:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> – The blender object to use.</li>
+<li><strong>data_path</strong> – The data path of the attribute.</li>
+<li><strong>frame</strong> – The frame number to use. If None is given, the current frame number is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
 <dt id="src.utility.Utility.Utility.insert_node_instead_existing_link">
 <em class="property">static </em><code class="descname">insert_node_instead_existing_link</code><span class="sig-paren">(</span><em>links</em>, <em>source_socket</em>, <em>new_node_dest_socket</em>, <em>new_node_src_socket</em>, <em>dest_socket</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.insert_node_instead_existing_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.insert_node_instead_existing_link" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replaces the node between source_socket and dest_socket with a new node.</p>
@@ -661,6 +735,51 @@ After: source_socket -&gt; new_node_dest_socket and new_node_src_socket -&gt; de
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The modified destination dict.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.Utility.Utility.output_already_registered">
+<em class="property">static </em><code class="descname">output_already_registered</code><span class="sig-paren">(</span><em>output</em>, <em>output_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.output_already_registered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.output_already_registered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
+Also throws an error if it detects an entry having the same key but not the same path and vice versa since this
+is ambiguous.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>output</strong> – The output dict entry.</li>
+<li><strong>output_list</strong> – The list of output entries.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool indicating whether it already exists.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.Utility.Utility.register_output">
+<em class="property">static </em><code class="descname">register_output</code><span class="sig-paren">(</span><em>output_dir</em>, <em>prefix</em>, <em>key</em>, <em>suffix</em>, <em>version</em>, <em>unique_for_camposes=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/Utility.html#Utility.register_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.Utility.Utility.register_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Registers new output type using configured key and file prefix.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output_dir</strong> – The output directory containing the generated files.</li>
+<li><strong>prefix</strong> – The default prefix of the generated files.</li>
+<li><strong>key</strong> – The default key which should be used for storing the output in merged file.</li>
+<li><strong>suffix</strong> – The suffix of the generated files.</li>
+<li><strong>version</strong> – The version number which will be stored at key_version in the final merged file.</li>
+<li><strong>unique_for_camposes</strong> – True if the output to be registered is unique for all the camera poses</li>
+</ul>
 </td>
 </tr>
 </tbody>

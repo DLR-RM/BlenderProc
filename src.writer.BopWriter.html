@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -377,8 +382,17 @@ Default: ‘’</td>
 <td>If true, the new frames will be appended to the existing ones. Default: False</td>
 <td>bool</td>
 </tr>
-<tr class="row-even"><td>ignore_dist_thres</td>
-<td>Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 5.</td>
+<tr class="row-even"><td>save_world2cam</td>
+<td>If true, camera to world transformations “cam_R_w2c”, “cam_t_w2c” are saved in scene_camera.json. Default: True</td>
+<td>bool</td>
+</tr>
+<tr class="row-odd"><td>ignore_dist_thres</td>
+<td>Distance between camera and object after which object is ignored. Mostly due to failed physics. Default: 100.</td>
+<td>float</td>
+</tr>
+<tr class="row-even"><td>depth_scale</td>
+<td>Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy 
+and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy. Default: 1.0</td>
 <td>float</td>
 </tr>
 <tr class="row-odd"><td>m2mm</td>
@@ -389,62 +403,28 @@ is needed if BopLoader option mm2m is used. Default: True</td>
 </tbody>
 </table>
 <dl class="method">
-<dt id="src.writer.BopWriter.BopWriter._get_camera_attribute">
-<code class="descname">_get_camera_attribute</code><span class="sig-paren">(</span><em>cam_pose</em>, <em>attribute_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writer/BopWriter.html#BopWriter._get_camera_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writer.BopWriter.BopWriter._get_camera_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the value of the requested attribute for the given object.</p>
+<dt id="src.writer.BopWriter.BopWriter._get_frame_camera">
+<code class="descname">_get_frame_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writer/BopWriter.html#BopWriter._get_frame_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writer.BopWriter.BopWriter._get_frame_camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns camera parameters for the active camera.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cam_pose</strong> – camera pose</li>
-<li><strong>attribute_name</strong> – The attribute name.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The attribute value.</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dict containing info for scene_camera.json</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.writer.BopWriter.BopWriter._get_frame_camera">
-<code class="descname">_get_frame_camera</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writer/BopWriter.html#BopWriter._get_frame_camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writer.BopWriter.BopWriter._get_frame_camera" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns camera parameters for the active camera.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="src.writer.BopWriter.BopWriter._get_frame_gt">
 <code class="descname">_get_frame_gt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writer/BopWriter.html#BopWriter._get_frame_gt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writer.BopWriter.BopWriter._get_frame_gt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns GT annotations for the active camera.</p>
+<dd><p>Returns GT pose annotations between active camera and objects.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of GT annotations.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.writer.BopWriter.BopWriter._get_object_attribute">
-<code class="descname">_get_object_attribute</code><span class="sig-paren">(</span><em>object</em>, <em>attribute_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/writer/BopWriter.html#BopWriter._get_object_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.writer.BopWriter.BopWriter._get_object_attribute" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the value of the requested attribute for the given object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>object</strong> – The mesh object.</li>
-<li><strong>attribute_name</strong> – The attribute name.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The attribute value.</p>
-</td>
 </tr>
 </tbody>
 </table>

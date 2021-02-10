@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -387,20 +392,6 @@ created automatically. Default: “”.</td>
 </tbody>
 </table>
 <dl class="method">
-<dt id="src.main.Module.Module._add_output_entry">
-<code class="descname">_add_output_entry</code><span class="sig-paren">(</span><em>output</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/main/Module.html#Module._add_output_entry"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.main.Module.Module._add_output_entry" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers the given output in the scene’s custom properties</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> – A dict containing key and path of the new output type.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="src.main.Module.Module._default_init">
 <code class="descname">_default_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/main/Module.html#Module._default_init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.main.Module.Module._default_init" title="Permalink to this definition">¶</a></dt>
 <dd><p>These operations are called during all modules inits</p>
@@ -417,69 +408,6 @@ created automatically. Default: “”.</td>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output_is_temp_default</strong> – True, if the files created by this module should be temporary by default.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The output directory to use</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.main.Module.Module._find_registered_output_by_key">
-<code class="descname">_find_registered_output_by_key</code><span class="sig-paren">(</span><em>key</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/main/Module.html#Module._find_registered_output_by_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.main.Module.Module._find_registered_output_by_key" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the output which was registered with the given key.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>key</strong> – The output key to look for.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The dict containing all information registered for that output. If no output with the given key exists, None is returned.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.main.Module.Module._output_already_registered">
-<code class="descname">_output_already_registered</code><span class="sig-paren">(</span><em>output</em>, <em>output_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/main/Module.html#Module._output_already_registered"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.main.Module.Module._output_already_registered" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
-Also throws an error if it detects an entry having the same key but not the same path and vice versa since this
-is ambiguous.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>output</strong> – The output dict entry.</li>
-<li><strong>output_list</strong> – The list of output entries.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">bool indicating whether it already exists.</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="src.main.Module.Module._register_output">
-<code class="descname">_register_output</code><span class="sig-paren">(</span><em>default_prefix</em>, <em>default_key</em>, <em>suffix</em>, <em>version</em>, <em>stereo=False</em>, <em>unique_for_camposes=True</em>, <em>output_key_parameter_name='output_key'</em>, <em>output_file_prefix_parameter_name='output_file_prefix'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/main/Module.html#Module._register_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.main.Module.Module._register_output" title="Permalink to this definition">¶</a></dt>
-<dd><p>Registers new output type using configured key and file prefix.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>default_prefix</strong> – The default prefix of the generated files.</li>
-<li><strong>default_key</strong> – The default key which should be used for storing the output in merged file.</li>
-<li><strong>suffix</strong> – The suffix of the generated files.</li>
-<li><strong>version</strong> – The version number which will be stored at key_version in the final merged file.</li>
-<li><strong>stereo</strong> – Boolean indicating whether the output of this rendering result will be stereo.</li>
-<li><strong>unique_for_camposes</strong> – True if the output to be registered is unique for all the camera poses</li>
-<li><strong>output_key_parameter_name</strong> – The parameter name to use for retrieving the output key from the config.</li>
-<li><strong>output_file_prefix_parameter_name</strong> – The parameter name to use for retrieving the output file prefix from the config.</li>
-</ul>
-</td>
 </tr>
 </tbody>
 </table>

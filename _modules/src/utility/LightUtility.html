@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.renderer.NormalRenderer &mdash; BlenderProc 1.0.0 documentation</title>
+  <title>src.utility.LightUtility &mdash; BlenderProc 1.0.0 documentation</title>
   
 
   
@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -203,9 +204,8 @@
 <li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2 current"><a class="reference external" href="#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -260,18 +260,23 @@
 <li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l1 current"><a class="reference external" href="src.utility.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.CocoUtility.html#src.utility.CocoUtility.CocoUtility">CocoUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -325,7 +330,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>src.renderer.NormalRenderer</li>
+      <li>src.utility.LightUtility</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -340,95 +345,132 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for src.renderer.NormalRenderer</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">bpy</span>
+  <h1>Source code for src.utility.LightUtility</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">src.renderer.RendererInterface</span> <span class="kn">import</span> <span class="n">RendererInterface</span>
-<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span><span class="p">,</span> <span class="n">KeyFrame</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Vector</span><span class="p">,</span> <span class="n">Euler</span><span class="p">,</span> <span class="n">Color</span>
 
 
-<div class="viewcode-block" id="NormalRenderer"><a class="viewcode-back" href="../../../src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">[docs]</a><span class="k">class</span> <span class="nc">NormalRenderer</span><span class="p">(</span><span class="n">RendererInterface</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;  Renders normal images for each registered key point.</span>
-
-<span class="sd">    Be aware that this can also be done by setting in any other renderer the `render_normals` to true.</span>
-
-<span class="sd">    The key difference here is that this renderer replaces every object&#39;s materials with an imported normal</span>
-<span class="sd">    material to render normals. The rendering is stored using the .exr file type and a color depth of 32bit</span>
-<span class="sd">    to achieve high precision. Furthermore, the `render_normals` mode supports anti-aliasing, while this</span>
-<span class="sd">    renderer does not.</span>
-
-<span class="sd">    This is only useful if you only want normals and no color.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
-        <span class="n">RendererInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
-
-<div class="viewcode-block" id="NormalRenderer._create_normal_material"><a class="viewcode-back" href="../../../src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer._create_normal_material">[docs]</a>    <span class="k">def</span> <span class="nf">_create_normal_material</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Creates a new material which uses xyz normal coordinates as rgb.</span>
-
-<span class="sd">        This assumes a linear color space used for rendering!</span>
+<div class="viewcode-block" id="Light"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light">[docs]</a><span class="k">class</span> <span class="nc">Light</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;POINT&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;light&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param type: The initial type of light, can be one of [POINT, SUN, SPOT, AREA].</span>
+<span class="sd">        :param name: The name of the new light</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">new_mat</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;Normal&quot;</span><span class="p">)</span>
-        <span class="n">new_mat</span><span class="o">.</span><span class="n">use_nodes</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">new_mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="n">light_data</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">lights</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">type</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">object_data</span><span class="o">=</span><span class="n">light_data</span><span class="p">)</span>
+        <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="p">)</span>
 
-        <span class="c1"># clean material from Principled BSDF nodes</span>
-        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">):</span>
-            <span class="n">nodes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">node</span><span class="p">)</span>
+<div class="viewcode-block" id="Light.set_location"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.set_location">[docs]</a>    <span class="k">def</span> <span class="nf">set_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">location</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">Vector</span><span class="p">],</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the location of the light in 3D world coordinates.</span>
 
-        <span class="n">links</span> <span class="o">=</span> <span class="n">new_mat</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">links</span>
-        <span class="n">texture_coord_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeTexCoord&#39;</span><span class="p">)</span>
-        <span class="n">vector_transform_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeVectorTransform&#39;</span><span class="p">)</span>
-        <span class="n">vector_transform_node</span><span class="o">.</span><span class="n">vector_type</span> <span class="o">=</span> <span class="s2">&quot;NORMAL&quot;</span>
-        <span class="n">vector_transform_node</span><span class="o">.</span><span class="n">convert_from</span> <span class="o">=</span> <span class="s2">&quot;OBJECT&quot;</span>
-        <span class="n">vector_transform_node</span><span class="o">.</span><span class="n">convert_to</span> <span class="o">=</span> <span class="s2">&quot;CAMERA&quot;</span>
+<span class="sd">        :param location: The location to set.</span>
+<span class="sd">        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">location</span> <span class="o">=</span> <span class="n">location</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_keyframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="p">,</span> <span class="s2">&quot;location&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
 
-        <span class="n">mapping_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeMapping&#39;</span><span class="p">)</span>
-        <span class="n">mapping_node</span><span class="o">.</span><span class="n">vector_type</span> <span class="o">=</span> <span class="s2">&quot;TEXTURE&quot;</span>
-        <span class="c1"># Translation</span>
-        <span class="n">mapping_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Location&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
-        <span class="c1"># Scaling</span>
-        <span class="n">mapping_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Scale&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+<div class="viewcode-block" id="Light.set_rotation_euler"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.set_rotation_euler">[docs]</a>    <span class="k">def</span> <span class="nf">set_rotation_euler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation_euler</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">Euler</span><span class="p">],</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the rotation of the light in euler angles.</span>
 
-        <span class="n">emission_node</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;ShaderNodeEmission&#39;</span><span class="p">)</span>
+<span class="sd">        :param rotation_euler: The euler angles to set.</span>
+<span class="sd">        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">rotation_euler</span> <span class="o">=</span> <span class="n">rotation_euler</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_keyframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="p">,</span> <span class="s2">&quot;rotation_euler&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
 
-        <span class="n">output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s1">&#39;OutputMaterial&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="Light.set_energy"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.set_energy">[docs]</a>    <span class="k">def</span> <span class="nf">set_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the energy of the light.</span>
 
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">texture_coord_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Normal&#39;</span><span class="p">],</span> <span class="n">vector_transform_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Vector&#39;</span><span class="p">])</span>
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">vector_transform_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Vector&#39;</span><span class="p">],</span> <span class="n">mapping_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Vector&#39;</span><span class="p">])</span>
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">mapping_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Vector&#39;</span><span class="p">],</span> <span class="n">emission_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">])</span>
-        <span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">emission_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Emission&#39;</span><span class="p">],</span> <span class="n">output</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Surface&#39;</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">new_mat</span></div>
+<span class="sd">        :param energy: The energy to set. If the type is SUN this value is interpreted as Watt per square meter, otherwise it is interpreted as Watt.</span>
+<span class="sd">        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">energy</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_keyframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="NormalRenderer.run"><a class="viewcode-back" href="../../../src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">with</span> <span class="n">Utility</span><span class="o">.</span><span class="n">UndoAfterExecution</span><span class="p">():</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_configure_renderer</span><span class="p">()</span>
+<div class="viewcode-block" id="Light.set_color"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.set_color">[docs]</a>    <span class="k">def</span> <span class="nf">set_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="n">Color</span><span class="p">],</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the color of the light.</span>
 
-            <span class="n">new_mat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_normal_material</span><span class="p">()</span>
+<span class="sd">        :param color: The rgb color to set.</span>
+<span class="sd">        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_keyframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
 
-            <span class="c1"># render normals</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">samples</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># this gives the best result for emission shader</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">cycles</span><span class="o">.</span><span class="n">use_denoising</span> <span class="o">=</span> <span class="kc">False</span>
-            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">objects</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">)):</span>
-                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span><span class="p">:</span>
-                            <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_alpha_texture_node</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">material</span><span class="p">,</span> <span class="n">new_mat</span><span class="p">)</span>
-                        <span class="k">else</span><span class="p">:</span>
-                            <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_mat</span>
-                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;materials&#39;</span><span class="p">):</span>
-                    <span class="n">obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_mat</span><span class="p">)</span>
+<div class="viewcode-block" id="Light.set_distance"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.set_distance">[docs]</a>    <span class="k">def</span> <span class="nf">set_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the falloff distance of the light = point where light is half the original intensity.</span>
 
-            <span class="c1"># Set the color channel depth of the output to 32bit</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">file_format</span> <span class="o">=</span> <span class="s2">&quot;OPEN_EXR&quot;</span>
-            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">image_settings</span><span class="o">.</span><span class="n">color_depth</span> <span class="o">=</span> <span class="s2">&quot;32&quot;</span>
+<span class="sd">        :param distance: The falloff distance to set.</span>
+<span class="sd">        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">distance</span> <span class="o">=</span> <span class="n">distance</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_keyframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;distance&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_use_alpha_channel</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">add_alpha_channel_to_textures</span><span class="p">(</span><span class="n">blurry_edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="viewcode-block" id="Light.set_type"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.set_type">[docs]</a>    <span class="k">def</span> <span class="nf">set_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Sets the type of the light.</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_render</span><span class="p">(</span><span class="s2">&quot;normal_&quot;</span><span class="p">)</span>
+<span class="sd">        :param type: The type to set, can be one of [POINT, SUN, SPOT, AREA].</span>
+<span class="sd">        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
+        <span class="n">Utility</span><span class="o">.</span><span class="n">insert_keyframe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span></div>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_register_output</span><span class="p">(</span><span class="s2">&quot;normal_&quot;</span><span class="p">,</span> <span class="s2">&quot;normals&quot;</span><span class="p">,</span> <span class="s2">&quot;.exr&quot;</span><span class="p">,</span> <span class="s2">&quot;2.0.0&quot;</span><span class="p">)</span></div></div>
+<div class="viewcode-block" id="Light.get_location"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.get_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Vector</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the location of the light in 3D world coordinates.</span>
+
+<span class="sd">        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.</span>
+<span class="sd">        :return: The location at the specified frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">location</span></div>
+
+<div class="viewcode-block" id="Light.get_rotation"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.get_rotation">[docs]</a>    <span class="k">def</span> <span class="nf">get_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Euler</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the rotation of the light in euler angles.</span>
+
+<span class="sd">        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.</span>
+<span class="sd">        :return: The rotation at the specified frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">rotation_euler</span></div>
+
+<div class="viewcode-block" id="Light.get_energy"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.get_energy">[docs]</a>    <span class="k">def</span> <span class="nf">get_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the energy of the light.</span>
+
+<span class="sd">        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.</span>
+<span class="sd">        :return: The energy at the specified frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">energy</span></div>
+
+<div class="viewcode-block" id="Light.get_color"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.get_color">[docs]</a>    <span class="k">def</span> <span class="nf">get_color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Color</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the RGB color of the light.</span>
+
+<span class="sd">        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.</span>
+<span class="sd">        :return: The color at the specified frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">color</span></div>
+
+<div class="viewcode-block" id="Light.get_distance"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.get_distance">[docs]</a>    <span class="k">def</span> <span class="nf">get_distance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the falloff distance of the light (point where light is half the original intensity).</span>
+
+<span class="sd">        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.</span>
+<span class="sd">        :return: The falloff distance at the specified frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">distance</span></div>
+
+<div class="viewcode-block" id="Light.get_type"><a class="viewcode-back" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light.get_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot; Returns the type of the light.</span>
+
+<span class="sd">        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.</span>
+<span class="sd">        :return: The type at the specified frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="n">KeyFrame</span><span class="p">(</span><span class="n">frame</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">light_obj</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">type</span></div></div>
 </pre></div>
 
            </div>

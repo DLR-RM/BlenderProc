@@ -7,7 +7,6 @@ Submodules
 .. toctree::
 
    src.renderer.FlowRenderer
-   src.renderer.NormalRenderer
    src.renderer.RendererInterface
    src.renderer.RgbRenderer
    src.renderer.SegMapRenderer

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>src.renderer.NormalRenderer module &mdash; BlenderProc 1.0.0 documentation</title>
+  <title>src.utility.SegMapRendererUtility module &mdash; BlenderProc 1.0.0 documentation</title>
   
 
   
@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -203,9 +204,8 @@
 <li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2 current"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -260,18 +260,23 @@
 <li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l1 current"><a class="reference external" href="src.utility.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.CocoUtility.html#src.utility.CocoUtility.CocoUtility">CocoUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -323,13 +328,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>src.renderer.NormalRenderer module</li>
+      <li>src.utility.SegMapRendererUtility module</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/src.renderer.NormalRenderer.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/src.utility.SegMapRendererUtility.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -342,30 +347,94 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-src.renderer.NormalRenderer">
-<span id="src-renderer-normalrenderer-module"></span><h1>src.renderer.NormalRenderer module<a class="headerlink" href="#module-src.renderer.NormalRenderer" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-src.utility.SegMapRendererUtility">
+<span id="src-utility-segmaprendererutility-module"></span><h1>src.utility.SegMapRendererUtility module<a class="headerlink" href="#module-src.utility.SegMapRendererUtility" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="src.renderer.NormalRenderer.NormalRenderer">
-<em class="property">class </em><code class="descclassname">src.renderer.NormalRenderer.</code><code class="descname">NormalRenderer</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/NormalRenderer.html#NormalRenderer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.NormalRenderer.NormalRenderer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface" title="src.renderer.RendererInterface.RendererInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.renderer.RendererInterface.RendererInterface</span></code></a></p>
-<p>Renders normal images for each registered key point.</p>
-<p>Be aware that this can also be done by setting in any other renderer the <cite>render_normals</cite> to true.</p>
-<p>The key difference here is that this renderer replaces every object’s materials with an imported normal
-material to render normals. The rendering is stored using the .exr file type and a color depth of 32bit
-to achieve high precision. Furthermore, the <cite>render_normals</cite> mode supports anti-aliasing, while this
-renderer does not.</p>
-<p>This is only useful if you only want normals and no color.</p>
-<dl class="method">
-<dt id="src.renderer.NormalRenderer.NormalRenderer._create_normal_material">
-<code class="descname">_create_normal_material</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/NormalRenderer.html#NormalRenderer._create_normal_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.NormalRenderer.NormalRenderer._create_normal_material" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a new material which uses xyz normal coordinates as rgb.</p>
-<p>This assumes a linear color space used for rendering!</p>
+<dt id="src.utility.SegMapRendererUtility.SegMapRendererUtility">
+<em class="property">class </em><code class="descclassname">src.utility.SegMapRendererUtility.</code><code class="descname">SegMapRendererUtility</code><a class="reference internal" href="_modules/src/utility/SegMapRendererUtility.html#SegMapRendererUtility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.SegMapRendererUtility.SegMapRendererUtility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="staticmethod">
+<dt id="src.utility.SegMapRendererUtility.SegMapRendererUtility._colorize_object">
+<em class="property">static </em><code class="descname">_colorize_object</code><span class="sig-paren">(</span><em>obj</em>, <em>color</em>, <em>use_alpha_channel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/SegMapRendererUtility.html#SegMapRendererUtility._colorize_object"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.SegMapRendererUtility.SegMapRendererUtility._colorize_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.</p>
+<p>This is done by replacing all nodes just with an emission node, which emits the color corresponding to the
+category of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>obj</strong> – The object to use.</li>
+<li><strong>color</strong> – RGB array of a color in the range of [0, self.render_colorspace_size_per_dimension].</li>
+<li><strong>use_alpha_channel</strong> – If true, the alpha channel stored in .png textures is used.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
-<dl class="method">
-<dt id="src.renderer.NormalRenderer.NormalRenderer.run">
-<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/renderer/NormalRenderer.html#NormalRenderer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.renderer.NormalRenderer.NormalRenderer.run" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="staticmethod">
+<dt id="src.utility.SegMapRendererUtility.SegMapRendererUtility._colorize_objects_for_instance_segmentation">
+<em class="property">static </em><code class="descname">_colorize_objects_for_instance_segmentation</code><span class="sig-paren">(</span><em>objects</em>, <em>use_alpha_channel</em>, <em>render_colorspace_size_per_dimension</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/SegMapRendererUtility.html#SegMapRendererUtility._colorize_objects_for_instance_segmentation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.SegMapRendererUtility.SegMapRendererUtility._colorize_objects_for_instance_segmentation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a different color to each object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>objects</strong> – A list of objects.</li>
+<li><strong>use_alpha_channel</strong> – If true, the alpha channel stored in .png textures is used.</li>
+<li><strong>render_colorspace_size_per_dimension</strong> – The limit of the colorspace to use per dimension for generating colors.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The num_splits_per_dimension of the spanned color space, the color map</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.SegMapRendererUtility.SegMapRendererUtility._set_world_background_color">
+<em class="property">static </em><code class="descname">_set_world_background_color</code><span class="sig-paren">(</span><em>color</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/SegMapRendererUtility.html#SegMapRendererUtility._set_world_background_color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.SegMapRendererUtility.SegMapRendererUtility._set_world_background_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the background color of the blender world obejct.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>color</strong> – A 3-dim array containing the background color in range [0, 255]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.SegMapRendererUtility.SegMapRendererUtility.render">
+<em class="property">static </em><code class="descname">render</code><span class="sig-paren">(</span><em>output_dir</em>, <em>temp_dir</em>, <em>used_attributes</em>, <em>used_default_values={}</em>, <em>file_prefix='segmap_'</em>, <em>output_key='segmap'</em>, <em>segcolormap_output_file_prefix='class_inst_col_map'</em>, <em>segcolormap_output_key='segcolormap'</em>, <em>use_alpha_channel=False</em>, <em>render_colorspace_size_per_dimension=2048</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/SegMapRendererUtility.html#SegMapRendererUtility.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.SegMapRendererUtility.SegMapRendererUtility.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders segmentation maps for all frames.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output_dir</strong> – The directory to write images to.</li>
+<li><strong>temp_dir</strong> – The directory to write intermediate data to.</li>
+<li><strong>used_attributes</strong> – The attributes to be used for color mapping.</li>
+<li><strong>used_default_values</strong> – The default values used for the keys used in used_attributes.</li>
+<li><strong>file_prefix</strong> – The prefix to use for writing the images.</li>
+<li><strong>output_key</strong> – The key to use for registering the output.</li>
+<li><strong>segcolormap_output_file_prefix</strong> – The prefix to use for writing the segmation-color map csv.</li>
+<li><strong>segcolormap_output_key</strong> – The key to use for registering the segmation-color map output.</li>
+<li><strong>use_alpha_channel</strong> – If true, the alpha channel stored in .png textures is used.</li>
+<li><strong>render_colorspace_size_per_dimension</strong> – As we use float16 for storing the rendering, the interval of integers which can be precisely stored is [-2048, 2048]. As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our color space which allows ~8 billion different colors/objects. This should be enough.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </dd></dl>
 

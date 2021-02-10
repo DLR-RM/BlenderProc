@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -580,6 +585,9 @@
 <span class="sd">        * - cf_add_uv_mapping/projection</span>
 <span class="sd">          - Name of the projection as str. Default: []. Available: [&quot;cube&quot;, &quot;cylinder&quot;, &quot;smart&quot;, &quot;sphere&quot;]</span>
 <span class="sd">          - str</span>
+<span class="sd">        * - cf_add_uv_mapping/forced_recalc_of_uv_maps</span>
+<span class="sd">          - If this is set to True, all UV maps are recalculated not just the missing ones</span>
+<span class="sd">          - bool</span>
 <span class="sd">        * - cf_randomize_materials</span>
 <span class="sd">          - Randomizes the materials for the selected objects with certain probability.</span>
 <span class="sd">          - dict</span>
@@ -596,6 +604,10 @@
 <span class="sd">          - A dict of materials and corresponding conditions making it possible to only replace materials with</span>
 <span class="sd">            certain properties. These are similar to the conditions mentioned in the getter.Material. Default: {}.</span>
 <span class="sd">          - dict</span>
+<span class="sd">        * - cf_randomize_materials/add_to_objects_without_material</span>
+<span class="sd">          - If set to True, objects which didn&#39;t have any material before will also get a random material assigned.</span>
+<span class="sd">            Default: False.</span>
+<span class="sd">          - bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
         <span class="n">Module</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
@@ -713,7 +725,8 @@
                 <span class="n">uv_config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">params_conf</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
                 <span class="c1"># instruction about unpacking the data: key, corresponding Config method to extract the value,</span>
                 <span class="c1"># it&#39;s default value and a postproc function</span>
-                <span class="n">instructions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_string</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">)}</span>
+                <span class="n">instructions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;projection&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_string</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">str</span><span class="o">.</span><span class="n">lower</span><span class="p">),</span>
+                                <span class="s2">&quot;forced_recalc_of_uv_maps&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)}</span>
                 <span class="c1"># unpack</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpack_params</span><span class="p">(</span><span class="n">uv_config</span><span class="p">,</span> <span class="n">instructions</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;cf_randomize_materials&quot;</span><span class="p">:</span>
@@ -721,8 +734,9 @@
                 <span class="c1"># instruction about unpacking the data: key, corresponding Config method to extract the value,</span>
                 <span class="c1"># it&#39;s default value and a postproc function</span>
                 <span class="n">instructions</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;randomization_level&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_float</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                                <span class="s2">&quot;add_to_objects_without_material&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
                                 <span class="s2">&quot;materials_to_replace_with&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_list</span><span class="p">,</span>
-                                                              <span class="p">[</span><span class="n">choice</span><span class="p">(</span><span class="n">BlenderUtility</span><span class="o">.</span><span class="n">get_all_materials</span><span class="p">())],</span> <span class="kc">None</span><span class="p">),</span>
+                                                              <span class="n">BlenderUtility</span><span class="o">.</span><span class="n">get_all_materials</span><span class="p">(),</span> <span class="kc">None</span><span class="p">),</span>
                                 <span class="s2">&quot;obj_materials_cond_to_be_replaced&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">Config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">,</span> <span class="p">{},</span> <span class="kc">None</span><span class="p">)}</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unpack_params</span><span class="p">(</span><span class="n">rand_config</span><span class="p">,</span> <span class="n">instructions</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -780,7 +794,7 @@
         <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">view_layer</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">active</span> <span class="o">=</span> <span class="n">entity</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> \
                 <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;uv_layers&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">entity</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">uv_layers</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">BlenderUtility</span><span class="o">.</span><span class="n">check_if_uv_coordinates_are_set</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">BlenderUtility</span><span class="o">.</span><span class="n">check_if_uv_coordinates_are_set</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span> <span class="ow">or</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;forced_recalc_of_uv_maps&quot;</span><span class="p">]:</span>
                 <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">editmode_toggle</span><span class="p">()</span>
                 <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;projection&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cube&quot;</span><span class="p">:</span>
                     <span class="n">bpy</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">uv</span><span class="o">.</span><span class="n">cube_project</span><span class="p">()</span>
@@ -802,20 +816,20 @@
 <span class="sd">        :param entity: An object to modify. Type: bpy.types.Object.</span>
 <span class="sd">        :param value: Configuration data. Type: dict.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;materials_to_replace_with&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;getter.Material returned more than one or no substitute material, namely this much: </span><span class="si">{}</span><span class="s2">. &quot;</span>
-                               <span class="s2">&quot;Please, make sure you enabled sampling in the Providers config by using &quot;</span>
-                               <span class="s2">&quot;&#39;random_samples&#39;: 1 as a config parameter, and that conditions are not too strict such &quot;</span>
-                               <span class="s2">&quot;that some materials can meet them&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;materials_to_replace_with&quot;</span><span class="p">])))</span>
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s1">&#39;material_slots&#39;</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
-                <span class="n">use_mat</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;obj_materials_cond_to_be_replaced&quot;</span><span class="p">]:</span>
-                    <span class="n">use_mat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Material</span><span class="o">.</span><span class="n">perform_and_condition_check</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;obj_materials_cond_to_be_replaced&quot;</span><span class="p">],</span> <span class="p">[],</span>
-                                                                       <span class="p">[</span><span class="n">mat</span><span class="o">.</span><span class="n">material</span><span class="p">]))</span> <span class="o">==</span> <span class="mi">1</span>
-                <span class="k">if</span> <span class="n">use_mat</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;randomization_level&quot;</span><span class="p">]:</span>
-                        <span class="n">mat</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;materials_to_replace_with&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                    <span class="n">use_mat</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;obj_materials_cond_to_be_replaced&quot;</span><span class="p">]:</span>
+                        <span class="n">use_mat</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">Material</span><span class="o">.</span><span class="n">perform_and_condition_check</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;obj_materials_cond_to_be_replaced&quot;</span><span class="p">],</span> <span class="p">[],</span>
+                                                                           <span class="p">[</span><span class="n">mat</span><span class="o">.</span><span class="n">material</span><span class="p">]))</span> <span class="o">==</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">use_mat</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;randomization_level&quot;</span><span class="p">]:</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="n">choice</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;materials_to_replace_with&quot;</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;add_to_objects_without_material&quot;</span><span class="p">]:</span>
+                <span class="c1"># this object didn&#39;t have a material before</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">[</span><span class="s2">&quot;randomization_level&quot;</span><span class="p">]:</span>
+                    <span class="n">entity</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">choice</span><span class="p">(</span><span class="n">value</span><span class="p">[</span><span class="s2">&quot;materials_to_replace_with&quot;</span><span class="p">]))</span></div>
 
 <div class="viewcode-block" id="EntityManipulator._unpack_params"><a class="viewcode-back" href="../../../src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator._unpack_params">[docs]</a>    <span class="k">def</span> <span class="nf">_unpack_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param_config</span><span class="p">,</span> <span class="n">instructions</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Unpacks the data from a config object following the instructions in the dict.</span>

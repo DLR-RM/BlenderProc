@@ -116,6 +116,7 @@
 <li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_multiview/README.html">shapenet_multiview</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
@@ -205,7 +206,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.renderer.NormalRenderer.html#src.renderer.NormalRenderer.NormalRenderer">NormalRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
@@ -267,11 +267,16 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
@@ -347,6 +352,7 @@
 <span class="kn">import</span> <span class="nn">h5py</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">src.main.GlobalStorage</span> <span class="kn">import</span> <span class="n">GlobalStorage</span>
 <span class="kn">from</span> <span class="nn">src.writer.WriterInterface</span> <span class="kn">import</span> <span class="n">WriterInterface</span>
 <span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
 
@@ -409,18 +415,28 @@
             <span class="n">hdf5_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_determine_output_dir</span><span class="p">(</span><span class="kc">False</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">frame</span> <span class="o">+</span> <span class="n">frame_offset</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.hdf5&quot;</span><span class="p">)</span>
             <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">hdf5_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
 
-                <span class="k">if</span> <span class="s1">&#39;output&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">is_in_storage</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">):</span>
                     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No output was designed in prior models!&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
                 <span class="c1"># Go through all the output types</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Merging data for frame &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; into &quot;</span> <span class="o">+</span> <span class="n">hdf5_path</span><span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">output_type</span> <span class="ow">in</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">]:</span>
-                    <span class="n">use_stereo</span> <span class="o">=</span> <span class="n">output_type</span><span class="p">[</span><span class="s2">&quot;stereo&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">output_type</span> <span class="ow">in</span> <span class="n">GlobalStorage</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;output&quot;</span><span class="p">):</span>
                     <span class="c1"># Build path (path attribute is format string)</span>
                     <span class="n">file_path</span> <span class="o">=</span> <span class="n">output_type</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
                     <span class="k">if</span> <span class="s1">&#39;%&#39;</span> <span class="ow">in</span> <span class="n">file_path</span><span class="p">:</span>
                         <span class="n">file_path</span> <span class="o">=</span> <span class="n">file_path</span> <span class="o">%</span> <span class="n">frame</span>
+
+                    <span class="c1"># Check if file exists</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+                        <span class="c1"># If not try stereo suffixes</span>
+                        <span class="n">path_l</span><span class="p">,</span> <span class="n">path_r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_stereo_path_pair</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path_l</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path_r</span><span class="p">):</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;File not found: &quot;</span> <span class="o">+</span> <span class="n">file_path</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">use_stereo</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">use_stereo</span> <span class="o">=</span> <span class="kc">False</span>
 
                     <span class="k">if</span> <span class="n">use_stereo</span><span class="p">:</span>
                         <span class="n">path_l</span><span class="p">,</span> <span class="n">path_r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_stereo_path_pair</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
@@ -443,7 +459,11 @@
 
                         <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_hdf_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">new_key</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_hdf_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">new_key</span> <span class="o">+</span> <span class="s2">&quot;_version&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">([</span><span class="n">new_version</span><span class="p">]))</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_hdf_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">new_key</span> <span class="o">+</span> <span class="s2">&quot;_version&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">([</span><span class="n">new_version</span><span class="p">]))</span>
+
+                <span class="n">blender_proc_version</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_current_version</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">blender_proc_version</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_hdf_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;blender_proc_version&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">string_</span><span class="p">(</span><span class="n">blender_proc_version</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Hdf5Writer._write_to_hdf_file"><a class="viewcode-back" href="../../../src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer._write_to_hdf_file">[docs]</a>    <span class="k">def</span> <span class="nf">_write_to_hdf_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Adds the given data as a new entry to the given hdf5 file.</span>
