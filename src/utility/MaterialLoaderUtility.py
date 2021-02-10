@@ -331,8 +331,7 @@ class MaterialLoaderUtility(object):
 
         :param nodes: Nodes from the current material
         :param links: Links from the current material
-        :param collection_of_texture_nodes: List of :class: `:w
-        bpy.type.Node of type :class: `ShaderNodeTexImage`
+        :param collection_of_texture_nodes: List of :class: `bpy.type.Node` of type :class: `ShaderNodeTexImage`
         """
         if len(collection_of_texture_nodes) > 0:
             texture_coords = nodes.new("ShaderNodeTexCoord")
