@@ -5,6 +5,7 @@ import bpy
 import time
 import inspect
 import importlib
+import git
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
@@ -77,6 +78,18 @@ class Utility:
 
         return modules
 
+    @staticmethod
+    def get_current_version():
+        """ Gets the git commit hash.
+
+        :return: a string, the BlenderProc version, or None if unavailable 
+        """
+        try:
+            repo = git.Repo(search_parent_directories=True) 
+        except git.InvalidGitRepositoryError as e:
+            warnings.warn("Invalid git repository")
+            return None
+        return repo.head.object.hexsha
 
     @staticmethod
     def transform_matrix_to_blender_coord_frame(matrix, source_frame):
