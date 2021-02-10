@@ -5,6 +5,7 @@ import bpy
 import time
 import inspect
 import importlib
+import git
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
@@ -77,6 +78,18 @@ class Utility:
 
         return modules
 
+    @staticmethod
+    def get_current_version():
+        """ Gets the git commit hash.
+
+        :return: a string, the BlenderProc version, or None if unavailable 
+        """
+        try:
+            repo = git.Repo(search_parent_directories=True) 
+        except git.InvalidGitRepositoryError as e:
+            warnings.warn("Invalid git repository")
+            return None
+        return repo.head.object.hexsha
 
     @staticmethod
     def transform_matrix_to_blender_coord_frame(matrix, source_frame):
@@ -510,3 +523,35 @@ class Utility:
                                 .format(_output["key"], _output["path"], output["key"], output["path"]))
 
         return False
+
+
+    @staticmethod
+    def insert_keyframe(obj, data_path, frame=None):
+        """ Inserts a keyframe for the given object and data path at the specified frame number:
+
+        :param obj: The blender object to use.
+        :param data_path: The data path of the attribute.
+        :param frame: The frame number to use. If None is given, the current frame number is used.
+        """
+        if frame is None:
+            frame = bpy.context.scene.frame_current
+        obj.keyframe_insert(data_path=data_path, frame=frame)
+
+
+class KeyFrame:
+    def __init__(self, frame):
+        """ Sets the frame number for its complete block.
+
+        :param frame: The frame number to set. If None is given, nothing is changed.
+        """
+        self._frame = frame
+        self._prev_frame = None
+
+    def __enter__(self):
+        if self._frame is not None:
+            self._prev_frame = bpy.context.scene.frame_current
+            bpy.context.scene.frame_set(self._frame)
+
+    def __exit__(self, type, value, traceback):
+        if self._prev_frame is not None:
+            bpy.context.scene.frame_set(self._prev_frame)

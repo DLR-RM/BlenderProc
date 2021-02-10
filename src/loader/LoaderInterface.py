@@ -19,6 +19,11 @@ class LoaderInterface(Module):
         * - add_properties
           - Custom properties to set for loaded objects. Use `cp_` prefix for keys.
           - dict
+        * - add_material_properties
+          - Custom properties to set for the materials of loaded objects. Use `cp_` prefix for keys. This only works
+            for materials which are used. Additional materials, which are loaded for example via a .blend file, are not
+            affected by this.
+          - dict
         * - cf_set_shading
           - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]
           - string
@@ -33,6 +38,7 @@ class LoaderInterface(Module):
 
     def _set_properties(self, objects: [bpy.types.Object]):
         """ Sets all custom properties of all given objects according to the configuration.
+        This includes setting the materials properties of the loaded objects.
 
         Also runs all custom property functions.
 
@@ -40,6 +46,7 @@ class LoaderInterface(Module):
         """
 
         properties = self.config.get_raw_dict("add_properties", {})
+        material_properties = self.config.get_raw_dict("add_material_properties", {})
 
         for obj in objects:
             for key, value in properties.items():
@@ -50,6 +57,19 @@ class LoaderInterface(Module):
                     raise RuntimeError(
                         "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
                         "Use manipulators.Entity for setting object's attribute values.")
+            if material_properties:
+                for mat_slot in obj.material_slots:
+                    material = mat_slot.material
+                    if material is None:
+                        continue
+                    for key, value in material_properties.items():
+                        if key.startswith("cp_"):
+                            key = key[3:]
+                            material[key] = value
+                        else:
+                            raise RuntimeError("Loader modules support setting only custom properties. "
+                                               "Use 'cp_' prefix for keys.")
+
         if self.config.has_param("cf_set_shading"):
             mode = self.config.get_string("cf_set_shading")
             LoaderInterface.change_shading_mode(objects, mode)

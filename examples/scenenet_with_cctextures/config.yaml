@@ -93,6 +93,7 @@
           },
           "check_if_pose_above_object_list": {
             "provider": "getter.Entity",
+            "check_empty": True,
             "conditions": {
               "cp_category_id": 2,
               "type": "MESH"
@@ -106,6 +107,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "cp_category_id": 1
           }
@@ -124,6 +126,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "cp_category_id": 1
           }
@@ -143,6 +146,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "name": ".*lamp.*"
           }
@@ -156,6 +160,7 @@
       "config": {
         "selector": {
           "provider": "getter.Entity",
+          "check_empty": True,
           "conditions": {
             "name": ".*ceiling.*"
           }

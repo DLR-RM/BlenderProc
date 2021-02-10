@@ -237,6 +237,9 @@ class EntityManipulator(Module):
         * - cf_add_uv_mapping/projection
           - Name of the projection as str. Default: []. Available: ["cube", "cylinder", "smart", "sphere"]
           - str
+        * - cf_add_uv_mapping/forced_recalc_of_uv_maps
+          - If this is set to True, all UV maps are recalculated not just the missing ones
+          - bool
         * - cf_randomize_materials
           - Randomizes the materials for the selected objects with certain probability.
           - dict
@@ -253,6 +256,10 @@ class EntityManipulator(Module):
           - A dict of materials and corresponding conditions making it possible to only replace materials with
             certain properties. These are similar to the conditions mentioned in the getter.Material. Default: {}.
           - dict
+        * - cf_randomize_materials/add_to_objects_without_material
+          - If set to True, objects which didn't have any material before will also get a random material assigned.
+            Default: False.
+          - bool
     """
     def __init__(self, config):
         Module.__init__(self, config)
@@ -370,7 +377,8 @@ class EntityManipulator(Module):
                 uv_config = Config(params_conf.get_raw_dict(key))
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
                 # it's default value and a postproc function
-                instructions = {"projection": (Config.get_string, None, str.lower)}
+                instructions = {"projection": (Config.get_string, None, str.lower),
+                                "forced_recalc_of_uv_maps": (Config.get_bool, False, None)}
                 # unpack
                 result = self._unpack_params(uv_config, instructions)
             elif key == "cf_randomize_materials":
@@ -378,8 +386,9 @@ class EntityManipulator(Module):
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
                 # it's default value and a postproc function
                 instructions = {"randomization_level": (Config.get_float, 0.2, None),
+                                "add_to_objects_without_material": (Config.get_bool, False, None),
                                 "materials_to_replace_with": (Config.get_list,
-                                                              [choice(BlenderUtility.get_all_materials())], None),
+                                                              BlenderUtility.get_all_materials(), None),
                                 "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
                 result = self._unpack_params(rand_config, instructions)
             else:
@@ -437,7 +446,7 @@ class EntityManipulator(Module):
         bpy.context.view_layer.objects.active = entity
         if hasattr(entity, "data") and entity.data is not None and \
                 hasattr(entity.data, "uv_layers") and entity.data.uv_layers is not None:
-            if not BlenderUtility.check_if_uv_coordinates_are_set(entity):
+            if not BlenderUtility.check_if_uv_coordinates_are_set(entity) or value["forced_recalc_of_uv_maps"]:
                 bpy.ops.object.editmode_toggle()
                 if value["projection"] == "cube":
                     bpy.ops.uv.cube_project()
@@ -459,20 +468,20 @@ class EntityManipulator(Module):
         :param entity: An object to modify. Type: bpy.types.Object.
         :param value: Configuration data. Type: dict.
         """
-        if len(value["materials_to_replace_with"]) != 1:
-            raise RuntimeError("getter.Material returned more than one or no substitute material, namely this much: {}. "
-                               "Please, make sure you enabled sampling in the Providers config by using "
-                               "'random_samples': 1 as a config parameter, and that conditions are not too strict such "
-                               "that some materials can meet them".format(len(value["materials_to_replace_with"])))
         if hasattr(entity, 'material_slots'):
-            for mat in entity.material_slots:
-                use_mat = True
-                if value["obj_materials_cond_to_be_replaced"]:
-                    use_mat = len(Material.perform_and_condition_check(value["obj_materials_cond_to_be_replaced"], [],
-                                                                       [mat.material])) == 1
-                if use_mat:
-                    if np.random.uniform(0, 1) <= value["randomization_level"]:
-                        mat.material = value["materials_to_replace_with"][0]
+            if entity.material_slots:
+                for mat in entity.material_slots:
+                    use_mat = True
+                    if value["obj_materials_cond_to_be_replaced"]:
+                        use_mat = len(Material.perform_and_condition_check(value["obj_materials_cond_to_be_replaced"], [],
+                                                                           [mat.material])) == 1
+                    if use_mat:
+                        if np.random.uniform(0, 1) <= value["randomization_level"]:
+                            mat.material = choice(value["materials_to_replace_with"])
+            elif value["add_to_objects_without_material"]:
+                # this object didn't have a material before
+                if np.random.uniform(0, 1) <= value["randomization_level"]:
+                    entity.data.materials.append(choice(value["materials_to_replace_with"]))
 
     def _unpack_params(self, param_config, instructions):
         """ Unpacks the data from a config object following the instructions in the dict.
