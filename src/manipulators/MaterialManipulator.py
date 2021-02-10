@@ -2,6 +2,7 @@ import os
 import warnings
 
 import bpy
+import mathutils
 
 from src.main.Module import Module
 from src.utility.Config import Config
@@ -308,7 +309,15 @@ class MaterialManipulator(Module):
             if operation == "set":
                 principled_bsdf.inputs[shader_input_key_copy].default_value = value
             elif operation == "add":
-                principled_bsdf.inputs[shader_input_key_copy].default_value += value
+                if isinstance(principled_bsdf.inputs[shader_input_key_copy].default_value, float):
+                    principled_bsdf.inputs[shader_input_key_copy].default_value += value
+                else:
+                    if len(principled_bsdf.inputs[shader_input_key_copy].default_value) != len(value):
+                        raise Exception(f"The shapder input key '{shader_input_key_copy}' needs a value with "
+                                        f"{len(principled_bsdf.inputs[shader_input_key_copy].default_value)} "
+                                        f"dimensions, the used config value only has {len(value)} dimensions.")
+                    for i in range(len(principled_bsdf.inputs[shader_input_key_copy].default_value)):
+                        principled_bsdf.inputs[shader_input_key_copy].default_value[i] += value[i]
         else:
             raise Exception("Shader input key '{}' is not a part of the shader.".format(shader_input_key_copy))
 
