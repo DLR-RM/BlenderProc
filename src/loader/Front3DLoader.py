@@ -71,10 +71,7 @@ class Front3DLoader(LoaderInterface):
         # a list of all newly created objects
         self.created_objects = []
 
-
-
     def run(self):
-
         if not os.path.exists(self.json_path):
             raise Exception("The given path does not exists: {}".format(self.json_path))
         if not self.json_path.endswith(".json"):
@@ -264,7 +261,7 @@ class Front3DLoader(LoaderInterface):
             obj_file = os.path.join(folder_path, "raw_model.obj")
             # if the object exists load it -> a lot of object do not exist
             # we are unsure why this is -> we assume that not all objects have been made public
-            if os.path.exists(obj_file):
+            if os.path.exists(obj_file) and not "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
                 # load all objects from this .obj file
                 objs = Utility.import_objects(filepath=obj_file)
                 # extract the name, which serves as category id
@@ -326,6 +323,8 @@ class Front3DLoader(LoaderInterface):
                             links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
 
                 all_objs.extend(objs)
+            elif "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
+                warnings.warn(f"This file {obj_file} was skipped as it can not be read by blender.")
         return all_objs
 
     def _move_and_duplicate_furniture(self, data: dir, all_loaded_furniture: list):
