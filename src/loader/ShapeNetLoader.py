@@ -67,16 +67,15 @@ class ShapeNetLoader(LoaderInterface):
             files = []
             with open(path_to_taxonomy_file, "r") as f:
                 loaded_data = json.load(f)
-                id_path = os.path.join(data_path, used_synset_id)
-                
-                # Checking if directory exists or not for the used_synset_id. If the directory does not exist it means that the used_synset_id is not a parent synset_id
-                if not os.path.exists(id_path):
-                    parent_synset_id = ShapeNetLoader.find_parent_synset_id(data_path, used_synset_id, loaded_data)
-                    id_path = os.path.join(data_path, parent_synset_id)
+                parent_synset_id = ShapeNetLoader.find_parent_synset_id(data_path, used_synset_id, loaded_data)
+                id_path = os.path.join(data_path, parent_synset_id)
                     
                 if not used_source_id:
                     files.extend(glob.glob(os.path.join(id_path, "*", "models", "*.obj")))
                 else:
+                    if not os.path.exists(os.path.join(id_path, used_source_id)):
+                        raise Exception("The used_source_id {} is not correct".format(used_source_id)) 
+                    
                     # Using both the used_synset_id and used_source_id
                     files.extend(glob.glob(os.path.join(id_path, used_source_id, "models", "*.obj")))
 
@@ -106,17 +105,14 @@ class ShapeNetLoader(LoaderInterface):
         for block in json_data:
             if synset_id in block["children"]:
                 parent_synset_id = block["synsetId"]
-                id_path = os.path.join(data_path, parent_synset_id)
-                if os.path.exists(id_path):
-                    return parent_synset_id
-                else:
-                    return ShapeNetLoader.find_parent_synset_id(data_path, parent_synset_id, json_data)
+                return ShapeNetLoader.find_parent_synset_id(data_path, parent_synset_id, json_data)
+
+        raise Exception("The used_synset_id {} does not exists in the taxonomy file".format(synset_id)) 
 
     def run(self):
         """
         Uses the loaded .obj files and picks one randomly and loads it
         """
-        print(self._files_with_fitting_synset)
         selected_obj = random.choice(self._files_with_fitting_synset)    
         loaded_obj = Utility.import_objects(selected_obj)
         
