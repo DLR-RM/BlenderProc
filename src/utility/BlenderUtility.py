@@ -384,18 +384,17 @@ def get_bound_volume(obj):
 def duplicate_objects(objects):
     """
     Creates duplicates of objects, first duplicates are given name <orignial_object_name>.001
-    
+
     :param objects: an object or a list of objects to be duplicated
     :return: a list of objects
     """
-    # TODO: Refactor method
     if not isinstance(objects, list):
         objects = [objects]
 
     bpy.ops.object.select_all(action='DESELECT')
     for obj in objects:
-        obj.select()
+        obj.select_set(True)
     bpy.ops.object.duplicate()
     duplicates = bpy.context.selected_objects
     bpy.ops.object.select_all(action='DESELECT')
-    return Mesh.convert_to_entities(duplicates)
+    return duplicates
