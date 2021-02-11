@@ -72,9 +72,9 @@ class HavenMaterialLoaderModule(Module):
         """
 
         HavenMaterialLoader.load(
-            self.config.get_string("folder_path", "resources/haven"),
-            self.config.get_list("used_assets", []),
-            self.config.get_raw_dict("add_custom_properties", {}),
-            self.config.get_bool("preload", False),
-            self.config.get_bool("fill_used_empty_materials", False)
+            folder_path=self.config.get_string("folder_path", "resources/haven"),
+            used_assets=self.config.get_list("used_assets", []),
+            add_cp=self.config.get_raw_dict("add_custom_properties", {}),
+            preload=self.config.get_bool("preload", False),
+            fill_used_empty_materials=self.config.get_bool("fill_used_empty_materials", False)
         )

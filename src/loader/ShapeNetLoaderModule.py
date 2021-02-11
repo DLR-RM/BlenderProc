@@ -43,8 +43,8 @@ class ShapeNetLoaderModule(LoaderInterface):
         Uses the loaded .obj files and picks one randomly and loads it
         """
         loaded_obj = ShapeNetLoader.load(
-            self.config.get_string("data_path"),
-            self.config.get_string("used_synset_id"),
-            self.config.get_string("used_source_id", "")
+            data_path=self.config.get_string("data_path"),
+            used_synset_id=self.config.get_string("used_synset_id"),
+            used_source_id=self.config.get_string("used_source_id", "")
         )
         self._set_properties(loaded_obj)

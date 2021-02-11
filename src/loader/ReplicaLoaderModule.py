@@ -34,10 +34,10 @@ class ReplicaLoaderModule(LoaderInterface):
 
     def run(self):
         loaded_objects = ReplicaLoader.load(
-            self.config.get_string('data_path'),
-            self.config.get_string('data_set_name'),
-            self.config.get_bool('use_ambient_occlusion', False),
-            self.config.get_bool('use_smooth_shading', False)
+            data_path=self.config.get_string('data_path'),
+            data_set_name=self.config.get_string('data_set_name'),
+            use_ambient_occlusion=self.config.get_bool('use_ambient_occlusion', False),
+            use_smooth_shading=self.config.get_bool('use_smooth_shading', False)
         )
 
         # Set the physics property of all imported objects

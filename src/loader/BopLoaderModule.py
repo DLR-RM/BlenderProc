@@ -91,20 +91,20 @@ class BopLoaderModule(LoaderInterface):
             obj_instances_limit = -1
 
         loaded_objects = BopLoader.load(
-            self.config.get_string("bop_dataset_path"),
-            self._temp_dir,
-            self.config.get_list("sys_paths"),
-            self.config.get_string("model_type", ""),
-            self.config.get_string("cam_type", ""),
-            self.config.get_string("split", "test"),
-            self.config.get_int("scene_id", -1),
-            self.config.get_list("obj_ids", []),
-            sample_objects,
-            num_of_objs_to_sample,
-            obj_instances_limit,
-            self.config.get_bool("move_origin_to_x_y_plane", False),
-            self.config.get_list("source_frame", ["X", "-Y", "-Z"]),
-            self.config.get_bool("mm2m", False)
+            bop_dataset_path=self.config.get_string("bop_dataset_path"),
+            temp_dir=self._temp_dir,
+            sys_paths=self.config.get_list("sys_paths"),
+            model_type=self.config.get_string("model_type", ""),
+            cam_type=self.config.get_string("cam_type", ""),
+            split=self.config.get_string("split", "test"),
+            scene_id=self.config.get_int("scene_id", -1),
+            obj_ids=self.config.get_list("obj_ids", []),
+            sample_objects=sample_objects,
+            num_of_objs_to_sample=num_of_objs_to_sample,
+            obj_instances_limit=obj_instances_limit,
+            move_origin_to_x_y_plane=self.config.get_bool("move_origin_to_x_y_plane", False),
+            source_frame=self.config.get_list("source_frame", ["X", "-Y", "-Z"]),
+            mm2m=self.config.get_bool("mm2m", False)
         )
 
         self._set_properties(loaded_objects)

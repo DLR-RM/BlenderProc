@@ -149,21 +149,21 @@ class RockEssentialsRockLoaderModule(LoaderInterface):
             subsec_config = Config(subsec_settings)
 
             subsec_objects = RockEssentialsRockLoader.load_rocks(
-                subsec_config.get_string("path"),
-                subsec_num,
-                subsec_config.get_list("objects", []),
-                subsec_config.get_bool("sample_objects", False),
-                subsec_config.get_int("amount") if subsec_config.has_param("amount") else None
+                path=subsec_config.get_string("path"),
+                subsec_num=subsec_num,
+                objects=subsec_config.get_list("objects", []),
+                sample_objects=subsec_config.get_bool("sample_objects", False),
+                amount=subsec_config.get_int("amount") if subsec_config.has_param("amount") else None
             )
 
             RockEssentialsRockLoader.set_rocks_properties(
-                subsec_objects,
-                subsec_config.get_bool("physics", False),
-                subsec_config.get_int("render_levels", 3),
-                subsec_config.get_bool("high_detail_mode", False),
-                subsec_config.get_vector3d("scale", [1, 1, 1]),
-                subsec_config.get_float("reflection_amount") if subsec_config.has_param("reflection_amount") else None,
-                subsec_config.get_float("reflection_roughness") if subsec_config.has_param("reflection_roughness") else None,
-                subsec_config.get_list("HSV") if subsec_config.has_param("HSV") else None
+                objects=subsec_objects,
+                physics=subsec_config.get_bool("physics", False),
+                render_levels=subsec_config.get_int("render_levels", 3),
+                high_detail_mode=subsec_config.get_bool("high_detail_mode", False),
+                scale=subsec_config.get_vector3d("scale", [1, 1, 1]),
+                reflection_amount=subsec_config.get_float("reflection_amount") if subsec_config.has_param("reflection_amount") else None,
+                reflection_roughness=subsec_config.get_float("reflection_roughness") if subsec_config.has_param("reflection_roughness") else None,
+                hsv=subsec_config.get_list("HSV") if subsec_config.has_param("HSV") else None
             )
 

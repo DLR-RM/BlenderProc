@@ -59,9 +59,9 @@ class Front3DLoaderModule(LoaderInterface):
 
     def run(self):
         Front3DLoader.load(
-            self.config.get_string("json_path"),
-            self.config.get_string("3D_future_model_path"),
-            self.mapping,
-            self.config.get_float("ceiling_light_strength", 0.8),
-            self.config.get_float("lamp_light_strength", 7.0)
+            json_path=self.config.get_string("json_path"),
+            future_model_path=self.config.get_string("3D_future_model_path"),
+            mapping=self.mapping,
+            ceiling_light_strength=self.config.get_float("ceiling_light_strength", 0.8),
+            lamp_light_strength=self.config.get_float("lamp_light_strength", 7.0)
         )

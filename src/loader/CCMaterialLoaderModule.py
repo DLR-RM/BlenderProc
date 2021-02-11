@@ -47,9 +47,9 @@ class CCMaterialLoaderModule(Module):
 
     def run(self):
         CCMaterialLoader.load(
-            Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures")),
-            self.config.get_list("used_assets", []),
-            self.config.get_bool("preload", False),
-            self.config.get_bool("fill_used_empty_materials", False),
-            self.config.get_raw_dict("add_custom_properties", {})
+            folder_path=Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures")),
+            used_assets=self.config.get_list("used_assets", []),
+            preload=self.config.get_bool("preload", False),
+            fill_used_empty_materials=self.config.get_bool("fill_used_empty_materials", False),
+            add_custom_properties=self.config.get_raw_dict("add_custom_properties", {})
         )

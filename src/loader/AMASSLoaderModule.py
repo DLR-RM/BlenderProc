@@ -104,6 +104,16 @@ class AMASSLoaderModule(LoaderInterface):
         """
         use the pose parameters to generate the mesh and loads it to the scene.
         """
-        loaded_obj = AMASSLoader.load(self._data_path, self._used_sub_dataset_id, self._temp_dir, self._used_body_model_gender, self._used_subject_id, self._used_sequence_id, self._used_frame_id, self._num_betas, self._num_dmpls)
+        loaded_obj = AMASSLoader.load(
+            data_path=self._data_path,
+            used_sub_dataset_id=self._used_sub_dataset_id,
+            temp_dir=self._temp_dir,
+            used_body_model_gender=self._used_body_model_gender,
+            used_subject_id=self._used_subject_id,
+            used_sequence_id=self._used_sequence_id,
+            used_frame_id=self._used_frame_id,
+            num_betas=self._num_betas,
+            num_dmpls=self._num_dmpls
+        )
 
         self._set_properties(loaded_obj)

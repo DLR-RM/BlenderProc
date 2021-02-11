@@ -51,7 +51,7 @@ class IKEALoaderModule(LoaderInterface):
             self._obj_style = None
 
     def run(self):
-        loaded_obj = IKEALoader.load(self._data_dir, self._obj_categories, self._obj_style)
+        loaded_obj = IKEALoader.load(data_dir=self._data_dir, obj_categories=self._obj_categories, obj_style=self._obj_style)
         self._set_properties(loaded_obj)
 
 
