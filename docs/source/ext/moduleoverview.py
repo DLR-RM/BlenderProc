@@ -55,7 +55,7 @@ def generate_examples_sidebar(app, fromdocname, container):
     toc = nodes.bullet_list()
 
     ref = nodes.reference('', '')
-    ref['refuri'] = app.builder.get_relative_uri(fromdocname, "examples/index")
+    ref['refuri'] = app.builder.get_relative_uri(fromdocname, "examples/README")
     ref.append(nodes.Text("Examples"))
     module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
     if fromdocname.startswith("examples/"):
@@ -66,9 +66,9 @@ def generate_examples_sidebar(app, fromdocname, container):
     module_item += subtree
 
     examples = Path(__file__).absolute().parent.parent / "examples"
-    for example in sorted(examples.rglob("*/index.md"), key=lambda x: x.parent.name):
+    for example in sorted(examples.rglob("*/README.md"), key=lambda x: x.parent.name):
         ref = nodes.reference('', '')
-        ref['refuri'] = app.builder.get_relative_uri(fromdocname, str(example).replace(str(examples), "examples").replace("index.md", "index"))
+        ref['refuri'] = app.builder.get_relative_uri(fromdocname, str(example).replace(str(examples), "examples").replace("README.md", "README"))
         ref.append(nodes.Text(example.parent.name))
         class_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l2"])
 

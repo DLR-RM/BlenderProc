@@ -38,6 +38,7 @@ print(sys.argv, os.getcwd())
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.autodoc',
+    'sphinx_autodoc_typehints',
     'sphinx.ext.intersphinx',
     'sphinx.ext.imgmath',
     'sphinx.ext.viewcode',
@@ -54,6 +55,9 @@ templates_path = ['_templates']
 #
 # source_suffix = ['.rst', '.md']
 source_suffix = ['.rst', '.md']
+m2r_parse_relative_links = True
+
+
 
 # The master toctree document.
 master_doc = 'index'

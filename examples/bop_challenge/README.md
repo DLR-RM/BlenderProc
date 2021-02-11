@@ -10,7 +10,7 @@ Here you find the official BlenderProc configs that we used to generate the [pro
 
 The prerendered datasets with 50K images each are available [here](https://bop.felk.cvut.cz/datasets/), where they are called "PBR-BlenderProc4BOP training images". We ran every config file 2000 times with 25 random cameras per scene. 
 
-For LineMOD, the objects are placed upright on a plane based on the [bop_object_on_surface_sampling](../bop_object_on_surface_sampling) example. All other datasets are created by dropping objects using physics based on the [bop_object_physics_positioning](../bop_object_physics_positioning) example. Make sure to read through them if you want to understand and adapt the configs. 
+For LineMOD, the objects are placed upright on a plane based on the [bop_object_on_surface_sampling](../bop_object_on_surface_sampling/README.md) example. All other datasets are created by dropping objects using physics based on the [bop_object_physics_positioning](../bop_object_physics_positioning/README.md) example. Make sure to read through them if you want to understand and adapt the configs. 
 
 ## Usage
 

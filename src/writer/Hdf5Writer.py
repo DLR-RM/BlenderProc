@@ -4,6 +4,7 @@ import bpy
 import h5py
 import numpy as np
 
+from src.main.GlobalStorage import GlobalStorage
 from src.writer.WriterInterface import WriterInterface
 from src.utility.Utility import Utility
 
@@ -66,18 +67,28 @@ class Hdf5Writer(WriterInterface):
             hdf5_path = os.path.join(self._determine_output_dir(False), str(frame + frame_offset) + ".hdf5")
             with h5py.File(hdf5_path, "w") as f:
 
-                if 'output' not in bpy.context.scene:
+                if not GlobalStorage.is_in_storage("output"):
                     print("No output was designed in prior models!")
                     return
                 # Go through all the output types
                 print("Merging data for frame " + str(frame) + " into " + hdf5_path)
 
-                for output_type in bpy.context.scene["output"]:
-                    use_stereo = output_type["stereo"]
+                for output_type in GlobalStorage.get("output"):
                     # Build path (path attribute is format string)
                     file_path = output_type["path"]
                     if '%' in file_path:
                         file_path = file_path % frame
+
+                    # Check if file exists
+                    if not os.path.exists(file_path):
+                        # If not try stereo suffixes
+                        path_l, path_r = self._get_stereo_path_pair(file_path)
+                        if not os.path.exists(path_l) or not os.path.exists(path_r):
+                            raise Exception("File not found: " + file_path)
+                        else:
+                            use_stereo = True
+                    else:
+                        use_stereo = False
 
                     if use_stereo:
                         path_l, path_r = self._get_stereo_path_pair(file_path)
@@ -101,6 +112,10 @@ class Hdf5Writer(WriterInterface):
                         self._write_to_hdf_file(f, new_key, data)
 
                     self._write_to_hdf_file(f, new_key + "_version", np.string_([new_version]))
+
+                blender_proc_version = Utility.get_current_version()
+                if blender_proc_version:
+                    self._write_to_hdf_file(f, "blender_proc_version", np.string_(blender_proc_version))
 
     def _write_to_hdf_file(self, file, key, data):
         """ Adds the given data as a new entry to the given hdf5 file.

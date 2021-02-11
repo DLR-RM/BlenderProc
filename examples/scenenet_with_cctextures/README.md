@@ -172,7 +172,7 @@ This module only sets up the materials which can then be used by other modules.
     }
 ```
 
-This builds up on the [material_randomizer](../material_randomizer) example.
+This builds up on the [material_randomizer](../material_randomizer/README.md) example.
 
 We also use the `randomization_level` and set it `0.4`.
 

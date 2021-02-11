@@ -73,7 +73,7 @@ class WriterInterface(Module):
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
-        self._register_output(file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
+        Utility.register_output(self._determine_output_dir(), file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
 
     def _get_attribute(self, item, attribute_name):
         """ Returns the value of the requested attribute for the given item.
@@ -104,10 +104,10 @@ class WriterInterface(Module):
             rot_mat = item.rotation_euler.to_matrix()
             up = rot_mat @ mathutils.Vector([0, 1, 0])
             return MathUtility.transform_point_to_blender_coord_frame(up, self.destination_frame)
-        elif attribute_name == "cam2world_matrix":
-            # Transform to matrix_world to given destination frame
-            cam2world_matrix = Utility.transform_matrix_to_blender_coord_frame(item.matrix_world, self.destination_frame)
-            return [[x for x in c] for c in cam2world_matrix]
+        elif attribute_name == "matrix_world":
+            # Transform matrix_world to given destination frame
+            matrix_world = Utility.transform_matrix_to_blender_coord_frame(item.matrix_world, self.destination_frame)
+            return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]
             # Make sure the requested custom property exist

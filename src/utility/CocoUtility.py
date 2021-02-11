@@ -172,11 +172,11 @@ class CocoUtility:
         bounding_box = CocoUtility.bbox_from_binary_mask(binary_mask)
 
         if mask_encoding_format == 'rle':
-            is_crowd = 1
             segmentation = CocoUtility.binary_mask_to_rle(binary_mask)
         elif mask_encoding_format == 'polygon':
-            is_crowd = 0
             segmentation = CocoUtility.binary_mask_to_polygon(binary_mask, tolerance)
+            if not segmentation:
+                return None
         else:
             raise RuntimeError("Unknown encoding format: {}".format(mask_encoding_format))
 
@@ -184,7 +184,7 @@ class CocoUtility:
             "id": annotation_id,
             "image_id": image_id,
             "category_id": category_id,
-            "iscrowd": is_crowd,
+            "iscrowd": 0,
             "area": area,
             "bbox": bounding_box,
             "segmentation": segmentation,
