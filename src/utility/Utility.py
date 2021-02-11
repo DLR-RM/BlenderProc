@@ -71,8 +71,22 @@ class Utility:
 
             with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
                 for i in range(amount_of_repetitions):
-                    # Import file and extract class
-                    module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
+                    module_class = None
+                    for suffix in ["Module", ""]:
+                        try:
+                            module = importlib.import_module("src." + module_config["module"] + suffix)
+                        except ModuleNotFoundError:
+                            continue
+
+                        class_name = module_config["module"].split(".")[-1] + suffix
+                        if hasattr(module, class_name):
+                            # Import file and extract class
+                            module_class = getattr(module, class_name)
+                            break
+
+                    if module_class is None:
+                        raise Exception("The module src." + module_config["module"] + " was not found!")
+
                     # Create module
                     modules.append(module_class(Config(config)))
 
@@ -82,10 +96,10 @@ class Utility:
     def get_current_version():
         """ Gets the git commit hash.
 
-        :return: a string, the BlenderProc version, or None if unavailable 
+        :return: a string, the BlenderProc version, or None if unavailable
         """
         try:
-            repo = git.Repo(search_parent_directories=True) 
+            repo = git.Repo(search_parent_directories=True)
         except git.InvalidGitRepositoryError as e:
             warnings.warn("Invalid git repository")
             return None
@@ -409,57 +423,6 @@ class Utility:
         return np.round(values)
 
     @staticmethod
-    def import_objects(filepath, cached_objects=None, **kwargs):
-        """ Import all objects for the given file and returns the loaded objects
-
-        In .obj files a list of objects can be saved in.
-        In .ply files only one object can saved so the list has always at most one element
-
-        :param filepath: the filepath to the location where the data is stored
-        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is updated in this function)
-        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
-        :return: a list of all newly loaded objects, in the failure case an empty list is returned
-        """
-        if os.path.exists(filepath):
-            if cached_objects is not None and isinstance(cached_objects, dict):
-                if filepath in cached_objects.keys():
-                    created_obj = []
-                    for obj in cached_objects[filepath]:
-                        # deselect all objects and duplicate the object
-                        bpy.ops.object.select_all(action='DESELECT')
-                        obj.select_set(True)
-                        bpy.ops.object.duplicate()
-                        # save the duplicate in new list
-                        if len(bpy.context.selected_objects) != 1:
-                            raise Exception("The amount of objects after the copy was more than one!")
-                        created_obj.append(bpy.context.selected_objects[0])
-                    return created_obj
-                else:
-                    loaded_objects = Utility.import_objects(filepath, cached_objects=None, **kwargs)
-                    cached_objects[filepath] = loaded_objects
-                    return loaded_objects
-            else:
-                # save all selected objects
-                previously_selected_objects = set(bpy.context.selected_objects)
-                if filepath.endswith('.obj'):
-                    # load an .obj file:
-                    bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
-                elif filepath.endswith('.ply'):
-                    # load a .ply mesh
-                    bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
-                    # add a default material to ply file
-                    mat = bpy.data.materials.new(name="ply_material")
-                    mat.use_nodes = True
-                    loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
-                    for obj in loaded_objects:
-                        obj.data.materials.append(mat)
-
-                # return all currently selected objects
-                return list(set(bpy.context.selected_objects) - previously_selected_objects)
-        else:
-            raise Exception("The given filepath does not exist: {}".format(filepath))
-
-    @staticmethod
     def add_output_entry(output):
         """ Registers the given output in the scene's custom properties
 
@@ -533,12 +496,18 @@ class Utility:
         :param data_path: The data path of the attribute.
         :param frame: The frame number to use. If None is given, the current frame number is used.
         """
-        if frame is None:
+        # If no frame is given use the current frame specified by the surrounding KeyFrame context manager
+        if frame is None and KeyFrame.is_any_active():
             frame = bpy.context.scene.frame_current
-        obj.keyframe_insert(data_path=data_path, frame=frame)
+        # If no frame is given and no KeyFrame context manager surrounds us => do nothing
+        if frame is not None:
+            obj.keyframe_insert(data_path=data_path, frame=frame)
 
 
 class KeyFrame:
+    # Remember how many KeyFrame context manager have been applied around the current execution point
+    depth = 0
+
     def __init__(self, frame):
         """ Sets the frame number for its complete block.
 
@@ -548,10 +517,20 @@ class KeyFrame:
         self._prev_frame = None
 
     def __enter__(self):
+        KeyFrame.depth += 1
         if self._frame is not None:
             self._prev_frame = bpy.context.scene.frame_current
             bpy.context.scene.frame_set(self._frame)
 
     def __exit__(self, type, value, traceback):
+        KeyFrame.depth -= 1
         if self._prev_frame is not None:
             bpy.context.scene.frame_set(self._prev_frame)
+
+    @staticmethod
+    def is_any_active() -> bool:
+        """ Returns whether the current execution point is surrounded by a KeyFrame context manager.
+
+        :return: True, if there is at least one surrounding KeyFrame context manager
+        """
+        return KeyFrame.depth > 0

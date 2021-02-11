@@ -7,6 +7,8 @@ from sys import platform
 import numpy as np
 import imageio
 
+from src.utility.MeshUtility import Mesh
+
 
 def local_to_world(cords, world):
     """
@@ -386,13 +388,14 @@ def duplicate_objects(objects):
     :param objects: an object or a list of objects to be duplicated
     :return: a list of objects
     """
+    # TODO: Refactor method
     if not isinstance(objects, list):
         objects = [objects]
 
     bpy.ops.object.select_all(action='DESELECT')
     for obj in objects:
-        obj.select_set(True)
+        obj.select()
     bpy.ops.object.duplicate()
     duplicates = bpy.context.selected_objects
     bpy.ops.object.select_all(action='DESELECT')
-    return duplicates
+    return Mesh.convert_to_entities(duplicates)

@@ -1,51 +1,55 @@
-from src.loader.LoaderInterface import LoaderInterface
-from src.utility.Utility import Utility
+import os
+import os
+from typing import List
+
+import bpy
+
+from src.utility.MeshUtility import Mesh
 
 
-class ObjectLoader(LoaderInterface):
-    """ Just imports the objects for the given file path
+class ObjectLoader:
 
-    The import will load all materials into cycle nodes.
+    @staticmethod
+    def load(filepath: str, cached_objects: dict = None, **kwargs) -> List[Mesh]:
+        """ Import all objects for the given file and returns the loaded objects
 
-    **Configuration**:
+        In .obj files a list of objects can be saved in.
+        In .ply files only one object can saved so the list has always at most one element
 
-    .. list-table:: 
-        :widths: 25 100 10
-        :header-rows: 1
+        :param filepath: the filepath to the location where the data is stored
+        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is updated in this function)
+        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
+        :return: The list of loaded mesh objects.
+        """
+        if os.path.exists(filepath):
+            if cached_objects is not None and isinstance(cached_objects, dict):
+                if filepath in cached_objects.keys():
+                    created_obj = []
+                    for obj in cached_objects[filepath]:
+                        # duplicate the object
+                        created_obj.append(obj.duplicate())
+                    return created_obj
+                else:
+                    loaded_objects = ObjectLoader.load(filepath, cached_objects=None, **kwargs)
+                    cached_objects[filepath] = loaded_objects
+                    return loaded_objects
+            else:
+                # save all selected objects
+                previously_selected_objects = set(bpy.context.selected_objects)
+                if filepath.endswith('.obj'):
+                    # load an .obj file:
+                    bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
+                elif filepath.endswith('.ply'):
+                    # load a .ply mesh
+                    bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
+                    # add a default material to ply file
+                    mat = bpy.data.materials.new(name="ply_material")
+                    mat.use_nodes = True
+                    loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
+                    for obj in loaded_objects:
+                        obj.data.materials.append(mat)
 
-        * - Parameter
-          - Description
-          - Type
-        * - path
-          - The path to the 3D data file to load. Can be either path or paths not both.
-          - string
-        * - paths
-          - A list of paths of 3D data files to load. Can be either path or paths not both.
-          - list
-    """
-    def __init__(self, config):
-        LoaderInterface.__init__(self, config)
-
-    def run(self):
-        if self.config.has_param('path') and self.config.has_param('paths'):
-            raise Exception("Objectloader can not use path and paths in the same module!")
-        if self.config.has_param('path'):
-            file_path = Utility.resolve_path(self.config.get_string("path"))
-            loaded_objects = Utility.import_objects(filepath=file_path)
-        elif self.config.has_param('paths'):
-            file_paths = self.config.get_list('paths')
-            loaded_objects = []
-            # the file paths are mapped here to object names
-            cache_objects = {}
-            for file_path in file_paths:
-                resolved_file_path = Utility.resolve_path(file_path)
-                current_objects = Utility.import_objects(filepath=resolved_file_path, cached_objects=cache_objects)
-                loaded_objects.extend(current_objects)
+                # return all currently selected objects
+                return Mesh.convert_to_meshes(list(set(bpy.context.selected_objects) - previously_selected_objects))
         else:
-            raise Exception("Loader module needs either a path or paths config value")
-
-        if not loaded_objects:
-            raise Exception("No objects have been loaded here, check the config.")
-
-        # Set the add_properties of all imported objects
-        self._set_properties(loaded_objects)
+            raise Exception("The given filepath does not exist: {}".format(filepath))
