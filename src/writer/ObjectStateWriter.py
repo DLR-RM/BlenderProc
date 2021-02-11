@@ -1,4 +1,4 @@
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.ItemWriter import ItemWriter
 from src.writer.WriterInterface import WriterInterface
 
@@ -13,7 +13,7 @@ class ObjectStateWriter(WriterInterface):
     def run(self):
         """ Collect all mesh objects and writes their id, name and pose."""
         objects = []
-        for object in get_all_mesh_objects():
+        for object in get_all_blender_mesh_objects():
             objects.append(object)
 
         self.write_attributes_to_file(self.object_writer, objects, "object_states_", "object_states",

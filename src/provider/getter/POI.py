@@ -2,7 +2,7 @@ import mathutils
 import numpy as np
 
 from src.main.Provider import Provider
-from src.utility.BlenderUtility import get_bounds, get_all_mesh_objects
+from src.utility.BlenderUtility import get_bounds, get_all_blender_mesh_objects
 
 
 class POI(Provider):
@@ -58,7 +58,7 @@ class POI(Provider):
         # Init matrix for all points of all bounding boxes
         mean_bb_points = []
         # For every selected object in the scene
-        selected_objects = self.config.get_list("selector", get_all_mesh_objects())
+        selected_objects = self.config.get_list("selector", get_all_blender_mesh_objects())
         if len(selected_objects) == 0:
             raise Exception("No objects were selected!")
 

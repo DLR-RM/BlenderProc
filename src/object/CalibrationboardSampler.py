@@ -1,7 +1,7 @@
 import bpy
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
 import numpy as np
 from mathutils import Vector, Matrix
 import bpy_extras

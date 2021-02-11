@@ -290,7 +290,7 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     return obj
 
 
-def get_all_mesh_objects():
+def get_all_blender_mesh_objects() -> list:
     """
     Returns a list of all mesh objects in the scene
     :return: a list of all mesh objects
