@@ -13,27 +13,124 @@ class BlendLoader(LoaderInterface):
     This class provides functionality to load entities from a .blend file. A .blend file is a 
     blender generated  data file that wraps project resources into sections/datablocks. Resources can be
     loaded individually by name pattern matching or entire datablocks to entire project. For more
-    information about a datablock see Blender's documentation for bpy.types.ID. 
+    information about a datablock see Blender's documentation for bpy.types.ID
+    at https://docs.blender.org/api/current/bpy.types.ID.html
 
-    Sections/Datablocks in a .blend File
-    +-------------------+
-    |    Blend File     |
-    +-------------------+
-    |    Collections    |
-    |    Object         |
-    |    Mesh           |
-    |    Text           |
-    |    Scene          |
-    |    World          |
-    |    Workspace      |
-    |    Curve          |
-    |    Camera         |
-    |    Light          |
-    |    Material       |
-    |    Texture        |
-    |    ......         |
-    +-------------------+
+    .. list-table:: 
+        :widths: 25 100 10
+        :header-rows: 1
 
+        * - Datablock
+          - Description
+          - Type
+        * - Action
+          - A collection of F-Curves for animation
+          - bpy.types.Action
+        * - Armature
+          - Armature data-block containing a hierarchy of bones, usually used for rigging characters
+          - bpy.types.Armature
+        * - Brush
+          - Brush data-block for storing brush settings for painting and sculpting
+          - bpy.types.Brush
+        * - CacheFile
+          - Cache Files data-blocks
+          - bpy.types.CacheFile
+        * - Camera
+          - Camera data-block for storing camera settings
+          - bpy.types.Camera
+        * - Collection
+          - Collection of Object data-blocks
+          - bpy.types.Collection
+        * - Curve
+          - Curve data-block storing curves, splines and NURBS
+          - bpy.types.Curve
+        * - FreestyleLineStyle
+          - Freestyle line style, reusable by multiple line sets
+          - bpy.types.FreestyleLineStyle
+        * - GreasePencil
+          - Freehand annotation sketchbook
+          - bpy.types.GreasePencil
+        * - Image
+          - Image data-block referencing an external or packed image
+          - bpy.types.Image
+        * - Key
+          - Shape keys data-block containing different shapes of geometric data-blocks
+          - bpy.types.Key
+        * - Lattice
+          - Lattice data-block defining a grid for deforming other objects
+          - bpy.types.Lattice
+        * - Library
+          - External .blend file from which data is linked
+          - bpy.types.Library
+        * - Light
+          - Light data-block for lighting a scene
+          - bpy.types.Light
+        * - LightProbe
+          - Light Probe data-block for lighting capture objects
+          - bpy.types.LightProbe
+        * - Mask
+          - Mask data-block defining mask for compositing
+          - bpy.types.Mask
+        * - Material
+          - Material data-block to define the appearance of geometric objects for rendering
+          - bpy.types.Material
+        * - Mesh
+          - Mesh data-block defining geometric surfaces
+          - bpy.types.Mesh
+        * - MetaBall
+          - Metaball data-block to defined blobby surfaces
+          - bpy.types.MetaBall
+        * - MovieClip
+          - MovieClip data-block referencing an external movie file
+          - bpy.types.MovieClip
+        * - NodeTree
+          - Node tree consisting of linked nodes used for shading, textures and compositing
+          - bpy.types.NodeTree
+        * - Object
+          - Object data-block defining an object in a scene
+          - bpy.types.Object
+        * - PaintCurve
+          - Paint Curves data-blocks
+          - bpy.types.PaintCurve
+        * - Palette
+          - Palette data-blocks
+          - bpy.types.Palette
+        * - ParticleSettings
+          - Particle settings, reusable by multiple particle systems
+          - bpy.types.ParticleSettings
+        * - Scene
+          - Scene data-block, consisting in objects and defining time and render related settings
+          - bpy.types.Scene
+        * - Screen
+          - Screen data-block, defining the layout of areas in a window
+          - bpy.types.Screen
+        * - Sound
+          - Sound data-block referencing an external or packed sound file
+          - bpy.types.Sound
+        * - Speaker
+          - Speaker data-block for 3D audio speaker objects
+          - bpy.types.Speaker
+        * - Text
+          - Text data-block referencing an external or packed text file
+          - bpy.types.Text
+        * - Texture
+          - Texture data-block used by materials, lights, worlds and brushes
+          - bpy.types.Texture
+        * - VectorFont
+          - Vector font for Text objects
+          - bpy.types.VectorFont
+        * - Volume
+          - Volume data-block for 3D volume grids
+          - bpy.types.Volume
+        * - WindowManager
+          - Window manager data-block defining open windows and other user interface data
+          - bpy.types.WindowManager
+        * - WorkSpace
+          - Workspace data-block, defining the working environment for the user
+          - bpy.types.WorkSpace
+        * - World
+          - World data-block describing the environment and ambient lighting of a scene
+          - bpy.types.World
 
     Example:
 
@@ -101,12 +198,14 @@ class BlendLoader(LoaderInterface):
         path = Utility.resolve_path(self.config.get_string("path"))
 
         # get section name/Blend ID
-        data_block_name = self.config.get_string("load_from")
+        load_from = self.config.get_string("load_from")
         # get a entities' name regex if present, set to None if not
         if self.config.has_param("entities"):
             entities = self.config.get_string("entities")
         else:
             entities = None
+
+        data_block_name = load_from.strip("/")
 
         with bpy.data.libraries.load(path) as (blend_file_data, _):
             # check if defined ID is supported
@@ -124,42 +223,41 @@ class BlendLoader(LoaderInterface):
                 # get all entity's names if not
                 else:
                     entities_to_load = getattr(blend_file_data, attr_name)
-                # load entities
+                    
                 for entity_to_load in entities_to_load:
+                    # get already added entities of type attr_name
+                    previous_objects = set(getattr(bpy.data, attr_name))
 
-                    # remove the earlier existing resource with same name
-                    if entity_to_load in bpy.data.objects:
-                        bpy.data.objects.remove(bpy.data.objects[entity_to_load], do_unlink=True)
+                    # load the new entity
+                    bpy.ops.wm.append(
+                        filepath=os.path.join(path, data_block_name, entity_to_load),
+                        filename=entity_to_load,
+                        directory=os.path.join(path, data_block_name))
+                    
+                    # get current entities of type attr_name
+                    curr_objects = set(getattr(bpy.data, attr_name))
 
-                    bpy.ops.wm.append(filepath=os.path.join( path, data_block_name, entity_to_load),
-                                      filename=entity_to_load,
-                                      directory=os.path.join(path, data_block_name))
-
-                    added_resource = getattr(bpy.data, attr_name)[entity_to_load]
-
+                    # get the newly added entity
+                    added_resource = (curr_objects - previous_objects).pop()
+                    
+                    # if newly added entity is a camera, remove previous cameras
+                    # and set current camera as active 
                     if hasattr(added_resource, 'type') and added_resource.type == 'CAMERA':
-                        bpy.context.scene.collection.objects.link(
-                            added_resource)
+                        # remove previous cameras
+                        for obj in previous_objects:
+                            if hasattr(obj, 'type') and obj.type == 'CAMERA':
+                                bpy.data.objects.remove(obj, do_unlink=True)
+
+                        # add loaded camera
+                        bpy.context.scene.collection.objects.link(added_resource)
                         bpy.context.scene.camera = added_resource
                         bpy.context.scene.frame_end = len(
                             self._get_camera_keyframes(added_resource))
 
-                    # setup proeprties. For Mesh based Objects use LoaderInterface._set_properties
-                    # that expects a mesh object and sets the polygon of the mesh to smooth/non smooth
-                    # Non mesh based objects dont have polygons.
-                    if hasattr(added_resource, 'type') and added_resource.type == 'MESH':
-                        self._set_properties([added_resource])
-                    else:
-                        # Non Mesh based object like Light, Camera wrapepd in objects
-                        # or non wrappable objects like materials, textures
-                        self._set_datablock_properties(added_resource)
+                    self._set_properties([added_resource])
             else:
-                raise Exception(
-                    "Unsupported datablock/folder name: " + load_from +
-                    "\nSupported names:  {}\nIf your ID exists, but not supported, please append a new pair of "
-                    "{type ID(folder name): parameter name} to the 'known_datablock_names' dict. Use this "
-                    "for finding your parameter name: {}".format(
-                        str(self.known_datablock_names.keys()), data_block_name))
+                raise Exception("Unsupported datablock/folder: {}\nSupported types:  {}".format( \
+                                data_block_name, self.known_datablock_names))
 
     def _find_datablock_name_match_in_blendfile(self, blend_file_data,
                                                 data_block_name):
@@ -177,62 +275,64 @@ class BlendLoader(LoaderInterface):
         blend_file_datablock_names = dir(blend_file_data)
         index = -1
         for i, attr in enumerate(blend_file_datablock_names):
-            # remove underscores like grease_pencils -> greasepencils and match with GreasePencil
-            # datablock
-            attr = attr.replace('_', '')
-            if data_block_name.lower() in attr:
-                index = i
-                break
+            # match .blend file attributes to BlendData object
+            # and find the type of those attributes. We can't
+            # find it directly using blend_file_data because its
+            # just string names.
+            # For e.g bpy.data.nodes_group is collection of datablocks
+            # of type bpy.type.NodeTree so we get get datablock name from attributes.
+            # we need to match node_groups -> type NodeTree
+            if hasattr(bpy.data, attr):
+                relevant_blend_data = getattr(bpy.data, attr)
+                # get type of the respective attribute of bpy.data.attr where
+                # attr in (objects, meshes, lights, cameras etc)
+                relevant_blend_data_type = relevant_blend_data.rna_type.identifier
+                if data_block_name in relevant_blend_data_type:
+                    index = i
+                    break
 
         if index == -1:
             # The Datablock is valid but the .blend file does not contain the datablock. Likely
             # version not supported.
-            raise Exception("Could not match Datablock {} in the .blend file. please Verify that \
-                            the .blend file version supports {} ID. Current \
-                            Blender API Version {}".format(
-                    data_block_name, data_block_name, bpy.app.version_string))
+            raise Exception(
+                "Could not match Datablock {} in the .blend file. please Verify that"
+                "the .blend file version supports {} ID. CurrentBlender API Version {}"
+                .format(data_block_name, data_block_name, bpy.app.version_string))
 
         return blend_file_datablock_names[index]
-
-    def _set_datablock_properties(self, resource: bpy.types.ID):
-        """
-        Sets the custom properties of **non object** resources like materials,
-        textures, images, etc.
-
-        Note: Some datablock types like bpy.types.Light, bpy.types.Mesh, bpy.types.Camera etc
-        are wrapped in bby.types.Object which act as a container of these object. In that case
-        setting the properties of the container object does not set the properties of underlying datablock like
-        camera and vice versa. Setting the bpy.data.objects["Light"] and bpy.data.lights["light"] can
-        have different properties. This function sets properties of all types materials, lights,
-        cameras even if they are loaded as an object. For Objects that wraps Meshes use  self._set_properties
-        instead
-
-        :param resource: The datablock for which the properties are set
-        """
-        properties = self.config.get_raw_dict("add_properties", {})
-        for key, value in properties.items():
-            if key.startswith("cp_"):
-                key = key[3:]
-                resource[key] = value
-            else:
-                raise RuntimeError(
-                    "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
-                    "Use manipulators.Entity for setting object's attribute values.")
-            resource[key] = value
 
     def _get_camera_keyframes(self, camera):
         """
         Get Keyframes from animation data of a Camera Object.
 
         :param camera: The camera for which the keyframes are extracted
-        :return: [] kerframes
+        :return: A list of keyframes
         """
         keyframes = []
+
+        # get camera animation data
         anim = camera.animation_data
         if anim is not None and anim.action is not None:
+            # The animation change over time of an object is represented by
+            # F-curve, which is part of an object's action data.
+            # Link: https://docs.blender.org/manual/en/latest/editors/graph_editor/fcurves/introduction.html
+            # Go over all the variables involved in the animation
+            # for example for animation of translation in 3D,
+            # we shall have fcurve for each variable x,y,z.
             for fcu in anim.action.fcurves:
+                # go over all the keyframes (bpy.types.FCurveKeyframePoints) for a variable,
+                # and see how it changes its value per keyframe
                 for keyframe in fcu.keyframe_points:
-                    x, y = keyframe.co
-                    if x not in keyframes:
-                        keyframes.append((math.ceil(x)))
+
+                    #  a keyframe has form (frame number, value of current variable in that frame).
+                    frame, value = keyframe.co
+                    if frame not in keyframes:
+                        # frame numbers are in range (float [-inf, inf])
+                        # for example x coordinats of camera at frame 1.8
+                        # is 1.2, at frame 1.9 it can be 1.3 and so on, we would
+                        # get varous values between two frames, but we need
+                        # total unique frames in an animation not total
+                        # number of values of animation so we round of
+                        # frame numbers and store unique frames.
+                        keyframes.append((math.ceil(frame)))
         return keyframes
