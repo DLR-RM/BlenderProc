@@ -2,7 +2,7 @@ import bpy
 
 from src.main.Module import Module
 from src.utility.MeshUtility import Mesh
-
+from typing import Union
 
 class LoaderInterface(Module):
     """
@@ -35,13 +35,13 @@ class LoaderInterface(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def _set_properties(self, objects: [bpy.types.Object]):
+    def _set_properties(self, objects: Union[bpy.types.Object, Mesh]):
         """ Sets all custom properties of all given objects according to the configuration.
         This includes setting the materials properties of the loaded objects.
 
         Also runs all custom property functions.
 
-        :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
+        :param objects: A list of objects which should receive the custom properties.
         """
 
         properties = self.config.get_raw_dict("add_properties", {})
@@ -60,7 +60,7 @@ class LoaderInterface(Module):
                         "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
                         "Use manipulators.Entity for setting object's attribute values.")
             if material_properties:
-                for material in obj.get_materials():
+                for material in (obj.get_materials() if isinstance(obj, Mesh) else obj.data.materials):
                     if material is None:
                         continue
                     for key, value in material_properties.items():
