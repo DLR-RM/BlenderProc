@@ -11,6 +11,7 @@ from mathutils import Euler, Matrix, Vector
 
 from src.utility.BlenderUtility import get_all_mesh_objects, load_image
 from src.utility.Utility import Utility
+from src.writer.WriterUtility import WriterUtility
 from src.writer.WriterInterface import WriterInterface
 from src.writer.CameraStateWriter import CameraStateWriter
 
@@ -123,9 +124,8 @@ class BopWriter(WriterInterface):
     def __init__(self, config):
         WriterInterface.__init__(self, config)
         
-        # Create CameraWriter to write camera attibutes, use OpenCV coordinates
-        self._camera_writer = CameraStateWriter(config)
-        self._camera_writer.destination_frame = ["X", "-Y", "-Z"]
+        # Create write camera poses in OpenCV coordinates
+        self._camera_frame = ["X", "-Y", "-Z"]
 
         # Parse configuration.
         self.dataset = self.config.get_string("dataset", "")
@@ -207,7 +207,7 @@ class BopWriter(WriterInterface):
         """ Writes camera.json into dataset_dir.
         """
 
-        cam_K = self._camera_writer._get_attribute(self.cam_pose, 'cam_K')
+        cam_K = WriterUtility.get_cam_attribute(self.cam_pose, 'cam_K')
         camera = {'cx': cam_K[0][2],
                   'cy': cam_K[1][2],
                   'depth_scale': self.depth_scale,
@@ -224,12 +224,12 @@ class BopWriter(WriterInterface):
         :return: A list of GT annotations.
         """
         
-        H_c2w_opencv = Matrix(self._camera_writer._get_attribute(self.cam_pose, 'cam2world_matrix'))
+        H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(self.cam_pose, 'cam2world_matrix', self._camera_frame))
         
         frame_gt = []
-        for idx, obj in enumerate(self.dataset_objects):
+        for obj in self.dataset_objects:
             
-            H_m2w = Matrix(self._get_attribute(obj, 'matrix_world'))
+            H_m2w = Matrix(WriterUtility.get_common_attribute(obj, 'matrix_world'))
 
             cam_H_m2c = H_c2w_opencv.inverted() @ H_m2w
             cam_R_m2c = cam_H_m2c.to_quaternion().to_matrix()
@@ -257,7 +257,7 @@ class BopWriter(WriterInterface):
         :return: dict containing info for scene_camera.json 
         """
         
-        cam_K = self._camera_writer._get_attribute(self.cam_pose, 'cam_K')
+        cam_K = WriterUtility.get_cam_attribute(self.cam_pose, 'cam_K', self._camera_frame)
         
         frame_camera_dict = {
             'cam_K': cam_K[0] + cam_K[1] + cam_K[2],
@@ -265,7 +265,7 @@ class BopWriter(WriterInterface):
         }
         
         if self._save_world2cam:
-            H_c2w_opencv = Matrix(self._camera_writer._get_attribute(self.cam_pose, 'cam2world_matrix'))
+            H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(self.cam_pose, 'cam2world_matrix', self._camera_frame))
             
             H_w2c_opencv = H_c2w_opencv.inverted()
             R_w2c_opencv = H_w2c_opencv.to_quaternion().to_matrix()
