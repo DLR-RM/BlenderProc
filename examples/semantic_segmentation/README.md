@@ -39,7 +39,7 @@ Without this idea it would not be possible to render the correct class.
   "module": "loader.BlendLoader",
   "config": {
     "path": "<args:1>",
-    "load_from": "/Object"  # load all objects from the scene file
+    "load_from": "objects"  # load all objects from the scene file
   }
 }
 ```

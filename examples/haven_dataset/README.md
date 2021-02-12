@@ -48,7 +48,7 @@ python scripts/visHdf5Files.py examples/haven_dataset/output/*.hdf5
   "module": "loader.BlendLoader",
   "config": {
     "path": "<args:0>",
-    "load_from": "/Object"
+    "load_from": "objects"
   }
 }
 ```

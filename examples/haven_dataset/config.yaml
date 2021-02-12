@@ -20,7 +20,7 @@
       "module": "loader.BlendLoader",
       "config": {
         "path": "<args:0>",
-        "load_from": "/Object"
+        "load_from": "objects"
       }
     },
     {

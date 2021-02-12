@@ -55,8 +55,7 @@ The same as in the basic example.
     "module": "loader.BlendLoader",
     "config": {
       "path": "<args:0>",
-      "load_from": "/Collection",
-      "entities": ".*.*"
+      "load_from": "objects"
     }
 }
 ```
