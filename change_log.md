@@ -1,12 +1,36 @@
 
 # Planned Features
 
+- Adding a complete python API and phasing out the `.yaml` files (Goal for 2.0.0)
 - Add support for all YCB objects (not just BOP)
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
 - Add support for BlenderKit (download is done, easy using is still missing)
 - Improve the documentation 
 
 # Version History
+
+## Version 1.9.0 10th February 2021
+- all `Loader` now support setting the `add_material_properties` of the newly loaded objects
+- each new `.hdf5` file, will contain the git commit hash of BlenderProc
+- introduce `LightUtility` -> this fulfills our long time goal giving BlenderProc a python API
+- changed the default stereo mode from `OFFAXIS` to `PARALLEL`
+- adapt to the changes made to 3D Front, as 3D Front does not have a version number, we support the newest version and a version from Summer 2020, if you have errors please open an issue
+- `getter.Material` can now return all materials of a list of objects, selected via the `getter.Entity`
+- add a `cf_add_*` fct to the MaterialManipulator, which works similar to the `cf_set_*` fct.
+- add `check_empty` to `getter.Entity` and to `getter.Material` to throw an error if the returned list is empty
+- added a `cf_add_uv_mapping/forced_recalc_of_uv_maps` option to force to recalculate the uv map of materials, which already have a uv map
+- added option that randomized materials in `cf_randomize_materials` are added to objects without any materials
+- change that `cf_randomize_materials` inside the `EntityManipulator` now deals with lists and not single elements as before
+- add auto download for the imageio library, if that fails an exception is thrown with instructions on how to do this yourself
+- `CameraInterface` now supports setting poses for a certain frame -> also needed for the python API
+- changed the `depth_scale` default value in the BopWriter from `0.1` to `1.0`, added an option to change via the config
+- changed the `ignore_dist_thres` default value in the BopWriter from `5.0` to `100.0`
+- improved the ShapeNet example, by adding a ShapeNetWriter, which saves which object was used in the `.hdf5` container
+- fixes a bug with the separation of ceilings and floor objects in SceneNet scenes 
+- fix a bug, where the `add_alpha_channel_to_texture` fct. couldn't deal with empty material sockets
+- fix the `pyhsics_positioning` example by using the `collision_shape="MESH"`
+- fix a bug, where empty material_sockets would have been returned in the `getter.Material`
+- fix `vis_coco_annotation` script, didn't work anymore after the segmentation map rewrite
 
 ## Version 1.8.2: 27th January 2021
 - added stereo mode to SegMapRenderer

@@ -20,7 +20,8 @@
       "module": "loader.ShapeNetLoader",
       "config": {
         "data_path": "<args:0>",
-        "used_synset_id": "02801938"
+        "used_synset_id": "02691156",
+        "used_source_id": "10155655850468db78d106ce0a280f87"
       }
     },
     {
@@ -63,7 +64,16 @@
         "transparent_background": False,
         "render_normals": True,
         "samples": 350,
-        "render_distance": true
+        "render_distance": True
+      }
+    },
+    {
+      "module": "writer.ShapeNetWriter"
+    },
+    {
+      "module": "writer.CameraStateWriter",
+      "config": {
+        "attributes_to_write": ["location", "rotation_euler", "fov_x", "fov_y", "shift_x", "shift_y", "cam_K", "cam2world_matrix"]
       }
     },
     {
@@ -73,7 +83,7 @@
         "postprocessing_modules": {
           "distance": [
             {
-              "module": "postprocessing.TrimRedundantChannels",
+              "module": "postprocessing.Dist2Depth",
               "config": {}
             }
           ]

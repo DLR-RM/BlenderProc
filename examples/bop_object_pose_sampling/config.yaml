@@ -126,6 +126,7 @@
       "config": {
         "dataset": "<args:1>",
         "append_to_existing_output": True,
+        "depth_scale": 1.0,
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}

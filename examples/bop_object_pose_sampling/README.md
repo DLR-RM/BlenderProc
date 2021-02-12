@@ -143,6 +143,7 @@ Writes CocoAnnotations of all objects from the given BOP dataset (`"supercategor
       "config": {
         "dataset": "<args:1>",
         "append_to_existing_output": True,
+        "depth_scale": 1.0,
         "postprocessing_modules": {
           "distance": [
             {"module": "postprocessing.Dist2Depth"}
@@ -152,7 +153,9 @@ Writes CocoAnnotations of all objects from the given BOP dataset (`"supercategor
     }
 ```
 
-Writes object to camera poses and intrinsics of the given `"dataset": "<args:1>"` in BOP format. Converts Blender distance images to depth images. If output folder exists `"append_to_existing_output": True`.
+Writes object to camera poses and intrinsics of the given `"dataset": "<args:1>"` in BOP format. Converts Blender distance images to depth images. If output folder exists outputs are appended with `"append_to_existing_output": True`.
+
+`"depth_scale": 1.0`: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy and maximum depth value. Default value `"depth_scale": 1.0` corresponds to 65.54m maximum depth and 1mm accuracy. 
 
 ## More examples
 

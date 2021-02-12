@@ -103,7 +103,8 @@ Pose sampling can be done by calling any two appropriate Providers (Samplers). I
   "config": {
     "min_simulation_time": 4,
     "max_simulation_time": 20,
-    "check_object_interval": 1
+    "check_object_interval": 1,
+    "collision_shape": "MESH"
   }
 }
 ```
@@ -111,6 +112,8 @@ Pose sampling can be done by calling any two appropriate Providers (Samplers). I
 This module now internally does a physics simulation. 
 All objects with `physics` set to `True` will be influenced by gravity, while all `False` objects will remain steady.
 In this way the spheres will fall down until they hit the bumpy plane.
+We set the collision shape to `MESH` (default is `CONVEX_HULL`) here to make sure the spheres can drop into the valleys.
+Keep in mind that using the mesh collision shape in more complex use-cases can cause performance and glitch issues.
 
 When running the physics simulation the module checks in intervals of 1 second, if there are still objects moving. If this is not the case, the simulation is stopped.
 Nevertheless the simulation is run at least for 4 seconds and at most for 20 seconds.

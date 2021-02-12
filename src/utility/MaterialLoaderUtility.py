@@ -331,8 +331,7 @@ class MaterialLoaderUtility(object):
 
         :param nodes: Nodes from the current material
         :param links: Links from the current material
-        :param collection_of_texture_nodes: List of :class: `:w
-        bpy.type.Node of type :class: `ShaderNodeTexImage`
+        :param collection_of_texture_nodes: List of :class: `bpy.type.Node` of type :class: `ShaderNodeTexImage`
         """
         if len(collection_of_texture_nodes) > 0:
             texture_coords = nodes.new("ShaderNodeTexCoord")
@@ -363,19 +362,23 @@ class MaterialLoaderUtility(object):
         # walk over all objects, which have materials
         for obj in obj_with_mats:
             for slot in obj.material_slots:
+                material = slot.material
+                if material is None:
+                    # this can happen if a material slot was created but no material was assigned
+                    continue
                 texture_node = None
                 # check each node of the material
-                for node in slot.material.node_tree.nodes:
+                for node in material.node_tree.nodes:
                     # if it is a texture image node
                     if 'TexImage' in node.bl_idname:
                         if '.png' in node.image.name: # contains an alpha channel
                             texture_node = node
                 # this material contains an alpha png texture
                 if texture_node is not None:
-                    nodes = slot.material.node_tree.nodes
-                    links = slot.material.node_tree.links
+                    nodes = material.node_tree.nodes
+                    links = material.node_tree.links
                     node_connected_to_the_output, material_output = \
-                        Utility.get_node_connected_to_the_output_and_unlink_it(slot.material)
+                        Utility.get_node_connected_to_the_output_and_unlink_it(material)
 
                     if node_connected_to_the_output is not None:
                         mix_node = nodes.new(type='ShaderNodeMixShader')
@@ -410,6 +413,9 @@ class MaterialLoaderUtility(object):
         :param new_material: a new material, which will get a copy of this texture node
         :return: the modified new_material, if no texture node was found, the original new_material
         """
+        if used_material is None:
+            # this can happen if a material slot was created but no material was assigned
+            return used_material
         # find out if there is an .png file used here
         texture_node = None
         for node in used_material.node_tree.nodes:
