@@ -75,7 +75,8 @@ class BlendLoader(LoaderInterface):
         data_blocks = self.config.get_raw_value("load_from", "objects")
         if not isinstance(data_blocks, list):
             data_blocks = [data_blocks]
-        data_blocks = [data_block.lower() for data_block in data_blocks]
+        # Make sure to also convert the old convention (e.q. /Object) to valid datablocks
+        data_blocks = [(data_block.lower().strip("/") + ("s" if not data_block.endswith("s") else "")) for data_block in data_blocks]
 
         name_regrex = self.config.get_string("entities", "")
         # Start importing blend file. All objects that should be imported need to be copied from "data_from" to "data_to"
