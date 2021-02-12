@@ -97,6 +97,9 @@ class BlendLoader(LoaderInterface):
 
         # Go over all imported objects again
         for data_block in data_blocks:
+            self._set_properties(getattr(data_to, data_block))
+
+            # Some adjustments that only affect objects
             if data_block == "objects":
                 for obj in getattr(data_to, data_block):
                     # Link objects to the scene
