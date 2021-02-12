@@ -33,21 +33,6 @@ python scripts/visHdf5Files.py examples/blenderkit/output/*.hdf5
 
 ## Config file
 
-### Global
-
-```yaml
-{
-    "module": "main.Initializer",
-    "config": {
-      "global": {
-        "output_dir": "<args:1>",
-      }
-    }
-}
-```
-
-The same as in the basic example.
-
 ### BlendLoader 
 
 ```yaml
@@ -60,7 +45,7 @@ The same as in the basic example.
 }
 ```
 This module loads a BLEND file resource and needs the relative p[ath of the .blend file model you want to load, which should be specified under `path` attribute in the loader section above. <br>
-The `load_from` = `/Collection` means assets shall be loaded from this Collection datablock/folder inside the .blend file. <br>
+The `load_from` = `objects` means assets shall be loaded from this Collection datablock/folder inside the .blend file. <br>
 The `entities` allows to filter assets using regular expressions.
 
 ### CameraSampler

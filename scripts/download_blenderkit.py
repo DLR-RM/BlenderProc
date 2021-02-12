@@ -1,4 +1,3 @@
-
 from sys import version_info
 from urllib.error import HTTPError
 
@@ -10,11 +9,13 @@ from urllib.request import urlretrieve, build_opener, install_opener, urlopen
 from pathlib import Path
 import uuid
 
+
 def download_blendkit_assets(asset_types):
     assets = {}
     for asset_type in asset_types:
+        page = 1
+        print("Downloading {} assets".format(asset_type))
         while True:
-            print("Downloading {} assets".format(asset_type))
             print("Download metadata: page {}".format(page))
             try:
                 with urllib.request.urlopen("https://www.blenderkit.com/api/v1/search/?query=asset_type:{}+order:_score+is_free:True&addon_version=1.0.30&page={}".format(asset_type, str(page))) as url:
@@ -76,7 +77,8 @@ def download_blendkit_assets(asset_types):
                 # Download the file
                 urlretrieve(file_path, str(temp_path))
                 temp_path.rename(output_path)
-                        
+
+
 if __name__ == "__main__":
     asset_types = ["material", "model"]
     download_blendkit_assets(asset_types)
