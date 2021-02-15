@@ -97,8 +97,6 @@ class BlendLoader(LoaderInterface):
 
         # Go over all imported objects again
         for data_block in data_blocks:
-            self._set_properties(getattr(data_to, data_block))
-
             # Some adjustments that only affect objects
             if data_block == "objects":
                 for obj in getattr(data_to, data_block):
@@ -111,12 +109,16 @@ class BlendLoader(LoaderInterface):
                         bpy.context.scene.camera = obj
 
                         # Find the maximum frame number of its key frames
-                        max_keyframe = 0
-                        fcurves = obj.animation_data.action.fcurves
-                        for curve in fcurves:
-                            keyframe_points = curve.keyframe_points
-                            for keyframe in keyframe_points:
-                                max_keyframe = max(max_keyframe, keyframe.co[0])
+                        max_keyframe = -1
+                        if obj.animation_data is not None:
+                            fcurves = obj.animation_data.action.fcurves
+                            for curve in fcurves:
+                                keyframe_points = curve.keyframe_points
+                                for keyframe in keyframe_points:
+                                    max_keyframe = max(max_keyframe, keyframe.co[0])
 
                         # Set frame_end to the next free keyframe
                         bpy.context.scene.frame_end = max_keyframe + 1
+
+            # Set custom properties to all added objects
+            self._set_properties(getattr(data_to, data_block))
