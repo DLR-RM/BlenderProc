@@ -39,14 +39,12 @@ python scripts/visHdf5Files.py examples/blenderkit/output/*.hdf5
 {
     "module": "loader.BlendLoader",
     "config": {
-      "path": "<args:0>",
-      "load_from": "objects"
+      "path": "<args:0>"
     }
 }
 ```
 This module loads a BLEND file resource and needs the relative p[ath of the .blend file model you want to load, which should be specified under `path` attribute in the loader section above. <br>
-The `load_from` = `objects` means assets shall be loaded from this Collection datablock/folder inside the .blend file. <br>
-The `entities` allows to filter assets using regular expressions.
+Per default this will load all mesh objects from the given .blend file. By using the parameters `obj_types` and `datablocks`, also other data and object types can be loaded.
 
 ### CameraSampler
 

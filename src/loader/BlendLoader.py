@@ -5,6 +5,7 @@ import math
 import bpy
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.utility.BlenderUtility import collect_all_orphan_datablocks
 from src.utility.Utility import Utility
 
 
@@ -23,24 +24,17 @@ class BlendLoader(LoaderInterface):
         {
           "module": "loader.BlendLoader",
           "config": {
-            "path": "/path/file.blend",     #<-------- path to a .blend file
-            "load_from": "objects",         #<-------- datablock name/ID
-            "entities": ".*abc.*"           #<-------- regular expression, load everything in the folder if not given
+            "path": "/path/file.blend",              #<-------- path to a .blend file
+            "datablocks": ["objects", "materials"],  #<-------- datablock name/ID
+            "object_types": ["mesh"]                 #<-------- object types
+            "entities": ".*abc.*"                    #<-------- regular expression, load everything in the folder if not given
           }
         }
 
-    Result: loading all objects of file.blend that match the pattern.
+    Result: loading all mesh objects and materials of file.blend that match the pattern.
 
-    Note:
-    Some datablocks types like bpy.types.Light, bpy.types.Mesh, bpy.types.Camera etc are designed to be wrapped in 
-    bpy.types.Object. Loading the container bpy.types.Object (represented as "objects" datablock here after) also loads the
-    underlying datablocks. For example loading a Camera object of type bpy.types.Object wrapping underlying Camera bpy.types.Camera instance
-    should load the instance as well but the converse is not true.
-
-    For example only loading "cameras" i.e  bpy.types.Camera shall not load Animations,
-    physical constraints and properties like location that are stored in the wrapper bpy.types.Object including properties. To load
-    such objects its recommended to load the container "objects" datablocks and filter on entity name.
-
+    The datablock type "objects" means mesh objects as well as camera and light objects.
+    To further specify which object types exactly should be loaded, the parameter "object_types" exists.
 
     **Configuration**:
 
@@ -54,34 +48,58 @@ class BlendLoader(LoaderInterface):
         * - path
           - Path to a .blend file.
           - string
-        * - load_from
-          - The datablock or a list of datablocks which should be loaded from the given .blend file. Default: "objects"
-            Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
+        * - obj_types
+          - The type of objects to load. This parameter is only relevant when `datablocks` is set to `"objects"`. Default: ['mesh', 'empty']
+            Available options are: ['mesh', 'curve', 'hair', 'armature', 'empty', 'light', 'camera']
           - string/list
         * - entities
           - Regular expression representing a name pattern of entities' (everything that can be stored in a .blend
             file's folders, see Blender's documentation for bpy.types.ID for more info) names. Optional.
           - string
+        * - datablocks
+          - The datablock or a list of datablocks which should be loaded from the given .blend file. Default: "objects"
+            Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
+          - string/list
         * - new_cam
     """
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
+        self.valid_datablocks = [collection.lower() for collection in dir(bpy.data) if isinstance(getattr(bpy.data, collection), bpy.types.bpy_prop_collection)]
+        self.valid_object_types = ['mesh', 'curve', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume', 'gpencil', 'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
 
-    def run(self):
         # get a path to a .blend file
-        path = Utility.resolve_path(self.config.get_string("path"))
+        self.path = Utility.resolve_path(self.config.get_string("path"))
 
         # Make sure we have a list of datablocks
-        data_blocks = self.config.get_raw_value("load_from", "objects")
-        if not isinstance(data_blocks, list):
-            data_blocks = [data_blocks]
-        # Make sure to also convert the old convention (e.q. /Object) to valid datablocks
-        data_blocks = [(data_block.lower().strip("/") + ("s" if not data_block.endswith("s") else "")) for data_block in data_blocks]
+        self.data_blocks = self.config.get_raw_value("datablocks", "objects")
+        if not isinstance(self.data_blocks, list):
+            self.data_blocks = [self.data_blocks]
+        self.data_blocks = [data_block.lower() for data_block in self.data_blocks]
+
+        # Check that the given data blocks are valid
+        for data_block in self.data_blocks:
+            if data_block not in self.valid_datablocks:
+                raise Exception("No such data block: " + data_block)
+
+        # Make sure we have a list of object types
+        self.obj_types = self.config.get_raw_value("obj_types", ['mesh', 'empty'])
+        if not isinstance(self.obj_types, list):
+            self.obj_types = [self.obj_types]
+        self.obj_types = [obj_type.lower() for obj_type in self.obj_types]
+
+        # Check that the given object types are valid
+        for obj_type in self.obj_types:
+            if obj_type not in self.valid_object_types:
+                raise Exception("No such object type: " + obj_type)
+
+    def run(self):
+        # Remember which orphans existed beforehand
+        orphans_before = collect_all_orphan_datablocks()
 
         name_regrex = self.config.get_string("entities", "")
         # Start importing blend file. All objects that should be imported need to be copied from "data_from" to "data_to"
-        with bpy.data.libraries.load(path) as (data_from, data_to):
-            for data_block in data_blocks:
+        with bpy.data.libraries.load(self.path) as (data_from, data_to):
+            for data_block in self.data_blocks:
                 # Verify that the given data block is valid
                 if hasattr(data_from, data_block):
                     # Find all entities of this data block that match the specified pattern
@@ -96,29 +114,62 @@ class BlendLoader(LoaderInterface):
                     raise Exception("No such data block: " + data_block)
 
         # Go over all imported objects again
-        for data_block in data_blocks:
+        for data_block in self.data_blocks:
             # Some adjustments that only affect objects
             if data_block == "objects":
+                loaded_objects = []
                 for obj in getattr(data_to, data_block):
-                    # Link objects to the scene
-                    bpy.context.collection.objects.link(obj)
+                    # Check that the object type is desired
+                    if obj.type.lower() in self.obj_types:
+                        # Link objects to the scene
+                        bpy.context.collection.objects.link(obj)
+                        loaded_objects.append(obj)
 
-                    # If a camera was imported
-                    if obj.type == 'CAMERA':
-                        # Make it the active camera in the scene
-                        bpy.context.scene.camera = obj
+                        # If a camera was imported
+                        if obj.type == 'CAMERA':
+                            # Make it the active camera in the scene
+                            bpy.context.scene.camera = obj
 
-                        # Find the maximum frame number of its key frames
-                        max_keyframe = -1
-                        if obj.animation_data is not None:
-                            fcurves = obj.animation_data.action.fcurves
-                            for curve in fcurves:
-                                keyframe_points = curve.keyframe_points
-                                for keyframe in keyframe_points:
-                                    max_keyframe = max(max_keyframe, keyframe.co[0])
+                            # Find the maximum frame number of its key frames
+                            max_keyframe = -1
+                            if obj.animation_data is not None:
+                                fcurves = obj.animation_data.action.fcurves
+                                for curve in fcurves:
+                                    keyframe_points = curve.keyframe_points
+                                    for keyframe in keyframe_points:
+                                        max_keyframe = max(max_keyframe, keyframe.co[0])
 
-                        # Set frame_end to the next free keyframe
-                        bpy.context.scene.frame_end = max_keyframe + 1
-
+                            # Set frame_end to the next free keyframe
+                            bpy.context.scene.frame_end = max_keyframe + 1
+                    else:
+                        # Remove object again if its type is not desired
+                        bpy.data.objects.remove(obj, do_unlink=True)
+                print("Selected " + str(len(loaded_objects)) + " of the loaded objects by type")
+            else:
+                loaded_objects = getattr(data_to, data_block)
             # Set custom properties to all added objects
-            self._set_properties(getattr(data_to, data_block))
+            self._set_properties(loaded_objects)
+
+        # As some loaded objects were deleted again due to their type, we need also to remove the dependent datablocks that were also loaded and are now orphans
+        self.purge_added_orphans(orphans_before, data_to)
+
+    def purge_added_orphans(self, orphans_before, data_to):
+        """ Removes all orphans that did not exists before loading the blend file.
+
+        :param orphans_before: A dict of sets containing orphans of all kind of datablocks that existed before loading the blend file.
+        :param data_to: The list of objects that were loaded on purpose and should not be removed, even when they are orphans.
+        """
+        purge_orphans = True
+        while purge_orphans:
+            purge_orphans = False
+            orphans_after = collect_all_orphan_datablocks()
+            # Go over all datablock types
+            for collection_name in orphans_after.keys():
+                # Go over all orphans of that type that were added due to this loader
+                for orphan in orphans_after[collection_name].difference(orphans_before[collection_name]):
+                    # Check whether this orphan was loaded on purpose
+                    if orphan not in getattr(data_to, collection_name):
+                        # Remove the orphan
+                        getattr(bpy.data, collection_name).remove(orphan)
+                        # Make sure to run the loop again, so we can detect newly created orphans
+                        purge_orphans = True
