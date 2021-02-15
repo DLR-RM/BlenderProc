@@ -26,7 +26,7 @@ class BopLoader:
         :param temp_dir: A temp directory which is used for writing the temporary .ply file.
         :param sys_paths: System paths to append.
         :param model_type: Optionally, specify type of BOP model.  Available: [reconst, cad or eval].
-        :param cam_type: Camera type.
+        :param cam_type: Camera type. Available: ["primesense", "cmu", "uw"]. If "" is given, the dataset-specific default camera type is used.
         :param split: Optionally, test or val split depending on BOP dataset.
         :param scene_id: Optionally, specify BOP dataset scene to synthetically replicate. Default: -1 (no scene is replicated,
                          only BOP Objects are loaded).

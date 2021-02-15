@@ -1,5 +1,6 @@
 import os
 import math
+import threading
 import uuid
 import bpy
 import time
@@ -72,18 +73,23 @@ class Utility:
             with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
                 for i in range(amount_of_repetitions):
                     module_class = None
+                    # For backwards compatibility we allow to specify a modules also without "Module" suffix.
                     for suffix in ["Module", ""]:
                         try:
+                            # Try to load the module using the current suffix
                             module = importlib.import_module("src." + module_config["module"] + suffix)
                         except ModuleNotFoundError:
+                            # Try next suffix
                             continue
 
+                        # Check if the loaded module has a class with the same name
                         class_name = module_config["module"].split(".")[-1] + suffix
                         if hasattr(module, class_name):
                             # Import file and extract class
                             module_class = getattr(module, class_name)
                             break
 
+                    # Throw an error if no module/class with the specified name + any suffix has been found
                     if module_class is None:
                         raise Exception("The module src." + module_config["module"] + " was not found!")
 

@@ -101,7 +101,7 @@ class AMASSLoader:
     def _get_pose_parameters(supported_mocap_datasets: dict, num_betas: int, used_sub_dataset_id: str, used_subject_id: str, used_sequence_id: int, used_frame_id: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """ Extract pose and shape parameters corresponding to the requested pose from the database to be processed by the parametric model
 
-        :param supported_mocap_datasets:
+        :param supported_mocap_datasets: A dict which maps sub dataset names to their paths.
         :param num_betas: Number of body parameters
         :param used_sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
         :param used_subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
