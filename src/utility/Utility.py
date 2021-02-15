@@ -510,9 +510,16 @@ class Utility:
             obj.keyframe_insert(data_path=data_path, frame=frame)
 
 
+# KeyFrameState should be thread-specific
+class KeyFrameState(threading.local):
+    def __init__(self):
+        super(KeyFrameState, self).__init__()
+        self.depth = 0
+
+
 class KeyFrame:
     # Remember how many KeyFrame context manager have been applied around the current execution point
-    depth = 0
+    state = KeyFrameState()
 
     def __init__(self, frame):
         """ Sets the frame number for its complete block.
@@ -523,13 +530,13 @@ class KeyFrame:
         self._prev_frame = None
 
     def __enter__(self):
-        KeyFrame.depth += 1
+        KeyFrame.state.depth += 1
         if self._frame is not None:
             self._prev_frame = bpy.context.scene.frame_current
             bpy.context.scene.frame_set(self._frame)
 
     def __exit__(self, type, value, traceback):
-        KeyFrame.depth -= 1
+        KeyFrame.state.depth -= 1
         if self._prev_frame is not None:
             bpy.context.scene.frame_set(self._prev_frame)
 
@@ -539,4 +546,4 @@ class KeyFrame:
 
         :return: True, if there is at least one surrounding KeyFrame context manager
         """
-        return KeyFrame.depth > 0
+        return KeyFrame.state.depth > 0
