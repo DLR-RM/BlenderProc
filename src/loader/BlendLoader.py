@@ -26,7 +26,7 @@ class BlendLoader(LoaderInterface):
           "config": {
             "path": "/path/file.blend",              #<-------- path to a .blend file
             "datablocks": ["objects", "materials"],  #<-------- datablock name/ID
-            "object_types": ["mesh"]                 #<-------- object types
+            "obj_types": ["mesh"],                   #<-------- object types
             "entities": ".*abc.*"                    #<-------- regular expression, load everything in the folder if not given
           }
         }
