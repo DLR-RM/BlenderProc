@@ -1,4 +1,4 @@
-# Args: <path_to_blend_file> <path_to_haven_folder> <output>
+# Args: <path_to_blend_file> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -12,7 +12,7 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:2>"
+          "output_dir": "<args:1>"
         }
       }
     },
@@ -20,12 +20,6 @@
       "module": "loader.BlendLoader",
       "config": {
         "path": "<args:0>"
-      }
-    },
-    {
-      "module": "loader.HavenEnvironmentLoader",
-      "config": {
-        "data_path": "<args:1>"
       }
     },
     {
@@ -49,7 +43,7 @@
           "location": {
             "provider":"sampler.PartSphere",
             "center": [0, 0, 0],
-            "radius": 3,
+            "radius": 2.5,
             "part_sphere_vector": [1, 0, 0],
             "mode": "SURFACE"
           },
