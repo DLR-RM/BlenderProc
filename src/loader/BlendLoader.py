@@ -1,6 +1,7 @@
 import os
 import re
 import math
+from typing import Union
 
 import bpy
 
@@ -60,7 +61,6 @@ class BlendLoader(LoaderInterface):
           - The datablock or a list of datablocks which should be loaded from the given .blend file. Default: "objects"
             Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
           - string/list
-        * - new_cam
     """
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
@@ -70,27 +70,28 @@ class BlendLoader(LoaderInterface):
         # get a path to a .blend file
         self.path = Utility.resolve_path(self.config.get_string("path"))
 
-        # Make sure we have a list of datablocks
-        self.data_blocks = self.config.get_raw_value("datablocks", "objects")
-        if not isinstance(self.data_blocks, list):
-            self.data_blocks = [self.data_blocks]
-        self.data_blocks = [data_block.lower() for data_block in self.data_blocks]
+        self.data_blocks = self._validate_and_standardizes_configured_list(self.config.get_raw_value("datablocks", "objects"), self.valid_datablocks, "data block")
+        self.obj_types = self._validate_and_standardizes_configured_list(self.config.get_raw_value("obj_types", ['mesh', 'empty']), self.valid_object_types, "object type")
 
-        # Check that the given data blocks are valid
-        for data_block in self.data_blocks:
-            if data_block not in self.valid_datablocks:
-                raise Exception("No such data block: " + data_block)
+    def _validate_and_standardizes_configured_list(self, config_value: Union[list, str], allowed_elements: list, element_name: str) -> list:
+        """ Makes sure the given config value is a list, is lower case and only consists of valid elements.
 
-        # Make sure we have a list of object types
-        self.obj_types = self.config.get_raw_value("obj_types", ['mesh', 'empty'])
-        if not isinstance(self.obj_types, list):
-            self.obj_types = [self.obj_types]
-        self.obj_types = [obj_type.lower() for obj_type in self.obj_types]
+        :param config_value: The configured value that should be standardized and validated.
+        :param allowed_elements: A list of valid elements. If one configured element is not contained in this list an exception is thrown.
+        :param element_name: How one element is called. Used to create an error message.
+        :return: The standardized and validated config value.
+        """
+        # Make sure we have a list
+        if not isinstance(config_value, list):
+            config_value = [config_value]
+        config_value = [element.lower() for element in config_value]
 
-        # Check that the given object types are valid
-        for obj_type in self.obj_types:
-            if obj_type not in self.valid_object_types:
-                raise Exception("No such object type: " + obj_type)
+        # Check that the given elements are valid
+        for element in config_value:
+            if element not in allowed_elements:
+                raise Exception("No such " + element_name + ": " + element)
+
+        return config_value
 
     def run(self):
         # Remember which orphans existed beforehand
