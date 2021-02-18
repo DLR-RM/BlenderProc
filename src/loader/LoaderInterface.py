@@ -37,7 +37,6 @@ class LoaderInterface(Module):
 
     def _set_properties(self, objects: Union[bpy.types.Object, Mesh]):
         """ Sets all custom properties of all given objects according to the configuration.
-        This includes setting the materials properties of the loaded objects.
 
         Also runs all custom property functions.
 
@@ -59,7 +58,7 @@ class LoaderInterface(Module):
                     raise RuntimeError(
                         "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
                         "Use manipulators.Entity for setting object's attribute values.")
-            if material_properties:
+            if material_properties and hasattr(obj, "material_slots"):
                 for material in (obj.get_materials() if isinstance(obj, Mesh) else obj.data.materials):
                     if material is None:
                         continue
@@ -71,9 +70,11 @@ class LoaderInterface(Module):
                             raise RuntimeError("Loader modules support setting only custom properties. "
                                                "Use 'cp_' prefix for keys.")
 
-        if self.config.has_param("cf_set_shading"):
-            mode = self.config.get_string("cf_set_shading")
-            LoaderInterface.change_shading_mode(objects, mode)
+            # only meshes have polygons/faces
+            if hasattr(obj, 'type') and obj.type == 'MESH':
+                if self.config.has_param("cf_set_shading"):
+                    mode = self.config.get_string("cf_set_shading")
+                    LoaderInterface.change_shading_mode([obj], mode)
 
         apply_transformation = self.config.get_bool("cf_apply_transformation", False)
         if apply_transformation:
@@ -89,10 +90,12 @@ class LoaderInterface(Module):
         """
         bpy.ops.object.select_all(action='DESELECT')
         for obj in objects:
-            obj.select_set(True)
-            bpy.context.view_layer.objects.active = obj
-            bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
-            obj.select_set(False)
+            # only bpy.types.Object (subclass of bpy.types.ID) have transformation
+            if isinstance(obj, bpy.types.Object):
+                obj.select_set(True)
+                bpy.context.view_layer.objects.active = obj
+                bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+                obj.select_set(False)
         bpy.ops.object.select_all(action='DESELECT')
 
     @staticmethod

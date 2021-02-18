@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 import bpy
 import bmesh
 import mathutils
@@ -398,3 +400,21 @@ def duplicate_objects(objects):
     duplicates = bpy.context.selected_objects
     bpy.ops.object.select_all(action='DESELECT')
     return duplicates
+
+def collect_all_orphan_datablocks():
+    """ Returns all orphan data blocks grouped by their type
+
+    :return: A dict of sets
+    """
+    orphans = defaultdict(set)
+    # Go over all datablock types
+    for collection_name in dir(bpy.data):
+        collection = getattr(bpy.data, collection_name)
+        if isinstance(collection, bpy.types.bpy_prop_collection):
+            # Go over all datablocks of that type
+            for datablock in collection:
+                # Add them to the list if they are orphan
+                if datablock.users == 0:
+                    orphans[collection_name].add(datablock)
+
+    return orphans

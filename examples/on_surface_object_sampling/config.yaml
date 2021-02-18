@@ -20,9 +20,7 @@
     {
       "module": "loader.BlendLoader",
       "config": {
-        "path": "<args:1>",
-        "load_from": "/Object",
-        "entities": ".*"
+        "path": "<args:1>"
       }
     },
     {
