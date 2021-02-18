@@ -4,13 +4,13 @@ from typing import List
 
 import bpy
 
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 
 
 class ObjectLoader:
 
     @staticmethod
-    def load(filepath: str, cached_objects: dict = None, **kwargs) -> List[Mesh]:
+    def load(filepath: str, cached_objects: dict = None, **kwargs) -> List[MeshObject]:
         """ Import all objects for the given file and returns the loaded objects
 
         In .obj files a list of objects can be saved in.
@@ -50,6 +50,6 @@ class ObjectLoader:
                         obj.data.materials.append(mat)
 
                 # return all currently selected objects
-                return Mesh.convert_to_meshes(list(set(bpy.context.selected_objects) - previously_selected_objects))
+                return MeshObject.convert_to_meshes(list(set(bpy.context.selected_objects) - previously_selected_objects))
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))

@@ -5,14 +5,14 @@ from typing import List
 import bpy
 from mathutils import Vector
 
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 
 
 class RockEssentialsRockLoader:
     """ Loads rocks/cliffs from a specified .blend Rocks Essentials file. """
 
     @staticmethod
-    def load_rocks(path: str, subsec_num: int, objects: list = [], sample_objects: bool = False, amount: int = None) -> List[Mesh]:
+    def load_rocks(path: str, subsec_num: int, objects: list = [], sample_objects: bool = False, amount: int = None) -> List[MeshObject]:
         """ Loads rocks from the given blend file.
 
         :param path: Path to a .blend file containing desired rock/cliff objects in //Object// section.
@@ -54,7 +54,7 @@ class RockEssentialsRockLoader:
                 obj = obj_list[i % len(obj_list)]
             bpy.ops.wm.append(filepath=os.path.join(path, "/Object", obj), filename=obj,
                               directory=os.path.join(path + "/Object"))
-            loaded_obj = Mesh(bpy.context.scene.objects[obj])
+            loaded_obj = MeshObject(bpy.context.scene.objects[obj])
             # set custom name for easier tracking in the scene
             loaded_obj.set_name(obj + "_" + str(subsec_num) + "_" + str(i))
             # append to return list
@@ -63,7 +63,7 @@ class RockEssentialsRockLoader:
         return loaded_objects
 
     @staticmethod
-    def set_rocks_properties(objects: List[Mesh], physics: bool = False, render_levels: int = 3, high_detail_mode: bool = False, scale: Vector = Vector([1, 1, 1]), reflection_amount: float = None, reflection_roughness: float = None, hsv: list = None):
+    def set_rocks_properties(objects: List[MeshObject], physics: bool = False, render_levels: int = 3, high_detail_mode: bool = False, scale: Vector = Vector([1, 1, 1]), reflection_amount: float = None, reflection_roughness: float = None, hsv: list = None):
         """ Sets rocks properties in accordance to the given parameters.
 
         :param objects: List of loaded rock mesh objects.
@@ -74,7 +74,6 @@ class RockEssentialsRockLoader:
         :param reflection_amount: Reflection texture value. Default: rock-specific. Range: [0,1]
         :param reflection_roughness: Roughness texture value. Default: rock-specific. Range: [0,1]
         :param hsv: Hue-Saturation-Value parameters of the HSV node. (3 values). Range: H: [0, 1], S: [0, 2], V: [0, 2]. Default: rock-specific.
-        :param batch_config: Config object that contains user-defined settings for a current batch.
         """
 
         for obj in objects:

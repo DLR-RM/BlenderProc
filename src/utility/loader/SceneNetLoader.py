@@ -6,7 +6,7 @@ from typing import List
 import bpy
 
 from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
 
@@ -14,7 +14,7 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 class SceneNetLoader:
 
     @staticmethod
-    def load(file_path: str, texture_folder: str, unknown_texture_folder: str = "unknown") -> List[Mesh]:
+    def load(file_path: str, texture_folder: str, unknown_texture_folder: str = "unknown") -> List[MeshObject]:
         """ Loads all SceneNet objects at the given "file_path".
 
         The textures for each object are sampled based on the name of the object, if the name is not represented in the
@@ -46,7 +46,7 @@ class SceneNetLoader:
         return loaded_objects
 
     @staticmethod
-    def _random_sample_materials_for_each_obj(loaded_objects: List[Mesh], texture_folder: str, unknown_texture_folder: str):
+    def _random_sample_materials_for_each_obj(loaded_objects: List[MeshObject], texture_folder: str, unknown_texture_folder: str):
         """
         Random sample materials for each of the loaded objects
 
@@ -103,7 +103,7 @@ class SceneNetLoader:
                 obj.set_shading_mode(False)
 
     @staticmethod
-    def _set_category_ids(loaded_objects: List[Mesh]):
+    def _set_category_ids(loaded_objects: List[MeshObject]):
         """
         Set the category ids for the objs based on the .csv file loaded in LabelIdMapping
 

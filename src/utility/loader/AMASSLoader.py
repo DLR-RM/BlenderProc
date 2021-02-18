@@ -12,7 +12,7 @@ import torch
 from human_body_prior.body_model.body_model import BodyModel
 
 from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
 
@@ -36,7 +36,7 @@ class AMASSLoader:
 
 
     @staticmethod
-    def load(data_path: str, used_sub_dataset_id: str, temp_dir: str, used_body_model_gender: str = None, used_subject_id: str = "", used_sequence_id: int = -1, used_frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 10) -> List[Mesh]:
+    def load(data_path: str, used_sub_dataset_id: str, temp_dir: str, used_body_model_gender: str = None, used_subject_id: str = "", used_sequence_id: int = -1, used_frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 10) -> List[MeshObject]:
         """
         use the pose parameters to generate the mesh and loads it to the scene.
 
@@ -234,10 +234,10 @@ class AMASSLoader:
         return outmesh_path
 
     @staticmethod
-    def _correct_materials(objects: List[Mesh]):
+    def _correct_materials(objects: List[MeshObject]):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
-        :param objects: objects where the material maybe wrong.
+        :param objects: Mesh objects where the material might be wrong.
         """
         for obj in objects:
             for material in obj.get_materials():

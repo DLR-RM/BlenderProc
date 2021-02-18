@@ -9,7 +9,7 @@ from mathutils import Matrix
 
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MathUtility import MathUtility
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
 from typing import Tuple
@@ -17,7 +17,7 @@ from typing import Tuple
 class SuncgLoader:
 
     @staticmethod
-    def load(house_path: str, suncg_dir: str) -> List[Mesh]:
+    def load(house_path: str, suncg_dir: str) -> List[MeshObject]:
         """ Loads a house.json file into blender.
 
         - Loads all objects files specified in the house.json file.
@@ -43,7 +43,7 @@ class SuncgLoader:
 
         for level in config["levels"]:
             # Build empty level object which acts as a parent for all rooms on the level
-            level_obj = Mesh.create_empty("Level#" + level["id"])
+            level_obj = MeshObject.create_empty("Level#" + level["id"])
             level_obj.set_cp("type", "Level")
             if "bbox" in level:
                 level_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(level["bbox"]))
@@ -121,7 +121,7 @@ class SuncgLoader:
                     material.name = textures[0].image.name
 
     @staticmethod
-    def _load_room(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: Mesh, room_per_object: dict) -> List[Mesh]:
+    def _load_room(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: MeshObject, room_per_object: dict) -> List[MeshObject]:
         """ Load the room specified in the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -134,7 +134,7 @@ class SuncgLoader:
         :return: The list of loaded mesh objects.
         """
         # Build empty room object which acts as a parent for all objects inside
-        room_obj = Mesh.create_empty("Room#" + node["id"])
+        room_obj = MeshObject.create_empty("Room#" + node["id"])
         room_obj.set_cp("type", "Room")
         room_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(node["bbox"]))
         room_obj.set_cp("roomTypes", node["roomTypes"])
@@ -167,7 +167,7 @@ class SuncgLoader:
         return loaded_objects
 
     @staticmethod
-    def _load_ground(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: Mesh) -> List[Mesh]:
+    def _load_ground(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: MeshObject) -> List[MeshObject]:
         """ Load the ground specified in the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -184,7 +184,7 @@ class SuncgLoader:
         return SuncgLoader._load_obj(os.path.join(SuncgLoader._suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
 
     @staticmethod
-    def _load_object(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, parent: Mesh) -> List[Mesh]:
+    def _load_object(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, parent: MeshObject) -> List[MeshObject]:
         """ Load the object specified in the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -212,7 +212,7 @@ class SuncgLoader:
         }
 
     @staticmethod
-    def _load_box(node: dict, material_adjustments: list, transform: Matrix, parent: Mesh) -> List[Mesh]:
+    def _load_box(node: dict, material_adjustments: list, transform: Matrix, parent: MeshObject) -> List[MeshObject]:
         """ Creates a cube inside blender which follows the specifications of the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -221,7 +221,7 @@ class SuncgLoader:
         :param parent: The parent object to which the ground should be linked
         :return: The list of loaded mesh objects.
         """
-        box = Mesh.create_primitive("CUBE")
+        box = MeshObject.create_primitive("CUBE")
         box.set_name("Box#" + node["id"])
         # Scale the cube to the required dimensions
         box.set_local2world_mat(Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) @ Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) @ Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0)))
@@ -246,7 +246,7 @@ class SuncgLoader:
         return [box]
 
     @staticmethod
-    def _load_obj(path: str, metadata: dict, material_adjustments: list, transform: Matrix = None, parent: Mesh = None) -> List[Mesh]:
+    def _load_obj(path: str, metadata: dict, material_adjustments: list, transform: Matrix = None, parent: MeshObject = None) -> List[MeshObject]:
         """ Load the wavefront object file from the given path and adjust according to the given arguments.
 
         :param path: The path to the .obj file.
@@ -279,7 +279,7 @@ class SuncgLoader:
             return loaded_objects
 
     @staticmethod
-    def _transform_and_colorize_object(object: Mesh, material_adjustments: list, transform: Matrix = None, parent: Mesh = None):
+    def _transform_and_colorize_object(object: MeshObject, material_adjustments: list, transform: Matrix = None, parent: MeshObject = None):
         """ Applies the given transformation to the object and refactors its materials.
 
         Material is replaced with an existing material if possible or is changed according to the material_adjustments

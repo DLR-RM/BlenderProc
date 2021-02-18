@@ -9,7 +9,7 @@ from sys import platform
 import numpy as np
 import imageio
 
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 
 
 def local_to_world(cords, world):

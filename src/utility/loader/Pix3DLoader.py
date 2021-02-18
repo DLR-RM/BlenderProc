@@ -6,7 +6,7 @@ from typing import List
 import bpy
 
 from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
 
@@ -60,7 +60,7 @@ class Pix3DLoader:
             raise Exception("The annotation file could not be found: {}".format(path_to_annotation_file))
 
     @staticmethod
-    def load(used_category: str, data_path: str = 'resources/pix3d') -> List[Mesh]:
+    def load(used_category: str, data_path: str = 'resources/pix3d') -> List[MeshObject]:
         """ Loads one random Pix3D object from the given category.
 
         :param used_category: The category to use for example: 'bed', check the data_path/model folder for more categories.
@@ -94,7 +94,7 @@ class Pix3DLoader:
         return loaded_obj
 
     @staticmethod
-    def _correct_materials(objects: List[Mesh]):
+    def _correct_materials(objects: List[MeshObject]):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
         :param objects: The list of mesh objects where the material maybe wrong.

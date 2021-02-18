@@ -6,13 +6,13 @@ from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
 
-class Mesh(Entity):
+class MeshObject(Entity):
 
     def __init__(self, object: bpy.types.Object):
         super().__init__(object)
 
     @staticmethod
-    def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "Mesh":
+    def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
         """ Creates a new Mesh object using the given blender mesh.
 
         :param blender_mesh: The blender mesh.
@@ -23,7 +23,7 @@ class Mesh(Entity):
         obj = bpy.data.objects.new(blender_mesh.name if object_name is None else object_name, blender_mesh)
         # link the object in the collection
         bpy.context.collection.objects.link(obj)
-        return Mesh(obj)
+        return MeshObject(obj)
 
     @staticmethod
     def create_empty(object_name: str, mesh_name: str = None):
@@ -35,10 +35,10 @@ class Mesh(Entity):
         """
         if mesh_name is None:
             mesh_name = object_name
-        return Mesh.create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
+        return MeshObject.create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
 
     @staticmethod
-    def create_primitive(shape: str, **kwargs) -> "Mesh":
+    def create_primitive(shape: str, **kwargs) -> "MeshObject":
         """ Creates a new primitive mesh object.
 
         :param shape: The name of the primitive to create. Available: ["CUBE"]
@@ -59,16 +59,16 @@ class Mesh(Entity):
         else:
             raise Exception("No such shape: " + shape)
 
-        return Mesh(bpy.context.object)
+        return MeshObject(bpy.context.object)
 
     @staticmethod
-    def convert_to_meshes(blender_objects: list) -> List["Mesh"]:
+    def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
         """ Converts the given list of blender objects to mesh objects
     
         :param blender_objects: List of blender objects.
         :return: The list of meshes.
         """
-        return [Mesh(obj) for obj in blender_objects]
+        return [MeshObject(obj) for obj in blender_objects]
 
     def get_materials(self) -> List[bpy.types.Material]:
         """ Returns the materials used by the mesh.
@@ -100,9 +100,9 @@ class Mesh(Entity):
         new_entity = self.blender_obj.copy()
         new_entity.data = self.blender_obj.data.copy()
         bpy.context.collection.objects.link(new_entity)
-        return Mesh(new_entity)
+        return MeshObject(new_entity)
 
-    def get_blender_mesh(self) -> bpy.types.Mesh:
+    def get_mesh(self) -> bpy.types.Mesh:
         """ Returns the blender mesh of the object.
 
         :return: The mesh.
@@ -114,7 +114,7 @@ class Mesh(Entity):
 
         :param use_smooth: If true, then all faces will be made smooth, otherwise flat.
         """
-        for face in self.get_blender_mesh().polygons:
+        for face in self.get_mesh().polygons:
             face.use_smooth = use_smooth
 
     def remove_x_axis_rotation(self):

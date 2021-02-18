@@ -5,7 +5,7 @@ from typing import List, Union
 import bpy
 
 from src.utility.BlenderUtility import collect_all_orphan_datablocks
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
@@ -43,7 +43,7 @@ class BlendLoader:
         return config_value
 
     @staticmethod
-    def load(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_regrex: str = None, data_blocks: Union[list, str] = "objects") -> List[Mesh]:
+    def load(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_regrex: str = None, data_blocks: Union[list, str] = "objects") -> List[MeshObject]:
         """
         Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
         bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.

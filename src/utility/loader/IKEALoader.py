@@ -7,7 +7,7 @@ from typing import Union, List
 
 import bpy
 
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.loader.ObjectLoader import ObjectLoader
 
 
@@ -83,7 +83,7 @@ class IKEALoader:
         return object_lst
 
     @staticmethod
-    def load(data_dir: str = 'resources/IKEA', obj_categories: Union[list, str] = None, obj_style: str = None) -> List[Mesh]:
+    def load(data_dir: str = 'resources/IKEA', obj_categories: Union[list, str] = None, obj_style: str = None) -> List[MeshObject]:
         """ Loads ikea objects based on selected type and style.
 
         If there are multiple options it picks one randomly or if style or type is None it picks one randomly.

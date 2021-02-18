@@ -1,7 +1,7 @@
 import bpy
 
 from src.main.Module import Module
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from typing import Union
 
 class LoaderInterface(Module):
@@ -35,7 +35,7 @@ class LoaderInterface(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def _set_properties(self, objects: Union[bpy.types.Object, Mesh]):
+    def _set_properties(self, objects: Union[bpy.types.Object, MeshObject]):
         """ Sets all custom properties of all given objects according to the configuration.
 
         Also runs all custom property functions.
@@ -50,7 +50,7 @@ class LoaderInterface(Module):
             for key, value in properties.items():
                 if key.startswith("cp_"):
                     key = key[3:]
-                    if isinstance(obj, Mesh):
+                    if isinstance(obj, MeshObject):
                         obj.set_cp(key, value)
                     else:
                         obj[key] = value
@@ -59,7 +59,7 @@ class LoaderInterface(Module):
                         "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
                         "Use manipulators.Entity for setting object's attribute values.")
             if material_properties and hasattr(obj, "material_slots"):
-                for material in (obj.get_materials() if isinstance(obj, Mesh) else obj.data.materials):
+                for material in (obj.get_materials() if isinstance(obj, MeshObject) else obj.data.materials):
                     if material is None:
                         continue
                     for key, value in material_properties.items():
@@ -114,7 +114,7 @@ class LoaderInterface(Module):
             raise Exception("This shading mode is unknown: {}".format(mode))
 
         for obj in objects:
-            if isinstance(obj, Mesh):
+            if isinstance(obj, MeshObject):
                 obj.set_shading_mode(is_smooth)
             else:
                 for face in obj.data.polygons:

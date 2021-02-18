@@ -3,14 +3,14 @@ from typing import List
 
 import bpy
 
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.loader.ObjectLoader import ObjectLoader
 
 
 class ReplicaLoader:
 
     @staticmethod
-    def load(data_path: str, data_set_name: str, use_ambient_occlusion: bool = False, use_smooth_shading: bool = False) -> List[Mesh]:
+    def load(data_path: str, data_set_name: str, use_ambient_occlusion: bool = False, use_smooth_shading: bool = False) -> List[MeshObject]:
         """ Just imports the configured .ply file straight into blender for the replica case.
 
         :param data_path: The path to the data folder, where all rooms are saved.

@@ -8,7 +8,7 @@ import bpy
 import mathutils
 import numpy as np
 
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
 
@@ -28,7 +28,7 @@ class Front3DLoader:
     """
 
     @staticmethod
-    def load(json_path: str, future_model_path: str, mapping: dict, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[Mesh]:
+    def load(json_path: str, future_model_path: str, mapping: dict, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
         """ Loads the 3D-Front scene specified by the given json file.
 
         :param json_path: Path to the json file, where the house information is stored.
@@ -68,7 +68,7 @@ class Front3DLoader:
         return created_objects
 
     @staticmethod
-    def _create_mesh_objects_from_file(data: dict, ceiling_light_strength: float, mapping: dict, json_path: str) -> List[Mesh]:
+    def _create_mesh_objects_from_file(data: dict, ceiling_light_strength: float, mapping: dict, json_path: str) -> List[MeshObject]:
         """
         This creates for a given data json block all defined meshes and assigns the correct materials.
         This means that the json file contains some mesh, like walls and floors, which have to built up manually.
@@ -97,7 +97,7 @@ class Front3DLoader:
                 warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            obj = Mesh.create_empty(used_obj_name, used_obj_name + "_mesh")
+            obj = MeshObject.create_empty(used_obj_name, used_obj_name + "_mesh")
             created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id
@@ -170,7 +170,7 @@ class Front3DLoader:
             normal = np.reshape(normal, [num_vertices * 3])
 
             # add this new data to the mesh object
-            mesh = obj.get_blender_mesh()
+            mesh = obj.get_mesh()
             mesh.vertices.add(num_vertices)
             mesh.vertices.foreach_set("co", vertices)
             mesh.vertices.foreach_set("normal", normal)
@@ -217,7 +217,7 @@ class Front3DLoader:
         return created_objects
 
     @staticmethod
-    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, mapping: dict) -> List[Mesh]:
+    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, mapping: dict) -> List[MeshObject]:
         """
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
@@ -303,7 +303,7 @@ class Front3DLoader:
         return all_objs
 
     @staticmethod
-    def _move_and_duplicate_furniture(data: dict, all_loaded_furniture: list) -> List[Mesh]:
+    def _move_and_duplicate_furniture(data: dict, all_loaded_furniture: list) -> List[MeshObject]:
         """
         Move and duplicate the furniture depending on the data in the data json dir.
         After loading each object gets a location based on the data in the json file. Some objects are used more than

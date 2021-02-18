@@ -8,7 +8,7 @@ from typing import List
 import bpy
 
 from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
 
@@ -16,7 +16,7 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 class ShapeNetLoader:
 
     @staticmethod
-    def load(data_path: str, used_synset_id: str, used_source_id: str = "") -> List[Mesh]:
+    def load(data_path: str, used_synset_id: str, used_source_id: str = "") -> List[MeshObject]:
         """ This loads an object from ShapeNet based on the given synset_id, which specifies the category of objects to use.
 
         From these objects one is randomly sampled and loaded.
@@ -117,7 +117,7 @@ class ShapeNetLoader:
         raise Exception("The used_synset_id {} does not exists in the taxonomy file".format(synset_id))
 
     @staticmethod
-    def _correct_materials(objects: List[Mesh]):
+    def _correct_materials(objects: List[MeshObject]):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
         :param objects: objects where the material maybe wrong

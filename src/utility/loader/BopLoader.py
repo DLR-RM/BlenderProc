@@ -8,14 +8,14 @@ import numpy as np
 from mathutils import Matrix, Vector
 
 from src.utility.CameraUtility import CameraUtility
-from src.utility.MeshUtility import Mesh
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
 class BopLoader:
 
     @staticmethod
-    def load(bop_dataset_path: str, temp_dir: str, sys_paths: list, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[Mesh]:
+    def load(bop_dataset_path: str, temp_dir: str, sys_paths: list, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[MeshObject]:
         """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
 
         - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -257,7 +257,7 @@ class BopLoader:
 
 
     @staticmethod
-    def _load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, has_external_texture: bool, temp_dir: str, allow_duplication: bool, scale: float = 1) -> Mesh:
+    def _load_mesh(obj_id: int, model_p: dict, bop_dataset_name: str, has_external_texture: bool, temp_dir: str, allow_duplication: bool, scale: float = 1) -> MeshObject:
         """ Loads BOP mesh and sets category_id.
 
         :param obj_id: The obj_id of the BOP Object.
@@ -315,7 +315,7 @@ class BopLoader:
             BopLoader._load_texture(cur_obj, texture_file_path, bop_dataset_name)
         cur_obj["is_bop_object"] = True
         cur_obj["bop_dataset_name"] = bop_dataset_name
-        return Mesh(cur_obj)
+        return MeshObject(cur_obj)
 
     @staticmethod
     def _load_materials(cur_obj: bpy.types.Object, bop_dataset_name: str) -> bpy.types.Material:
