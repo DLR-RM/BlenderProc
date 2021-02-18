@@ -30,7 +30,7 @@ class BopLoaderModule(LoaderInterface):
           - Description
           - Type
         * - cam_type
-          - Camera type. Optional. Available: ["primesense", "cmu", "uw"]. If "" is given, the dataset-specific default camera type is used. Default value: ""
+          - Camera type. If not defined, dataset-specific default camera type is used. Default value: ""
           - string
         * - source_frame
           - Can be used if the given positions and rotations are specified in frames different from the blender
