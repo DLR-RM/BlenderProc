@@ -70,6 +70,67 @@ class MaterialManipulator(Module):
           }
         }
 
+    Example 4: Add a layer of dust to all materials. By using a random generated dust texture. The strength here
+    determines how thick the dust layer is. The texture scale determines the size of the dust flakes. At one it gets
+    the same as the normal texture on the object. Be aware that each object needs a UV map so that the dust flakes
+    are properly displayed.
+
+    .. code-block:: yaml
+
+        {
+          "module": "manipulators.MaterialManipulator",
+          "config":{
+            "selector": {
+              "provider": "getter.Material",
+              "conditions": {
+                "name": ".*",
+                "use_nodes": True
+              }
+            },
+            "cf_add_dust": {
+              "strength": 0.8,
+              "texture_scale": 0.05
+            }
+          }
+        },
+
+    Example 5: Add a layer of dust to all materials. In this example the focus is on loading a texture with the
+    TextureLoader and using it with the MaterialManipulator.
+
+    .. code-block:: yaml
+
+        {
+          "module": "loader.TextureLoader",
+          "config": {
+            "path": "<args:0>",
+            "add_properties": {
+              "cp_dust_texture": True
+            }
+          }
+        },
+        {
+          "module": "manipulators.MaterialManipulator",
+          "config":{
+            "selector": {
+              "provider": "getter.Material",
+              "conditions": {
+                "name": ".*",
+                "use_nodes": True
+              }
+            },
+            "cf_add_dust": {
+              "strength": 0.8,
+              "used_dust_texture": {
+                "provider": "getter.Texture",
+                "conditions": {
+                  "cp_dust_texture": True
+                }
+              },
+              "texture_scale": 0.05
+            }
+          }
+        },
+
     **Configuration**:
 
     .. list-table:: 
