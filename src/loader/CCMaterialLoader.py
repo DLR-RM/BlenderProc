@@ -71,7 +71,7 @@ class CCMaterialLoader(Module):
         if self.config.has_param("use_all_materials") and self.config.has_param("used_assets"):
             raise Exception("It is impossible to use all materials and selected a certain list of assets!")
         self._use_all_materials = self.config.get_bool("use_all_materials", False)
-        if not self._use_all_materials:
+        if not self._use_all_materials and not self.config.has_param("used_assets"):
             self._used_assets = self._probably_useful_texture
         else:
             self._used_assets = self.config.get_list("used_assets", [])
