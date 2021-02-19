@@ -66,15 +66,6 @@
       }
     },
     {
-      "module": "loader.TextureLoader",
-      "config": {
-        "path": "/home/max/Downloads/dust_dl.png",
-        "add_properties": {
-          "cp_dust_texture": True
-        }
-      }
-    },
-    {
       "module": "manipulators.MaterialManipulator",
       "config":{
         "selector": {
@@ -86,12 +77,6 @@
         },
         "cf_add_dust": {
           "strength": 0.8,
-          "used_dust_texture": {
-            "provider": "getter.Texture",
-            "conditions": {
-              "cp_dust_texture": True
-            }
-          },
           "texture_scale": 0.05
         }
       }

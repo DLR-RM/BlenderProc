@@ -332,7 +332,7 @@ class MaterialManipulator(Module):
                     result.update({emission_key: attr_val})
             elif key == "cf_add_dust":
                 result = params_conf.get_raw_dict(key)
-            elif "cf_set_" in key or "cf_set_add_" in key:
+            elif "cf_set_" in key or "cf_add_" in key:
                 result = params_conf.get_raw_value(key)
             else:
                 result = params_conf.get_raw_value(key)
