@@ -462,7 +462,7 @@ class MaterialManipulator(Module):
         emission_node.inputs["Strength"].default_value = value["strength"]
         links.new(emission_node.outputs["Emission"], mat_output.inputs["Surface"])
 
-    def _add_dust_to_material(self, material: bpy.types.Material, value: float):
+    def _add_dust_to_material(self, material: bpy.types.Material, value: dict):
         """
         Adds a dust film to the material, where the strength determines how much dust is used.
 
