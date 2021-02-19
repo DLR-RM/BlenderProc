@@ -211,7 +211,7 @@ class EntityManipulator(Module):
         * - cf_set_shading
           - Custom function to set the shading of the selected object. Available: ["FLAT", "SMOOTH", "AUTO"]
           - str
-        * - cf_set_shading/
+        * - cf_set_shading
         * - cf_add_displace_modifier_with_texture
           - Adds a displace modifier with texture to an object.
           - dict
