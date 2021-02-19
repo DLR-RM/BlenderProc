@@ -1,0 +1,106 @@
+# Args: <path_to_blend_file> <path_to_haven_folder> <output>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
+    },
+    {
+      "module": "loader.BlendLoader",
+      "config": {
+        "path": "<args:0>",
+        "load_from": "/Object"
+      }
+    },
+    {
+      "module": "loader.HavenEnvironmentLoader",
+      "config": {
+        "data_path": "<args:1>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [
+        {
+          "number_of_samples": 5,
+          "location": {
+            "provider":"sampler.PartSphere",
+            "center": [0, 0, 0],
+            "radius": 3,
+            "part_sphere_vector": [1, 0, 0],
+            "distance_above_center": 0.5,
+            "mode": "SURFACE"
+          },
+          "rotation": {
+            "format": "look_at",
+            "value": {
+              "provider": "getter.POI"
+            }
+          }
+        }
+        ]
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config":{
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": ".*",
+            "use_nodes": True
+          }
+        },
+        "cf_add_dust": {
+          "strength": 0.8,
+          "texture_scale": 0.05
+        }
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "render_normals": True,
+        "samples": 350,
+        "render_distance": true
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "distance": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+              "config": {}
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
