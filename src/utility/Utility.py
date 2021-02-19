@@ -263,7 +263,7 @@ class Utility:
         if node and len(node) == 1:
             return node[0]
         else:
-            raise Exception("There is not only one node of this type: {}".format(node_type))
+            raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.
