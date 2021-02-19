@@ -566,15 +566,18 @@ class MaterialManipulator(Module):
             noise_node = nodes.new("ShaderNodeTexNoise")
             noise_node.location.x = x_pos + x_diff * 2
             noise_node.location.y = y_pos - y_diff * 2
+            # this determines the pattern of the dust flakes, a high scale makes them small enough to look like dust
             noise_node.inputs["Scale"].default_value = 250.0
             noise_node.inputs["Detail"].default_value = 0.0
             noise_node.inputs["Roughness"].default_value = 0.0
             noise_node.inputs["Distortion"].default_value = 1.9
             links.new(mapping_node.outputs["Vector"], noise_node.inputs["Vector"])
+            # this noise_node produces RGB colors, we only need one value in this instance red
             separate_r_channel = nodes.new("ShaderNodeSeparateRGB")
             separate_r_channel.location.x = x_pos + x_diff * 3
             separate_r_channel.location.y = y_pos - y_diff * 2
             links.new(noise_node.outputs["Color"], separate_r_channel.inputs["Image"])
+            # as the produced noise image has a nice fading to it, we use a color ramp to create dust flakes
             color_ramp = nodes.new("ShaderNodeValToRGB")
             color_ramp.location.x = x_pos + x_diff * 4
             color_ramp.location.y = y_pos - y_diff * 2
@@ -605,20 +608,3 @@ class MaterialManipulator(Module):
         dust_color.inputs["Roughness"].default_value = 1.0
         dust_color.inputs["Specular"].default_value = 0.0
         links.new(dust_color.outputs["BSDF"], mix_shader.inputs[2])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
