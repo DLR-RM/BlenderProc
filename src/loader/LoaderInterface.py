@@ -109,6 +109,11 @@ class LoaderInterface(Module):
             is_smooth = False
         elif mode.lower() == "smooth":
             is_smooth = True
+        elif mode.lower() == "auto":
+            is_smooth = True
+            for obj in objects:
+                obj.data.use_auto_smooth = 1
+                obj.data.auto_smooth_angle = 0.523599  # 30° in radians
         else:
             raise Exception("This shading mode is unknown: {}".format(mode))
 
