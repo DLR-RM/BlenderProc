@@ -33,6 +33,8 @@ python scripts/visHdf5Files.py examples/haven_dataset/output/*.hdf5
 
 * The BlendLoader loads the given blend file and extracts the object
 * Then the `HavenEnvironmentLoader` loads a randomly selected HDR image as world environment
+* After that the `MaterialManipulator` adds to all materials in the scene a layer of dust
+* Then it is rendered and saved in a `hdf5` file.
  
 ## Config file
 
