@@ -25,8 +25,11 @@ class LoaderInterface(Module):
             affected by this.
           - dict
         * - cf_set_shading
-          - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH"]
+          - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH", "AUTO"]
           - string
+        * - cf_shading_auto_smooth_angle_in_deg
+          - Angle in degrees at which smooth shading is activated in `AUTO` mode.
+          - float
         * - cf_apply_transformation
           - Loaded objects, sometimes contain transformations, these can be applied to the mesh, so that setting a
             new location, has the expected behavior. Else the prior location, will be replaced. Default: False.
@@ -73,7 +76,8 @@ class LoaderInterface(Module):
             if hasattr(obj, 'type') and obj.type == 'MESH':
                 if self.config.has_param("cf_set_shading"):
                     mode = self.config.get_string("cf_set_shading")
-                    LoaderInterface.change_shading_mode([obj], mode)
+                    angle_value = self.config.get_float("cf_shading_auto_smooth_angle_in_deg", 30)
+                    LoaderInterface.change_shading_mode([obj], mode, angle_value)
 
         apply_transformation = self.config.get_bool("cf_apply_transformation", False)
         if apply_transformation:
@@ -98,12 +102,13 @@ class LoaderInterface(Module):
         bpy.ops.object.select_all(action='DESELECT')
 
     @staticmethod
-    def change_shading_mode(objects: [bpy.types.Object], mode: str):
+    def change_shading_mode(objects: [bpy.types.Object], mode: str, angle_value: float):
         """
         Changes the shading mode of all objects to either flat or smooth. All surfaces of that object are changed.
 
         :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
-        :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH"]. Type: str
+        :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH", "AUTO"]. Type: str
+        :param angle_value: Angle in degree at which smooth shading is activated in `AUTO` mode. Type: float
         """
         if mode.lower() == "flat":
             is_smooth = False
@@ -113,7 +118,7 @@ class LoaderInterface(Module):
             is_smooth = True
             for obj in objects:
                 obj.data.use_auto_smooth = 1
-                obj.data.auto_smooth_angle = 0.523599  # 30° in radians
+                obj.data.auto_smooth_angle = np.deg2rad(angle_value)
         else:
             raise Exception("This shading mode is unknown: {}".format(mode))
 

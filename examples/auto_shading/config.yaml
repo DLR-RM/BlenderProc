@@ -42,7 +42,8 @@
           "name": "Sphere"
         }
       },
-      "cf_set_shading": "AUTO"
+      "cf_set_shading": "AUTO",
+      "cf_shading_auto_smooth_angle_in_deg": 45
     }
   },
   {
@@ -55,18 +56,6 @@
         }
       },
       "cf_set_shading": "SMOOTH"
-    }
-  },
-  {
-    "module": "manipulators.EntityManipulator",
-    "config": {
-      "selector": {
-        "provider": "getter.Entity",
-        "conditions": {
-          "name": "Sphere.002"
-        }
-      },
-      "cf_set_shading": "FLAT"
     }
   },
   {
