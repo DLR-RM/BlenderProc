@@ -33,6 +33,11 @@ class CCMaterialLoader(Module):
             beginning the name starts with. By default all assets will be loaded, specified by an empty list.
             Default: [].
           - list
+        * - use_all_materials
+          - If this is true all materials, which are available are used. This includes materials, which are not
+            tileable an materials which have an alpha channel. By default only a reasonable selection is used.
+            Default: False
+          - bool
         * - add_custom_properties
           - A dictionary of materials and the respective properties. Default: {}.
           - dict
@@ -47,6 +52,15 @@ class CCMaterialLoader(Module):
     def __init__(self, config):
         Module.__init__(self, config)
         self._folder_path = ""
+        self._probably_useful_texture = ["paving stones", "tiles", "wood", "fabric", "bricks", "metal", "wood floor",
+                                         "ground", "rock", "concrete", "leather", "planks", "rocks", "gravel",
+                                         "asphalt", "painted metal", "painted plaster", "marble", "carpet",
+                                         "plastic", "roofing tiles", "bark", "metal plates", "wood siding",
+                                         "terrazzo", "plaster", "paint", "corrugated steel", "painted wood", "lava"
+                                         "cardboard", "clay", "diamond plate", "ice", "moss", "pipe", "candy",
+                                         "chipboard", "rope", "sponge", "tactile paving", "paper", "cork",
+                                         "wood chips"]
+        self._use_all_materials = False
         self._used_assets = []
         self._add_cp = {}
         self._preload = False
@@ -54,7 +68,13 @@ class CCMaterialLoader(Module):
 
     def run(self):
         self._folder_path = Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures"))
-        self._used_assets = self.config.get_list("used_assets", [])
+        if self.config.has_param("use_all_materials") and self.config.has_param("used_assets"):
+            raise Exception("It is impossible to use all materials and selected a certain list of assets!")
+        self._use_all_materials = self.config.get_bool("use_all_materials", False)
+        if not self._use_all_materials:
+            self._used_assets = self._probably_useful_texture
+        else:
+            self._used_assets = self.config.get_list("used_assets", [])
         self._add_cp = self.config.get_raw_dict("add_custom_properties", {})
         self._preload = self.config.get_bool("preload", False)
         self._fill_used_empty_materials = self.config.get_bool("fill_used_empty_materials", False)
