@@ -232,7 +232,7 @@ class Utility:
                 links.remove(l)
 
         links.new(source_socket, new_node_dest_socket)
-        links.new(new_node_src_socket, dest_socket)\
+        links.new(new_node_src_socket, dest_socket)
 
     @staticmethod
     def get_node_connected_to_the_output_and_unlink_it(material):
@@ -365,7 +365,7 @@ class Utility:
                 parameters[key] = config.data[key]
 
         if not config.has_param('provider'):
-            raise Exception("Each provider needs an provider label, this one does not contain one: {}".format(config.data))
+            raise Exception("Each provider needs a provider label, this one does not contain one: {}".format(config.data))
 
         return Utility.build_provider(config.get_string("provider"), parameters)
 
