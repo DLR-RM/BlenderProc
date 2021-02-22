@@ -9,6 +9,8 @@ from sys import platform
 import numpy as np
 import imageio
 
+from src.utility.Utility import Utility
+
 
 def local_to_world(cords, world):
     """
@@ -358,8 +360,6 @@ def load_image(file_path, num_channels=3):
             raise Exception(error)
 
 
-
-
 def get_bound_volume(obj):
     """ Gets the volume of a possible orientated bounding box.
     :param obj: Mesh object.
@@ -399,6 +399,7 @@ def duplicate_objects(objects):
     bpy.ops.object.select_all(action='DESELECT')
     return duplicates
 
+
 def collect_all_orphan_datablocks():
     """ Returns all orphan data blocks grouped by their type
 
@@ -416,3 +417,166 @@ def collect_all_orphan_datablocks():
                     orphans[collection_name].add(datablock)
 
     return orphans
+
+
+def copy_attributes(attributes: list, old_prop: str, new_prop: str):
+    """
+    Copies the list of attributes from the old to the new prop if the attribute exists.
+
+    :param: attributes: Current selected attributes
+    :param: old_prop: Old property
+    :param: new_prop: New property
+    """
+
+    # check if the attribute exists and copy it
+    for attr in attributes:
+        if hasattr(new_prop, attr):
+            setattr(new_prop, attr, getattr(old_prop, attr))
+
+
+def get_node_attributes(node: bpy.types.Node):
+    """
+    Returns a list of all properties identifiers if they should not be ignored
+
+    :param: node: the node which attributes should be returned
+    """
+
+    # all attributes that shouldn't be copied
+    ignore_attributes = ("rna_type", "type", "dimensions", "inputs", "outputs", "internal_links", "select",
+                         "texture_mapping", "color_mapping", "image_user", "interface")
+
+    attributes = []
+    for attr in node.bl_rna.properties:
+        #check if the attribute should be copied and add it to the list of attributes to copy
+        if not attr.identifier in ignore_attributes and not attr.identifier.split("_")[0] == "bl":
+            attributes.append(attr.identifier)
+
+    return attributes
+
+
+def copy_nodes(nodes: bpy.types.Nodes, goal_nodes: bpy.types.Nodes):
+    """
+    Copies all nodes from the given list into the group with their attributes
+
+    :param: node: the nodes which should be copied
+    :param: goal_nodes: the nodes where they should be copied too
+    """
+
+    # the attributes that should be copied for every link
+    input_attributes = ("default_value", "name")
+    output_attributes = ("default_value", "name")
+
+    for node in nodes:
+        # create a new node in the goal_nodes and find and copy its attributes
+        new_node = goal_nodes.new(node.bl_idname)
+        node_attributes = get_node_attributes(node)
+        copy_attributes(node_attributes, node, new_node)
+
+        # copy the attributes for all inputs
+        for inp, new_inp in zip(node.inputs, new_node.inputs):
+            copy_attributes(input_attributes, inp, new_inp)
+
+        # copy the attributes for all outputs
+        for out, new_out in zip(node.outputs, new_node.outputs):
+            copy_attributes(output_attributes, out, new_out)
+
+
+def copy_links(nodes: bpy.types.Nodes., goal_nodes: bpy.types.Nodes, goal_links: bpy.types.NodeLinks):
+    """
+    Copies all links between the nodes to goal_links with the goal_nodes.
+
+    :param nodes: Nodes, which are used as base for the copying
+    :param goal_nodes: Nodes, which are will be newly connected
+    :param goal_links: Links, where all the newly generated links are saved
+    """
+
+    for node in nodes:
+        # find the corresponding node
+        new_node = goal_nodes[node.name]
+
+        # enumerate over every link in the nodes inputs
+        for i, inp in enumerate(node.inputs):
+            for link in inp.links:
+                # find the connected node for the link
+                connected_node = goal_nodes[link.from_node.name]
+                # connect the goal nodes
+                goal_links.new(connected_node.outputs[link.from_socket.name], new_node.inputs[i])
+
+
+def add_group_nodes(group: bpy.types.ShaderNodeTree):
+    """
+    Adds the group input and output node and positions them correctly.
+
+    :param group: the group which will get an output and input node
+    :return bpy.types.NodeGroupInput, bpy.types.NodeGroupOutput: the input and output to the given group
+    """
+
+    # add group input and output
+    group_input = group.nodes.new("NodeGroupInput")
+    group_output = group.nodes.new("NodeGroupOutput")
+
+    # if there are any nodes in the group, find the min and maxi x position of all nodes and position the group nodes
+    if len(group.nodes) > 0:
+        min_pos = 9999999
+        max_pos = -9999999
+
+        for node in group.nodes:
+            if node.location[0] < min_pos:
+                min_pos = node.location[0]
+            elif node.location[0] + node.width > max_pos:
+                max_pos = node.location[0]
+
+        group_input.location = (min_pos - 250, 0)
+        group_output.location = (max_pos + 250, 0)
+    return group_input, group_output
+
+
+def copy_nodes_from_mat_to_material(from_material: bpy.types.Material, to_material: bpy.types.Material):
+    """
+    Copy nodes from one material to another material
+
+    :param from_material: The material from which the nodes are selected
+    :param to_material: The material to which the nodes will be copied
+    """
+    # get the list of all selected nodes from the active objects active material
+    nodes = from_material.node_tree.nodes
+
+    # copy all nodes from from_material to the to_material with all their attributes
+    copy_nodes(nodes, to_material.node_tree.nodes)
+
+    # copy the links between the nodes to the to_material
+    copy_links(nodes, to_material.node_tree.nodes, to_material.node_tree.links)
+
+
+def add_nodes_to_group(nodes: bpy.types.Node, group_name: str):
+    """
+    Creates the node group, copies all attributes and links and adds the group input and output
+    https://blender.stackexchange.com/a/175604
+
+    :param nodes: Nodes, which should be used
+    :param group_name: Name of the group
+    :return bpy.types.ShaderNodeTree: the group which can be used inside of a bpy.types.ShaderNodeGroup
+    """
+    # create new node group
+    group = bpy.data.node_groups.new(name=group_name, type="ShaderNodeTree")
+
+    # copy all nodes from the list to the created group with all their attributes
+    copy_nodes(nodes, group.nodes)
+
+    # copy the links between the nodes to the created groups nodes
+    copy_links(nodes, group.nodes, group.links)
+
+    # add the group input and output node to the created group
+    group_input, group_output = add_group_nodes(group)
+
+    # check if the selection of nodes goes over a material, if so replace the material output with the output of
+    # the group
+    material_outputs = Utility.get_nodes_with_type(group.nodes, "OutputMaterial")
+    if len(material_outputs) == 1:
+        for input in material_outputs[0].inputs:
+            group.outputs.new(input.bl_idname, input.name)
+            for link in input.links:
+                group.links.new(link.from_socket, group_output.inputs[input.name])
+        # remove the material output, the material output should never be inside of a group
+        group.nodes.remove(material_outputs[0])
+    return group
