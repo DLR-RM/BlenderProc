@@ -132,6 +132,76 @@ class MaterialManipulator(Module):
           }
         },
 
+    Example 6: Adds a texture as an overlay over all materials, which are currently used. First the texture is loaded,
+    via the `TextureLoader` and then it is used in side of the `"cf_infuse_texture"`
+
+    .. code-block:: yaml
+
+        {
+          "module": "loader.TextureLoader",
+          "config":{
+            "path": "<args:3>",
+            "add_properties": {
+              "cp_dust_texture": True
+            }
+          }
+        },
+        {
+          "module": "manipulators.MaterialManipulator",
+          "config": {
+           "selector": {
+             "provider": "getter.Material",
+             "conditions": {
+              "cf_use_materials_of_objects": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "type": "MESH"
+                }
+              },
+             }
+           },
+           "cf_infuse_material": {
+            "mode": "mix",
+            "texture_scale": 1.0,
+            "used_texture": {
+              "provider": "getter.Texture",
+              "conditions": {
+                "cp_dust_texture": True
+              }
+            }
+
+    Example 7: Combines two materials, this mixes all currently used materials, with all cc materials.
+
+    .. code-block:: yaml
+
+        {
+          "module": "manipulators.MaterialManipulator",
+          "config": {
+           "selector": {
+             "provider": "getter.Material",
+             "conditions": {
+              "cf_use_materials_of_objects": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "type": "MESH"
+                }
+              },
+             }
+           },
+           "cf_infuse_material": {
+            "mode": "mix",
+            "texture_scale": 1.0,
+            "used_material": {
+              "provider": "getter.Material",
+              "check_empty": True,
+              "conditions": {
+                "cp_is_cc_texture": True
+              }
+            }
+           }
+          }
+        },
+
     **Configuration**:
 
     .. list-table:: 
