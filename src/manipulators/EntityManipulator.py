@@ -209,15 +209,15 @@ class EntityManipulator(Module):
           - 'thickness' attribute of the 'Solidify' modifier.
           - float
         * - cf_set_shading
-          - Custom function to set the shading of the selected object. Available: ["FLAT", "SMOOTH", "AUTO"]
+          - Custom function to set the shading of the selected object. Default: 'FLAT'.
+            Available: ['FLAT', 'SMOOTH', 'AUTO'].
           - str
-        * - cf_set_shading
+        * - cf_shading_auto_smooth_angle_in_deg
+          - Angle in degrees at which flat shading is activated in `AUTO` mode. Default: 30.
+          - float
         * - cf_add_displace_modifier_with_texture
           - Adds a displace modifier with texture to an object.
           - dict
-        * - cf_shading_auto_smooth_angle_in_deg
-          - Angle in degrees at which smooth shading is activated in `AUTO` mode.
-          - float
         * - cf_add_displace_modifier_with_texture/texture
           - The structure is either a given or a random texture. Default: []. Available:['CLOUDS',"
             'DISTORTED_NOISE', 'MAGIC', 'MARBLE', 'MUSGRAVE', 'NOISE', 'STUCCI', 'VORONOI', 'WOOD']

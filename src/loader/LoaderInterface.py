@@ -25,10 +25,11 @@ class LoaderInterface(Module):
             affected by this.
           - dict
         * - cf_set_shading
-          - Custom function to set the shading of the loaded objects. Available: ["FLAT", "SMOOTH", "AUTO"]
-          - string
+          - Custom function to set the shading of the selected object. Default: 'FLAT'.
+            Available: ['FLAT', 'SMOOTH', 'AUTO'].
+          - str
         * - cf_shading_auto_smooth_angle_in_deg
-          - Angle in degrees at which smooth shading is activated in `AUTO` mode.
+          - Angle in degrees at which flat shading is activated in `AUTO` mode. Default: 30.
           - float
         * - cf_apply_transformation
           - Loaded objects, sometimes contain transformations, these can be applied to the mesh, so that setting a
@@ -108,16 +109,20 @@ class LoaderInterface(Module):
 
         :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
         :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH", "AUTO"]. Type: str
-        :param angle_value: Angle in degree at which smooth shading is activated in `AUTO` mode. Type: float
+        :param angle_value: Angle in degrees at which flat shading is activated in `AUTO` mode. Type: float
         """
         if mode.lower() == "flat":
             is_smooth = False
+            for obj in objects:
+                obj.data.use_auto_smooth = False
         elif mode.lower() == "smooth":
             is_smooth = True
+            for obj in objects:
+                obj.data.use_auto_smooth = False
         elif mode.lower() == "auto":
             is_smooth = True
             for obj in objects:
-                obj.data.use_auto_smooth = 1
+                obj.data.use_auto_smooth = True
                 obj.data.auto_smooth_angle = np.deg2rad(angle_value)
         else:
             raise Exception("This shading mode is unknown: {}".format(mode))
