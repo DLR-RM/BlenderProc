@@ -631,11 +631,15 @@ class MaterialManipulator(Module):
         if config.has_param("used_dust_texture"):
             texture_nodes = config.get_list("used_dust_texture")
 
-        nodes = material.node_tree.nodes
-        links = material.node_tree.links
+        group_node = material.node_tree.nodes.new("ShaderNodeGroup")
+        group_node.width = 250
+        group = bpy.data.node_groups.new(name="Dust Material", type="ShaderNodeTree")
+        group_node.node_tree = group
+        nodes, links = group.nodes, group.links
+
         # define start locations and differences, to make the debugging easier
-        x_pos, x_diff = -(250 * 8), 250
-        y_pos, y_diff = (x_diff * 5), x_diff
+        x_pos, x_diff = -(250 * 4), 250
+        y_pos, y_diff = (x_diff * 1), x_diff
 
         # Extract the normal for the current material location
         geometry_node = nodes.new('ShaderNodeNewGeometry')
@@ -740,21 +744,47 @@ class MaterialManipulator(Module):
 
         # combine the previous color with the new dust mode
         mix_shader = nodes.new("ShaderNodeMixShader")
+        mix_shader.location = (x_pos + x_diff * 8, y_pos)
         links.new(multiply_node.outputs["Value"], mix_shader.inputs["Fac"])
-
-        # remove the connection between the output and the last node and put the mix shader inbetween
-        node_connected_to_the_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(material)
-        links.new(node_connected_to_the_output.outputs[0], mix_shader.inputs[1])
-        links.new(mix_shader.outputs["Shader"], material_output.inputs["Surface"])
-        mix_shader.location.x = material_output.location.x - x_diff
-        mix_shader.location.y = material_output.location.y + y_diff
 
         # add a bsdf node for the dust, this will be used to actually give the dust a color
         dust_color = nodes.new("ShaderNodeBsdfPrincipled")
-        dust_color.location.x = x_pos + x_diff * 6
-        dust_color.location.y = y_pos - y_diff
+        dust_color.location = (x_pos + x_diff * 6, y_pos - y_diff)
         # the used dust color is a grey with a tint in orange
         dust_color.inputs["Base Color"].default_value = [0.8, 0.773, 0.7, 1.0]
         dust_color.inputs["Roughness"].default_value = 1.0
         dust_color.inputs["Specular"].default_value = 0.0
         links.new(dust_color.outputs["BSDF"], mix_shader.inputs[2])
+
+        # create the input and output nodes inside of the group
+        group_output = nodes.new("NodeGroupOutput")
+        group_output.location = (x_pos + x_diff * 9, y_pos)
+        group_input = nodes.new("NodeGroupInput")
+        group_input.location = (x_pos + x_diff * 7, y_pos - y_diff * 0.5)
+
+        # create sockets for the outside of the group match them to the mix shader
+        group.outputs.new(mix_shader.outputs[0].bl_idname, mix_shader.outputs[0].name)
+        group.inputs.new(mix_shader.inputs[1].bl_idname, mix_shader.inputs[1].name)
+        group.inputs.new(multiply_node.inputs[1].bl_idname, "Dust strength")
+        group.inputs.new(mapping_node.inputs["Scale"].bl_idname, "Texture scale")
+
+        # link the input and output to the mix shader
+        links.new(group_input.outputs[0], mix_shader.inputs[1])
+        links.new(mix_shader.outputs[0], group_output.inputs[0])
+        links.new(group_input.outputs["Dust strength"], multiply_node.inputs[1])
+        links.new(group_input.outputs["Texture scale"], mapping_node.inputs["Scale"])
+
+        # remove the connection between the output and the last node and put the mix shader in between
+        node_connected_to_the_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(material)
+
+        # place the group node above the material output
+        group_node.location = (material_output.location.x - x_diff, material_output.location.y + y_diff)
+
+        # connect the dust group
+        material.node_tree.links.new(node_connected_to_the_output.outputs[0], group_node.inputs[0])
+        material.node_tree.links.new(group_node.outputs[0], material_output.inputs["Surface"])
+
+        # set the default values
+        group_node.inputs["Dust strength"].default_value = strength
+        group_node.inputs["Texture scale"].default_value = [texture_scale] * 3
+
