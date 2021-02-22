@@ -481,7 +481,7 @@ def copy_nodes(nodes: bpy.types.Nodes, goal_nodes: bpy.types.Nodes):
             copy_attributes(output_attributes, out, new_out)
 
 
-def copy_links(nodes: bpy.types.Nodes., goal_nodes: bpy.types.Nodes, goal_links: bpy.types.NodeLinks):
+def copy_links(nodes: bpy.types.Nodes, goal_nodes: bpy.types.Nodes, goal_links: bpy.types.NodeLinks):
     """
     Copies all links between the nodes to goal_links with the goal_nodes.
 
