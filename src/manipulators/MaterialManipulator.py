@@ -500,10 +500,14 @@ class MaterialManipulator(Module):
         used_connector = config.get_string("connection", "Base Color").title()
         texture_scale = config.get_float("texture_scale", 0.05)
 
-        overlay_strength = config.get_float("overlay_strength", 0.5)
+        if config.has_param("strength") and used_mode == "set":
+            raise Exception("The strength can only be used if the mode is not \"set\"!")
+        strength = config.get_float("strength", 0.5)
+
         principled_bsdfs = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
         if len(principled_bsdfs) != 1:
-            raise Exception("This only works with materials, which have exactly one Prinicpled BSDF!")
+            raise Exception("This only works with materials, which have exactly one Prinicpled BSDF, "
+                            "use a different selector!")
         principled_bsdf = principled_bsdfs[0]
         if used_connector not in principled_bsdf.inputs:
             raise Exception(f"The {used_connector} not an input to Principled BSDF!")
@@ -531,20 +535,18 @@ class MaterialManipulator(Module):
                 links.new(texture_node_output, invert_node.inputs["Color"])
                 texture_node_output = invert_node.outputs["Color"]
             if node_connected_to_the_connector is not None and used_mode != "set":
-                overlay = nodes.new("ShaderNodeMixRGB")
-                if used_mode in "overlay":
-                    overlay.blend_type = "OVERLAY"
+                mix_node = nodes.new("ShaderNodeMixRGB")
+                if used_mode in "mix_node":
+                    mix_node.blend_type = "OVERLAY"
                 elif used_mode in "mix":
-                    overlay.blend_type = "MIX"
-                overlay.inputs["Fac"].default_value = overlay_strength
-                links.new(texture_node_output, overlay.inputs["Color2"])
+                    mix_node.blend_type = "MIX"
+                mix_node.inputs["Fac"].default_value = strength
+                links.new(texture_node_output, mix_node.inputs["Color2"])
                 # hopefully 0 is the color node!
-                links.new(node_connected_to_the_connector.outputs[0], overlay.inputs["Color1"])
-                links.new(overlay.outputs["Color"], principled_bsdf.inputs[used_connector])
+                links.new(node_connected_to_the_connector.outputs[0], mix_node.inputs["Color1"])
+                links.new(mix_node.outputs["Color"], principled_bsdf.inputs[used_connector])
             elif used_mode == "set":
                 links.new(texture_node_output, principled_bsdf.inputs[used_connector])
-            else:
-                raise Exception(f"The mode was not recognized: {used_mode}!")
 
     @staticmethod
     def _infuse_material(material: bpy.types.Material, config: Config):
@@ -560,9 +562,10 @@ class MaterialManipulator(Module):
         nodes = material.node_tree.nodes
         links = material.node_tree.links
 
-        used_mode = config.get_string("mode", "overlay").lower()
+        # determine the mode
+        used_mode = config.get_string("mode", "mix").lower()
         if used_mode not in ["add", "mix"]:
-            raise Exception(f'This mode is unknown here: {used_mode}, only ["overlay", "mix", "set"]!')
+            raise Exception(f'This mode is unknown here: {used_mode}, only ["mix", "add"]!')
 
         if used_mode == "mix":
             mix_strength = config.get_float("mix_strength", 0.5)
@@ -581,12 +584,13 @@ class MaterialManipulator(Module):
         group_node.node_tree = group
 
         material_output = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
-
-        for input in material_output.inputs:
-            if len(input.links) > 0:
-                if "Float" in input.bl_idname or "Vector" in input.bl_idname:
+        for mat_output_input in material_output.inputs:
+            if len(mat_output_input.links) > 0:
+                if "Float" in mat_output_input.bl_idname or "Vector" in mat_output_input.bl_idname:
+                    # For displacement
                     infuse_node = nodes.new("ShaderNodeMixRGB")
-                    if used_mode in "multiply":
+                    if used_mode in "mix":
+                        # as there is no mix mode, we use multiply here, which is similar
                         infuse_node.blend_type = "MULTIPLY"
                         infuse_node.inputs["Fac"].default_value = mix_strength
                         input_offset = 1
@@ -595,6 +599,7 @@ class MaterialManipulator(Module):
                         input_offset = 0
                     else:
                         raise Exception(f"This mode is not supported here: {used_mode}!")
+                    infuse_output = infuse_node.outputs["Color"]
                 else:
                     if used_mode == "mix":
                         infuse_node = nodes.new(type='ShaderNodeMixShader')
@@ -605,12 +610,12 @@ class MaterialManipulator(Module):
                         input_offset = 0
                     else:
                         raise Exception(f"This mode is not supported here: {used_mode}!")
+                    infuse_output = infuse_node.outputs["Shader"]
 
                 for link in input.links:
                     links.new(link.from_socket, infuse_node.inputs[input_offset])
-                links.new(group_node.outputs[input.name], infuse_node.inputs[input_offset + 1])
-                links.new(infuse_node.outputs["Shader"], input)
-
+                links.new(group_node.outputs[mat_output_input.name], infuse_node.inputs[input_offset + 1])
+                links.new(infuse_output, mat_output_input)
 
     def _add_dust_to_material(self, material: bpy.types.Material, value: dict):
         """
@@ -787,4 +792,3 @@ class MaterialManipulator(Module):
         # set the default values
         group_node.inputs["Dust strength"].default_value = strength
         group_node.inputs["Texture scale"].default_value = [texture_scale] * 3
-
