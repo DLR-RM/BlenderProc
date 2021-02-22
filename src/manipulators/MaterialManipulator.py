@@ -219,6 +219,53 @@ class MaterialManipulator(Module):
           - This scale is used to scale down the used noise texture (even for the case where a random noise texture
             is used). Default: 0.1.
           - float
+        * - cf_infuse_texture
+          - With this custom function it is possible to overlay materials with a certain texture. This only works
+            if there is one principled BSDF shader in this material, which will be used as a reference point.
+          - dict
+        * - cf_infuse_texture/mode
+          - The mode determines how the texture is used. There are three options: "overlay" in which the selected
+            texture is overlayed over a preexisting one. If there is none, nothing happens. The second option: "mix"
+            is similar to overlay, just that the textures are mixed there. The last option: "set" replaces any existing
+            texture and is even added if there was none before.
+            Default: "overlay". Available: ["overlay", "mix", "set"].
+          - str
+        * - cf_infuse_texture/used_texture
+          - A getter.Texture can be used here to select the texture, which should be infused in the material.
+          - getter.Texture
+        * - cf_infuse_texture/connection
+          - By default the "Base Color" input of the principled shader will be used. This can be changed to any valid
+            input of a principled shader. Default: "Base Color". For available check the blender documentation.
+          - str
+        * - cf_infuse_texture/strength
+          - The strength determines how much the newly generated texture is going to be used. Default: 0.5.
+          - float
+        * - cf_infuse_texture/texture_scale
+          - The used texture can be scaled down or up by a factor, to make it match the preexisting UV mapping. Make
+            sure that the object has a UV mapping beforehand. Default: 0.05.
+          - float
+        * - cf_infuse_texture/invert_texture
+          - It might be sometimes useful to invert the input texture, this can be done by setting this to True.
+            Default: False.
+          - bool
+        * - cf_infuse_material
+          - This can be used to fuse to materials together, this is applied to the selected materials. One can select
+            inside of this the materials which will be copied inside of the other materials. Be aware this affects more
+            than just the color it will also affect the displacement and the volume of the material.
+          - dict
+        * - cf_infuse_material/used_material
+          - This selector (getter.Material) is used to select the materials, which will be copied into the materials
+            selected by the "selector".
+          - getter.Material
+        * - cf_infuse_material/mode
+          - The mode determines how the two materials are mixed. There are two options "mix" in which the
+            preexisting material is mixed with the selected one in "used_material" or "add" in which they are just
+            added on top of each other. Default: "mix". Available: ["mix", "add"]
+          - str
+        * - cf_infuse_material/mix_strength
+          - In the "mix" mode a strength can be set to determine how much of each material is going to be used.
+            A strength of 1.0 means that the new material is going to be used completely. Default: 0.5.
+          - float
         * - cf_set_*
           - Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case name of
             the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> 'base_color'). Also
@@ -551,10 +598,12 @@ class MaterialManipulator(Module):
     @staticmethod
     def _infuse_material(material: bpy.types.Material, config: Config):
         """
+        Infuse a material inside of another material. The given material, will be adapted and the used material, will
+        be added, depending on the mode either as add or as mix. This change is applied to all outputs of the material,
+        this include the Surface (Color) and also the displacement and volume. For displacement mix means multiply.
 
-        :param material:
-        :param config:
-        :return:
+        :param material: Used material
+        :param config: Used config
         """
         if not material.use_nodes:
             raise Exception(f"The material {material.name} does not use nodes. Change your selection!")
@@ -567,22 +616,25 @@ class MaterialManipulator(Module):
         if used_mode not in ["add", "mix"]:
             raise Exception(f'This mode is unknown here: {used_mode}, only ["mix", "add"]!')
 
+        mix_strength = 0.0
         if used_mode == "mix":
             mix_strength = config.get_float("mix_strength", 0.5)
         elif used_mode == "add" and config.has_param("mix_strength"):
             raise Exception("The mix_strength only works in the mix mode not in the add mode!")
 
+        # get the material, which will be used to infuse the given material
         used_materials = config.get_list("used_material")
         if len(used_materials) == 0:
             raise Exception(f"You have to select a material, which is {used_mode}ed over the material!")
 
         used_material = used_materials[0]
 
+        # move the copied material inside of a group
         group_node = nodes.new("ShaderNodeGroup")
         group = BlenderUtility.add_nodes_to_group(used_material.node_tree.nodes,
                                                   f"{used_mode.title()}_{used_material.name}")
         group_node.node_tree = group
-
+        # get the current material output and put the used material in between the last node and the material output
         material_output = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
         for mat_output_input in material_output.inputs:
             if len(mat_output_input.links) > 0:
@@ -601,6 +653,7 @@ class MaterialManipulator(Module):
                         raise Exception(f"This mode is not supported here: {used_mode}!")
                     infuse_output = infuse_node.outputs["Color"]
                 else:
+                    # for the normal surface output (Color)
                     if used_mode == "mix":
                         infuse_node = nodes.new(type='ShaderNodeMixShader')
                         infuse_node.inputs[0].default_value = mix_strength
@@ -612,7 +665,8 @@ class MaterialManipulator(Module):
                         raise Exception(f"This mode is not supported here: {used_mode}!")
                     infuse_output = infuse_node.outputs["Shader"]
 
-                for link in input.links:
+                # link the infuse node with the correct group node and the material output
+                for link in mat_output_input.links:
                     links.new(link.from_socket, infuse_node.inputs[input_offset])
                 links.new(group_node.outputs[mat_output_input.name], infuse_node.inputs[input_offset + 1])
                 links.new(infuse_output, mat_output_input)
