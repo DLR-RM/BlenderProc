@@ -149,26 +149,29 @@ class MaterialManipulator(Module):
         {
           "module": "manipulators.MaterialManipulator",
           "config": {
-           "selector": {
-             "provider": "getter.Material",
-             "conditions": {
-              "cf_use_materials_of_objects": {
-                "provider": "getter.Entity",
-                "conditions": {
-                  "type": "MESH"
-                }
-              },
-             }
-           },
-           "cf_infuse_material": {
-            "mode": "mix",
-            "texture_scale": 1.0,
-            "used_texture": {
-              "provider": "getter.Texture",
+            "selector": {
+              "provider": "getter.Material",
               "conditions": {
-                "cp_dust_texture": True
+               "cf_use_materials_of_objects": {
+                 "provider": "getter.Entity",
+                 "conditions": {
+                   "type": "MESH"
+                 }
+               },
+              }
+            },
+            "cf_infuse_material": {
+              "mode": "mix",
+              "texture_scale": 1.0,
+              "used_texture": {
+                "provider": "getter.Texture",
+                "conditions": {
+                  "cp_dust_texture": True
+                }
               }
             }
+          }
+        }
 
     Example 7: Combines two materials, this mixes all currently used materials, with all cc materials.
 
@@ -697,7 +700,7 @@ class MaterialManipulator(Module):
         if len(used_materials) == 0:
             raise Exception(f"You have to select a material, which is {used_mode}ed over the material!")
 
-        used_material = used_materials[0]
+        used_material = random.choice(used_materials)
 
         # move the copied material inside of a group
         group_node = nodes.new("ShaderNodeGroup")
