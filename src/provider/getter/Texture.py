@@ -131,8 +131,9 @@ class Texture(Provider):
         """
         conditions = self.config.get_raw_dict('conditions')
         text = json.dumps(conditions, indent=2, sort_keys=True)
-        def add_indent(t): return "\n".join(" " * len("Exception: ") + e for e in t.split("\n"))
-        return add_indent(text)
+        # Add indent
+        text = "\n".join(" " * len("Exception: ") + e for e in text.split("\n"))
+        return text
 
     @staticmethod
     def perform_and_condition_check(and_condition, textures, used_textures_to_check=None):
