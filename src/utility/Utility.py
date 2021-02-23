@@ -68,7 +68,7 @@ class Utility:
             # Check if the module has a repetition counter
             amount_of_repetitions = 1
             if "amount_of_repetitions" in module_config:
-                amount_of_repetitions = module_config["amount_of_repetitions"]
+                amount_of_repetitions = Config(module_config).get_int("amount_of_repetitions")
 
             with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
                 for i in range(amount_of_repetitions):
