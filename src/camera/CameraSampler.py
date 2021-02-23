@@ -9,7 +9,7 @@ import numpy as np
 
 from src.camera.CameraInterface import CameraInterface
 from src.utility.CameraUtility import CameraUtility
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.Config import Config
 from src.utility.ItemCollection import ItemCollection
 
@@ -330,7 +330,7 @@ class CameraSampler(CameraInterface):
         # Create bmesh which will contain the meshes of all objects
         bm = bmesh.new()
         # Go through all mesh objects
-        for obj in get_all_mesh_objects():
+        for obj in get_all_blender_mesh_objects():
             if obj in self.excluded_objects_in_proximity_check:
                 continue
             # Add object mesh to bmesh (the newly added vertices will be automatically selected)

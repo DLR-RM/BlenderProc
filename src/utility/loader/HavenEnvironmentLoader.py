@@ -4,47 +4,28 @@ import random
 
 import bpy
 
-from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Utility import Utility
 
 
-class HavenEnvironmentLoader(LoaderInterface):
-    """
-    This module can load hdr images as background images, which will replace the default grey background.
+class HavenEnvironmentLoader:
+    """ This class can load hdr images as background images, which will replace the default grey background. """
 
-    **Configuration**:
+    @staticmethod
+    def set_random_world_background_hdr_img(data_path: str):
+        """ Sets the world background to a random .hdr file from the given directory.
 
-    .. list-table::
-        :widths: 25 100 10
-        :header-rows: 1
+        :param data_path: A path pointing to a directory containing .hdr files.
+        """
 
-        * - Parameter
-          - Description
-          - Type
-        * - data_path
-          - Path to the data folder, if this was downloaded via the script without changing the output folder, \
-            then it is not necessary to add this value. Default: "resources/haven".
-          - string
-    """
-
-    def __init__(self, config):
-        LoaderInterface.__init__(self, config)
-        self.data_path = self.config.get_string("data_path", os.path.join("resources", "haven"))
-
-        if os.path.exists(self.data_path):
-            self.data_path = os.path.join(self.data_path, "hdris")
-            if not os.path.exists(self.data_path):
+        if os.path.exists(data_path):
+            data_path = os.path.join(data_path, "hdris")
+            if not os.path.exists(data_path):
                 raise Exception("The folder: {} does not contain a folder name hdfris. Please use the "
-                                "download script.".format(self.data_path))
+                                "download script.".format(data_path))
         else:
-            raise Exception("The data path does not exists: {}".format(self.data_path))
+            raise Exception("The data path does not exists: {}".format(data_path))
 
-    def run(self):
-        """
-        Runs this current module.
-        """
-
-        hdr_files = glob.glob(os.path.join(self.data_path, "*", "*.hdr"))
+        hdr_files = glob.glob(os.path.join(data_path, "*", "*.hdr"))
         # this will be ensure that the call is deterministic
         hdr_files.sort()
 

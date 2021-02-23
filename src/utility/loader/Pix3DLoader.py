@@ -1,61 +1,36 @@
 import json
 import os
 import random
+from typing import List
 
 import bpy
 
-from src.loader.LoaderInterface import LoaderInterface
-from src.utility.Utility import Utility
 from src.utility.LabelIdMapping import LabelIdMapping
+from src.utility.MeshObjectUtility import MeshObject
+from src.utility.Utility import Utility
+from src.utility.loader.ObjectLoader import ObjectLoader
 
 
-class Pix3DLoader(LoaderInterface):
+class Pix3DLoader:
     """
     This loads an object from Pix3D based on the given category of objects to use.
 
     From these objects one is randomly sampled and loaded.
 
-    As for all loaders it is possible to add custom properties to the loaded object, for that use add_properties.
-
-    Finally it sets all objects to have a category_id corresponding to the void class, 
+    Finally it sets all objects to have a category_id corresponding to the void class,
     so it wouldn't trigger an exception in the SegMapRenderer.
 
-    Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other
-    module is loaded first in the config file.
-
-    **Configuration**:
-
-    .. list-table:: 
-        :widths: 25 100 10
-        :header-rows: 1
-
-        * - Parameter
-          - Description
-          - Type
-        * - data_path
-          - The path to the Pix3D folder. Default: 'resources/pix3d'.
-          - string
-        * - category
-          - The category to use for example: 'bed', check the data_path/model folder for more categories. Available:
-            ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool'" , 'wardrobe']
-          - string
+    Note: if this class is used with another loader that loads objects with semantic mapping, make sure the other
+    module is loaded first. TODO: Really?
     """
 
-    def __init__(self, config):
-        LoaderInterface.__init__(self, config)
-
-        self._data_path = Utility.resolve_path(self.config.get_string("data_path", "resources/pix3d"))
-        self._used_category = self.config.get_string("used_category")
-
-        self._files_with_fitting_category = Pix3DLoader.get_files_with_category(self._used_category, self._data_path)
-
     @staticmethod
-    def get_files_with_category(used_category, data_path):
+    def get_files_with_category(used_category: str, data_path: str) -> list:
         """
         Returns a list of a .obj file for the given category. This function creates a category path file for each used
         category. This will speed up the usage the next time the category is used.
 
-        :param category: the category something like: 'bed', see the data_path folder for categories
+        :param used_category: the category something like: 'bed', see the data_path folder for categories
         :param data_path: path to the Pix3D folder
         :return: list of .obj files, which are in the data_path folder, based on the given category
         """
@@ -84,40 +59,49 @@ class Pix3DLoader(LoaderInterface):
         else:
             raise Exception("The annotation file could not be found: {}".format(path_to_annotation_file))
 
-    def run(self):
-        """
-        Uses the loaded .obj files and picks one randomly and loads it
-        """
-        selected_obj = random.choice(self._files_with_fitting_category)
-        loaded_obj = Utility.import_objects(selected_obj)
+    @staticmethod
+    def load(used_category: str, data_path: str = 'resources/pix3d') -> List[MeshObject]:
+        """ Loads one random Pix3D object from the given category.
 
-        self._correct_materials(loaded_obj)
+        :param used_category: The category to use for example: 'bed', check the data_path/model folder for more categories.
+                              Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool', 'wardrobe']
+        :param data_path: The path to the Pix3D folder.
+        :return: The list of loaded mesh objects.
+        """
+        data_path = Utility.resolve_path(data_path)
+        files_with_fitting_category = Pix3DLoader.get_files_with_category(used_category, data_path)
 
-        self._set_properties(loaded_obj)
+        selected_obj = random.choice(files_with_fitting_category)
+        loaded_obj = ObjectLoader.load(selected_obj)
+
+        Pix3DLoader._correct_materials(loaded_obj)
 
         if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
             for obj in loaded_obj:
-                obj['category_id'] = LabelIdMapping.label_id_map["void"]
+                obj.set_cp('category_id', LabelIdMapping.label_id_map["void"])
 
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
-        LoaderInterface.remove_x_axis_rotation(loaded_obj)
+        for obj in loaded_obj:
+            obj.remove_x_axis_rotation()
 
         # move the origin of the object to the world origin and on top of the X-Y plane
         # makes it easier to place them later on, this does not change the `.location`
-        LoaderInterface.move_obj_origin_to_bottom_mean_point(loaded_obj)
+        for obj in loaded_obj:
+            obj.move_origin_to_bottom_mean_point()
         bpy.ops.object.select_all(action='DESELECT')
 
-    def _correct_materials(self, objects):
-        """
-        If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
+        return loaded_obj
 
-        :param objects: objects where the material maybe wrong
+    @staticmethod
+    def _correct_materials(objects: List[MeshObject]):
+        """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
+
+        :param objects: The list of mesh objects where the material maybe wrong.
         """
 
         for obj in objects:
-            for mat_slot in obj.material_slots:
-                material = mat_slot.material
+            for material in obj.get_materials():
                 nodes = material.node_tree.nodes
                 links = material.node_tree.links
                 texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")

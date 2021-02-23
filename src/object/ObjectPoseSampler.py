@@ -2,7 +2,7 @@ import bpy
 import mathutils
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_mesh_objects
+from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
 
 
 class ObjectPoseSampler(Module):
@@ -75,7 +75,7 @@ class ObjectPoseSampler(Module):
         placed = []
         # After this many tries we give up on current object and continue with the rest
         max_tries = self.config.get_int("max_iterations", 1000)
-        objects = self.config.get_list("objects_to_sample", get_all_mesh_objects())
+        objects = self.config.get_list("objects_to_sample", get_all_blender_mesh_objects())
 
         if max_tries <= 0:
             raise ValueError("The value of max_tries must be greater than zero: {}".format(max_tries))

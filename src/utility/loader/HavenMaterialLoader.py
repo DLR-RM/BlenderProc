@@ -1,110 +1,53 @@
 import glob
 import os
 
-import bpy
 import addon_utils
+import bpy
 
-from src.main.Module import Module
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.Utility import Utility
 
 
-class HavenMaterialLoader(Module):
+class HavenMaterialLoader:
     """
-    This modules loads all textures obtained from https://texturehaven.com, use the script
+    This class loads all textures obtained from https://texturehaven.com, use the script
     (scripts/download_haven.py) to download all the textures to your pc.
 
     All textures here support Physically based rendering (PBR), which makes the textures more realistic.
 
-    All materials will have the custom property "is_cc_texture": True, which will make the selection later on easier.
-
     There is a preload option, in which you only load empty materials, without any loaded textures, these are than
-    later filled, when an object really uses them. This saves on loading times:
-
-    .. code-block:: yaml
-
-        {
-          "module": "loader.HavenMaterialLoader",
-          "config": {
-            "folder_path": "<args:0>", # this would be resources/haven/textures
-            "preload": True
-          }
-        }
-
-    After you have used them maybe with an manipulators.EntityManipulator, you can load the ones you really assign to
-    an object. By:
-
-    .. code-block:: yaml
-
-        {
-          "module": "loader.HavenMaterialLoader",
-          "config": {
-            "folder_path": "<args:0>",
-            "fill_used_empty_materials": True
-          }
-        }
-
-    **Configuration**:
-
-    .. list-table::
-        :widths: 25 100 10
-        :header-rows: 1
-
-        * - Parameter
-          - Description
-          - Type
-        * - folder_path
-          - The path to the downloaded cc0textures. Default: resources/cctextures.
-          - string
-        * - used_assets
-          - A list of all asset names, you want to use. The asset-name must not be typed in completely, only the
-            beginning the name starts with. By default all assets will be loaded, specified by an empty list.
-            Default: [].
-          - list
-        * - add_custom_properties
-          - A dictionary of materials and the respective properties. Default: {}.
-          - dict
-        * - preload
-          - If set true, only the material names are loaded and not the complete material. Default: False
-          - bool
-        * - fill_used_empty_materials
-          - If set true, the preloaded materials, which are used are now loaded completely. Default: False
-          - bool
+    later filled, when an object really uses them. This saves on loading times.
     """
 
-    def __init__(self, config):
-        Module.__init__(self, config)
-        self._folder_path = ""
-        self._used_assets = []
-        self._add_cp = {}
-        self._preload = False
-        self._fill_used_empty_materials = False
+    @staticmethod
+    def load(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
+        """ Loads all specified haven textures from the given directory.
+
+        :param folder_path: The path to the downloaded haven.
+        :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely, only the
+                            beginning the name starts with. By default all assets will be loaded, specified by an empty list.
+        :param preload: If set true, only the material names are loaded and not the complete material.
+        :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
+        :param add_cp: A dictionary of materials and the respective properties.
+        """
         # makes the integration of complex materials easier
         addon_utils.enable("node_wrangler")
 
-    def run(self):
-        """
-        Load the materials
-        """
-        self._folder_path = Utility.resolve_path(self.config.get_string("folder_path", "resources/haven"))
-        self._used_assets = self.config.get_list("used_assets", [])
-        self._add_cp = self.config.get_raw_dict("add_custom_properties", {})
-        self._preload = self.config.get_bool("preload", False)
-        self._fill_used_empty_materials = self.config.get_bool("fill_used_empty_materials", False)
+        folder_path = Utility.resolve_path(folder_path)
 
-        if self._preload and self._fill_used_empty_materials:
+        if preload and fill_used_empty_materials:
             raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
-        if os.path.exists(self._folder_path) and os.path.isdir(self._folder_path):
-            for asset in os.listdir(self._folder_path):
-                if self._used_assets:
+        if os.path.exists(folder_path) and os.path.isdir(folder_path):
+            for asset in os.listdir(folder_path):
+                if used_assets:
                     skip_this_one = True
-                    for used_asset in self._used_assets:
+                    for used_asset in used_assets:
                         if asset.startswith(used_asset):
                             skip_this_one = False
                             break
                     if skip_this_one:
                         continue
-                current_path = os.path.join(self._folder_path, asset)
+                current_path = os.path.join(folder_path, asset)
                 if os.path.isdir(current_path):
                     # find the current base_image_path by search for _diff_, this make it independent of the used res
                     all_paths = glob.glob(os.path.join(current_path, "*.jpg"))
@@ -117,14 +60,14 @@ class HavenMaterialLoader(Module):
                         continue
 
                     # if the material was already created it only has to be searched
-                    if self._fill_used_empty_materials:
-                        new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, self._add_cp)
+                    if fill_used_empty_materials:
+                        new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, add_cp)
                     else:
-                        new_mat = MaterialLoaderUtility.create_new_cc_material(asset, self._add_cp)
-                    if self._preload:
+                        new_mat = MaterialLoaderUtility.create_new_cc_material(asset, add_cp)
+                    if preload:
                         # if preload then the material is only created but not filled
                         continue
-                    elif self._fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
+                    elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
                         # now only the materials, which have been used should be filled
                         continue
 
@@ -148,12 +91,12 @@ class HavenMaterialLoader(Module):
                                                         final_paths["alpha"], final_paths["nor"],
                                                         final_paths["disp"], final_paths["bump"])
         else:
-            raise Exception("The folder path does not exist: {}".format(self._folder_path))
+            raise Exception("The folder path does not exist: {}".format(folder_path))
 
     @staticmethod
-    def create_material(new_mat, base_image_path, ambient_occlusion_image_path, specular_image_path,
-                        roughness_image_path, alpha_image_path, normal_image_path, displacement_image_path,
-                        bump_image_path):
+    def create_material(new_mat: bpy.types.Material, base_image_path: str, ambient_occlusion_image_path: str, specular_image_path: str,
+                        roughness_image_path: str, alpha_image_path: str, normal_image_path: str, displacement_image_path: str,
+                        bump_image_path: str):
         """
         Create a material for the haven datatset, the combination used here is calibrated to the haven dataset format.
 
