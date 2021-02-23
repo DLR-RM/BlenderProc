@@ -439,6 +439,7 @@ def get_node_attributes(node: bpy.types.Node):
     Returns a list of all properties identifiers if they should not be ignored
 
     :param: node: the node which attributes should be returned
+    :return list of attributes of the given node
     """
 
     # all attributes that shouldn't be copied
@@ -462,9 +463,12 @@ def copy_nodes(nodes: bpy.types.Nodes, goal_nodes: bpy.types.Nodes):
     :param: goal_nodes: the nodes where they should be copied too
     """
 
+    if len(goal_nodes) > 0:
+        raise Exception(f"This function only works if goal_nodes was empty before, has {len(goal_nodes)} elements.")
+
     # the attributes that should be copied for every link
-    input_attributes = ("default_value", "name")
-    output_attributes = ("default_value", "name")
+    input_attributes = ["default_value", "name"]
+    output_attributes = ["default_value", "name"]
 
     for node in nodes:
         # create a new node in the goal_nodes and find and copy its attributes
