@@ -22,8 +22,7 @@
     {
       "module": "loader.ReplicaLoader",
       "config": {
-        "use_smooth_shading": True,
-        "use_ambient_occlusion": True
+        "use_smooth_shading": True
       }
     },
     {

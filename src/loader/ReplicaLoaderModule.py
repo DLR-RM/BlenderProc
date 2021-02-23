@@ -22,9 +22,6 @@ class ReplicaLoaderModule(LoaderInterface):
         * - data_set_name
           - Name of the room (for example: apartment_0).
           - string
-        * - use_ambient_occlusion
-          - Use ambient occlusion to lighten up the scene, if the RgbRenderer is used. Default: False.
-          - bool
         * - use_smooth_shading
           - Enable smooth shading on all surfaces, instead of flat shading. Default: False.
           - bool
@@ -36,7 +33,6 @@ class ReplicaLoaderModule(LoaderInterface):
         loaded_objects = ReplicaLoader.load(
             data_path=self.config.get_string('data_path'),
             data_set_name=self.config.get_string('data_set_name'),
-            use_ambient_occlusion=self.config.get_bool('use_ambient_occlusion', False),
             use_smooth_shading=self.config.get_bool('use_smooth_shading', False)
         )
 
