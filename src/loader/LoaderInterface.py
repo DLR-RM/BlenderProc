@@ -3,6 +3,7 @@ import bpy
 from src.main.Module import Module
 from src.utility.MeshObjectUtility import MeshObject
 from typing import Union
+import numpy as np
 
 class LoaderInterface(Module):
     """

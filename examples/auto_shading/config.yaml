@@ -16,8 +16,7 @@
   {
     "module": "loader.BlendLoader",
     "config": {
-      "path": "<args:1>",
-      "load_from": "/Object"
+      "path": "<args:1>"
     }
   },
   {
