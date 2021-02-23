@@ -1,23 +1,20 @@
-import os
-import re
 import json
+import os
 import warnings
 from math import radians
-import numpy as np
+from typing import List
 
 import bpy
-import bmesh
 import mathutils
+import numpy as np
 
-from src.loader.LoaderInterface import LoaderInterface
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
-from src.utility.Config import Config
-from src.utility.BlenderUtility import duplicate_objects
-from src.utility.LabelIdMapping import LabelIdMapping
+from src.utility.loader.ObjectLoader import ObjectLoader
 
-class Front3DLoader(LoaderInterface):
-    """
-    Loads the 3D-Front dataset.
+
+class Front3DLoader:
+    """ Loads the 3D-Front dataset.
 
     https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset
 
@@ -28,74 +25,50 @@ class Front3DLoader(LoaderInterface):
     As we have created this mapping ourselves it might be faulty.
 
     The Front3DLoader creates automatically lights in the scene, by adding emission shaders to the ceiling and lamps.
-    The strength can be configured via the config.
+    """
 
-    **Configuration**:
+    @staticmethod
+    def load(json_path: str, future_model_path: str, mapping: dict, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
+        """ Loads the 3D-Front scene specified by the given json file.
 
-    .. list-table:: 
-        :widths: 25 100 10
-        :header-rows: 1
+        :param json_path: Path to the json file, where the house information is stored.
+        :param future_model_path: Path to the models used in the 3D-Front dataset.
+        :param mapping: A dict which maps the names of the objects to ids.
+        :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
+        :param lamp_light_strength: Strength of the emission shader used in each lamp.
+        :return: The list of loaded mesh objects.
+        """
+        json_path = Utility.resolve_path(json_path)
+        future_model_path = Utility.resolve_path(future_model_path)
 
-        * - Parameter
-          - Description
-          - Type
-        * - json_path
-          - Path to the json file, where the house information is stored.
-          - string
-        * - 3D_future_model_path
-          - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
-          - string
-        * - mapping_file
-          - Path to a file, which maps the names of the objects to ids. Default:
-            resources/front_3D/3D_front_mapping.csv
-          - string
-        * - ceiling_light_strength
-          - Strength of the emission shader used in the ceiling. Default: 0.8
-          - float
-        * - lamp_light_strength
-          - Strength of the emission shader used in each lamp. Default: 7.0
-          - float
-   """
-
-    def __init__(self, config: Config):
-        LoaderInterface.__init__(self, config)
-        self.json_path = Utility.resolve_path(self.config.get_string("json_path"))
-        self.future_model_path = Utility.resolve_path(self.config.get_string("3D_future_model_path"))
-
-        self.mapping_file = Utility.resolve_path(self.config.get_string("mapping_file",
-                                                                        os.path.join("resources", "front_3D",
-                                                                                     "3D_front_mapping.csv")))
-        if not os.path.exists(self.mapping_file):
-            raise Exception("The mapping file could not be found: {}".format(self.mapping_file))
-        _, self.mapping = LabelIdMapping.read_csv_mapping(self.mapping_file)
-        # a list of all newly created objects
-        self.created_objects = []
-
-    def run(self):
-        if not os.path.exists(self.json_path):
-            raise Exception("The given path does not exists: {}".format(self.json_path))
-        if not self.json_path.endswith(".json"):
-            raise Exception("The given path does not point to a .json file: {}".format(self.json_path))
-        if not os.path.exists(self.future_model_path):
-            raise Exception("The 3D future model path does not exist: {}".format(self.future_model_path))
+        if not os.path.exists(json_path):
+            raise Exception("The given path does not exists: {}".format(json_path))
+        if not json_path.endswith(".json"):
+            raise Exception("The given path does not point to a .json file: {}".format(json_path))
+        if not os.path.exists(future_model_path):
+            raise Exception("The 3D future model path does not exist: {}".format(future_model_path))
 
         # load data from json file
-        with open(self.json_path, "r") as json_file:
+        with open(json_path, "r") as json_file:
             data = json.load(json_file)
 
-        self._create_mesh_objects_from_file(data)
+        if "scene" not in data:
+            raise Exception("There is no scene data in this json file: {}".format(json_path))
 
-        all_loaded_furniture = self._load_furniture_objs(data)
+        created_objects = Front3DLoader._create_mesh_objects_from_file(data, ceiling_light_strength, mapping, json_path)
 
-        self._move_and_duplicate_furniture(data, all_loaded_furniture)
+        all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, mapping)
+
+        created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture)
 
         # add an identifier to the obj
-        for obj in self.created_objects:
-            obj["is_3d_front"] = True
+        for obj in created_objects:
+            obj.set_cp("is_3d_front", True)
 
-        self._set_properties(self.created_objects)
+        return created_objects
 
-    def _create_mesh_objects_from_file(self, data: dir):
+    @staticmethod
+    def _create_mesh_objects_from_file(data: dict, ceiling_light_strength: float, mapping: dict, json_path: str) -> List[MeshObject]:
         """
         This creates for a given data json block all defined meshes and assigns the correct materials.
         This means that the json file contains some mesh, like walls and floors, which have to built up manually.
@@ -103,6 +76,10 @@ class Front3DLoader(LoaderInterface):
         It also already adds the lighting for the ceiling
 
         :param data: json data dir. Must contain "material" and "mesh"
+        :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
+        :param mapping: A dict which maps the names of the objects to ids.
+        :param json_path: Path to the json file, where the house information is stored.
+        :return: The list of loaded mesh objects.
         """
         # extract all used materials -> there are more materials defined than used
         used_materials = []
@@ -110,28 +87,22 @@ class Front3DLoader(LoaderInterface):
             used_materials.append({"uid": mat["uid"], "texture": mat["texture"],
                                    "normaltexture": mat["normaltexture"], "color": mat["color"]})
 
-        col = bpy.data.collections.get("Collection")
+        created_objects = []
         for mesh_data in data["mesh"]:
             # extract the obj name, which also is used as the category_id name
             used_obj_name = mesh_data["type"].strip()
             if used_obj_name == "":
                 used_obj_name = "void"
             if "material" not in mesh_data:
-                warnings.warn(f"Material is not defined for {used_obj_name} in this file: {self.json_path}")
+                warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            mesh = bpy.data.meshes.new(used_obj_name + "_mesh")  # add the new mesh
-            # link this mesh inside of a new object
-            obj = bpy.data.objects.new(mesh.name, mesh)
-            self.created_objects.append(obj)
-            # link the object in the collection
-            col.objects.link(obj)
-            # set the name of the new object to the category_id name
-            obj.name = used_obj_name
+            obj = MeshObject.create_empty(used_obj_name, used_obj_name + "_mesh")
+            created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id
-            obj["is_3D_future"] = True
-            obj["category_id"] = self.mapping[used_obj_name.lower()]
+            obj.set_cp("is_3D_future", True)
+            obj.set_cp("category_id", mapping[used_obj_name.lower()])
 
             # get the material uid of the current mesh data
             current_mat = mesh_data["material"]
@@ -173,13 +144,12 @@ class Front3DLoader(LoaderInterface):
                         emission_node = nodes.new(type='ShaderNodeEmission')
                         # use the same color for the emission light then for the ceiling itself
                         emission_node.inputs["Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
-                        ceiling_light_strength = self.config.get_float("ceiling_light_strength", 0.8)
                         emission_node.inputs["Strength"].default_value = ceiling_light_strength
 
                         links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
 
-                    # as this material was just created the material is just appened to the empty list
-                    obj.data.materials.append(mat)
+                    # as this material was just created the material is just append it to the empty list
+                    obj.add_material(mat)
 
             # extract the vertices from the mesh_data
             vert = [float(ele) for ele in mesh_data["xyz"]]
@@ -200,7 +170,7 @@ class Front3DLoader(LoaderInterface):
             normal = np.reshape(normal, [num_vertices * 3])
 
             # add this new data to the mesh object
-            mesh = obj.data
+            mesh = obj.get_mesh()
             mesh.vertices.add(num_vertices)
             mesh.vertices.foreach_set("co", vertices)
             mesh.vertices.foreach_set("normal", normal)
@@ -244,42 +214,47 @@ class Front3DLoader(LoaderInterface):
             #if result:
             #    raise Exception("The generation of the mesh: {} failed!".format(used_obj_name))
 
-    def _load_furniture_objs(self, data: dir):
+        return created_objects
+
+    @staticmethod
+    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, mapping: dict) -> List[MeshObject]:
         """
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
 
         :param data: json data dir. Should contain "furniture"
-        :return: all objects which have been loaded
+        :param future_model_path: Path to the models used in the 3D-Front dataset.
+        :param lamp_light_strength: Strength of the emission shader used in each lamp.
+        :param mapping: A dict which maps the names of the objects to ids.
+        :return: The list of loaded mesh objects.
         """
         # collect all loaded furniture objects
         all_objs = []
         # for each furniture element
         for ele in data["furniture"]:
             # create the paths based on the "jid"
-            folder_path = os.path.join(self.future_model_path, ele["jid"])
+            folder_path = os.path.join(future_model_path, ele["jid"])
             obj_file = os.path.join(folder_path, "raw_model.obj")
             # if the object exists load it -> a lot of object do not exist
             # we are unsure why this is -> we assume that not all objects have been made public
             if os.path.exists(obj_file) and not "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
                 # load all objects from this .obj file
-                objs = Utility.import_objects(filepath=obj_file)
+                objs = ObjectLoader.load(filepath=obj_file)
                 # extract the name, which serves as category id
                 used_obj_name = ele["category"]
                 for obj in objs:
-                    obj.name = used_obj_name
+                    obj.set_name(used_obj_name)
                     # add some custom properties
-                    obj["uid"] = ele["uid"]
+                    obj.set_cp("uid", ele["uid"])
                     # this custom property determines if the object was used before
                     # is needed to only clone the second appearance of this object
-                    obj["is_used"] = False
-                    obj["is_3D_future"] = True
-                    obj["type"] = "Non-Object"  # is an non object used for the interesting score
+                    obj.set_cp("is_used", False)
+                    obj.set_cp("is_3D_future", True)
+                    obj.set_cp("type", "Non-Object")  # is an non object used for the interesting score
                     # set the category id based on the used obj name
-                    obj["category_id"] = self.mapping[used_obj_name.lower()]
-                    # walk over all material slots
-                    for slot in obj.material_slots:
-                        mat = slot.material
+                    obj.set_cp("category_id", mapping[used_obj_name.lower()])
+                    # walk over all materials
+                    for mat in obj.get_materials():
                         nodes = mat.node_tree.nodes
                         links = mat.node_tree.links
 
@@ -292,7 +267,7 @@ class Front3DLoader(LoaderInterface):
                             principled_node = principled_node[0]
                         else:
                             raise Exception("The amount of principle nodes can not be more than 1, "
-                                            "for obj: {}!".format(obj.name))
+                                            "for obj: {}!".format(obj.get_name()))
 
                         # For each a texture node
                         image_node = nodes.new(type='ShaderNodeTexImage')
@@ -316,7 +291,7 @@ class Front3DLoader(LoaderInterface):
                             links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
 
                             emission_node = nodes.new(type='ShaderNodeEmission')
-                            lamp_light_strength = self.config.get_float("lamp_light_strength", 7.0)
+                            lamp_light_strength = lamp_light_strength
                             emission_node.inputs["Strength"].default_value = lamp_light_strength
                             links.new(image_node.outputs['Color'], emission_node.inputs['Color'])
 
@@ -327,7 +302,8 @@ class Front3DLoader(LoaderInterface):
                 warnings.warn(f"This file {obj_file} was skipped as it can not be read by blender.")
         return all_objs
 
-    def _move_and_duplicate_furniture(self, data: dir, all_loaded_furniture: list):
+    @staticmethod
+    def _move_and_duplicate_furniture(data: dict, all_loaded_furniture: list) -> List[MeshObject]:
         """
         Move and duplicate the furniture depending on the data in the data json dir.
         After loading each object gets a location based on the data in the json file. Some objects are used more than
@@ -335,11 +311,11 @@ class Front3DLoader(LoaderInterface):
 
         :param data: json data dir. Should contain "scene", which should contain "room"
         :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs
+        :return: The list of loaded mesh objects.
         """
         # this rotation matrix rotates the given quaternion into the blender coordinate system
         blender_rot_mat = mathutils.Matrix.Rotation(radians(-90), 4, 'X')
-        if "scene" not in data:
-            raise Exception("There is no scene data in this json file: {}".format(self.json_path))
+        created_objects = []
         # for each room
         for room_id, room in enumerate(data["scene"]["room"]):
             # for each object in that room
@@ -347,22 +323,23 @@ class Front3DLoader(LoaderInterface):
                 if "furniture" in child["instanceid"]:
                     # find the object where the uid matches the child ref id
                     for obj in all_loaded_furniture:
-                        if obj["uid"] == child["ref"]:
+                        if obj.get_cp("uid") == child["ref"]:
                             # if the object was used before, duplicate the object and move that duplicated obj
-                            if obj["is_used"]:
-                                new_obj = duplicate_objects(obj)[0]
+                            if obj.get_cp("is_used"):
+                                new_obj = obj.duplicate()
                             else:
                                 # if it is the first time use the object directly
                                 new_obj = obj
-                            self.created_objects.append(new_obj)
-                            new_obj["is_used"] = True
-                            new_obj["room_id"] = room_id
-                            new_obj["type"] = "Object"  # is an object used for the interesting score
-                            new_obj["coarse_grained_class"] = new_obj["category_id"]
+                            created_objects.append(new_obj)
+                            new_obj.set_cp("is_used", True)
+                            new_obj.set_cp("room_id", room_id)
+                            new_obj.set_cp("type", "Object")  # is an object used for the interesting score
+                            new_obj.set_cp("coarse_grained_class", new_obj.get_cp("category_id"))
                             # this flips the y and z coordinate to bring it to the blender coordinate system
-                            new_obj.location = mathutils.Vector(child["pos"]).xzy
-                            new_obj.scale = child["scale"]
+                            new_obj.set_location(mathutils.Vector(child["pos"]).xzy)
+                            new_obj.set_scale(child["scale"])
                             # extract the quaternion and convert it to a rotation matrix
                             rotation_mat = mathutils.Quaternion(child["rot"]).to_euler().to_matrix().to_4x4()
                             # transform it into the blender coordinate system and then to an euler
-                            new_obj.rotation_euler = (blender_rot_mat @ rotation_mat).to_euler()
+                            new_obj.set_rotation_euler((blender_rot_mat @ rotation_mat).to_euler())
+        return created_objects

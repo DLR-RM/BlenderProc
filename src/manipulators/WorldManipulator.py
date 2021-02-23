@@ -1,7 +1,7 @@
 import bpy
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 
 
 class WorldManipulator(Module):

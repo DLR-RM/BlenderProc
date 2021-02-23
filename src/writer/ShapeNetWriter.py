@@ -2,7 +2,7 @@ import bpy
 
 from src.utility.ItemWriter import ItemWriter
 from src.writer.WriterInterface import WriterInterface
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 
 class ShapeNetWriter(WriterInterface):
     """ Writes the ShapeNet object attributes in an hdf5 file.
@@ -28,7 +28,7 @@ class ShapeNetWriter(WriterInterface):
     def run(self):
         """ Collect ShapeNet attributes and write them to a file."""
 
-        shapenet_objects = [obj for obj in get_all_mesh_objects() if "used_synset_id" in obj]
+        shapenet_objects = [obj for obj in get_all_blender_mesh_objects() if "used_synset_id" in obj]
 
         self.write_attributes_to_file(self.object_writer, shapenet_objects, "shapenet_", "shapenet", ["used_synset_id", "used_source_id"])
 

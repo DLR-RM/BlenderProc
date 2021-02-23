@@ -9,7 +9,7 @@ import shutil
 import bpy
 from mathutils import Euler, Matrix, Vector
 
-from src.utility.BlenderUtility import get_all_mesh_objects, load_image
+from src.utility.BlenderUtility import get_all_blender_mesh_objects, load_image
 from src.utility.Utility import Utility
 from src.writer.WriterInterface import WriterInterface
 from src.writer.CameraStateWriter import CameraStateWriter
@@ -180,7 +180,7 @@ class BopWriter(WriterInterface):
         """ Stores frames and annotations for objects from the specified dataset.
         """
         
-        all_mesh_objects = get_all_mesh_objects()
+        all_mesh_objects = get_all_blender_mesh_objects()
 	
         # Select objects from the specified dataset.
         if self.dataset:
