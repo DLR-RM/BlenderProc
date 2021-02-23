@@ -294,7 +294,7 @@ class MaterialManipulator(Module):
           - float
         * - cf_infuse_texture
           - With this custom function it is possible to overlay materials with a certain texture. This only works
-            if there is one principled BSDF shader in this material, which will be used as a reference point.
+            if there is one principled BSDF shader in this material, it will be used as a reference point.
           - dict
         * - cf_infuse_texture/mode
           - The mode determines how the texture is used. There are three options: "overlay" in which the selected
@@ -322,7 +322,7 @@ class MaterialManipulator(Module):
             Default: False.
           - bool
         * - cf_infuse_material
-          - This can be used to fuse to materials together, this is applied to the selected materials. One can select
+          - This can be used to fuse two materials together, this is applied to the selected materials. One can select
             inside of this the materials which will be copied inside of the other materials. Be aware this affects more
             than just the color it will also affect the displacement and the volume of the material.
           - dict
@@ -714,12 +714,12 @@ class MaterialManipulator(Module):
                 if "Float" in mat_output_input.bl_idname or "Vector" in mat_output_input.bl_idname:
                     # For displacement
                     infuse_node = nodes.new("ShaderNodeMixRGB")
-                    if used_mode in "mix":
+                    if used_mode == "mix":
                         # as there is no mix mode, we use multiply here, which is similar
                         infuse_node.blend_type = "MULTIPLY"
                         infuse_node.inputs["Fac"].default_value = mix_strength
                         input_offset = 1
-                    elif used_mode in "add":
+                    elif used_mode == "add":
                         infuse_node.blend_type = "ADD"
                         input_offset = 0
                     else:

@@ -434,7 +434,7 @@ def copy_attributes(attributes: list, old_prop: str, new_prop: str):
             setattr(new_prop, attr, getattr(old_prop, attr))
 
 
-def get_node_attributes(node: bpy.types.Node):
+def get_node_attributes(node: bpy.types.Node) -> list:
     """
     Returns a list of all properties identifiers if they should not be ignored
 
@@ -552,7 +552,7 @@ def copy_nodes_from_mat_to_material(from_material: bpy.types.Material, to_materi
     copy_links(nodes, to_material.node_tree.nodes, to_material.node_tree.links)
 
 
-def add_nodes_to_group(nodes: bpy.types.Node, group_name: str):
+def add_nodes_to_group(nodes: bpy.types.Node, group_name: str) -> bpy.types.ShaderNodeTree:
     """
     Creates the node group, copies all attributes and links and adds the group input and output
     https://blender.stackexchange.com/a/175604
