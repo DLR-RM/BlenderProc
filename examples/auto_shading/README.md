@@ -33,7 +33,7 @@ The rendered image as shown above can be found in the output directory.
 
 ## Config file
 
-### Some module
+### EntityManipulator
 
 ```yaml
     {
