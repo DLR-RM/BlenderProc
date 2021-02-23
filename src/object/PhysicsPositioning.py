@@ -3,7 +3,7 @@ import mathutils
 import numpy as np
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import get_all_mesh_objects, get_bound_volume
+from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bound_volume
 
 
 class PhysicsPositioning(Module):
@@ -97,7 +97,7 @@ class PhysicsPositioning(Module):
         """ Performs physics simulation in the scene. """
         # locations of all soon to be active objects before we shift their origin points
         locations_before_origin_shift = {}
-        for obj in get_all_mesh_objects():
+        for obj in get_all_blender_mesh_objects():
             if obj["physics"]:
                 locations_before_origin_shift.update({obj.name: obj.location.copy()})
         # enable rigid body and shift origin point for active objects
@@ -115,7 +115,7 @@ class PhysicsPositioning(Module):
         # perform simulation
         obj_poses_after_sim = self._do_simulation()
         # reset origin point of all active objects to the total shift location of the 3D cursor
-        for obj in get_all_mesh_objects():
+        for obj in get_all_blender_mesh_objects():
             if obj.rigid_body.type == "ACTIVE":
                 bpy.context.view_layer.objects.active = obj
                 obj.select_set(True)
@@ -149,7 +149,7 @@ class PhysicsPositioning(Module):
         :return: Object locations after origin point shift. Type: dict.
         """
         locations_after_origin_shift = {}
-        for obj in get_all_mesh_objects():
+        for obj in get_all_blender_mesh_objects():
             bpy.context.view_layer.objects.active = obj
             bpy.ops.rigidbody.object_add()
             if "physics" not in obj:
@@ -180,7 +180,7 @@ class PhysicsPositioning(Module):
 
     def _remove_rigidbody(self):
         """ Removes the rigidbody element from all mesh objects. """
-        for obj in get_all_mesh_objects():
+        for obj in get_all_blender_mesh_objects():
             bpy.context.view_layer.objects.active = obj
             bpy.ops.rigidbody.object_remove()
 
@@ -252,7 +252,7 @@ class PhysicsPositioning(Module):
         :return: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         """
         objects_poses = {}
-        for obj in get_all_mesh_objects():
+        for obj in get_all_blender_mesh_objects():
             if obj.rigid_body.type == 'ACTIVE':
                 location = bpy.context.scene.objects[obj.name].matrix_world.translation.copy()
                 rotation = mathutils.Vector(bpy.context.scene.objects[obj.name].matrix_world.to_euler())

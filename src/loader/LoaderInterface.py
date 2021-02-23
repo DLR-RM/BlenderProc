@@ -1,9 +1,8 @@
 import bpy
-import numpy as np
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import get_bounds
-
+from src.utility.MeshObjectUtility import MeshObject
+from typing import Union
 
 class LoaderInterface(Module):
     """
@@ -36,12 +35,12 @@ class LoaderInterface(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def _set_properties(self, objects: [bpy.types.Object]):
+    def _set_properties(self, objects: Union[bpy.types.Object, MeshObject]):
         """ Sets all custom properties of all given objects according to the configuration.
 
         Also runs all custom property functions.
 
-        :param objects: A list of objects which should receive the custom properties. Type: [bpy.types.Object]
+        :param objects: A list of objects which should receive the custom properties.
         """
 
         properties = self.config.get_raw_dict("add_properties", {})
@@ -51,14 +50,16 @@ class LoaderInterface(Module):
             for key, value in properties.items():
                 if key.startswith("cp_"):
                     key = key[3:]
-                    obj[key] = value
+                    if isinstance(obj, MeshObject):
+                        obj.set_cp(key, value)
+                    else:
+                        obj[key] = value
                 else:
                     raise RuntimeError(
                         "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "
                         "Use manipulators.Entity for setting object's attribute values.")
             if material_properties and hasattr(obj, "material_slots"):
-                for mat_slot in obj.material_slots:
-                    material = mat_slot.material
+                for material in (obj.get_materials() if isinstance(obj, MeshObject) else obj.data.materials):
                     if material is None:
                         continue
                     for key, value in material_properties.items():
@@ -69,7 +70,7 @@ class LoaderInterface(Module):
                             raise RuntimeError("Loader modules support setting only custom properties. "
                                                "Use 'cp_' prefix for keys.")
 
-            # only meshes have polygons/faces 
+            # only meshes have polygons/faces
             if hasattr(obj, 'type') and obj.type == 'MESH':
                 if self.config.has_param("cf_set_shading"):
                     mode = self.config.get_string("cf_set_shading")
@@ -113,49 +114,8 @@ class LoaderInterface(Module):
             raise Exception("This shading mode is unknown: {}".format(mode))
 
         for obj in objects:
-            for face in obj.data.polygons:
-                face.use_smooth = is_smooth
-
-    @staticmethod
-    def remove_x_axis_rotation(objects: [bpy.types.Object]):
-        """
-        Removes the 90 degree X-axis rotation found, when loading from `.obj` files. This function rotates the mesh
-        itself not just the object, this will set the `rotation_euler` to `[0, 0, 0]`.
-
-        :param objects: list of objects, which mesh should be rotated
-        """
-
-        bpy.ops.object.select_all(action='DESELECT')
-        for obj in objects:
-            # convert object rotation into internal rotation
-            obj.select_set(True)
-            bpy.context.view_layer.objects.active = obj
-            obj.rotation_euler = [0, 0, 0]
-            bpy.ops.object.mode_set(mode='EDIT')
-            bpy.ops.transform.rotate(value=np.pi * 0.5, orient_axis="X")
-            bpy.ops.object.mode_set(mode='OBJECT')
-            obj.select_set(False)
-        bpy.context.view_layer.update()
-
-    @staticmethod
-    def move_obj_origin_to_bottom_mean_point(objects: [bpy.types.Object]):
-        """
-        Moves the object center to bottom of the bounding box in Z direction and also in the middle of the X and Y
-        plane. So that all objects have a similar origin, which then makes the placement easier.
-
-        :param objects: list of objects, which origin should be moved
-        """
-
-        bpy.ops.object.select_all(action='DESELECT')
-        for obj in objects:
-            # move the object to the center
-            obj.select_set(True)
-            bpy.context.view_layer.objects.active = obj
-            bb = get_bounds(obj)
-            bb_center = np.mean(bb, axis=0)
-            bb_min_z_value = np.min(bb, axis=0)[2]
-            bpy.ops.object.mode_set(mode='EDIT')
-            bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
-            bpy.ops.object.mode_set(mode='OBJECT')
-            obj.select_set(False)
-        bpy.context.view_layer.update()
+            if isinstance(obj, MeshObject):
+                obj.set_shading_mode(is_smooth)
+            else:
+                for face in obj.data.polygons:
+                    face.use_smooth = is_smooth
