@@ -3,7 +3,7 @@ import os
 import bpy
 
 from src.main.GlobalStorage import GlobalStorage
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.Utility import Utility
 import mathutils
 import math
@@ -409,7 +409,7 @@ class RendererUtility:
 
         # Skip if there is nothing to render
         if bpy.context.scene.frame_end != bpy.context.scene.frame_start:
-            if len(get_all_mesh_objects()) == 0:
+            if len(get_all_blender_mesh_objects()) == 0:
                 raise Exception("There are no mesh-objects to render, "
                                 "please load an object before invoking the renderer.")
             # As frame_end is pointing to the next free frame, decrease it by one, as

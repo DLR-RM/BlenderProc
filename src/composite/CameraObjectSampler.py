@@ -1,7 +1,7 @@
 import bpy
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import get_all_mesh_objects
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.Utility import Utility
 
 
@@ -53,7 +53,7 @@ class CameraObjectSampler(Module):
             frame_id = bpy.context.scene.frame_end
 
             # TODO: Use Getter for selecting objects
-            for obj in get_all_mesh_objects():
+            for obj in get_all_blender_mesh_objects():
                 # insert keyframes for current object poses
                 self._object_pose_sampler.insert_key_frames(obj, frame_id)
 

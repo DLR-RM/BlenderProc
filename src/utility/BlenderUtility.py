@@ -9,6 +9,8 @@ from sys import platform
 import numpy as np
 import imageio
 
+from src.utility.MeshObjectUtility import MeshObject
+
 
 def local_to_world(cords, world):
     """
@@ -292,7 +294,7 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     return obj
 
 
-def get_all_mesh_objects():
+def get_all_blender_mesh_objects() -> list:
     """
     Returns a list of all mesh objects in the scene
     :return: a list of all mesh objects
@@ -384,7 +386,7 @@ def get_bound_volume(obj):
 def duplicate_objects(objects):
     """
     Creates duplicates of objects, first duplicates are given name <orignial_object_name>.001
-    
+
     :param objects: an object or a list of objects to be duplicated
     :return: a list of objects
     """
