@@ -140,7 +140,7 @@ class ObjectReplacer(Module):
                     for key, value in current_object_to_be_replaced.items():
                         duplicate_new_object[key] = value
 
-                duplicate_new_object.hider_render = False
+                duplicate_new_object.hide_render = False
 
                 print('Replaced ', current_object_to_replace_with.name, ' by ', duplicate_new_object.name)
 
