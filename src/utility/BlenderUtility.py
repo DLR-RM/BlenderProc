@@ -104,6 +104,10 @@ def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
     if bvh_cache is None:
         bvh_cache = {}
 
+    # If one of the objects has no vertices, collision is impossible
+    if len(obj1.data.vertices) == 0 or len(obj2.data.vertices) == 0:
+        return False, bvh_cache
+
     # create bvhtree for obj1
     if obj1.name not in bvh_cache:
         obj1_BVHtree = create_bvh_tree_for_object(obj1)
