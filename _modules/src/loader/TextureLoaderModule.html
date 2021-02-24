@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.loader.TextureLoaderModule &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<ul class="compound-first">
+<li class="toctree-l1"><a class="reference external" href="examples/README.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/api/README.html">api</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/README.html">basic_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/debugging/README.html">debugging</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/README.html">haven_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/README.html">replica_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Modules</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.composite.CameraObjectSampler.html#src.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicMeshInitializer.html#src.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RandomRoomConstructor.html#src.constructor.RandomRoomConstructor.RandomRoomConstructor">RandomRoomConstructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RockEssentialsGroundConstructor.html#src.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SurfaceLighting.html#src.lighting.SurfaceLighting.SurfaceLighting">SurfaceLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference external" href="src.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.loader.AMASSLoaderModule.html#src.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BopLoaderModule.html#src.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.CCMaterialLoaderModule.html#src.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Front3DLoaderModule.html#src.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenEnvironmentLoaderModule.html#src.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenMaterialLoaderModule.html#src.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.IKEALoaderModule.html#src.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ObjectLoaderModule.html#src.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Pix3DLoaderModule.html#src.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ReplicaLoaderModule.html#src.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.RockEssentialsRockLoaderModule.html#src.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SceneNetLoaderModule.html#src.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ShapeNetLoaderModule.html#src.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SuncgLoaderModule.html#src.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="#src.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.WorldManipulator.html#src.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.materials.RockEssentialsTextureSampler.html#src.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.FloorExtractor.html#src.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.IntrinsicsChecker.html#src.object.IntrinsicsChecker.IntrinsicsChecker">IntrinsicsChecker</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectPoseSampler.html#src.object.ObjectPoseSampler.ObjectPoseSampler">ObjectPoseSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectReplacer.html#src.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.PhysicsPositioning.html#src.object.PhysicsPositioning.PhysicsPositioning">PhysicsPositioning</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ShapeNetWriter.html#src.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Provider</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.provider.getter.html">Getter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Attribute.html#src.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.AttributeMerger.html#src.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Entity.html#src.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Material.html#src.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.POI.html#src.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Texture.html#src.provider.getter.Texture.Texture">Texture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.provider.sampler.html">Sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Color.html#src.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Disk.html#src.provider.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.PartSphere.html#src.provider.sampler.PartSphere.PartSphere">PartSphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Path.html#src.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Shell.html#src.provider.sampler.Shell.Shell">Shell</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Sphere.html#src.provider.sampler.Sphere.Sphere">Sphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Texture.html#src.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Uniform3d.html#src.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UniformSO3.html#src.provider.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.UpperRegionSampler">UpperRegionSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Value.html#src.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Core</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Initializer.html#src.main.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CocoUtility.html#src.utility.CocoUtility.CocoUtility">CocoUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.EntityUtility.html#src.utility.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MeshObjectUtility.html#src.utility.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.loader.TextureLoaderModule</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.loader.TextureLoaderModule</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">src.loader.LoaderInterface</span> <span class="kn">import</span> <span class="n">LoaderInterface</span>
+<span class="kn">from</span> <span class="nn">src.utility.loader.TextureLoader</span> <span class="kn">import</span> <span class="n">TextureLoader</span>
+
+
+<div class="viewcode-block" id="TextureLoaderModule"><a class="viewcode-back" href="../../../src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule">[docs]</a><span class="k">class</span> <span class="nc">TextureLoaderModule</span><span class="p">(</span><span class="n">LoaderInterface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Depending on the form of the provided path:</span>
+<span class="sd">    1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an</span>
+<span class="sd">    image is provided.</span>
+<span class="sd">    2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a</span>
+<span class="sd">    folder with images is provided.</span>
+
+<span class="sd">    NOTE: Same image file can be loaded once to avoid unnecessary overhead. If you really need the same image in</span>
+<span class="sd">    different colorspaces, then have a copy per desired colorspace and load them in different instances of this Loader.</span>
+
+<span class="sd">    Example 1: Load all images in the folder in sRGB colorspace and create appropriate textures.</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;module&quot;: &quot;loader.TextureLoader&quot;,</span>
+<span class="sd">          &quot;config&quot;: {</span>
+<span class="sd">            &quot;path&quot;: &quot;path/to/folder/with/assets/&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Example 2: Load a random image from the path in raw colorspace and create an appropriate texture.</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;module&quot;: &quot;loader.TextureLoader&quot;,</span>
+<span class="sd">          &quot;config&quot;: {</span>
+<span class="sd">            &quot;path&quot;: {</span>
+<span class="sd">              &quot;provider&quot;: &quot;sampler.Path&quot;,</span>
+<span class="sd">              &quot;path&quot;: &quot;path/to/folder/with/assets/*.png&quot;</span>
+<span class="sd">            }</span>
+<span class="sd">          },</span>
+<span class="sd">          &quot;colorspace&quot;: &quot;Raw&quot;</span>
+<span class="sd">        }</span>
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. list-table:: </span>
+<span class="sd">        :widths: 25 100 10</span>
+<span class="sd">        :header-rows: 1</span>
+
+<span class="sd">        * - Parameter</span>
+<span class="sd">          - Description</span>
+<span class="sd">          - Type</span>
+<span class="sd">        * - path</span>
+<span class="sd">          - The path to the folder with assets/to the asset.</span>
+<span class="sd">          - string</span>
+<span class="sd">        * - colorspace</span>
+<span class="sd">          - Colorspace type to assign to loaded assets. Default: &#39;sRGB&#39;. Available: [&#39;Filmic Log&#39;, &#39;Linear&#39;, &#39;Linear</span>
+<span class="sd">            ACES&#39;, &#39;Non-Color&#39;, &#39;Raw&#39;, &#39;sRGB&#39;, &#39;XYZ&#39;].</span>
+<span class="sd">          - string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">LoaderInterface</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TextureLoaderModule.run"><a class="viewcode-back" href="../../../src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Loads images and creates image textures. &quot;&quot;&quot;</span>
+        <span class="n">textures</span> <span class="o">=</span> <span class="n">TextureLoader</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_string</span><span class="p">(</span><span class="s2">&quot;colorspace&quot;</span><span class="p">,</span> <span class="s2">&quot;sRGB&quot;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_properties</span><span class="p">(</span><span class="n">textures</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

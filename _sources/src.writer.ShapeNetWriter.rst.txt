@@ -1,0 +1,7 @@
+src\.writer\.ShapeNetWriter module
+==================================
+
+.. automodule:: src.writer.ShapeNetWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

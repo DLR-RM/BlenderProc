@@ -17,7 +17,7 @@ python run.py examples/calibration/config.yaml
 After rendering we can use the images to estimate the actual K matrix using opencv
 
 ```
-python calibrate.py
+python examples/calibration/calibrate.py
 ```
 
 This should now output something like:

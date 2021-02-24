@@ -1,0 +1,7 @@
+src\.loader\.SceneNetLoaderModule module
+========================================
+
+.. automodule:: src.loader.SceneNetLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -12,6 +12,7 @@ Submodules
    src.writer.Hdf5Writer
    src.writer.LightStateWriter
    src.writer.ObjectStateWriter
+   src.writer.ShapeNetWriter
    src.writer.StereoGlobalMatchingWriter
    src.writer.WriterInterface
 

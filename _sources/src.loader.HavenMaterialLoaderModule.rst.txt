@@ -1,0 +1,7 @@
+src\.loader\.HavenMaterialLoaderModule module
+=============================================
+
+.. automodule:: src.loader.HavenMaterialLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

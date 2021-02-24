@@ -1,0 +1,7 @@
+src\.loader\.HavenEnvironmentLoaderModule module
+================================================
+
+.. automodule:: src.loader.HavenEnvironmentLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

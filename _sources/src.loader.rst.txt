@@ -6,23 +6,23 @@ Submodules
 
 .. toctree::
 
-   src.loader.AMASSLoader
-   src.loader.BlendLoader
-   src.loader.BopLoader
-   src.loader.CCMaterialLoader
-   src.loader.Front3DLoader
-   src.loader.HavenEnvironmentLoader
-   src.loader.HavenMaterialLoader
-   src.loader.IKEALoader
+   src.loader.AMASSLoaderModule
+   src.loader.BlendLoaderModule
+   src.loader.BopLoaderModule
+   src.loader.CCMaterialLoaderModule
+   src.loader.Front3DLoaderModule
+   src.loader.HavenEnvironmentLoaderModule
+   src.loader.HavenMaterialLoaderModule
+   src.loader.IKEALoaderModule
    src.loader.LoaderInterface
-   src.loader.ObjectLoader
-   src.loader.Pix3DLoader
-   src.loader.ReplicaLoader
-   src.loader.RockEssentialsRockLoader
-   src.loader.SceneNetLoader
-   src.loader.ShapeNetLoader
-   src.loader.SuncgLoader
-   src.loader.TextureLoader
+   src.loader.ObjectLoaderModule
+   src.loader.Pix3DLoaderModule
+   src.loader.ReplicaLoaderModule
+   src.loader.RockEssentialsRockLoaderModule
+   src.loader.SceneNetLoaderModule
+   src.loader.ShapeNetLoaderModule
+   src.loader.SuncgLoaderModule
+   src.loader.TextureLoaderModule
    src.loader.VisNormalImage
 
 Module contents

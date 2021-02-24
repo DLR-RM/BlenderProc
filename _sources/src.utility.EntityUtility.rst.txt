@@ -1,0 +1,7 @@
+src\.utility\.EntityUtility module
+==================================
+
+.. automodule:: src.utility.EntityUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:
