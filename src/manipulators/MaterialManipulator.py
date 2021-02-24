@@ -93,7 +93,7 @@ class MaterialManipulator(Module):
               "texture_scale": 0.05
             }
           }
-        },
+        }
 
     Example 5: Add a layer of dust to all materials. In this example the focus is on loading a texture with the
     TextureLoader and using it with the MaterialManipulator.
@@ -130,7 +130,7 @@ class MaterialManipulator(Module):
               "texture_scale": 0.05
             }
           }
-        },
+        }
 
     Example 6: Adds a texture as an overlay over all materials, which are currently used. First the texture is loaded,
     via the `TextureLoader` and then it is used in side of the `"cf_infuse_texture"`
@@ -203,7 +203,7 @@ class MaterialManipulator(Module):
             }
            }
           }
-        },
+        }
 
     **Configuration**:
 
