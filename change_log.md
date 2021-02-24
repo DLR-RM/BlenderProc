@@ -9,6 +9,7 @@
 # Version History
 
 ## Version 1.10.0 24th February 2021
+- rewritten the `BlendLoader`, which is now able to only load objects of a given type, this will break existing config files as the `load_from` parameter has been replaced by `datablocks` and `obj_types`
 - the `MaterialManipulator` can now overlay/mix a texture with a selected material
 - the `MaterialManipulator` can now mix/add a material with another selected material, ideal for creating surface imperfections on other materials
 - the `MaterialManipulator` can now add a layer of dust on materials, which simulates dust flakes on top of the object, there also exists now an example for it
