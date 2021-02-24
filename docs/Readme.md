@@ -1,7 +1,7 @@
 # Documentation
 
 
-The scripts assume that blender is installed at `/home_local/${USER}/blender/blender-2.91-linux-glibc217-x86_64`.
+The scripts assume that blender is installed at `/home_local/${USER}/blender/blender-2.92.0rc-linux64`.
 If this is not the case please change it in the [Makefile](Makefile).
 
 First run `config_for_pip_install.yaml` to make sure to install all packages used in our code:
