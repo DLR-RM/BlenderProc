@@ -54,18 +54,18 @@ if "custom_blender_path" not in setup_config:
         blender_install_path = "blender"
 
     # Determine configured version
-    # right new only support blender-2.91
-    major_version = "2.91"
+    # right new only support blender-2.92
+    major_version = "2.92"
     minor_version = "0"
     blender_version = "blender-{}.{}".format(major_version, minor_version)
     if platform == "linux" or platform == "linux2":
-        blender_version += "-linux64"
+        blender_version += "rc-linux64"
         blender_path = os.path.join(blender_install_path, blender_version)
     elif platform == "darwin":
-        blender_version += "-macOS"
+        blender_version += "rc-macOS"
         blender_path = os.path.join(blender_install_path, "Blender.app")
     elif platform == "win32":
-        blender_version += "-windows64"
+        blender_version += "rc-windows64"
         blender_path = os.path.join(blender_install_path, blender_version)
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
@@ -83,12 +83,13 @@ if "custom_blender_path" not in setup_config:
             except ImportError as e:
                 print("For decompressing \".xz\" files in python 2.x is it necessary to use lzma")
                 raise e  # from import lzma -> pip install --user pyliblzma
+        used_url = "https://builder.blender.org/download/"
         if platform == "linux" or platform == "linux2":
-            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".tar.xz"
+            url = used_url + blender_version + ".tar.xz"
         elif platform == "darwin":
-            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".dmg"
+            url = used_url + blender_version + ".dmg"
         elif platform == "win32":
-            url = "https://download.blender.org/release/Blender" + major_version + "/" + blender_version + ".zip"
+            url = used_url + blender_version + ".zip"
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
         try:
