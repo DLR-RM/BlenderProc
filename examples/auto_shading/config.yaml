@@ -1,0 +1,91 @@
+# Args: <cam_file> <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/"
+  },
+  "modules": [
+  {
+    "module": "main.Initializer",
+    "config": {
+      "global": {
+        "output_dir": "<args:2>"
+      }
+    }
+  },
+  {
+    "module": "loader.BlendLoader",
+    "config": {
+      "path": "<args:1>"
+    }
+  },
+  {
+    "module": "manipulators.MaterialManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Material",
+        "conditions": {
+          "name": "Material.*"
+        }
+      },
+      "cf_set_specular": 1,
+      "cf_set_roughness": 0.3
+    }
+  },
+  {
+    "module": "manipulators.EntityManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+        "conditions": {
+          "name": "Sphere"
+        }
+      },
+      "cf_set_shading": "AUTO",
+      "cf_shading_auto_smooth_angle_in_deg": 45
+    }
+  },
+  {
+    "module": "manipulators.EntityManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+        "conditions": {
+          "name": "Sphere.001"
+        }
+      },
+      "cf_set_shading": "SMOOTH"
+    }
+  },
+  {
+    "module": "lighting.LightLoader",
+    "config": {
+      "lights": [
+      {
+        "type": "POINT",
+        "location": [3, -8, 5],
+        "energy": 1000
+      }
+      ]
+    }
+  },
+  {
+    "module": "camera.CameraLoader",
+    "config": {
+      "path": "<args:0>",
+      "file_format": "location rotation/value",
+      "intrinsics": {
+        "fov": 1,
+        "resolution_x": 800,
+        "resolution_y": 600
+      }
+    }
+  },
+  {
+    "module": "renderer.RgbRenderer",
+    "config": {
+      "output_is_temp": False
+    }
+  }
+  ]
+}

@@ -209,8 +209,12 @@ class EntityManipulator(Module):
           - 'thickness' attribute of the 'Solidify' modifier.
           - float
         * - cf_set_shading
-          - Custom function to set the shading of the selected object. Available: ["FLAT", "SMOOTH"]
+          - Custom function to set the shading of the selected object. Default: 'FLAT'.
+            Available: ['FLAT', 'SMOOTH', 'AUTO'].
           - str
+        * - cf_shading_auto_smooth_angle_in_deg
+          - Angle in degrees at which flat shading is activated in `AUTO` mode. Default: 30.
+          - float
         * - cf_add_displace_modifier_with_texture
           - Adds a displace modifier with texture to an object.
           - dict
@@ -361,7 +365,8 @@ class EntityManipulator(Module):
                 # unpack
                 result = self._unpack_params(modifier_config, instructions)
             elif key == "cf_set_shading":
-                result = params_conf.get_string("cf_set_shading")
+                result = {"shading_mode": params_conf.get_string("cf_set_shading"),
+                          "angle_value": params_conf.get_float("cf_shading_auto_smooth_angle_in_deg", 30)}
             elif key == "cf_add_displace_modifier_with_texture":
                 displace_config = Config(params_conf.get_raw_dict(key))
                 # instruction about unpacking the data: key, corresponding Config method to extract the value,
@@ -417,7 +422,7 @@ class EntityManipulator(Module):
         :param entity: An entity to modify. Type: bpy.types.Object
         :param value: Configuration data. Type: dict.
         """
-        LoaderInterface.change_shading_mode([entity], value)
+        LoaderInterface.change_shading_mode([entity], value["shading_mode"], value["angle_value"])
 
     def _add_displace(self, entity, value):
         """ Adds a displace modifier with texture to an object.
