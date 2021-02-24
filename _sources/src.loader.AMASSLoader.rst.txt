@@ -1,7 +1,0 @@
-src\.loader\.AMASSLoader module
-===============================
-
-.. automodule:: src.loader.AMASSLoader
-    :members:
-    :undoc-members:
-    :show-inheritance:

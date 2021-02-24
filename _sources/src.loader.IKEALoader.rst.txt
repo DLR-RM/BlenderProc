@@ -1,7 +1,0 @@
-src\.loader\.IKEALoader module
-==============================
-
-.. automodule:: src.loader.IKEALoader
-    :members:
-    :undoc-members:
-    :show-inheritance:

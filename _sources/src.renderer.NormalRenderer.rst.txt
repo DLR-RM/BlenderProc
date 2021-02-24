@@ -1,7 +1,0 @@
-src\.renderer\.NormalRenderer module
-====================================
-
-.. automodule:: src.renderer.NormalRenderer
-    :members:
-    :undoc-members:
-    :show-inheritance:
