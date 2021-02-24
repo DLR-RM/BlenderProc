@@ -5,11 +5,12 @@ import bpy
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.Utility import Utility
 
-
 class CCMaterialLoader:
 
     @staticmethod
-    def load(folder_path: str = "resources/cctextures", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_custom_properties: dict = {}):
+    def load(folder_path: str = "resources/cctextures", used_assets: list = None, preload: bool = False,
+             fill_used_empty_materials: bool = False, add_custom_properties: dict = None,
+             use_all_materials: bool = False):
         """ This method loads all textures obtained from https://cc0textures.com, use the script
         (scripts/download_cc_textures.py) to download all the textures to your pc.
 
@@ -23,8 +24,24 @@ class CCMaterialLoader:
         :param preload: If set true, only the material names are loaded and not the complete material.
         :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
         :param add_custom_properties:  A dictionary of materials and the respective properties.
+        :param use_all_materials: If this is false only a selection of probably useful textures is used. This excludes \
+                                  some see through texture and non tileable texture.
         """
         folder_path = Utility.resolve_path(folder_path)
+        # this selected textures are probably useful for random selection
+        probably_useful_texture = ["paving stones", "tiles", "wood", "fabric", "bricks", "metal", "wood floor",
+                                   "ground", "rock", "concrete", "leather", "planks", "rocks", "gravel",
+                                   "asphalt", "painted metal", "painted plaster", "marble", "carpet",
+                                   "plastic", "roofing tiles", "bark", "metal plates", "wood siding",
+                                   "terrazzo", "plaster", "paint", "corrugated steel", "painted wood", "lava"
+                                   "cardboard", "clay", "diamond plate", "ice", "moss", "pipe", "candy",
+                                   "chipboard", "rope", "sponge", "tactile paving", "paper", "cork",
+                                   "wood chips"]
+        if not use_all_materials and used_assets is None:
+            used_assets = probably_useful_texture
+
+        if add_custom_properties is None:
+            add_custom_properties = dict()
 
         if preload and fill_used_empty_materials:
             raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")

@@ -31,6 +31,11 @@ class CCMaterialLoaderModule(Module):
             beginning the name starts with. By default all assets will be loaded, specified by an empty list.
             Default: [].
           - list
+        * - use_all_materials
+          - If this is true all materials, which are available are used. This includes materials, which are not
+            tileable an materials which have an alpha channel. By default only a reasonable selection is used.
+            Default: False
+          - bool
         * - add_custom_properties
           - A dictionary of materials and the respective properties. Default: {}.
           - dict
@@ -46,10 +51,14 @@ class CCMaterialLoaderModule(Module):
         Module.__init__(self, config)
 
     def run(self):
+        if self.config.get_bool("use_all_materials", False) and self.config.has_param("used_assets"):
+            raise Exception("It is impossible to use all materials and selected a certain list of assets!")
+
         CCMaterialLoader.load(
             folder_path=Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures")),
             used_assets=self.config.get_list("used_assets", []),
             preload=self.config.get_bool("preload", False),
             fill_used_empty_materials=self.config.get_bool("fill_used_empty_materials", False),
-            add_custom_properties=self.config.get_raw_dict("add_custom_properties", {})
+            add_custom_properties=self.config.get_raw_dict("add_custom_properties", {}),
+            use_all_materials=self.config.get_bool("use_all_materials", False)
         )

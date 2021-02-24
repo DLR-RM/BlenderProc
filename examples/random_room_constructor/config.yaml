@@ -1,4 +1,4 @@
-# Args: <output_dir>
+# Args: <IKEA_PATH> <CC_TEXTURES> <output_dir>
 {
   "version": 3,
   "setup": {
@@ -12,7 +12,7 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:0>",
+          "output_dir": "<args:2>",
           "max_bounces": 200,
           "diffuse_bounces": 200,
           "glossy_bounces": 200,
@@ -24,7 +24,8 @@
     {
       "module": "loader.CCMaterialLoader",
       "config": {
-        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
+        "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"],
+        "folder_path": "<args:1>"
       }
     },
     {
@@ -36,6 +37,7 @@
           {
             "module": "loader.IKEALoader",
             "config": {
+              "data_dir": "<args:0>",
               "category": ["bed", "chair", "desk", "bookshelf"]
             },
             "amount_of_repetitions": 15
