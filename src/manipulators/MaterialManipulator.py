@@ -6,6 +6,7 @@ import bpy
 import mathutils
 
 from src.main.Module import Module
+from src.utility import BlenderUtility
 from src.utility.Config import Config
 from src.utility.Utility import Utility
 
@@ -131,6 +132,79 @@ class MaterialManipulator(Module):
           }
         },
 
+    Example 6: Adds a texture as an overlay over all materials, which are currently used. First the texture is loaded,
+    via the `TextureLoader` and then it is used in side of the `"cf_infuse_texture"`
+
+    .. code-block:: yaml
+
+        {
+          "module": "loader.TextureLoader",
+          "config":{
+            "path": "<args:3>",
+            "add_properties": {
+              "cp_dust_texture": True
+            }
+          }
+        },
+        {
+          "module": "manipulators.MaterialManipulator",
+          "config": {
+            "selector": {
+              "provider": "getter.Material",
+              "conditions": {
+               "cf_use_materials_of_objects": {
+                 "provider": "getter.Entity",
+                 "conditions": {
+                   "type": "MESH"
+                 }
+               },
+              }
+            },
+            "cf_infuse_material": {
+              "mode": "mix",
+              "texture_scale": 1.0,
+              "used_texture": {
+                "provider": "getter.Texture",
+                "conditions": {
+                  "cp_dust_texture": True
+                }
+              }
+            }
+          }
+        }
+
+    Example 7: Combines two materials, this mixes all currently used materials, with all cc materials.
+
+    .. code-block:: yaml
+
+        {
+          "module": "manipulators.MaterialManipulator",
+          "config": {
+           "selector": {
+             "provider": "getter.Material",
+             "conditions": {
+              "cf_use_materials_of_objects": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "type": "MESH"
+                }
+              },
+             }
+           },
+           "cf_infuse_material": {
+            "mode": "mix",
+            "texture_scale": 1.0,
+            "used_material": {
+              "provider": "getter.Material",
+              "check_empty": True,
+              "conditions": {
+                "cp_is_cc_texture": True
+              }
+            }
+           }
+          }
+        },
+
     **Configuration**:
 
     .. list-table:: 
@@ -218,6 +292,53 @@ class MaterialManipulator(Module):
           - This scale is used to scale down the used noise texture (even for the case where a random noise texture
             is used). Default: 0.1.
           - float
+        * - cf_infuse_texture
+          - With this custom function it is possible to overlay materials with a certain texture. This only works
+            if there is one principled BSDF shader in this material, it will be used as a reference point.
+          - dict
+        * - cf_infuse_texture/mode
+          - The mode determines how the texture is used. There are three options: "overlay" in which the selected
+            texture is overlayed over a preexisting one. If there is none, nothing happens. The second option: "mix"
+            is similar to overlay, just that the textures are mixed there. The last option: "set" replaces any existing
+            texture and is even added if there was none before.
+            Default: "overlay". Available: ["overlay", "mix", "set"].
+          - str
+        * - cf_infuse_texture/used_texture
+          - A getter.Texture can be used here to select the texture, which should be infused in the material.
+          - getter.Texture
+        * - cf_infuse_texture/connection
+          - By default the "Base Color" input of the principled shader will be used. This can be changed to any valid
+            input of a principled shader. Default: "Base Color". For available check the blender documentation.
+          - str
+        * - cf_infuse_texture/strength
+          - The strength determines how much the newly generated texture is going to be used. Default: 0.5.
+          - float
+        * - cf_infuse_texture/texture_scale
+          - The used texture can be scaled down or up by a factor, to make it match the preexisting UV mapping. Make
+            sure that the object has a UV mapping beforehand. Default: 0.05.
+          - float
+        * - cf_infuse_texture/invert_texture
+          - It might be sometimes useful to invert the input texture, this can be done by setting this to True.
+            Default: False.
+          - bool
+        * - cf_infuse_material
+          - This can be used to fuse two materials together, this is applied to the selected materials. One can select
+            inside of this the materials which will be copied inside of the other materials. Be aware this affects more
+            than just the color it will also affect the displacement and the volume of the material.
+          - dict
+        * - cf_infuse_material/used_material
+          - This selector (getter.Material) is used to select the materials, which will be copied into the materials
+            selected by the "selector".
+          - getter.Material
+        * - cf_infuse_material/mode
+          - The mode determines how the two materials are mixed. There are two options "mix" in which the
+            preexisting material is mixed with the selected one in "used_material" or "add" in which they are just
+            added on top of each other. Default: "mix". Available: ["mix", "add"]
+          - str
+        * - cf_infuse_material/mix_strength
+          - In the "mix" mode a strength can be set to determine how much of each material is going to be used.
+            A strength of 1.0 means that the new material is going to be used completely. Default: 0.5.
+          - float
         * - cf_set_*
           - Sets value to the * (suffix) input of the Principled BSDF shader. Replace * with all lower-case name of
             the input (use '_' if those are represented by multiple nodes, e.g. 'Base Color' -> 'base_color'). Also
@@ -290,6 +411,10 @@ class MaterialManipulator(Module):
                     self._set_textures(loaded_textures, material)
                 elif key_copy == "switch_to_emission_shader" and requested_cf:
                     self._switch_to_emission_shader(material, value)
+                elif key_copy == "infuse_texture" and requested_cf:
+                    MaterialManipulator._infuse_texture(material, value)
+                elif key_copy == "infuse_material" and requested_cf:
+                    MaterialManipulator._infuse_material(material, value)
                 elif key_copy == "add_dust" and requested_cf:
                     self._add_dust_to_material(material, value)
                 elif "set_" in key_copy and requested_cf:
@@ -330,6 +455,10 @@ class MaterialManipulator(Module):
                     elif emission_key == "strength":
                         attr_val = emission_conf.get_float("strength", 1.0)
                     result.update({emission_key: attr_val})
+            elif key == "cf_infuse_texture":
+                result = Config(params_conf.get_raw_dict(key))
+            elif key == "cf_infuse_material":
+                result = Config(params_conf.get_raw_dict(key))
             elif key == "cf_add_dust":
                 result = params_conf.get_raw_dict(key)
             elif "cf_set_" in key or "cf_add_" in key:
@@ -462,6 +591,159 @@ class MaterialManipulator(Module):
         emission_node.inputs["Strength"].default_value = value["strength"]
         links.new(emission_node.outputs["Emission"], mat_output.inputs["Surface"])
 
+    @staticmethod
+    def _infuse_texture(material: bpy.types.Material, config: Config):
+        """
+        Overlays the selected material with a texture, this can be either a color texture like for example dirt or
+        it can be a texture, which is used as an input to the Principled BSDF of the given material.
+
+        :param material: Material, which will be changed
+        :param config: containing the config information
+        """
+        if not material.use_nodes:
+            raise Exception(f"The material {material.name} does not use nodes. Change your selection!")
+
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+
+        used_mode = config.get_string("mode", "overlay").lower()
+        if used_mode not in ["overlay", "mix", "set"]:
+            raise Exception(f'This mode is unknown here: {used_mode}, only ["overlay", "mix", "set"]!')
+
+        used_textures = config.get_list("used_texture")
+        if len(used_textures) == 0:
+            raise Exception(f"You have to select a texture, which is {used_mode} over the material!")
+
+        invert_texture = config.get_bool("invert_texture", False)
+
+        used_texture = random.choice(used_textures)
+        used_connector = config.get_string("connection", "Base Color").title()
+        texture_scale = config.get_float("texture_scale", 0.05)
+
+        if config.has_param("strength") and used_mode == "set":
+            raise Exception("The strength can only be used if the mode is not \"set\"!")
+        strength = config.get_float("strength", 0.5)
+
+        principled_bsdfs = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+        if len(principled_bsdfs) != 1:
+            raise Exception("This only works with materials, which have exactly one Prinicpled BSDF, "
+                            "use a different selector!")
+        principled_bsdf = principled_bsdfs[0]
+        if used_connector not in principled_bsdf.inputs:
+            raise Exception(f"The {used_connector} not an input to Principled BSDF!")
+
+        node_connected_to_the_connector = None
+        for link in links:
+            if link.to_socket == principled_bsdf.inputs[used_connector]:
+                node_connected_to_the_connector = link.from_node
+                # remove this connection
+                links.remove(link)
+        if node_connected_to_the_connector is not None or used_mode == "set":
+            texture_node = nodes.new("ShaderNodeTexImage")
+            texture_node.image = used_texture.image
+            # add texture coords to make the scaling of the dust texture possible
+            texture_coords = nodes.new("ShaderNodeTexCoord")
+            mapping_node = nodes.new("ShaderNodeMapping")
+            mapping_node.vector_type = "TEXTURE"
+            mapping_node.inputs["Scale"].default_value = [texture_scale] * 3
+            links.new(texture_coords.outputs["UV"], mapping_node.inputs["Vector"])
+            links.new(mapping_node.outputs["Vector"], texture_node.inputs["Vector"])
+            texture_node_output = texture_node.outputs["Color"]
+            if invert_texture:
+                invert_node = nodes.new("ShaderNodeInvert")
+                invert_node.inputs["Fac"].default_value = 1.0
+                links.new(texture_node_output, invert_node.inputs["Color"])
+                texture_node_output = invert_node.outputs["Color"]
+            if node_connected_to_the_connector is not None and used_mode != "set":
+                mix_node = nodes.new("ShaderNodeMixRGB")
+                if used_mode in "mix_node":
+                    mix_node.blend_type = "OVERLAY"
+                elif used_mode in "mix":
+                    mix_node.blend_type = "MIX"
+                mix_node.inputs["Fac"].default_value = strength
+                links.new(texture_node_output, mix_node.inputs["Color2"])
+                # hopefully 0 is the color node!
+                links.new(node_connected_to_the_connector.outputs[0], mix_node.inputs["Color1"])
+                links.new(mix_node.outputs["Color"], principled_bsdf.inputs[used_connector])
+            elif used_mode == "set":
+                links.new(texture_node_output, principled_bsdf.inputs[used_connector])
+
+    @staticmethod
+    def _infuse_material(material: bpy.types.Material, config: Config):
+        """
+        Infuse a material inside of another material. The given material, will be adapted and the used material, will
+        be added, depending on the mode either as add or as mix. This change is applied to all outputs of the material,
+        this include the Surface (Color) and also the displacement and volume. For displacement mix means multiply.
+
+        :param material: Used material
+        :param config: Used config
+        """
+        if not material.use_nodes:
+            raise Exception(f"The material {material.name} does not use nodes. Change your selection!")
+
+        nodes = material.node_tree.nodes
+        links = material.node_tree.links
+
+        # determine the mode
+        used_mode = config.get_string("mode", "mix").lower()
+        if used_mode not in ["add", "mix"]:
+            raise Exception(f'This mode is unknown here: {used_mode}, only ["mix", "add"]!')
+
+        mix_strength = 0.0
+        if used_mode == "mix":
+            mix_strength = config.get_float("mix_strength", 0.5)
+        elif used_mode == "add" and config.has_param("mix_strength"):
+            raise Exception("The mix_strength only works in the mix mode not in the add mode!")
+
+        # get the material, which will be used to infuse the given material
+        used_materials = config.get_list("used_material")
+        if len(used_materials) == 0:
+            raise Exception(f"You have to select a material, which is {used_mode}ed over the material!")
+
+        used_material = random.choice(used_materials)
+
+        # move the copied material inside of a group
+        group_node = nodes.new("ShaderNodeGroup")
+        group = BlenderUtility.add_nodes_to_group(used_material.node_tree.nodes,
+                                                  f"{used_mode.title()}_{used_material.name}")
+        group_node.node_tree = group
+        # get the current material output and put the used material in between the last node and the material output
+        material_output = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
+        for mat_output_input in material_output.inputs:
+            if len(mat_output_input.links) > 0:
+                if "Float" in mat_output_input.bl_idname or "Vector" in mat_output_input.bl_idname:
+                    # For displacement
+                    infuse_node = nodes.new("ShaderNodeMixRGB")
+                    if used_mode == "mix":
+                        # as there is no mix mode, we use multiply here, which is similar
+                        infuse_node.blend_type = "MULTIPLY"
+                        infuse_node.inputs["Fac"].default_value = mix_strength
+                        input_offset = 1
+                    elif used_mode == "add":
+                        infuse_node.blend_type = "ADD"
+                        input_offset = 0
+                    else:
+                        raise Exception(f"This mode is not supported here: {used_mode}!")
+                    infuse_output = infuse_node.outputs["Color"]
+                else:
+                    # for the normal surface output (Color)
+                    if used_mode == "mix":
+                        infuse_node = nodes.new(type='ShaderNodeMixShader')
+                        infuse_node.inputs[0].default_value = mix_strength
+                        input_offset = 1
+                    elif used_mode == "add":
+                        infuse_node = nodes.new(type='ShaderNodeMixShader')
+                        input_offset = 0
+                    else:
+                        raise Exception(f"This mode is not supported here: {used_mode}!")
+                    infuse_output = infuse_node.outputs["Shader"]
+
+                # link the infuse node with the correct group node and the material output
+                for link in mat_output_input.links:
+                    links.new(link.from_socket, infuse_node.inputs[input_offset])
+                links.new(group_node.outputs[mat_output_input.name], infuse_node.inputs[input_offset + 1])
+                links.new(infuse_output, mat_output_input)
+
     def _add_dust_to_material(self, material: bpy.types.Material, value: dict):
         """
         Adds a dust film to the material, where the strength determines how much dust is used.
@@ -481,11 +763,15 @@ class MaterialManipulator(Module):
         if config.has_param("used_dust_texture"):
             texture_nodes = config.get_list("used_dust_texture")
 
-        nodes = material.node_tree.nodes
-        links = material.node_tree.links
+        group_node = material.node_tree.nodes.new("ShaderNodeGroup")
+        group_node.width = 250
+        group = bpy.data.node_groups.new(name="Dust Material", type="ShaderNodeTree")
+        group_node.node_tree = group
+        nodes, links = group.nodes, group.links
+
         # define start locations and differences, to make the debugging easier
-        x_pos, x_diff = -(250 * 8), 250
-        y_pos, y_diff = (x_diff * 5), x_diff
+        x_pos, x_diff = -(250 * 4), 250
+        y_pos, y_diff = (x_diff * 1), x_diff
 
         # Extract the normal for the current material location
         geometry_node = nodes.new('ShaderNodeNewGeometry')
@@ -590,21 +876,46 @@ class MaterialManipulator(Module):
 
         # combine the previous color with the new dust mode
         mix_shader = nodes.new("ShaderNodeMixShader")
+        mix_shader.location = (x_pos + x_diff * 8, y_pos)
         links.new(multiply_node.outputs["Value"], mix_shader.inputs["Fac"])
-
-        # remove the connection between the output and the last node and put the mix shader inbetween
-        node_connected_to_the_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(material)
-        links.new(node_connected_to_the_output.outputs[0], mix_shader.inputs[1])
-        links.new(mix_shader.outputs["Shader"], material_output.inputs["Surface"])
-        mix_shader.location.x = material_output.location.x - x_diff
-        mix_shader.location.y = material_output.location.y + y_diff
 
         # add a bsdf node for the dust, this will be used to actually give the dust a color
         dust_color = nodes.new("ShaderNodeBsdfPrincipled")
-        dust_color.location.x = x_pos + x_diff * 6
-        dust_color.location.y = y_pos - y_diff
+        dust_color.location = (x_pos + x_diff * 6, y_pos - y_diff)
         # the used dust color is a grey with a tint in orange
         dust_color.inputs["Base Color"].default_value = [0.8, 0.773, 0.7, 1.0]
         dust_color.inputs["Roughness"].default_value = 1.0
         dust_color.inputs["Specular"].default_value = 0.0
         links.new(dust_color.outputs["BSDF"], mix_shader.inputs[2])
+
+        # create the input and output nodes inside of the group
+        group_output = nodes.new("NodeGroupOutput")
+        group_output.location = (x_pos + x_diff * 9, y_pos)
+        group_input = nodes.new("NodeGroupInput")
+        group_input.location = (x_pos + x_diff * 7, y_pos - y_diff * 0.5)
+
+        # create sockets for the outside of the group match them to the mix shader
+        group.outputs.new(mix_shader.outputs[0].bl_idname, mix_shader.outputs[0].name)
+        group.inputs.new(mix_shader.inputs[1].bl_idname, mix_shader.inputs[1].name)
+        group.inputs.new(multiply_node.inputs[1].bl_idname, "Dust strength")
+        group.inputs.new(mapping_node.inputs["Scale"].bl_idname, "Texture scale")
+
+        # link the input and output to the mix shader
+        links.new(group_input.outputs[0], mix_shader.inputs[1])
+        links.new(mix_shader.outputs[0], group_output.inputs[0])
+        links.new(group_input.outputs["Dust strength"], multiply_node.inputs[1])
+        links.new(group_input.outputs["Texture scale"], mapping_node.inputs["Scale"])
+
+        # remove the connection between the output and the last node and put the mix shader in between
+        node_connected_to_the_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(material)
+
+        # place the group node above the material output
+        group_node.location = (material_output.location.x - x_diff, material_output.location.y + y_diff)
+
+        # connect the dust group
+        material.node_tree.links.new(node_connected_to_the_output.outputs[0], group_node.inputs[0])
+        material.node_tree.links.new(group_node.outputs[0], material_output.inputs["Surface"])
+
+        # set the default values
+        group_node.inputs["Dust strength"].default_value = strength
+        group_node.inputs["Texture scale"].default_value = [texture_scale] * 3
