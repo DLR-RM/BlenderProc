@@ -47,6 +47,9 @@ class LoaderInterface(Module):
 
         :param objects: A list of objects which should receive the custom properties.
         """
+        # after loading blender needs an update to actually place the objects in the scene, which is necessary
+        # to manipulate or select them
+        bpy.context.view_layer.update()
 
         properties = self.config.get_raw_dict("add_properties", {})
         material_properties = self.config.get_raw_dict("add_material_properties", {})
