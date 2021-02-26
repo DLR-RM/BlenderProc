@@ -128,7 +128,7 @@ class MeshObject(Entity):
         bpy.context.view_layer.objects.active = self.blender_obj
         self.set_rotation_euler([0, 0, 0])
         bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.transform.rotate(value=np.pi * 0.5, orient_axis="X")
+        bpy.ops.transform.rotate(value=-np.pi * 0.5, orient_axis="X")
         bpy.ops.object.mode_set(mode='OBJECT')
         self.deselect()
         bpy.context.view_layer.update()
