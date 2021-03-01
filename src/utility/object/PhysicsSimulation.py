@@ -51,7 +51,7 @@ class PhysicsSimulation:
                 obj.set_origin(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
 
                 # Fix pose of object to the one it had at the end of the simulation
-                obj.set_location(obj_poses_after_sim[obj.get_name()]['location'])
+                obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                 obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
             else:
                 # Reset origin to same place it was before the simulation
