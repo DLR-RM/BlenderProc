@@ -1,10 +1,11 @@
-from typing import List
+from typing import List, Union
 
 import bpy
 
 from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
+
 
 class MeshObject(Entity):
 
@@ -64,7 +65,7 @@ class MeshObject(Entity):
     @staticmethod
     def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
         """ Converts the given list of blender objects to mesh objects
-    
+
         :param blender_objects: List of blender objects.
         :return: The list of meshes.
         """
@@ -167,3 +168,90 @@ class MeshObject(Entity):
         bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
         self.deselect()
 
+    def get_origin(self) -> Vector:
+        """ Returns the origin of the object.
+
+        :return: The origin in world coordinates.
+        """
+        return self.blender_obj.location
+
+    def set_origin(self, point: Union[list, Vector] = None, mode: str = "POINT") -> Vector:
+        """ Sets the origin of the object.
+
+        This will not change the appearing pose of the object, as the vertex locations experience the inverse transformation applied to the origin.
+
+        :param point: The point in world coordinates to which the origin should be set. This parameter is only relevent if mode is set to "POINT".
+        :param mode: The mode specifying how the origin should be set. Available options are: ["POINT", "CENTER_OF_MASS", "CENTER_OF_VOLUME"]
+        :return: The new origin in world coordinates.
+        """
+        if mode == "POINT":
+            if point is None:
+                raise Exception("The parameter point is not given even though the mode is set to POINT.")
+            prev_cursor_location = bpy.context.scene.cursor.location
+            bpy.context.scene.cursor.location = point
+            bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+            bpy.context.scene.cursor.location = prev_cursor_location
+        elif mode == "CENTER_OF_MASS":
+            bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
+        elif mode == "CENTER_OF_VOLUME":
+            bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME')
+        else:
+            raise Exception("No such mode: " + mode)
+
+        return self.get_origin()
+
+    def enable_rigidbody(self, active: bool, collision_shape: str = 'CONVEX_HULL', collision_margin: float = 0.001, collision_mesh_source: str = "FINAL", mass: float = None, mass_factor: float = 1, friction: float = 0.5, angular_damping: float = 0.1, linear_damping: float = 0.04):
+        """ Enables the rigidbody component of the object which makes it participate in physics simulations.
+
+        :param active: If True, the object actively participates in the simulation and its key frames are ignored. If False, the object still follows its keyframes and only acts as an obstacle, but is not influenced by the simulation.
+        :param collision_shape: Collision shape of object in simulation. Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'.
+        :param collision_margin: The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit.
+        :param collision_mesh_source: Source of the mesh used to create collision shape. Default: 'FINAL'. Available: 'BASE', 'DEFORM', 'FINAL'.
+        :param mass: The mass in kilogram the object should have. If None is given the mass is calculated based on its bounding box volume and the given `mass_factor`.
+        :param mass_factor: Scaling factor for mass. This is only considered if the given `mass` is None. Defines the linear function mass=bounding_box_volume*mass_factor (defines material density).
+        :param friction: Resistance of object to movement.
+        :param angular_damping: Amount of angular velocity that is lost over time.
+        :param linear_damping: Amount of linear velocity that is lost over time.
+        """
+        # Enable rigid body component
+        bpy.context.view_layer.objects.active = self.blender_obj
+        bpy.ops.rigidbody.object_add()
+        # Sett attributes
+        rigid_body = self.blender_obj.rigid_body
+        rigid_body.type = "ACTIVE" if active else "PASSIVE"
+        rigid_body.collision_shape = collision_shape
+        rigid_body.collision_margin = collision_margin
+        rigid_body.use_margin = True
+        rigid_body.mesh_source = collision_mesh_source
+        rigid_body.friction = friction
+        rigid_body.angular_damping = angular_damping
+        rigid_body.linear_damping = linear_damping
+        if mass is None:
+            rigid_body.mass = self.get_bound_box_volume() * mass_factor
+        else:
+            rigid_body.mass = mass
+
+    def disable_rigidbody(self):
+        """ Disables the rigidbody element of the object """
+        bpy.context.view_layer.objects.active = self.blender_obj
+        bpy.ops.rigidbody.object_remove()
+
+    def get_bound_box_volume(self) -> float:
+        """ Gets the volume of the object aligned bounding box.
+
+        :return: volume of a bounding box.
+        """
+        bb = self.get_bound_box()
+        # Search for the point which is the maximum distance away from the first point
+        # we call this first point min and the furthest away point max
+        # the vector between the two is a diagonal of the bounding box
+        min_point, max_point = bb[0], None
+        max_dist = -1
+        for point in bb:
+            dist = (point - min_point).length
+            if dist > max_dist:
+                max_point = point
+                max_dist = dist
+        diag = max_point - min_point
+        # use the diagonal to calculate the volume of the box
+        return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
