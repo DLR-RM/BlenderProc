@@ -173,7 +173,7 @@ class MeshObject(Entity):
 
         :return: The origin in world coordinates.
         """
-        return self.blender_obj.location
+        return self.blender_obj.location.copy()
 
     def set_origin(self, point: Union[list, Vector] = None, mode: str = "POINT") -> Vector:
         """ Sets the origin of the object.
@@ -184,17 +184,20 @@ class MeshObject(Entity):
         :param mode: The mode specifying how the origin should be set. Available options are: ["POINT", "CENTER_OF_MASS", "CENTER_OF_VOLUME"]
         :return: The new origin in world coordinates.
         """
+        context = bpy.context.copy()
+        context["selected_editable_objects"] = [self.blender_obj]
+
         if mode == "POINT":
             if point is None:
                 raise Exception("The parameter point is not given even though the mode is set to POINT.")
             prev_cursor_location = bpy.context.scene.cursor.location
             bpy.context.scene.cursor.location = point
-            bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+            bpy.ops.object.origin_set(context, type='ORIGIN_CURSOR')
             bpy.context.scene.cursor.location = prev_cursor_location
         elif mode == "CENTER_OF_MASS":
-            bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
+            bpy.ops.object.origin_set(context, type='ORIGIN_CENTER_OF_MASS')
         elif mode == "CENTER_OF_VOLUME":
-            bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME')
+            bpy.ops.object.origin_set(context, type='ORIGIN_CENTER_OF_VOLUME')
         else:
             raise Exception("No such mode: " + mode)
 
@@ -226,15 +229,24 @@ class MeshObject(Entity):
         rigid_body.friction = friction
         rigid_body.angular_damping = angular_damping
         rigid_body.linear_damping = linear_damping
+
         if mass is None:
             rigid_body.mass = self.get_bound_box_volume() * mass_factor
         else:
             rigid_body.mass = mass
 
+
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
         bpy.context.view_layer.objects.active = self.blender_obj
         bpy.ops.rigidbody.object_remove()
+
+    def get_rigidbody(self) -> bpy.types.RigidBodyObject:
+        """ Returns the rigid body component
+
+        :return: The rigid body component of the object.
+        """
+        return self.blender_obj.rigid_body
 
     def get_bound_box_volume(self) -> float:
         """ Gets the volume of the object aligned bounding box.
