@@ -128,7 +128,7 @@ class PhysicsPositioning(Module):
                 # set 3d cursor location to the total shift of the object
                 bpy.context.scene.cursor.location = origin_shift[obj.name] + obj_poses_after_sim[obj.name]['location']
             else:
-                bpy.context.scene.cursor.location = origin_shift[obj.name] + obj_poses_after_sim[obj.name]['location']
+                bpy.context.scene.cursor.location = origin_shift[obj.name] + obj.location
 
             bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
             obj.select_set(False)
