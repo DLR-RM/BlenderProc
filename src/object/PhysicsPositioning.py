@@ -98,8 +98,7 @@ class PhysicsPositioning(Module):
         # locations of all soon to be active objects before we shift their origin points
         locations_before_origin_shift = {}
         for obj in get_all_blender_mesh_objects():
-            if obj["physics"]:
-                locations_before_origin_shift.update({obj.name: obj.location.copy()})
+            locations_before_origin_shift.update({obj.name: obj.location.copy()})
         # enable rigid body and shift origin point for active objects
         locations_after_origin_shift = self._add_rigidbody()
         # compute origin point shift for all active objects
@@ -116,9 +115,10 @@ class PhysicsPositioning(Module):
         obj_poses_after_sim = self._do_simulation()
         # reset origin point of all active objects to the total shift location of the 3D cursor
         for obj in get_all_blender_mesh_objects():
+            bpy.context.view_layer.objects.active = obj
+            obj.select_set(True)
+
             if obj.rigid_body.type == "ACTIVE":
-                bpy.context.view_layer.objects.active = obj
-                obj.select_set(True)
                 # compute relative object rotation before and after simulation
                 R_obj_before_sim = mathutils.Euler(obj_poses_before_sim[obj.name]['rotation']).to_matrix()
                 R_obj_after = mathutils.Euler(obj_poses_after_sim[obj.name]['rotation']).to_matrix()
@@ -127,8 +127,11 @@ class PhysicsPositioning(Module):
                 origin_shift[obj.name] = R_obj_rel.transposed() @ origin_shift[obj.name]
                 # set 3d cursor location to the total shift of the object
                 bpy.context.scene.cursor.location = origin_shift[obj.name] + obj_poses_after_sim[obj.name]['location']
-                bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
-                obj.select_set(False)
+            else:
+                bpy.context.scene.cursor.location = origin_shift[obj.name] + obj.location
+
+            bpy.ops.object.origin_set(type='ORIGIN_CURSOR', center='MEDIAN')
+            obj.select_set(False)
 
         # reset 3D cursor location
         bpy.context.scene.cursor.location = mathutils.Vector([0, 0, 0])
@@ -149,6 +152,7 @@ class PhysicsPositioning(Module):
         :return: Object locations after origin point shift. Type: dict.
         """
         locations_after_origin_shift = {}
+        bpy.ops.object.select_all(action='DESELECT')
         for obj in get_all_blender_mesh_objects():
             bpy.context.view_layer.objects.active = obj
             bpy.ops.rigidbody.object_add()
@@ -166,10 +170,10 @@ class PhysicsPositioning(Module):
             obj.rigid_body.friction = self.friction
             obj.rigid_body.angular_damping = self.angular_damping
             obj.rigid_body.linear_damping = self.linear_damping
-            if obj.rigid_body.type == "ACTIVE":
-                bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME', center='MEDIAN')
-                bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-                locations_after_origin_shift.update({obj.name: obj.location.copy()})
+
+            bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_VOLUME', center='MEDIAN')
+            bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+            locations_after_origin_shift.update({obj.name: obj.location.copy()})
 
             if self.mass_scaling:
                 obj.rigid_body.mass = get_bound_volume(obj) * self.mass_factor
