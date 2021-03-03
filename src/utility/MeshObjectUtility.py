@@ -188,8 +188,7 @@ class MeshObject(Entity):
         :param mode: The mode specifying how the origin should be set. Available options are: ["POINT", "CENTER_OF_MASS", "CENTER_OF_VOLUME"]
         :return: The new origin in world coordinates.
         """
-        context = bpy.context.copy()
-        context["selected_editable_objects"] = [self.blender_obj]
+        context = {"selected_editable_objects": [self.blender_obj]}
 
         if mode == "POINT":
             if point is None:
@@ -221,8 +220,7 @@ class MeshObject(Entity):
         :param linear_damping: Amount of linear velocity that is lost over time.
         """
         # Enable rigid body component
-        bpy.context.view_layer.objects.active = self.blender_obj
-        bpy.ops.rigidbody.object_add()
+        bpy.ops.rigidbody.object_add({'object': self.blender_obj})
         # Sett attributes
         rigid_body = self.blender_obj.rigid_body
         rigid_body.type = "ACTIVE" if active else "PASSIVE"
@@ -242,8 +240,7 @@ class MeshObject(Entity):
 
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
-        bpy.context.view_layer.objects.active = self.blender_obj
-        bpy.ops.rigidbody.object_remove()
+        bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
 
     def get_rigidbody(self) -> bpy.types.RigidBodyObject:
         """ Returns the rigid body component
