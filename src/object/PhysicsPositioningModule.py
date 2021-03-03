@@ -64,10 +64,6 @@ class PhysicsPositioningModule(Module):
           - Collision shape of object in simulation. This value is used if for an object no custom property `physics_collision_shape` is set.
             Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'.
           - string
-        * - objs_with_box_collision_shape
-          - List of objects that get 'BOX' collision shape instead 'collision_shape'. Result of the getter.Entity.
-            Default: []
-          - list
         * - mass_scaling
           - Toggles scaling of mass for objects (1 kg/1m3 of a bounding box). Default: False.
           - bool
