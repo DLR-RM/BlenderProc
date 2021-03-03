@@ -4,6 +4,7 @@ import numpy as np
 
 from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bound_volume
 from src.utility.MeshObjectUtility import MeshObject
+from src.utility.Utility import Utility
 
 
 class PhysicsSimulation:
@@ -29,13 +30,15 @@ class PhysicsSimulation:
         :param substeps_per_frame: Number of simulation steps taken per frame.
         :param solver_iters: Number of constraint solver iterations made per simulation step.
         """
-        # Run simulation and remember poses before and after
-        obj_poses_before_sim = PhysicsSimulation._get_pose()
-        origin_shifts = PhysicsSimulation.simulate(min_simulation_time, max_simulation_time, check_object_interval, object_stopped_location_threshold, object_stopped_rotation_threshold, substeps_per_frame, solver_iters)
-        obj_poses_after_sim = PhysicsSimulation._get_pose()
+        # Undo changes made in the simulation like origin adjustment and persisting the object's scale
+        with Utility.UndoAfterExecution():
+            # Run simulation and remember poses before and after
+            obj_poses_before_sim = PhysicsSimulation._get_pose()
+            origin_shifts = PhysicsSimulation.simulate(min_simulation_time, max_simulation_time, check_object_interval, object_stopped_location_threshold, object_stopped_rotation_threshold, substeps_per_frame, solver_iters)
+            obj_poses_after_sim = PhysicsSimulation._get_pose()
 
-        # Make sure to remove the simulation cache as we are only interested in the final poses
-        bpy.ops.ptcache.free_bake({"point_cache": bpy.context.scene.rigidbody_world.point_cache})
+            # Make sure to remove the simulation cache as we are only interested in the final poses
+            bpy.ops.ptcache.free_bake({"point_cache": bpy.context.scene.rigidbody_world.point_cache})
 
         # Fix the pose of all objects to their pose at the and of the simulation (also revert origin shift)
         objects_with_physics = [MeshObject(obj) for obj in get_all_blender_mesh_objects() if obj.rigid_body is not None]
@@ -47,15 +50,10 @@ class PhysicsSimulation:
                 R_obj_rel = R_obj_before_sim @ R_obj_after.transposed()
                 # Apply relative rotation to origin shift
                 origin_shift = R_obj_rel.transposed() @ origin_shifts[obj.get_name()]
-                # Reset origin to same place it was before the simulation
-                obj.set_origin(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
 
                 # Fix pose of object to the one it had at the end of the simulation
                 obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                 obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
-            else:
-                # Reset origin to same place it was before the simulation
-                obj.set_origin(obj.get_origin() - origin_shifts[obj.get_name()])
 
             # Disable the rigidbody element of the object
             obj.disable_rigidbody()
@@ -69,6 +67,7 @@ class PhysicsSimulation:
         If that is the case, the simulation is stopped.
 
         The origin of all objects is set to their center of mass in this function which is necessary to achieve a realistic simulation in blender (see https://blender.stackexchange.com/questions/167488/physics-not-working-as-expected)
+        Also the scale of each participating object is persisted as scale != 1 can make the simulation unstable.
 
         :param min_simulation_time: The minimum number of seconds to simulate.
         :param max_simulation_time: The maximum number of seconds to simulate.
@@ -89,6 +88,9 @@ class PhysicsSimulation:
             prev_origin = obj.get_origin()
             new_origin = obj.set_origin(mode="CENTER_OF_VOLUME")
             origin_shift[obj.get_name()] = new_origin - prev_origin
+
+            # Persist mesh scaling as having a scale != 1 can make the simulation unstable
+            obj.persist_transformation_into_mesh(location=False, rotation=False, scale=True)
 
         # Configure simulator
         bpy.context.scene.rigidbody_world.substeps_per_frame = substeps_per_frame

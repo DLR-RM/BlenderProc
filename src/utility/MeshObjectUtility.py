@@ -157,15 +157,19 @@ class MeshObject(Entity):
         """
         return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
 
-    def persist_transformation_into_mesh(self):
+    def persist_transformation_into_mesh(self, location: bool = True, rotation: bool = True, scale: bool = True):
         """
         Apply the current transformation of the object, which are saved in the location, scale or rotation attributes
         to the mesh and sets them to their init values.
+
+        :param location: Determines whether the object's location should be persisted.
+        :param rotation: Determines whether the object's rotation should be persisted.
+        :param scale: Determines whether the object's scale should be persisted.
         """
         bpy.ops.object.select_all(action='DESELECT')
         self.select()
         bpy.context.view_layer.objects.active = self.blender_obj
-        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+        bpy.ops.object.transform_apply(location=location, rotation=rotation, scale=scale)
         self.deselect()
 
     def get_origin(self) -> Vector:
