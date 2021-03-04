@@ -185,6 +185,7 @@
           }
         },
         "cp_physics": False,
+        "cp_physics_collision_shape": "BOX",
         "cp_category_id": 333
       }
     },
@@ -269,13 +270,7 @@
         "substeps_per_frame": 20,
         "friction": 100.0,
         "linear_damping": 0.99,
-        "angular_damping": 0.99,        
-        "objs_with_box_collision_shape": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "ground_plane.*"
-          }
-        }
+        "angular_damping": 0.99
       }
     },
     {
