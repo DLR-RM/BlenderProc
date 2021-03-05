@@ -42,6 +42,19 @@ python run.py config.yaml <additional arguments>
 
 This runs all modules specified in the config file in a step-by-step fashion in the configured order.
 
+BlenderProc here generates a scene, places cameras in it and renders the content. This process has to be repeated multiple times to generate a diverse dataset.
+Each run should construct a random scene to create a vast variety of different scenarios, to make the generalization to the real world easier.
+
+<p align="center">
+<img src="BlenderProcRerun.jpg" alt="BlenderProc rerun image" width=500>
+</p>
+
+For that reason we offer a `rerun.py` script, which does exactly this:
+```shell
+python rerun.py config.yaml <additional arguments>
+```
+Make sure that the last additional argument is the output folder, in which it will create sub folders for each run.
+
 Currently, BlenderProc officialy supports Linux and MacOS. There is also a community driven support for Windows.
 
 ## Functionality
