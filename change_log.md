@@ -4,10 +4,20 @@
 - Adding a complete python API and phasing out the `.yaml` files (Goal for 2.0.0)
 - Add support for all YCB objects (not just BOP)
 - Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)
-- Add support for BlenderKit (download is done, easy using is still missing)
 - Improve the documentation 
 
 # Version History
+
+## Version 1.10.0 24th February 2021
+- rewritten the `BlendLoader`, which is now able to only load objects of a given type, this will break existing config files as the `load_from` parameter has been replaced by `datablocks` and `obj_types`
+- the `MaterialManipulator` can now overlay/mix a texture with a selected material
+- the `MaterialManipulator` can now mix/add a material with another selected material, ideal for creating surface imperfections on other materials
+- the `MaterialManipulator` can now add a layer of dust on materials, which simulates dust flakes on top of the object, there also exists now an example for it
+- `amount_of_repetitions` can now be used with providers  
+- full integration of the blenderkit module, including modules and textures with an example
+- `LoaderInterface` now offers an auto shading mode
+- the `CCMaterialLoader` uses now a preselected list of probably useful materials by default to avoid non tileable materials
+- restructure loaders and move their functionality to the utilities (necessary for the API changes for 2.0.0)
 
 ## Version 1.9.0 10th February 2021
 - all `Loader` now support setting the `add_material_properties` of the newly loaded objects

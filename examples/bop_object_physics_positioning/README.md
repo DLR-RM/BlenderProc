@@ -232,6 +232,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
           }
         },
         "cp_physics": False,
+        "cp_physics_collision_shape": "BOX",
         "cp_category_id": 333
       }
     }
@@ -239,6 +240,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 
 * Construct minimal 2m x 2m x 2m room from 6 planes
 * Set `"cp_physics": False` to fix the planes during any simulations
+* Give ground planes a BOX collision shape since they behave better.
 
 ### Material Manipulator
 
@@ -360,13 +362,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
         "substeps_per_frame": 20,
         "friction": 100.0,
         "linear_damping": 0.99,
-        "angular_damping": 0.99,
-        "objs_with_box_collision_shape": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "ground_plane.*"
-          }
-        }
+        "angular_damping": 0.99
       }
     }
 ```
@@ -377,7 +373,6 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
 * `"solver_iters": 25` increase if physics glitches occur.
 * `"substeps_per_frame": 20` increase if physics glitches occur.
 * `"friction": 100.0, "linear_damping": 0.99, "angular_damping": 0.99` ensure inert physics properties so that objects don't spread too much
-* Give ground planes a BOX collision shape since they behave better using `"objs_with_box_collision_shape"`
 
 ### Light Sampler
 
