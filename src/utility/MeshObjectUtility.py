@@ -150,7 +150,7 @@ class MeshObject(Entity):
         :param rotation: Determines whether the object's rotation should be persisted.
         :param scale: Determines whether the object's scale should be persisted.
         """
-        bpy.ops.object.transform_apply({"object": self.blender_obj}, location=location, rotation=rotation, scale=scale)
+        bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location, rotation=rotation, scale=scale)
 
     def get_origin(self) -> Vector:
         """ Returns the origin of the object.
