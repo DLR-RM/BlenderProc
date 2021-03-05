@@ -49,7 +49,7 @@ Each run should construct a random scene to create a vast variety of different s
 <img src="BlenderProcRerun.jpg" alt="BlenderProc rerun image" width=500>
 </p>
 
-For that reason we over a `rerun.py` script, which does exactly this:
+For that reason we offer a `rerun.py` script, which does exactly this:
 ```shell
 python rerun.py config.yaml <additional arguments>
 ```
