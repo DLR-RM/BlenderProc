@@ -1,0 +1,251 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/"
+  },
+  "modules": [
+  {
+    "module": "main.Initializer",
+    "config":{
+      "global": {
+        "output_dir": "<args:2>"
+      }
+    }
+  },
+  {
+    "module": "loader.ObjectLoader",
+    "config": {
+      "path": "<args:0>",
+      "add_properties": {
+        "cp_category_id": 1,
+        "cp_name": "object",
+      },
+      "cf_set_shading": "AUTO"
+    }
+  },
+  {
+    "module": "manipulators.EntityManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+        "conditions": {
+          "type": "MESH",
+          "cp_name": "object"
+        }
+      },
+      "scale": {
+        "provider": "sampler.Uniform3d",
+        "min": [0.25, 0.25, 0.25],  # Simulates distance of approx. 1-4m to camera
+        "max": [1, 1, 1]
+      }
+    }
+  },
+  {
+    "module": "object.ObjectPoseSampler",
+    "config":{
+      "objects_to_sample": {
+        "provider": "getter.Entity",
+        "condition": {
+          "cp_name": "object",
+          "type": "MESH"
+        }
+      },
+      "pos_sampler":{
+        "provider": "sampler.Uniform3d",  # Translates object within camera FOV
+        "max": [0.55, 0.4, -1],
+        "min": [-0.55, -0.4, -1]
+      },
+      "rot_sampler": {
+        "provider": "sampler.UniformSO3"
+      }
+    }
+  },
+  {
+    "module": "manipulators.MaterialManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Material",
+        "conditions": {
+          "name": "ply_material"
+        }
+      },
+      "cf_set_specular": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0,
+        "max": 1
+      },
+      "cf_set_roughness": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0,
+        "max": 1
+      },
+      "cf_set_base_color": {
+        "provider": "sampler.Color",
+        "min": [0, 0, 0, 1],
+        "max": [1, 1, 1, 1]
+      },
+      "cf_set_metallic": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "module": "constructor.BasicMeshInitializer",
+    "config": {
+      "meshes_to_add": [
+      {
+        "type": "plane",
+        "name": "background",
+        "location": [0, 0, -7.3],
+        "scale": [4, 3, 0]
+      }
+      ]
+    }
+  },
+  {
+    "module": "manipulators.EntityManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Entity",
+        "conditions": {
+          "name": "background"
+        }
+      },
+      "cp_category_id": 0
+    }
+  },
+  {
+    "module": "loader.TextureLoader",
+    "config":{
+      "path": {
+        "provider": "sampler.Path",
+        "path": "<args:1>"
+      },
+      "add_properties": {
+        "cp_is_background_image": True
+      }
+    }
+  },
+  {
+    "module": "manipulators.MaterialManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Material",
+        "conditions": {
+          "name": "background_material"
+        }
+      },
+      # Decrease influence of sampled light source on background image
+      "cf_set_specular": 0,
+      "cf_set_roughness": 1,
+      "cf_set_transmission": 1,
+      "cf_infuse_texture": {
+        "connection": "Base Color",
+        "mode": "set",
+        "texture_scale": 1,
+        "used_texture": {
+          "provider": "getter.Texture",
+          "conditions": {
+            "cp_is_background_image": True
+          }
+        }
+      }
+    }
+  },
+  {
+    "module": "manipulators.MaterialManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Material",
+        "conditions": {
+          "name": "background_material"
+        }
+      },
+      "cf_set_specular": 0,
+      "cf_set_roughness": 1,
+      "cf_set_transmission": 1,
+      "cf_infuse_texture": {
+        "connection": "Emission",
+        "mode": "set",
+        "texture_scale": 1,
+        "used_texture": {
+          "provider": "getter.Texture",
+          "conditions": {
+            "cp_is_background_image": True
+          }
+        }
+      }
+    }
+  },
+  {
+    "module": "lighting.LightSampler",
+    "config": {
+      "lights": [
+      {
+        "location": {
+          "provider": "sampler.Shell",
+          "center": [0, 0, 0],
+          "radius_min": 1,
+          "radius_max": 5,
+          "elevation_min": 1,
+          "elevation_max": 89
+        },
+        "color": {
+          "provider": "sampler.Color",
+          "min": [0.5, 0.5, 0.5, 1],
+          "max": [1, 1, 1, 1]
+        },
+        "type": "POINT",
+        "energy": {
+          "provider": "sampler.Value",
+          "type": "int",
+          "min": 100,
+          "max": 1000
+        }
+      }
+      ]
+    }
+  },
+  {
+    "module": "camera.CameraLoader",
+    "config": {
+      "cam_poses":
+      [
+      {
+        "location": [0, 0, 0],
+        "rotation": {
+          "value": [0, 0, 0]
+      }
+      }
+      ],
+      "intrinsics": {
+        "fov": 1,
+        "resolution_x": 640,
+        "resolution_y": 480
+      }
+    }
+  },
+  {
+    "module": "renderer.RgbRenderer"
+  },
+  {
+    "module": "renderer.SegMapRenderer",
+    "config": {
+      "map_by": ["instance", "class", "name"],
+      "default_values": {"class": 0, "name": "none"}
+    }
+  },
+  {
+    "module": "writer.CocoAnnotationsWriter",
+    "config": {
+      "append_to_existing_output": True
+    }
+  }
+  ]
+}

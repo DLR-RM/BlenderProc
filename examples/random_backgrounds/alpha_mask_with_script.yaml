@@ -1,0 +1,190 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/"
+  },
+  "modules": [
+  {
+    "module": "main.Initializer",
+    "config":{
+      "global": {
+        "output_dir": "<args:1>"
+      }
+    }
+  },
+  {
+    "module": "loader.ObjectLoader",
+    "config": {
+      "path": "<args:0>",
+      "add_properties": {
+        "cp_category_id": 1,
+        "cp_name": "object",
+      },
+      "cf_set_shading": "AUTO"
+    }
+  },
+  {
+    "module": "manipulators.MaterialManipulator",
+    "config": {
+      "selector": {
+        "provider": "getter.Material",
+        "conditions": {
+          "name": "ply_material"
+        }
+      },
+      "cf_set_specular": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0,
+        "max": 1
+      },
+      "cf_set_roughness": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0,
+        "max": 1
+      },
+      "cf_set_base_color": {
+        "provider": "sampler.Color",
+        "min": [0, 0, 0, 1],
+        "max": [1, 1, 1, 1]
+      },
+      "cf_set_metallic": {
+        "provider": "sampler.Value",
+        "type": "float",
+        "min": 0,
+        "max": 1
+      }
+    }
+  },
+  {
+    "module": "lighting.LightSampler",
+    "config": {
+      "lights": [
+      {
+        "location": {
+          "provider": "sampler.Shell",
+          "center": {
+            "provider": "getter.POI",
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "cp_name": "object",
+                "type": "MESH"
+              }
+            }
+          },
+          "radius_min": 1,
+          "radius_max": 5,
+          "elevation_min": 1,
+          "elevation_max": 89,
+          "uniform_elevation": True
+        },
+        "color": {
+          "provider": "sampler.Color",
+          "min": [0.5, 0.5, 0.5, 1],
+          "max": [1, 1, 1, 1]
+        },
+        "type": "POINT",
+        "energy": {
+          "provider": "sampler.Value",
+          "type": "int",
+          "min": 100,
+          "max": 1000
+        }
+      }
+      ]
+    }
+  },
+  {
+    "module": "camera.CameraSampler",
+    "config": {
+      "cam_poses": [
+      {
+        "number_of_samples": 5,
+        "check_if_objects_visible": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_name": "object",
+            "type": "MESH"
+          }
+        },
+        "location": {
+          "provider": "sampler.Shell",
+          "center": {
+            "provider": "getter.POI",
+            "selector": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "cp_name": "object",
+                "type": "MESH"
+              }
+            }
+          },
+          "radius_min": 1,
+          "radius_max": 4,
+          "elevation_min": 1,
+          "elevation_max": 89,
+          "uniform_elevation": True
+        },
+        "rotation": {
+          "format": "look_at",
+          "value": {
+            "provider": "getter.AttributeMerger",
+            "elements": [
+            {
+              "provider": "getter.POI",
+              "selector": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "cp_name": "object",
+                  "type": "MESH"
+                }
+              }
+            },
+            {
+              "provider": "sampler.Uniform3d",
+              "min": [-0.5, -0.5, -0.5],
+              "max": [0.5, 0.5, 0.5],
+            },
+            ],
+            "transform_by": "sum"
+          },
+          "inplane_rot": {
+            "provider": "sampler.Value",
+            "type": "float",
+            "min": -0.7854,
+            "max": 0.7854
+          }
+        }
+      }
+      ],
+      "intrinsics": {
+        "fov": 1,
+        "resolution_x": 640,
+        "resolution_y": 480
+      }
+    }
+  },
+  {
+    "module": "renderer.RgbRenderer",
+    "config": {
+      "transparent_background": True
+    }
+  },
+  {
+    "module": "renderer.SegMapRenderer",
+    "config": {
+      "map_by": ["instance", "class", "name"],
+      "default_values": {"class": 0, "name": "none"}
+    }
+  },
+  {
+    "module": "writer.CocoAnnotationsWriter",
+    "config": {
+      "append_to_existing_output": True
+    }
+  }
+  ]
+}
