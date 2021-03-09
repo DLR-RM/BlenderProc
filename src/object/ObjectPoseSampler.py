@@ -162,17 +162,17 @@ class ObjectPoseSampler(Module):
 
         no_collision = True
         # Now check for collisions
-        for already_placed in objects_to_check_against:
-
-            if already_placed == obj:
+        for collision_obj in objects_to_check_against:
+            # Do not check collisions with yourself
+            if collision_obj == obj:
                 continue
             # First check if bounding boxes collides
-            intersection = check_bb_intersection(obj, already_placed)
+            intersection = check_bb_intersection(obj, collision_obj)
             # if they do
             if intersection:
-                skip_inside_check = already_placed in list_of_objects_with_no_inside_check
+                skip_inside_check = collision_obj in list_of_objects_with_no_inside_check
                 # then check for more refined collisions
-                intersection, bvh_cache = check_intersection(obj, already_placed, bvh_cache=bvh_cache,
+                intersection, bvh_cache = check_intersection(obj, collision_obj, bvh_cache=bvh_cache,
                                                              skip_inside_check=skip_inside_check)
             if intersection:
                 no_collision = False
