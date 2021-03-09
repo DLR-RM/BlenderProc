@@ -356,8 +356,6 @@ def load_image(file_path, num_channels=3):
             raise Exception(error)
 
 
-
-
 def get_bound_volume(obj):
     """ Gets the volume of a possible orientated bounding box.
     :param obj: Mesh object.

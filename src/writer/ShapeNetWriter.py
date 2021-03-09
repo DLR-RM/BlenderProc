@@ -2,6 +2,7 @@ import bpy
 
 from src.utility.ItemWriter import ItemWriter
 from src.writer.WriterInterface import WriterInterface
+from src.utility.WriterUtility import WriterUtility
 from src.utility.BlenderUtility import get_all_mesh_objects
 
 class ShapeNetWriter(WriterInterface):
@@ -23,7 +24,7 @@ class ShapeNetWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self.object_writer = ItemWriter(self._get_attribute)
+        self.object_writer = ItemWriter(WriterUtility.get_shapenet_attribute)
 
     def run(self):
         """ Collect ShapeNet attributes and write them to a file."""
@@ -32,16 +33,4 @@ class ShapeNetWriter(WriterInterface):
 
         self.write_attributes_to_file(self.object_writer, shapenet_objects, "shapenet_", "shapenet", ["used_synset_id", "used_source_id"])
 
-    def _get_attribute(self, shapenet_obj, attribute_name):
-        """ Returns the value of the requested attribute for the given object.
-        :param shapenet_obj: The ShapeNet object.
-        :param attribute_name: The attribute name. Type: string.
-        :return: The attribute value.
-        """
 
-        if attribute_name == "used_synset_id":
-            return shapenet_obj.get("used_synset_id", "")
-        elif attribute_name == "used_source_id":
-            return shapenet_obj.get("used_source_id", "")
-        else:
-            return super()._get_attribute(shapenet, attribute_name)
