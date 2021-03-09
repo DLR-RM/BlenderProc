@@ -47,6 +47,9 @@ class ObjectPoseSampler(Module):
         * - objects_to_sample
           - Here call an appropriate Provider (Getter) in order to select objects. Default: all mesh objects.
           - Provider
+        * - objects_to_check_collisions
+          - Here call an appropriate Provider (Getter) in order to select objects that you want to check collisions with. Default: all mesh objects.
+          - Provider
         * - max_iterations
           - Amount of tries before giving up on an object and moving to the next one. Default: 1000.
           - int
@@ -71,11 +74,11 @@ class ObjectPoseSampler(Module):
         2. If no collisions are found keep the point.
         """
         # While we have objects remaining and have not run out of tries - sample a point
-        # List of successfully placed objects
-        placed = []
+
         # After this many tries we give up on current object and continue with the rest
         max_tries = self.config.get_int("max_iterations", 1000)
         objects = self.config.get_list("objects_to_sample", get_all_blender_mesh_objects())
+        objects_to_check_collisions = self.config.get_list("objects_to_check_collisions", get_all_blender_mesh_objects())
 
         if max_tries <= 0:
             raise ValueError("The value of max_tries must be greater than zero: {}".format(max_tries))
@@ -99,7 +102,7 @@ class ObjectPoseSampler(Module):
                     position = self.config.get_vector3d("pos_sampler")
                     rotation = self.config.get_vector3d("rot_sampler")
                     no_collision = ObjectPoseSampler.check_pose_for_object(obj, position, rotation, bvh_cache,
-                                                                           placed, [])
+                                                                           objects_to_check_collisions, [])
 
                     # If no collision then keep the position
                     if no_collision:
@@ -108,8 +111,6 @@ class ObjectPoseSampler(Module):
 
                 if amount_of_tries_done == -1:
                     amount_of_tries_done = max_tries
-
-                placed.append(obj)
 
                 if not no_collision:
                     print("Could not place " + obj.name + " without a collision.")
@@ -162,6 +163,9 @@ class ObjectPoseSampler(Module):
         no_collision = True
         # Now check for collisions
         for already_placed in objects_to_check_against:
+
+            if already_placed == obj:
+                continue
             # First check if bounding boxes collides
             intersection = check_bb_intersection(obj, already_placed)
             # if they do
