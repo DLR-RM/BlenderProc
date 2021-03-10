@@ -74,27 +74,33 @@ class ObjectPoseSampler(Module):
         2. If no collisions are found keep the point.
         """
         # While we have objects remaining and have not run out of tries - sample a point
-
+        # List of successfully placed objects
+        placed = []
+        
         # After this many tries we give up on current object and continue with the rest
         max_tries = self.config.get_int("max_iterations", 1000)
-        objects = self.config.get_list("objects_to_sample", get_all_blender_mesh_objects())
+        objects_to_sample = self.config.get_list("objects_to_sample", get_all_blender_mesh_objects())
         objects_to_check_collisions = self.config.get_list("objects_to_check_collisions", get_all_blender_mesh_objects())
 
         if max_tries <= 0:
             raise ValueError("The value of max_tries must be greater than zero: {}".format(max_tries))
 
-        if not objects:
-            raise Exception("The list of objects can not be empty!")
+        if not objects_to_sample:
+            raise Exception("The list of objects_to_sample can not be empty!")
 
         # cache to fasten collision detection
         bvh_cache = {}
 
         # for every selected object
-        for obj in objects:
+        for obj in objects_to_sample:
             if obj.type == "MESH":
                 no_collision = True
 
                 amount_of_tries_done = -1
+                
+                # Among objects_to_sample only check collisions against already placed objects
+                cur_objects_to_check_collisions = list(set(objects_to_check_collisions) - set(objects_to_sample)) + placed
+                
                 # Try max_iter amount of times
                 for i in range(max_tries):
 
@@ -102,13 +108,15 @@ class ObjectPoseSampler(Module):
                     position = self.config.get_vector3d("pos_sampler")
                     rotation = self.config.get_vector3d("rot_sampler")
                     no_collision = ObjectPoseSampler.check_pose_for_object(obj, position, rotation, bvh_cache,
-                                                                           objects_to_check_collisions, [])
+                                                                           cur_objects_to_check_collisions, [])
 
                     # If no collision then keep the position
                     if no_collision:
                         amount_of_tries_done = i
                         break
-
+                      
+                placed.append(obj)
+                
                 if amount_of_tries_done == -1:
                     amount_of_tries_done = max_tries
 
