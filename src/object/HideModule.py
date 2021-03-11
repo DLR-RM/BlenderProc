@@ -34,9 +34,11 @@ class HideModule(Module):
         """
 
         objects = self.config.get_list("selector")
-        number_of_frames = self.config.get_int("number_of_frames")
-        print("Found %d frames"%number_of_frames)
-        print("Got %d objects"%len(objects))
+        number_of_frames = self.config.get_int("number_of_frames", bpy.context.scene.frame_end)
+        if number_of_frames > bpy.context.scene.frame_end:
+            number_of_frames = bpy.context.scene.frame_end
+        print("Set %d frames. Found %d frames." % number_of_frames)
+        print("Got %d objects" % len(objects))
         for obj in objects:
             obj.hide_render = False
             # Insert all selected objects to each frame for normal rendering.
