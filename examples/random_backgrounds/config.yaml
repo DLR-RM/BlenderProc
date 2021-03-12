@@ -19,9 +19,8 @@
       "path": "<args:0>",
       "add_properties": {
         "cp_category_id": 1,
-        "cp_name": "object",
-      },
-      "cf_set_shading": "AUTO"
+        "cp_is_object": True
+      }
     }
   },
   {
@@ -36,25 +35,25 @@
       "cf_set_specular": {
         "provider": "sampler.Value",
         "type": "float",
-        "min": 0,
-        "max": 1
+        "min": 0.0,
+        "max": 1.0
       },
       "cf_set_roughness": {
         "provider": "sampler.Value",
         "type": "float",
-        "min": 0,
-        "max": 1
+        "min": 0.0,
+        "max": 1.0
       },
       "cf_set_base_color": {
         "provider": "sampler.Color",
-        "min": [0, 0, 0, 1],
-        "max": [1, 1, 1, 1]
+        "min": [0.0, 0, 0.0, 1.0],
+        "max": [1.0, 1.0, 1.0, 1.0]
       },
       "cf_set_metallic": {
         "provider": "sampler.Value",
         "type": "float",
-        "min": 0,
-        "max": 1
+        "min": 0.0,
+        "max": 1.0
       }
     }
   },
@@ -70,7 +69,7 @@
             "selector": {
               "provider": "getter.Entity",
               "conditions": {
-                "cp_name": "object",
+                "cp_is_object": True,
                 "type": "MESH"
               }
             }
@@ -106,7 +105,7 @@
         "check_if_objects_visible": {
           "provider": "getter.Entity",
           "conditions": {
-            "cp_name": "object",
+            "cp_is_object": True,
             "type": "MESH"
           }
         },
@@ -117,7 +116,7 @@
             "selector": {
               "provider": "getter.Entity",
               "conditions": {
-                "cp_name": "object",
+                "cp_is_object": True,
                 "type": "MESH"
               }
             }
@@ -138,7 +137,7 @@
               "selector": {
                 "provider": "getter.Entity",
                 "conditions": {
-                  "cp_name": "object",
+                  "cp_is_object": True,
                   "type": "MESH"
                 }
               }
