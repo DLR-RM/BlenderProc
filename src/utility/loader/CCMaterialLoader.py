@@ -62,18 +62,6 @@ class CCMaterialLoader:
                     if not os.path.exists(base_image_path):
                         continue
 
-                    # if the material was already created it only has to be searched
-                    if fill_used_empty_materials:
-                        new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, add_custom_properties)
-                    else:
-                        new_mat = MaterialLoaderUtility.create_new_cc_material(asset, add_custom_properties)
-                    if preload:
-                        # if preload then the material is only created but not filled
-                        continue
-                    elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
-                        # now only the materials, which have been used should be filled
-                        continue
-
                     # construct all image paths
                     ambient_occlusion_image_path = base_image_path.replace("Color", "AmbientOcclusion")
                     metallic_image_path = base_image_path.replace("Color", "Metalness")
@@ -81,6 +69,23 @@ class CCMaterialLoader:
                     alpha_image_path = base_image_path.replace("Color", "Opacity")
                     normal_image_path = base_image_path.replace("Color", "Normal")
                     displacement_image_path = base_image_path.replace("Color", "Displacement")
+
+                    # if the material was already created it only has to be searched
+                    if fill_used_empty_materials:
+                        new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, add_custom_properties)
+                    else:
+                        new_mat = MaterialLoaderUtility.create_new_cc_material(asset, add_custom_properties)
+
+                    # if preload then the material is only created but not filled
+                    if preload:
+                        # Set alpha to 0 if the material has an alpha texture, so it can be detected e.q. in the material getter.
+                        nodes = new_mat.node_tree.nodes
+                        principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                        principled_bsdf.inputs["Alpha"].default_value = 0 if os.path.exists(alpha_image_path) else 1
+                        continue
+                    elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
+                        # now only the materials, which have been used should be filled
+                        continue
 
                     # create material based on these image paths
                     CCMaterialLoader.create_material(new_mat, base_image_path, ambient_occlusion_image_path,
