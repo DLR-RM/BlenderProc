@@ -1,14 +1,7 @@
-import csv
-import json
 import os
-import shutil
 
-import bpy
-
-from src.utility.CocoUtility import CocoUtility
-from src.utility.Utility import Utility
+from src.utility.CocoWriterUtility import CocoWriterUtility
 from src.writer.WriterInterface import WriterInterface
-
 
 class CocoAnnotationsWriter(WriterInterface):
     """ Writes Coco Annotations in to a file.
@@ -60,8 +53,7 @@ class CocoAnnotationsWriter(WriterInterface):
         self.segcolormap_output_key = self.config.get_string("segcolormap_output_key", "segcolormap")
         self._coco_data_dir = os.path.join(self._determine_output_dir(False), 'coco_data')
         self.mask_encoding_format = self.config.get_string("mask_encoding_format", "rle")
-        if not os.path.exists(self._coco_data_dir):
-            os.makedirs(self._coco_data_dir)
+        self._append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
 
     def run(self):
         """ Writes coco annotations in the following steps:
@@ -75,63 +67,10 @@ class CocoAnnotationsWriter(WriterInterface):
             print("Avoid rendering is on, no output produced!")
             return
 
-        # Find path pattern of segmentation images
-        segmentation_map_output = Utility.find_registered_output_by_key(self.segmap_output_key)
-        if segmentation_map_output is None:
-            raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
-                            "before?".format(self.segmap_output_key))
-        
-        # Find path pattern of rgb images
-        rgb_output = Utility.find_registered_output_by_key(self.rgb_output_key)
-        if rgb_output is None:
-            raise Exception("There is no output registered with key {}. Are you sure you ran the RgbRenderer module "
-                            "before?".format(self.rgb_output_key))
-    
-        # collect all segmaps
-        segmentation_map_paths = []
-
-        # Find path of name class mapping csv file
-        segcolormap_output = Utility.find_registered_output_by_key(self.segcolormap_output_key)
-        if segcolormap_output is None:
-            raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
-                            "with 'map_by' set to 'instance' before?".format(self.segcolormap_output_key))
-
-        # read colormappings, which include object name/class to integer mapping
-        inst_attribute_maps = []
-        with open(segcolormap_output["path"], 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for mapping in reader:
-                inst_attribute_maps.append(mapping)
-
-        coco_annotations_path = os.path.join(self._coco_data_dir, "coco_annotations.json")
-        # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
-        if self.config.get_bool("append_to_existing_output", False) and os.path.exists(coco_annotations_path):
-            with open(coco_annotations_path, 'r') as fp:
-                existing_coco_annotations = json.load(fp)
-            image_offset = max([image["id"] for image in existing_coco_annotations["images"]]) + 1
-        else:
-            image_offset = 0
-            existing_coco_annotations = None
-
-        # collect all RGB paths
-        new_coco_image_paths = []
-        # for each rendered frame
-        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-            segmentation_map_paths.append(segmentation_map_output["path"] % frame)
-
-            source_path = rgb_output["path"] % frame
-            target_path = os.path.join(self._coco_data_dir, os.path.basename(rgb_output["path"] % (frame + image_offset)))
-
-            shutil.copyfile(source_path, target_path)
-            new_coco_image_paths.append(os.path.basename(target_path))
-
-        coco_output = CocoUtility.generate_coco_annotations(segmentation_map_paths,
-                                                            new_coco_image_paths,
-                                                            inst_attribute_maps,
-                                                            self._supercategory,
-                                                            self.mask_encoding_format,
-                                                            existing_coco_annotations)
-
-        print("Writing coco annotations to " + coco_annotations_path)
-        with open(coco_annotations_path, 'w') as fp:
-            json.dump(coco_output, fp)
+        CocoWriterUtility.write(self._coco_data_dir,
+                                mask_encoding_format = self.mask_encoding_format,
+                                supercategory = self._supercategory,
+                                append_to_existing_output = self._append_to_existing_output,
+                                segmap_output_key = self.segmap_output_key,
+                                segcolormap_output_key = self.segcolormap_output_key,
+                                rgb_output_key = self.rgb_output_key)
