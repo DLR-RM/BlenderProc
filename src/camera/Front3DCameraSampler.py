@@ -4,7 +4,7 @@ import numpy as np
 import bpy
 
 from src.camera.CameraSampler import CameraSampler
-from src.utility.BlenderUtility import get_all_mesh_objects, get_bounds
+from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bounds
 from src.utility.CameraUtility import CameraUtility
 from src.utility.Config import Config
 
@@ -43,7 +43,7 @@ class Front3DCameraSampler(CameraSampler):
 
 
     def run(self):
-        all_objects = get_all_mesh_objects()
+        all_objects = get_all_blender_mesh_objects()
         front_3D_objs = [obj for obj in all_objects if "is_3D_future" in obj and obj["is_3D_future"]]
 
         floor_objs = [obj for obj in front_3D_objs if obj.name.lower().startswith("floor")]

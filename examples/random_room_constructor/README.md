@@ -16,9 +16,11 @@ Both are needed to use to this example.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/random_room_constructor/config.yaml examples/random_room_constructor/output
+python run.py examples/random_room_constructor/config.yaml resources/ikea resources/cctextures examples/random_room_constructor/output
 ``` 
 
+* `<PATH_TO_IKEA>`: path to the downloaded IKEA dataset, see the [scripts folder](../../scripts) for the download script. 
+* `resources/cctextures`: path to CCTextures folder, see the [scripts folder](../../scripts) for the download script.
 * `examples/random_room_constructor/output`: path of the output directory.
 
 Make sure that you have downloaded the `ikea` dataset and the `cctextures` before executing.

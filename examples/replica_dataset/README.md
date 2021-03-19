@@ -58,13 +58,12 @@ As before all these values are stored in the GlobalStorage and are only used if 
 {
   "module": "loader.ReplicaLoader",
   "config": {
-    "use_smooth_shading": "True",
-    "use_ambient_occlusion": "True"
+    "use_smooth_shading": "True"
   }
 }
 ```
 
-`loader.ReplicaLoader` handles importing objects from a given path. here we are using ambient occlusion to lighten up the scene, and enabling smooth shading on all surfaces, instead of flat shading.
+`loader.ReplicaLoader` handles importing objects from a given path. Here we are using smooth shading on all surfaces, instead of flat shading.
 
 ### Floor extractor
 

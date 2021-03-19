@@ -1,5 +1,6 @@
 import os
 import math
+import threading
 import uuid
 import bpy
 import time
@@ -67,12 +68,31 @@ class Utility:
             # Check if the module has a repetition counter
             amount_of_repetitions = 1
             if "amount_of_repetitions" in module_config:
-                amount_of_repetitions = module_config["amount_of_repetitions"]
+                amount_of_repetitions = Config(module_config).get_int("amount_of_repetitions")
 
             with Utility.BlockStopWatch("Initializing module " + module_config["module"]):
                 for i in range(amount_of_repetitions):
-                    # Import file and extract class
-                    module_class = getattr(importlib.import_module("src." + module_config["module"]), module_config["module"].split(".")[-1])
+                    module_class = None
+                    # For backwards compatibility we allow to specify a modules also without "Module" suffix.
+                    for suffix in ["Module", ""]:
+                        try:
+                            # Try to load the module using the current suffix
+                            module = importlib.import_module("src." + module_config["module"] + suffix)
+                        except ModuleNotFoundError:
+                            # Try next suffix
+                            continue
+
+                        # Check if the loaded module has a class with the same name
+                        class_name = module_config["module"].split(".")[-1] + suffix
+                        if hasattr(module, class_name):
+                            # Import file and extract class
+                            module_class = getattr(module, class_name)
+                            break
+
+                    # Throw an error if no module/class with the specified name + any suffix has been found
+                    if module_class is None:
+                        raise Exception("The module src." + module_config["module"] + " was not found!")
+
                     # Create module
                     modules.append(module_class(Config(config)))
 
@@ -82,10 +102,10 @@ class Utility:
     def get_current_version():
         """ Gets the git commit hash.
 
-        :return: a string, the BlenderProc version, or None if unavailable 
+        :return: a string, the BlenderProc version, or None if unavailable
         """
         try:
-            repo = git.Repo(search_parent_directories=True) 
+            repo = git.Repo(search_parent_directories=True)
         except git.InvalidGitRepositoryError as e:
             warnings.warn("Invalid git repository")
             return None
@@ -212,7 +232,7 @@ class Utility:
                 links.remove(l)
 
         links.new(source_socket, new_node_dest_socket)
-        links.new(new_node_src_socket, dest_socket)\
+        links.new(new_node_src_socket, dest_socket)
 
     @staticmethod
     def get_node_connected_to_the_output_and_unlink_it(material):
@@ -263,7 +283,7 @@ class Utility:
         if node and len(node) == 1:
             return node[0]
         else:
-            raise Exception("There is not only one node of this type: {}".format(node_type))
+            raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.
@@ -345,7 +365,7 @@ class Utility:
                 parameters[key] = config.data[key]
 
         if not config.has_param('provider'):
-            raise Exception("Each provider needs an provider label, this one does not contain one: {}".format(config.data))
+            raise Exception("Each provider needs a provider label, this one does not contain one: {}".format(config.data))
 
         return Utility.build_provider(config.get_string("provider"), parameters)
 
@@ -407,57 +427,6 @@ class Utility:
         values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
-
-    @staticmethod
-    def import_objects(filepath, cached_objects=None, **kwargs):
-        """ Import all objects for the given file and returns the loaded objects
-
-        In .obj files a list of objects can be saved in.
-        In .ply files only one object can saved so the list has always at most one element
-
-        :param filepath: the filepath to the location where the data is stored
-        :param cached_objects: a dict of filepath to objects, which have been loaded before, to avoid reloading (the dict is updated in this function)
-        :param kwargs: all other params are handed directly to the bpy loading fct. check the corresponding documentation
-        :return: a list of all newly loaded objects, in the failure case an empty list is returned
-        """
-        if os.path.exists(filepath):
-            if cached_objects is not None and isinstance(cached_objects, dict):
-                if filepath in cached_objects.keys():
-                    created_obj = []
-                    for obj in cached_objects[filepath]:
-                        # deselect all objects and duplicate the object
-                        bpy.ops.object.select_all(action='DESELECT')
-                        obj.select_set(True)
-                        bpy.ops.object.duplicate()
-                        # save the duplicate in new list
-                        if len(bpy.context.selected_objects) != 1:
-                            raise Exception("The amount of objects after the copy was more than one!")
-                        created_obj.append(bpy.context.selected_objects[0])
-                    return created_obj
-                else:
-                    loaded_objects = Utility.import_objects(filepath, cached_objects=None, **kwargs)
-                    cached_objects[filepath] = loaded_objects
-                    return loaded_objects
-            else:
-                # save all selected objects
-                previously_selected_objects = set(bpy.context.selected_objects)
-                if filepath.endswith('.obj'):
-                    # load an .obj file:
-                    bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
-                elif filepath.endswith('.ply'):
-                    # load a .ply mesh
-                    bpy.ops.import_mesh.ply(filepath=filepath, **kwargs)
-                    # add a default material to ply file
-                    mat = bpy.data.materials.new(name="ply_material")
-                    mat.use_nodes = True
-                    loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
-                    for obj in loaded_objects:
-                        obj.data.materials.append(mat)
-
-                # return all currently selected objects
-                return list(set(bpy.context.selected_objects) - previously_selected_objects)
-        else:
-            raise Exception("The given filepath does not exist: {}".format(filepath))
 
     @staticmethod
     def add_output_entry(output):
@@ -533,12 +502,25 @@ class Utility:
         :param data_path: The data path of the attribute.
         :param frame: The frame number to use. If None is given, the current frame number is used.
         """
-        if frame is None:
+        # If no frame is given use the current frame specified by the surrounding KeyFrame context manager
+        if frame is None and KeyFrame.is_any_active():
             frame = bpy.context.scene.frame_current
-        obj.keyframe_insert(data_path=data_path, frame=frame)
+        # If no frame is given and no KeyFrame context manager surrounds us => do nothing
+        if frame is not None:
+            obj.keyframe_insert(data_path=data_path, frame=frame)
+
+
+# KeyFrameState should be thread-specific
+class KeyFrameState(threading.local):
+    def __init__(self):
+        super(KeyFrameState, self).__init__()
+        self.depth = 0
 
 
 class KeyFrame:
+    # Remember how many KeyFrame context manager have been applied around the current execution point
+    state = KeyFrameState()
+
     def __init__(self, frame):
         """ Sets the frame number for its complete block.
 
@@ -548,10 +530,20 @@ class KeyFrame:
         self._prev_frame = None
 
     def __enter__(self):
+        KeyFrame.state.depth += 1
         if self._frame is not None:
             self._prev_frame = bpy.context.scene.frame_current
             bpy.context.scene.frame_set(self._frame)
 
     def __exit__(self, type, value, traceback):
+        KeyFrame.state.depth -= 1
         if self._prev_frame is not None:
             bpy.context.scene.frame_set(self._prev_frame)
+
+    @staticmethod
+    def is_any_active() -> bool:
+        """ Returns whether the current execution point is surrounded by a KeyFrame context manager.
+
+        :return: True, if there is at least one surrounding KeyFrame context manager
+        """
+        return KeyFrame.state.depth > 0
