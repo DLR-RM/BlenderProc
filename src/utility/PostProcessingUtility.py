@@ -224,4 +224,7 @@ class PostProcessingUtility:
         :param image: The image data.
         :return: The trimmed image data.
         """
-        return image[:, :, 0] # All channles have the same value, so just extract any single channel
+        if len(image.shape) > 2:
+            image = image[:, :, 0] # All channles have the same value, so just extract any single channel
+        
+        return image
