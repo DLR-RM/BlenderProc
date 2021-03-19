@@ -226,3 +226,49 @@ class CameraUtility:
             [[fx, 0, cx],
              [0, fy, cy],
              [0, 0, 1]])
+
+
+    @staticmethod
+    def add_depth_of_field(camera: bpy.types.Camera, focal_point_obj: bpy.types.Object, fstop_value: float,
+                           aperture_blades: int = 0, aperture_rotation: float = 0.0, aperture_ratio: float = 1.0,
+                           focal_distance: float = -1.0):
+        """
+        Adds depth of field to the given camera, the focal point will be set by the focal_point_obj, ideally an empty
+        instance is used for this see the BasicEmptyInitializer on how to init one of those. A higher fstop value
+        makes the resulting image look sharper, while a low value decreases the sharpness.
+
+        Check the documentation on
+        https://docs.blender.org/manual/en/latest/render/cameras.html#depth-of-field
+
+        :param camera: The camera, which will get a depth of field added
+        :param focal_point_obj: The used focal point, if the object moves the focal point will move with it
+        :param fstop_value: A higher fstop value, will increase the sharpness of the scene
+        :param aperture_blades: Amount of blades used in the camera
+        :param aperture_rotation: Rotation of the blades in the camera in radiant
+        :param aperture_ratio: Ratio of the anamorphic bokeh effect, below 1.0 will give a horizontal one, above one a \
+                               vertical one.
+        :param focal_distance: Sets the distance to the focal point when no focal_point_obj is given.
+        """
+        # activate depth of field rendering for this cameraera
+        camera.dof.use_dof = True
+        if focal_point_obj is not None:
+            # set the focus point of the cameraera
+            camera.dof.focus_object = focal_point_obj
+        elif focal_distance >= 0.0:
+            camera.dof.focus_distance = focal_distance
+        else:
+            raise RuntimeError("Either a focal_point_obj have to be given or the focal_distance has to be higher "
+                               "than zero.")
+        # set the aperture of the cameraera, lower values make the scene more out of focus, higher values make them look
+        # sharper
+        camera.dof.aperture_fstop = fstop_value
+        # set the amount of blades
+        camera.dof.aperture_blades = aperture_blades
+        # setting the rotation of the aperture in radiant
+        camera.dof.aperture_rotation = aperture_rotation
+        # Change the amount of distortion to simulate the anamorphic bokeh effect. A setting of 1.0 shows no
+        # distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number will
+        # cause a vertical distortion.
+        camera.dof.aperture_ratio = aperture_ratio
+
+
