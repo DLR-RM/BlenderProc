@@ -114,7 +114,7 @@
     {
       "module": "writer.CocoAnnotationsWriter",
       "config": {
-        "supercategory": "<args:1>",
+        "cp_supercategory": "<args:1>",
         "append_to_existing_output": True
       }
     },
