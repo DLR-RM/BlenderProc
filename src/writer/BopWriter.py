@@ -62,8 +62,7 @@ class BopWriter(WriterInterface):
     def run(self):
         """ Stores frames and annotations for objects from the specified dataset.
         """
-        
-        BopWriterUtility.write(output_dir = self._determine_output_dir(), 
+        BopWriterUtility.write(output_dir = self._determine_output_dir(False), 
                             dataset = self._dataset, 
                             append_to_existing_output = self._append_to_existing_output, 
                             depth_scale = self._depth_scale, 

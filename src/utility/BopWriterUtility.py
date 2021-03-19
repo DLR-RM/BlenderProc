@@ -9,7 +9,7 @@ import shutil
 import bpy
 from mathutils import Euler, Matrix, Vector
 
-from src.utility.BlenderUtility import get_all_mesh_objects, load_image
+from src.utility.BlenderUtility import get_all_blender_mesh_objects, load_image
 from src.utility.Utility import Utility
 from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.WriterUtility import WriterUtility
@@ -131,7 +131,7 @@ class BopWriterUtility:
         elif not append_to_existing_output:
             raise Exception("The output folder already exists: {}.".format(dataset_dir))
         
-        all_mesh_objects = get_all_mesh_objects()
+        all_mesh_objects = get_all_blender_mesh_objects()
 	
         # Select objects from the specified dataset.
         if dataset:
