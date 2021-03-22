@@ -87,7 +87,7 @@ class AMASSLoader:
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
         for obj in loaded_obj:
-            obj.remove_x_axis_rotation()
+            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
 
         # move the origin of the object to the world origin and on top of the X-Y plane
         # makes it easier to place them later on, this does not change the `.location`
