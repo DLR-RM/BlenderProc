@@ -135,12 +135,6 @@ class BlendLoader:
                     # if the object doesn't have a parent we can set its parent
                     loaded_object.parent = parent_obj
 
-                # the latest selected object will be parent
-                parent_obj.select_set(True)
-                bpy.context.view_layer.objects.active = parent_obj
-
-                bpy.ops.object.parent_set(type='OBJECT', keep_transform=True)
-
         # As some loaded objects were deleted again due to their type, we need also to remove the dependent datablocks that were also loaded and are now orphans
         BlendLoader._purge_added_orphans(orphans_before, data_to)
 
