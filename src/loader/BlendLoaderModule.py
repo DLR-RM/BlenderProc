@@ -62,6 +62,7 @@ class BlendLoaderModule(LoaderInterface):
             path=self.config.get_string("path"),
             obj_types=self.config.get_raw_value("obj_types", ['mesh', 'empty']),
             name_regrex=self.config.get_string("entities") if self.config.has_param("entities") else None,
-            data_blocks=self.config.get_raw_value("datablocks", "objects")
+            data_blocks=self.config.get_raw_value("datablocks", "objects"),
+            merge_objects=self.config.get_raw_value("merge_objects", False)
         )
         self._set_properties(newly_loaded_objects)

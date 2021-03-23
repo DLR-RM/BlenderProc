@@ -43,7 +43,7 @@ class BlendLoader:
         return config_value
 
     @staticmethod
-    def load(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_regrex: str = None, data_blocks: Union[list, str] = "objects") -> List[MeshObject]:
+    def load(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_regrex: str = None, data_blocks: Union[list, str] = "objects", merge_objects: bool = False) -> List[MeshObject]:
         """
         Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
         bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
@@ -55,6 +55,7 @@ class BlendLoader:
                          file's folders, see Blender's documentation for bpy.types.ID for more info) names.
         :param data_blocks: The datablock or a list of datablocks which should be loaded from the given .blend file.
                             Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
+        :param merge_objects: Whether to merge all loaded mesh objects into a single object or not.
         :return: The list of loaded mesh objects.
         """
         # get a path to a .blend file
@@ -116,8 +117,36 @@ class BlendLoader:
             else:
                 loaded_objects.extend(getattr(data_to, data_block))
 
+        # merge objects into one, if desired
+        if merge_objects:
+            if len(loaded_objects) > 1:
+                # create new empty object which acts as parent, and link it to the collection
+                parent_obj = bpy.data.objects.new("parent_object", None)
+                col = bpy.data.collections.get('Collection')
+                col.objects.link(parent_obj)
+                bpy.ops.object.select_all(action='DESELECT')
+
+                # select all relevant objects
+                for loaded_object in loaded_objects:
+                    # objects with a parent will be skipped, as this relationship will otherwise be broken
+                    # if a parent exists this object should be grandchild of parent_obj (or grandgrand...)
+                    if loaded_object.parent is not None:
+                        continue
+                    # if the object doesn't have a parent we can set its parent
+                    loaded_object.parent = parent_obj
+
+                # the latest selected object will be parent
+                parent_obj.select_set(True)
+                bpy.context.view_layer.objects.active = parent_obj
+
+                bpy.ops.object.parent_set(type='OBJECT', keep_transform=True)
+
         # As some loaded objects were deleted again due to their type, we need also to remove the dependent datablocks that were also loaded and are now orphans
         BlendLoader._purge_added_orphans(orphans_before, data_to)
+
+        if merge_objects:
+            return [bpy.data.objects['parent_object']]
+
         return loaded_objects
 
     @staticmethod
