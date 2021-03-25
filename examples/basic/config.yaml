@@ -52,7 +52,9 @@
         "render_normals": True,
         "normals_output_key": "normals",
         "render_distance": True,
-        "distance_output_key": "distance"
+        "distance_output_key": "distance",
+        "render_diffuse_color": True,
+        "diffuse_color_output_key": "diffuse"
       }
     },
     {
