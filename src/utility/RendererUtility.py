@@ -373,6 +373,37 @@ class RendererUtility:
         })
 
     @staticmethod
+    def enable_diffuse_color_output(output_dir, file_prefix="diffuse_", output_key="diffse"):
+        """ Enables writing diffuse color (albedo) images.
+
+        Diffuse color images will be written in the form of .png files during the next rendering.
+
+        :param output_dir: The directory to write files to.
+        :param file_prefix: The prefix to use for writing the files.
+        :param output_key: The key to use for registering the diffuse color output.
+        """
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+        tree = bpy.context.scene.node_tree
+        links = tree.links
+
+        bpy.context.view_layer.use_pass_diffuse_color = True
+        render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
+        final_output = render_layer_node.outputs["DiffCol"]
+
+        output_file = tree.nodes.new('CompositorNodeOutputFile')
+        output_file.base_path = output_dir
+        output_file.format.file_format = "PNG"
+        output_file.file_slots.values()[0].path = file_prefix
+        links.new(final_output, output_file.inputs['Image'])
+        
+        Utility.add_output_entry({
+            "key": output_key,
+            "path": os.path.join(output_dir, file_prefix) + "%04d" + ".png",
+            "version": "2.0.0"
+        })
+
+    @staticmethod
     def map_file_format_to_file_ending(file_format):
         """ Returns the files endings for a given blender output format.
 
