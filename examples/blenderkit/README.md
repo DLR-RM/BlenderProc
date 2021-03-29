@@ -40,13 +40,13 @@ python scripts/visHdf5Files.py examples/blenderkit/output/*.hdf5
     "module": "loader.BlendLoader",
     "config": {
       "path": "<args:0>",
-      "merge_objects": True
+      "merge_objects": False
     }
 }
 ```
 This module loads a BLEND file resource and needs the relative path of the .blend file model you want to load, which should be specified under `path` attribute in the loader section above. <br>
 Per default this will load all mesh objects from the given .blend file. By using the parameters `obj_types` and `datablocks`, also other data and object types can be loaded.
-Specifying `merge_objects=True` will result in one merged object instance.
+Specifying `merge_objects=True` will result in one merged object instance with its name equal to the .blend file name.
 
 ### CameraSampler
 
