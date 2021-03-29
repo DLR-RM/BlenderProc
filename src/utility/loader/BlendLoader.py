@@ -121,7 +121,8 @@ class BlendLoader:
         if merge_objects:
             if len(loaded_objects) > 1:
                 # create new empty object which acts as parent, and link it to the collection
-                parent_obj = bpy.data.objects.new("parent_object", None)
+                parent_name = path.split('/')[-1][:-6]
+                parent_obj = bpy.data.objects.new(parent_name, None)
                 col = bpy.data.collections.get('Collection')
                 col.objects.link(parent_obj)
                 bpy.ops.object.select_all(action='DESELECT')
@@ -139,7 +140,7 @@ class BlendLoader:
         BlendLoader._purge_added_orphans(orphans_before, data_to)
 
         if merge_objects:
-            return [bpy.data.objects['parent_object']]
+            return [bpy.data.objects[parent_name]]
 
         return loaded_objects
 
