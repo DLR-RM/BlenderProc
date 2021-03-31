@@ -43,7 +43,8 @@ class PhysicsSimulation:
         # Fix the pose of all objects to their pose at the and of the simulation (also revert origin shift)
         objects_with_physics = [MeshObject(obj) for obj in get_all_blender_mesh_objects() if obj.rigid_body is not None]
         for obj in objects_with_physics:
-            if obj.get_rigidbody().type == "ACTIVE":
+            # Skip objects that have parents with compound rigid body component
+            if obj.get_rigidbody().type == "ACTIVE" and (obj.get_parent() is None or obj.get_parent().get_rigidbody() is None and obj.get_parent().get_rigidbody().shape == "COMPOUND"):
                 # compute relative object rotation before and after simulation
                 R_obj_before_sim = mathutils.Euler(obj_poses_before_sim[obj.get_name()]['rotation']).to_matrix()
                 R_obj_after = mathutils.Euler(obj_poses_after_sim[obj.get_name()]['rotation']).to_matrix()
@@ -55,6 +56,7 @@ class PhysicsSimulation:
                 obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                 obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
 
+        for obj in objects_with_physics:
             # Disable the rigidbody element of the object
             obj.disable_rigidbody()
 

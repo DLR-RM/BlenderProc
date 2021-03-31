@@ -22,7 +22,7 @@ sys.path.append(packages_path)
 
 # Delete all loaded models inside src/, as they are cached inside blender
 for module in list(sys.modules.keys()):
-    if module.startswith("src"):
+    if module.startswith("src") or module.startswith("external"):
         del sys.modules[module]
 
 from src.main.Pipeline import Pipeline
