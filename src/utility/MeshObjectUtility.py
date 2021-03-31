@@ -238,10 +238,13 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self):
-        """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD """
+    def build_convex_decomposition_collision_shape(self, temp_dir):
+        """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
+
+        :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
+        """
         # Decompose the object
-        parts = convex_decomposition(self.blender_obj, "/dev/shm")
+        parts = convex_decomposition(self.blender_obj, temp_dir)
         parts = [MeshObject(p) for p in parts]
 
         # Make the convex parts children of this object, enable their rigid body component and hide them
@@ -255,7 +258,7 @@ class MeshObject(Entity):
 
         :param hide_object: Determines whether the object should be hidden in rendering.
         """
-        self.blender_obj.hide_render = not hide_object
+        self.blender_obj.hide_render = hide_object
 
     def set_parent(self, new_parent: "MeshObject"):
         """ Sets the parent of this object.

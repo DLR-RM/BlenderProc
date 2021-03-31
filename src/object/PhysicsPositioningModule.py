@@ -134,7 +134,7 @@ class PhysicsPositioningModule(Module):
                 collision_shape = get_physics_attribute(obj, "physics_collision_shape", self.collision_shape)
                 if collision_shape == "CONVEX_DECOMPOSITION":
                     # Decompose the object
-                    mesh_obj.build_convex_decomposition_collision_shape()
+                    mesh_obj.build_convex_decomposition_collision_shape(self._temp_dir)
                     collision_shape = "COMPOUND"
 
                 mesh_obj.enable_rigidbody(
