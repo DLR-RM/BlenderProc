@@ -234,7 +234,7 @@ class CameraUtility:
                            focal_distance: float = -1.0):
         """
         Adds depth of field to the given camera, the focal point will be set by the focal_point_obj, ideally an empty
-        instance is used for this see the BasicEmptyInitializer on how to init one of those. A higher fstop value
+        instance is used for this see `MeshObject.create_empty()` on how to init one of those. A higher fstop value
         makes the resulting image look sharper, while a low value decreases the sharpness.
 
         Check the documentation on
@@ -259,7 +259,7 @@ class CameraUtility:
         else:
             raise RuntimeError("Either a focal_point_obj have to be given or the focal_distance has to be higher "
                                "than zero.")
-        # set the aperture of the cameraera, lower values make the scene more out of focus, higher values make them look
+        # set the aperture of the camera, lower values make the scene more out of focus, higher values make them look
         # sharper
         camera.dof.aperture_fstop = fstop_value
         # set the amount of blades
@@ -270,5 +270,4 @@ class CameraUtility:
         # distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number will
         # cause a vertical distortion.
         camera.dof.aperture_ratio = aperture_ratio
-
 
