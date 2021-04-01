@@ -1,4 +1,4 @@
-# Camera sampling
+# Camera Depth of Field
 
 
 <p align="center">
