@@ -59,7 +59,7 @@ class Pipeline:
         # Go through all attributes of bpy.data
         for collection in dir(bpy.data):
             data_structure = getattr(bpy.data, collection)
-            # Check that is a data collection
+            # Check that it is a data collection
             if isinstance(data_structure, bpy.types.bpy_prop_collection) and hasattr(data_structure, "remove") and collection not in ["texts"]:
                 # Go over all entities in that collection
                 for block in data_structure:
