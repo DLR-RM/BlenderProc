@@ -127,7 +127,7 @@ class Config:
         """
         value = self._get_value_with_fallback(name, fallback, True)
         try:
-            return int(value) if value != fallback else fallback
+            return int(value) if value is not None else value
         except ValueError:
             raise TypeError("Cannot convert '" + str(value) + "' to int!")
 
@@ -142,7 +142,7 @@ class Config:
         """
         value = self._get_value_with_fallback(name, fallback, True)
         try:
-            return bool(value) if value != fallback else fallback
+            return bool(value) if value is not None else value
         except ValueError:
             raise TypeError("Cannot convert '" + str(value) + "' to bool!")
 
@@ -157,7 +157,7 @@ class Config:
         """
         value = self._get_value_with_fallback(name, fallback, True)
         try:
-            return float(value) if value != fallback else fallback
+            return float(value) if value is not None else value
         except ValueError:
             raise TypeError("Cannot convert '" + str(value) + "' to float!")
 
@@ -172,7 +172,7 @@ class Config:
         """
         value = self._get_value_with_fallback(name, fallback, True)
         try:
-            return str(value) if value != fallback else fallback
+            return str(value) if value is not None else value
         except ValueError:
             raise TypeError("Cannot convert '" + str(value) + "' to string!")
 
@@ -187,7 +187,7 @@ class Config:
         """
         value = self._get_value_with_fallback(name, fallback, True)
 
-        if value != fallback:
+        if value is not None:
             if isinstance(value, mathutils.Vector):
                 value = list(value)
 
@@ -208,13 +208,14 @@ class Config:
         """
         value = self.get_list(name, fallback)
 
-        if dimensions is not None and len(value) != dimensions:
-            raise TypeError(str(value) + "' must have exactly " + str(dimensions) + " dimensions!")
+        if value is not None:
+            if dimensions is not None and len(value) != dimensions:
+                raise TypeError(str(value) + "' must have exactly " + str(dimensions) + " dimensions!")
 
-        try:
-            value = mathutils.Vector(value) if value != fallback else fallback
-        except ValueError:
-            raise TypeError("Cannot convert '" + str(value) + "' to a mathutils.Vector!")
+            try:
+                value = mathutils.Vector(value)
+            except ValueError:
+                raise TypeError("Cannot convert '" + str(value) + "' to a mathutils.Vector!")
 
         return value
 
@@ -263,7 +264,7 @@ class Config:
         """
         value = self.get_raw_value(name, fallback)
 
-        if value != fallback:
+        if value is not None:
             if dimensions is not None and (len(value) != dimensions or not all(len(item) == dimensions for item in value)):
                 raise TypeError(str(value) + "' must be exactly " + str(dimensions) + "x" + str(dimensions) + "-dimensional!")
 
