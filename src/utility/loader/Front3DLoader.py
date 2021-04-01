@@ -98,7 +98,7 @@ class Front3DLoader:
                 warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            obj = Entity.create_empty(used_obj_name, used_obj_name + "_mesh")
+            obj = Entity.create_empty(used_obj_name)
             created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id

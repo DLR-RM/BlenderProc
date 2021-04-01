@@ -1,6 +1,7 @@
 import bpy
 
 from src.main.Module import Module
+from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
 from typing import Union
 import numpy as np
@@ -40,7 +41,7 @@ class LoaderInterface(Module):
     def __init__(self, config):
         Module.__init__(self, config)
 
-    def _set_properties(self, objects: Union[bpy.types.Object, MeshObject]):
+    def _set_properties(self, objects: Union[bpy.types.Object, Entity]):
         """ Sets all custom properties of all given objects according to the configuration.
 
         Also runs all custom property functions.
@@ -55,7 +56,7 @@ class LoaderInterface(Module):
             for key, value in properties.items():
                 if key.startswith("cp_"):
                     key = key[3:]
-                    if isinstance(obj, MeshObject):
+                    if isinstance(obj, Entity):
                         obj.set_cp(key, value)
                     else:
                         obj[key] = value
