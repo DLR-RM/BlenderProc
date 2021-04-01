@@ -153,7 +153,7 @@ class RockEssentialsRockLoaderModule(LoaderInterface):
                 subsec_num=subsec_num,
                 objects=subsec_config.get_list("objects", []),
                 sample_objects=subsec_config.get_bool("sample_objects", False),
-                amount=subsec_config.get_int("amount") if subsec_config.has_param("amount") else None
+                amount=subsec_config.get_int("amount", None)
             )
 
             RockEssentialsRockLoader.set_rocks_properties(
@@ -162,8 +162,8 @@ class RockEssentialsRockLoaderModule(LoaderInterface):
                 render_levels=subsec_config.get_int("render_levels", 3),
                 high_detail_mode=subsec_config.get_bool("high_detail_mode", False),
                 scale=subsec_config.get_vector3d("scale", [1, 1, 1]),
-                reflection_amount=subsec_config.get_float("reflection_amount") if subsec_config.has_param("reflection_amount") else None,
-                reflection_roughness=subsec_config.get_float("reflection_roughness") if subsec_config.has_param("reflection_roughness") else None,
-                hsv=subsec_config.get_list("HSV") if subsec_config.has_param("HSV") else None
+                reflection_amount=subsec_config.get_float("reflection_amount", None),
+                reflection_roughness=subsec_config.get_float("reflection_roughness", None),
+                hsv=subsec_config.get_list("HSV", None)
             )
 

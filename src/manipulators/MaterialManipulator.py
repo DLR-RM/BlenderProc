@@ -759,9 +759,7 @@ class MaterialManipulator(Module):
         strength = config.get_float("strength")
         texture_scale = config.get_float("texture_scale", 0.1)
         # if no texture is used, a random noise texture is generated
-        texture_nodes = None
-        if config.has_param("used_dust_texture"):
-            texture_nodes = config.get_list("used_dust_texture")
+        texture_nodes = config.get_list("used_dust_texture", None)
 
         group_node = material.node_tree.nodes.new("ShaderNodeGroup")
         group_node.width = 250
