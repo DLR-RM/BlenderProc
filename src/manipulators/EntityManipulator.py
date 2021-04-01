@@ -396,6 +396,7 @@ class EntityManipulator(Module):
                                                               BlenderUtility.get_all_materials(), None),
                                 "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
                 result = self._unpack_params(rand_config, instructions)
+                result["material_to_replace_with"] = choice(result["materials_to_replace_with"])
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -482,11 +483,11 @@ class EntityManipulator(Module):
                                                                            [mat.material])) == 1
                     if use_mat:
                         if np.random.uniform(0, 1) <= value["randomization_level"]:
-                            mat.material = choice(value["materials_to_replace_with"])
+                            mat.material = value["material_to_replace_with"]
             elif value["add_to_objects_without_material"]:
                 # this object didn't have a material before
                 if np.random.uniform(0, 1) <= value["randomization_level"]:
-                    entity.data.materials.append(choice(value["materials_to_replace_with"]))
+                    entity.data.materials.append(value["material_to_replace_with"])
 
     def _unpack_params(self, param_config, instructions):
         """ Unpacks the data from a config object following the instructions in the dict.
