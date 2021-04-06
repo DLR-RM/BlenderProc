@@ -21,33 +21,37 @@ import uuid
 from src.utility.ConfigParser import ConfigParser
 
 parser = argparse.ArgumentParser(add_help=False)
-parser.add_argument('config', default=None, nargs='?', help='The path to the configuration file which describes what the pipeline should do.')
+parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
 parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
 parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true', help='If given, all python packages configured inside the configuration file will be reinstalled.')
 parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
 parser.add_argument('--batch_process', help='Renders a batch of house-cam combinations, by reading a file containing the combinations on each line, where each line is the standard placeholder arguments for rendering a single scene separated by spaces. The value of this option is the path to the index file, no need to add placeholder arguments.')
 parser.add_argument('--temp-dir', dest='temp_dir', default=None, help="The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically. Type: string. Default: \"/dev/shm\" or \"/tmp/\" depending on which is available.")
 parser.add_argument('--keep-temp-dir', dest='keep_temp_dir', action='store_true', help="If set, the temporary directory is not removed in the end.")
-parser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None)
-parser.add_argument('--blender-install-path', dest='blender_install_path', default=None)
+parser.add_argument('--blender-install-path', dest='blender_install_path', default=None, help="Set path where blender should be installed. If None is given, /home_local/<env:USER>/blender/ is used per default. This argument is ignored if it is specified in the given YAML config.")
+parser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None, help="Set, if you want to use a custom blender installation to run BlenderProc. If None is given, blender is installed into the configured blender_install_path. This argument is ignored if it is specified in the given YAML config.")
 parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
 args = parser.parse_args()
 
-if args.config is None:
+if args.file is None:
     print(parser.format_help())
     exit(0)
 
-is_config = args.config.endswith(".yaml")
-
+# If a config is given we can extract some information out of it
+is_config = args.file.endswith(".yaml")
 if is_config:
     config_parser = ConfigParser()
-    config = config_parser.parse(args.config, args.args, args.help, skip_arg_placeholders=(args.batch_process != None)) # Don't parse placeholder args in batch mode.
+    config = config_parser.parse(args.file, args.args, args.help, skip_arg_placeholders=(args.batch_process != None)) # Don't parse placeholder args in batch mode.
     setup_config = config["setup"]
-    custom_blender_path = setup_config["custom_blender_path"] if "custom_blender_path" in setup_config else None
-    blender_install_path = setup_config["blender_install_path"] if "blender_install_path" in setup_config else None
+    custom_blender_path = setup_config["custom_blender_path"] if "custom_blender_path" in setup_config else args.custom_blender_path
+    blender_install_path = setup_config["blender_install_path"] if "blender_install_path" in setup_config else args.blender_install_path
 else:
     custom_blender_path = args.custom_blender_path
     blender_install_path = args.blender_install_path
+
+    # If no blender install path is given set it to /home_local/<env:USER>/blender/ per default
+    if blender_install_path is None:
+        blender_install_path = os.path.join("/home_local", os.getenv("USERNAME") if platform == "win32" else os.getenv("USER"), "blender")
 
 # If blender should be downloaded automatically
 if custom_blender_path is None:
@@ -170,6 +174,7 @@ else:
 
 print("Using blender in " + blender_path)
 
+# If a config is given, we do the setup directly here, otherwise it will be done in the given python script.
 if is_config:
     SetupUtility.setup_pip(blender_path, major_version, setup_config["pip"] if "pip" in setup_config else [], args.reinstall_packages)
 
@@ -187,7 +192,7 @@ repo_root_directory = os.path.dirname(os.path.realpath(__file__))
 if is_config:
     path_src_run = os.path.join(repo_root_directory, "src/run.py")
 else:
-    path_src_run = args.config
+    path_src_run = args.file
 
 # Determine perfect temp dir
 if args.temp_dir is None:
@@ -209,10 +214,10 @@ if not os.path.exists(temp_dir):
 
 
 if not args.batch_process:
-    p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.config, temp_dir] + args.args,
+    p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args,
                          env=dict(os.environ, PYTHONPATH=os.getcwd()), cwd=repo_root_directory)
 else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
-    p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--",  args.config, temp_dir, "--batch-process", args.batch_process],
+    p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--",  args.file, temp_dir, "--batch-process", args.batch_process],
                          env=dict(os.environ, PYTHONPATH=os.getcwd()), cwd=repo_root_directory)
 
 

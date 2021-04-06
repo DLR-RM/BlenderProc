@@ -7,13 +7,32 @@ class SetupUtility:
 
     @staticmethod
     def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
+        """ Sets up the python environment.
+
+        - Makes sure all required pip packages are installed
+        - Prepares the given sys.argv
+
+        :param user_required_packages: A list of python packages that are additionally necessary to execute the python script.
+        :param blender_path: The path to the blender installation. If None, it is determined automatically based on the current python env.
+        :param major_version: The version number of the blender installation. If None, it is determined automatically based on the current python env.
+        :param reinstall_packages: Set to true, if all python packages should be reinstalled.
+        """
         packages_path = SetupUtility.setup_pip(blender_path, major_version, user_required_packages, reinstall_packages)
         sys.path.append(packages_path)
 
         sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
 
     @staticmethod
-    def setup_pip(blender_path, major_version, user_required_packages=None, reinstall_packages=False):
+    def setup_pip(blender_path: str = None, major_version: str = None, user_required_packages: list = None, reinstall_packages: bool = False) -> :
+        """ Makes sure the given user required and the general required python packages are installed in the blender proc env
+
+        :param blender_path: The path to the blender installation.
+        :param major_version: The version number of the blender installation.
+        :param user_required_packages: A list of pip packages that should be installed. The version number can be specified via the usual == notation.
+        :param reinstall_packages: Set to true, if all python packages should be reinstalled.
+        :return: Returns the path to the directory which contains all custom installed pip packages.
+        """
+        # If no bleneder path is given, determine it based on sys.executable
         if blender_path is None:
             blender_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", ".."))
             major_version = os.path.basename(os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..")))
