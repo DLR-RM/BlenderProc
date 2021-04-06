@@ -23,7 +23,7 @@ class SetupUtility:
         sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
 
     @staticmethod
-    def setup_pip(blender_path: str = None, major_version: str = None, user_required_packages: list = None, reinstall_packages: bool = False) -> :
+    def setup_pip(blender_path: str = None, major_version: str = None, user_required_packages: list = None, reinstall_packages: bool = False) -> str:
         """ Makes sure the given user required and the general required python packages are installed in the blender proc env
 
         :param blender_path: The path to the blender installation.
