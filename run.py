@@ -38,7 +38,7 @@ if args.file is None:
     exit(0)
 
 # If a config is given we can extract some information out of it
-is_config = args.file.endswith(".yaml")
+is_config = not args.file.endswith(".py")
 if is_config:
     config_parser = ConfigParser()
     config = config_parser.parse(args.file, args.args, args.help, skip_arg_placeholders=(args.batch_process != None)) # Don't parse placeholder args in batch mode.
