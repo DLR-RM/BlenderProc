@@ -151,6 +151,8 @@ class ObjectReplacer(Module):
                 bpy.ops.object.delete()
 
                 amount_of_already_replaced += 1
-
+            if not self._objects_to_replace_with:
+                # if no objects are left to place, break the loop
+                break
             tries += 1
         bpy.context.view_layer.update()

@@ -34,8 +34,7 @@ class Initializer(Module):
           - Description
           - Type
         * - horizon_color
-          - A list of three elements specifying rgb of the world's horizon/background color. Default: [0.535, 0.633,
-            0.608].
+          - A list of three elements specifying rgb of the world's horizon/background color. Default: [0.05, 0.05, 0.05].
           - list
         * - global
           - A dictionary of all global set attributes, which are used if a module does not provide a certain key.
@@ -92,7 +91,8 @@ class Initializer(Module):
 
         # Sets background color
         world = bpy.data.worlds['World']
-        world.color[:3] = self.config.get_list("horizon_color", [0.535, 0.633, 0.608])
+        world.use_nodes = True
+        world.node_tree.nodes["Background"].inputs[0].default_value[:3] = self.config.get_list("horizon_color", [0.05, 0.05, 0.05])
 
         # Create the camera
         cam = bpy.data.cameras.new("Camera")

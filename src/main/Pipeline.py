@@ -41,37 +41,31 @@ class Pipeline:
 
 
     def _cleanup(self):
-        """ Cleanup the scene by removing objects, orphan data and custom properties """
-        self._remove_all_objects()
-        self._remove_orphan_data()
+        """ Resets the scene to its clean state, but keeping the UI as it is """
+        # Switch to right context
+        if bpy.context.object is not None and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+        # Clean up
+        self._remove_all_data()
         self._remove_custom_properties()
 
-    def _remove_all_objects(self):
-        """ Removes all objects of the current scene """
-        # Select all
-        for obj in bpy.context.scene.objects:
-            obj.select_set(True)
-        # Delete selection
-        bpy.ops.object.delete()
+        # Create new world
+        new_world = bpy.data.worlds.new("World")
+        bpy.context.scene.world = new_world
 
-    def _remove_orphan_data(self):
-        """ Remove all data blocks which are not used anymore. """
-        data_structures = [
-            bpy.data.meshes,
-            bpy.data.materials,
-            bpy.data.textures,
-            bpy.data.images,
-            bpy.data.brushes,
-            bpy.data.cameras,
-            bpy.data.actions,
-            bpy.data.lights
-        ]
-
-        for data_structure in data_structures:
-            for block in data_structure:
-                # If no one uses this block => remove it
-                if block.users == 0:
-                    data_structure.remove(block)
+    def _remove_all_data(self):
+        """ Remove all data blocks except opened scripts and the default scene. """
+        # Go through all attributes of bpy.data
+        for collection in dir(bpy.data):
+            data_structure = getattr(bpy.data, collection)
+            # Check that it is a data collection
+            if isinstance(data_structure, bpy.types.bpy_prop_collection) and hasattr(data_structure, "remove") and collection not in ["texts"]:
+                # Go over all entities in that collection
+                for block in data_structure:
+                    # Remove everything besides the default scene
+                    if not isinstance(block, bpy.types.Scene) or block.name != "Scene":
+                        data_structure.remove(block)
 
     def _remove_custom_properties(self):
         """ Remove all custom properties registered at global entities like the scene. """

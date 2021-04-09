@@ -23,7 +23,7 @@ class RendererUtility:
         bpy.context.scene.cycles.debug_bvh_type = "STATIC_BVH"
         bpy.context.scene.cycles.debug_use_spatial_splits = True
         # Setting use_persistent_data to True makes the rendering getting slower and slower (probably a blender bug)
-        bpy.context.scene.render.use_persistent_data = False
+        bpy.context.scene.render.use_persistent_data = True
 
     @staticmethod
     def _disable_all_denoiser():
