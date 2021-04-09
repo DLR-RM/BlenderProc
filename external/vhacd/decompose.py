@@ -25,8 +25,9 @@ import bpy
 from mathutils import Matrix
 import bmesh
 from subprocess import Popen
+import shutil
 
-def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull_#", remove_doubles=True, apply_modifiers=True, apply_transforms="NONE", depth=20, concavity=0.0025, plane_downsampling=4, convexhull_downsampling=4, alpha=0.05, beta=0.05, gamma=0.00125, pca=False, mode="VOXEL", max_num_vertices_per_ch=32, min_volume_per_ch=0.0001):
+def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull_#", remove_doubles=True, apply_modifiers=True, apply_transforms="NONE", depth=20, concavity=0.0025, plane_downsampling=4, convexhull_downsampling=4, alpha=0.05, beta=0.05, gamma=0.00125, pca=False, mode="VOXEL", max_num_vertices_per_ch=32, min_volume_per_ch=0.0001, cache_dir=None):
     """ Uses V-HACD to decompose the given object.
 
     :param ob: The blender object to decompose.
@@ -47,6 +48,7 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
     :param mode: 0: voxel-based approximate convex decomposition, 1: tetrahedron-based approximate convex decomposition
     :param max_num_vertices_per_ch: controls the maximum number of triangles per convex-hull
     :param min_volume_per_ch: controls the adaptive sampling of the generated convex-hulls
+    :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
     :return: The list of convex parts composing the given object.
     """
     # Download v-hacd library if necessary
@@ -98,28 +100,39 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
     bm.to_mesh(mesh)
     bm.free()
 
-    vhacd_binary = os.path.join(vhacd_path, "v-hacd", 'bin', "test", "testVHACD")
+    mesh_hash = 0
+    for vert in mesh.vertices:
+        mesh_hash = hash((mesh_hash, hash(vert.co[:])))
 
-    # Run V-HACD
-    print('\nExporting mesh for V-HACD: {}...'.format(off_filename))
-    off_export(mesh, off_filename)
-    bpy.data.meshes.remove(mesh)
-    cmd_line = ('"{}" --input "{}" --resolution {} --depth {} '
-                '--concavity {:g} --planeDownsampling {} --convexhullDownsampling {} '
-                '--alpha {:g} --beta {:g} --gamma {:g} --pca {:b} --mode {:b} '
-                '--maxNumVerticesPerCH {} --minVolumePerCH {:g} --output "{}" --log "{}"').format(
-        vhacd_binary, off_filename, resolution, depth,
-        concavity, plane_downsampling, convexhull_downsampling,
-        alpha, beta, gamma, pca, mode == 'TETRAHEDRON',
-        max_num_vertices_per_ch, min_volume_per_ch, outFileName, logFileName)
+    if cache_dir is None or not os.path.exists(os.path.join(cache_dir, str(mesh_hash) + ".wrl")):
+        vhacd_binary = os.path.join(vhacd_path, "v-hacd", 'bin', "test", "testVHACD")
 
-    print('Running V-HACD...\n{}\n'.format(cmd_line))
-    vhacd_process = Popen(cmd_line, bufsize=-1, close_fds=True, shell=True)
-    vhacd_process.wait()
+        # Run V-HACD
+        print('\nExporting mesh for V-HACD: {}...'.format(off_filename))
+        off_export(mesh, off_filename)
+        bpy.data.meshes.remove(mesh)
+        cmd_line = ('"{}" --input "{}" --resolution {} --depth {} '
+                    '--concavity {:g} --planeDownsampling {} --convexhullDownsampling {} '
+                    '--alpha {:g} --beta {:g} --gamma {:g} --pca {:b} --mode {:b} '
+                    '--maxNumVerticesPerCH {} --minVolumePerCH {:g} --output "{}" --log "{}"').format(
+            vhacd_binary, off_filename, resolution, depth,
+            concavity, plane_downsampling, convexhull_downsampling,
+            alpha, beta, gamma, pca, mode == 'TETRAHEDRON',
+            max_num_vertices_per_ch, min_volume_per_ch, outFileName, logFileName)
 
-    # Import convex parts
-    if not os.path.exists(outFileName):
-        raise Exception("No output produced by convex decomposition of object " + ob.name)
+        print('Running V-HACD...\n{}\n'.format(cmd_line))
+        vhacd_process = Popen(cmd_line, bufsize=-1, close_fds=True, shell=True)
+        vhacd_process.wait()
+
+        # Import convex parts
+        if not os.path.exists(outFileName):
+            raise Exception("No output produced by convex decomposition of object " + ob.name)
+
+        if cache_dir is not None:
+            shutil.copyfile(outFileName, os.path.join(cache_dir, str(mesh_hash) + ".wrl"))
+    else:
+        outFileName = os.path.join(cache_dir, str(mesh_hash) + ".wrl")
+
     bpy.ops.import_scene.x3d(filepath=outFileName, axis_forward='Y', axis_up='Z')
     imported = bpy.context.selected_objects
 

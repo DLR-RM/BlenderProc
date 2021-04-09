@@ -84,6 +84,10 @@ class PhysicsPositioningModule(Module):
           - Amount of linear velocity that is lost over time. This value is used if for an object no custom property `physics_linear_damping` is set.
             Default: 0.04. Range: [0, 1]
           - float
+        * - convex_decomposition_cache_path
+          - If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
+            Default: "resources/decomposition_cache"
+          - string
     """
 
     def __init__(self, config):
@@ -98,6 +102,7 @@ class PhysicsPositioningModule(Module):
         self.friction = self.config.get_float("friction", 0.5)
         self.angular_damping = self.config.get_float("angular_damping", 0.1)
         self.linear_damping = self.config.get_float("linear_damping", 0.04)
+        self.convex_decomposition_cache_path = self.config.get_string("convex_decomposition_cache_path", "resources/decomposition_cache")
 
     def run(self):
         """ Performs physics simulation in the scene. """
@@ -132,14 +137,10 @@ class PhysicsPositioningModule(Module):
 
                 # Check if object needs decomposition
                 collision_shape = get_physics_attribute(obj, "physics_collision_shape", self.collision_shape)
-                if collision_shape == "CONVEX_DECOMPOSITION":
-                    # Decompose the object
-                    mesh_obj.build_convex_decomposition_collision_shape(self._temp_dir)
-                    collision_shape = "COMPOUND"
 
                 mesh_obj.enable_rigidbody(
                     active=obj["physics"],
-                    collision_shape=collision_shape,
+                    collision_shape="COMPOUND" if collision_shape == "CONVEX_DECOMPOSITION" else collision_shape,
                     collision_margin=get_physics_attribute(obj, "physics_collision_margin", self.collision_margin),
                     mass=get_physics_attribute(obj, "physics_mass", None if self.mass_scaling else 1),
                     mass_factor=self.mass_factor,
@@ -148,4 +149,8 @@ class PhysicsPositioningModule(Module):
                     angular_damping=get_physics_attribute(obj, "physics_angular_damping", self.angular_damping),
                     linear_damping=get_physics_attribute(obj, "physics_linear_damping", self.linear_damping)
                 )
+
+                if collision_shape == "CONVEX_DECOMPOSITION":
+                    # Decompose the object
+                    mesh_obj.build_convex_decomposition_collision_shape(self._temp_dir, self.convex_decomposition_cache_path)
 
