@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"])
+
 import glob
 import json
 import os

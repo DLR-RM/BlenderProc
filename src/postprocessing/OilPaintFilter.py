@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["scipy"])
+
 import cv2
 import numpy as np
 from scipy import stats

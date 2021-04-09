@@ -23,7 +23,6 @@ from src.utility.ConfigParser import ConfigParser
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
 parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
-parser.add_argument('--reinstall-packages', dest='reinstall_packages', action='store_true', help='If given, all python packages configured inside the configuration file will be reinstalled.')
 parser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
 parser.add_argument('--batch_process', help='Renders a batch of house-cam combinations, by reading a file containing the combinations on each line, where each line is the standard placeholder arguments for rendering a single scene separated by spaces. The value of this option is the path to the index file, no need to add placeholder arguments.')
 parser.add_argument('--temp-dir', dest='temp_dir', default=None, help="The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically. Type: string. Default: \"/dev/shm\" or \"/tmp/\" depending on which is available.")
@@ -173,10 +172,6 @@ else:
         raise Exception("Could not determine major blender version")
 
 print("Using blender in " + blender_path)
-
-# If a config is given, we do the setup directly here, otherwise it will be done in the given python script.
-if is_config:
-    SetupUtility.setup_pip(blender_path, major_version, setup_config["pip"] if "pip" in setup_config else [], args.reinstall_packages)
 
 # Run script
 if platform == "linux" or platform == "linux2":

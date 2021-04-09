@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup(["h5py"])
+SetupUtility.setup([])
 
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader

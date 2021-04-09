@@ -1,9 +1,8 @@
 
-import shutil
 import os
-import bpy
 
 from src.utility.ConfigParser import ConfigParser
+from src.utility.SetupUtility import SetupUtility
 from src.utility.Utility import Utility, Config
 from src.main.GlobalStorage import GlobalStorage
 
@@ -25,6 +24,9 @@ class Pipeline:
 
         config_parser = ConfigParser(silent=True)
         config = config_parser.parse(Utility.resolve_path(config_path), args)
+
+        # Setup pip packages specified in config
+        SetupUtility.setup_pip(config["pip"] if "pip" in config else [])
 
         if avoid_rendering:
             GlobalStorage.add_to_config_before_init("avoid_rendering", True)
