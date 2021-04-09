@@ -8,7 +8,6 @@ import bpy
 import mathutils
 import numpy as np
 
-from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -98,7 +97,7 @@ class Front3DLoader:
                 warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            obj = Entity.create_empty(used_obj_name)
+            obj = MeshObject.create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
             created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id

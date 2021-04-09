@@ -27,6 +27,17 @@ class MeshObject(Entity):
         return MeshObject(obj)
 
     @staticmethod
+    def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
+        """ Creates an object with an empty mesh.
+        :param object_name: The name of the new object.
+        :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
+        :return: The new Mesh object.
+        """
+        if mesh_name is None:
+            mesh_name = object_name
+        return MeshObject.create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
+
+    @staticmethod
     def create_primitive(shape: str, **kwargs) -> "MeshObject":
         """ Creates a new primitive mesh object.
 
