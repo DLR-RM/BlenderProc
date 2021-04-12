@@ -10,6 +10,9 @@ from src.utility.DefaultConfig import DefaultConfig
 
 import addon_utils
 
+from src.utility.RendererUtility import RendererUtility
+
+
 class Initializer:
 
     @staticmethod
@@ -71,9 +74,7 @@ class Initializer:
         bpy.context.scene.collection.objects.link(cam_ob)
         bpy.context.scene.camera = cam_ob
 
-        # Set default intrinsics
-        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, "FOV")
-        CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
+        Initializer.set_default_parameters()
 
         random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
         if random_seed:
@@ -85,7 +86,33 @@ class Initializer:
             random.seed(random_seed)
             np_random.seed(random_seed)
 
+    @staticmethod
+    def set_default_parameters():
+        # Set default intrinsics
+        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, "FOV")
+        CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
+
+        # Init renderer
+        RendererUtility.init()
+        RendererUtility.set_samples(DefaultConfig.samples)
         addon_utils.enable("render_auto_tile_size")
+        RendererUtility.toggle_auto_tile_size(True)
+
+        # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1
+        # cpu thread means GPU-only rendering)
+        RendererUtility.set_cpu_threads(1)
+        RendererUtility.set_denoiser(DefaultConfig.denoiser)
+
+        RendererUtility.set_simplify_subdivision_render(DefaultConfig.simplify_subdivision_render)
+
+        RendererUtility.set_light_bounces(DefaultConfig.diffuse_bounces,
+                                          DefaultConfig.glossy_bounces,
+                                          DefaultConfig.ao_bounces_render,
+                                          DefaultConfig.max_bounces,
+                                          DefaultConfig.transmission_bounces,
+                                          DefaultConfig.transparency_bounces,
+                                          DefaultConfig.volume_bounces)
+
 
     @staticmethod
     def cleanup():
