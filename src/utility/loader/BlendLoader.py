@@ -147,9 +147,7 @@ class BlendLoader:
                 parent_name = merged_object_name
             # create new empty object which acts as parent, and link it to the collection
             parent_obj = bpy.data.objects.new(parent_name, None)
-            col = bpy.data.collections.get('Collection')
-            col.objects.link(parent_obj)
-            bpy.ops.object.select_all(action='DESELECT')
+            bpy.context.collection.objects.link(parent_obj)
 
             # select all relevant objects
             for loaded_object in loaded_objects:
