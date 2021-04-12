@@ -30,11 +30,16 @@ if "--batch-process" in argv:
 argv = argv[argv.index("--") + 1:]
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
+from src.utility.SetupUtility import SetupUtility
+# Setup general required pip packages e.q. pyyaml
+SetupUtility.setup_pip([])
+
 from src.main.Pipeline import Pipeline
 from src.utility.Utility import Utility
 
 config_path = argv[0]
 temp_dir = argv[1]
+
 if batch_index_file == None:
     pipeline = Pipeline(config_path, argv[2:], working_dir, temp_dir)
     pipeline.run()

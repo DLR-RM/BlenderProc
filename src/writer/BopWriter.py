@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["pypng==0.0.20"])
+
 import json
 import os
 import math

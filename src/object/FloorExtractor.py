@@ -215,11 +215,9 @@ class FloorExtractor(Module):
                 if counter:
                     bpy.ops.mesh.separate(type='SELECTED')
             else:
-                try:
-                    from sklearn.cluster import MeanShift, estimate_bandwidth
-                except ImportError:
-                    raise ImportError("If no height_list_path is defined, the sklearn lib has to be installed: "
-                                      "By adding \"scikit-learn\" to the \"setup\"/\"pip\" in the config file.")
+                from src.utility.SetupUtility import SetupUtility
+                SetupUtility.setup_pip(["scikit-learn"])
+                from sklearn.cluster import MeanShift, estimate_bandwidth
 
                 # no height list was provided, try to estimate them on its own
 

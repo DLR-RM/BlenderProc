@@ -5,54 +5,25 @@ from sys import platform
 import multiprocessing
 
 import bpy
-
-from src.main.Module import Module
-from src.main.GlobalStorage import GlobalStorage
 from src.utility.CameraUtility import CameraUtility
-from src.utility.Config import Config
 from src.utility.DefaultConfig import DefaultConfig
 
+import addon_utils
 
-class Initializer(Module):
-    """ Does some basic initialization of the blender project.
+class Initializer:
 
-     - Sets background color
-     - Configures computing device
-     - Creates camera
-     - sets the device type to the fastest option possible -> OPTIX > CUDA > OPEN_CL
+    @staticmethod
+    def init(horizon_color: list = [0.05, 0.05, 0.05], clean_up_scene: bool = True):
+        """ Initializes basic blender settings, the world and the camera.
 
-     If you want deterministic outputs use the environment variable: "BLENDER_PROC_RANDOM_SEED" and set it to
-     the desired seed. (random and numpy random are effected by this)
+        Also cleans up the whole scene at first.
 
-    **Configuration**:
+        :param horizon_color: The color to use for the world background.
+        :param clean_up_scene: Set to False, if you want to keep all scene data.
+        """
+        if clean_up_scene:
+            Initializer.cleanup()
 
-    .. list-table:: 
-        :widths: 25 100 10
-        :header-rows: 1
-
-        * - Parameter
-          - Description
-          - Type
-        * - horizon_color
-          - A list of three elements specifying rgb of the world's horizon/background color. Default: [0.05, 0.05, 0.05].
-          - list
-        * - global
-          - A dictionary of all global set attributes, which are used if a module does not provide a certain key.
-            Default: {}.
-          - dict
-    """
-
-    def __init__(self, config):
-        Module.__init__(self, config)
-
-        # setting up the GlobalStorage
-        global_config = Config(self.config.get_raw_dict("global", {}))
-        GlobalStorage.init_global(global_config)
-
-        # call the init again to make sure all values from the global config where read correctly, too
-        self._default_init()
-
-    def run(self):
         # Set language if necessary
         if bpy.context.preferences.view.language != "en_US":
             print("Setting blender language settings to english during this run")
@@ -92,7 +63,7 @@ class Initializer(Module):
         # Sets background color
         world = bpy.data.worlds['World']
         world.use_nodes = True
-        world.node_tree.nodes["Background"].inputs[0].default_value[:3] = self.config.get_list("horizon_color", [0.05, 0.05, 0.05])
+        world.node_tree.nodes["Background"].inputs[0].default_value[:3] = horizon_color
 
         # Create the camera
         cam = bpy.data.cameras.new("Camera")
@@ -113,3 +84,40 @@ class Initializer(Module):
                 raise e
             random.seed(random_seed)
             np_random.seed(random_seed)
+
+        addon_utils.enable("render_auto_tile_size")
+
+    @staticmethod
+    def cleanup():
+        """ Resets the scene to its clean state, but keeping the UI as it is """
+        # Switch to right context
+        if bpy.context.object is not None and bpy.context.object.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+        # Clean up
+        Initializer._remove_all_data()
+        Initializer._remove_custom_properties()
+
+        # Create new world
+        new_world = bpy.data.worlds.new("World")
+        bpy.context.scene.world = new_world
+
+    @staticmethod
+    def _remove_all_data():
+        """ Remove all data blocks except opened scripts and the default scene. """
+        # Go through all attributes of bpy.data
+        for collection in dir(bpy.data):
+            data_structure = getattr(bpy.data, collection)
+            # Check that it is a data collection
+            if isinstance(data_structure, bpy.types.bpy_prop_collection) and hasattr(data_structure, "remove") and collection not in ["texts"]:
+                # Go over all entities in that collection
+                for block in data_structure:
+                    # Remove everything besides the default scene
+                    if not isinstance(block, bpy.types.Scene) or block.name != "Scene":
+                        data_structure.remove(block)
+
+    @staticmethod
+    def _remove_custom_properties():
+        """ Remove all custom properties registered at global entities like the scene. """
+        for key in bpy.context.scene.keys():
+            del bpy.context.scene[key]
