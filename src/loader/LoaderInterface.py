@@ -100,10 +100,6 @@ class LoaderInterface(Module):
             merged_object_name = self.config.get_string("cf_merged_object_name", "merged_object")
             objects = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
 
-        for obj in objects:
-            print(obj, obj.name)
-        exit(0)
-
     @staticmethod
     def apply_transformation_to_objects(objects: [bpy.types.Object]):
         """
