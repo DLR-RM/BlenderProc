@@ -41,6 +41,9 @@ class LoaderInterface(Module):
           - Merges a list of objects by creating an empty object and assinging it as parent to every object which does
             not already have a parent. Returns the list of objects including the newly created empty parent.
           - list
+        * - cf_merged_object_name
+          - Name of the empty parent object. Default: `merged_object`.
+          - str
     """
 
     def __init__(self, config):
