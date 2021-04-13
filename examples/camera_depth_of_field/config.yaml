@@ -1,0 +1,98 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "constructor.BasicEmptyInitializer",
+      "config": {
+        "empties_to_add": [
+          {
+            "type": "plain_axes",
+            "name": "Camera Focus Point",
+            "location": [0.5, -1.5, 3]
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "intrinsics": {
+          "fov": 1,
+          "depth_of_field": {
+            "fstop": 0.25,
+            "focal_object": {
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": "Camera Focus Point"
+              }
+            }
+          }
+        },
+        "cam_poses": [
+          {
+            "number_of_samples": 5,
+            "location": {
+              "provider":"sampler.PartSphere",
+              "center": [0, 0, 0],
+              "radius": 7,
+              "mode": "SURFACE",
+              "distance_above_center": 1.0,
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "provider": "getter.POI"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "output_key": "colors",
+        "samples": 350,
+        "render_normals": True,
+        "render_distance": True
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+    }
+  ]
+}
+

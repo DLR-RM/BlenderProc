@@ -42,9 +42,7 @@ class SurfaceLighting(Module):
         Module.__init__(self, config)
         self.emission_strength = self.config.get_float("emission_strength", 10.0)
         self.keep_using_base_color = self.config.get_bool("keep_using_base_color", False)
-        self.emission_color = None
-        if self.config.has_param("emission_color"):
-            self.emission_color = self.config.get_vector3d("emission_color")
+        self.emission_color = self.config.get_vector3d("emission_color", None)
 
     def run(self):
         """

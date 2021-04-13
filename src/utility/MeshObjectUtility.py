@@ -27,9 +27,8 @@ class MeshObject(Entity):
         return MeshObject(obj)
 
     @staticmethod
-    def create_empty(object_name: str, mesh_name: str = None):
-        """ Creates an empty object.
-
+    def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
+        """ Creates an object with an empty mesh.
         :param object_name: The name of the new object.
         :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
         :return: The new Mesh object.
@@ -118,22 +117,6 @@ class MeshObject(Entity):
         for face in self.get_mesh().polygons:
             face.use_smooth = use_smooth
 
-    def remove_x_axis_rotation(self):
-        """
-        Removes the 90 degree X-axis rotation found, when loading from `.obj` files. This function rotates the mesh
-        itself not just the object, this will set the `rotation_euler` to `[0, 0, 0]`.
-        """
-        bpy.ops.object.select_all(action='DESELECT')
-        # convert object rotation into internal rotation
-        self.select()
-        bpy.context.view_layer.objects.active = self.blender_obj
-        self.set_rotation_euler([0, 0, 0])
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.transform.rotate(value=np.pi * 0.5, orient_axis="X")
-        bpy.ops.object.mode_set(mode='OBJECT')
-        self.deselect()
-        bpy.context.view_layer.update()
-
     def move_origin_to_bottom_mean_point(self):
         """
         Moves the object center to bottom of the bounding box in Z direction and also in the middle of the X and Y
@@ -166,11 +149,7 @@ class MeshObject(Entity):
         :param rotation: Determines whether the object's rotation should be persisted.
         :param scale: Determines whether the object's scale should be persisted.
         """
-        bpy.ops.object.select_all(action='DESELECT')
-        self.select()
-        bpy.context.view_layer.objects.active = self.blender_obj
-        bpy.ops.object.transform_apply(location=location, rotation=rotation, scale=scale)
-        self.deselect()
+        bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location, rotation=rotation, scale=scale)
 
     def get_origin(self) -> Vector:
         """ Returns the origin of the object.

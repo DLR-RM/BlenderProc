@@ -53,13 +53,6 @@ class BlendLoaderModule(LoaderInterface):
           - The datablock or a list of datablocks which should be loaded from the given .blend file. Default: "objects"
             Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
           - string/list
-        * - merge_objects
-          - Whether to merge all loaded mesh objects into a single object or not.
-          - bool
-        * - merged_object_name
-          - The name of the merged object in case of merge_objects=True. If None of ['filename', 'parent_object'], uses the provided string as filename.
-            Available options are: ['filename', 'parent_object', '<custom_name>']
-          - string
     """
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
@@ -68,9 +61,7 @@ class BlendLoaderModule(LoaderInterface):
         newly_loaded_objects = BlendLoader.load(
             path=self.config.get_string("path"),
             obj_types=self.config.get_raw_value("obj_types", ['mesh', 'empty']),
-            name_regrex=self.config.get_string("entities") if self.config.has_param("entities") else None,
-            data_blocks=self.config.get_raw_value("datablocks", "objects"),
-            merge_objects=self.config.get_raw_value("merge_objects", False),
-            merged_object_name=self.config.get_raw_value("merged_object_name", "parent_name")
+            name_regrex=self.config.get_string("entities", None),
+            data_blocks=self.config.get_raw_value("datablocks", "objects")
         )
         self._set_properties(newly_loaded_objects)
