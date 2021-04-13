@@ -63,7 +63,7 @@
       "module": "renderer.RgbRenderer",
       "config": {
         "render_normals": True,
-        "samples": 1,
+        "samples": 350,
         "render_distance": true
       }
     },
