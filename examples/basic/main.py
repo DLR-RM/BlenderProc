@@ -33,10 +33,6 @@ with open(args.camera, "r") as f:
         matrix_world = Matrix.Translation(Vector(line[:3])) @ Euler(line[3:6], 'XYZ').to_matrix().to_4x4()
         CameraUtility.add_camera_pose(matrix_world)
 
-RendererUtility.init()
-RendererUtility.toggle_auto_tile_size(True)
-RendererUtility.set_samples(350)
-RendererUtility.set_denoiser("INTEL")
 RendererUtility.enable_distance_output(args.output_dir)
 RendererUtility.enable_normals_output(args.output_dir)
 RendererUtility.render(args.output_dir)
