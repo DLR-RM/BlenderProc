@@ -37,6 +37,10 @@ class LoaderInterface(Module):
           - Loaded objects, sometimes contain transformations, these can be applied to the mesh, so that setting a
             new location, has the expected behavior. Else the prior location, will be replaced. Default: False.
           - bool
+        * - cf_merge_objects
+          - Merges a list of objects by creating an empty object and assinging it as parent to every object which does
+            not already have a parent. Returns the list of objects including the newly created empty parent.
+          - list
     """
 
     def __init__(self, config):
