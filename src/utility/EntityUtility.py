@@ -192,10 +192,7 @@ class Entity:
 
         :return: The parent.
         """
-        if not isinstance(self.blender_obj.parent, Entity):
-            return Entity(self.blender_obj.parent)
-        else:
-            return self.blender_obj.parent
+        return Entity(self.blender_obj.parent)
 
     def __setattr__(self, key, value):
         if key != "blender_obj":
