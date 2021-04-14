@@ -41,7 +41,7 @@
       "config": {
         "cam_poses": [
         {
-          "number_of_samples": 1,
+          "number_of_samples": 5,
           "location": {
             "provider":"sampler.PartSphere",
             "center": [0, 0, 0],
