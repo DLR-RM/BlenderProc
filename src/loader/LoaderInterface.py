@@ -3,6 +3,7 @@ import bpy
 from src.main.Module import Module
 from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
+from src.utility.object.ObjectMerging import ObjectMerging
 from typing import Union
 import numpy as np
 
@@ -36,6 +37,13 @@ class LoaderInterface(Module):
           - Loaded objects, sometimes contain transformations, these can be applied to the mesh, so that setting a
             new location, has the expected behavior. Else the prior location, will be replaced. Default: False.
           - bool
+        * - cf_merge_objects
+          - Merges a list of objects by creating an empty object and assinging it as parent to every object which does
+            not already have a parent. Returns the list of objects including the newly created empty parent.
+          - list
+        * - cf_merged_object_name
+          - Name of the empty parent object. Default: `merged_object`.
+          - str
     """
 
     def __init__(self, config):
@@ -48,6 +56,12 @@ class LoaderInterface(Module):
 
         :param objects: A list of objects which should receive the custom properties.
         """
+
+        merge_objects = self.config.get_bool("cf_merge_objects", False)
+        if merge_objects:
+            merged_object_name = self.config.get_string("cf_merged_object_name", "merged_object")
+            parent_object = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
+            objects.append(parent_object)
 
         properties = self.config.get_raw_dict("add_properties", {})
         material_properties = self.config.get_raw_dict("add_material_properties", {})
