@@ -1,32 +1,35 @@
 import bpy
 
-from src.utility.MeshObjectUtility import MeshObject
+from src.utility.EntityUtility import Entity
 from typing import Union
 
 
 class ObjectMerging:
 
     @staticmethod
-    def merge_object_list(objects: Union[bpy.types.Object, MeshObject], merged_object_name: str = 'merged_object'):
+    def merge_object_list(objects: Union[bpy.types.Object, Entity], merged_object_name: str = 'merged_object'):
         """ Generates an empty object and sets this as parent object for all objects in the list which do not already have a parent set.
 
+        :param objects: A list of objects to be merged.
         :param merged_object_name: The name of the parent object.
         """
         assert merged_object_name != "", "Parent object name cannot be empty!"
         print('name', merged_object_name)
 
         # create new empty object which acts as parent, and link it to the collection
-        parent_obj = bpy.data.objects.new(merged_object_name, None)
-        bpy.context.collection.objects.link(parent_obj)
+        parent_obj = Entity.create_empty(merged_object_name)
 
         # select all relevant objects
         for obj in objects:
+            # cast objects in case they are not Entity/MeshObjects
+            if not isinstance(obj, Entity):
+                obj = Entity(obj)
             # objects with a parent will be skipped, as this relationship will otherwise be broken
             # if a parent exists this object should be grandchild of parent_obj (or grandgrand...)
-            if obj.parent is not None:
+            if obj.get_parent() is not None:
                 continue
             # if the object doesn't have a parent we can set its parent
-            obj.parent = parent_obj
+            obj.set_parent(parent_obj)
 
         objects.append(parent_obj)
         return objects
