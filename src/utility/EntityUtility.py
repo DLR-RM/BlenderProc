@@ -187,6 +187,16 @@ class Entity:
         """
         self.blender_obj.parent = parent.blender_obj
 
+    def get_parent(self) -> "Entity":
+        """ Returns the parent of the entity.
+
+        :return: The parent.
+        """
+        if not isinstance(self.blender_obj.parent, Entity):
+            return Entity(self.blender_obj.parent)
+        else:
+            return self.blender_obj.parent
+
     def __setattr__(self, key, value):
         if key != "blender_obj":
             raise Exception("The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
