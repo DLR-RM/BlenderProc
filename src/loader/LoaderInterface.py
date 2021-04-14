@@ -60,7 +60,8 @@ class LoaderInterface(Module):
         merge_objects = self.config.get_bool("cf_merge_objects", False)
         if merge_objects:
             merged_object_name = self.config.get_string("cf_merged_object_name", "merged_object")
-            objects = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
+            parent_object = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
+            objects.append(parent_object)
 
         properties = self.config.get_raw_dict("add_properties", {})
         material_properties = self.config.get_raw_dict("add_material_properties", {})

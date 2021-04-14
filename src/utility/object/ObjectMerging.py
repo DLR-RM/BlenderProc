@@ -31,5 +31,4 @@ class ObjectMerging:
             # if the object doesn't have a parent we can set its parent
             obj.set_parent(parent_obj)
 
-        objects.append(parent_obj)
-        return objects
+        return parent_obj
