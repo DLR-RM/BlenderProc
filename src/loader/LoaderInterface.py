@@ -57,6 +57,11 @@ class LoaderInterface(Module):
         :param objects: A list of objects which should receive the custom properties.
         """
 
+        merge_objects = self.config.get_bool("cf_merge_objects", False)
+        if merge_objects:
+            merged_object_name = self.config.get_string("cf_merged_object_name", "merged_object")
+            objects = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
+
         properties = self.config.get_raw_dict("add_properties", {})
         material_properties = self.config.get_raw_dict("add_material_properties", {})
 
@@ -94,11 +99,6 @@ class LoaderInterface(Module):
         apply_transformation = self.config.get_bool("cf_apply_transformation", False)
         if apply_transformation:
             LoaderInterface.apply_transformation_to_objects(objects)
-
-        merge_objects = self.config.get_bool("cf_merge_objects", False)
-        if merge_objects:
-            merged_object_name = self.config.get_string("cf_merged_object_name", "merged_object")
-            objects = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
 
     @staticmethod
     def apply_transformation_to_objects(objects: [bpy.types.Object]):
