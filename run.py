@@ -210,10 +210,10 @@ if not os.path.exists(temp_dir):
 
 if not args.batch_process:
     p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args,
-                         env=dict(os.environ, PYTHONPATH=os.getcwd()), cwd=repo_root_directory)
+                         env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
 else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
     p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--",  args.file, temp_dir, "--batch-process", args.batch_process],
-                         env=dict(os.environ, PYTHONPATH=os.getcwd()), cwd=repo_root_directory)
+                         env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
 
 
 def clean_temp_dir():
