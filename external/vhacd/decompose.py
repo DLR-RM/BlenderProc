@@ -14,7 +14,7 @@
 
 #
 # NOTE: requires/calls Khaled Mamou's VHACD executable found here: https://github.com/kmammou/v-hacd/
-#
+# We specifically asked for the permission to use this inside BlenderProc. All rights are still with Khaled Mamou.
 
 import os
 
