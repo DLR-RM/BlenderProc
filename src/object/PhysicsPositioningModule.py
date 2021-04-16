@@ -135,22 +135,29 @@ class PhysicsPositioningModule(Module):
                 if "physics" not in obj:
                     raise Exception("The obj: '{}' has no physics attribute, each object needs one.".format(obj.name))
 
-                # Check if object needs decomposition
+                # Collect physics attributes
                 collision_shape = get_physics_attribute(obj, "physics_collision_shape", self.collision_shape)
+                collision_margin = get_physics_attribute(obj, "physics_collision_margin", self.collision_margin)
+                mass = get_physics_attribute(obj, "physics_mass", None if self.mass_scaling else 1)
+                collision_mesh_source = get_physics_attribute(obj, "physics_collision_mesh_source", self.collision_mesh_source)
+                friction = get_physics_attribute(obj, "physics_friction", self.friction)
+                angular_damping = get_physics_attribute(obj, "physics_angular_damping", self.angular_damping)
+                linear_damping = get_physics_attribute(obj, "physics_linear_damping", self.linear_damping)
 
+                # Set physics attributes
                 mesh_obj.enable_rigidbody(
                     active=obj["physics"],
                     collision_shape="COMPOUND" if collision_shape == "CONVEX_DECOMPOSITION" else collision_shape,
-                    collision_margin=get_physics_attribute(obj, "physics_collision_margin", self.collision_margin),
-                    mass=get_physics_attribute(obj, "physics_mass", None if self.mass_scaling else 1),
+                    collision_margin=collision_margin,
+                    mass=mass,
                     mass_factor=self.mass_factor,
-                    collision_mesh_source=get_physics_attribute(obj, "physics_collision_mesh_source", self.collision_mesh_source),
-                    friction=get_physics_attribute(obj, "physics_friction", self.friction),
-                    angular_damping=get_physics_attribute(obj, "physics_angular_damping", self.angular_damping),
-                    linear_damping=get_physics_attribute(obj, "physics_linear_damping", self.linear_damping)
+                    collision_mesh_source=collision_mesh_source,
+                    friction=friction,
+                    angular_damping=angular_damping,
+                    linear_damping=linear_damping
                 )
 
+                # Check if object needs decomposition
                 if collision_shape == "CONVEX_DECOMPOSITION":
-                    # Decompose the object
                     mesh_obj.build_convex_decomposition_collision_shape(self._temp_dir, self.convex_decomposition_cache_path)
 

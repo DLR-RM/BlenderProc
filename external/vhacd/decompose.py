@@ -17,6 +17,7 @@
 # We specifically asked for the permission to use this inside BlenderProc. All rights are still with Khaled Mamou.
 
 import os
+from sys import platform
 
 import git
 
@@ -51,6 +52,9 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
     :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
     :return: The list of convex parts composing the given object.
     """
+    if platform != "linux" and platform != "linux2":
+        raise Exception("Convex decomposition is at the moment only available on linux.")
+
     # Download v-hacd library if necessary
     vhacd_path = Utility.resolve_path("external/vhacd")
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):
@@ -100,8 +104,10 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
     bm.to_mesh(mesh)
     bm.free()
 
+    # Build a hash for the given mesh
     mesh_hash = 0
     for vert in mesh.vertices:
+        # Combine the hashes of the local coordinates of all vertices
         mesh_hash = hash((mesh_hash, hash(vert.co[:])))
 
     if cache_dir is None or not os.path.exists(os.path.join(cache_dir, str(mesh_hash) + ".wrl")):
