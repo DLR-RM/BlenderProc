@@ -866,7 +866,7 @@ class MaterialManipulator(Module):
         links.new(group_input.outputs["Texture scale"], mapping_node.inputs["Scale"])
 
         # remove the connection between the output and the last node and put the mix shader in between
-        node_connected_to_the_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(material)
+        node_connected_to_the_output, material_output = material.get_node_connected_to_the_output_and_unlink_it()
 
         # place the group node above the material output
         group_node.location = (material_output.location.x - x_diff, material_output.location.y + y_diff)

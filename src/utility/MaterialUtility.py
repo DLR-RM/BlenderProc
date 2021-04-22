@@ -179,15 +179,32 @@ class Material(Struct):
         """
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
 
-        if isinstance(value, bpy.data.Texture):
+        if isinstance(value, bpy.types.Texture):
             node = self.new_node('ShaderNodeTexImage')
             node.label = input_name
             node.image = value
             self.link(node.outputs['Color'], principled_bsdf.inputs[input_name])
-        elif isinstance(value, bpy.data.NodeSocket):
+        elif isinstance(value, bpy.types.NodeSocket):
             self.link(value, principled_bsdf.inputs[input_name])
         else:
             principled_bsdf.inputs[input_name].default_value = value
+
+    def get_node_connected_to_the_output_and_unlink_it(self):
+        """
+        Searches for the OutputMaterial in the material and finds the connected node to it,
+        removes the connection between this node and the output and returns this node and the material_output
+        """
+
+        material_output = Utility.get_the_one_node_with_type(self.nodes, 'OutputMaterial')
+        # find the node, which is connected to the output
+        node_connected_to_the_output = None
+        for link in self.links:
+            if link.to_node == material_output:
+                node_connected_to_the_output = link.from_node
+                # remove this link
+                self.links.remove(link)
+                break
+        return node_connected_to_the_output, material_output
 
     def __setattr__(self, key, value):
         if key not in ["links", "nodes", "blender_obj"]:

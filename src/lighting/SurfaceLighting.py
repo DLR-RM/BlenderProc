@@ -76,7 +76,7 @@ class SurfaceLighting(Module):
                 # add a custom property to later identify these materials
                 material.set_cp("is_lamp", True)
 
-                material.make_emissive(emission_strength=self.emission_strength, emission_color=self.emission_strength, keep_using_base_color=self.keep_using_base_color)
+                material.make_emissive(emission_strength=self.emission_strength, emission_color=self.emission_color, keep_using_base_color=self.keep_using_base_color)
 
 
 
