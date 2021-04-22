@@ -100,7 +100,7 @@ class SceneNetLoader:
             obj_name = obj_name.lower()
             if "wall" in obj_name or "floor" in obj_name or "ceiling" in obj_name:
                 # set the shading of all polygons to flat
-                obj.set_shading_mode("SMOOTH")
+                obj.set_shading_mode("FLAT")
 
     @staticmethod
     def _set_category_ids(loaded_objects: List[MeshObject]):
