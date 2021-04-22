@@ -386,7 +386,7 @@ class MaterialManipulator(Module):
             params = self._get_the_set_params(params_conf)
 
         for material in materials:
-            if not material.blender_mat.use_nodes:
+            if not material.blender_obj.use_nodes:
                 raise Exception("This material does not use nodes -> not supported here.")
 
             if op_mode == "once_for_each":

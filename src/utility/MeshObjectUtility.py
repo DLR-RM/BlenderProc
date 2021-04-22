@@ -88,14 +88,14 @@ class MeshObject(Entity):
         :param index: The index to set the material to.
         :param material: The material to set.
         """
-        self.blender_obj.data.materials[index] = material.blender_mat
+        self.blender_obj.data.materials[index] = material.blender_obj
 
     def add_material(self, material: Material):
         """ Adds a new material to the object.
 
         :param material: The material to add.
         """
-        self.blender_obj.data.materials.append(material.blender_mat)
+        self.blender_obj.data.materials.append(material.blender_obj)
 
     def new_material(self, name: str):
         """ Creates a new material and adds it to the object.

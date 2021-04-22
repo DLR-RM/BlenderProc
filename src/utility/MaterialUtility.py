@@ -164,7 +164,7 @@ class Material(Struct):
                 # use 0 as it is probably the first one
                 self.link(node_connected_to_the_base_color.outputs[0], emission_node.inputs["Color"])
         elif emission_color is not None:
-            emission_node.inputs["Color"] = emission_color
+            emission_node.inputs["Color"].default_value = emission_color
 
         # set the emission strength of the shader
         emission_node.inputs['Strength'].default_value = emission_strength
@@ -188,3 +188,9 @@ class Material(Struct):
             self.link(value, principled_bsdf.inputs[input_name])
         else:
             principled_bsdf.inputs[input_name].default_value = value
+
+    def __setattr__(self, key, value):
+        if key not in ["links", "nodes", "blender_obj"]:
+            raise Exception("The API class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
+        else:
+            object.__setattr__(self, key, value)

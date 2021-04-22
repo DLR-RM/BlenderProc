@@ -82,7 +82,7 @@ class SuncgLighting(Module):
                 old_mat_name = m.get_name()
                 if old_mat_name in self._collection_of_mats["lamp"]:
                     # this material was used as a ceiling before use that one
-                    m.material = self._collection_of_mats["lamp"][old_mat_name]
+                    obj.set_material(i, self._collection_of_mats["lamp"][old_mat_name])
                     continue
                 # copy the material if more than one users is using it
                 if m.get_users() > 1:
