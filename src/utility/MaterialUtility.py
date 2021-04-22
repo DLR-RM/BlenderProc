@@ -171,15 +171,15 @@ class Material(Struct):
 
         self.link(emission_node.outputs["Emission"], output_socket)
 
-    def set_principled_shader_value(self, input_name: str, value: Union[float, bpy.types.Texture, bpy.types.NodeSocket]):
+    def set_principled_shader_value(self, input_name: str, value: Union[float, bpy.types.Image, bpy.types.NodeSocket]):
         """ Sets value of an input to the principled shader node.
 
         :param input_name: The name of the input socket of the principled shader node.
-        :param value: The value to set. Can be a simple value to use as default_value, a socket which will be connected to the input or a texture which will be used for a new TextureNode connected to the input.
+        :param value: The value to set. Can be a simple value to use as default_value, a socket which will be connected to the input or an image which will be used for a new TextureNode connected to the input.
         """
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
 
-        if isinstance(value, bpy.types.Texture):
+        if isinstance(value, bpy.types.Image):
             node = self.new_node('ShaderNodeTexImage')
             node.label = input_name
             node.image = value

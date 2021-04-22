@@ -151,14 +151,14 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         bpy.data.textures.new(name=texture_name, type="IMAGE")
 
         # set new texture as a displacement texture, set UV texture coordinates
-        plane_obj.modifiers['Displace'].texture = bpy.data.textures[texture_name]
-        plane_obj.modifiers['Displace'].texture_coords = 'UV'
+        plane_obj.blender_obj.modifiers['Displace'].texture = bpy.data.textures[texture_name]
+        plane_obj.blender_obj.modifiers['Displace'].texture_coords = 'UV'
 
         bpy.ops.object.editmode_toggle()
         # scale, set render levels for subdivision, strength of displacement and set passive rigidbody state
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
         bpy.context.object.modifiers["Subdivision"].render_levels = subdivision_render_levels
-        plane_obj["physics"] = False
+        plane_obj.set_cp("physics", False)
         self._set_properties([MeshObject(plane_obj)])
 
     def _create_node(self, mat_obj, map_type, in_point):
