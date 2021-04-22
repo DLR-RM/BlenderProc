@@ -27,8 +27,8 @@ for module in list(sys.modules.keys()):
 
 from src.main.Pipeline import Pipeline
 
-config_path = "examples/debugging/config.yaml"
-args = []  # Put in here arguments to use for filling the placeholders in the config file.
+config_path = "examples/basic_object_pose/main.py"
+args = ["examples/basic_object_pose/obj_000004.ply","examples/basic_object_pose/output"]  # Put in here arguments to use for filling the placeholders in the config file.
 
 # Focus the 3D View, this is necessary to make undo work (otherwise undo will focus on the scripting area)
 for window in bpy.context.window_manager.windows:

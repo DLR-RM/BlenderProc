@@ -29,6 +29,7 @@ parser.add_argument('--temp-dir', dest='temp_dir', default=None, help="The path 
 parser.add_argument('--keep-temp-dir', dest='keep_temp_dir', action='store_true', help="If set, the temporary directory is not removed in the end.")
 parser.add_argument('--blender-install-path', dest='blender_install_path', default=None, help="Set path where blender should be installed. If None is given, /home_local/<env:USER>/blender/ is used per default. This argument is ignored if it is specified in the given YAML config.")
 parser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None, help="Set, if you want to use a custom blender installation to run BlenderProc. If None is given, blender is installed into the configured blender_install_path. This argument is ignored if it is specified in the given YAML config.")
+parser.add_argument('--debug', action='store_true', help="")
 parser.add_argument('-h', '--help', dest='help', action='store_true', help='Show this help message and exit.')
 args = parser.parse_args()
 
@@ -207,13 +208,15 @@ print("Using temporary directory: " + temp_dir)
 if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
-
-if not args.batch_process:
-    p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args,
-                         env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
-else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
-    p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--",  args.file, temp_dir, "--batch-process", args.batch_process],
-                         env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+if args.debug:
+    p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", "src/debug_startup.py", "--", path_src_run, temp_dir] + args.args, env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+else:
+    if not args.batch_process:
+        p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args,
+                             env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+    else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
+        p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--",  args.file, temp_dir, "--batch-process", args.batch_process],
+                             env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
 
 
 def clean_temp_dir():

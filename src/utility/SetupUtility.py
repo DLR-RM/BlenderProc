@@ -9,7 +9,7 @@ class SetupUtility:
     installed_packages = None
 
     @staticmethod
-    def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
+    def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False, debug_args=None):
         """ Sets up the python environment.
 
         - Makes sure all required pip packages are installed
@@ -23,8 +23,17 @@ class SetupUtility:
         packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
         sys.path.append(packages_path)
 
-        # Cut off blender specific arguments
-        sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
+        if "--background" not in sys.argv:
+            # Delete all loaded models inside src/, as they are cached inside blender
+            for module in list(sys.modules.keys()):
+                if module.startswith("src"):
+                    del sys.modules[module]
+
+        if "--background" in sys.argv:
+            # Cut off blender specific arguments
+            sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
+        elif debug_args is not None:
+            sys.argv = ["debug"] + debug_args
 
     @staticmethod
     def setup_pip(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
