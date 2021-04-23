@@ -5,7 +5,7 @@ import bpy
 from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
-
+import bmesh
 
 class MeshObject(Entity):
 
@@ -247,3 +247,12 @@ class MeshObject(Entity):
         diag = max_point - min_point
         # use the diagonal to calculate the volume of the box
         return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
+
+    def build_bmesh(self) -> bmesh.types.BMesh:
+        """ Builds a bmesh based on the object's mesh.
+
+        :return: The bmesh
+        """
+        bm = bmesh.from_edit_mesh(self.get_mesh())
+        bm.faces.ensure_lookup_table()
+        return bm
