@@ -134,11 +134,14 @@ class MeshObject(Entity):
         self.deselect()
         bpy.context.view_layer.update()
 
-    def get_bound_box(self):
+    def get_bound_box(self, local_coords=False):
         """
         :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
         """
-        return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+        if not local_coords:
+            return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+        else:
+            return [Vector(cord) for cord in self.blender_obj.bound_box]
 
     def persist_transformation_into_mesh(self, location: bool = True, rotation: bool = True, scale: bool = True):
         """
@@ -216,6 +219,11 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
+    def hide(self, hide_object: bool = True):
+        """ Sets the visibility of the object.
+        :param hide_object: Determines whether the object should be hidden in rendering.
+        """
+        self.blender_obj.hide_render = hide_object
 
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
