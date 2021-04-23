@@ -1,6 +1,7 @@
 import os
 import random
 import warnings
+from typing import Any
 
 import bpy
 import mathutils
@@ -429,11 +430,11 @@ class MaterialManipulator(Module):
                     # set the value
                     setattr(material, key_copy, value)
 
-    def _get_the_set_params(self, params_conf):
+    def _get_the_set_params(self, params_conf: Config) -> dict:
         """ Extracts actual values to set from a Config object.
 
-        :param params_conf: Object with all user-defined data. Type: Config.
-        :return: Parameters to set as {name of the parameter: it's value} pairs. Type: dict.
+        :param params_conf: Object with all user-defined data.
+        :return: Parameters to set as {name of the parameter: it's value} pairs.
         """
         params = {}
         for key in params_conf.data.keys():
@@ -472,11 +473,11 @@ class MaterialManipulator(Module):
 
         return params
 
-    def _load_textures(self, text_paths):
+    def _load_textures(self, text_paths: dict) -> dict:
         """ Loads textures.
 
-        :param text_paths: Texture data. Type: dict.
-        :return: Loaded texture data. Type: dict.
+        :param text_paths: Texture data.
+        :return: Loaded texture data.
         """
         loaded_textures = {}
         for key in text_paths.keys():
@@ -485,24 +486,24 @@ class MaterialManipulator(Module):
 
         return loaded_textures
 
-    def _set_textures(self, loaded_textures, material: Material):
+    def _set_textures(self, loaded_textures: dict, material: Material):
         """ Creates a ShaderNodeTexImage node, assigns a loaded image to it and connects it to the shader of the
             selected material.
 
-        :param loaded_textures: Loaded texture data. Type: dict.
-        :param material: Material to be modified. Type: bpy.types.Material.
+        :param loaded_textures: Loaded texture data.
+        :param material: Material to be modified.
         """
         # for each Image Texture node set a texture (image) if one was loaded
         for key, texture in loaded_textures.items():
             material.set_principled_shader_value(key, texture)
 
     @staticmethod
-    def _op_principled_shader_value(material: Material, shader_input_key, value, operation):
+    def _op_principled_shader_value(material: Material, shader_input_key: str, value: Any, operation: str):
         """
         Sets or adds the given value to the shader_input_key of the principled shader in the material
 
-        :param material: Material to be modified. Type: bpy.types.Material.
-        :param shader_input_key: Name of the shader's input. Type: string.
+        :param material: Material to be modified.
+        :param shader_input_key: Name of the shader's input.
         :param value: Value to set.
         """
         principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
@@ -526,11 +527,11 @@ class MaterialManipulator(Module):
             raise Exception("Shader input key '{}' is not a part of the shader.".format(shader_input_key_copy))
 
     @staticmethod
-    def _link_color_to_displacement_for_mat(material: Material, multiply_factor):
+    def _link_color_to_displacement_for_mat(material: Material, multiply_factor: float):
         """ Link the output of the texture image to the displacement. Fails if there is more than one texture image.
 
-        :param material: Material to be modified. Type: bpy.types.Material.
-        :param multiply_factor: Multiplication factor of the displacement. Type: float.
+        :param material: Material to be modified.
+        :param multiply_factor: Multiplication factor of the displacement.
         """
         output = material.get_the_one_node_with_type("OutputMaterial")
         texture = material.get_nodes_with_type("ShaderNodeTexImage")
@@ -547,20 +548,20 @@ class MaterialManipulator(Module):
                                 "this custom function.".format(material.get_name()))
 
     @staticmethod
-    def _map_vertex_color(material: Material, layer_name):
+    def _map_vertex_color(material: Material, layer_name: str):
         """ Replaces the material with a mapping of the vertex color to a background color node.
 
-        :param material: Material to be modified. Type: bpy.types.Material.
-        :param layer_name: Name of the vertex color layer. Type: string.
+        :param material: Material to be modified.
+        :param layer_name: Name of the vertex color layer.
         """
         material.map_vertex_color(layer_name)
 
-    def _switch_to_emission_shader(self, material: Material, value):
+    def _switch_to_emission_shader(self, material: Material, value: dict):
         """ Adds the Emission shader to the target material, sets it's color and strength values, connects it to
             the Material Output node.
 
-        :param material: Material to be modified. Type: bpy.types.Material.
-        :param value: Light color and strength data. Type: dict.
+        :param material: Material to be modified.
+        :param value: Light color and strength data.
         """
         material.make_emissive(emission_strength=value["strength"], emission_color=value["color"], replace=True, keep_using_base_color=False)
 

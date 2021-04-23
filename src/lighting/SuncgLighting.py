@@ -68,7 +68,7 @@ class SuncgLighting(Module):
                     self.windows.append(row["model_id"])
         self._collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
 
-    def _make_lamp_emissive(self, obj: MeshObject, light):
+    def _make_lamp_emissive(self, obj: MeshObject, light: list):
         """ Adds an emission shader to the object materials which are specified in the light list
 
         :param obj: The blender object.
@@ -154,9 +154,10 @@ class SuncgLighting(Module):
                 m = m.duplicate()
                 obj.set_material(i, m)
             # rename the material
-            if "." in m.get_name():
+            mat_name = m.get_name()
+            if "." in mat_name:
                 # remove everything after the dot
-                m.set_name(m.get_name()[:m.get_name().find(".")])
+                m.set_name(mat_name[:mat_name.find(".")])
             m.set_name(m.get_name() + "_emission")
 
             if not m.get_nodes_with_type("Emission") and m.get_nodes_with_type("BsdfPrincipled"):

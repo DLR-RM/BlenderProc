@@ -114,16 +114,12 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         tile_name = ground_config.get_string("tile_name", "RE_ground_plane")
 
         # create new plane, set its size
-        bpy.ops.mesh.primitive_plane_add()
-        bpy.context.object.name = tile_name
-        plane_obj = MeshObject(bpy.data.objects[tile_name])
+        plane_obj = MeshObject.create_primitive("PLANE")
+        plane_obj.set_name(tile_name)
         plane_obj.set_scale(plane_scale)
 
-        # create new material, enable use of nodes
-        mat_obj = Material.create("re_ground_mat")
-
-        # set material
-        plane_obj.add_material(mat_obj)
+        # create new material
+        mat_obj = plane_obj.new_material("re_ground_mat")
 
         # delete Principled BSDF node
         mat_obj.remove_node(mat_obj.get_the_one_node_with_type("BsdfPrincipled"))
