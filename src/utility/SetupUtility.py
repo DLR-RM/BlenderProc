@@ -23,13 +23,15 @@ class SetupUtility:
         packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
         sys.path.append(packages_path)
 
-        if "--background" not in sys.argv:
+        is_debug_mode = "--background" not in sys.argv
+
+        if is_debug_mode:
             # Delete all loaded models inside src/, as they are cached inside blender
             for module in list(sys.modules.keys()):
-                if module.startswith("src"):
+                if module.startswith("src") and not module == "src.utility.SetupUtility":
                     del sys.modules[module]
 
-        if "--background" in sys.argv:
+        if not is_debug_mode:
             # Cut off blender specific arguments
             sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
         elif debug_args is not None:
