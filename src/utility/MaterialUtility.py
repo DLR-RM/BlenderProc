@@ -157,12 +157,14 @@ class Material(Struct):
         emission_node = self.new_node('ShaderNodeEmission')
 
         if keep_using_base_color:
+            principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
             if len(principled_bsdf.inputs["Base Color"].links) == 1:
                 # get the node connected to the Base Color
-                principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
                 node_connected_to_the_base_color = principled_bsdf.inputs["Base Color"].links[0].from_node
                 # use 0 as it is probably the first one
                 self.link(node_connected_to_the_base_color.outputs[0], emission_node.inputs["Color"])
+            else:
+                emission_node.inputs["Color"].default_value = principled_bsdf.inputs["Base Color"].default_value
         elif emission_color is not None:
             emission_node.inputs["Color"].default_value = emission_color
 

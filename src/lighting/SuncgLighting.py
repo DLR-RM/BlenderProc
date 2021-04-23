@@ -100,7 +100,7 @@ class SuncgLighting(Module):
                         # If the material corresponds to a lampshade
                         emission_strength = self.config.get_float("lampshade_emission_strength", 7)
 
-                    m.make_emissive(emission_strength)
+                    m.make_emissive(emission_strength, keep_using_base_color=False, emission_color=m.blender_obj.diffuse_color)
                     self._collection_of_mats["lamp"][old_mat_name] = m
 
     def _make_window_emissive(self, obj: MeshObject):
