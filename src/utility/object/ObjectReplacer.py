@@ -110,6 +110,7 @@ class ObjectReplacer:
 
                 # Delete the original object and remove it from the list
                 objects_to_be_replaced.remove(current_object_to_be_replaced)
+                check_collision_with.remove(current_object_to_be_replaced)
                 current_object_to_be_replaced.delete()
 
                 amount_of_already_replaced += 1
