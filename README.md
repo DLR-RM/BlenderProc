@@ -1,5 +1,9 @@
 # BlenderProc
 
+[![Documentation](https://img.shields.io/badge/documentation-passing-brightgreen.svg)](https://dlr-rm.github.io/BlenderProc/)
+[![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 <p align="center">
 <img src="readme.jpg" alt="Front readme image" width=500>
 </p>
@@ -108,3 +112,9 @@ If you use BlenderProc in a research project, please cite as follows:
   year={2019}
 }
 ```
+
+---
+
+<div align="center">
+  <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="docs/source/logo.svg" height="100px" hspace="3%" vspace="60px"></a>
+</div>
