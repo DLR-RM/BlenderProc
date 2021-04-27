@@ -14,7 +14,7 @@ from src.utility.Utility import Utility
 class FloorExtractor:
 
     @staticmethod
-    def _split_at_height_value(bm: bmesh.types.BMesh, height_value: float, compare_height: float,
+    def split_at_height_value(bm: bmesh.types.BMesh, height_value: float, compare_height: float,
                               up_vector: mathutils.Vector, cmp_angle: float, matrix_world: mathutils.Matrix):
         """
         Splits for a given `height_value` all faces, which are inside the given `compare_height` band and also face
@@ -92,7 +92,7 @@ class FloorExtractor:
         bpy.ops.object.select_all(action='DESELECT')
         newly_created_objects = []
         for obj in mesh_objects:
-            obj.select(True)
+            obj.select()
             bpy.context.view_layer.objects.active = obj.blender_obj
             bpy.ops.object.mode_set(mode='EDIT')
             bm = obj.build_bmesh()
@@ -101,7 +101,7 @@ class FloorExtractor:
                 bpy.ops.mesh.select_all(action='DESELECT')
                 counter = 0
                 for height_val in height_list:
-                    counter = FloorExtractor._split_at_height_value(bm, height_val, compare_height, up_vec,
+                    counter = FloorExtractor.split_at_height_value(bm, height_val, compare_height, up_vec,
                                                                    compare_angle_degrees, obj.get_local2world_mat())
                 if counter:
                     bpy.ops.mesh.separate(type='SELECTED')
@@ -146,7 +146,7 @@ class FloorExtractor:
                     else:
                         height_value = np.max(ms.cluster_centers_)
                 bpy.ops.mesh.select_all(action='DESELECT')
-                counter = FloorExtractor._split_at_height_value(bm, height_value, compare_height, successful_up_vec,
+                counter = FloorExtractor.split_at_height_value(bm, height_value, compare_height, successful_up_vec,
                                                                compare_angle_degrees, obj.get_local2world_mat())
                 if counter:
                     bpy.ops.mesh.separate(type='SELECTED')
