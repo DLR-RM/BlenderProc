@@ -23,6 +23,6 @@ class ReplicaLoader:
 
         if use_smooth_shading:
             for obj in loaded_objects:
-                obj.set_shading_mode(True)
+                obj.set_shading_mode("SMOOTH")
 
         return loaded_objects
