@@ -24,6 +24,7 @@ There is also an extended introduction video to BlenderProc, it covers the basic
 * [General](#general)
 * [Functionality](#functionality)
 * [Examples](#examples)
+* [Debugging](#debugging)
 * [Source code](#source-code)
 * [Contributions](#contributions)
 * [Change log](#change-log)
