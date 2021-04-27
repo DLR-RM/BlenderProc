@@ -11,6 +11,9 @@ from src.provider.getter.Material import Material
 from src.utility.Config import Config
 from mathutils import Matrix
 
+from src.utility.MeshObjectUtility import MeshObject
+
+
 class EntityManipulator(Module):
     """
     Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
@@ -423,7 +426,7 @@ class EntityManipulator(Module):
         :param entity: An entity to modify. Type: bpy.types.Object
         :param value: Configuration data. Type: dict.
         """
-        LoaderInterface.change_shading_mode([entity], value["shading_mode"], value["angle_value"])
+        MeshObject(entity).set_shading_mode(value["shading_mode"], value["angle_value"])
 
     def _add_displace(self, entity, value):
         """ Adds a displace modifier with texture to an object.
