@@ -47,7 +47,7 @@ temp_dir = "examples/debugging/temp"
 try:
     # In this debug case the rendering is avoided, everything is executed except the final render step
     # For the RgbRenderer the undo is avoided to have a direct way of rendering in debug
-    pipeline = Pipeline(config_path, args, working_dir, temp_dir, avoid_rendering=True)
+    pipeline = Pipeline(config_path, args, working_dir, temp_dir, avoid_output=True)
     pipeline.run()
 finally:
     # Revert back to previous view
