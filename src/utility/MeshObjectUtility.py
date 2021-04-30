@@ -27,9 +27,8 @@ class MeshObject(Entity):
         return MeshObject(obj)
 
     @staticmethod
-    def create_empty(object_name: str, mesh_name: str = None):
-        """ Creates an empty object.
-
+    def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
+        """ Creates an object with an empty mesh.
         :param object_name: The name of the new object.
         :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
         :return: The new Mesh object.
@@ -110,29 +109,27 @@ class MeshObject(Entity):
         """
         return self.blender_obj.data
 
-    def set_shading_mode(self, use_smooth: bool):
+    def set_shading_mode(self, mode: str, angle_value: float = 30):
         """ Sets the shading mode of all faces of the object.
 
-        :param use_smooth: If true, then all faces will be made smooth, otherwise flat.
+        :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH", "AUTO"]. Type: str
+        :param angle_value: Angle in degrees at which flat shading is activated in `AUTO` mode. Type: float
         """
-        for face in self.get_mesh().polygons:
-            face.use_smooth = use_smooth
+        if mode.lower() == "flat":
+            is_smooth = False
+            self.blender_obj.data.use_auto_smooth = False
+        elif mode.lower() == "smooth":
+            is_smooth = True
+            self.blender_obj.data.use_auto_smooth = False
+        elif mode.lower() == "auto":
+            is_smooth = True
+            self.blender_obj.data.use_auto_smooth = True
+            self.blender_obj.data.auto_smooth_angle = np.deg2rad(angle_value)
+        else:
+            raise Exception("This shading mode is unknown: {}".format(mode))
 
-    def remove_x_axis_rotation(self):
-        """
-        Removes the 90 degree X-axis rotation found, when loading from `.obj` files. This function rotates the mesh
-        itself not just the object, this will set the `rotation_euler` to `[0, 0, 0]`.
-        """
-        bpy.ops.object.select_all(action='DESELECT')
-        # convert object rotation into internal rotation
-        self.select()
-        bpy.context.view_layer.objects.active = self.blender_obj
-        self.set_rotation_euler([0, 0, 0])
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.transform.rotate(value=np.pi * 0.5, orient_axis="X")
-        bpy.ops.object.mode_set(mode='OBJECT')
-        self.deselect()
-        bpy.context.view_layer.update()
+        for face in self.get_mesh().polygons:
+            face.use_smooth = is_smooth
 
     def move_origin_to_bottom_mean_point(self):
         """
@@ -166,11 +163,7 @@ class MeshObject(Entity):
         :param rotation: Determines whether the object's rotation should be persisted.
         :param scale: Determines whether the object's scale should be persisted.
         """
-        bpy.ops.object.select_all(action='DESELECT')
-        self.select()
-        bpy.context.view_layer.objects.active = self.blender_obj
-        bpy.ops.object.transform_apply(location=location, rotation=rotation, scale=scale)
-        self.deselect()
+        bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location, rotation=rotation, scale=scale)
 
     def get_origin(self) -> Vector:
         """ Returns the origin of the object.

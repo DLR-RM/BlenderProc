@@ -10,6 +10,7 @@ import numpy as np
 from src.loader.LoaderInterface import LoaderInterface
 from src.main.Module import Module
 from src.utility.Config import Config
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
@@ -215,11 +216,9 @@ class FloorExtractor(Module):
                 if counter:
                     bpy.ops.mesh.separate(type='SELECTED')
             else:
-                try:
-                    from sklearn.cluster import MeanShift, estimate_bandwidth
-                except ImportError:
-                    raise ImportError("If no height_list_path is defined, the sklearn lib has to be installed: "
-                                      "By adding \"scikit-learn\" to the \"setup\"/\"pip\" in the config file.")
+                from src.utility.SetupUtility import SetupUtility
+                SetupUtility.setup_pip(["scikit-learn"])
+                from sklearn.cluster import MeanShift, estimate_bandwidth
 
                 # no height list was provided, try to estimate them on its own
 
@@ -279,7 +278,7 @@ class FloorExtractor(Module):
         if add_properties:
             config = Config({"add_properties": add_properties})
             loader_interface = LoaderInterface(config)
-            loader_interface._set_properties(newly_created_objects)
+            loader_interface._set_properties(MeshObject.convert_to_meshes(newly_created_objects))
 
     @staticmethod
     def get_median_face_pose(face: bmesh.types.BMFace, matrix_world: mathutils.Matrix):

@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["h5py"])
+
 import os
 
 import bpy

@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["scikit-image"])
+
 import datetime
 from itertools import groupby
 import csv
