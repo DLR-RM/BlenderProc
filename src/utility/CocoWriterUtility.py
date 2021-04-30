@@ -133,7 +133,7 @@ class CocoWriterUtility:
                 elif "supercategory" in inst:
                     inst_supercategory = inst["supercategory"]
 
-                if supercategory == inst_supercategory:
+                if supercategory == inst_supercategory or supercategory == 'coco_annotations':
                     cat_dict = {'id': int(inst["category_id"]),
                                 'name': inst["category_id"],
                                 'supercategory': inst_supercategory}
@@ -170,7 +170,6 @@ class CocoWriterUtility:
 
             # Go through all objects visible in this image
             instances = np.unique(segmentation_map)
-            
             # Remove background
             instances = np.delete(instances, np.where(instances == 0))
             for inst in instances:

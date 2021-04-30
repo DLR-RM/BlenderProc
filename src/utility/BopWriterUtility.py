@@ -33,7 +33,7 @@ class BopWriterUtility:
         :return: Content of the loaded JSON file.
         """
             
-        @staticmethod# Keys to integers.
+        # Keys to integers.
         def convert_keys_to_int(x):
             return {int(k) if k.lstrip('-').isdigit() else k: v for k, v in x.items()}
 

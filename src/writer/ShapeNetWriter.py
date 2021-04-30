@@ -24,7 +24,7 @@ class ShapeNetWriter(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self.object_writer = ItemWriter(WriterUtility.get_shapenet_attribute)
+        self.object_writer = ItemWriter(WriterUtility._get_shapenet_attribute)
 
     def run(self):
         """ Collect ShapeNet attributes and write them to a file."""
