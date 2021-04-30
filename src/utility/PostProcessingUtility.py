@@ -4,8 +4,6 @@ import csv
 
 import bpy
 
-from src.utility.BlenderUtility import load_image
-
 class PostProcessingUtility:  
         
     @staticmethod

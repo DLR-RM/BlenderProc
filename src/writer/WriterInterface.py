@@ -8,7 +8,6 @@ import numpy as np
 import mathutils
 
 from src.main.Module import Module
-from src.utility.BlenderUtility import load_image
 from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 from src.utility.WriterUtility import WriterUtility
@@ -57,6 +56,7 @@ class WriterInterface(Module):
             self.postprocessing_modules_per_output[output_key] = Utility.initialize_modules(module_configs[output_key])
         self.name_to_id = {}
         self.destination_frame = self.config.get_list("destination_frame", ["X", "Y", "Z"])
+        self.write_alpha_channel = self.config.get_bool("write_alpha_channel", False)
 
     def write_attributes_to_file(self, item_writer, items, default_file_prefix, default_output_key, default_attributes, version="1.0.0"):
         """ Writes the state of the given items to a file with the configured prefix.
@@ -102,7 +102,7 @@ class WriterInterface(Module):
         :param version: The version number original data. Type: String. Default: 1.0.0.
         :return: The post-processed image that was loaded using the file path.
         """
-        data = WriterUtility.load_output_file(Utility.resolve_path(file_path), self.config.get_bool("write_alpha_channel", False))
+        data = WriterUtility.load_output_file(Utility.resolve_path(file_path), self.write_alpha_channel)
         data, new_key, new_version = self._apply_postprocessing(key, data, version)
         print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
         return data, new_key, new_version
