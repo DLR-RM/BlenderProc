@@ -30,6 +30,7 @@ class BopWriterUtility:
         From the BOP toolkit (https://github.com/thodan/bop_toolkit).
 
         :param path: Path to the JSON file.
+        :param keys_to_int: Convert digit dict keys to integers. Default: False
         :return: Content of the loaded JSON file.
         """
             
