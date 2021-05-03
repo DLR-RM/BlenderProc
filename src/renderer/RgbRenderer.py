@@ -60,7 +60,7 @@ class RgbRenderer(RendererInterface):
 
     def run(self):
         # if the rendering is not performed -> it is probably the debug case.
-        do_undo = not self._avoid_rendering
+        do_undo = not self._avoid_output
         with Utility.UndoAfterExecution(perform_undo_op=do_undo):
             self._configure_renderer(use_denoiser=True, default_denoiser="Intel")
 

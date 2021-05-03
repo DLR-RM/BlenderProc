@@ -62,11 +62,14 @@ class BopWriter(WriterInterface):
     def run(self):
         """ Stores frames and annotations for objects from the specified dataset.
         """
-        BopWriterUtility.write(output_dir = self._determine_output_dir(False), 
-                            dataset = self._dataset, 
-                            append_to_existing_output = self._append_to_existing_output, 
-                            depth_scale = self._depth_scale, 
-                            save_world2cam = self._save_world2cam, 
-                            ignore_dist_thres = self._ignore_dist_thres, 
-                            m2mm = self._mm2m)
-        
+
+        if self._avoid_output:
+            print("Avoid output is on, no output produced!")
+        else:
+            BopWriterUtility.write(output_dir = self._determine_output_dir(False), 
+                                dataset = self._dataset, 
+                                append_to_existing_output = self._append_to_existing_output, 
+                                depth_scale = self._depth_scale, 
+                                save_world2cam = self._save_world2cam, 
+                                ignore_dist_thres = self._ignore_dist_thres, 
+                                m2mm = self._mm2m)
