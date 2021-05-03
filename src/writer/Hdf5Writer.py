@@ -38,18 +38,14 @@ class Hdf5Writer(WriterInterface):
           - If true, stereo images are saved as two separate images \*_0 and \*_1. Default: False
             (stereo images are combined into one np.array (2, ...)).
           - bool
-        * - avoid_rendering
-          - If true, exit. Default: False.
-          - bool
     """
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
-        self._avoid_rendering = config.get_bool("avoid_rendering", False)
 
     def run(self):
-        if self._avoid_rendering:
-            print("Avoid rendering is on, no output produced!")
+        if self._avoid_output:
+            print("Avoid output is on, no output produced!")
             return
 
         if self.config.get_bool("append_to_existing_output", False):
