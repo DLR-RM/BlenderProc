@@ -16,6 +16,27 @@ from src.utility.CameraUtility import CameraUtility
 class WriterUtility:
     
     @staticmethod
+    def load_registered_outputs(keys):
+        """
+        Loads registered outputs with specified keys
+
+        param keys: list of output_key types to load
+        :return: dict of lists of raw loaded outputs. Keys can be 'distance', 'colors', 'normals'
+        """
+        output_data_dict = {}
+        reg_outputs = Utility.get_registered_outputs()
+
+        for reg_out in reg_outputs:
+            if reg_out['key'] in keys:
+                output_data_dict[reg_out['key']] = []
+                for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+                    output_path = Utility.resolve_path(reg_out['path'] % frame_id)
+                    output_file = WriterUtility.load_output_file(output_path)
+                    output_data_dict[reg_out['key']].append(output_file)
+
+        return output_data_dict
+    
+    @staticmethod
     def load_output_file(file_path:str, write_alpha_channel:bool=False):
         """ Tries to read in the file with the given path into a numpy array.
 

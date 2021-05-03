@@ -1,12 +1,12 @@
 import os
-
+import mathutils
+import math
 import bpy
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.Utility import Utility
-import mathutils
-import math
+from src.utility.WriterUtility import WriterUtility
 
 class RendererUtility:
 
@@ -389,7 +389,7 @@ class RendererUtility:
             raise Exception("Unknown Image Type " + file_format)
 
     @staticmethod
-    def render(output_dir, file_prefix="rgb_", output_key="colors"):
+    def render(output_dir, file_prefix="rgb_", output_key="colors", load_keys={'colors', 'distance', 'normals'}):
         """ Render all frames.
 
         This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -397,6 +397,8 @@ class RendererUtility:
         :param output_dir: The directory to write images to.
         :param file_prefix: The prefix to use for writing the images.
         :param output_key: The key to use for registering the output.
+        :param load_keys: Set of output keys to load when available
+        :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'
         """
         if output_key is not None:
             Utility.add_output_entry({
@@ -404,6 +406,7 @@ class RendererUtility:
                 "path": os.path.join(output_dir, file_prefix) + "%04d" + RendererUtility.map_file_format_to_file_ending(bpy.context.scene.render.image_settings.file_format),
                 "version": "2.0.0"
             })
+            load_keys.add(output_key)
 
         bpy.context.scene.render.filepath = os.path.join(output_dir, file_prefix)
 
@@ -418,7 +421,9 @@ class RendererUtility:
             bpy.ops.render.render(animation=True, write_still=True)
             # Revert changes
             bpy.context.scene.frame_end += 1
-
+        
+        return WriterUtility.load_registered_outputs(load_keys)
+        
     @staticmethod
     def set_output_format(file_format, color_depth=8, enable_transparency=False, jpg_quality=95):
         """ Sets the output format to use for rendering.

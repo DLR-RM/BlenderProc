@@ -301,3 +301,5 @@ class SegMapRendererUtility:
                                     ".csv",
                                     "2.0.0",
                                     unique_for_camposes=False)
+            
+        return WriterUtility.load_registered_outputs(load_keys)

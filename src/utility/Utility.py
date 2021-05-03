@@ -465,12 +465,23 @@ class Utility:
         :param key: The output key to look for.
         :return: The dict containing all information registered for that output. If no output with the given key exists, None is returned.
         """
-        if GlobalStorage.is_in_storage("output"):
-            for output in GlobalStorage.get("output"):
-                if output["key"] == key:
-                    return output
+        for output in Utility.get_registered_outputs():
+            if output["key"] == key:
+                return output
 
         return None
+
+    @staticmethod
+    def get_registered_outputs():
+        """ Returns a list of outputs which were registered.
+
+        :return: A list of dicts containing all information registered for the outputs. 
+        """
+        outputs = []
+        if GlobalStorage.is_in_storage("output"):
+            outputs = GlobalStorage.get("output")
+        
+        return outputs
 
     @staticmethod
     def output_already_registered(output, output_list):
