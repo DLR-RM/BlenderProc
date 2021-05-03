@@ -389,7 +389,7 @@ class RendererUtility:
             raise Exception("Unknown Image Type " + file_format)
 
     @staticmethod
-    def render(output_dir, file_prefix="rgb_", output_key="colors", load_keys={'colors', 'distance', 'normals'}):
+    def render(output_dir, file_prefix="rgb_", output_key="colors", load_keys={'colors', 'distance', 'normals'}, return_data=True):
         """ Render all frames.
 
         This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -398,6 +398,7 @@ class RendererUtility:
         :param file_prefix: The prefix to use for writing the images.
         :param output_key: The key to use for registering the output.
         :param load_keys: Set of output keys to load when available
+        :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
         :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'
         """
         if output_key is not None:
@@ -422,7 +423,7 @@ class RendererUtility:
             # Revert changes
             bpy.context.scene.frame_end += 1
         
-        return WriterUtility.load_registered_outputs(load_keys)
+        return WriterUtility.load_registered_outputs(load_keys) if return_data else None
         
     @staticmethod
     def set_output_format(file_format, color_depth=8, enable_transparency=False, jpg_quality=95):

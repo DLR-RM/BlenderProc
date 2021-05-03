@@ -58,5 +58,6 @@ class FlowRenderer(RendererInterface):
                     self.config.get_string('forward_flow_output_file_prefix', 'forward_flow_'),
                     self.config.get_string("forward_flow_output_key", "forward_flow"),
                     self.config.get_string('backward_flow_output_file_prefix', 'backward_flow_'),
-                    self.config.get_string("backward_flow_output_key", "backward_flow")
+                    self.config.get_string("backward_flow_output_key", "backward_flow"),
+                    return_data=False
                 )

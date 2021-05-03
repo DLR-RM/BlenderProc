@@ -207,5 +207,6 @@ class RendererInterface(Module):
             RendererUtility.render(
                 self._determine_output_dir(),
                 self.config.get_string(output_file_prefix_parameter_name, default_prefix),
-                self.config.get_string(output_key_parameter_name, default_key)
+                self.config.get_string(output_key_parameter_name, default_key),
+                return_data=False
             )

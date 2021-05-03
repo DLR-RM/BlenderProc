@@ -8,6 +8,7 @@ from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image, get_all_blender_mesh_objects
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.RendererUtility import RendererUtility
+from src.utility.WriterUtility import WriterUtility
 from src.utility.Utility import Utility
 
 
@@ -78,8 +79,9 @@ class SegMapRendererUtility:
         return colors, num_splits_per_dimension, color_map
 
     @staticmethod
-    def render(output_dir, temp_dir, used_attributes, used_default_values={}, file_prefix="segmap_", output_key="segmap", segcolormap_output_file_prefix="class_inst_col_map", segcolormap_output_key="segcolormap", use_alpha_channel=False, render_colorspace_size_per_dimension=2048):
-        """ Renders segmentation maps for all frames.
+    def render(output_dir, temp_dir, used_attributes, used_default_values={}, file_prefix="segmap_", output_key="segmap", segcolormap_output_file_prefix="class_inst_col_map", 
+               segcolormap_output_key="segcolormap", use_alpha_channel=False, render_colorspace_size_per_dimension=2048, return_data=True):
+        """ Renders segmentation maps for all frames
 
         :param output_dir: The directory to write images to.
         :param temp_dir: The directory to write intermediate data to.
@@ -91,6 +93,8 @@ class SegMapRendererUtility:
         :param segcolormap_output_key: The key to use for registering the segmation-color map output.
         :param use_alpha_channel: If true, the alpha channel stored in .png textures is used.
         :param render_colorspace_size_per_dimension: As we use float16 for storing the rendering, the interval of integers which can be precisely stored is [-2048, 2048]. As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our color space which allows ~8 billion different colors/objects. This should be enough.
+        :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+        :return: dict of lists of segmaps and (for instance segmentation) segcolormaps
         """
         with Utility.UndoAfterExecution():
             RendererUtility.init()
@@ -294,6 +298,7 @@ class SegMapRendererUtility:
                         writer.writerow(object_element)
 
         Utility.register_output(output_dir, file_prefix, output_key, ".npy", "2.0.0")
+        load_keys = {output_key}
         if save_in_csv_attributes:
             Utility.register_output(output_dir,
                                     segcolormap_output_file_prefix,
@@ -301,5 +306,6 @@ class SegMapRendererUtility:
                                     ".csv",
                                     "2.0.0",
                                     unique_for_camposes=False)
-            
-        return WriterUtility.load_registered_outputs(load_keys)
+            load_keys.add(segcolormap_output_key)
+        
+        return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
