@@ -59,7 +59,7 @@ class FlowRendererUtility:
 
     @staticmethod
     def render(output_dir, temp_dir, get_forward_flow, get_backward_flow, blender_image_coordinate_style=False, forward_flow_output_file_prefix="forward_flow_", 
-               forward_flow_output_key="forward_flow", backward_flow_output_file_prefix="backward_flow_", backward_flow_output_key="backward_flow", return_data=False):
+               forward_flow_output_key="forward_flow", backward_flow_output_file_prefix="backward_flow_", backward_flow_output_key="backward_flow", return_data=True):
         """ Renders the optical flow (forward and backward) for all frames.
 
         :param output_dir: The directory to write images to.
