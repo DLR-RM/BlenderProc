@@ -129,11 +129,11 @@ If `scene_id` is not specified (default = -1), `loader.BopLoader` simply loads a
     {
       "module": "writer.CocoAnnotationsWriter",
       "config": {
-        "cp_supercategory": "<args:1>"
+        "supercategory": "<args:1>"
       }
     }
 ```
-Writes CocoAnnotations of all objects from the given BOP dataset (`"cp_supercategory"`).
+Writes CocoAnnotations of all objects from the given BOP dataset (`"supercategory"`).
 
 ### BopWriter
 

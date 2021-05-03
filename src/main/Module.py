@@ -39,6 +39,9 @@ class Module:
           - The path to a directory where all persistent output files should be stored. If it doesn't exist, it is
             created automatically. Default: "".
           - string
+        * - avoid_output
+          - This mode is only used during debugging, when no output should be produced. Default: False
+          - bool
     """
 
     def __init__(self, config):
@@ -53,6 +56,8 @@ class Module:
         os.makedirs(self._output_dir, exist_ok=True)
 
         self._temp_dir = Utility.get_temporary_directory()
+
+        self._avoid_output = self.config.get_bool("avoid_output", False)
 
     def _determine_output_dir(self, output_is_temp_default=True):
         """ Returns the directory where to store output file created by this module.

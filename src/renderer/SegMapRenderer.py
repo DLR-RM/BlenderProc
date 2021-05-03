@@ -134,7 +134,7 @@ class SegMapRenderer(RendererInterface):
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_samples=1)
 
-            if not self._avoid_rendering:
+            if not self._avoid_output:
                 SegMapRendererUtility.render(
                     self._determine_output_dir(),
                     self._temp_dir,

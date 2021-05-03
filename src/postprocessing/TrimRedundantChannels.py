@@ -11,7 +11,4 @@ class TrimRedundantChannels(Module):
         :param image: The image data.
         :return: The trimmed image data.
         """
-        
-        image = image[:, :, 0] # All channles have the same value, so just extract any single channel
-
         return PostProcessingUtility.trim_redundant_channels(image), key, version
