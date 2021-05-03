@@ -7,11 +7,31 @@ import bpy
 class PostProcessingUtility:  
         
     @staticmethod
+    def _apply_to_list(function, input_list, *args, **kwargs):
+        """
+        Applies given function to list of inputs with given arguments
+
+        :param function: function handle
+        :param input_list: list of input data
+        :return: list of outputs to which the postprocessing was applied
+        """
+        
+        out = []
+        for el in input_list:
+            out.append(function(el, *args, **kwargs))
+        return out
+    
+    @staticmethod
     def dist2depth(dist):
         """
         :param dist: The distance data.
         :return: The depth data
         """
+        
+        if type(dist) is list or len(np.squeeze(dist).shape) > 2:
+            func_handle = PostProcessingUtility.dist2depth
+            return PostProcessingUtility._apply_to_list(func_handle, dist)
+        
         if len(dist.shape) > 2:
             dist = dist[:, :, 0] # All channles have the same value, so just extract any single channel
         else:
@@ -131,6 +151,10 @@ class PostProcessingUtility:
         :return: The denoised segmap image
         """
         
+        if type(image) is list or len(image.shape) > 3:
+            func_handle = PostProcessingUtility.remove_segmap_noise
+            return PostProcessingUtility._apply_to_list(func_handle, image)
+        
         noise_indices = PostProcessingUtility._determine_noisy_pixels(image)
 
         for index in noise_indices:
@@ -169,11 +193,14 @@ class PostProcessingUtility:
             :param rgb: Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated). Type: bool. Default: False
             :return: filtered image
         """
-                
+        
         import cv2
         from scipy import stats
-        
+        func_handle = PostProcessingUtility.oil_paint_filter
         if rgb:
+            if type(image) is list or len(image.shape) > 3:
+                return PostProcessingUtility._apply_to_list(func_handle, image, filter_size=filter_size, edges_only=edges_only, rgb=rgb)
+            
             intensity_img = (np.sum(image, axis=2) / 3.0)
 
             neighbors = np.array(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size, return_list=True))
@@ -195,11 +222,14 @@ class PostProcessingUtility:
                 image[edges > 0] = filtered_img[edges > 0]
                 filtered_img = image
         else:
+            if type(image) is list or len(np.squeeze(image).shape) > 2:
+                return PostProcessingUtility._apply_to_list(func_handle, image, filter_size=filter_size, edges_only=edges_only, rgb=rgb)
+            
             if len(image.shape) == 3 and image.shape[2] > 1:
                 image = image[:, :, 0]
-
-            filtered_img = stats.mode(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size), axis=2)[0] \
-                .reshape(filtered_img.shape[0], filtered_img.shape[1])
+            
+            filtered_img = stats.mode(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size), axis=2)[0]
+            filtered_img = filtered_img.reshape(filtered_img.shape[0], filtered_img.shape[1])
 
             if edges_only:
                 # Handle inf and map input to the range: 0-255
@@ -222,6 +252,11 @@ class PostProcessingUtility:
         :param image: The image data.
         :return: The trimmed image data.
         """
+        
+        if type(image) is list or len(np.squeeze(image).shape) > 2:
+            func_handle = PostProcessingUtility.trim_redundant_channels
+            return PostProcessingUtility._apply_to_list(func_handle, image)
+        
         if len(image.shape) > 2:
             image = image[:, :, 0] # All channles have the same value, so just extract any single channel
         
