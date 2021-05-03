@@ -1,6 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
-
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader
 from src.utility.CameraUtility import CameraUtility
@@ -8,6 +7,7 @@ from src.utility.LightUtility import Light
 from mathutils import Matrix, Vector, Euler
 
 from src.utility.RendererUtility import RendererUtility
+from src.utility.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 
@@ -33,6 +33,8 @@ with open(args.camera, "r") as f:
         matrix_world = Matrix.Translation(Vector(line[:3])) @ Euler(line[3:6], 'XYZ').to_matrix().to_4x4()
         CameraUtility.add_camera_pose(matrix_world)
 
-RendererUtility.enable_distance_output(args.output_dir)
-RendererUtility.enable_normals_output(args.output_dir)
-RendererUtility.render(args.output_dir)
+RendererUtility.enable_distance_output()
+RendererUtility.enable_normals_output()
+data = RendererUtility.render()
+
+data['depth'] = PostProcessingUtility.dist2depth(data['distance'])
