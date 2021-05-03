@@ -42,16 +42,18 @@ class Hdf5Writer(WriterInterface):
 
     def __init__(self, config):
         WriterInterface.__init__(self, config)
+        self._append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
+        self._output_dir = self._determine_output_dir(False)
 
     def run(self):
         if self._avoid_output:
             print("Avoid output is on, no output produced!")
             return
 
-        if self.config.get_bool("append_to_existing_output", False):
+        if self._append_to_existing_output:
             frame_offset = 0
             # Look for hdf5 file with highest index
-            for path in os.listdir(self._determine_output_dir(False)):
+            for path in os.listdir(self._output_dir):
                 if path.endswith(".hdf5"):
                     index = path[:-len(".hdf5")]
                     if index.isdigit():
@@ -63,7 +65,7 @@ class Hdf5Writer(WriterInterface):
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
 
             # Create output hdf5 file
-            hdf5_path = os.path.join(self._determine_output_dir(False), str(frame + frame_offset) + ".hdf5")
+            hdf5_path = os.path.join(self._output_dir, str(frame + frame_offset) + ".hdf5")
             with h5py.File(hdf5_path, "w") as f:
 
                 if not GlobalStorage.is_in_storage("output"):
