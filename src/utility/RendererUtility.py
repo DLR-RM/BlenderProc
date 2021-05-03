@@ -198,7 +198,7 @@ class RendererUtility:
         bpy.context.scene.cycles.samples = samples
 
     @staticmethod
-    def enable_distance_output(output_dir, file_prefix="distance_", output_key="distance", use_mist_as_distance=True, distance_start=0.1, distance_range=25.0, distance_falloff="LINEAR"):
+    def enable_distance_output(output_dir=Utility.get_temporary_directory(), file_prefix="distance_", output_key="distance", use_mist_as_distance=True, distance_start=0.1, distance_range=25.0, distance_falloff="LINEAR"):
         """ Enables writing distance images.
 
         Distance images will be written in the form of .exr files during the next rendering.
@@ -211,6 +211,7 @@ class RendererUtility:
         :param distance_range: Total distance in which the distance is measured. distance_end = distance_start + distance_range.
         :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]
         """
+
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         GlobalStorage.add("renderer_distance_end", distance_start + distance_range)
@@ -264,7 +265,7 @@ class RendererUtility:
         })
 
     @staticmethod
-    def enable_normals_output(output_dir, file_prefix="normals_", output_key="normals"):
+    def enable_normals_output(output_dir=Utility.get_temporary_directory(), file_prefix="normals_", output_key="normals"):
         """ Enables writing normal images.
 
         Normal images will be written in the form of .exr files during the next rendering.
@@ -273,6 +274,7 @@ class RendererUtility:
         :param file_prefix: The prefix to use for writing the files.
         :param output_key: The key to use for registering the normal output.
         """
+            
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         tree = bpy.context.scene.node_tree
@@ -389,12 +391,12 @@ class RendererUtility:
             raise Exception("Unknown Image Type " + file_format)
 
     @staticmethod
-    def render(output_dir, file_prefix="rgb_", output_key="colors", load_keys={'colors', 'distance', 'normals'}, return_data=True):
+    def render(output_dir=Utility.get_temporary_directory(), file_prefix="rgb_", output_key="colors", load_keys={'colors', 'distance', 'normals'}, return_data=True):
         """ Render all frames.
 
         This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
 
-        :param output_dir: The directory to write images to.
+        :param output_dir: The (temporary) directory to write images to. Default: temporary directory in shared memory
         :param file_prefix: The prefix to use for writing the images.
         :param output_key: The key to use for registering the output.
         :param load_keys: Set of output keys to load when available
@@ -423,7 +425,7 @@ class RendererUtility:
             # Revert changes
             bpy.context.scene.frame_end += 1
         
-        return WriterUtility.load_registered_outputs(load_keys) if return_data else None
+        return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
         
     @staticmethod
     def set_output_format(file_format, color_depth=8, enable_transparency=False, jpg_quality=95):
