@@ -28,15 +28,12 @@ class PostProcessingUtility:
         :return: The depth data
         """
         
-        if type(dist) is list or len(np.squeeze(dist).shape) > 2:
+        dist = PostProcessingUtility.trim_redundant_channels(dist)
+        
+        if type(dist) is list or len(dist.shape) > 2:
             func_handle = PostProcessingUtility.dist2depth
             return PostProcessingUtility._apply_to_list(func_handle, dist)
-        
-        if len(dist.shape) > 2:
-            dist = dist[:, :, 0] # All channles have the same value, so just extract any single channel
-        else:
-            dist = dist.squeeze()
-        
+                
         height, width = dist.shape
 
         cam_ob = bpy.context.scene.camera
@@ -222,7 +219,8 @@ class PostProcessingUtility:
                 image[edges > 0] = filtered_img[edges > 0]
                 filtered_img = image
         else:
-            if type(image) is list or len(np.squeeze(image).shape) > 2:
+            image = PostProcessingUtility.trim_redundant_channels(image)
+            if type(image) is list or len(image.shape) > 2:
                 return PostProcessingUtility._apply_to_list(func_handle, image, filter_size=filter_size, edges_only=edges_only, rgb=rgb)
             
             if len(image.shape) == 3 and image.shape[2] > 1:
@@ -253,11 +251,11 @@ class PostProcessingUtility:
         :return: The trimmed image data.
         """
         
-        if type(image) is list or len(np.squeeze(image).shape) > 2:
+        if type(image) is list or len(image.shape) > 3:
             func_handle = PostProcessingUtility.trim_redundant_channels
             return PostProcessingUtility._apply_to_list(func_handle, image)
         
-        if len(image.shape) > 2:
+        if len(image.shape) == 3 and image.shape[2] == 3:
             image = image[:, :, 0] # All channles have the same value, so just extract any single channel
-        
+            
         return image
