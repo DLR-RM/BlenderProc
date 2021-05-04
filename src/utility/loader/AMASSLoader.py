@@ -81,7 +81,7 @@ class AMASSLoader:
 
         # set the shading mode explicitly to smooth
         for obj in loaded_obj:
-            obj.set_shading_mode(True)
+            obj.set_shading_mode("SMOOTH")
 
         if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
             for obj in loaded_obj:

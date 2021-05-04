@@ -28,6 +28,7 @@ There is also an extended introduction video to BlenderProc, it covers the basic
 * [General](#general)
 * [Functionality](#functionality)
 * [Examples](#examples)
+* [Debugging](#debugging)
 * [Source code](#source-code)
 * [Contributions](#contributions)
 * [Change log](#change-log)
@@ -87,6 +88,25 @@ We provide a lot of [examples](examples/README.md) which explain all features in
 * [BOP Challenge](README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
 
 ... And much more!
+
+## Debugging
+
+To find a bug or to understand what the pipeline is doing, it is possible to run BlenderProc from inside the Blender UI.
+To do so, just add the `--debug` flag to your blender proc command.
+For example, to start the basic example in debug mode, run:
+```
+python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output --debug
+```
+
+Now the Blender UI opens up, the scripting tab is selected, the correct script is loaded and your config path and arguments are placed.
+To start the BlenderProc pipeline, one now just has to press play (see red circle in image).
+ 
+<p align="center">
+<img src="debug.png" alt="Front readme image" width=500>
+</p>
+
+The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.
+To adjust the config arguments without restarting blender, just change line 32 in the scripting tab.
 
 ## Source Code
 
