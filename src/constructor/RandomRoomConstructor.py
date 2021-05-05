@@ -375,7 +375,7 @@ class RandomRoomConstructor(Module):
             bm = bmesh.from_edit_mesh(mesh)
             bm.faces.ensure_lookup_table()
             # split the floor at the wall height
-            counter = FloorExtractor.split_at_height_value(bm, used_split_height, compare_height,
+            counter = FloorExtractor.select_at_height_value(bm, used_split_height, compare_height,
                                                            mathutils.Vector(up_vec), compare_angle, obj.matrix_world)
             # if any faces are selected split them up
             if counter:
