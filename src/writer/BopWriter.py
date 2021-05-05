@@ -182,7 +182,10 @@ class BopWriter(WriterInterface):
     def run(self):
         """ Stores frames and annotations for objects from the specified dataset.
         """
-        
+        if self._avoid_output:
+            print("Avoid output is on, no output produced!")
+            return
+
         all_mesh_objects = get_all_blender_mesh_objects()
 	
         # Select objects from the specified dataset.

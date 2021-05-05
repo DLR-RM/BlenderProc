@@ -9,7 +9,7 @@ class SetupUtility:
     installed_packages = None
 
     @staticmethod
-    def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
+    def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False, debug_args=None):
         """ Sets up the python environment.
 
         - Makes sure all required pip packages are installed
@@ -19,12 +19,24 @@ class SetupUtility:
         :param blender_path: The path to the blender installation. If None, it is determined automatically based on the current python env.
         :param major_version: The version number of the blender installation. If None, it is determined automatically based on the current python env.
         :param reinstall_packages: Set to true, if all python packages should be reinstalled.
+        :param debug_args: Can be used to overwrite sys.argv in debug mode.
         """
         packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
         sys.path.append(packages_path)
 
-        # Cut off blender specific arguments
-        sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
+        is_debug_mode = "--background" not in sys.argv
+        if is_debug_mode:
+            # Delete all loaded models inside src/, as they are cached inside blender
+            for module in list(sys.modules.keys()):
+                if module.startswith("src") and not module == "src.utility.SetupUtility":
+                    del sys.modules[module]
+
+        # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
+        if not is_debug_mode:
+            # Cut off blender specific arguments
+            sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
+        elif debug_args is not None:
+            sys.argv = ["debug"] + debug_args
 
     @staticmethod
     def setup_pip(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):

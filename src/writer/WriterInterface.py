@@ -68,6 +68,10 @@ class WriterInterface(Module):
         :param default_attributes: The default attributes to write, if no attributes are specified in the config. Type: list.
         :param version: The version to use when registering the output. Type: string.
         """
+        if self._avoid_output:
+            print("Avoid output is on, no output produced!")
+            return
+
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))

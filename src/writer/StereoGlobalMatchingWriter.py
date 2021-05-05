@@ -51,9 +51,6 @@ class StereoGlobalMatchingWriter(RendererInterface):
         * - min_disparity
           - Semi-global matching minimum disparity. Optional. Default: 0
           - int
-        * - avoid_rendering
-          - If true, exit. Optional. Default: False.
-          - bool
         * - output_disparity
           - Additionally outputs the disparity map. Default: False
           - bool
@@ -65,7 +62,6 @@ class StereoGlobalMatchingWriter(RendererInterface):
     def __init__(self, config):
         RendererInterface.__init__(self, config)
 
-        self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
         if self.rgb_output_key is None:
             raise Exception("RGB output is not registered, please register the RGB renderer before this module.")
@@ -149,8 +145,8 @@ class StereoGlobalMatchingWriter(RendererInterface):
         2. For each frame, load left and right images and call the `sgm()` methode.
         3. Write the results to a numpy file.
         """
-        if self._avoid_rendering:
-            print("Avoid rendering is on, no output produced!")
+        if self._avoid_output:
+            print("Avoid output is on, no output produced!")
             return
 
         if GlobalStorage.is_in_storage("renderer_distance_end"):

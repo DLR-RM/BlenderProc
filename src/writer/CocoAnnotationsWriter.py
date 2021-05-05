@@ -22,9 +22,6 @@ class CocoAnnotationsWriter(WriterInterface):
         * - Parameter
           - Description
           - Type
-        * - avoid_rendering
-          - If true, no output is produced. Default: False
-          - bool
         * - rgb_output_key
           - The output key with which the rgb images were registered. Should be the same as the output_key of the
             RgbRenderer module. Default: colors.
@@ -53,7 +50,6 @@ class CocoAnnotationsWriter(WriterInterface):
     def __init__(self, config):
         WriterInterface.__init__(self, config)
 
-        self._avoid_rendering = config.get_bool("avoid_rendering", False)
         self.rgb_output_key = self.config.get_string("rgb_output_key", "colors")
         self._supercategory = self.config.get_string("supercategory", "coco_annotations")
         self.segmap_output_key = self.config.get_string("segmap_output_key", "segmap")
@@ -71,8 +67,8 @@ class CocoAnnotationsWriter(WriterInterface):
         4. Read color mappings
         5. For each frame write the coco annotation
         """
-        if self._avoid_rendering:
-            print("Avoid rendering is on, no output produced!")
+        if self._avoid_output:
+            print("Avoid output is on, no output produced!")
             return
 
         # Find path pattern of segmentation images
