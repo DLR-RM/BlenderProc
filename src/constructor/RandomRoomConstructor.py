@@ -518,6 +518,8 @@ class RandomRoomConstructor(Module):
         current_obj = MeshObject(current_obj)
         current_obj.set_location(random_placed_value)
         current_obj.set_rotation_euler(random_placed_rotation)
+        bpy.context.view_layer.update()
+
         # Remove bvh cache, as object has changed
         if current_obj.get_name() in self.bvh_cache_for_intersection:
             del self.bvh_cache_for_intersection[current_obj.get_name()]
