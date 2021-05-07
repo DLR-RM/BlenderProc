@@ -199,3 +199,11 @@ class Entity:
             raise Exception("The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
         else:
             object.__setattr__(self, key, value)
+
+    def __eq__(self, other):
+        if isinstance(other, Entity):
+            return self.blender_obj == other.blender_obj
+        return False
+
+    def __hash__(self):
+        return hash(self.blender_obj)
