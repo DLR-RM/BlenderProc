@@ -2,6 +2,8 @@ import os
 import math
 import threading
 import uuid
+from typing import List, Dict, Any
+
 import bpy
 import time
 import inspect
@@ -472,7 +474,7 @@ class Utility:
         return None
 
     @staticmethod
-    def get_registered_outputs():
+    def get_registered_outputs() -> List[Dict[str, Any]]:
         """ Returns a list of outputs which were registered.
 
         :return: A list of dicts containing all information registered for the outputs. 
