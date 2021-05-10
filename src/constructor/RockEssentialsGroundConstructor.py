@@ -157,29 +157,25 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         plane_obj.set_cp("physics", False)
         self._set_properties([plane_obj])
 
-    def _create_node(self, mat_obj, map_type, in_point):
+    def _create_node(self, mat_obj: Material, map_type: str, in_point: str):
         """ Handles the creation a ShaderNodeTexImage node, setting maps and creating links.
 
         :param mat_obj: The material object.
-        :param map_type: Type of image/map that will be assigned to this node. Type: string.
-        :param in_point: Name of an input point in PBR Rock Shader node to use. Type: string.
+        :param map_type: Type of image/map that will be assigned to this node.
+        :param in_point: Name of an input point in PBR Rock Shader node to use.
         """
         new_node = mat_obj.new_node('ShaderNodeTexImage')
         # set output point of the node to connect
-        a = new_node.outputs['Color']
+        output_socket = new_node.outputs['Color']
         new_node.label = map_type
         # special case for a normal map since the link between TextureNode and PBR RS is broken with Normal Map node
         if map_type == 'normal':
             # create new node
             group_norm_map = mat_obj.new_node('ShaderNodeNormalMap')
-            # select Color output
-            a_norm = new_node.outputs['Color']
-            # select input point
-            b_norm = group_norm_map.inputs['Color']
-            # connect them
-            mat_obj.link(a_norm, b_norm)
+            # connect color output/input
+            mat_obj.link(new_node.outputs['Color'], group_norm_map.inputs['Color'])
             # redefine main output point to connect
-            a = group_norm_map.outputs['Normal']
+            output_socket = group_norm_map.outputs['Normal']
         # select main input point of the PBR Rock Shader
-        b = mat_obj.nodes.get("Group").inputs[in_point]
-        mat_obj.link(a, b)
+        group_input_socket = mat_obj.nodes.get("Group").inputs[in_point]
+        mat_obj.link(output_socket, group_input_socket)
