@@ -252,7 +252,7 @@ class PostProcessingUtility:
             func_handle = PostProcessingUtility.trim_redundant_channels
             return PostProcessingUtility._apply_to_list(func_handle, image)
         
-        if len(image.shape) == 3 and image.shape[2] == 3:
+        if hasattr(image, "shape") and len(image.shape) == 3 and image.shape[2] == 3:
             image = image[:, :, 0] # All channles have the same value, so just extract any single channel
             
         return image
