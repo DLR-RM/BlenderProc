@@ -154,3 +154,11 @@ class Entity(Struct):
         """
         return Entity(self.blender_obj.parent)
 
+
+    def __eq__(self, other):
+        if isinstance(other, Entity):
+            return self.blender_obj == other.blender_obj
+        return False
+
+    def __hash__(self):
+        return hash(self.blender_obj)

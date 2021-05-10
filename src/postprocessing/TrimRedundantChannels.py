@@ -1,4 +1,5 @@
 from src.main.Module import Module
+from src.utility.PostProcessingUtility import PostProcessingUtility
 
 class TrimRedundantChannels(Module):
     """ Removes redundant channels, where the input has more than one channels that share exactly the same value """
@@ -10,7 +11,4 @@ class TrimRedundantChannels(Module):
         :param image: The image data.
         :return: The trimmed image data.
         """
-
-        image = image[:, :, 0] # All channles have the same value, so just extract any single channel
-
-        return image, key, version
+        return PostProcessingUtility.trim_redundant_channels(image), key, version
