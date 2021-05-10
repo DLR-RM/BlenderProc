@@ -8,8 +8,6 @@ import numpy as np
 import random
 
 from src.main.Module import Module
-from src.object.ObjectPoseSampler import ObjectPoseSampler
-from src.object.FloorExtractor import FloorExtractor
 from src.provider.getter.Material import Material
 from src.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
 from src.utility.CollisionUtility import CollisionUtility
