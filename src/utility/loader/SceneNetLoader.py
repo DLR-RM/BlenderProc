@@ -59,17 +59,15 @@ class SceneNetLoader:
         # for each object add a material
         for obj in loaded_objects:
             for material in obj.get_materials():
-                nodes = material.node_tree.nodes
-                links = material.node_tree.links
-                principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-                texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
+                principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
+                texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
                 if not texture_nodes or len(texture_nodes) == 1:
                     if len(texture_nodes) == 1:
                         # these materials do not exist they are just named in the .mtl files
                         texture_node = texture_nodes[0]
                     else:
-                        texture_node = nodes.new("ShaderNodeTexImage")
-                    mat_name = material.name
+                        texture_node = material.new_node("ShaderNodeTexImage")
+                    mat_name = material.get_name()
                     if "." in mat_name:
                         mat_name = mat_name[:mat_name.find(".")]
                     mat_name = mat_name.replace("_", "")
@@ -91,8 +89,8 @@ class SceneNetLoader:
                         texture_node.image = bpy.data.images.load(image_path, check_existing=True)
                     else:
                         raise Exception("No image was found for this entity: {}, "
-                                        "material name: {}".format(obj.name, mat_name))
-                    links.new(texture_node.outputs["Color"], principled_bsdf.inputs["Base Color"])
+                                        "material name: {}".format(obj.get_name(), mat_name))
+                    material.link(texture_node.outputs["Color"], principled_bsdf.inputs["Base Color"])
         for obj in loaded_objects:
             obj_name = obj.get_name()
             if "." in obj_name:
@@ -100,7 +98,7 @@ class SceneNetLoader:
             obj_name = obj_name.lower()
             if "wall" in obj_name or "floor" in obj_name or "ceiling" in obj_name:
                 # set the shading of all polygons to flat
-                obj.set_shading_mode(False)
+                obj.set_shading_mode("FLAT")
 
     @staticmethod
     def _set_category_ids(loaded_objects: List[MeshObject]):

@@ -3,6 +3,7 @@ import numpy as np
 from mathutils import Matrix, Vector, Euler
 
 from src.main.Module import Module
+from src.utility.Config import Config
 from src.utility.CameraUtility import CameraUtility
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
@@ -139,7 +140,31 @@ class CameraInterface(Module):
         * - interocular_distance
           - Distance between the camera pair.
           - float
-
+        * - depth_of_field/focal_object
+          - This object will be used as focal point, ideally a empty plane_axes is used here, see BasicEmptyInitializer.
+            Using this will automatically activate the depth of field mode. Can not be combined with
+            depth_of_field_dist.
+          - Provider
+        * - depth_of_field/depth_of_field_dist
+          - Instead of a focal_object it is possible to use a distance from the camera for the focal plane. More
+            control over the scene can be achieved by using a focal_object.
+          - float
+        * - depth_of_field/fstop
+          - The desired amount of blurring, a lower value means more blur and higher value less. Default: 2.4
+          - float
+        * - depth_of_field/aperture_blades
+          - Amount of aperture polygon blades used, to change the shape of the blurred object. Minimum to see an effect
+            is three. Default: 0
+          - int
+        * - depth_of_field/aperture_ratio
+          - Change the amount of distortion to simulate the anamorphic bokeh effect. A setting of 1.0 shows no
+            distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number
+            will cause a vertical distortion. Default: 1.0
+          - float
+        * - depth_of_field/aperture_rotation_in_rad
+          - Rotate the polygonal blades along the facing axis, and will rotate in a clockwise, and
+            counter-clockwise fashion in radiant. Default: 0.0
+          - float
     """
 
     def __init__(self, config):
@@ -195,6 +220,29 @@ class CameraInterface(Module):
             CameraUtility.set_intrinsics_from_blender_params(fov, width, height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, shift_x, shift_y, lens_unit="FOV")
 
         CameraUtility.set_stereo_parameters(config.get_string("stereo_convergence_mode", cam.stereo.convergence_mode), config.get_float("convergence_distance", cam.stereo.convergence_distance), config.get_float("interocular_distance", cam.stereo.interocular_distance))
+        if config.has_param("depth_of_field"):
+            depth_of_field_config = Config(config.get_raw_dict("depth_of_field"))
+            fstop_value = depth_of_field_config.get_float("fstop", 2.4)
+            aperture_blades = depth_of_field_config.get_int("aperture_blades", 0)
+            aperture_ratio = depth_of_field_config.get_float("aperture_ratio", 1.0)
+            aperture_rotation = depth_of_field_config.get_float("aperture_rotation_in_rad", 0.0)
+            if depth_of_field_config.has_param("depth_of_field_dist") and depth_of_field_config.has_param("focal_object"):
+                raise RuntimeError("You can only use either depth_of_field_dist or a focal_object but not both!")
+            if depth_of_field_config.has_param("depth_of_field_dist"):
+                depth_of_field_dist = depth_of_field_config.get_float("depth_of_field_dist")
+                CameraUtility.add_depth_of_field(cam, None, fstop_value, aperture_blades,
+                                                 aperture_rotation, aperture_ratio, depth_of_field_dist)
+            elif depth_of_field_config.has_param("focal_object"):
+                focal_object = depth_of_field_config.get_list("focal_object")
+                if len(focal_object) != 1:
+                    raise RuntimeError(f"There has to be exactly one focal object, use 'random_samples: 1' or change "
+                                       f"the selector. Found {len(focal_object)}.")
+                CameraUtility.add_depth_of_field(cam, focal_object[0], fstop_value, aperture_blades,
+                                                 aperture_rotation, aperture_ratio)
+            else:
+                raise RuntimeError("The depth_of_field dict must contain either a focal_object definition or "
+                                   "a depth_of_field_dist")
+
 
     def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.

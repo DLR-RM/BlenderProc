@@ -4,6 +4,8 @@ import bpy
 
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Config import Config
+from src.utility.MaterialUtility import Material
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
@@ -112,34 +114,27 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         tile_name = ground_config.get_string("tile_name", "RE_ground_plane")
 
         # create new plane, set its size
-        bpy.ops.mesh.primitive_plane_add()
-        bpy.context.object.name = tile_name
-        plane_obj = bpy.data.objects[tile_name]
-        plane_obj.scale = plane_scale
+        plane_obj = MeshObject.create_primitive("PLANE")
+        plane_obj.set_name(tile_name)
+        plane_obj.set_scale(plane_scale)
 
-        # create new material, enable use of nodes
-        mat_obj = bpy.data.materials.new(name="re_ground_mat")
-        mat_obj.use_nodes = True
-
-        # set material
-        plane_obj.data.materials.append(mat_obj)
-        nodes = mat_obj.node_tree.nodes
-        links = mat_obj.node_tree.links
+        # create new material
+        mat_obj = plane_obj.new_material("re_ground_mat")
 
         # delete Principled BSDF node
-        nodes.remove(Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled"))
+        mat_obj.remove_node(mat_obj.get_the_one_node_with_type("BsdfPrincipled"))
 
         # create PBR Rock Shader, connect its output 'Shader' to the Material Output nodes input 'Surface'
-        group_pbr = nodes.new("ShaderNodeGroup")
+        group_pbr = mat_obj.new_node("ShaderNodeGroup")
         group_pbr.node_tree = bpy.data.node_groups['PBR Rock Shader']
-        output_node = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
-        links.new(group_pbr.outputs['Shader'], output_node.inputs['Surface'])
+        output_node = mat_obj.get_the_one_node_with_type('OutputMaterial')
+        mat_obj.link(group_pbr.outputs['Shader'], output_node.inputs['Surface'])
 
         # create Image Texture nodes for color, roughness, reflection, and normal maps
-        self._create_node(nodes, links, 'color', 'Color')
-        self._create_node(nodes, links, 'roughness', 'Roughness')
-        self._create_node(nodes, links, 'reflection', 'Reflection')
-        self._create_node(nodes, links, 'normal', 'Normal')
+        self._create_node(mat_obj, 'color', 'Color')
+        self._create_node(mat_obj, 'roughness', 'Roughness')
+        self._create_node(mat_obj, 'reflection', 'Reflection')
+        self._create_node(mat_obj, 'normal', 'Normal')
 
         # create subsurface and displacement modifiers
         bpy.ops.object.mode_set(mode='EDIT')
@@ -152,40 +147,35 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         bpy.data.textures.new(name=texture_name, type="IMAGE")
 
         # set new texture as a displacement texture, set UV texture coordinates
-        plane_obj.modifiers['Displace'].texture = bpy.data.textures[texture_name]
-        plane_obj.modifiers['Displace'].texture_coords = 'UV'
+        plane_obj.blender_obj.modifiers['Displace'].texture = bpy.data.textures[texture_name]
+        plane_obj.blender_obj.modifiers['Displace'].texture_coords = 'UV'
 
         bpy.ops.object.editmode_toggle()
         # scale, set render levels for subdivision, strength of displacement and set passive rigidbody state
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
         bpy.context.object.modifiers["Subdivision"].render_levels = subdivision_render_levels
-        plane_obj["physics"] = False
+        plane_obj.set_cp("physics", False)
         self._set_properties([plane_obj])
 
-    def _create_node(self, nodes, links, map_type, in_point):
+    def _create_node(self, mat_obj: Material, map_type: str, in_point: str):
         """ Handles the creation a ShaderNodeTexImage node, setting maps and creating links.
 
-        :param nodes: All nodes in the node tree of the material object. Type: Nodes.
-        :param links: All links in the node tree of the material object. Type: NodeLinks.
-        :param map_type: Type of image/map that will be assigned to this node. Type: string.
-        :param in_point: Name of an input point in PBR Rock Shader node to use. Type: string.
+        :param mat_obj: The material object.
+        :param map_type: Type of image/map that will be assigned to this node.
+        :param in_point: Name of an input point in PBR Rock Shader node to use.
         """
-        nodes.new('ShaderNodeTexImage')
+        new_node = mat_obj.new_node('ShaderNodeTexImage')
         # set output point of the node to connect
-        a = nodes.get(nodes[-1].name).outputs['Color']
-        nodes[-1].label = map_type
+        output_socket = new_node.outputs['Color']
+        new_node.label = map_type
         # special case for a normal map since the link between TextureNode and PBR RS is broken with Normal Map node
         if map_type == 'normal':
             # create new node
-            group_norm_map = nodes.new('ShaderNodeNormalMap')
-            # magic: pre-last node, select Color output
-            a_norm = nodes.get(nodes[-2].name).outputs['Color']
-            # select input point
-            b_norm = group_norm_map.inputs['Color']
-            # connect them
-            links.new(a_norm, b_norm)
+            group_norm_map = mat_obj.new_node('ShaderNodeNormalMap')
+            # connect color output/input
+            mat_obj.link(new_node.outputs['Color'], group_norm_map.inputs['Color'])
             # redefine main output point to connect
-            a = nodes.get(nodes[-1].name).outputs['Normal']
+            output_socket = group_norm_map.outputs['Normal']
         # select main input point of the PBR Rock Shader
-        b = nodes.get("Group").inputs[in_point]
-        links.new(a, b)
+        group_input_socket = mat_obj.nodes.get("Group").inputs[in_point]
+        mat_obj.link(output_socket, group_input_socket)

@@ -8,7 +8,9 @@ import bpy
 from mathutils import Matrix
 
 from src.utility.LabelIdMapping import LabelIdMapping
+from src.utility.MaterialUtility import Material
 from src.utility.MathUtility import MathUtility
+from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -43,7 +45,7 @@ class SuncgLoader:
 
         for level in config["levels"]:
             # Build empty level object which acts as a parent for all rooms on the level
-            level_obj = MeshObject.create_empty("Level#" + level["id"])
+            level_obj = Entity.create_empty("Level#" + level["id"])
             level_obj.set_cp("type", "Level")
             if "bbox" in level:
                 level_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(level["bbox"]))
@@ -134,7 +136,7 @@ class SuncgLoader:
         :return: The list of loaded mesh objects.
         """
         # Build empty room object which acts as a parent for all objects inside
-        room_obj = MeshObject.create_empty("Room#" + node["id"])
+        room_obj = Entity.create_empty("Room#" + node["id"])
         room_obj.set_cp("type", "Room")
         room_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(node["bbox"]))
         room_obj.set_cp("roomTypes", node["roomTypes"])
@@ -233,9 +235,7 @@ class SuncgLoader:
         bpy.ops.object.editmode_toggle()
 
         # Create an empty material which is filled in the next step
-        mat = bpy.data.materials.new(name="material_0")
-        mat.use_nodes = True
-        box.add_material(mat)
+        box.new_material("material_0")
 
         SuncgLoader._transform_and_colorize_object(box, material_adjustments, transform, parent)
         # set class to void
@@ -298,7 +298,7 @@ class SuncgLoader:
 
         for i, mat in enumerate(object.get_materials()):
             # the material name of an object contains a nr, which is mentioned in the material_adjustments
-            index = mat.name[mat.name.find("_") + 1:]
+            index = mat.get_name()[mat.get_name().find("_") + 1:]
             if "." in index:
                 index = index[:index.find(".")]
             index = int(index)
@@ -318,7 +318,7 @@ class SuncgLoader:
                 current_mats[value] = mat
 
     @staticmethod
-    def _get_type_and_value_from_mat(mat: bpy.types.Material) -> Tuple[str, str]:
+    def _get_type_and_value_from_mat(mat: Material) -> Tuple[str, str]:
         """
         Returns the type of the material -> either diffuse or with texture (there are only two in SUNCG)
 
@@ -326,20 +326,19 @@ class SuncgLoader:
         :return: mat_type, value: mat_type is either "diffuse" or "texture", the value contains either name of the \
                                  image or the color mapped to an RGB string of the values
         """
-        nodes = mat.node_tree.nodes
-        image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
+        image_node = mat.get_nodes_with_type('TexImage')
         if len(image_node) == 1:
             # there is an image node -> type texture
             mat_type = "texture"
             image_node = image_node[0]
             if image_node.image is None:
-                raise Exception("The image does not have a texture for material: {}".format(mat.name))
+                raise Exception("The image does not have a texture for material: {}".format(mat.get_name()))
             value = image_node.image.name
             if "." in value:
                 value = value[:value.find(".")]
         else:
             mat_type = "diffuse"
-            principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+            principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
             used_keys = list(principled_node.inputs["Base Color"].default_value)
             alpha = principled_node.inputs['Alpha'].default_value
             used_keys.append(alpha)
@@ -347,7 +346,7 @@ class SuncgLoader:
         return mat_type, value
 
     @staticmethod
-    def _recreate_material_nodes(mat: bpy.types.Material, force_texture: bool):
+    def _recreate_material_nodes(mat: Material, force_texture: bool):
         """ Remove all nodes and recreate a diffuse node, optionally with texture.
 
         This will replace all material nodes with only a diffuse and a texturing node (to speedup rendering).
@@ -355,23 +354,21 @@ class SuncgLoader:
         :param mat: The blender material
         :param force_texture: True, if there always should be a texture node created even if the material has at the moment no texture
         """
-        nodes = mat.node_tree.nodes
-        links = mat.node_tree.links
-        image_node = Utility.get_nodes_with_type(nodes, 'TexImage')
+        image_node = mat.get_nodes_with_type('TexImage')
         # if there is no image no create one
         if force_texture and len(image_node) == 0:
             # The principled BSDF node contains all imported material properties
-            principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+            principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
 
-            uv_node = nodes.new(type='ShaderNodeTexCoord')
+            uv_node = mat.new_node('ShaderNodeTexCoord')
             # create an image node and link it
-            image_node = nodes.new(type='ShaderNodeTexImage')
-            links.new(uv_node.outputs['UV'], image_node.inputs['Vector'])
-            links.new(image_node.outputs['Color'], principled_node.inputs['Base Color'])
+            image_node = mat.new_node('ShaderNodeTexImage')
+            mat.link(uv_node.outputs['UV'], image_node.inputs['Vector'])
+            mat.link(image_node.outputs['Color'], principled_node.inputs['Base Color'])
 
 
     @staticmethod
-    def _adjust_material_nodes(mat: bpy.types.Material, adjustments: dict):
+    def _adjust_material_nodes(mat: Material, adjustments: dict):
         """ Adjust the material node of the given material according to the given adjustments.
 
         Textures or diffuse colors will be changed according to the given material_adjustments.
@@ -379,10 +376,9 @@ class SuncgLoader:
         :param mat: The blender material.
         :param adjustments: A dict containing a new "diffuse" color or a new "texture" path
         """
-        nodes = mat.node_tree.nodes
 
         if "diffuse" in adjustments:
-            principle_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+            principle_node = mat.get_the_one_node_with_type("BsdfPrincipled")
             principle_node.inputs['Base Color'].default_value = Utility.hex_to_rgba(adjustments["diffuse"])
 
         if "texture" in adjustments:
@@ -394,12 +390,12 @@ class SuncgLoader:
             else:
                 image_path += ".jpg"
 
-            image_node = Utility.get_the_one_node_with_type(nodes, "ShaderNodeTexImage")
+            image_node = mat.get_the_one_node_with_type("ShaderNodeTexImage")
             if os.path.exists(image_path):
                 image_node.image = bpy.data.images.load(image_path, check_existing=True)
             else:
                 print("Warning: Cannot load texture, path does not exist: {}, remove image node again".format(image_path))
-                nodes.remove(image_node)
+                mat.remove_node(image_node)
 
     @staticmethod
     def _read_model_category_mapping(path: str):

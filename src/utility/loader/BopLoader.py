@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy==1.2.2", "matplotlib==2.2.4"])
+
 import os
 import sys
 from random import choice
