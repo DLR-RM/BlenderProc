@@ -86,10 +86,6 @@ class RendererInterface(Module):
         * - render_distance
           - If true, the distance is also rendered to file. Default: False.
           - bool
-        * - use_mist_distance
-          - If true, the distance is sampled over several iterations, useful for motion blur or soft edges, if this
-            is turned off, only one sample is taken to determine the depth. Default: True.
-          - bool
         * - distance_output_file_prefix
           - The file prefix that should be used when writing distance to file. Default: `"distance_"`
           - string
@@ -106,6 +102,15 @@ class RendererInterface(Module):
         * - distance_falloff
           - Type of transition used to fade distance. Default: "Linear". Available: [LINEAR, QUADRATIC,
             INVERSE_QUADRATIC]
+          - string
+        * - render_depth
+          - If true, the z-buffer is also rendered to file. Default: False.
+          - bool
+        * - depth_output_file_prefix
+          - The file prefix that should be used when writing depth to file. Default: `"depth_"`
+          - string
+        * - depth_output_key
+          - The key which should be used for storing the depth in a merged file. Default: `"depth"`.
           - string
         * - use_alpha
           - If true, the alpha channel stored in .png textures is used. Default: False
@@ -184,10 +189,16 @@ class RendererInterface(Module):
                 self._determine_output_dir(),
                 self.config.get_string("distance_output_file_prefix", "distance_"),
                 self.config.get_string("distance_output_key", "distance"),
-                self.config.get_bool("use_mist_distance", True),
                 self.config.get_float("distance_start", 0.1),
                 self.config.get_float("distance_range", 25.0),
                 self.config.get_string("distance_falloff", "LINEAR")
+            )
+
+        if self.config.get_bool("render_depth", False):
+            RendererUtility.enable_depth_output(
+                self._determine_output_dir(),
+                self.config.get_string("depth_output_file_prefix", "depth_"),
+                self.config.get_string("depth_output_key", "depth")
             )
 
         if self.config.get_bool("render_normals", False):
