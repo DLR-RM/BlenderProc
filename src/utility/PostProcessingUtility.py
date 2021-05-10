@@ -28,8 +28,7 @@ class PostProcessingUtility:
         dist = PostProcessingUtility.trim_redundant_channels(dist)
         
         if type(dist) is list or len(dist.shape) > 2:
-            func_handle = PostProcessingUtility.dist2depth
-            return PostProcessingUtility._apply_to_list(func_handle, dist)
+            return [PostProcessingUtility.dist2depth(img) for img in dist]
                 
         height, width = dist.shape
 
@@ -146,8 +145,7 @@ class PostProcessingUtility:
         """
         
         if type(image) is list or len(image.shape) > 3:
-            func_handle = PostProcessingUtility.remove_segmap_noise
-            return PostProcessingUtility._apply_to_list(func_handle, image)
+            return [PostProcessingUtility.remove_segmap_noise(img) for img in image]
         
         noise_indices = PostProcessingUtility._determine_noisy_pixels(image)
 
