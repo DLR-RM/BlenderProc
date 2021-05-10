@@ -1,4 +1,5 @@
 import os
+from typing import Dict, List
 
 import bpy
 import numpy as np
@@ -13,7 +14,7 @@ from src.utility.WriterUtility import WriterUtility
 class FlowRendererUtility:
 
     @staticmethod
-    def _output_vector_field(forward_flow, backward_flow, output_dir):
+    def _output_vector_field(forward_flow: bool, backward_flow: bool, output_dir: str):
         """ Configures compositor to output speed vectors.
 
         :param forward_flow: Whether to render forward optical flow.
@@ -58,8 +59,10 @@ class FlowRendererUtility:
             links.new(combine_bwd_flow.outputs['Image'], bwd_flow_output_file.inputs['Image'])
 
     @staticmethod
-    def render(output_dir, temp_dir, get_forward_flow, get_backward_flow, blender_image_coordinate_style=False, forward_flow_output_file_prefix="forward_flow_", 
-               forward_flow_output_key="forward_flow", backward_flow_output_file_prefix="backward_flow_", backward_flow_output_key="backward_flow", return_data=True):
+    def render(output_dir: str, temp_dir: str, get_forward_flow: bool, get_backward_flow: bool,
+               blender_image_coordinate_style: bool = False, forward_flow_output_file_prefix: str = "forward_flow_",
+               forward_flow_output_key: str = "forward_flow", backward_flow_output_file_prefix: str = "backward_flow_",
+               backward_flow_output_key: str = "backward_flow", return_data: bool = True) -> Dict[str, List[np.ndarray]]:
         """ Renders the optical flow (forward and backward) for all frames.
 
         :param output_dir: The directory to write images to.
