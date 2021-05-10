@@ -5,7 +5,8 @@ import bpy
 from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
-
+import bmesh
+import mathutils
 
 class MeshObject(Entity):
 
@@ -109,13 +110,27 @@ class MeshObject(Entity):
         """
         return self.blender_obj.data
 
-    def set_shading_mode(self, use_smooth: bool):
+    def set_shading_mode(self, mode: str, angle_value: float = 30):
         """ Sets the shading mode of all faces of the object.
 
-        :param use_smooth: If true, then all faces will be made smooth, otherwise flat.
+        :param mode: Desired mode of the shading. Available: ["FLAT", "SMOOTH", "AUTO"]. Type: str
+        :param angle_value: Angle in degrees at which flat shading is activated in `AUTO` mode. Type: float
         """
+        if mode.lower() == "flat":
+            is_smooth = False
+            self.blender_obj.data.use_auto_smooth = False
+        elif mode.lower() == "smooth":
+            is_smooth = True
+            self.blender_obj.data.use_auto_smooth = False
+        elif mode.lower() == "auto":
+            is_smooth = True
+            self.blender_obj.data.use_auto_smooth = True
+            self.blender_obj.data.auto_smooth_angle = np.deg2rad(angle_value)
+        else:
+            raise Exception("This shading mode is unknown: {}".format(mode))
+
         for face in self.get_mesh().polygons:
-            face.use_smooth = use_smooth
+            face.use_smooth = is_smooth
 
     def move_origin_to_bottom_mean_point(self):
         """
@@ -255,3 +270,15 @@ class MeshObject(Entity):
         diag = max_point - min_point
         # use the diagonal to calculate the volume of the box
         return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
+
+    def create_bvh_tree(self) -> mathutils.bvhtree.BVHTree:
+        """ Builds a bvh tree based on the object's mesh.
+
+        :return: The new bvh tree
+        """
+        bm = bmesh.new()
+        bm.from_mesh(self.get_mesh())
+        bm.transform(self.get_local2world_mat())
+        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bm.free()
+        return bvh_tree

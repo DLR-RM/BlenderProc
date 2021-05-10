@@ -4,6 +4,7 @@ import bpy
 
 from src.loader.LoaderInterface import LoaderInterface
 from src.utility.Config import Config
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
@@ -160,7 +161,7 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
         bpy.context.object.modifiers["Subdivision"].render_levels = subdivision_render_levels
         plane_obj["physics"] = False
-        self._set_properties([plane_obj])
+        self._set_properties([MeshObject(plane_obj)])
 
     def _create_node(self, nodes, links, map_type, in_point):
         """ Handles the creation a ShaderNodeTexImage node, setting maps and creating links.

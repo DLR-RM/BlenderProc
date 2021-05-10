@@ -7,7 +7,7 @@ from typing import Union
 class ObjectMerging:
 
     @staticmethod
-    def merge_object_list(objects: Union[bpy.types.Object, Entity], merged_object_name: str = 'merged_object'):
+    def merge_object_list(objects: [Entity], merged_object_name: str = 'merged_object'):
         """ Generates an empty object and sets this as parent object for all objects in the list which do not already have a parent set.
 
         :param objects: A list of objects to be merged.
@@ -21,9 +21,6 @@ class ObjectMerging:
 
         # select all relevant objects
         for obj in objects:
-            # cast objects in case they are not Entity/MeshObjects
-            if not isinstance(obj, Entity):
-                obj = Entity(obj)
             # objects with a parent will be skipped, as this relationship will otherwise be broken
             # if a parent exists this object should be grandchild of parent_obj (or grandgrand...)
             if obj.get_parent() is not None:

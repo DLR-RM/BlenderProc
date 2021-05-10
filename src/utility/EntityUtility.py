@@ -214,3 +214,6 @@ class Entity:
         if isinstance(other, Entity):
             return self.blender_obj == other.blender_obj
         return False
+
+    def __hash__(self):
+        return hash(self.blender_obj)

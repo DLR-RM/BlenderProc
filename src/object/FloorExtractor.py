@@ -10,6 +10,7 @@ import numpy as np
 from src.loader.LoaderInterface import LoaderInterface
 from src.main.Module import Module
 from src.utility.Config import Config
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
@@ -277,7 +278,7 @@ class FloorExtractor(Module):
         if add_properties:
             config = Config({"add_properties": add_properties})
             loader_interface = LoaderInterface(config)
-            loader_interface._set_properties(newly_created_objects)
+            loader_interface._set_properties(MeshObject.convert_to_meshes(newly_created_objects))
 
     @staticmethod
     def get_median_face_pose(face: bmesh.types.BMFace, matrix_world: mathutils.Matrix):

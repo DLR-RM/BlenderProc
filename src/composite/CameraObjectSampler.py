@@ -55,7 +55,17 @@ class CameraObjectSampler(Module):
             # TODO: Use Getter for selecting objects
             for obj in get_all_blender_mesh_objects():
                 # insert keyframes for current object poses
-                self._object_pose_sampler.insert_key_frames(obj, frame_id)
+                self.insert_key_frames(obj, frame_id)
 
             # sample new camera poses
             self._camera_pose_sampler.run()
+
+    def insert_key_frames(self, obj, frame_id):
+        """ Insert key frames for given object pose
+        :param obj: Loaded object. Type: blender object.
+        :param frame_id: The frame number where key frames should be inserted. Type: int.
+        """
+
+        obj.keyframe_insert(data_path='location', frame=frame_id)
+        obj.keyframe_insert(data_path='rotation_euler', frame=frame_id)
+
