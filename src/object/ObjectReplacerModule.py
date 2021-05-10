@@ -39,7 +39,7 @@ class ObjectReplacerModule(Module):
           - Provider (Getter): selects objects, which are not checked for collisions with. Default: [].
           - Provider
         * - max_tries
-          - Amount of tries, which are performed while trying to replace the objects. Default: 100000.
+          - Maximum number of tries to replace one object. Default: 100.
           - int
     """
 
@@ -59,5 +59,5 @@ class ObjectReplacerModule(Module):
             MeshObject.convert_to_meshes(self.config.get_list("ignore_collision_with", [])),
             self.config.get_float("replace_ratio", 1),
             self.config.get_float("copy_properties", 1),
-            self.config.get_int("max_tries", 100000)
+            self.config.get_int("max_tries", 100)
         )
