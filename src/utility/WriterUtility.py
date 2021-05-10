@@ -1,4 +1,6 @@
 import os
+from typing import List, Dict, Union, Any
+
 import numpy as np
 import csv
 import math
@@ -14,9 +16,9 @@ from src.utility.CameraUtility import CameraUtility
 
 
 class WriterUtility:
-    
+
     @staticmethod
-    def load_registered_outputs(keys: list):
+    def load_registered_outputs(keys: List[str]) -> Dict[str, List[np.ndarray]]:
         """
         Loads registered outputs with specified keys
 
@@ -35,9 +37,9 @@ class WriterUtility:
                     output_data_dict[reg_out['key']].append(output_file)
 
         return output_data_dict
-    
+
     @staticmethod
-    def load_output_file(file_path:str, write_alpha_channel:bool=False):
+    def load_output_file(file_path: str, write_alpha_channel: bool = False) -> np.ndarray:
         """ Tries to read in the file with the given path into a numpy array.
 
         :param file_path: The file path. Type: string.
@@ -50,17 +52,17 @@ class WriterUtility:
         file_ending = file_path[file_path.rfind(".") + 1:].lower()
 
         if file_ending in ["exr", "png", "jpg"]:
-            #num_channels is 4 if transparent_background is true in config
-            return load_image(file_path, num_channels = 3 + write_alpha_channel)
+            # num_channels is 4 if transparent_background is true in config
+            return load_image(file_path, num_channels=3 + (1 if write_alpha_channel else 0))
         elif file_ending in ["npy", "npz"]:
             return np.load(file_path)
         elif file_ending in ["csv"]:
             return WriterUtility._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
-    
+
     @staticmethod
-    def _load_csv(file_path:str):
+    def _load_csv(file_path: str) -> np.ndarray:
         """ Load the csv file at the given path.
 
         :param file_path: The path. Type: string.
@@ -72,9 +74,10 @@ class WriterUtility:
             for row in csv_reader:
                 rows.append(row)
         return np.string_(json.dumps(rows))  # make the list of dicts as a string
-    
+
     @staticmethod
-    def get_common_attribute(item, attribute_name:str, destination_frame:str=["X", "Y", "Z"]):
+    def get_common_attribute(item: bpy.types.Object, attribute_name: str,
+                             destination_frame: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given item.
 
         This method covers all general attributes that blender objects have.
@@ -83,8 +86,11 @@ class WriterUtility:
         :param attribute_name: The attribute name. Type: string.
         :param destination_frame: Used to transform item to blender coordinates. Default: ["X", "Y", "Z"]
         :return: The attribute value.
-        """    
-            
+        """
+
+        if destination_frame is None:
+            destination_frame = ["X", "Y", "Z"]
+
         if attribute_name == "name":
             return item.name
         elif attribute_name == "location":
@@ -114,13 +120,14 @@ class WriterUtility:
                 raise Exception("No such custom property: " + custom_property_name)
         else:
             raise Exception("No such attribute: " + attribute_name)
-        
-    @staticmethod    
-    def get_cam_attribute(cam_ob:bpy.context.scene.camera, attribute_name:str, destination_frame:str=["X", "Y", "Z"]):
+
+    @staticmethod
+    def get_cam_attribute(cam_ob: bpy.context.scene.camera, attribute_name: str,
+                          destination_frame: Union[List[str], None] = None) -> Any:
         """ Returns the value of the requested attribute for the given object.
 
         :param cam_ob: The camera object.
-        :param attribute_name: The attribute name. Type: string.
+        :param attribute_name: The attribute name.
         :param destination_frame: Used to transform camera to blender coordinates. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
@@ -139,29 +146,33 @@ class WriterUtility:
             return cam_ob.data.angle_y * 0.5
         elif attribute_name == "cam_K":
             return [[x for x in c] for c in CameraUtility.get_intrinsics_as_K_matrix()]
-        elif attribute_name == "cam2world_matrix":
-            return WriterUtility.get_common_attribute(cam_ob, "matrix_world", destination_frame)
         else:
-            return WriterUtility.get_common_attribute(cam_ob, attribute_name, destination_frame)
-    
-    @staticmethod    
-    def get_light_attribute(light, attribute_name):
+            if destination_frame is None:
+                destination_frame = ["X", "Y", "Z"]
+            if attribute_name == "cam2world_matrix":
+                return WriterUtility.get_common_attribute(cam_ob, "matrix_world", destination_frame)
+            else:
+                return WriterUtility.get_common_attribute(cam_ob, attribute_name, destination_frame)
+
+    @staticmethod
+    def get_light_attribute(light: bpy.types.Light, attribute_name: str) -> Any:
         """ Returns the value of the requested attribute for the given light.
 
         :param light: The light. Type: blender scene object of type light.
-        :param attribute_name: The attribute name. Type: string.
+        :param attribute_name: The attribute name.
         :return: The attribute value.
         """
         if attribute_name == "energy":
             return light.data.energy
         else:
             return WriterUtility.get_common_attribute(light, attribute_name)
-    
-    @staticmethod    
-    def _get_shapenet_attribute(shapenet_obj, attribute_name):
+
+    @staticmethod
+    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str):
         """ Returns the value of the requested attribute for the given object.
+
         :param shapenet_obj: The ShapeNet object.
-        :param attribute_name: The attribute name. Type: string.
+        :param attribute_name: The attribute name.
         :return: The attribute value.
         """
 
