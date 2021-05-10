@@ -192,7 +192,7 @@ class PostProcessingUtility:
         from scipy import stats
         func_handle = PostProcessingUtility.oil_paint_filter
         if rgb:
-            if type(image) is list or len(image.shape) > 3:
+            if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
                 return PostProcessingUtility._apply_to_list(func_handle, image, filter_size=filter_size, edges_only=edges_only, rgb=rgb)
             
             intensity_img = (np.sum(image, axis=2) / 3.0)
