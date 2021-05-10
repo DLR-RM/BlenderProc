@@ -322,7 +322,7 @@ def get_all_textures():
     return list(bpy.data.textures)
 
 
-def load_image(file_path, num_channels=3):
+def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
     """ Load the image at the given path returns its pixels as a numpy array.
 
     The alpha channel is neglected.
@@ -452,7 +452,7 @@ def get_node_attributes(node: bpy.types.Node) -> list:
 
     attributes = []
     for attr in node.bl_rna.properties:
-        #check if the attribute should be copied and add it to the list of attributes to copy
+        # check if the attribute should be copied and add it to the list of attributes to copy
         if not attr.identifier in ignore_attributes and not attr.identifier.split("_")[0] == "bl":
             attributes.append(attr.identifier)
 
