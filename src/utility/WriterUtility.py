@@ -16,7 +16,7 @@ from src.utility.CameraUtility import CameraUtility
 class WriterUtility:
     
     @staticmethod
-    def load_registered_outputs(keys):
+    def load_registered_outputs(keys: list):
         """
         Loads registered outputs with specified keys
 
