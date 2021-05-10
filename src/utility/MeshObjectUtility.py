@@ -274,6 +274,8 @@ class MeshObject(Entity):
             bm = bmesh.new()
             bm.from_mesh(self.get_mesh())
         else:
+            if bpy.context.mode != "EDIT":
+                raise Exception(f"The object: {self.get_name()} is not in EDIT mode before calling mesh_as_bmesh()")
             bm = bmesh.from_edit_mesh(self.get_mesh())
         return bm
 
