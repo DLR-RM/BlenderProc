@@ -16,10 +16,7 @@ class PostProcessingUtility:
         :return: list of outputs to which the postprocessing was applied
         """
         
-        out = []
-        for el in input_list:
-            out.append(function(el, *args, **kwargs))
-        return out
+        return [function(ele, *args, **kwargs) for ele in input_list]
     
     @staticmethod
     def dist2depth(dist):
