@@ -1,5 +1,5 @@
 import os
-from typing import List, Dict, Union, Any
+from typing import List, Dict, Union, Any, Set
 
 import numpy as np
 import csv
@@ -18,11 +18,11 @@ from src.utility.CameraUtility import CameraUtility
 class WriterUtility:
 
     @staticmethod
-    def load_registered_outputs(keys: List[str]) -> Dict[str, List[np.ndarray]]:
+    def load_registered_outputs(keys: Set[str]) -> Dict[str, List[np.ndarray]]:
         """
         Loads registered outputs with specified keys
 
-        param keys: list of output_key types to load
+        :param keys: set of output_key types to load
         :return: dict of lists of raw loaded outputs. Keys can be 'distance', 'colors', 'normals'
         """
         output_data_dict = {}
