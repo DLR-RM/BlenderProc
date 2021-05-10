@@ -5,7 +5,8 @@ import bpy
 from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
-
+import bmesh
+import mathutils
 
 class MeshObject(Entity):
 
@@ -261,3 +262,15 @@ class MeshObject(Entity):
         diag = max_point - min_point
         # use the diagonal to calculate the volume of the box
         return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
+
+    def create_bvh_tree(self) -> mathutils.bvhtree.BVHTree:
+        """ Builds a bvh tree based on the object's mesh.
+
+        :return: The new bvh tree
+        """
+        bm = bmesh.new()
+        bm.from_mesh(self.get_mesh())
+        bm.transform(self.get_local2world_mat())
+        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bm.free()
+        return bvh_tree

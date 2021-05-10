@@ -9,9 +9,10 @@ import random
 
 from src.main.Module import Module
 from src.object.FloorExtractor import FloorExtractor
-from src.object.ObjectPoseSampler import ObjectPoseSampler
 from src.provider.getter.Material import Material
 from src.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
+from src.utility.CollisionUtility import CollisionUtility
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility, Config
 
 
@@ -514,20 +515,28 @@ class RandomRoomConstructor(Module):
 
         random_placed_rotation = [0, 0, random.uniform(0, np.pi * 2.0)]
 
+        current_obj = MeshObject(current_obj)
+        current_obj.set_location(random_placed_value)
+        current_obj.set_rotation_euler(random_placed_rotation)
+        bpy.context.view_layer.update()
+
+        # Remove bvh cache, as object has changed
+        if current_obj.get_name() in self.bvh_cache_for_intersection:
+            del self.bvh_cache_for_intersection[current_obj.get_name()]
+
         # perform check if object can be placed there
-        no_collision = ObjectPoseSampler.check_pose_for_object(current_obj, position=random_placed_value,
-                                                               rotation=random_placed_rotation,
-                                                               bvh_cache=self.bvh_cache_for_intersection,
-                                                               objects_to_check_against=self.placed_objects,
-                                                               list_of_objects_with_no_inside_check=[self.wall_obj])
+        no_collision = CollisionUtility.check_intersections(current_obj,
+                                                           bvh_cache=self.bvh_cache_for_intersection,
+                                                           objects_to_check_against=self.placed_objects,
+                                                           list_of_objects_with_no_inside_check=[MeshObject(self.wall_obj)])
         return no_collision
 
     def run(self):
         # construct a random room
         self.construct_random_room()
-        self.placed_objects.append(self.wall_obj)
+        self.placed_objects.append(MeshObject(self.wall_obj))
         if self.ceiling_obj is not None:
-            self.placed_objects.append(self.ceiling_obj)
+            self.placed_objects.append(MeshObject(self.ceiling_obj))
 
         # assign materials to all existing objects
         self.assign_materials_to_floor_wall_ceiling()
@@ -605,7 +614,7 @@ class RandomRoomConstructor(Module):
                         for _ in range(self.tries_per_face):
                             found_spot = self.sample_new_object_poses_on_face(current_obj, face_bb)
                             if found_spot:
-                                self.placed_objects.append(current_obj)
+                                self.placed_objects.append(MeshObject(current_obj))
                                 current_obj = duplicate_obj(cur_obj=current_obj)
                                 is_duplicated = True
                                 break
@@ -617,7 +626,7 @@ class RandomRoomConstructor(Module):
                         for _ in range(self.tries_per_face):
                             found_spot = self.sample_new_object_poses_on_face(current_obj, face_bb)
                             if found_spot:
-                                self.placed_objects.append(current_obj)
+                                self.placed_objects.append(MeshObject(current_obj))
                                 current_obj = duplicate_obj(cur_obj=current_obj)
                                 is_duplicated = True
                                 break
@@ -641,6 +650,6 @@ class RandomRoomConstructor(Module):
 
         # delete the loaded objects, which couldn't be placed
         for obj in loaded_objects:
-            if obj not in self.placed_objects:
+            if MeshObject(obj) not in self.placed_objects:
                 obj.select_set(True)
         bpy.ops.object.delete()
