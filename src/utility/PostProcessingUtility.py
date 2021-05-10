@@ -248,7 +248,7 @@ class PostProcessingUtility:
         :return: The trimmed image data.
         """
         
-        if type(image) is list or len(image.shape) > 3:
+        if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
             func_handle = PostProcessingUtility.trim_redundant_channels
             return PostProcessingUtility._apply_to_list(func_handle, image)
         
