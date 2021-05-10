@@ -38,7 +38,7 @@ class Struct:
     def set_cp(self, key: str, value: Any, frame: int = None):
         """ Sets the custom property with the given key.
 
-        Keyframes can be only set for custom properties from type int, float or bool.
+        Keyframes can be only set for custom properties for the types int, float or bool.
 
         :param key: The key of the custom property.
         :param value: The value to set.
@@ -64,7 +64,7 @@ class Struct:
         return key in self.blender_obj
 
     def clear_all_cps(self):
-        """ Removes all existing custom properties the entity has. """
+        """ Removes all existing custom properties the struct has. """
         keys = self.blender_obj.keys()
         for key in keys:
             del self.blender_obj[key]
