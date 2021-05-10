@@ -10,6 +10,9 @@ class Material(Struct):
 
     def __init__(self, material: bpy.types.Material):
         super().__init__(material)
+        if not material.use_nodes:
+            raise Exception("The given material " + material.name + " does not have nodes enabled and can therefore not be handled by BlenderProc's Material wrapper class.")
+
         self.nodes = material.node_tree.nodes
         self.links = material.node_tree.links
 
