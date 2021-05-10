@@ -277,7 +277,7 @@ class MeshObject(Entity):
             bm = bmesh.from_edit_mesh(self.get_mesh())
         return bm
 
-    def update_from_bmesh(self, bm, free_bm_mesh=True) -> bmesh.types.BMesh:
+    def update_from_bmesh(self, bm: bmesh.types.BMesh, free_bm_mesh=True) -> bmesh.types.BMesh:
         """ Updates the object's mesh based on the given bmesh.
 
         :param bm: The bmesh to set.
