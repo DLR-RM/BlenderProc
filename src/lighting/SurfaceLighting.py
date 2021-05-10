@@ -60,11 +60,20 @@ class SurfaceLighting(Module):
 
         :param objects: to change the materials of
         """
+        empty_material = None
+
         # for each object add a material
         for obj in objects:
             if not obj.has_materials():
-                # this object has no material so far -> create one
-                obj.new_material("TextureLess")
+                # If this is the first object without any material
+                if empty_material is None:
+                    # this object has no material so far -> create one
+                    empty_material = obj.new_material("TextureLess")
+                else:
+                    # Just reuse the material that was already created for other objects with no material
+                    obj.add_material(empty_material)
+                    # Material has already been made emissive, so go to the next object
+                    continue
 
             for i, material in enumerate(obj.get_materials()):
                 # if there is more than one user make a copy and then use the new one
