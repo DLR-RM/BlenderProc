@@ -2,7 +2,7 @@ import os
 import math
 import threading
 import uuid
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 import bpy
 import time
@@ -372,7 +372,7 @@ class Utility:
         return Utility.build_provider(config.get_string("provider"), parameters)
 
     @staticmethod
-    def generate_equidistant_values(num, space_size_per_dimension):
+    def generate_equidistant_values(num: int, space_size_per_dimension: int) -> Tuple[List[List[int]], int]:
         """ This function generates N equidistant values in a 3-dim space and returns num of them.
 
         Every dimension of the space is limited by [0, K], where K is the given space_size_per_dimension.
@@ -391,7 +391,8 @@ class Utility:
         while num_splits_per_dimension ** 3 < num:
             num_splits_per_dimension += 1
 
-        # Calc the side length of a block. We do a integer division here, s.t. we get blocks with the exact same size, even though we are then not using the full space of [0, 255] ** 3
+        # Calc the side length of a block. We do a integer division here, s.t. we get blocks with the exact same size,
+        # even though we are then not using the full space of [0, 255] ** 3
         block_length = space_size_per_dimension // num_splits_per_dimension
 
         # Calculate the center of each block and use them as equidistant values
