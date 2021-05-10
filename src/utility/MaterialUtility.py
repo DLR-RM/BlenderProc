@@ -199,8 +199,7 @@ class Material(Struct):
         Searches for the OutputMaterial in the material and finds the connected node to it,
         removes the connection between this node and the output and returns this node and the material_output
         """
-
-        material_output = Utility.get_the_one_node_with_type(self.nodes, 'OutputMaterial')
+        material_output = self.get_the_one_node_with_type('OutputMaterial')
         # find the node, which is connected to the output
         node_connected_to_the_output = None
         for link in self.links:
