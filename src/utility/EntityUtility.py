@@ -1,15 +1,17 @@
 from typing import Union, Any
 
 import bpy
+
+from src.utility.StructUtility import Struct
 from src.utility.Utility import Utility, KeyFrame
 from mathutils import Vector, Euler, Color, Matrix
 
 from typing import List
 
-class Entity:
+class Entity(Struct):
 
     def __init__(self, object: bpy.types.Object):
-        self.blender_obj = object
+        super().__init__(object)
 
     @staticmethod
     def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
@@ -118,7 +120,10 @@ class Entity:
 
         :param matrix_world: A 4x4 matrix.
         """
-        self.blender_obj.matrix_world = matrix_world
+        # To make sure matrices are always interpreted row-wise, we first convert them to a mathutils matrix.
+        if not isinstance(matrix_world, Matrix):
+            matrix_world = Matrix(matrix_world)
+        self.blender_obj.matrix_world = Matrix(matrix_world)
 
     def get_local2world_mat(self) -> Matrix:
         """ Returns the pose of the object in the form of a local2world matrix.

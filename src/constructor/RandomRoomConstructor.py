@@ -8,12 +8,12 @@ import numpy as np
 import random
 
 from src.main.Module import Module
-from src.object.FloorExtractor import FloorExtractor
 from src.provider.getter.Material import Material
 from src.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
 from src.utility.CollisionUtility import CollisionUtility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility, Config
+from src.utility.object.FloorExtractor import FloorExtractor
 
 
 class RandomRoomConstructor(Module):
@@ -375,8 +375,8 @@ class RandomRoomConstructor(Module):
             bpy.ops.mesh.select_all(action='DESELECT')
             bm = bmesh.from_edit_mesh(mesh)
             bm.faces.ensure_lookup_table()
-            # split the floor at the wall height
-            counter = FloorExtractor.split_at_height_value(bm, used_split_height, compare_height,
+            # Select faces at given height that should be separate from the mesh
+            counter = FloorExtractor.select_at_height_value(bm, used_split_height, compare_height,
                                                            mathutils.Vector(up_vec), compare_angle, obj.matrix_world)
             # if any faces are selected split them up
             if counter:
