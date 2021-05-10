@@ -68,6 +68,11 @@
               "type": "MESH"
             }
         },
+        "relative_rotation_sampler": {
+          "provider": "sampler.Uniform3d",
+          "max": [0, 0, 6.283185307],
+          "min": [0, 0, 0]
+        }
       }
     },
     {

@@ -5,7 +5,7 @@ from src.main.Module import Module
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_blender_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.object.ObjectReplacer import ObjectReplacer
-
+from mathutils import Euler
 
 class ObjectReplacerModule(Module):
     """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the
@@ -41,6 +41,11 @@ class ObjectReplacerModule(Module):
         * - max_tries
           - Maximum number of tries to replace one object. Default: 100.
           - int
+        * - relative_rotation_sampler
+          - Here call an appropriate Provider (Sampler) in order to sample a relative rotation to apply to the objects added to the scene.
+            This random rotation is applied after the objects have been aligned to the objects they replace.
+            If no relative_rotation_sampler is given, the object poses are no randomized. Default: None.
+          - Provider
     """
 
     def __init__(self, config):
@@ -53,11 +58,20 @@ class ObjectReplacerModule(Module):
         2. If there is no collision, between that object and the objects in the scene, then do replace and delete the original object.
 
         """
+
+        if self.config.has_param("relative_rotation_sampler"):
+            def relative_pose_sampler(obj):
+                # Sample random rotation and apply it to the objects pose
+                obj.get_rotation().rotate(Euler(self.config.get_list("relative_rotation_sampler")))
+        else:
+            relative_pose_sampler = None
+
         ObjectReplacer.replace_multiple(
-            MeshObject.convert_to_meshes(self.config.get_list("objects_to_be_replaced", [])),
-            MeshObject.convert_to_meshes(self.config.get_list("objects_to_replace_with", [])),
-            MeshObject.convert_to_meshes(self.config.get_list("ignore_collision_with", [])),
-            self.config.get_float("replace_ratio", 1),
-            self.config.get_float("copy_properties", 1),
-            self.config.get_int("max_tries", 100)
+            objects_to_be_replaced=MeshObject.convert_to_meshes(self.config.get_list("objects_to_be_replaced", [])),
+            objects_to_replace_with=MeshObject.convert_to_meshes(self.config.get_list("objects_to_replace_with", [])),
+            ignore_collision_with=MeshObject.convert_to_meshes(self.config.get_list("ignore_collision_with", [])),
+            replace_ratio=self.config.get_float("replace_ratio", 1),
+            copy_properties=self.config.get_float("copy_properties", 1),
+            max_tries=self.config.get_int("max_tries", 100),
+            relative_pose_sampler=relative_pose_sampler
         )
