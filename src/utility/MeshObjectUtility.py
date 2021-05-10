@@ -271,4 +271,6 @@ class MeshObject(Entity):
         bm = bmesh.new()
         bm.from_mesh(self.get_mesh())
         bm.transform(self.get_local2world_mat())
-        return mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bm.free()
+        return bvh_tree
