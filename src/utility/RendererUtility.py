@@ -219,9 +219,7 @@ class RendererUtility:
         # Use existing render layer
         render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
-        # use either mist rendering or the z-buffer
-        # mists uses an interpolation during the sample per pixel
-        # while the z buffer only returns the closest object per pixel
+        # Set mist pass limits
         bpy.context.scene.world.mist_settings.start = distance_start
         bpy.context.scene.world.mist_settings.depth = distance_range
         bpy.context.scene.world.mist_settings.falloff = distance_falloff
@@ -268,9 +266,7 @@ class RendererUtility:
         # Use existing render layer
         render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
-        # use either mist rendering or the z-buffer
-        # mists uses an interpolation during the sample per pixel
-        # while the z buffer only returns the closest object per pixel
+        # Enable z-buffer pass
         bpy.context.view_layer.use_pass_z = True
 
         # Build output node
