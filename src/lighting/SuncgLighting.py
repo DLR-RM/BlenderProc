@@ -154,10 +154,6 @@ class SuncgLighting(Module):
                 m = m.duplicate()
                 obj.set_material(i, m)
             # rename the material
-            mat_name = m.get_name()
-            if "." in mat_name:
-                # remove everything after the dot
-                m.set_name(mat_name[:mat_name.find(".")])
             m.set_name(m.get_name() + "_emission")
 
             if not m.get_nodes_with_type("Emission") and m.get_nodes_with_type("BsdfPrincipled"):
