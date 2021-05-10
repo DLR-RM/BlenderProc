@@ -6,6 +6,7 @@ from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
 import bmesh
+import mathutils
 
 class MeshObject(Entity):
 
@@ -311,3 +312,15 @@ class MeshObject(Entity):
     def object_mode(self):
         """ Switch back into object mode """
         bpy.ops.object.mode_set(mode='OBJECT')
+
+    def create_bvh_tree(self) -> mathutils.bvhtree.BVHTree:
+        """ Builds a bvh tree based on the object's mesh.
+
+        :return: The new bvh tree
+        """
+        bm = bmesh.new()
+        bm.from_mesh(self.get_mesh())
+        bm.transform(self.get_local2world_mat())
+        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bm.free()
+        return bvh_tree
