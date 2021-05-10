@@ -396,7 +396,7 @@ class RendererUtility:
 
         This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
 
-        :param output_dir: The (temporary) directory to write images to. Default: temporary directory in shared memory
+        :param output_dir: The (temporary) directory to write images to. Default: temporary directory in shared memory (only true for linux)
         :param file_prefix: The prefix to use for writing the images.
         :param output_key: The key to use for registering the output.
         :param load_keys: Set of output keys to load when available
@@ -460,4 +460,3 @@ class RendererUtility:
 
         bpy.context.scene.cycles.rolling_shutter_type = rolling_shutter_type
         bpy.context.scene.cycles.rolling_shutter_duration = rolling_shutter_length
-
