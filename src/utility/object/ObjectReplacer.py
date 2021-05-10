@@ -12,16 +12,6 @@ class ObjectReplacer:
     """
 
     @staticmethod
-    def _two_points_distance(point1, point2):
-        """ Euclidian distance between two points
-
-        :param point1: Point 1 as a list of three floats. Type: list.
-        :param point2: Point 2 as a list of three floats. Type: list.
-        returns a float.
-        """
-        return np.linalg.norm(np.array(point1) - np.array(point2))
-
-    @staticmethod
     def _bb_ratio(bb1, bb2):
         """ Rough estimation of the ratios between two bounding boxes sides, not axis aligned
 
@@ -29,9 +19,9 @@ class ObjectReplacer:
         :param bb2: bounding box 2. Type: float multi-dimensional array of 8 * 3.
         returns the ratio between each side of the bounding box. Type: a list of floats.
         """
-        ratio_a = ObjectReplacer._two_points_distance(bb1[0], bb1[3]) / ObjectReplacer._two_points_distance(bb2[0], bb2[3])
-        ratio_b = ObjectReplacer._two_points_distance(bb1[0], bb1[4]) / ObjectReplacer._two_points_distance(bb2[0], bb2[4])
-        ratio_c = ObjectReplacer._two_points_distance(bb1[0], bb1[1]) / ObjectReplacer._two_points_distance(bb2[0], bb2[1])
+        ratio_a = (bb1[0][0] - bb1[4][0]) / (bb2[0][0] - bb2[4][0])
+        ratio_b = (bb1[0][1] - bb1[3][1]) / (bb2[0][1] - bb2[3][1])
+        ratio_c = (bb1[0][2] - bb1[1][2]) / (bb2[0][2] - bb2[1][2])
         return [ratio_a, ratio_b, ratio_c]
 
     @staticmethod
