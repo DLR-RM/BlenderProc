@@ -10,20 +10,6 @@ import bpy
 class PostProcessingUtility:
 
     @staticmethod
-    def _apply_to_list(function: Callable[[np.ndarray, Tuple[Any, ...], Dict[str, Any]], np.ndarray],
-                       input_list: List[np.ndarray], *args: Tuple[Any, ...],
-                       **kwargs: Dict[str, Any]) -> List[np.ndarray]:
-        """
-        Applies given function to list of inputs with given arguments
-
-        :param function: function handle
-        :param input_list: list of input data
-        :return: list of outputs to which the postprocessing was applied
-        """
-
-        return [function(ele, *args, **kwargs) for ele in input_list]
-
-    @staticmethod
     def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
         """
         :param dist: The distance data.
@@ -204,11 +190,9 @@ class PostProcessingUtility:
 
         import cv2
         from scipy import stats
-        func_handle = PostProcessingUtility.oil_paint_filter
         if rgb:
             if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
-                return PostProcessingUtility._apply_to_list(func_handle, image, filter_size=filter_size,
-                                                            edges_only=edges_only, rgb=rgb)
+                return [PostProcessingUtility.oil_paint_filter(img, filter_size, edges_only, rgb) for img in image]
 
             intensity_img = (np.sum(image, axis=2) / 3.0)
 
@@ -234,8 +218,7 @@ class PostProcessingUtility:
         else:
             image = PostProcessingUtility.trim_redundant_channels(image)
             if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
-                return PostProcessingUtility._apply_to_list(func_handle, image, filter_size=filter_size,
-                                                            edges_only=edges_only, rgb=rgb)
+                return [PostProcessingUtility.oil_paint_filter(img, filter_size, edges_only, rgb) for img in image]
 
             if len(image.shape) == 3 and image.shape[2] > 1:
                 image = image[:, :, 0]
