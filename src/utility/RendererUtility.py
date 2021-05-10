@@ -1,5 +1,5 @@
 import os
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Set
 
 import mathutils
 import math
@@ -392,7 +392,7 @@ class RendererUtility:
         })
 
     @staticmethod
-    def map_file_format_to_file_ending(file_format: str):
+    def map_file_format_to_file_ending(file_format: str) -> str:
         """ Returns the files endings for a given blender output format.
 
         :param file_format: The blender file format.
@@ -409,7 +409,7 @@ class RendererUtility:
 
     @staticmethod
     def render(output_dir: Union[str, None] = None, file_prefix: str = "rgb_", output_key: str = "colors",
-               load_keys: Set = None, return_data: bool = True) -> Union[None, Dict[str, List[np.ndarray]]]:
+               load_keys: Set = None, return_data: bool = True) -> Dict[str, List[np.ndarray]]:
         """ Render all frames.
 
         This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
