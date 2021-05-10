@@ -3,6 +3,7 @@ import mathutils
 
 from src.main.Module import Module
 from src.utility.Config import Config
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
@@ -49,7 +50,7 @@ class SurfaceLighting(Module):
         Run this current module.
         """
         # get all objects which material should be changed
-        objects = self.config.get_list("selector")
+        objects = MeshObject.convert_to_meshes(self.config.get_list("selector"))
 
         self.add_emission_to_materials(objects)
 
@@ -59,62 +60,32 @@ class SurfaceLighting(Module):
 
         :param objects: to change the materials of
         """
+        empty_material = None
+
         # for each object add a material
         for obj in objects:
-            if len(obj.material_slots) == 0:
-                # this object has no material so far -> create one
-                new_mat = bpy.data.materials.new(name="TextureLess")
-                new_mat.use_nodes = True
-                obj.data.materials.append(new_mat)
-
-            for mat_slot in obj.material_slots:
-
-                material = mat_slot.material
-                # if there is more than one user make a copy and then use the new one
-                if material.users > 1:
-                    new_mat = material.copy()
-                    mat_slot.material = new_mat
-                    material = mat_slot.material
-                # rename the material
-                material.name += "_emission"
-                # add a custom property to later identify these materials
-                material["is_lamp"] = True
-
-                # access the nodes and links of the material
-                nodes, links = material.node_tree.nodes, material.node_tree.links
-                principled_bsdfs = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
-                if len(principled_bsdfs) == 1:
-                    principled_bsdf = principled_bsdfs[0]
+            if not obj.has_materials():
+                # If this is the first object without any material
+                if empty_material is None:
+                    # this object has no material so far -> create one
+                    empty_material = obj.new_material("TextureLess")
                 else:
-                    raise Exception("This only works if there is only one Bsdf Principled Node in the material: "
-                                    "{}".format(material.name))
-                output_node = Utility.get_the_one_node_with_type(nodes, "OutputMaterial")
+                    # Just reuse the material that was already created for other objects with no material
+                    obj.add_material(empty_material)
+                    # Material has already been made emissive, so go to the next object
+                    continue
 
-                mix_node = nodes.new(type='ShaderNodeMixShader')
-                Utility.insert_node_instead_existing_link(links, principled_bsdf.outputs['BSDF'], mix_node.inputs[2],
-                                                          mix_node.outputs['Shader'], output_node.inputs['Surface'])
+            for i, material in enumerate(obj.get_materials()):
+                # if there is more than one user make a copy and then use the new one
+                if material.get_users() > 1:
+                    material = material.duplicate()
+                    obj.set_material(i, material)
+                # rename the material
+                material.set_name(material.get_name() + "_emission")
+                # add a custom property to later identify these materials
+                material.set_cp("is_lamp", True)
 
-                # The light path node returns 1, if the material is hit by a ray coming from the camera, else it
-                # returns 0. In this way the mix shader will use the principled shader for rendering the color of
-                # the emitting surface itself, while using the emission shader for lighting the scene.
-                light_path_node = nodes.new(type='ShaderNodeLightPath')
-                links.new(light_path_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
-
-                emission_node = nodes.new(type='ShaderNodeEmission')
-
-                if self.keep_using_base_color:
-                    if len(principled_bsdf.inputs["Base Color"].links) == 1:
-                        # get the node connected to the Base Color
-                        node_connected_to_the_base_color = principled_bsdf.inputs["Base Color"].links[0].from_node
-                        # use 0 as it is probably the first one
-                        links.new(node_connected_to_the_base_color.outputs[0], emission_node.inputs["Color"])
-                elif self.emission_color is not None:
-                    emission_node.inputs["Color"] = self.emission_color
-
-                # set the emission strength of the shader
-                emission_node.inputs['Strength'].default_value = self.emission_strength
-
-                links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
+                material.make_emissive(emission_strength=self.emission_strength, emission_color=self.emission_color, keep_using_base_color=self.keep_using_base_color)
 
 
 

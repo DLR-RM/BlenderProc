@@ -82,7 +82,7 @@ class LoaderInterface(Module):
                     for key, value in material_properties.items():
                         if key.startswith("cp_"):
                             key = key[3:]
-                            material[key] = value
+                            material.set_cp(key, value)
                         else:
                             raise RuntimeError("Loader modules support setting only custom properties. "
                                                "Use 'cp_' prefix for keys.")
