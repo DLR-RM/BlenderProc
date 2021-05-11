@@ -33,7 +33,7 @@ light.set_energy(1000)
 # define the camera intrinsics
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 
-# read the camera positions file and convert the poses into 6D camera poses
+# read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
