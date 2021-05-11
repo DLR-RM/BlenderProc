@@ -21,27 +21,36 @@ args = parser.parse_args()
 
 Initializer.init()
 
+# load the objects into the scene
 objs = ObjectLoader.load(args.scene)
 
+# define a light and set its location and energy level
 light = Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
 
+# define the camera intrinsics
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
+
+# read the camera positions file and convert the poses into 6D camera poses
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
         matrix_world = Matrix.Translation(Vector(line[:3])) @ Euler(line[3:6], 'XYZ').to_matrix().to_4x4()
         CameraUtility.add_camera_pose(matrix_world)
 
-RendererUtility.enable_distance_output()
+# activate normal and distance rendering
 RendererUtility.enable_normals_output()
-RendererUtility.set_samples(20)
-RendererUtility.toggle_stereo(False)
+RendererUtility.enable_distance_output()
+# set the amount of samples, which should be used for the color rendering
+RendererUtility.set_samples(350)
+
+# render the whole pipeline
 data = RendererUtility.render()
 
+# post process the data and remove the redundant channels in the distance image
 data["distance"] = PostProcessingUtility.trim_redundant_channels(data["distance"])
-data['depth'] = PostProcessingUtility.dist2depth(data['distance'])
 
+# write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)
