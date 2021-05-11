@@ -25,7 +25,7 @@ class Pipeline:
         config = config_parser.parse(Utility.resolve_path(config_path), args)
 
         # Setup pip packages specified in config
-        SetupUtility.setup_pip(config["pip"] if "pip" in config else [])
+        SetupUtility.setup_pip(config["setup"]["pip"] if "pip" in config["setup"] else [])
 
         if avoid_output:
             GlobalStorage.add_to_config_before_init("avoid_output", True)

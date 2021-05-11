@@ -7,10 +7,13 @@ from src.utility.BlenderUtility import get_all_blender_mesh_objects
 
 class ShapeNetWriter(WriterInterface):
     """ Writes the ShapeNet object attributes in an hdf5 file.
+
     **Attributes per object**:
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1
+
         * - Parameter
           - Description
           - Type

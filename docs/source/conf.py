@@ -22,8 +22,6 @@ import sys
 sys.path.insert(0, os.path.abspath('../..'))
 print(os.path.abspath("./ext"))
 sys.path.append(os.path.abspath("./ext"))
-#sys.path.append("/home_local/" + os.environ["USER"] + " /blender/blender-2.81-linux-glibc217-x86_64/custom-python-packages/")
-exclude_patterns = ["run.py", "debug.py"]
 
 autodoc_default_flags = ['members', 'undoc-members', 'private-members', 'show-inheritance']
 print(sys.argv, os.getcwd())
