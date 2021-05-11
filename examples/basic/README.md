@@ -169,7 +169,7 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 It also creates the normals and distance 
 
 * The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`. 
+* By using `"render_distance": True`, an antialiased distance image is rendered. To render a z-buffer depth image without any smoothing effects use `"render_depth": True` instead. 
 * The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`.
 
 => Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
