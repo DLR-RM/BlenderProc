@@ -43,8 +43,13 @@ class WriterUtility:
                         # convert to a tensor of shape [2, img_x, img_y, channels]
                         # output_file[0] is the left image and output_file[1] the right image
                         output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
+                        # remove the stored files
+                        for path in output_paths:
+                            os.remove(path)
                     else:
                         output_file = WriterUtility.load_output_file(output_path)
+                        # remove the stored file
+                        os.remove(output_path)
                     output_data_dict.setdefault(reg_out['key'], []).append(output_file)
 
         return output_data_dict
