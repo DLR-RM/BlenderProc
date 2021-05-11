@@ -1,0 +1,86 @@
+# Args: <obj_file> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config":{
+        "global": {
+          "output_dir": "<args:1>"
+        }
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:0>"
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "POINT",
+            "location": [5, -5, 5],
+            "energy": 1000
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [
+          {
+            "number_of_samples": 5,
+            "location": {
+              "provider":"sampler.Uniform3d",
+              "max":[10, 10, 8],
+              "min":[-10, -10, 12]
+            },
+            "rotation": {
+              "format": "look_at",
+              "value": {
+                "provider": "getter.POI"
+              },
+              "inplane_rot": {
+                "provider": "sampler.Value",
+                "type": "float",
+                "min": -0.7854,
+                "max": 0.7854
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "samples": 350,
+        "render_normals": True,
+        "render_distance": True,
+        "render_diffuse_color": True,
+      }
+    },
+    {
+      "module": "writer.Hdf5Writer",
+      "config": {
+        "postprocessing_modules": {
+          "distance": [
+            {
+              "module": "postprocessing.TrimRedundantChannels",
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
