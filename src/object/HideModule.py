@@ -1,7 +1,9 @@
 import bpy
 
 from src.main.Module import Module
+from src.utility.Config import Config
 from src.utility.Utility import Utility
+
 
 class HideModule(Module):
     """
@@ -26,7 +28,7 @@ class HideModule(Module):
 
     """
 
-    def __init__(self, config):
+    def __init__(self, config: Config):
         Module.__init__(self, config)
 
     def run(self):
@@ -37,8 +39,8 @@ class HideModule(Module):
         number_of_frames = self.config.get_int("number_of_frames", bpy.context.scene.frame_end)
         if number_of_frames > bpy.context.scene.frame_end:
             number_of_frames = bpy.context.scene.frame_end
-        print("Set %d frames. Found %d frames." % number_of_frames)
-        print("Got %d objects" % len(objects))
+        print(f"Will use {number_of_frames} number of frames, for {len(objects)} objects.")
+        # iterate over all objects
         for obj in objects:
             obj.hide_render = False
             # Insert all selected objects to each frame for normal rendering.
@@ -48,12 +50,12 @@ class HideModule(Module):
             # Insert updated selected objects to each frame with the field hide_render modified
             obj.hide_render = True
             for frame in range(number_of_frames):
-                Utility.insert_keyframe(obj, "hide_render", frame + number_of_frames)
+                Utility.insert_keyframe(obj, "hide_render", frame + bpy.context.scene.frame_end)
 
         # Copy and modify camera location and rotation to the new frames where objects are hidden.
+        camera = bpy.context.scene.camera
         for frame in range(number_of_frames):
             bpy.context.scene.frame_set(frame)
-            camera = bpy.context.scene.camera
-            Utility.insert_keyframe(camera, "location", frame + number_of_frames)
-            Utility.insert_keyframe(camera, "rotation_euler", frame + number_of_frames)
+            Utility.insert_keyframe(camera, "location", frame + bpy.context.scene.frame_end)
+            Utility.insert_keyframe(camera, "rotation_euler", frame + bpy.context.scene.frame_end)
         bpy.context.scene.frame_end += number_of_frames
