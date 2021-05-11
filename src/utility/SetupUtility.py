@@ -32,7 +32,10 @@ class SetupUtility:
                     del sys.modules[module]
         
         # Setup temporary directory
-        SetupUtility.setup_temp_dir(sys.argv[sys.argv.index("--") + 2])
+        if is_debug_mode:
+            SetupUtility.setup_temp_dir("examples/debugging/temp")
+        else:
+            SetupUtility.setup_temp_dir(sys.argv[sys.argv.index("--") + 2])
         
         # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
         if not is_debug_mode:
