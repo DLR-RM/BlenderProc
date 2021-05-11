@@ -198,7 +198,7 @@ class RendererUtility:
         bpy.context.scene.cycles.samples = samples
 
     @staticmethod
-    def enable_distance_output(output_dir, file_prefix="distance_", output_key="distance", use_mist_as_distance=True, distance_start=0.1, distance_range=25.0, distance_falloff="LINEAR"):
+    def enable_distance_output(output_dir, file_prefix="distance_", output_key="distance", distance_start=0.1, distance_range=25.0, distance_falloff="LINEAR"):
         """ Enables writing distance images.
 
         Distance images will be written in the form of .exr files during the next rendering.
@@ -206,7 +206,6 @@ class RendererUtility:
         :param output_dir: The directory to write files to.
         :param file_prefix: The prefix to use for writing the files.
         :param output_key: The key to use for registering the distance output.
-        :param use_mist_as_distance: If true, the distance is sampled over several iterations, useful for motion blur or soft edges, if this is turned off, only one sample is taken to determine the depth. Default: True.
         :param distance_start: Starting distance of the distance, measured from the camera.
         :param distance_range: Total distance in which the distance is measured. distance_end = distance_start + distance_range.
         :param distance_falloff: Type of transition used to fade distance. Available: [LINEAR, QUADRATIC, INVERSE_QUADRATIC]
@@ -220,35 +219,21 @@ class RendererUtility:
         # Use existing render layer
         render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
 
-        # use either mist rendering or the z-buffer
-        # mists uses an interpolation during the sample per pixel
-        # while the z buffer only returns the closest object per pixel
-        if use_mist_as_distance:
-            bpy.context.scene.world.mist_settings.start = distance_start
-            bpy.context.scene.world.mist_settings.depth = distance_range
-            bpy.context.scene.world.mist_settings.falloff = distance_falloff
+        # Set mist pass limits
+        bpy.context.scene.world.mist_settings.start = distance_start
+        bpy.context.scene.world.mist_settings.depth = distance_range
+        bpy.context.scene.world.mist_settings.falloff = distance_falloff
 
-            bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
-            # Create a mapper node to map from 0-1 to SI units
-            mapper_node = tree.nodes.new("CompositorNodeMapRange")
-            links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
-            # map the values 0-1 to range distance_start to distance_range
-            mapper_node.inputs['To Min'].default_value = distance_start
-            mapper_node.inputs['To Max'].default_value = distance_start + distance_range
-            final_output = mapper_node.outputs['Value']
-        else:
-            bpy.context.view_layer.use_pass_z = True
-            # add min and max nodes to perform the clipping to the desired range
-            min_node = tree.nodes.new("CompositorNodeMath")
-            min_node.operation = "MINIMUM"
-            min_node.inputs[1].default_value = distance_start + distance_range
-            links.new(render_layer_node.outputs["Depth"], min_node.inputs[0])
-            max_node = tree.nodes.new("CompositorNodeMath")
-            max_node.operation = "MAXIMUM"
-            max_node.inputs[1].default_value = distance_start
-            links.new(min_node.outputs["Value"], max_node.inputs[0])
-            final_output = max_node.outputs["Value"]
+        bpy.context.view_layer.use_pass_mist = True  # Enable distance pass
+        # Create a mapper node to map from 0-1 to SI units
+        mapper_node = tree.nodes.new("CompositorNodeMapRange")
+        links.new(render_layer_node.outputs["Mist"], mapper_node.inputs['Value'])
+        # map the values 0-1 to range distance_start to distance_range
+        mapper_node.inputs['To Min'].default_value = distance_start
+        mapper_node.inputs['To Max'].default_value = distance_start + distance_range
+        final_output = mapper_node.outputs['Value']
 
+        # Build output node
         output_file = tree.nodes.new("CompositorNodeOutputFile")
         output_file.base_path = output_dir
         output_file.format.file_format = "OPEN_EXR"
@@ -256,6 +241,42 @@ class RendererUtility:
 
         # Feed the Z-Buffer or Mist output of the render layer to the input of the file IO layer
         links.new(final_output, output_file.inputs['Image'])
+
+        Utility.add_output_entry({
+            "key": output_key,
+            "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
+            "version": "2.0.0"
+        })
+
+    @staticmethod
+    def enable_depth_output(output_dir, file_prefix="depth_", output_key="depth"):
+        """ Enables writing depth images.
+
+        Depth images will be written in the form of .exr files during the next rendering.
+
+        :param output_dir: The directory to write files to.
+        :param file_prefix: The prefix to use for writing the files.
+        :param output_key: The key to use for registering the depth output.
+        """
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+
+        tree = bpy.context.scene.node_tree
+        links = tree.links
+        # Use existing render layer
+        render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
+
+        # Enable z-buffer pass
+        bpy.context.view_layer.use_pass_z = True
+
+        # Build output node
+        output_file = tree.nodes.new("CompositorNodeOutputFile")
+        output_file.base_path = output_dir
+        output_file.format.file_format = "OPEN_EXR"
+        output_file.file_slots.values()[0].path = file_prefix
+
+        # Feed the Z-Buffer output of the render layer to the input of the file IO layer
+        links.new(render_layer_node.outputs["Depth"], output_file.inputs['Image'])
 
         Utility.add_output_entry({
             "key": output_key,
@@ -369,6 +390,37 @@ class RendererUtility:
         Utility.add_output_entry({
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
+            "version": "2.0.0"
+        })
+
+    @staticmethod
+    def enable_diffuse_color_output(output_dir: str, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
+        """ Enables writing diffuse color (albedo) images.
+
+        Diffuse color images will be written in the form of .png files during the next rendering.
+
+        :param output_dir: The directory to write files to.
+        :param file_prefix: The prefix to use for writing the files.
+        :param output_key: The key to use for registering the diffuse color output.
+        """
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+        tree = bpy.context.scene.node_tree
+        links = tree.links
+
+        bpy.context.view_layer.use_pass_diffuse_color = True
+        render_layer_node = Utility.get_the_one_node_with_type(tree.nodes, 'CompositorNodeRLayers')
+        final_output = render_layer_node.outputs["DiffCol"]
+
+        output_file = tree.nodes.new('CompositorNodeOutputFile')
+        output_file.base_path = output_dir
+        output_file.format.file_format = "PNG"
+        output_file.file_slots.values()[0].path = file_prefix
+        links.new(final_output, output_file.inputs['Image'])
+        
+        Utility.add_output_entry({
+            "key": output_key,
+            "path": os.path.join(output_dir, file_prefix) + "%04d" + ".png",
             "version": "2.0.0"
         })
 

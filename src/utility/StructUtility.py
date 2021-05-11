@@ -63,6 +63,13 @@ class Struct:
         """
         return key in self.blender_obj
 
+    def get_all_cps(self) -> list:
+        """ Returns all custom properties as key, value pairs.
+
+        :return: A list of key value pairs
+        """
+        return self.blender_obj.items()
+
     def clear_all_cps(self):
         """ Removes all existing custom properties the struct has. """
         keys = self.blender_obj.keys()

@@ -166,11 +166,13 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 => Creates the files `rgb_0000.png` and `rgb_0001.png`.
 
-It also creates the normals and distance 
+It also creates the normals and distance
 
 * The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`. 
-* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`.
+* By using `"render_distance": True`, an antialiased distance image is rendered. To render a z-buffer depth image without any smoothing effects use `"render_depth": True` instead. 
+  While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene. 
+  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
+* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`
 
 => Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
 
