@@ -73,12 +73,9 @@ python scripts/visHdf5Files.py examples/diffuse_color_image/output/0.hdf5
 
 It also creates the normals and distance and the diffuse color image
 
-* The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
 * The diffuse color image, which describes the base color of the textures, is rendered using the `.png` format.
-* By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`. 
-* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key` and the `diffuse_color_output_key`.
 
-=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr` and the files `diffuse_0000.png` and `diffuse_0001.png`.
+=> Creates the files `diffuse_0000.png` and `diffuse_0001.png`.
 
 In this example all of these are temporary and are used in the next module.
 
