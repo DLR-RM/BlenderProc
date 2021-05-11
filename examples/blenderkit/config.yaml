@@ -19,7 +19,9 @@
     {
       "module": "loader.BlendLoader",
       "config": {
-        "path": "<args:0>"
+        "path": "<args:0>",
+        "cf_merge_objects": True,
+        "cf_merged_object_name": "merged_object"
       }
     },
     {

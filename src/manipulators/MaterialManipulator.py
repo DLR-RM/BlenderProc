@@ -93,7 +93,7 @@ class MaterialManipulator(Module):
               "texture_scale": 0.05
             }
           }
-        },
+        }
 
     Example 5: Add a layer of dust to all materials. In this example the focus is on loading a texture with the
     TextureLoader and using it with the MaterialManipulator.
@@ -130,7 +130,7 @@ class MaterialManipulator(Module):
               "texture_scale": 0.05
             }
           }
-        },
+        }
 
     Example 6: Adds a texture as an overlay over all materials, which are currently used. First the texture is loaded,
     via the `TextureLoader` and then it is used in side of the `"cf_infuse_texture"`
@@ -203,7 +203,7 @@ class MaterialManipulator(Module):
             }
            }
           }
-        },
+        }
 
     **Configuration**:
 
@@ -759,9 +759,7 @@ class MaterialManipulator(Module):
         strength = config.get_float("strength")
         texture_scale = config.get_float("texture_scale", 0.1)
         # if no texture is used, a random noise texture is generated
-        texture_nodes = None
-        if config.has_param("used_dust_texture"):
-            texture_nodes = config.get_list("used_dust_texture")
+        texture_nodes = config.get_list("used_dust_texture", None)
 
         group_node = material.node_tree.nodes.new("ShaderNodeGroup")
         group_node.width = 250

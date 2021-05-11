@@ -9,6 +9,7 @@ from mathutils import Matrix
 
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MathUtility import MathUtility
+from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -43,7 +44,7 @@ class SuncgLoader:
 
         for level in config["levels"]:
             # Build empty level object which acts as a parent for all rooms on the level
-            level_obj = MeshObject.create_empty("Level#" + level["id"])
+            level_obj = Entity.create_empty("Level#" + level["id"])
             level_obj.set_cp("type", "Level")
             if "bbox" in level:
                 level_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(level["bbox"]))
@@ -134,7 +135,7 @@ class SuncgLoader:
         :return: The list of loaded mesh objects.
         """
         # Build empty room object which acts as a parent for all objects inside
-        room_obj = MeshObject.create_empty("Room#" + node["id"])
+        room_obj = Entity.create_empty("Room#" + node["id"])
         room_obj.set_cp("type", "Room")
         room_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(node["bbox"]))
         room_obj.set_cp("roomTypes", node["roomTypes"])

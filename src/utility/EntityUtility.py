@@ -11,6 +11,25 @@ class Entity:
     def __init__(self, object: bpy.types.Object):
         self.blender_obj = object
 
+
+    @staticmethod
+    def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
+        """ Creates an empty entity.
+
+        :param entity_name: The name of the new entity.
+        :param empty_type: Type of the newly created empty entity. Available: ["plain_axes", "arrows", "single_arrow", \
+                           "circle", "cube", "sphere", "cone"]
+        :return: The new Mesh entity.
+        """
+        if empty_type.lower() in ["plain_axes", "arrows", "single_arrow", "circle", "cube", "sphere", "cone"]:
+            bpy.ops.object.empty_add(type=empty_type.upper(), align="WORLD")
+        else:
+            raise RuntimeError(f'Unknown basic empty type "{empty_type}"! Available types: "plain_axes".')
+
+        new_entity = Entity(bpy.context.object)
+        new_entity.set_name(entity_name)
+        return new_entity
+
     @staticmethod
     def convert_to_entities(blender_objects: list) -> List["Entity"]:
         """ Converts the given list of blender objects to entities
@@ -167,6 +186,13 @@ class Entity:
         :param parent: The parent entity to set.
         """
         self.blender_obj.parent = parent.blender_obj
+
+    def get_parent(self) -> "Entity":
+        """ Returns the parent of the entity.
+
+        :return: The parent.
+        """
+        return Entity(self.blender_obj.parent)
 
     def __setattr__(self, key, value):
         if key != "blender_obj":

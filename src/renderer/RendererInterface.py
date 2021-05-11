@@ -113,10 +113,6 @@ class RendererInterface(Module):
         * - stereo
           - If true, renders a pair of stereoscopic images for each camera position. Default: False
           - bool
-        * - avoid_rendering
-          - This mode is only used during debugging, when all settings should be executed but the actual rendering
-            call is omitted. Default: False
-          - bool
         * - cpu_threads
           - Set number of cpu cores used for rendering (1 thread is always used for coordination if more than one
             cpu thread means GPU-only rendering). Default: 1
@@ -137,7 +133,6 @@ class RendererInterface(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
-        self._avoid_rendering = config.get_bool("avoid_rendering", False)
         addon_utils.enable("render_auto_tile_size")
 
     def _configure_renderer(self, default_samples=256, use_denoiser=False, default_denoiser="Intel"):
@@ -213,7 +208,7 @@ class RendererInterface(Module):
             )
 
         RendererUtility.set_output_format(file_format, enable_transparency=enable_transparency)
-        if not self._avoid_rendering:
+        if not self._avoid_output:
             RendererUtility.render(
                 self._determine_output_dir(),
                 self.config.get_string(output_file_prefix_parameter_name, default_prefix),
