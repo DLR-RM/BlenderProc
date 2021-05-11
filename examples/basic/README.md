@@ -172,7 +172,7 @@ It also creates the normals and distance
 * By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`.
 * The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`
 
-=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`
+=> Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
 
 In this example all of these are temporary and are used in the next module.
 
