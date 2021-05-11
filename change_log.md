@@ -11,7 +11,7 @@
 ## Version 1.11.0 11th May 2021
 - BlenderProc now can be executed via a python script (not all modules are supported yet)
 - python API extension for the following modules:
-  - the pyhsic positioning, PoseSampler
+  - the physic positioning, PoseSampler
   - the Material
   - the WriterUtility, Hdf5Writer, BopWriterUtility, CocoWriterUtility
   - the PostProcessing
