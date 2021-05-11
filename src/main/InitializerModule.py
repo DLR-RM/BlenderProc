@@ -47,4 +47,8 @@ class InitializerModule(Module):
         self._default_init()
 
     def run(self):
-        Initializer.init(self.config.get_list("horizon_color", [0.05, 0.05, 0.05]), self.config.get_string("compute_device", "GPU"), self.config.get_string("compute_device_type", "OPTIX"), self.config.get_bool("use_experimental_features", False), clean_up_scene=False)
+        horizon_color = self.config.get_list("horizon_color", [0.05, 0.05, 0.05])
+        compute_device = self.config.get_string("compute_device", "GPU")
+        compute_device_type = self.config.get_string("compute_device_type", "OPTIX")
+        use_experimental_features = self.config.get_bool("use_experimental_features", False)
+        Initializer.init(horizon_color, compute_device, compute_device_type, use_experimental_features, clean_up_scene=False)
