@@ -41,6 +41,7 @@ RendererUtility.set_samples(20)
 RendererUtility.toggle_stereo(False)
 data = RendererUtility.render()
 
+data["distance"] = PostProcessingUtility.trim_redundant_channels(data["distance"])
 data['depth'] = PostProcessingUtility.dist2depth(data['distance'])
 
 WriterUtility.save_to_hdf5("output_dir", data)

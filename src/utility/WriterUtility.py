@@ -220,7 +220,8 @@ from src.utility.WriterUtility import WriterUtility
 
         amount_of_frames = 0
         for data_block in output_data_dict.values():
-            amount_of_frames = max([amount_of_frames, len(data_block)])
+            if isinstance(data_block, list):
+                amount_of_frames = max([amount_of_frames, len(data_block)])
 
         # if append to existing output is turned on the existing folder is searched for the highest occurring
         # index, which is then used as starting point for this run
