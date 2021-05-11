@@ -9,12 +9,12 @@
 # Version History
 
 ## Version 1.11.0 11th May 2021
-- BlenderProc now can be executed via a python script (not all modules are supported yet)
+- BlenderProc now can be executed via a python script (experimental, not all modules are supported yet)
 - python API extension for the following modules:
-  - the physic positioning, PoseSampler
-  - the Material
+  - the Entity & Material Manipulation
   - the WriterUtility, Hdf5Writer, BopWriterUtility, CocoWriterUtility
   - the PostProcessing
+  - the physic positioning, PoseSampler
 - debugging can now be done via the command line, by just typing --debug after a BlenderProc call
 - add automatic convex decomposition to speed up physics, object decompositions will be cached
 - add a jupyter notebook example for google colab
