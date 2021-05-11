@@ -1,5 +1,6 @@
 import os
-from typing import List, Dict, Union, Any, Set
+from typing import List, Dict, Union, Any, Set, Tuple
+from collections import defaultdict
 
 import numpy as np
 import csv
@@ -30,13 +31,33 @@ class WriterUtility:
 
         for reg_out in reg_outputs:
             if reg_out['key'] in keys:
-                output_data_dict[reg_out['key']] = []
                 for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
                     output_path = Utility.resolve_path(reg_out['path'] % frame_id)
-                    output_file = WriterUtility.load_output_file(output_path)
-                    output_data_dict[reg_out['key']].append(output_file)
+                    if not os.path.exists(output_path):
+                        # check for the stereo files
+                        output_paths = WriterUtility._get_stereo_path_pair(output_path)
+                        # convert to a tensor of shape [2, img_x, img_y, channels]
+                        # output_file[0] is the left image and output_file[1] the right image
+                        output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
+                    else:
+                        output_file = WriterUtility.load_output_file(output_path)
+                    output_data_dict.setdefault(reg_out['key'], []).append(output_file)
 
         return output_data_dict
+
+    @staticmethod
+    def _get_stereo_path_pair(file_path: str) -> Tuple[str, str]:
+        """
+        Returns stereoscopic file path pair for a given "normal" image file path.
+
+        :param file_path: The file path of a single image.
+        :return: The pair of file paths corresponding to the stereo images,
+        """
+        path_split = file_path.split(".")
+        path_l = "{}_L.{}".format(path_split[0], path_split[1])
+        path_r = "{}_R.{}".format(path_split[0], path_split[1])
+
+        return path_l, path_r
 
     @staticmethod
     def load_output_file(file_path: str, write_alpha_channel: bool = False) -> np.ndarray:
@@ -157,7 +178,7 @@ class WriterUtility:
     @staticmethod
     def get_light_attribute(light: bpy.types.Light, attribute_name: str) -> Any:
         """ Returns the value of the requested attribute for the given light.
-
+from src.utility.WriterUtility import WriterUtility
         :param light: The light. Type: blender scene object of type light.
         :param attribute_name: The attribute name.
         :return: The attribute value.
@@ -182,3 +203,81 @@ class WriterUtility:
             return shapenet_obj.get("used_source_id", "")
         else:
             return WriterUtility.get_common_attribute(shapenet_obj, attribute_name)
+
+    @staticmethod
+    def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[np.ndarray]],
+                     append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
+        """
+        Saves the information provided inside of the output_data_dict into a .hdf5 container
+
+        :param output_dir_path:
+        :param output_data_dict:
+        :param append_to_existing_output:
+        """
+        import h5py
+        if not os.path.exists(output_dir_path):
+            os.makedirs(output_dir_path)
+
+        amount_of_frames = 0
+        for data_block in output_data_dict.values():
+            amount_of_frames = max([amount_of_frames, len(data_block)])
+
+        # if append to existing output is turned on the existing folder is searched for the highest occurring
+        # index, which is then used as starting point for this run
+        if append_to_existing_output:
+            frame_offset = 0
+            # Look for hdf5 file with highest index
+            for path in os.listdir(output_dir_path):
+                if path.endswith(".hdf5"):
+                    index = path[:-len(".hdf5")]
+                    if index.isdigit():
+                        frame_offset = max(frame_offset, int(index) + 1)
+        else:
+            frame_offset = 0
+
+        if amount_of_frames != bpy.context.scene.frame_end - bpy.context.scene.frame_start:
+            raise Exception("The amount of images stored in the output_data_dict does not correspond with the amount"
+                            "of images specified by frame_start to frame_end.")
+
+        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+            # for each frame a new .hdf5 file is generated
+            hdf5_path = os.path.join(output_dir_path, str(frame + frame_offset) + ".hdf5")
+            with h5py.File(hdf5_path, "w") as file:
+                # Go through all the output types
+                print(f"Merging data for frame {frame} into {hdf5_path}")
+
+                for key, data_block in output_data_dict.items():
+                    if frame < len(data_block):
+                        used_data_block = data_block[frame]
+                        if stereo_separate_keys and (bpy.context.scene.render.use_multiview or
+                                                     used_data_block.shape[0] == 2):
+                            # stereo mode was activated
+                            WriterUtility._write_to_hdf_file(file, key + "_0", data_block[frame][0])
+                            WriterUtility._write_to_hdf_file(file, key + "_1", data_block[frame][1])
+                        else:
+                            WriterUtility._write_to_hdf_file(file, key, data_block[frame])
+                    else:
+                        raise Exception(f"There are more frames {frame} then there are blocks of information "
+                                        f" {len(data_block)} in the given list for key {key}.")
+                blender_proc_version = Utility.get_current_version()
+                if blender_proc_version:
+                    WriterUtility._write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
+
+    @staticmethod
+    def _write_to_hdf_file(file, key: str, data: np.ndarray, compression: str = "gzip"):
+        """ Adds the given data as a new entry to the given hdf5 file.
+
+        :param file: The hdf5 file handle. Type: hdf5.File
+        :param key: The key at which the data should be stored in the hdf5 file.
+        :param data: The data to store.
+        """
+        if not isinstance(data, np.ndarray) and not isinstance(data, np.bytes_):
+            if isinstance(data, list):
+                data = np.array(data)
+            else:
+                raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray not a {type(data)}!")
+
+        if data.dtype.char == 'S':
+            file.create_dataset(key, data=data, dtype=data.dtype)
+        else:
+            file.create_dataset(key, data=data, compression=compression)

@@ -1,5 +1,7 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
+
+SetupUtility.setup(["imageio", "h5py"])
+from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader
 from src.utility.CameraUtility import CameraUtility
@@ -35,6 +37,10 @@ with open(args.camera, "r") as f:
 
 RendererUtility.enable_distance_output()
 RendererUtility.enable_normals_output()
+RendererUtility.set_samples(20)
+RendererUtility.toggle_stereo(False)
 data = RendererUtility.render()
 
 data['depth'] = PostProcessingUtility.dist2depth(data['distance'])
+
+WriterUtility.save_to_hdf5("output_dir", data)
