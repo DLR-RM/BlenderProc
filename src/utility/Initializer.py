@@ -32,34 +32,6 @@ class Initializer:
             print("Setting blender language settings to english during this run")
             bpy.context.preferences.view.language = "en_US"
 
-        prefs = bpy.context.preferences.addons['cycles'].preferences
-        # Use cycles
-        bpy.context.scene.render.engine = 'CYCLES'
-
-        if platform == "darwin":
-            # there is no gpu support in mac os so use the cpu with maximum power
-            bpy.context.scene.cycles.device = "CPU"
-            bpy.context.scene.render.threads = multiprocessing.cpu_count()
-        else:
-            bpy.context.scene.cycles.device = "GPU"
-            preferences = bpy.context.preferences.addons['cycles'].preferences
-            for device_type in preferences.get_device_types(bpy.context):
-                preferences.get_devices_for_type(device_type[0])
-            for gpu_type in ["OPTIX", "CUDA"]:
-                found = False
-                for device in preferences.devices:
-                    if device.type == gpu_type:
-                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
-                        print('Device {} of type {} found and used.'.format(device.name, device.type))
-                        found = True
-                        break
-                if found:
-                    break
-            # make sure that all visible GPUs are used
-            for group in prefs.get_devices():
-                for d in group:
-                    d.use = True
-
         # setting the frame end, will be changed by the camera loader modules
         bpy.context.scene.frame_end = 0
 
@@ -89,6 +61,38 @@ class Initializer:
     @staticmethod
     def set_default_parameters():
         """ Loads and sets default parameters defined in DefaultConfig.py """
+        prefs = bpy.context.preferences.addons['cycles'].preferences
+        # Use cycles
+        bpy.context.scene.render.engine = 'CYCLES'
+
+        if platform == "darwin" or DefaultConfig.compute_device == "CPU":
+            # if there is no gpu support (mac os) or if cpu is specified as compute device, then use the cpu with maximum power
+            bpy.context.scene.cycles.device = "CPU"
+            bpy.context.scene.render.threads = multiprocessing.cpu_count()
+        else:
+            bpy.context.scene.cycles.device = "GPU"
+            preferences = bpy.context.preferences.addons['cycles'].preferences
+            for device_type in preferences.get_device_types(bpy.context):
+                preferences.get_devices_for_type(device_type[0])
+            for gpu_type in ["OPTIX", "CUDA"]:
+                found = False
+                for device in preferences.devices:
+                    if device.type == gpu_type and DefaultConfig.compute_device_type == gpu_type:
+                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
+                        print('Device {} of type {} found and used.'.format(device.name, device.type))
+                        found = True
+                        break
+                if found:
+                    break
+            # make sure that all visible GPUs are used
+            for group in prefs.get_devices():
+                for d in group:
+                    d.use = True
+
+        # Set the Experimental features on/off
+        if DefaultConfig.use_experimental_features:
+            bpy.context.scene.cycles.feature_set = 'EXPERIMENTAL'
+
         # Set default intrinsics
         CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, "FOV")
         CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
