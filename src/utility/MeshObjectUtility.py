@@ -1,10 +1,14 @@
+import os
 from typing import List, Union
 
 import bpy
 
+from external.vhacd.decompose import convex_decomposition
 from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
+
+from src.utility.Utility import Utility
 
 from src.utility.MaterialUtility import Material
 
@@ -164,11 +168,14 @@ class MeshObject(Entity):
         self.deselect()
         bpy.context.view_layer.update()
 
-    def get_bound_box(self):
+    def get_bound_box(self, local_coords=False):
         """
         :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
         """
-        return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+        if not local_coords:
+            return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+        else:
+            return [Vector(cord) for cord in self.blender_obj.bound_box]
 
     def persist_transformation_into_mesh(self, location: bool = True, rotation: bool = True, scale: bool = True):
         """
@@ -219,7 +226,7 @@ class MeshObject(Entity):
         """ Enables the rigidbody component of the object which makes it participate in physics simulations.
 
         :param active: If True, the object actively participates in the simulation and its key frames are ignored. If False, the object still follows its keyframes and only acts as an obstacle, but is not influenced by the simulation.
-        :param collision_shape: Collision shape of object in simulation. Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'.
+        :param collision_shape: Collision shape of object in simulation. Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH', 'COMPOUND'.
         :param collision_margin: The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit.
         :param collision_mesh_source: Source of the mesh used to create collision shape. Default: 'FINAL'. Available: 'BASE', 'DEFORM', 'FINAL'.
         :param mass: The mass in kilogram the object should have. If None is given the mass is calculated based on its bounding box volume and the given `mass_factor`.
@@ -246,6 +253,43 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
+    def build_convex_decomposition_collision_shape(self, temp_dir, cache_dir="resources/decomposition_cache"):
+        """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
+
+        :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
+        :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
+        """
+        # Decompose the object
+        parts = convex_decomposition(self.blender_obj, temp_dir, cache_dir=Utility.resolve_path(cache_dir))
+        parts = [MeshObject(p) for p in parts]
+
+        # Make the convex parts children of this object, enable their rigid body component and hide them
+        for part in parts:
+            part.set_parent(self)
+            part.enable_rigidbody(True, "CONVEX_HULL")
+            part.hide()
+
+    def hide(self, hide_object: bool = True):
+        """ Sets the visibility of the object.
+
+        :param hide_object: Determines whether the object should be hidden in rendering.
+        """
+        self.blender_obj.hide_render = hide_object
+
+    def set_parent(self, new_parent: "MeshObject"):
+        """ Sets the parent of this object.
+
+        :param new_parent: The new parent object.
+        """
+        self.blender_obj.parent = new_parent.blender_obj
+        self.blender_obj.matrix_parent_inverse = new_parent.blender_obj.matrix_world.inverted()
+
+    def get_parent(self) -> "MeshObject":
+        """ Returns the parent object.
+
+        :return: The parent object, None if it has no parent.
+        """
+        return MeshObject(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
