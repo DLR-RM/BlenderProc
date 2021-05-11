@@ -8,31 +8,51 @@ from src.utility.Utility import Utility
 class HideModule(Module):
     """
     Will hide the selected objects from the scene and render frames with and without the objects.
+    Be aware that this doubles the amount of used camera poses.
 
-    Example
+    If number_of_frames is lower than the amount of used camera poses the results might not be as expected.
+
+    Example 1, here the object name "wall" will be shown in the first two frames and then hidden in the third and
+    fourth frame. In this example there were only two camera poses before this module was called.
+
     .. code-block:: yaml
 
-    {
-      "module": "object.HideModule",
-      "config": {
-        "selector": {  # this will select the object, which gets removed for the same set of frames.
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "wall"
+        {
+          "module": "object.HideModule",
+          "config": {
+            "selector": {  # this will select the object, which gets removed for the same set of frames.
+              "provider": "getter.Entity",
+              "conditions": {
+                "name": "wall"
+              }
+            },
+            "number_of_frames": 2, # this specifies first n frames to be duplicated, this is optional
           }
-        "number_of_frames": 2, # this specifies first n frames to be duplicated.
-        },
-      }
-    }
+        }
 
+    **Configuration**:
 
+    .. list-table::
+        :widths: 25 100 10
+        :header-rows: 1
+
+        * - Parameter
+          - Description
+          - Type
+        * - selector
+          - Objects which will be hidden for a certain set of frames
+          - Provider
+        * - number_of_frames
+          - The amount of frames this scene has, by default this is bpy.context.scene.frame_end, which is \
+            automatically set by the CameraInterface classes. Default: bpy.context.scene.frame_end
+          - int
     """
 
     def __init__(self, config: Config):
         Module.__init__(self, config)
 
     def run(self):
-        """ Removes objects for the same set of frames.
+        """ Hides objects for the set number of frames.
         """
 
         objects = self.config.get_list("selector")
