@@ -373,7 +373,7 @@ class RendererUtility:
         })
 
     @staticmethod
-    def enable_diffuse_color_output(output_dir, file_prefix="diffuse_", output_key="diffse"):
+    def enable_diffuse_color_output(output_dir: str, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
         """ Enables writing diffuse color (albedo) images.
 
         Diffuse color images will be written in the form of .png files during the next rendering.
