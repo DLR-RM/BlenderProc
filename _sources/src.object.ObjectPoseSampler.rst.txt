@@ -1,7 +1,0 @@
-src\.object\.ObjectPoseSampler module
-=====================================
-
-.. automodule:: src.object.ObjectPoseSampler
-    :members:
-    :undoc-members:
-    :show-inheritance:

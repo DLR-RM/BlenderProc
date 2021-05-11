@@ -1,7 +1,0 @@
-src\.writer\.WriterInterface module
-===================================
-
-.. automodule:: src.writer.WriterInterface
-    :members:
-    :undoc-members:
-    :show-inheritance:

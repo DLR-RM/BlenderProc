@@ -1,7 +1,0 @@
-src\.utility\.CameraUtility module
-==================================
-
-.. automodule:: src.utility.CameraUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:

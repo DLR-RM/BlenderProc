@@ -1,7 +1,0 @@
-src\.loader\.ReplicaLoaderModule module
-=======================================
-
-.. automodule:: src.loader.ReplicaLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

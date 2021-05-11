@@ -1,7 +1,0 @@
-src\.provider\.getter\.POI module
-=================================
-
-.. automodule:: src.provider.getter.POI
-    :members:
-    :undoc-members:
-    :show-inheritance:

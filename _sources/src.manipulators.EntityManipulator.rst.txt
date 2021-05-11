@@ -1,7 +1,0 @@
-src\.manipulators\.EntityManipulator module
-===========================================
-
-.. automodule:: src.manipulators.EntityManipulator
-    :members:
-    :undoc-members:
-    :show-inheritance:

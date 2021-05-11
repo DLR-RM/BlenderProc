@@ -1,7 +1,0 @@
-src\.manipulators\.MaterialManipulator module
-=============================================
-
-.. automodule:: src.manipulators.MaterialManipulator
-    :members:
-    :undoc-members:
-    :show-inheritance:

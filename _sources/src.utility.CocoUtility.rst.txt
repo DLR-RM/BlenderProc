@@ -1,7 +1,0 @@
-src\.utility\.CocoUtility module
-================================
-
-.. automodule:: src.utility.CocoUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:

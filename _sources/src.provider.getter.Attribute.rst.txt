@@ -1,7 +1,0 @@
-src\.provider\.getter\.Attribute module
-=======================================
-
-.. automodule:: src.provider.getter.Attribute
-    :members:
-    :undoc-members:
-    :show-inheritance:

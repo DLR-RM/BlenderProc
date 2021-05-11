@@ -1,7 +1,0 @@
-src\.loader\.ObjectLoaderModule module
-======================================
-
-.. automodule:: src.loader.ObjectLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

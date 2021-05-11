@@ -1,7 +1,0 @@
-src\.provider\.getter\.Material module
-======================================
-
-.. automodule:: src.provider.getter.Material
-    :members:
-    :undoc-members:
-    :show-inheritance:

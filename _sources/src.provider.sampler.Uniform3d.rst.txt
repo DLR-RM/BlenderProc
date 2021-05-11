@@ -1,7 +1,0 @@
-src\.provider\.sampler\.Uniform3d module
-========================================
-
-.. automodule:: src.provider.sampler.Uniform3d
-    :members:
-    :undoc-members:
-    :show-inheritance:

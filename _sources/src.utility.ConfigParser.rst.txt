@@ -1,7 +1,0 @@
-src\.utility\.ConfigParser module
-=================================
-
-.. automodule:: src.utility.ConfigParser
-    :members:
-    :undoc-members:
-    :show-inheritance:

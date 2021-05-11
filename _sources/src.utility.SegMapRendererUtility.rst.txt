@@ -1,7 +1,0 @@
-src\.utility\.SegMapRendererUtility module
-==========================================
-
-.. automodule:: src.utility.SegMapRendererUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:

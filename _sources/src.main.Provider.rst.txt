@@ -1,7 +1,0 @@
-src\.main\.Provider module
-==========================
-
-.. automodule:: src.main.Provider
-    :members:
-    :undoc-members:
-    :show-inheritance:

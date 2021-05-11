@@ -1,7 +1,0 @@
-src\.provider\.sampler\.Color module
-====================================
-
-.. automodule:: src.provider.sampler.Color
-    :members:
-    :undoc-members:
-    :show-inheritance:

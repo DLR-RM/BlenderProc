@@ -1,7 +1,0 @@
-src\.postprocessing\.NoiseRemoval module
-========================================
-
-.. automodule:: src.postprocessing.NoiseRemoval
-    :members:
-    :undoc-members:
-    :show-inheritance:

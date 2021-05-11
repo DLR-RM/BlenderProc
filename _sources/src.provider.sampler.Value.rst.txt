@@ -1,7 +1,0 @@
-src\.provider\.sampler\.Value module
-====================================
-
-.. automodule:: src.provider.sampler.Value
-    :members:
-    :undoc-members:
-    :show-inheritance:

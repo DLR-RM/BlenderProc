@@ -1,7 +1,0 @@
-src\.utility\.LabelIdMapping module
-===================================
-
-.. automodule:: src.utility.LabelIdMapping
-    :members:
-    :undoc-members:
-    :show-inheritance:
