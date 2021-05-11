@@ -1,0 +1,7 @@
+src\.provider\.getter\.Entity module
+====================================
+
+.. automodule:: src.provider.getter.Entity
+    :members:
+    :undoc-members:
+    :show-inheritance:

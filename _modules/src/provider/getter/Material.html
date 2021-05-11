@@ -1,0 +1,807 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.provider.getter.Material &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<ul class="compound-first">
+<li class="toctree-l1"><a class="reference external" href="examples/README.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/README.html">basic_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/README.html">haven_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/README.html">replica_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Modules</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.composite.CameraObjectSampler.html#src.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicEmptyInitializer.html#src.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicMeshInitializer.html#src.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RandomRoomConstructor.html#src.constructor.RandomRoomConstructor.RandomRoomConstructor">RandomRoomConstructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RockEssentialsGroundConstructor.html#src.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SurfaceLighting.html#src.lighting.SurfaceLighting.SurfaceLighting">SurfaceLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.loader.AMASSLoaderModule.html#src.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BopLoaderModule.html#src.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.CCMaterialLoaderModule.html#src.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Front3DLoaderModule.html#src.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenEnvironmentLoaderModule.html#src.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenMaterialLoaderModule.html#src.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.IKEALoaderModule.html#src.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ObjectLoaderModule.html#src.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Pix3DLoaderModule.html#src.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ReplicaLoaderModule.html#src.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.RockEssentialsRockLoaderModule.html#src.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SceneNetLoaderModule.html#src.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ShapeNetLoaderModule.html#src.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SuncgLoaderModule.html#src.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.WorldManipulator.html#src.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.materials.RockEssentialsTextureSampler.html#src.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.FloorExtractorModule.html#src.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.HideModule.html#src.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectPoseSamplerModule.html#src.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectReplacerModule.html#src.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.PhysicsPositioningModule.html#src.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ShapeNetWriter.html#src.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Provider</span></p>
+<li class="toctree-l1 current"><a class="reference external" href="src.provider.getter.html">Getter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Attribute.html#src.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.AttributeMerger.html#src.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Entity.html#src.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="#src.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.POI.html#src.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Texture.html#src.provider.getter.Texture.Texture">Texture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.provider.sampler.html">Sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Color.html#src.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Disk.html#src.provider.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.PartSphere.html#src.provider.sampler.PartSphere.PartSphere">PartSphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Path.html#src.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Shell.html#src.provider.sampler.Shell.Shell">Shell</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Sphere.html#src.provider.sampler.Sphere.Sphere">Sphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Texture.html#src.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Uniform3d.html#src.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UniformSO3.html#src.provider.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.UpperRegionSampler">UpperRegionSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Value.html#src.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Core</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.InitializerModule.html#src.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.utility.BopWriterUtility.html#src.utility.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CocoWriterUtility.html#src.utility.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CollisionUtility.html#src.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.EntityUtility.html#src.utility.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Initializer.html#src.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MeshObjectUtility.html#src.utility.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.PostProcessingUtility.html#src.utility.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SetupUtility.html#src.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.StructUtility.html#src.utility.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.WriterUtility.html#src.utility.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>src.provider.getter.Material</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for src.provider.getter.Material</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span>
+
+<span class="kn">import</span> <span class="nn">mathutils</span>
+
+<span class="kn">from</span> <span class="nn">src.main.Provider</span> <span class="kn">import</span> <span class="n">Provider</span>
+<span class="kn">from</span> <span class="nn">src.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_materials</span>
+<span class="kn">from</span> <span class="nn">src.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span>
+
+
+<div class="viewcode-block" id="Material"><a class="viewcode-back" href="../../../../src.provider.getter.Material.html#src.provider.getter.Material.Material">[docs]</a><span class="k">class</span> <span class="nc">Material</span><span class="p">(</span><span class="n">Provider</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of materials that comply with defined conditions.</span>
+
+<span class="sd">    Example 1: Return materials matching a name pattern.</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;getter.Material&quot;,</span>
+<span class="sd">          &quot;conditions&quot;: {</span>
+<span class="sd">            &quot;name&quot;: &quot;wood.*&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Example 2: Return all materials matching a name pattern which also have exactly two textures used.</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;getter.Material&quot;,</span>
+<span class="sd">          &quot;conditions&quot;: {</span>
+<span class="sd">            &quot;name&quot;: &quot;wood.*&quot;,</span>
+<span class="sd">            &quot;cf_texture_amount_eq&quot;: &quot;2&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Example 3: Return all materials matching a name pattern which also have two or more textures used.</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;getter.Material&quot;,</span>
+<span class="sd">          &quot;conditions&quot;: {</span>
+<span class="sd">            &quot;name&quot;: &quot;wood.*&quot;,</span>
+<span class="sd">            &quot;cf_texture_amount_min&quot;: &quot;2&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Example 4: Return all materials which: {match the name pattern &#39;wood.*&#39; AND have two or less textures used}</span>
+<span class="sd">                                            OR {match the name pattern &#39;tile.*&#39;}</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;getter.Material&quot;,</span>
+<span class="sd">          &quot;conditions&quot;: [</span>
+<span class="sd">          {</span>
+<span class="sd">            &quot;name&quot;: &quot;wood.*&quot;,</span>
+<span class="sd">            &quot;cf_texture_amount_max&quot;: &quot;2&quot;</span>
+<span class="sd">          },</span>
+<span class="sd">          {</span>
+<span class="sd">            &quot;name: &quot;tile.*&quot;</span>
+<span class="sd">          }</span>
+<span class="sd">          ]</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Example 5: Return all materials which: {are cc_textures (see CCMaterialLoader) and do not have</span>
+<span class="sd">                                            any alpha texture used}</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;getter.Material&quot;,</span>
+<span class="sd">          &quot;conditions&quot;: [</span>
+<span class="sd">          {</span>
+<span class="sd">            &quot;cp_is_cc_texture&quot;: True,</span>
+<span class="sd">            &quot;cf_principled_bsdf_Alpha_eq&quot;: 1.0</span>
+<span class="sd">          }</span>
+<span class="sd">          ]</span>
+<span class="sd">        }</span>
+
+<span class="sd">    Example 6: Return all materials which: {belong to a certain list of objects and do not have any alpha texture used}</span>
+
+<span class="sd">    .. code-block:: yaml</span>
+
+<span class="sd">        {</span>
+<span class="sd">          &quot;provider&quot;: &quot;getter.Material&quot;,</span>
+<span class="sd">          &quot;conditions&quot;: [</span>
+<span class="sd">          {</span>
+<span class="sd">            &quot;cf_use_materials_of_objects&quot;: {</span>
+<span class="sd">                &quot;provider&quot;: &quot;getter.Entity&quot;,</span>
+<span class="sd">                &quot;conditions&quot;: {</span>
+<span class="sd">                    &quot;type&quot;: &quot;MESH&quot;,</span>
+<span class="sd">                    &quot;name&quot;: &quot;Suzanne&quot;</span>
+<span class="sd">                }</span>
+<span class="sd">            },</span>
+<span class="sd">            &quot;cf_principled_bsdf_Alpha_eq&quot;: 1.0</span>
+<span class="sd">          }</span>
+<span class="sd">          ]</span>
+<span class="sd">        }</span>
+
+
+<span class="sd">    **Configuration**:</span>
+
+<span class="sd">    .. list-table:: </span>
+<span class="sd">        :widths: 25 100 10</span>
+<span class="sd">        :header-rows: 1</span>
+
+<span class="sd">        * - Parameter</span>
+<span class="sd">          - Description</span>
+<span class="sd">          - Type</span>
+<span class="sd">        * - conditions</span>
+<span class="sd">          - List of dicts/a dict of entries of format {attribute_name: attribute_value}. Entries in a dict are</span>
+<span class="sd">            conditions connected with AND, if there multiple dicts are defined (i.e. &#39;conditions&#39; is a list of</span>
+<span class="sd">            dicts, each cell is connected by OR. </span>
+<span class="sd">          - list/dict</span>
+<span class="sd">        * - conditions/attribute_name</span>
+<span class="sd">          - Name of any valid material&#39;s attribute, custom property, or custom function. Any given attribute_value</span>
+<span class="sd">            of the type string will be treated as a REGULAR EXPRESSION. &quot; In order to specify, what exactly one</span>
+<span class="sd">            wants to look for: For attribute: key of the pair must be a valid attribute name. For custom property:</span>
+<span class="sd">            key of the pair must start with `cp_` prefix. For calling custom function: key of the pair must start</span>
+<span class="sd">            with `cf_` prefix. See table below for supported custom functions.</span>
+<span class="sd">          - string</span>
+<span class="sd">        * - conditions/attribute_value</span>
+<span class="sd">          - Any value to set. </span>
+<span class="sd">          - string, list/Vector, int, bool or float</span>
+<span class="sd">        * - index</span>
+<span class="sd">          - If set, after the conditions are applied only the entity with the specified index is returned. </span>
+<span class="sd">          - int</span>
+<span class="sd">        * - random_samples</span>
+<span class="sd">          - If set, this Provider returns random_samples objects from the pool of selected ones. Define index or</span>
+<span class="sd">            random_samples property, only one is allowed at a time. Default: 0.</span>
+<span class="sd">          - int</span>
+<span class="sd">        * - check_empty</span>
+<span class="sd">          - If this is True, the returned list can not be empty, if it is empty an error will be thrown. Default: False.</span>
+<span class="sd">          - bool</span>
+
+<span class="sd">    **Custom functions**</span>
+
+<span class="sd">    .. list-table:: </span>
+<span class="sd">        :widths: 25 100 10</span>
+<span class="sd">        :header-rows: 1</span>
+
+<span class="sd">        * - Parameter</span>
+<span class="sd">          - Description</span>
+<span class="sd">          - Type</span>
+<span class="sd">        * - cf_texture_amount_{min,max,eq}</span>
+<span class="sd">          - Returns materials that have a certain amount of texture nodes inside of the material. Suffix &#39;min&#39; =</span>
+<span class="sd">            less nodes or equal than specified, &#39;max&#39; = at least as many or &#39;eq&#39; = for this exact amount of textures</span>
+<span class="sd">            nodes. </span>
+<span class="sd">          - int</span>
+<span class="sd">        * - cf_principled_bsdf_amount_{min,max,eq}</span>
+<span class="sd">          - Returns materials that have a certain amount of principled bsdf nodes inside of the material. Suffix</span>
+<span class="sd">            &#39;min&#39; = less nodes or equal than specified, &#39;max&#39; = at least as many or &#39;eq&#39; = for this exact amount of</span>
+<span class="sd">            principled bsdf nodes. </span>
+<span class="sd">          - int</span>
+<span class="sd">        * - cf_principled_bsdf_{INPUT}_{min,max,eq}</span>
+<span class="sd">          - Returns materials that have a certain value for a certain INPUT of the principled bsdf node. Only works if</span>
+<span class="sd">            there is only one principled bsdf node. The INPUT can be any of the input values used of the principled</span>
+<span class="sd">            bsdf. By using this all materials, which do not use a float value as an input are also not selected.</span>
+<span class="sd">            Suffix &#39;min&#39; = less nodes or equal than specified, &#39;max&#39; = at least as many or &#39;eq&#39; = for this exact</span>
+<span class="sd">            amount of principled bsdf nodes.</span>
+<span class="sd">          - float</span>
+<span class="sd">        * - conditions/cf_use_materials_of_objects</span>
+<span class="sd">          - This accepts a provider &quot;getter.Entity&quot;, which returns a list of mesh objects, on which the materials</span>
+<span class="sd">            have to be in use. This can be used to return all materials, which are currently used on a certain object.</span>
+<span class="sd">          - Provider</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">Provider</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Material.perform_and_condition_check"><a class="viewcode-back" href="../../../../src.provider.getter.Material.html#src.provider.getter.Material.Material.perform_and_condition_check">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">perform_and_condition_check</span><span class="p">(</span><span class="n">and_condition</span><span class="p">,</span> <span class="n">materials</span><span class="p">,</span> <span class="n">used_materials_to_check</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Checks for all materials in the scene if all given conditions are true, collects them in the return list.</span>
+
+<span class="sd">        :param and_condition: Given conditions. Type: dict.</span>
+<span class="sd">        :param materials: Materials, that are already in the return list. Type: list.</span>
+<span class="sd">        :param used_materials_to_check: a list of materials to perform the check on. Type: list. Default: all materials</span>
+<span class="sd">        :return: Materials that fulfilled given conditions. Type: list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_materials</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">used_materials_to_check</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">used_materials_to_check</span> <span class="o">=</span> <span class="n">get_all_materials</span><span class="p">()</span>
+
+        <span class="c1"># through every material</span>
+        <span class="k">for</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">used_materials_to_check</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">new_materials</span> <span class="ow">or</span> <span class="n">material</span> <span class="ow">in</span> <span class="n">materials</span> <span class="ow">or</span> <span class="n">material</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">select_material</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">and_condition</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># check if the key is a requested custom property</span>
+                <span class="n">requested_custom_property</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">requested_custom_function</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;cp_&#39;</span><span class="p">):</span>
+                    <span class="n">requested_custom_property</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+                <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;cf_&#39;</span><span class="p">):</span>
+                    <span class="n">requested_custom_function</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">key</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">requested_custom_property</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">requested_custom_function</span><span class="p">:</span>
+                    <span class="c1"># check if the type of the value of attribute matches desired</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)):</span>
+                        <span class="n">new_value</span> <span class="o">=</span> <span class="n">value</span>
+                    <span class="c1"># if not, try to enforce some mathutils-specific type</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">):</span>
+                            <span class="n">new_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Euler</span><span class="p">):</span>
+                            <span class="n">new_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Euler</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Color</span><span class="p">):</span>
+                            <span class="n">new_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                        <span class="c1"># raise an exception if it is none of them</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Types are not matching: </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2"> !&quot;</span>
+                                            <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">)),</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+                    <span class="c1"># or check for equality</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">),</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                            <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">new_value</span><span class="p">):</span>
+                        <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+                <span class="c1"># check if a custom property with this name exists</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">material</span> <span class="ow">and</span> <span class="n">requested_custom_property</span><span class="p">:</span>
+                    <span class="c1"># check if the type of the value of such custom property matches desired</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">material</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">material</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)):</span>
+                        <span class="c1"># if it is a string and if the whole string matches the given pattern</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">material</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">material</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span>
+                                <span class="n">material</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">==</span> <span class="n">value</span><span class="p">):</span>
+                            <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># raise an exception if not</span>
+                        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Types are not matching: </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="s2"> !&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">material</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+                <span class="k">elif</span> <span class="n">requested_custom_function</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;texture_amount_&quot;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                            <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                            <span class="n">texture_nodes</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;TexImage&quot;</span><span class="p">)</span>
+                            <span class="n">amount_of_texture_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">texture_nodes</span><span class="p">)</span> <span class="k">if</span> <span class="n">texture_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+                            <span class="k">if</span> <span class="s2">&quot;min&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">amount_of_texture_nodes</span> <span class="o">&gt;=</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">elif</span> <span class="s2">&quot;max&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">amount_of_texture_nodes</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">elif</span> <span class="s2">&quot;eq&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">amount_of_texture_nodes</span> <span class="o">==</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This type of key is unknown: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;principled_bsdf_amount_&quot;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                            <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                            <span class="n">principled</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                            <span class="n">amount_of_principled_bsdf_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled</span><span class="p">)</span> <span class="k">if</span> <span class="n">principled</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+                            <span class="k">if</span> <span class="s2">&quot;min&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">amount_of_principled_bsdf_nodes</span> <span class="o">&gt;=</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">elif</span> <span class="s2">&quot;max&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">amount_of_principled_bsdf_nodes</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">elif</span> <span class="s2">&quot;eq&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">amount_of_principled_bsdf_nodes</span> <span class="o">==</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This type of key is unknown: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;principled_bsdf_&quot;</span><span class="p">):</span>  <span class="c1"># must be after the amount check</span>
+                        <span class="c1"># This custom function can check the value of a certain Principled BSDF shader input.</span>
+                        <span class="c1"># For example this can be used to avoid using materials, which have an Alpha Texture by</span>
+                        <span class="c1"># adding they key: `&quot;cf_principled_bsdf_Alpha_eq&quot;: 1.0`</span>
+                        <span class="k">if</span> <span class="n">material</span><span class="o">.</span><span class="n">use_nodes</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                            <span class="c1"># first check if there is only one Principled BSDF node in the material</span>
+                            <span class="n">nodes</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">node_tree</span><span class="o">.</span><span class="n">nodes</span>
+                            <span class="n">principled</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                            <span class="n">amount_of_principled_bsdf_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled</span><span class="p">)</span> <span class="k">if</span> <span class="n">principled</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
+                            <span class="k">if</span> <span class="n">amount_of_principled_bsdf_nodes</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                <span class="k">break</span>
+                            <span class="n">principled</span> <span class="o">=</span> <span class="n">principled</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                            <span class="c1"># then extract the input name from the key, for the Alpha example: `Alpha`</span>
+                            <span class="n">extracted_input_name</span> <span class="o">=</span> <span class="n">key</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="s2">&quot;principled_bsdf_&quot;</span><span class="p">):</span><span class="n">key</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)]</span>
+                            <span class="c1"># check if this key exists, else throw an error</span>
+                            <span class="k">if</span> <span class="n">extracted_input_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Only valid inputs of a principled node are allowed: &quot;</span>
+                                                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> in: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extracted_input_name</span><span class="p">,</span> <span class="n">key</span><span class="p">))</span>
+                            <span class="c1"># extract this input value</span>
+                            <span class="n">used_value</span> <span class="o">=</span> <span class="n">principled</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="n">extracted_input_name</span><span class="p">]</span>
+                            <span class="c1"># if this input value is not a default value it will be connected via the links</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">used_value</span><span class="o">.</span><span class="n">links</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                                <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                <span class="k">break</span>
+                            <span class="c1"># if no link is found check the default value</span>
+                            <span class="n">used_value</span> <span class="o">=</span> <span class="n">used_value</span><span class="o">.</span><span class="n">default_value</span>
+                            <span class="c1"># compare the given value to the default value</span>
+                            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;min&quot;</span><span class="p">):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">used_value</span> <span class="o">&gt;=</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;max&quot;</span><span class="p">):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">used_value</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">elif</span> <span class="n">key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;eq&quot;</span><span class="p">):</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">used_value</span> <span class="o">==</span> <span class="n">value</span><span class="p">):</span>
+                                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                                    <span class="k">break</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This type of key is unknown: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;use_materials_of_objects&quot;</span><span class="p">:</span>
+                        <span class="n">objects</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">build_provider_based_on_config</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+                        <span class="n">found_material</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="c1"># iterate over all selected objects</span>
+                        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">:</span>
+                            <span class="c1"># check if they have materials</span>
+                            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s2">&quot;material_slots&quot;</span><span class="p">):</span>
+                                <span class="k">for</span> <span class="n">mat_slot</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">material_slots</span><span class="p">:</span>
+                                    <span class="c1"># if the material is the same as the currently checked one</span>
+                                    <span class="k">if</span> <span class="n">mat_slot</span><span class="o">.</span><span class="n">material</span> <span class="o">==</span> <span class="n">material</span><span class="p">:</span>
+                                        <span class="n">found_material</span> <span class="o">=</span> <span class="kc">True</span>
+                                        <span class="k">break</span>
+                            <span class="k">if</span> <span class="n">found_material</span><span class="p">:</span>
+                                <span class="k">break</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">found_material</span><span class="p">:</span>
+                            <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">select_material</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="n">select_material</span><span class="p">:</span>
+                <span class="n">new_materials</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">material</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_materials</span></div>
+
+<div class="viewcode-block" id="Material._get_conditions_as_string"><a class="viewcode-back" href="../../../../src.provider.getter.Material.html#src.provider.getter.Material.Material._get_conditions_as_string">[docs]</a>    <span class="k">def</span> <span class="nf">_get_conditions_as_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the used conditions as neatly formatted string</span>
+<span class="sd">        :return: str: containing the conditions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s1">&#39;conditions&#39;</span><span class="p">)</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">conditions</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">add_indent</span><span class="p">(</span><span class="n">t</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot; &quot;</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="s2">&quot;Exception: &quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">t</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">add_indent</span><span class="p">(</span><span class="n">text</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Material.run"><a class="viewcode-back" href="../../../../src.provider.getter.Material.html#src.provider.getter.Material.Material.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Processes defined conditions and compiles a list of materials.</span>
+
+<span class="sd">        :return: List of materials that met the conditional requirement. Type: list.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">conditions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_raw_dict</span><span class="p">(</span><span class="s1">&#39;conditions&#39;</span><span class="p">)</span>
+
+        <span class="c1"># the list of conditions is treated as or condition</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">conditions</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">materials</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># each single condition is treated as and condition</span>
+            <span class="k">for</span> <span class="n">and_condition</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
+                <span class="n">materials</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perform_and_condition_check</span><span class="p">(</span><span class="n">and_condition</span><span class="p">,</span> <span class="n">materials</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># only one condition was given, treat it as and condition</span>
+            <span class="n">materials</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perform_and_condition_check</span><span class="p">(</span><span class="n">conditions</span><span class="p">,</span> <span class="p">[])</span>
+
+        <span class="n">random_samples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;random_samples&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">has_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">has_param</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">has_index</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">random_samples</span><span class="p">:</span>
+            <span class="n">materials</span> <span class="o">=</span> <span class="p">[</span><span class="n">materials</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_int</span><span class="p">(</span><span class="s2">&quot;index&quot;</span><span class="p">)]]</span>
+        <span class="k">elif</span> <span class="n">random_samples</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">has_index</span><span class="p">:</span>
+            <span class="n">materials</span> <span class="o">=</span> <span class="n">sample</span><span class="p">(</span><span class="n">materials</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">random_samples</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">materials</span><span class="p">)))</span>
+        <span class="k">elif</span> <span class="n">has_index</span> <span class="ow">and</span> <span class="n">random_samples</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Please, define only one of two: `index` or `random_samples`.&quot;</span><span class="p">)</span>
+
+        <span class="n">check_if_return_is_empty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_bool</span><span class="p">(</span><span class="s2">&quot;check_empty&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">check_if_return_is_empty</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">materials</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There were no materials selected with the following &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;condition: </span><span class="se">\n</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_conditions_as_string</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">materials</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

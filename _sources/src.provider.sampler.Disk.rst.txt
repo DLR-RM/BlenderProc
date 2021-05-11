@@ -1,0 +1,7 @@
+src\.provider\.sampler\.Disk module
+===================================
+
+.. automodule:: src.provider.sampler.Disk
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+src\.utility\.CocoWriterUtility module
+======================================
+
+.. automodule:: src.utility.CocoWriterUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

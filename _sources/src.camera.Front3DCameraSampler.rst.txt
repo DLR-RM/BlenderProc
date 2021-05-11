@@ -1,0 +1,7 @@
+src\.camera\.Front3DCameraSampler module
+========================================
+
+.. automodule:: src.camera.Front3DCameraSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

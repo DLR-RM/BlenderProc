@@ -1,0 +1,34 @@
+src\.loader package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.loader.AMASSLoaderModule
+   src.loader.BlendLoaderModule
+   src.loader.BopLoaderModule
+   src.loader.CCMaterialLoaderModule
+   src.loader.Front3DLoaderModule
+   src.loader.HavenEnvironmentLoaderModule
+   src.loader.HavenMaterialLoaderModule
+   src.loader.IKEALoaderModule
+   src.loader.LoaderInterface
+   src.loader.ObjectLoaderModule
+   src.loader.Pix3DLoaderModule
+   src.loader.ReplicaLoaderModule
+   src.loader.RockEssentialsRockLoaderModule
+   src.loader.SceneNetLoaderModule
+   src.loader.ShapeNetLoaderModule
+   src.loader.SuncgLoaderModule
+   src.loader.TextureLoaderModule
+   src.loader.VisNormalImage
+
+Module contents
+---------------
+
+.. automodule:: src.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:

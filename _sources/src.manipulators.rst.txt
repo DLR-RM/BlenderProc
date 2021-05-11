@@ -1,0 +1,19 @@
+src\.manipulators package
+=========================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.manipulators.EntityManipulator
+   src.manipulators.MaterialManipulator
+   src.manipulators.WorldManipulator
+
+Module contents
+---------------
+
+.. automodule:: src.manipulators
+    :members:
+    :undoc-members:
+    :show-inheritance:

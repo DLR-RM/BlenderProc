@@ -1,0 +1,17 @@
+src\.materials package
+======================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.materials.RockEssentialsTextureSampler
+
+Module contents
+---------------
+
+.. automodule:: src.materials
+    :members:
+    :undoc-members:
+    :show-inheritance:

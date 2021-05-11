@@ -1,0 +1,7 @@
+src\.renderer\.RendererInterface module
+=======================================
+
+.. automodule:: src.renderer.RendererInterface
+    :members:
+    :undoc-members:
+    :show-inheritance:

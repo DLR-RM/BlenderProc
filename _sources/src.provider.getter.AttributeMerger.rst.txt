@@ -1,0 +1,7 @@
+src\.provider\.getter\.AttributeMerger module
+=============================================
+
+.. automodule:: src.provider.getter.AttributeMerger
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+src\.utility\.CollisionUtility module
+=====================================
+
+.. automodule:: src.utility.CollisionUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

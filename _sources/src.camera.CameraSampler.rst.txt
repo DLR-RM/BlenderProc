@@ -1,0 +1,7 @@
+src\.camera\.CameraSampler module
+=================================
+
+.. automodule:: src.camera.CameraSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

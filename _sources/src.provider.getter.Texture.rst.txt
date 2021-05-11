@@ -1,0 +1,7 @@
+src\.provider\.getter\.Texture module
+=====================================
+
+.. automodule:: src.provider.getter.Texture
+    :members:
+    :undoc-members:
+    :show-inheritance:

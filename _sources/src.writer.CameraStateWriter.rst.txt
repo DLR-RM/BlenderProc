@@ -1,0 +1,7 @@
+src\.writer\.CameraStateWriter module
+=====================================
+
+.. automodule:: src.writer.CameraStateWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,808 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Planned Features &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<ul class="compound-first">
+<li class="toctree-l1"><a class="reference external" href="examples/README.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/README.html">basic_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/README.html">haven_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/README.html">replica_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Modules</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.composite.CameraObjectSampler.html#src.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicEmptyInitializer.html#src.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicMeshInitializer.html#src.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RandomRoomConstructor.html#src.constructor.RandomRoomConstructor.RandomRoomConstructor">RandomRoomConstructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RockEssentialsGroundConstructor.html#src.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SurfaceLighting.html#src.lighting.SurfaceLighting.SurfaceLighting">SurfaceLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.loader.AMASSLoaderModule.html#src.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BopLoaderModule.html#src.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.CCMaterialLoaderModule.html#src.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Front3DLoaderModule.html#src.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenEnvironmentLoaderModule.html#src.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenMaterialLoaderModule.html#src.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.IKEALoaderModule.html#src.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ObjectLoaderModule.html#src.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Pix3DLoaderModule.html#src.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ReplicaLoaderModule.html#src.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.RockEssentialsRockLoaderModule.html#src.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SceneNetLoaderModule.html#src.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ShapeNetLoaderModule.html#src.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SuncgLoaderModule.html#src.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.WorldManipulator.html#src.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.materials.RockEssentialsTextureSampler.html#src.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.FloorExtractorModule.html#src.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.HideModule.html#src.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectPoseSamplerModule.html#src.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectReplacerModule.html#src.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.PhysicsPositioningModule.html#src.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ShapeNetWriter.html#src.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Provider</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.provider.getter.html">Getter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Attribute.html#src.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.AttributeMerger.html#src.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Entity.html#src.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Material.html#src.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.POI.html#src.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Texture.html#src.provider.getter.Texture.Texture">Texture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.provider.sampler.html">Sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Color.html#src.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Disk.html#src.provider.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.PartSphere.html#src.provider.sampler.PartSphere.PartSphere">PartSphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Path.html#src.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Shell.html#src.provider.sampler.Shell.Shell">Shell</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Sphere.html#src.provider.sampler.Sphere.Sphere">Sphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Texture.html#src.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Uniform3d.html#src.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UniformSO3.html#src.provider.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.UpperRegionSampler">UpperRegionSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Value.html#src.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Core</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.InitializerModule.html#src.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.utility.BopWriterUtility.html#src.utility.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CocoWriterUtility.html#src.utility.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CollisionUtility.html#src.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.EntityUtility.html#src.utility.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Initializer.html#src.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MeshObjectUtility.html#src.utility.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.PostProcessingUtility.html#src.utility.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SetupUtility.html#src.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.StructUtility.html#src.utility.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.WriterUtility.html#src.utility.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Planned Features</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/change_log.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="planned-features">
+<h1>Planned Features<a class="headerlink" href="#planned-features" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Adding a complete python API and phasing out the <code class="docutils literal notranslate"><span class="pre">.yaml</span></code> files (Goal for 2.0.0)</li>
+<li>Add support for all YCB objects (not just BOP)</li>
+<li>Add support for more object datasets (ideas are welcomed, just open an issue with a dataset you want to see integrated)</li>
+<li>Improve the documentation</li>
+</ul>
+</div>
+<div class="section" id="version-history">
+<h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-11-0-11th-may-2021">
+<h2>Version 1.11.0 11th May 2021<a class="headerlink" href="#version-1-11-0-11th-may-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>BlenderProc now can be executed via a python script (experimental, not all modules are supported yet)</li>
+<li>python API extension for the following modules:<ul>
+<li>the Entity &amp; Material Manipulation</li>
+<li>the WriterUtility, Hdf5Writer, BopWriterUtility, CocoWriterUtility</li>
+<li>the PostProcessing</li>
+<li>the physic positioning, PoseSampler</li>
+</ul>
+</li>
+<li>debugging can now be done via the command line, by just typing –debug after a BlenderProc call</li>
+<li>add automatic convex decomposition to speed up physics, object decompositions will be cached</li>
+<li>add a jupyter notebook example for google colab</li>
+<li>add a BasicEmptyInitializer module, which helps creating simple empty objects, these can be used for using a depth of field</li>
+<li>add a depth_of_field option to the CameraInterface (thanks to cuteday)</li>
+<li>add a hide module, so that certain objects can be hidden in a selected range of frames (thanks to Sainan Liu)</li>
+<li>add an option to change the computation type via the config</li>
+<li>blender 2.92 changed depth and distance once again, we use it correctly now and added an explanation</li>
+<li>added a diffuse rendering mode</li>
+<li>added a key frame API</li>
+<li>added a default config, which can be easily changed</li>
+<li>ObjectPoseSampler now can check also against only a limited set of objects</li>
+<li>ObjectReplacer now stops if no objects are left to replace</li>
+<li>SurfaceLighting now reuses the TextureLess material</li>
+<li>preloading in CCTexture now also works perfectly for textures which use an alpha texture</li>
+<li>python packages now are installed by specifying the required packages at the top of each file</li>
+<li>added an example for pasting objects onto random backgrounds</li>
+<li>added a flag to merge BlenderKit objects, while loading, they will be named after the blenderkit file</li>
+<li>reintroduce persistent transformation scaling to improve stability</li>
+<li>improve the clean up at the start of BlenderProc</li>
+<li>fixed a bug in the Front3DLoader, which avoided the correct setting of the custom properties</li>
+<li>fixed a bug with the once_for_all mode for the randomize materials fct.</li>
+<li>add a simple rerun script to show how BlenderProc is used for creating a diverse dataset</li>
+<li>switch to blender 2.92</li>
+</ul>
+</div>
+<div class="section" id="version-1-10-0-24th-february-2021">
+<h2>Version 1.10.0 24th February 2021<a class="headerlink" href="#version-1-10-0-24th-february-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>rewritten the <code class="docutils literal notranslate"><span class="pre">BlendLoader</span></code>, which is now able to only load objects of a given type, this will break existing config files as the <code class="docutils literal notranslate"><span class="pre">load_from</span></code> parameter has been replaced by <code class="docutils literal notranslate"><span class="pre">datablocks</span></code> and <code class="docutils literal notranslate"><span class="pre">obj_types</span></code></li>
+<li>the <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code> can now overlay/mix a texture with a selected material</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code> can now mix/add a material with another selected material, ideal for creating surface imperfections on other materials</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">MaterialManipulator</span></code> can now add a layer of dust on materials, which simulates dust flakes on top of the object, there also exists now an example for it</li>
+<li><code class="docutils literal notranslate"><span class="pre">amount_of_repetitions</span></code> can now be used with providers</li>
+<li>full integration of the blenderkit module, including modules and textures with an example</li>
+<li><code class="docutils literal notranslate"><span class="pre">LoaderInterface</span></code> now offers an auto shading mode</li>
+<li>the <code class="docutils literal notranslate"><span class="pre">CCMaterialLoader</span></code> uses now a preselected list of probably useful materials by default to avoid non tileable materials</li>
+<li>restructure loaders and move their functionality to the utilities (necessary for the API changes for 2.0.0)</li>
+</ul>
+</div>
+<div class="section" id="version-1-9-0-10th-february-2021">
+<h2>Version 1.9.0 10th February 2021<a class="headerlink" href="#version-1-9-0-10th-february-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>all <code class="docutils literal notranslate"><span class="pre">Loader</span></code> now support setting the <code class="docutils literal notranslate"><span class="pre">add_material_properties</span></code> of the newly loaded objects</li>
+<li>each new <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> file, will contain the git commit hash of BlenderProc</li>
+<li>introduce <code class="docutils literal notranslate"><span class="pre">LightUtility</span></code> -&gt; this fulfills our long time goal giving BlenderProc a python API</li>
+<li>changed the default stereo mode from <code class="docutils literal notranslate"><span class="pre">OFFAXIS</span></code> to <code class="docutils literal notranslate"><span class="pre">PARALLEL</span></code></li>
+<li>adapt to the changes made to 3D Front, as 3D Front does not have a version number, we support the newest version and a version from Summer 2020, if you have errors please open an issue</li>
+<li><code class="docutils literal notranslate"><span class="pre">getter.Material</span></code> can now return all materials of a list of objects, selected via the <code class="docutils literal notranslate"><span class="pre">getter.Entity</span></code></li>
+<li>add a <code class="docutils literal notranslate"><span class="pre">cf_add_*</span></code> fct to the MaterialManipulator, which works similar to the <code class="docutils literal notranslate"><span class="pre">cf_set_*</span></code> fct.</li>
+<li>add <code class="docutils literal notranslate"><span class="pre">check_empty</span></code> to <code class="docutils literal notranslate"><span class="pre">getter.Entity</span></code> and to <code class="docutils literal notranslate"><span class="pre">getter.Material</span></code> to throw an error if the returned list is empty</li>
+<li>added a <code class="docutils literal notranslate"><span class="pre">cf_add_uv_mapping/forced_recalc_of_uv_maps</span></code> option to force to recalculate the uv map of materials, which already have a uv map</li>
+<li>added option that randomized materials in <code class="docutils literal notranslate"><span class="pre">cf_randomize_materials</span></code> are added to objects without any materials</li>
+<li>change that <code class="docutils literal notranslate"><span class="pre">cf_randomize_materials</span></code> inside the <code class="docutils literal notranslate"><span class="pre">EntityManipulator</span></code> now deals with lists and not single elements as before</li>
+<li>add auto download for the imageio library, if that fails an exception is thrown with instructions on how to do this yourself</li>
+<li><code class="docutils literal notranslate"><span class="pre">CameraInterface</span></code> now supports setting poses for a certain frame -&gt; also needed for the python API</li>
+<li>changed the <code class="docutils literal notranslate"><span class="pre">depth_scale</span></code> default value in the BopWriter from <code class="docutils literal notranslate"><span class="pre">0.1</span></code> to <code class="docutils literal notranslate"><span class="pre">1.0</span></code>, added an option to change via the config</li>
+<li>changed the <code class="docutils literal notranslate"><span class="pre">ignore_dist_thres</span></code> default value in the BopWriter from <code class="docutils literal notranslate"><span class="pre">5.0</span></code> to <code class="docutils literal notranslate"><span class="pre">100.0</span></code></li>
+<li>improved the ShapeNet example, by adding a ShapeNetWriter, which saves which object was used in the <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> container</li>
+<li>fixes a bug with the separation of ceilings and floor objects in SceneNet scenes</li>
+<li>fix a bug, where the <code class="docutils literal notranslate"><span class="pre">add_alpha_channel_to_texture</span></code> fct. couldn’t deal with empty material sockets</li>
+<li>fix the <code class="docutils literal notranslate"><span class="pre">pyhsics_positioning</span></code> example by using the <code class="docutils literal notranslate"><span class="pre">collision_shape=&quot;MESH&quot;</span></code></li>
+<li>fix a bug, where empty material_sockets would have been returned in the <code class="docutils literal notranslate"><span class="pre">getter.Material</span></code></li>
+<li>fix <code class="docutils literal notranslate"><span class="pre">vis_coco_annotation</span></code> script, didn’t work anymore after the segmentation map rewrite</li>
+</ul>
+</div>
+<div class="section" id="version-1-8-2-27th-january-2021">
+<h2>Version 1.8.2: 27th January 2021<a class="headerlink" href="#version-1-8-2-27th-january-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>added stereo mode to SegMapRenderer</li>
+<li>switched to using imageio for reading images, as the blender image loading API does not support .exr files written in stereo mode</li>
+<li>added option to write world-to-cam transformations to the BopWriter</li>
+<li>CocoAnnotationWriter does now in the polygon format not write empty segmentation lists anymore and uses iscrowd:0</li>
+<li>type hints are now added to the generated documentation</li>
+<li>extracted reusable rendering code from the renderer modules into utility classes</li>
+</ul>
+</div>
+<div class="section" id="version-1-8-1-14th-january-2021">
+<h2>Version 1.8.1: 14th January 2021<a class="headerlink" href="#version-1-8-1-14th-january-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>fixed a bug in the WriterInterface</li>
+<li>fixed cc_texture downloader script in the case of weird urls</li>
+<li>fixed creating the ceiling when there are rounding errors in the vertices coordinates</li>
+</ul>
+</div>
+<div class="section" id="version-1-8-0-11th-december-2020">
+<h2>Version 1.8.0: 11th December 2020<a class="headerlink" href="#version-1-8-0-11th-december-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>massively improve the documentation, by adding using github pages for our documentation: <a class="reference external" href="https://dlr-rm.github.io/BlenderProc/index.html">https://dlr-rm.github.io/BlenderProc/index.html</a></li>
+<li>add a RandomRoomConstructor:<ul>
+<li>This module can generate random floor plans of single rooms, with arbitrary extrusions.</li>
+<li>It can also randomly place loaded objects without collision inside of the room</li>
+<li>By using CCTexture it is also possible to assign random materials to the floor, wall and ceiling</li>
+</ul>
+</li>
+<li>remove the SceneNetLighting module and replace it with the SurfaceLighting module, to make it more general</li>
+<li>add support for the haven websites and add an example and corresponding loaders:<ul>
+<li>The haven environment website: <a class="reference external" href="https://hdrihaven.com/">https://hdrihaven.com/</a></li>
+<li>The haven model website: <a class="reference external" href="https://3dmodelhaven.com/">https://3dmodelhaven.com/</a></li>
+<li>The haven texture website: <a class="reference external" href="https://texturehaven.com/">https://texturehaven.com/</a></li>
+</ul>
+</li>
+<li>add option to the CameraSampler to ensure that a certain object is always in the camera view</li>
+<li>improve the FloorExtractor to extract the floor and ceiling in SceneNet and other scenarios</li>
+<li>improve the skin tones for AMASSLoader</li>
+<li>add a proper scaling to the ikea dataset, by converting all files into SI units</li>
+<li>fix the ikea dataset downloading, by removing and splitting broken pieces, we advise to redownload the dataset</li>
+</ul>
+</div>
+<div class="section" id="version-1-7-0-1st-december-2020">
+<h2>Version 1.7.0: 1st December 2020<a class="headerlink" href="#version-1-7-0-1st-december-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>switch to blender 2.91</li>
+<li>added an example of how to set object poses via a transformation matrix and set camera extrinsics / intrinsics via a transformation matrix and a K matrix</li>
+<li>added camera utility class which makes it easier to set and retrieve intrinsics via any K matrix</li>
+<li>added loader for Pix3D dataset</li>
+<li>added loader for AMASS dataset</li>
+<li>added loader for the ikea dataset</li>
+<li>added community driven support for Windows</li>
+<li>added motion blur and rolling shutter support</li>
+<li>fixed collision checks between meshes, so the ObjectPoseSampler is not generating colliding object poses anymore</li>
+<li>fixed cleanup of temporary directories in the case of an error</li>
+<li>set pixel origin to the center of a pixel, slightly affecting intrinsics and depth outputs</li>
+<li>fixed coco annotations if background is not visible</li>
+<li>added support for transparent background</li>
+<li>fixed wrong image size in coco annotations</li>
+<li>fixed blender proc if non-english language is configured</li>
+<li>when loading ply files a default material is now added</li>
+<li>fixed setting matrix_world via the entity manipulator</li>
+<li>fixed the scenenet examples (corrects physics positioning and camera sampling)</li>
+</ul>
+</div>
+<div class="section" id="version-1-6-1-25th-august-2020">
+<h2>Version 1.6.1: 25th August 2020<a class="headerlink" href="#version-1-6-1-25th-august-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>fixed bbox computation in the Coco Annotations</li>
+<li>fixed visualization of Coco Annotations</li>
+<li>add set properties fct. to BlenderLoader</li>
+<li>adds a script to download all materials from BlenderKit (not used yet)</li>
+</ul>
+</div>
+<div class="section" id="version-1-6-0-24th-july-2020">
+<h2>Version 1.6.0: 24th July 2020<a class="headerlink" href="#version-1-6-0-24th-july-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>added an <code class="docutils literal notranslate"><span class="pre">TextureLoader</span></code>, which can load images and store them as blender textures</li>
+<li>added a provider to access these loaded textures</li>
+<li>removed the <code class="docutils literal notranslate"><span class="pre">MaterialRandomizer</span></code></li>
+<li>moved the whole functionality from the <code class="docutils literal notranslate"><span class="pre">MaterialRandomizer</span></code> to the <code class="docutils literal notranslate"><span class="pre">EntityManipulator</span></code></li>
+<li>fixed a bug in the SUNCG material loading, where for a few objects the diffuse material was confused with an alpha material</li>
+<li>add set_properties for <code class="docutils literal notranslate"><span class="pre">Front3DLoader</span></code></li>
+<li>fixed the <code class="docutils literal notranslate"><span class="pre">min_interest_score</span></code> that it works with more than just SUNCG</li>
+<li>fix a bug in the visHdf5 scripts with distance maps which had several channels</li>
+<li>improved documentation for <code class="docutils literal notranslate"><span class="pre">min_interest_score</span></code> and <code class="docutils literal notranslate"><span class="pre">check_pose_novelty_translation</span></code></li>
+</ul>
+</div>
+<div class="section" id="version-1-5-1-17th-july-2020">
+<h2>Version 1.5.1: 17th July 2020<a class="headerlink" href="#version-1-5-1-17th-july-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>adding support for 3D-Front: <a class="reference external" href="https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset">https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset</a></li>
+<li>added to example on how to use 3D-Front</li>
+<li>fixed visualization of newly generated SegMapRenderer results</li>
+<li>fixed combining several coco annotations</li>
+<li>added option for the “class” key for default values in the SegMapRenderer</li>
+<li>fixed a bug in the SegMapRenderer when used in debug mode</li>
+</ul>
+</div>
+<div class="section" id="version-1-5-0-14th-july-2020">
+<h2>Version 1.5.0: 14th July 2020<a class="headerlink" href="#version-1-5-0-14th-july-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>rename depth to distance (this is the difference between taking at each pixel the Z coordinate (in the camera coordinate system) or the distance from the optical center, as sensors usually produce depth and not distance, we changed this)</li>
+<li>create postprocessing module to calculate the depth out of the distance image</li>
+<li>rewriting of the SegMapRenderer, it now supports the mapping of any attribute or custom property of an object to an image or a csv file</li>
+<li>reworking of the used coco examples to better work with this new SegMapRenderer</li>
+<li>adapting CocoAnnotationsWriter to write category_ids which must be defined in a Loader or in a .blend file</li>
+<li>adding support for a supercategory inside of the coco annotations tool (useful for bop dataset names)</li>
+<li>add texture provider, which can generate random textures, which can be used in a displacement modifier</li>
+<li>added to the EntityManipulator:<ul>
+<li>option to automatically generate a UV mapping for an object</li>
+<li>added option for displacement modifier adding to objects</li>
+<li>added an example for the entity_displacement_modifier usage</li>
+</ul>
+</li>
+<li>the sampler.Value now supports gaussian sampling</li>
+<li>reworked some parts of the Hdf5Writer, to better work with depth and distance</li>
+<li>added a check to the CocoUtility to avoid that the bounding box has a area of zero</li>
+<li>remove the provider.ContentGetter as it was confusing, now it works directly without it</li>
+<li>add an Interface in the naming of some modules, if they are not supposed to be run by the pipeline directly</li>
+<li>change the sample amount for the FlowRenderer to 1 as a higher sampling density integrates over several objects in one pixel</li>
+<li>added a step function in the alpha mode of the renderer to avoid artifacts, when rendering semantic segmentations</li>
+<li>support for setting different fx/fy values in the camera module</li>
+<li>remove the pixel_aspect_x/pixel_aspect_y/resolution_x/resolution_y from the renderer is now in Camera</li>
+<li>fixed a bug when the unknown texture folder in the scenenet dataset was not created before</li>
+<li>improved the loading of camera parameters from files</li>
+<li>added a feature for supporting changes of the “category_id” for the WorldManipulator</li>
+<li>improved the visHdf5/saveHdf5/generate_nice_vis scripts</li>
+<li>switches to blender 2.83.2</li>
+</ul>
+</div>
+<div class="section" id="version-1-4-1-3rd-june-2020">
+<h2>Version 1.4.1: 3rd June 2020<a class="headerlink" href="#version-1-4-1-3rd-june-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>switches to blender 2.83</li>
+<li>adds support for adaptive sampling (Renderer/use_adaptive_sampling) -&gt; can decrease rendering time for complex scenes if used</li>
+<li>add random_samples option for entity getter</li>
+<li>add friction/damping for physics positioning</li>
+<li>add JPG save option for RgbRenderer</li>
+<li>add uniform elevation sampling in Shell Sampler</li>
+<li>add in plane rotation option for look_at/direction camera rotations</li>
+<li>add postprocessing.Dist2Depth to convert Blender distance images to depth images</li>
+<li>UpperRegionSamlper can sample in relative area on selected face</li>
+<li>improve physics by using convex hull and box collision shapes</li>
+<li>obj.rigid_body.use_margin = True, to actually use margin</li>
+<li>add a Smooth Shader cf to entityManipulator</li>
+<li>BopWriter improvements, outputs chunks of 1000 images</li>
+<li>exclude objects like planes from proximity checks</li>
+<li>fix transparency bounces</li>
+<li>add custom property cp_bop_dataset_name</li>
+<li>add bop_challenge example with all configs used to render the provided synthetic data</li>
+<li>add bop_object_on_surface_sampling for sampling upright objects</li>
+<li>docu improvements and step by step explanations of config files</li>
+</ul>
+</div>
+<div class="section" id="version-1-4-0-15th-may-2020">
+<h2>Version 1.4.0: 15th May 2020<a class="headerlink" href="#version-1-4-0-15th-may-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>added the NormalRenderer functions to the RGBRenderer saves a render call, when generating normal images</li>
+<li>added a script to automatically download all PBR assest from <a class="reference external" href="https://cc0textures.com/">https://cc0textures.com/</a></li>
+<li>add CCMaterialLoader, which can load all downloaded materials from cc0textures, to randomly replace them later</li>
+<li>add support for ShapeNet</li>
+<li>add support for SceneNet, including the lighting, which is modeled after the SUNCG lighting module.</li>
+<li>massive docu improvements, added a type to all config values and a default value if one is there</li>
+<li>added examples for:<ul>
+<li>bop_object_physics_positioning</li>
+<li>bop_object_pose_sampling</li>
+<li>bop_scene_replication</li>
+<li>on_surface_object_sampling</li>
+<li>scenenet</li>
+<li>scenenet_with_cctextures</li>
+<li>shapenet</li>
+<li>shapenet_with_scenenet</li>
+<li>shapenet_with_suncg</li>
+<li>suncg_with_improved_mat</li>
+</ul>
+</li>
+<li>added object OnSurfaceSampler (similiar to the phyiscs but faster and places object only on the bb)</li>
+<li>added WorldManipulator (can change custom properties of the world, like the category_id)</li>
+<li>switched to config version 3.0<ul>
+<li>global initialized values are now in the main.Initializer</li>
+<li>added a GlobalStorage to save variables over module boundaries</li>
+</ul>
+</li>
+<li>add VisNormalImage for debugging mode, which visualizes a depth &amp; normal image in blender</li>
+<li>material selectors now also support AND and OR conditions</li>
+<li>add automatic detection of optix graphics cards</li>
+<li>added a min interest score for the CameraSampler</li>
+<li>added a novelty pose checker for the CameraSampler, to avoid clustering of camera poses</li>
+<li>global config values are now not longer added to the modules config, only in the event that there is no module found the global config is checked</li>
+<li>rename SUNCG materials to the textures they load, makes selecting them easier</li>
+<li>SUNCG materials are now shared over objects, if they share the same properties, also true for lights</li>
+<li>rewrite of MaterialRandomizer to make use of the new cc0textures</li>
+<li>added a Bop Writer to write out the current scene config in the BOP format</li>
+<li>add the solidify modifier to the options of the EntityManipulator</li>
+<li>add a PartSphere sampler to e.g. only sample in the upper half of a sphere</li>
+<li>add a script to download scenenet to make the use of it even easier</li>
+<li>add easy option to change specular values for materials with the MaterialManipulator</li>
+<li>added the option to make runs deterministic by introducing a env variable: <code class="docutils literal notranslate"><span class="pre">BLENDER_PROC_RANDOM_SEED</span></code></li>
+<li>added a Basic Color Sampler</li>
+<li>improved the capabilities of the DiscSampler</li>
+<li>now all custom properties should be accessed in the config via: “cp<em>…” for custom functions: “cf</em>”</li>
+<li>add texture support for ycbv objects in the BopLoader</li>
+<li>change the default results of the SegMapRenderer to NYU ids instead of the row-index in the .csv file.</li>
+</ul>
+</div>
+<div class="section" id="version-1-3-0-25th-march-2020">
+<h2>Version 1.3.0: 25th March 2020<a class="headerlink" href="#version-1-3-0-25th-march-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>added Optical Flow Renderer</li>
+<li>added Stereo Global Matching Renderer (SGM) -&gt; which takes two color images and produces “non-perfect” depth images</li>
+<li>added option for SGM to also write disparities</li>
+<li>added a new material manipulator</li>
+<li>added a material getter to select materials based on certain conditions</li>
+<li>combined BOP with this repo -&gt; now the only difference is the readme</li>
+<li>added contribution guidelines -&gt; which include commit message guidelines and branch name guidelines and much more</li>
+<li>matrices can now be read via the config file</li>
+<li>added a cached options to the import objects</li>
+<li>added request custom property for the entity getter (to ensure that a custom property is changed)</li>
+<li>added ReplaceObject</li>
+<li>added option that in debugging the RgbRenderer get executed except for the actual rendering part all others are executed and then undon</li>
+<li>added collision mesh source to the physics module</li>
+<li>added option to coco annotations to append the output to an existing coco file</li>
+<li>added bounding box selection to getter.Entity and also just axis aligned hyper plane checks</li>
+<li>added a 1D sampler for float/int/bool</li>
+<li>added postprocessing to the example to reduce the amount of channels in the depth image</li>
+<li>added visualization for stereo and optical flow</li>
+<li>added an oil filter for the SGM result</li>
+<li>added a path sampler</li>
+<li>added a blender collection loader</li>
+<li>added the RockEssentialLoader based on the RockEssential dataset</li>
+<li>added index to getter.Entity to request only a certain element of the selection</li>
+<li>fix three bugs in the physics module, where the mass_scaling was always used and the location not properly updated</li>
+<li>fixed a bug where color images where wrongly saved in float now back to uint8</li>
+<li>fixed a bug in the coco annotations writer + adapting of the example</li>
+<li>fixed bug in load_image, where the dimensions where switched</li>
+<li>fixed a bug when “home_local” is not available than “home” is used</li>
+<li>fixed bug where run.py can only be run from the main folder</li>
+<li>fixed pypng version in bop example</li>
+<li>fixed bug where the volume calculation for bounding boxes did not work as expected</li>
+<li>refactored the disc sampler</li>
+<li>cleaned up all readmes</li>
+</ul>
+</div>
+<div class="section" id="version-1-2-0-31th-january-2020">
+<h2>Version 1.2.0: 31th January 2020<a class="headerlink" href="#version-1-2-0-31th-january-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>added more detailed examples to most of the important modules</li>
+<li>adapt CoCo annotation tools to newer Version of SegMapRenderer</li>
+<li>background class is now zero when doing instance segmentation</li>
+<li>renamed getter.Object to getter.Entity, same for ObjectManipulator is now named EntityManipulator</li>
+<li>entity conditions do now work with AND and OR connections</li>
+<li>strings are now matched with fullmatch instead of search in entity conditions</li>
+<li>conditions now support bool custom properties</li>
+<li>material randomizer now supports getter.entity providers</li>
+<li>added UpperRegionSampler, which can sample on the up surface of the bounding box of an object</li>
+<li>scripts now support execution with python3.x</li>
+<li>physics are now saved with bool instead of active and passive</li>
+<li>physics options for simulator added</li>
+<li>remove version number -&gt; only blender version 2.81 supported</li>
+<li>the ObjectLoader can now load several objects at once and set their properties with <code class="docutils literal notranslate"><span class="pre">&quot;add_properties&quot;</span></code></li>
+<li>moved more functionality in the camera sampler instead of having in specific sampler to make writing a new one easier</li>
+<li>added a SO3 Sampler for rotation sampling</li>
+<li>change the “name” of modules in the config to “module” and “provider” depending on the case</li>
+<li>added MacOS support (but only for CPUs, GPU support on MacOS is not available)</li>
+<li>added this changelog</li>
+<li>fixes:<ul>
+<li>fixed a problem that the check_bb_intersection did not work right in all cases (Bounding box check)</li>
+<li>fixed a problem with the check_intersection fct., where the reference coordinate system was not always right.</li>
+<li>fixed a bug with the SUNCG lighting in RGB images</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="version-1-1-0-16th-january-2020">
+<h2>Version 1.1.0: 16th January 2020<a class="headerlink" href="#version-1-1-0-16th-january-2020" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added provider, which can be executed inside of different modules, examples:<ul>
+<li>Samplers of values</li>
+<li>Getters of objects, specified on one condition (for example the name)</li>
+</ul>
+</li>
+<li>Added object manipulators, these can change selected objects attributes and custom properties</li>
+<li>Added physics positioning, objects can be either “active” or “passive” and then interact with each other</li>
+<li>Added ObjectPoseSampler sampled collision free poses of all objects</li>
+<li>Added one ObjectLoader, which deals with all kinds of objects</li>
+<li>Added a camera object sampler to sample cameras and objects at the same time</li>
+<li>Redone the SegMapRenderer to fix bug in instance and class segmentation</li>
+<li>Added coco annotations writer</li>
+<li>Added version number to config files</li>
+<li>Added more documentation</li>
+<li>Added more examples</li>
+</ul>
+</div>
+<div class="section" id="version-1-0-0-25th-october-2019">
+<h2>Version 1.0.0: 25th October 2019<a class="headerlink" href="#version-1-0-0-25th-october-2019" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added Pipeline, Modules and Config</li>
+<li>Added CameraModules, with different sampler for SUNCG and replica</li>
+<li>Added LightModules, with different samplers also for SUNCG</li>
+<li>Added Loader for objects</li>
+<li>Added Loader for replica and SUNCG</li>
+<li>Added Hdf5 Writer</li>
+<li>Added camera-, light-, object state writer</li>
+<li>Added MaterialRandomizer</li>
+<li>Added Shell-, Sphere- and Uniform3DSampler</li>
+<li>Added debug script</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

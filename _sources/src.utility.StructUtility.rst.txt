@@ -1,0 +1,7 @@
+src\.utility\.StructUtility module
+==================================
+
+.. automodule:: src.utility.StructUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

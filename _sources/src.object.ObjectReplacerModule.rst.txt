@@ -1,0 +1,7 @@
+src\.object\.ObjectReplacerModule module
+========================================
+
+.. automodule:: src.object.ObjectReplacerModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

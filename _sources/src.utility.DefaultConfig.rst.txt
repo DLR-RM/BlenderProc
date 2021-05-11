@@ -1,0 +1,7 @@
+src\.utility\.DefaultConfig module
+==================================
+
+.. automodule:: src.utility.DefaultConfig
+    :members:
+    :undoc-members:
+    :show-inheritance:

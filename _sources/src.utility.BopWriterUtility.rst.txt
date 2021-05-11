@@ -1,0 +1,7 @@
+src\.utility\.BopWriterUtility module
+=====================================
+
+.. automodule:: src.utility.BopWriterUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

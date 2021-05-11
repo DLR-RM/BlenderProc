@@ -1,0 +1,7 @@
+src\.utility\.MaterialUtility module
+====================================
+
+.. automodule:: src.utility.MaterialUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

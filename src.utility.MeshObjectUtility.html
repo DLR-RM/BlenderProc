@@ -1,0 +1,879 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>src.utility.MeshObjectUtility module &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<ul class="compound-first">
+<li class="toctree-l1"><a class="reference external" href="examples/README.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/README.html">basic_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/haven_dataset/README.html">haven_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/replica_dataset/README.html">replica_dataset</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/semantic_segmentation/README.html">semantic_segmentation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/stereo_matching/README.html">stereo_matching</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Modules</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.composite.CameraObjectSampler.html#src.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicEmptyInitializer.html#src.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.BasicMeshInitializer.html#src.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RandomRoomConstructor.html#src.constructor.RandomRoomConstructor.RandomRoomConstructor">RandomRoomConstructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.constructor.RockEssentialsGroundConstructor.html#src.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SuncgLighting.html#src.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.lighting.SurfaceLighting.html#src.lighting.SurfaceLighting.SurfaceLighting">SurfaceLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.loader.AMASSLoaderModule.html#src.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BopLoaderModule.html#src.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.CCMaterialLoaderModule.html#src.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Front3DLoaderModule.html#src.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenEnvironmentLoaderModule.html#src.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.HavenMaterialLoaderModule.html#src.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.IKEALoaderModule.html#src.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ObjectLoaderModule.html#src.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.Pix3DLoaderModule.html#src.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ReplicaLoaderModule.html#src.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.RockEssentialsRockLoaderModule.html#src.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SceneNetLoaderModule.html#src.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.ShapeNetLoaderModule.html#src.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.SuncgLoaderModule.html#src.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.manipulators.WorldManipulator.html#src.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.materials.RockEssentialsTextureSampler.html#src.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.FloorExtractorModule.html#src.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.HideModule.html#src.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectPoseSamplerModule.html#src.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.ObjectReplacerModule.html#src.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.PhysicsPositioningModule.html#src.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.ShapeNetWriter.html#src.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Provider</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.provider.getter.html">Getter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Attribute.html#src.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.AttributeMerger.html#src.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Entity.html#src.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Material.html#src.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.POI.html#src.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.getter.Texture.html#src.provider.getter.Texture.Texture">Texture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="src.provider.sampler.html">Sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Color.html#src.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Disk.html#src.provider.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.PartSphere.html#src.provider.sampler.PartSphere.PartSphere">PartSphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Path.html#src.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Shell.html#src.provider.sampler.Shell.Shell">Shell</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Sphere.html#src.provider.sampler.Sphere.Sphere">Sphere</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Texture.html#src.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Uniform3d.html#src.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UniformSO3.html#src.provider.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.UpperRegionSampler.html#src.provider.sampler.UpperRegionSampler.UpperRegionSampler">UpperRegionSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.provider.sampler.Value.html#src.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Core</span></p>
+<li class="toctree-l1"><a class="reference external" href="src.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.InitializerModule.html#src.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference external" href="src.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="src.utility.BopWriterUtility.html#src.utility.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CocoWriterUtility.html#src.utility.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CollisionUtility.html#src.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.EntityUtility.html#src.utility.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Initializer.html#src.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="src.utility.MeshObjectUtility.html#src.utility.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.PostProcessingUtility.html#src.utility.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SetupUtility.html#src.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.StructUtility.html#src.utility.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.WriterUtility.html#src.utility.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>src.utility.MeshObjectUtility module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/src.utility.MeshObjectUtility.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-src.utility.MeshObjectUtility">
+<span id="src-utility-meshobjectutility-module"></span><h1>src.utility.MeshObjectUtility module<a class="headerlink" href="#module-src.utility.MeshObjectUtility" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="src.utility.MeshObjectUtility.MeshObject">
+<em class="property">class </em><code class="descclassname">src.utility.MeshObjectUtility.</code><code class="descname">MeshObject</code><span class="sig-paren">(</span><em>object</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="src.utility.EntityUtility.html#src.utility.EntityUtility.Entity" title="src.utility.EntityUtility.Entity"><code class="xref py py-class docutils literal notranslate"><span class="pre">src.utility.EntityUtility.Entity</span></code></a></p>
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.add_material">
+<code class="descname">add_material</code><span class="sig-paren">(</span><em>material</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.add_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.add_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new material to the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>material</strong> (<a class="reference internal" href="src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material" title="src.utility.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material to add.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.build_convex_decomposition_collision_shape">
+<code class="descname">build_convex_decomposition_collision_shape</code><span class="sig-paren">(</span><em>temp_dir</em>, <em>cache_dir='resources/decomposition_cache'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.build_convex_decomposition_collision_shape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.build_convex_decomposition_collision_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a collision shape of the object by decomposing it into near convex parts using V-HACD</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>temp_dir</strong> – The temp dir to use for storing the object files created by v-hacd.</li>
+<li><strong>cache_dir</strong> – If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.MeshObjectUtility.MeshObject.convert_to_meshes">
+<em class="property">static </em><code class="descname">convert_to_meshes</code><span class="sig-paren">(</span><em>blender_objects</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.convert_to_meshes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.convert_to_meshes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts the given list of blender objects to mesh objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>blender_objects</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – List of blender objects.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="#src.utility.MeshObjectUtility.MeshObject" title="src.utility.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The list of meshes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.create_bvh_tree">
+<code class="descname">create_bvh_tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.create_bvh_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.create_bvh_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds a bvh tree based on the object’s mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">BVHTree</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The new bvh tree</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.MeshObjectUtility.MeshObject.create_from_blender_mesh">
+<em class="property">static </em><code class="descname">create_from_blender_mesh</code><span class="sig-paren">(</span><em>blender_mesh</em>, <em>object_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.create_from_blender_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.create_from_blender_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new Mesh object using the given blender mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>blender_mesh</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code>) – The blender mesh.</li>
+<li><strong>object_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The name of the new object. If None is given, the name of the given mesh is used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#src.utility.MeshObjectUtility.MeshObject" title="src.utility.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new Mesh object.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.MeshObjectUtility.MeshObject.create_primitive">
+<em class="property">static </em><code class="descname">create_primitive</code><span class="sig-paren">(</span><em>shape</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.create_primitive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.create_primitive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new primitive mesh object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the primitive to create. Available: [“CUBE”]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#src.utility.MeshObjectUtility.MeshObject" title="src.utility.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="src.utility.MeshObjectUtility.MeshObject.create_with_empty_mesh">
+<em class="property">static </em><code class="descname">create_with_empty_mesh</code><span class="sig-paren">(</span><em>object_name</em>, <em>mesh_name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.create_with_empty_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.create_with_empty_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an object with an empty mesh.
+:type object_name: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>
+:param object_name: The name of the new object.
+:type mesh_name: <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]
+:param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
+:rtype: <a class="reference internal" href="#src.utility.MeshObjectUtility.MeshObject" title="src.utility.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>
+:return: The new Mesh object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.disable_rigidbody">
+<code class="descname">disable_rigidbody</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.disable_rigidbody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.disable_rigidbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disables the rigidbody element of the object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.duplicate">
+<code class="descname">duplicate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.duplicate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.duplicate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Duplicates the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A new mesh object, which is a duplicate of this object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.edit_mode">
+<code class="descname">edit_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.edit_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.edit_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch into edit mode of this mesh object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.enable_rigidbody">
+<code class="descname">enable_rigidbody</code><span class="sig-paren">(</span><em>active</em>, <em>collision_shape='CONVEX_HULL'</em>, <em>collision_margin=0.001</em>, <em>collision_mesh_source='FINAL'</em>, <em>mass=None</em>, <em>mass_factor=1</em>, <em>friction=0.5</em>, <em>angular_damping=0.1</em>, <em>linear_damping=0.04</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.enable_rigidbody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.enable_rigidbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the rigidbody component of the object which makes it participate in physics simulations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>active</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, the object actively participates in the simulation and its key frames are ignored. If False, the object still follows its keyframes and only acts as an obstacle, but is not influenced by the simulation.</li>
+<li><strong>collision_shape</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Collision shape of object in simulation. Default: ‘CONVEX_HULL’. Available: ‘BOX’, ‘SPHERE’, ‘CAPSULE’, ‘CYLINDER’, ‘CONE’, ‘CONVEX_HULL’, ‘MESH’, ‘COMPOUND’.</li>
+<li><strong>collision_margin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit.</li>
+<li><strong>collision_mesh_source</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Source of the mesh used to create collision shape. Default: ‘FINAL’. Available: ‘BASE’, ‘DEFORM’, ‘FINAL’.</li>
+<li><strong>mass</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>]) – The mass in kilogram the object should have. If None is given the mass is calculated based on its bounding box volume and the given <cite>mass_factor</cite>.</li>
+<li><strong>mass_factor</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Scaling factor for mass. This is only considered if the given <cite>mass</cite> is None. Defines the linear function mass=bounding_box_volume*mass_factor (defines material density).</li>
+<li><strong>friction</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Resistance of object to movement.</li>
+<li><strong>angular_damping</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amount of angular velocity that is lost over time.</li>
+<li><strong>linear_damping</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amount of linear velocity that is lost over time.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_bound_box">
+<code class="descname">get_bound_box</code><span class="sig-paren">(</span><em>local_coords=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_bound_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_bound_box" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">[8x[3xfloat]] the object aligned bounding box coordinates in world coordinates</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_bound_box_volume">
+<code class="descname">get_bound_box_volume</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_bound_box_volume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_bound_box_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the volume of the object aligned bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">volume of a bounding box.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_materials">
+<code class="descname">get_materials</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_materials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_materials" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the materials used by the mesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference internal" href="src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material" title="src.utility.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of materials.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_mesh">
+<code class="descname">get_mesh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the blender mesh of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mesh</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The mesh.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_origin">
+<code class="descname">get_origin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_origin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_origin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the origin of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The origin in world coordinates.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_parent">
+<code class="descname">get_parent</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the parent object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#src.utility.MeshObjectUtility.MeshObject" title="src.utility.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The parent object, None if it has no parent.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.get_rigidbody">
+<code class="descname">get_rigidbody</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.get_rigidbody"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.get_rigidbody" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the rigid body component</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyObject</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The rigid body component of the object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.has_materials">
+<code class="descname">has_materials</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.has_materials"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.has_materials" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.hide">
+<code class="descname">hide</code><span class="sig-paren">(</span><em>hide_object=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.hide"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.hide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the visibility of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hide_object</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object should be hidden in rendering.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.mesh_as_bmesh">
+<code class="descname">mesh_as_bmesh</code><span class="sig-paren">(</span><em>return_copy=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.mesh_as_bmesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.mesh_as_bmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a bmesh based on the object’s mesh.</p>
+<p>Independent of return_copy, changes to the returned bmesh only take into affect after calling update_from_bmesh().</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>return_copy</strong> – If True, a copy of the objects bmesh will be returned, otherwise the bmesh owned by blender is returned (the object has to be in edit mode for that).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The bmesh</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.move_origin_to_bottom_mean_point">
+<code class="descname">move_origin_to_bottom_mean_point</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.move_origin_to_bottom_mean_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.move_origin_to_bottom_mean_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Moves the object center to bottom of the bounding box in Z direction and also in the middle of the X and Y
+plane, which then makes the placement easier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.new_material">
+<code class="descname">new_material</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.new_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.new_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new material and adds it to the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The name of the new material.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.object_mode">
+<code class="descname">object_mode</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.object_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.object_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Switch back into object mode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.persist_transformation_into_mesh">
+<code class="descname">persist_transformation_into_mesh</code><span class="sig-paren">(</span><em>location=True</em>, <em>rotation=True</em>, <em>scale=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.persist_transformation_into_mesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.persist_transformation_into_mesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the current transformation of the object, which are saved in the location, scale or rotation attributes
+to the mesh and sets them to their init values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object’s location should be persisted.</li>
+<li><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object’s rotation should be persisted.</li>
+<li><strong>scale</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Determines whether the object’s scale should be persisted.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.set_material">
+<code class="descname">set_material</code><span class="sig-paren">(</span><em>index</em>, <em>material</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.set_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.set_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the given material at the given index of the objects material list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The index to set the material to.</li>
+<li><strong>material</strong> (<a class="reference internal" href="src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material" title="src.utility.MaterialUtility.Material"><code class="xref py py-class docutils literal notranslate"><span class="pre">Material</span></code></a>) – The material to set.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.set_origin">
+<code class="descname">set_origin</code><span class="sig-paren">(</span><em>point=None</em>, <em>mode='POINT'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.set_origin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.set_origin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the origin of the object.</p>
+<p>This will not change the appearing pose of the object, as the vertex locations experience the inverse transformation applied to the origin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.9)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – The point in world coordinates to which the origin should be set. This parameter is only relevent if mode is set to “POINT”.</li>
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The mode specifying how the origin should be set. Available options are: [“POINT”, “CENTER_OF_MASS”, “CENTER_OF_VOLUME”]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vector</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The new origin in world coordinates.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.set_parent">
+<code class="descname">set_parent</code><span class="sig-paren">(</span><em>new_parent</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.set_parent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.set_parent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the parent of this object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_parent</strong> (<a class="reference internal" href="#src.utility.MeshObjectUtility.MeshObject" title="src.utility.MeshObjectUtility.MeshObject"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeshObject</span></code></a>) – The new parent object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.set_shading_mode">
+<code class="descname">set_shading_mode</code><span class="sig-paren">(</span><em>mode</em>, <em>angle_value=30</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.set_shading_mode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.set_shading_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the shading mode of all faces of the object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Desired mode of the shading. Available: [“FLAT”, “SMOOTH”, “AUTO”]. Type: str</li>
+<li><strong>angle_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Angle in degrees at which flat shading is activated in <cite>AUTO</cite> mode. Type: float</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="src.utility.MeshObjectUtility.MeshObject.update_from_bmesh">
+<code class="descname">update_from_bmesh</code><span class="sig-paren">(</span><em>bm</em>, <em>free_bm_mesh=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/src/utility/MeshObjectUtility.html#MeshObject.update_from_bmesh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#src.utility.MeshObjectUtility.MeshObject.update_from_bmesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the object’s mesh based on the given bmesh.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bm</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code>) – The bmesh to set.</li>
+<li><strong>free_bm_mesh</strong> – If True and the given bmesh is not owned by blender, it will be deleted in the end.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">BMesh</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+src\.loader\.VisNormalImage module
+==================================
+
+.. automodule:: src.loader.VisNormalImage
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+src\.main\.GlobalStorage module
+===============================
+
+.. automodule:: src.main.GlobalStorage
+    :members:
+    :undoc-members:
+    :show-inheritance:

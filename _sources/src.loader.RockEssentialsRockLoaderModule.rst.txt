@@ -1,0 +1,7 @@
+src\.loader\.RockEssentialsRockLoaderModule module
+==================================================
+
+.. automodule:: src.loader.RockEssentialsRockLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

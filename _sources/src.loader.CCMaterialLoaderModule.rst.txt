@@ -1,0 +1,7 @@
+src\.loader\.CCMaterialLoaderModule module
+==========================================
+
+.. automodule:: src.loader.CCMaterialLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

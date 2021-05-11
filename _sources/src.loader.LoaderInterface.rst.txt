@@ -1,0 +1,7 @@
+src\.loader\.LoaderInterface module
+===================================
+
+.. automodule:: src.loader.LoaderInterface
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+src\.main\.Module module
+========================
+
+.. automodule:: src.main.Module
+    :members:
+    :undoc-members:
+    :show-inheritance:

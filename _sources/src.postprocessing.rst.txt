@@ -1,0 +1,20 @@
+src\.postprocessing package
+===========================
+
+Submodules
+----------
+
+.. toctree::
+
+   src.postprocessing.Dist2Depth
+   src.postprocessing.NoiseRemoval
+   src.postprocessing.OilPaintFilter
+   src.postprocessing.TrimRedundantChannels
+
+Module contents
+---------------
+
+.. automodule:: src.postprocessing
+    :members:
+    :undoc-members:
+    :show-inheritance:

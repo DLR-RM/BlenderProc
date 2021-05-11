@@ -1,0 +1,7 @@
+src\.utility\.MathUtility module
+================================
+
+.. automodule:: src.utility.MathUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

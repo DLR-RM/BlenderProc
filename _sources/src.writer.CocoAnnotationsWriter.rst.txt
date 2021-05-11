@@ -1,0 +1,7 @@
+src\.writer\.CocoAnnotationsWriter module
+=========================================
+
+.. automodule:: src.writer.CocoAnnotationsWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

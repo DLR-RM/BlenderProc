@@ -1,0 +1,7 @@
+src\.utility\.BlenderUtility module
+===================================
+
+.. automodule:: src.utility.BlenderUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:
