@@ -22,6 +22,9 @@ class Initializer:
         Also cleans up the whole scene at first.
 
         :param horizon_color: The color to use for the world background.
+        :param compute_device: The compute device to use for the Cycles Render Engine i.e. CPU or GPU. (default: ``GPU``).
+        :param compute_device_type: The compute device type to use for the Cycles Render Engine i.e. OPTIX or CUDA. Only necessary to specify if compute device is GPU. (default: ``OPTIX``).
+        :param use_experimental_features: Set to True, if you want to use the Experimental features of the Cycles Render Engine i.e Adaptive subdivision. (default: ``False``).
         :param clean_up_scene: Set to False, if you want to keep all scene data.
         """
         if clean_up_scene:

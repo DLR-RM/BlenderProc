@@ -28,8 +28,3 @@ class DefaultConfig:
     transmission_bounces = 0
     transparency_bounces = 8
     volume_bounces = 0
-
-    # Compute Device
-    compute_device = "GPU"
-    compute_device_type = "OPTIX"
-    use_experimental_features = False
