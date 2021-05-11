@@ -1,6 +1,6 @@
 from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup([])
 
-SetupUtility.setup(["h5py", "imageio"])
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -14,9 +14,9 @@ from src.utility.PostProcessingUtility import PostProcessingUtility
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('camera')
-parser.add_argument('scene')
-parser.add_argument('output_dir')
+parser.add_argument('camera', help="Path to the camera file, should be examples/basic/camera_positions")
+parser.add_argument('scene', help="Path to the scene.obj file, should be examples/basic/scene.obj")
+parser.add_argument('output_dir', help="Path to where the final files, will be saved, could be examples/basic/output")
 args = parser.parse_args()
 
 Initializer.init()
@@ -44,4 +44,4 @@ data = RendererUtility.render()
 data["distance"] = PostProcessingUtility.trim_redundant_channels(data["distance"])
 data['depth'] = PostProcessingUtility.dist2depth(data['distance'])
 
-WriterUtility.save_to_hdf5("output_dir", data)
+WriterUtility.save_to_hdf5(args.output_dir, data)
