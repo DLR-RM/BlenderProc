@@ -166,11 +166,11 @@ location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_eul
 
 => Creates the files `rgb_0000.png` and `rgb_0001.png`.
 
-It also creates the normals and distance 
+It also creates the normals and distance
 
 * The normal and distance images are rendered using the `.exr` format which allows linear colorspace and higher precision
-* By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`. 
-* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`.
+* By default the distance image is antialiased (`"use_mist_distance"=True`).  To avoid any smoothing effects set it to `False`.
+* The `normal_output_key` config defines the key name in the `.hdf5` file, same for the `distance_output_key`
 
 => Creates the files `normal_0000.exr` and `normal_0001.exr` and the files `distance_0000.exr` and `distance_0001.exr`.
 
