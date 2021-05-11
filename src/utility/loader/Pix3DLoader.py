@@ -83,7 +83,7 @@ class Pix3DLoader:
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
         for obj in loaded_obj:
-            obj.remove_x_axis_rotation()
+            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
 
         # move the origin of the object to the world origin and on top of the X-Y plane
         # makes it easier to place them later on, this does not change the `.location`
@@ -102,11 +102,9 @@ class Pix3DLoader:
 
         for obj in objects:
             for material in obj.get_materials():
-                nodes = material.node_tree.nodes
-                links = material.node_tree.links
-                texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
+                texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
                 if texture_nodes and len(texture_nodes) > 1:
-                    principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                    principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
                     # find the image texture node which is connect to alpha
                     node_connected_to_the_alpha = None
                     for node_links in principled_bsdf.inputs["Alpha"].links:
@@ -114,9 +112,9 @@ class Pix3DLoader:
                             node_connected_to_the_alpha = node_links.from_node
                     # if a node was found which is connected to the alpha node, add an invert between the two
                     if node_connected_to_the_alpha is not None:
-                        invert_node = nodes.new("ShaderNodeInvert")
+                        invert_node = material.new_node("ShaderNodeInvert")
                         invert_node.inputs["Fac"].default_value = 1.0
-                        Utility.insert_node_instead_existing_link(links, node_connected_to_the_alpha.outputs["Color"],
+                        material.insert_node_instead_existing_link(node_connected_to_the_alpha.outputs["Color"],
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])

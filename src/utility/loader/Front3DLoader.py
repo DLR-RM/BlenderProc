@@ -8,6 +8,7 @@ import bpy
 import mathutils
 import numpy as np
 
+from src.utility.MaterialUtility import Material
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -97,7 +98,7 @@ class Front3DLoader:
                 warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            obj = MeshObject.create_empty(used_obj_name, used_obj_name + "_mesh")
+            obj = MeshObject.create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
             created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id
@@ -121,32 +122,13 @@ class Front3DLoader:
                 # if there is a normal color used
                 if used_mat["color"]:
                     # Create a new material
-                    mat = bpy.data.materials.new(name=used_obj_name + "_material")
-                    mat.use_nodes = True
-                    nodes = mat.node_tree.nodes
+                    mat = Material.create(name=used_obj_name + "_material")
                     # create a principled node and set the default color
-                    principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                    principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
                     principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
                     # if the object is a ceiling add some light output
                     if "ceiling" in used_obj_name.lower():
-                        links = mat.node_tree.links
-                        mix_node = nodes.new(type='ShaderNodeMixShader')
-                        output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
-                        Utility.insert_node_instead_existing_link(links, principled_node.outputs['BSDF'],
-                                                                  mix_node.inputs[2], mix_node.outputs['Shader'],
-                                                                  output.inputs['Surface'])
-                        # The light path node returns 1, if the material is hit by a ray coming from the camera,
-                        # else it returns 0. In this way the mix shader will use the principled shader for rendering
-                        # the color of the lightbulb itself, while using the emission shader for lighting the scene.
-                        light_path_node = nodes.new(type='ShaderNodeLightPath')
-                        links.new(light_path_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
-
-                        emission_node = nodes.new(type='ShaderNodeEmission')
-                        # use the same color for the emission light then for the ceiling itself
-                        emission_node.inputs["Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
-                        emission_node.inputs["Strength"].default_value = ceiling_light_strength
-
-                        links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
+                        mat.make_emissive(ceiling_light_strength, keep_using_base_color=False, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
 
                     # as this material was just created the material is just append it to the empty list
                     obj.add_material(mat)
@@ -255,10 +237,7 @@ class Front3DLoader:
                     obj.set_cp("category_id", mapping[used_obj_name.lower()])
                     # walk over all materials
                     for mat in obj.get_materials():
-                        nodes = mat.node_tree.nodes
-                        links = mat.node_tree.links
-
-                        principled_node = Utility.get_nodes_with_type(nodes, "BsdfPrincipled")
+                        principled_node = mat.get_nodes_with_type("BsdfPrincipled")
                         is_lamp = "lamp" in used_obj_name.lower()
                         if len(principled_node) == 0 and is_lamp:
                             # this material has already been transformed
@@ -270,32 +249,14 @@ class Front3DLoader:
                                             "for obj: {}!".format(obj.get_name()))
 
                         # For each a texture node
-                        image_node = nodes.new(type='ShaderNodeTexImage')
+                        image_node = mat.new_node('ShaderNodeTexImage')
                         # and load the texture.png
                         base_image_path = os.path.join(folder_path, "texture.png")
                         image_node.image = bpy.data.images.load(base_image_path, check_existing=True)
-                        links.new(image_node.outputs['Color'], principled_node.inputs['Base Color'])
+                        mat.link(image_node.outputs['Color'], principled_node.inputs['Base Color'])
                         # if the object is a lamp, do the same as for the ceiling and add an emission shader
                         if is_lamp:
-                            mix_node = nodes.new(type='ShaderNodeMixShader')
-                            output = Utility.get_the_one_node_with_type(nodes, 'OutputMaterial')
-                            Utility.insert_node_instead_existing_link(links, principled_node.outputs['BSDF'],
-                                                                      mix_node.inputs[2], mix_node.outputs['Shader'],
-                                                                      output.inputs['Surface'])
-
-                            # The light path node returns 1, if the material is hit by a ray coming from the camera,
-                            # else it returns 0. In this way the mix shader will use the principled shader for
-                            # rendering the color of the lightbulb itself, while using the emission shader
-                            # for lighting the scene.
-                            lightPath_node = nodes.new(type='ShaderNodeLightPath')
-                            links.new(lightPath_node.outputs['Is Camera Ray'], mix_node.inputs['Fac'])
-
-                            emission_node = nodes.new(type='ShaderNodeEmission')
-                            lamp_light_strength = lamp_light_strength
-                            emission_node.inputs["Strength"].default_value = lamp_light_strength
-                            links.new(image_node.outputs['Color'], emission_node.inputs['Color'])
-
-                            links.new(emission_node.outputs["Emission"], mix_node.inputs[1])
+                            mat.make_emissive(lamp_light_strength)
 
                 all_objs.extend(objs)
             elif "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:

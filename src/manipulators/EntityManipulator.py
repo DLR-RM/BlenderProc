@@ -11,6 +11,9 @@ from src.provider.getter.Material import Material
 from src.utility.Config import Config
 from mathutils import Matrix
 
+from src.utility.MeshObjectUtility import MeshObject
+
+
 class EntityManipulator(Module):
     """
     Performs manipulation on selected entities of different Blender built-in types, e.g. Mesh objects, Camera
@@ -396,6 +399,7 @@ class EntityManipulator(Module):
                                                               BlenderUtility.get_all_materials(), None),
                                 "obj_materials_cond_to_be_replaced": (Config.get_raw_dict, {}, None)}
                 result = self._unpack_params(rand_config, instructions)
+                result["material_to_replace_with"] = choice(result["materials_to_replace_with"])
             else:
                 result = params_conf.get_raw_value(key)
 
@@ -422,7 +426,7 @@ class EntityManipulator(Module):
         :param entity: An entity to modify. Type: bpy.types.Object
         :param value: Configuration data. Type: dict.
         """
-        LoaderInterface.change_shading_mode([entity], value["shading_mode"], value["angle_value"])
+        MeshObject(entity).set_shading_mode(value["shading_mode"], value["angle_value"])
 
     def _add_displace(self, entity, value):
         """ Adds a displace modifier with texture to an object.
@@ -482,11 +486,11 @@ class EntityManipulator(Module):
                                                                            [mat.material])) == 1
                     if use_mat:
                         if np.random.uniform(0, 1) <= value["randomization_level"]:
-                            mat.material = choice(value["materials_to_replace_with"])
+                            mat.material = value["material_to_replace_with"]
             elif value["add_to_objects_without_material"]:
                 # this object didn't have a material before
                 if np.random.uniform(0, 1) <= value["randomization_level"]:
-                    entity.data.materials.append(choice(value["materials_to_replace_with"]))
+                    entity.data.materials.append(value["material_to_replace_with"])
 
     def _unpack_params(self, param_config, instructions):
         """ Unpacks the data from a config object following the instructions in the dict.

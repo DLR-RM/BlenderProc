@@ -45,10 +45,8 @@ class IKEALoaderModule(LoaderInterface):
                 self._obj_categories = [self._obj_categories]
         else:
             self._obj_categories = None
-        if self.config.has_param("style"):
-            self._obj_style = self.config.get_raw_value("style", None)
-        else:
-            self._obj_style = None
+
+        self._obj_style = self.config.get_raw_value("style", None)
 
     def run(self):
         loaded_obj = IKEALoader.load(data_dir=self._data_dir, obj_categories=self._obj_categories, obj_style=self._obj_style)

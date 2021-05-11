@@ -1,3 +1,6 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"])
+
 import glob
 import json
 import os
@@ -78,7 +81,7 @@ class AMASSLoader:
 
         # set the shading mode explicitly to smooth
         for obj in loaded_obj:
-            obj.set_shading_mode(True)
+            obj.set_shading_mode("SMOOTH")
 
         if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
             for obj in loaded_obj:
@@ -87,7 +90,7 @@ class AMASSLoader:
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
         for obj in loaded_obj:
-            obj.remove_x_axis_rotation()
+            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
 
         # move the origin of the object to the world origin and on top of the X-Y plane
         # makes it easier to place them later on, this does not change the `.location`
@@ -241,11 +244,8 @@ class AMASSLoader:
         """
         for obj in objects:
             for material in obj.get_materials():
-                nodes = material.node_tree.nodes
-                links = material.node_tree.links
-
                 # Create a principled node and set the default color
-                principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
+                principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
                 # Pick random skin color value
                 skin_tone_hex = np.random.choice(AMASSLoader.human_skin_colors)
                 skin_tone_rgb = Utility.hex_to_rgba(skin_tone_hex)[:3]
@@ -260,7 +260,7 @@ class AMASSLoader:
                 # darker skin looks better when made less specular
                 principled_bsdf.inputs["Specular"].default_value = np.mean(skin_tone_rgb) / 255.0
 
-                texture_nodes = Utility.get_nodes_with_type(nodes, "ShaderNodeTexImage")
+                texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
                 if texture_nodes and len(texture_nodes) > 1:
                     # find the image texture node which is connect to alpha
                     node_connected_to_the_alpha = None
@@ -269,9 +269,9 @@ class AMASSLoader:
                             node_connected_to_the_alpha = node_links.from_node
                     # if a node was found which is connected to the alpha node, add an invert between the two
                     if node_connected_to_the_alpha is not None:
-                        invert_node = nodes.new("ShaderNodeInvert")
+                        invert_node = material.new_node("ShaderNodeInvert")
                         invert_node.inputs["Fac"].default_value = 1.0
-                        Utility.insert_node_instead_existing_link(links, node_connected_to_the_alpha.outputs["Color"],
+                        material.insert_node_instead_existing_link(node_connected_to_the_alpha.outputs["Color"],
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
