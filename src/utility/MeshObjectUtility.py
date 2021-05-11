@@ -1,11 +1,19 @@
+import os
 from typing import List, Union
 
 import bpy
 
+from external.vhacd.decompose import convex_decomposition
 from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector
 
+from src.utility.Utility import Utility
+
+from src.utility.MaterialUtility import Material
+
+import bmesh
+import mathutils
 
 class MeshObject(Entity):
 
@@ -70,27 +78,39 @@ class MeshObject(Entity):
         """
         return [MeshObject(obj) for obj in blender_objects]
 
-    def get_materials(self) -> List[bpy.types.Material]:
+    def get_materials(self) -> List[Material]:
         """ Returns the materials used by the mesh.
 
         :return: A list of materials.
         """
-        return self.blender_obj.data.materials
+        return Material.convert_to_materials(self.blender_obj.data.materials)
 
-    def set_material(self, index: int, material: bpy.types.Material):
+    def has_materials(self):
+        return len(self.blender_obj.data.materials) > 0
+
+    def set_material(self, index: int, material: Material):
         """ Sets the given material at the given index of the objects material list.
 
         :param index: The index to set the material to.
         :param material: The material to set.
         """
-        self.blender_obj.data.materials[index] = material
+        self.blender_obj.data.materials[index] = material.blender_obj
 
-    def add_material(self, material: bpy.types.Material):
+    def add_material(self, material: Material):
         """ Adds a new material to the object.
 
         :param material: The material to add.
         """
-        self.blender_obj.data.materials.append(material)
+        self.blender_obj.data.materials.append(material.blender_obj)
+
+    def new_material(self, name: str):
+        """ Creates a new material and adds it to the object.
+
+        :param name: The name of the new material.
+        """
+        new_mat = Material.create(name)
+        self.add_material(new_mat)
+        return new_mat
 
     def duplicate(self):
         """ Duplicates the object.
@@ -148,11 +168,14 @@ class MeshObject(Entity):
         self.deselect()
         bpy.context.view_layer.update()
 
-    def get_bound_box(self):
+    def get_bound_box(self, local_coords=False):
         """
         :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
         """
-        return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+        if not local_coords:
+            return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+        else:
+            return [Vector(cord) for cord in self.blender_obj.bound_box]
 
     def persist_transformation_into_mesh(self, location: bool = True, rotation: bool = True, scale: bool = True):
         """
@@ -203,7 +226,7 @@ class MeshObject(Entity):
         """ Enables the rigidbody component of the object which makes it participate in physics simulations.
 
         :param active: If True, the object actively participates in the simulation and its key frames are ignored. If False, the object still follows its keyframes and only acts as an obstacle, but is not influenced by the simulation.
-        :param collision_shape: Collision shape of object in simulation. Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH'.
+        :param collision_shape: Collision shape of object in simulation. Default: 'CONVEX_HULL'. Available: 'BOX', 'SPHERE', 'CAPSULE', 'CYLINDER', 'CONE', 'CONVEX_HULL', 'MESH', 'COMPOUND'.
         :param collision_margin: The margin around objects where collisions are already recognized. Higher values improve stability, but also make objects hover a bit.
         :param collision_mesh_source: Source of the mesh used to create collision shape. Default: 'FINAL'. Available: 'BASE', 'DEFORM', 'FINAL'.
         :param mass: The mass in kilogram the object should have. If None is given the mass is calculated based on its bounding box volume and the given `mass_factor`.
@@ -230,6 +253,43 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
+    def build_convex_decomposition_collision_shape(self, temp_dir, cache_dir="resources/decomposition_cache"):
+        """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
+
+        :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
+        :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
+        """
+        # Decompose the object
+        parts = convex_decomposition(self.blender_obj, temp_dir, cache_dir=Utility.resolve_path(cache_dir))
+        parts = [MeshObject(p) for p in parts]
+
+        # Make the convex parts children of this object, enable their rigid body component and hide them
+        for part in parts:
+            part.set_parent(self)
+            part.enable_rigidbody(True, "CONVEX_HULL")
+            part.hide()
+
+    def hide(self, hide_object: bool = True):
+        """ Sets the visibility of the object.
+
+        :param hide_object: Determines whether the object should be hidden in rendering.
+        """
+        self.blender_obj.hide_render = hide_object
+
+    def set_parent(self, new_parent: "MeshObject"):
+        """ Sets the parent of this object.
+
+        :param new_parent: The new parent object.
+        """
+        self.blender_obj.parent = new_parent.blender_obj
+        self.blender_obj.matrix_parent_inverse = new_parent.blender_obj.matrix_world.inverted()
+
+    def get_parent(self) -> "MeshObject":
+        """ Returns the parent object.
+
+        :return: The parent object, None if it has no parent.
+        """
+        return MeshObject(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
@@ -261,3 +321,65 @@ class MeshObject(Entity):
         diag = max_point - min_point
         # use the diagonal to calculate the volume of the box
         return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
+
+    def mesh_as_bmesh(self, return_copy=False) -> bmesh.types.BMesh:
+        """ Returns a bmesh based on the object's mesh.
+
+        Independent of return_copy, changes to the returned bmesh only take into affect after calling update_from_bmesh().
+
+        :param return_copy: If True, a copy of the objects bmesh will be returned, otherwise the bmesh owned by blender is returned (the object has to be in edit mode for that).
+        :return: The bmesh
+        """
+        if return_copy:
+            bm = bmesh.new()
+            bm.from_mesh(self.get_mesh())
+        else:
+            if bpy.context.mode != "EDIT_MESH":
+                raise Exception(f"The object: {self.get_name()} is not in EDIT mode before calling mesh_as_bmesh()")
+            bm = bmesh.from_edit_mesh(self.get_mesh())
+        return bm
+
+    def update_from_bmesh(self, bm: bmesh.types.BMesh, free_bm_mesh=True) -> bmesh.types.BMesh:
+        """ Updates the object's mesh based on the given bmesh.
+
+        :param bm: The bmesh to set.
+        :param free_bm_mesh: If True and the given bmesh is not owned by blender, it will be deleted in the end.
+        """
+        # If the bmesh is owned by blender
+        if bm.is_wrapped:
+            # Just tell the mesh to update itself based on its bmesh
+            bmesh.update_edit_mesh(self.get_mesh())
+        else:
+            # Set mesh from bmesh
+            bm.to_mesh(self.get_mesh())
+            # Optional: Free the bmesh
+            if free_bm_mesh:
+                bm.free()
+
+    def edit_mode(self):
+        """ Switch into edit mode of this mesh object """
+        # Make sure we are in object mode
+        if bpy.context.mode != "OBJECT":
+            self.object_mode()
+
+        # Set object active (Context overriding does not work for bpy.ops.object.mode_set)
+        bpy.ops.object.select_all(action='DESELECT')
+        bpy.context.view_layer.objects.active = self.blender_obj
+        self.blender_obj.select_set(True)
+        bpy.ops.object.mode_set(mode='EDIT')
+
+    def object_mode(self):
+        """ Switch back into object mode """
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+    def create_bvh_tree(self) -> mathutils.bvhtree.BVHTree:
+        """ Builds a bvh tree based on the object's mesh.
+
+        :return: The new bvh tree
+        """
+        bm = bmesh.new()
+        bm.from_mesh(self.get_mesh())
+        bm.transform(self.get_local2world_mat())
+        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bm.free()
+        return bvh_tree

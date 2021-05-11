@@ -1,16 +1,17 @@
 from typing import Union, Any
 
 import bpy
+
+from src.utility.StructUtility import Struct
 from src.utility.Utility import Utility, KeyFrame
 from mathutils import Vector, Euler, Color, Matrix
 
 from typing import List
 
-class Entity:
+class Entity(Struct):
 
     def __init__(self, object: bpy.types.Object):
-        self.blender_obj = object
-
+        super().__init__(object)
 
     @staticmethod
     def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
@@ -119,7 +120,10 @@ class Entity:
 
         :param matrix_world: A 4x4 matrix.
         """
-        self.blender_obj.matrix_world = matrix_world
+        # To make sure matrices are always interpreted row-wise, we first convert them to a mathutils matrix.
+        if not isinstance(matrix_world, Matrix):
+            matrix_world = Matrix(matrix_world)
+        self.blender_obj.matrix_world = Matrix(matrix_world)
 
     def get_local2world_mat(self) -> Matrix:
         """ Returns the pose of the object in the form of a local2world matrix.
@@ -166,6 +170,13 @@ class Entity:
         """
         return key in self.blender_obj
 
+    def get_all_cps(self) -> list:
+        """ Returns all custom properties as key, value pairs.
+
+        :return: A list of key value pairs
+        """
+        return self.blender_obj.items()
+
     def clear_all_cps(self):
         """ Removes all existing custom properties the entity has. """
         keys = self.blender_obj.keys()
@@ -194,8 +205,20 @@ class Entity:
         """
         return Entity(self.blender_obj.parent)
 
+    def delete(self):
+        """ Deletes the entity """
+        bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
+
     def __setattr__(self, key, value):
         if key != "blender_obj":
             raise Exception("The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
         else:
             object.__setattr__(self, key, value)
+
+    def __eq__(self, other):
+        if isinstance(other, Entity):
+            return self.blender_obj == other.blender_obj
+        return False
+
+    def __hash__(self):
+        return hash(self.blender_obj)

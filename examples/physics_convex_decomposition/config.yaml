@@ -1,0 +1,146 @@
+# Args: <obj_file1> <obj_file2> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
+          "output_dir": "<args:2>"
+        }
+      }
+    },
+    {
+      "module": "loader.ObjectLoader",
+      "config": {
+        "path": "<args:0>",
+        "add_properties": {
+           "cp_physics": False
+        }
+      }
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "<args:1>",
+        "used_synset_id": "02801938",
+        "used_source_id": "d9fb327b0e19a9ddc735651f0fb19093",
+        "add_properties": {
+          "cp_physics": True
+        }
+      }
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "<args:1>",
+        "used_synset_id": "02880940",
+        "used_source_id": "a9ba34614bfd8ca9938afc5c0b5b182",
+        "add_properties": {
+          "cp_physics": True
+        }
+      }
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "<args:1>",
+        "used_synset_id": "02691156",
+        "used_source_id": "56c605d0b1bd86a9f417244ad1b14759",
+        "add_properties": {
+          "cp_physics": True
+        }
+      }
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "<args:1>",
+        "used_synset_id": "04380533",
+        "used_source_id": "102273fdf8d1b90041fbc1e2da054acb",
+        "add_properties": {
+          "cp_physics": True
+        }
+      }
+    },
+    {
+      "module": "loader.ShapeNetLoader",
+      "config": {
+        "data_path": "<args:1>",
+        "used_synset_id": "02954340",
+        "used_source_id": "1fd62459ef715e71617fb5e58b4b0232",
+        "add_properties": {
+          "cp_physics": True
+        }
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config": {
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_physics": True,
+            "type": "MESH"
+          }
+        },
+        "pos_sampler": {
+          "provider": "sampler.Uniform3d",
+          "max": [ 0.5, 0.5, 8 ],
+          "min": [ -0.5, -0.5, 12 ]
+        },
+        "rot_sampler": {
+          "provider": "sampler.UniformSO3"
+        }
+      }
+    },
+    {
+      "module": "lighting.LightLoader",
+      "config": {
+        "lights": [
+          {
+            "type": "SUN",
+            "location": [0, 0, 0],
+            "rotation": [-0.063, 0.6177, -0.1985],
+            "energy": 1,
+            "color": [1, 1, 1]
+          }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraLoader",
+      "config": {
+        "cam_poses": [
+          {
+            "location": [0, -2.13, 3.22],
+            "rotation": {
+              "value": [0.64, 0, 0]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "module": "object.PhysicsPositioning",
+      "config": {
+        "min_simulation_time": 4,
+        "max_simulation_time": 20,
+        "check_object_interval": 1,
+        "collision_shape": "CONVEX_DECOMPOSITION"
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer"
+    },
+    {
+      "module": "writer.Hdf5Writer"
+    }
+  ]
+}
