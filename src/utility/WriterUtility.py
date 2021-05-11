@@ -178,7 +178,7 @@ class WriterUtility:
     @staticmethod
     def get_light_attribute(light: bpy.types.Light, attribute_name: str) -> Any:
         """ Returns the value of the requested attribute for the given light.
-from src.utility.WriterUtility import WriterUtility
+
         :param light: The light. Type: blender scene object of type light.
         :param attribute_name: The attribute name.
         :return: The attribute value.
@@ -210,11 +210,24 @@ from src.utility.WriterUtility import WriterUtility
         """
         Saves the information provided inside of the output_data_dict into a .hdf5 container
 
-        :param output_dir_path:
-        :param output_data_dict:
-        :param append_to_existing_output:
+        :param output_dir_path: The folder path in which the .hdf5 containers will be generated
+        :param output_data_dict: The container, which keeps the different images, which should be saved to disc.
+                                 Each key will be saved as its own key in the .hdf5 container.
+        :param append_to_existing_output: If this is True, the output_dir_path folder will be scanned for pre-existing
+                                          .hdf5 containers and the numbering of the newly added containers, will start
+                                          right where the last run left off.
+        :param stereo_separate_keys: If this is True and the rendering was done in stereo mode, than the stereo images
+                                     won't be saved in one tensor [2, img_x, img_y, channels], where the img[0] is the
+                                     left image and img[1] the right. They will be saved in separate keys: for example
+                                     for colors in colors_0 and colors_1.
         """
-        import h5py
+        try:
+            import h5py
+        except ImportError as e:
+            raise ImportError(f"The h5py lib could not be found, use the SetupUtility.setup([\"h5py\"]) to install it"
+                              f" before executing the rest of the code: {e}")
+
+
         if not os.path.exists(output_dir_path):
             os.makedirs(output_dir_path)
 
@@ -249,6 +262,7 @@ from src.utility.WriterUtility import WriterUtility
 
                 for key, data_block in output_data_dict.items():
                     if frame < len(data_block):
+                        # get the current data block for the current frame
                         used_data_block = data_block[frame]
                         if stereo_separate_keys and (bpy.context.scene.render.use_multiview or
                                                      used_data_block.shape[0] == 2):

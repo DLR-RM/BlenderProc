@@ -1,6 +1,6 @@
 from src.utility.SetupUtility import SetupUtility
 
-SetupUtility.setup(["imageio", "h5py"])
+SetupUtility.setup(["h5py", "imageio"])
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader

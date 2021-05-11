@@ -7,7 +7,11 @@ from mathutils import Vector
 from sys import platform
 
 import numpy as np
-import imageio
+try:
+    import imageio
+except ImportError as e:
+    raise ImportError(f"The imageio lib could not be found, use the SetupUtility.setup([\"imageio\"]) to install it"
+                      f" before executing the rest of the code: {e}")
 
 from src.utility.Utility import Utility
 
