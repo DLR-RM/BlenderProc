@@ -444,7 +444,7 @@ def get_node_attributes(node: bpy.types.Node) -> list:
     Returns a list of all properties identifiers if they should not be ignored
 
     :param: node: the node which attributes should be returned
-    :return list of attributes of the given node
+    :return: list of attributes of the given node
     """
 
     # all attributes that shouldn't be copied
