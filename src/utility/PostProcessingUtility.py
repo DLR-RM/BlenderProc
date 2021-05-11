@@ -1,28 +1,32 @@
 import os
+from typing import Union, Callable, Any, List, Dict, Tuple
+
 import numpy as np
 import csv
 
 import bpy
 
-class PostProcessingUtility:  
-        
+
+class PostProcessingUtility:
+
     @staticmethod
-    def dist2depth(dist):
+    def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
         """
         :param dist: The distance data.
         :return: The depth data
         """
-        if len(dist.shape) > 2:
-            dist = dist[:, :, 0] # All channles have the same value, so just extract any single channel
-        else:
-            dist = dist.squeeze()
-        
+
+        dist = PostProcessingUtility.trim_redundant_channels(dist)
+
+        if isinstance(dist, list) or hasattr(dist, "shape") and len(dist.shape) > 2:
+            return [PostProcessingUtility.dist2depth(img) for img in dist]
+
         height, width = dist.shape
 
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
 
-        max_resolution = max(width, height) 
+        max_resolution = max(width, height)
 
         # Compute Intrinsics from Blender attributes (can change)
         f = width / (2 * np.tan(cam.angle / 2.))
@@ -30,19 +34,19 @@ class PostProcessingUtility:
         cy = (height - 1.0) / 2. + cam.shift_y * max_resolution
 
         xs, ys = np.meshgrid(np.arange(dist.shape[1]), np.arange(dist.shape[0]))
-        
+
         # coordinate distances to principal point
-        x_opt = np.abs(xs-cx)
-        y_opt = np.abs(ys-cy)
+        x_opt = np.abs(xs - cx)
+        y_opt = np.abs(ys - cy)
 
         # Solve 3 equations in Wolfram Alpha: 
         # Solve[{X == (x-c0)/f0*Z, Y == (y-c1)/f0*Z, X*X + Y*Y + Z*Z = d*d}, {X,Y,Z}]
-        depth = dist * f / np.sqrt(x_opt**2 + y_opt**2 + f**2)
+        depth = dist * f / np.sqrt(x_opt ** 2 + y_opt ** 2 + f ** 2)
 
         return depth
-    
+
     @staticmethod
-    def _get_pixel_neighbors(data, i, j):
+    def _get_pixel_neighbors(data: np.ndarray, i: int, j: int) -> np.ndarray:
         """ Returns the valid neighbor pixel indices of the given pixel.
 
         :param data: The whole image data.
@@ -57,17 +61,21 @@ class PostProcessingUtility:
                     neighbors.append([p, q])
 
         return np.array(neighbors)
-    
+
     @staticmethod
-    def _get_pixel_neighbors_stacked(img, filter_size=3, return_list=False):
+    def _get_pixel_neighbors_stacked(img: np.ndarray, filter_size: int = 3,
+                                     return_list: bool = False) -> Union[list, np.ndarray]:
         """
         Stacks the neighbors of each pixel according to a square filter around each given pixel in the depth dimensions.
         The neighbors are represented by shifting the input image in all directions required to simulate the filter.
 
         :param img: Input image. Type: blender object of type image.
         :param filter_size: Filter size. Type: int. Default: 5..
-        :param return_list: Instead of stacking in the output array, just return a list of the "neighbor" images along with the input image.
-        :return: Either a tensor with the "neighbor" images stacked in a separate additional dimension, or a list of images of the same shape as the input image, containing the shifted images (simulating the neighbors) and the input image.
+        :param return_list: Instead of stacking in the output array, just return a list of the "neighbor" \
+                            images along with the input image.
+        :return: Either a tensor with the "neighbor" images stacked in a separate additional dimension, or a list of \
+                 images of the same shape as the input image, containing the shifted images (simulating the neighbors) \
+                 and the input image.
         """
         _min = -int(filter_size / 2)
         _max = _min + filter_size
@@ -80,7 +88,8 @@ class PostProcessingUtility:
                 if p == 0 and q == 0:
                     continue
                 shifted = np.zeros_like(img)
-                shifted[max(p, 0):min(rows, rows + p), max(q, 0):min(cols, cols + q)] = img[max(-p, 0):min(rows - p, rows),
+                shifted[max(p, 0):min(rows, rows + p), max(q, 0):min(cols, cols + q)] = img[
+                                                                                        max(-p, 0):min(rows - p, rows),
                                                                                         max(-q, 0):min(cols - q, cols)]
 
                 channels.append(shifted)
@@ -96,7 +105,7 @@ class PostProcessingUtility:
         return np.in1d(element, test_elements, assume_unique=assume_unique, invert=invert).reshape(element.shape)
 
     @staticmethod
-    def _determine_noisy_pixels(image):
+    def _determine_noisy_pixels(image: np.ndarray) -> np.ndarray:
         """
         :param image: The image data.
         :return: a list of 2D indices that correspond to the noisy pixels. One criteria of finding \
@@ -113,32 +122,39 @@ class PostProcessingUtility:
         # their closest (numerically, since this deviation is a
         # result of some numerical operation) neighbor.
         hist = sorted((np.asarray((b, counts)).T), key=lambda x: x[1])
-        noise_vals = [h[0] for h in hist if h[1] <= 100]  # Assuming the stray pixels wouldn't have a count of more than 100
+        # Assuming the stray pixels wouldn't have a count of more than 100
+        noise_vals = [h[0] for h in hist if h[1] <= 100]
         noise_indices = np.argwhere(PostProcessingUtility._isin(image, noise_vals))
-        
+
         return noise_indices
-    
+
     @staticmethod
-    def remove_segmap_noise(image):
+    def remove_segmap_noise(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
         """
         A function that takes an image and a few 2D indices, where these indices correspond to pixel values in
         segmentation maps, where these values are not real labels, but some deviations from the real labels, that were
-        generated as a result of Blender doing some interpolation, smooting, or other numerical operations.
+        generated as a result of Blender doing some interpolation, smoothing, or other numerical operations.
         
         Assumes that noise pixel values won't occur more than 100 times.
 
         :param image: ndarray of the .exr segmap
         :return: The denoised segmap image
         """
-        
+
+        if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
+            return [PostProcessingUtility.remove_segmap_noise(img) for img in image]
+
         noise_indices = PostProcessingUtility._determine_noisy_pixels(image)
 
         for index in noise_indices:
-            neighbors = PostProcessingUtility._get_pixel_neighbors(image, index[0], index[1])  # Extracting the indices surrounding 3x3 neighbors
+            neighbors = PostProcessingUtility._get_pixel_neighbors(image, index[0], index[
+                1])  # Extracting the indices surrounding 3x3 neighbors
             curr_val = image[index[0]][index[1]][0]  # Current value of the noisy pixel
 
-            neighbor_vals = [image[neighbor[0]][neighbor[1]] for neighbor in neighbors]  # Getting the values of the neighbors
-            neighbor_vals = np.unique(np.array([np.array(index) for index in neighbor_vals]))  # Getting the unique values only
+            neighbor_vals = [image[neighbor[0]][neighbor[1]] for neighbor in
+                             neighbors]  # Getting the values of the neighbors
+            neighbor_vals = np.unique(
+                np.array([np.array(index) for index in neighbor_vals]))  # Getting the unique values only
 
             min = 10000000000
             min_idx = 0
@@ -156,27 +172,32 @@ class PostProcessingUtility:
             image[index[0]][index[1]] = np.array([new_val, new_val, new_val])
 
         return image
-    
+
     @staticmethod
-    def oil_paint_filter(image, filter_size=5, edges_only=True, rgb=False):
+    def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges_only: bool = True,
+                         rgb: bool = False) -> Union[list, np.ndarray]:
         """ Applies the oil paint filter on a single channel image (or more than one channel, where each channel is a replica
             of the other). This could be desired for corrupting rendered depth maps to appear more realistic. Also trims the
             redundant channels if they exist.
             
-            :param image: Input image. Type: blender object of type image. 
-            :param filter_size: Filter size, should be an odd number. Type: int. Default: 5
-            :param edges_only: If true, applies the filter on the edges only. Default: True
-            :param rgb: Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be replicated). Type: bool. Default: False
+            :param image: Input image or list of images
+            :param filter_size: Filter size, should be an odd number.
+            :param edges_only: If true, applies the filter on the edges only.
+            :param rgb: Apply the filter on an RGB image (if the image has 3 channels, they're assumed to not be \
+                        replicated).
             :return: filtered image
         """
-                
+
         import cv2
         from scipy import stats
-        
         if rgb:
+            if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
+                return [PostProcessingUtility.oil_paint_filter(img, filter_size, edges_only, rgb) for img in image]
+
             intensity_img = (np.sum(image, axis=2) / 3.0)
 
-            neighbors = np.array(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size, return_list=True))
+            neighbors = np.array(
+                PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size, return_list=True))
             neighbors_intensity = PostProcessingUtility._get_pixel_neighbors_stacked(intensity_img, filter_size)
 
             mode_intensity = stats.mode(neighbors_intensity, axis=2)[0].reshape(image.shape[0], image.shape[1])
@@ -195,11 +216,15 @@ class PostProcessingUtility:
                 image[edges > 0] = filtered_img[edges > 0]
                 filtered_img = image
         else:
+            image = PostProcessingUtility.trim_redundant_channels(image)
+            if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 2:
+                return [PostProcessingUtility.oil_paint_filter(img, filter_size, edges_only, rgb) for img in image]
+
             if len(image.shape) == 3 and image.shape[2] > 1:
                 image = image[:, :, 0]
 
-            filtered_img = stats.mode(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size), axis=2)[0] \
-                .reshape(filtered_img.shape[0], filtered_img.shape[1])
+            filtered_img = stats.mode(PostProcessingUtility._get_pixel_neighbors_stacked(image, filter_size), axis=2)[0]
+            filtered_img = filtered_img.reshape(filtered_img.shape[0], filtered_img.shape[1])
 
             if edges_only:
                 # Handle inf and map input to the range: 0-255
@@ -213,16 +238,24 @@ class PostProcessingUtility:
 
                 image[edges > 0] = filtered_img[edges > 0]
                 filtered_img = image
-                
+
         return filtered_img
-    
+
     @staticmethod
-    def trim_redundant_channels(image):
+    def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
         """
-        :param image: The image data.
+        Remove redundant channels, this is useful to remove the two of the three channels created for a
+        depth or distance image. This also works on a list of images. Be aware that there is no check performed,
+        to ensure that all channels are really equal.
+
+        :param image: Input image or list of images
         :return: The trimmed image data.
         """
-        if len(image.shape) > 2:
-            image = image[:, :, 0] # All channles have the same value, so just extract any single channel
-        
+
+        if isinstance(image, list) or hasattr(image, "shape") and len(image.shape) > 3:
+            return [PostProcessingUtility.trim_redundant_channels(ele) for ele in image]
+
+        if hasattr(image, "shape") and len(image.shape) == 3 and image.shape[2] == 3:
+            image = image[:, :, 0]  # All channles have the same value, so just extract any single channel
+
         return image

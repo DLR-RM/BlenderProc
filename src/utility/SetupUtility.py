@@ -30,14 +30,35 @@ class SetupUtility:
             for module in list(sys.modules.keys()):
                 if module.startswith("src") and not module == "src.utility.SetupUtility":
                     del sys.modules[module]
-
+        
+        # Setup temporary directory
+        if is_debug_mode:
+            SetupUtility.setup_temp_dir("examples/debugging/temp")
+        else:
+            SetupUtility.setup_temp_dir(sys.argv[sys.argv.index("--") + 2])
+        
         # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
         if not is_debug_mode:
             # Cut off blender specific arguments
             sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
         elif debug_args is not None:
             sys.argv = ["debug"] + debug_args
+            
+        return sys.argv
 
+    @staticmethod
+    def setup_temp_dir(temp_dir):
+        """
+        Set temporary directory
+
+        Arguments:
+        :param temp_dir: Path to temporary directory where Blender saves output. Default is shared memory.
+        """
+        from src.utility.Utility import Utility
+        
+        Utility.temp_dir = Utility.resolve_path(temp_dir)
+        os.makedirs(Utility.temp_dir, exist_ok=True)
+    
     @staticmethod
     def setup_pip(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
         """ Makes sure the given user required and the general required python packages are installed in the blender proc env

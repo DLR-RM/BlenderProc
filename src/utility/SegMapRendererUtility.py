@@ -1,19 +1,22 @@
 import csv
 import os
+from typing import List, Tuple, Union, Dict
 
 import bpy
+import mathutils
 import numpy as np
 
-from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image, get_all_blender_mesh_objects
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.RendererUtility import RendererUtility
+from src.utility.WriterUtility import WriterUtility
 from src.utility.Utility import Utility
 
 
 class SegMapRendererUtility:
+
     @staticmethod
-    def _colorize_object(obj, color, use_alpha_channel):
+    def _colorize_object(obj: bpy.types.Object, color: mathutils.Vector, use_alpha_channel: bool):
         """ Adjusts the materials of the given object, s.t. they are ready for rendering the seg map.
 
         This is done by replacing all nodes just with an emission node, which emits the color corresponding to the
@@ -45,8 +48,8 @@ class SegMapRendererUtility:
             obj.data.materials.append(new_mat)
 
     @staticmethod
-    def _set_world_background_color(color):
-        """ Set the background color of the blender world obejct.
+    def _set_world_background_color(color: mathutils.Vector):
+        """ Set the background color of the blender world object.
 
         :param color: A 3-dim array containing the background color in range [0, 255]
         """
@@ -54,7 +57,9 @@ class SegMapRendererUtility:
         nodes.get("Background").inputs['Color'].default_value = color + [1]
 
     @staticmethod
-    def _colorize_objects_for_instance_segmentation(objects, use_alpha_channel, render_colorspace_size_per_dimension):
+    def _colorize_objects_for_instance_segmentation(objects: List[bpy.types.Object], use_alpha_channel: bool,
+                                                    render_colorspace_size_per_dimension: int) \
+            -> Tuple[List[List[int]], int, List[bpy.types.Object]]:
         """ Sets a different color to each object.
 
         :param objects: A list of objects.
@@ -78,8 +83,12 @@ class SegMapRendererUtility:
         return colors, num_splits_per_dimension, color_map
 
     @staticmethod
-    def render(output_dir, temp_dir, used_attributes, used_default_values={}, file_prefix="segmap_", output_key="segmap", segcolormap_output_file_prefix="class_inst_col_map", segcolormap_output_key="segcolormap", use_alpha_channel=False, render_colorspace_size_per_dimension=2048):
-        """ Renders segmentation maps for all frames.
+    def render(output_dir: str, temp_dir: str, used_attributes: Union[str, List[str]],
+               used_default_values: Union[Dict[str, str]] = None, file_prefix: str = "segmap_",
+               output_key: str = "segmap", segcolormap_output_file_prefix: str = "class_inst_col_map",
+               segcolormap_output_key: str = "segcolormap", use_alpha_channel: bool = False,
+               render_colorspace_size_per_dimension: int = 2048, return_data: bool = True) -> Dict[str, List[np.ndarray]]:
+        """ Renders segmentation maps for all frames
 
         :param output_dir: The directory to write images to.
         :param temp_dir: The directory to write intermediate data to.
@@ -87,10 +96,16 @@ class SegMapRendererUtility:
         :param used_default_values: The default values used for the keys used in used_attributes.
         :param file_prefix: The prefix to use for writing the images.
         :param output_key: The key to use for registering the output.
-        :param segcolormap_output_file_prefix: The prefix to use for writing the segmation-color map csv.
-        :param segcolormap_output_key: The key to use for registering the segmation-color map output.
+        :param segcolormap_output_file_prefix: The prefix to use for writing the segmentation-color map csv.
+        :param segcolormap_output_key: The key to use for registering the segmentation-color map output.
         :param use_alpha_channel: If true, the alpha channel stored in .png textures is used.
-        :param render_colorspace_size_per_dimension: As we use float16 for storing the rendering, the interval of integers which can be precisely stored is [-2048, 2048]. As blender does not allow negative values for colors, we use [0, 2048] ** 3 as our color space which allows ~8 billion different colors/objects. This should be enough.
+        :param render_colorspace_size_per_dimension: As we use float16 for storing the rendering, the interval of \
+                                                     integers which can be precisely stored is [-2048, 2048]. As \
+                                                     blender does not allow negative values for colors, we use \
+                                                     [0, 2048] ** 3 as our color space which allows ~8 billion \
+                                                     different colors/objects. This should be enough.
+        :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+        :return: dict of lists of segmaps and (for instance segmentation) segcolormaps
         """
         with Utility.UndoAfterExecution():
             RendererUtility.init()
@@ -102,7 +117,10 @@ class SegMapRendererUtility:
             # Get objects with meshes (i.e. not lights or cameras)
             objs_with_mats = get_all_blender_mesh_objects()
 
-            colors, num_splits_per_dimension, used_objects = SegMapRendererUtility._colorize_objects_for_instance_segmentation(objs_with_mats, use_alpha_channel, render_colorspace_size_per_dimension)
+            colors, num_splits_per_dimension, used_objects = \
+                SegMapRendererUtility._colorize_objects_for_instance_segmentation(objs_with_mats,
+                                                                                  use_alpha_channel,
+                                                                                  render_colorspace_size_per_dimension)
 
             bpy.context.scene.cycles.filter_width = 0.0
 
@@ -121,8 +139,9 @@ class SegMapRendererUtility:
                 optimal_dtype = dtype
                 if np.iinfo(optimal_dtype).max >= len(colors) - 1:
                     break
-
-            if 'class' in used_default_values:
+            if used_default_values is None:
+                used_default_values = {}
+            elif 'class' in used_default_values:
                 used_default_values['cp_category_id'] = used_default_values['class']
 
             if isinstance(used_attributes, str):
@@ -294,6 +313,7 @@ class SegMapRendererUtility:
                         writer.writerow(object_element)
 
         Utility.register_output(output_dir, file_prefix, output_key, ".npy", "2.0.0")
+        load_keys = {output_key}
         if save_in_csv_attributes:
             Utility.register_output(output_dir,
                                     segcolormap_output_file_prefix,
@@ -301,3 +321,6 @@ class SegMapRendererUtility:
                                     ".csv",
                                     "2.0.0",
                                     unique_for_camposes=False)
+            load_keys.add(segcolormap_output_key)
+        
+        return WriterUtility.load_registered_outputs(load_keys) if return_data else {}

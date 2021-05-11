@@ -238,7 +238,7 @@ To aggregate data and labels over multiple scenes, simply run the script multipl
     }
 ```
 
-* Construct minimal 2m x 2m x 2m room from 6 planes
+* Construct minimal 4m x 4m x 4m room from 6 planes
 * Set `"cp_physics": False` to fix the planes during any simulations
 * Give ground planes a BOX collision shape since they behave better.
 

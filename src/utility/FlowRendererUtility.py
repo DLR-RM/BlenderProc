@@ -1,4 +1,5 @@
 import os
+from typing import Dict, List
 
 import bpy
 import numpy as np
@@ -7,12 +8,13 @@ from src.renderer.RendererInterface import RendererInterface
 from src.utility.BlenderUtility import load_image
 from src.utility.RendererUtility import RendererUtility
 from src.utility.Utility import Utility
+from src.utility.WriterUtility import WriterUtility
 
 
 class FlowRendererUtility:
 
     @staticmethod
-    def _output_vector_field(forward_flow, backward_flow, output_dir):
+    def _output_vector_field(forward_flow: bool, backward_flow: bool, output_dir: str):
         """ Configures compositor to output speed vectors.
 
         :param forward_flow: Whether to render forward optical flow.
@@ -57,7 +59,10 @@ class FlowRendererUtility:
             links.new(combine_bwd_flow.outputs['Image'], bwd_flow_output_file.inputs['Image'])
 
     @staticmethod
-    def render(output_dir, temp_dir, get_forward_flow, get_backward_flow, blender_image_coordinate_style=False, forward_flow_output_file_prefix="forward_flow_", forward_flow_output_key="forward_flow", backward_flow_output_file_prefix="backward_flow_", backward_flow_output_key="backward_flow"):
+    def render(output_dir: str, temp_dir: str, get_forward_flow: bool, get_backward_flow: bool,
+               blender_image_coordinate_style: bool = False, forward_flow_output_file_prefix: str = "forward_flow_",
+               forward_flow_output_key: str = "forward_flow", backward_flow_output_file_prefix: str = "backward_flow_",
+               backward_flow_output_key: str = "backward_flow", return_data: bool = True) -> Dict[str, List[np.ndarray]]:
         """ Renders the optical flow (forward and backward) for all frames.
 
         :param output_dir: The directory to write images to.
@@ -69,6 +74,8 @@ class FlowRendererUtility:
         :param forward_flow_output_key: The key which should be used for storing forward optical flow values.
         :param backward_flow_output_file_prefix: The file prefix that should be used when writing backward flow to a file.
         :param backward_flow_output_key: The key which should be used for storing backward optical flow values.
+        :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+        :return: dict of lists of raw renderer outputs. Keys can be 'forward_flow', 'backward_flow'
         """
         if get_forward_flow is False and get_backward_flow is False:
             raise Exception("Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
@@ -111,8 +118,13 @@ class FlowRendererUtility:
                     fname = os.path.join(output_dir, backward_flow_output_file_prefix) + '%04d' % frame
                     np.save(fname + '.npy', bwd_flow_field[:, :, :2])
 
+        load_keys = set()
         # register desired outputs
         if get_forward_flow:
             Utility.register_output(output_dir, forward_flow_output_file_prefix, forward_flow_output_key, '.npy', '2.0.0')
+            load_keys.add(forward_flow_output_key)
         if get_backward_flow:
             Utility.register_output(output_dir, backward_flow_output_file_prefix, backward_flow_output_key, '.npy', '2.0.0')
+            load_keys.add(backward_flow_output_key)
+
+        return WriterUtility.load_registered_outputs(load_keys) if return_data else {}

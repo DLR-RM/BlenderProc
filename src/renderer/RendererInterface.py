@@ -1,15 +1,9 @@
-import math
-import os
-
 import addon_utils
 import bpy
-import mathutils
 
-from src.main.GlobalStorage import GlobalStorage
 from src.main.Module import Module
+from src.utility.Config import Config
 from src.utility.RendererUtility import RendererUtility
-from src.utility.BlenderUtility import get_all_blender_mesh_objects
-from src.utility.Utility import Utility
 
 
 class RendererInterface(Module):
@@ -136,11 +130,12 @@ class RendererInterface(Module):
           - bool
     """
 
-    def __init__(self, config):
+    def __init__(self, config: Config):
         Module.__init__(self, config)
         addon_utils.enable("render_auto_tile_size")
 
-    def _configure_renderer(self, default_samples=256, use_denoiser=False, default_denoiser="Intel"):
+    def _configure_renderer(self, default_samples: int = 256, use_denoiser: bool = False,
+                            default_denoiser: str = "Intel"):
         """
         Sets many different render parameters which can be adjusted via the config.
 
@@ -182,7 +177,9 @@ class RendererInterface(Module):
 
         self._use_alpha_channel = self.config.get_bool('use_alpha', False)
 
-    def _render(self, default_prefix, default_key, output_key_parameter_name="output_key", output_file_prefix_parameter_name="output_file_prefix", enable_transparency=False, file_format="PNG"):
+    def _render(self, default_prefix: str, default_key: str, output_key_parameter_name: str = "output_key",
+                output_file_prefix_parameter_name: str = "output_file_prefix", enable_transparency: bool = False,
+                file_format: str = "PNG"):
         """ Renders each registered keypoint.
 
         :param default_prefix: The default prefix of the output files.
@@ -223,5 +220,6 @@ class RendererInterface(Module):
             RendererUtility.render(
                 self._determine_output_dir(),
                 self.config.get_string(output_file_prefix_parameter_name, default_prefix),
-                self.config.get_string(output_key_parameter_name, default_key)
+                self.config.get_string(output_key_parameter_name, default_key),
+                return_data=False
             )

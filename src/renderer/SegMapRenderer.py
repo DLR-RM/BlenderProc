@@ -144,5 +144,6 @@ class SegMapRenderer(RendererInterface):
                     self.config.get_string("output_key", "segmap"),
                     self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map"),
                     self.config.get_string("segcolormap_output_key", "segcolormap"),
-                    use_alpha_channel=self._use_alpha_channel
+                    use_alpha_channel=self._use_alpha_channel,
+                    return_data=False
                 )
