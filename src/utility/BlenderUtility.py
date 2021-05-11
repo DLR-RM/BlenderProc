@@ -1,17 +1,14 @@
 from collections import defaultdict
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["imageio"])
 
 import bpy
 import bmesh
 import mathutils
 from mathutils import Vector
-from sys import platform
 
 import numpy as np
-try:
-    import imageio
-except ImportError as e:
-    raise ImportError(f"The imageio lib could not be found, use the SetupUtility.setup([\"imageio\"]) to install it"
-                      f" before executing the rest of the code: {e}")
+import imageio
 
 from src.utility.Utility import Utility
 

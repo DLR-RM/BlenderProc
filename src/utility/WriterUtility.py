@@ -2,6 +2,9 @@ import os
 from typing import List, Dict, Union, Any, Set, Tuple
 from collections import defaultdict
 
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["h5py"])
+
 import numpy as np
 import csv
 import math
@@ -9,6 +12,7 @@ import json
 
 import bpy
 import mathutils
+import h5py
 
 from src.utility.BlenderUtility import load_image
 from src.utility.MathUtility import MathUtility
@@ -221,12 +225,6 @@ class WriterUtility:
                                      left image and img[1] the right. They will be saved in separate keys: for example
                                      for colors in colors_0 and colors_1.
         """
-        try:
-            import h5py
-        except ImportError as e:
-            raise ImportError(f"The h5py lib could not be found, use the SetupUtility.setup([\"h5py\"]) to install it"
-                              f" before executing the rest of the code: {e}")
-
 
         if not os.path.exists(output_dir_path):
             os.makedirs(output_dir_path)
