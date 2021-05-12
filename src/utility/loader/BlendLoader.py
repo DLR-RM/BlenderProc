@@ -5,19 +5,13 @@ from typing import List, Union
 import bpy
 
 from src.utility.BlenderUtility import collect_all_orphan_datablocks
+from src.utility.EntityUtility import Entity
+from src.utility.LightUtility import Light
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 
 
 class BlendLoader:
-    known_datablock_names = {"/Camera": "cameras",
-                              "/Collection": "collections",
-                              "/Image": "images",
-                              "/Light": "lights",
-                              "/Material": "materials",
-                              "/Mesh": "meshes",
-                              "/Object": "objects",
-                              "/Texture": "textures"}
     valid_datablocks = [collection.lower() for collection in dir(bpy.data) if isinstance(getattr(bpy.data, collection), bpy.types.bpy_prop_collection)]
     valid_object_types = ['mesh', 'curve', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume', 'gpencil', 'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
 
@@ -91,7 +85,12 @@ class BlendLoader:
                     if obj.type.lower() in obj_types:
                         # Link objects to the scene
                         bpy.context.collection.objects.link(obj)
-                        loaded_objects.append(obj)
+                        if obj.type == 'MESH':
+                            loaded_objects.append(MeshObject(obj))
+                        elif obj.type == 'LIGHT':
+                            loaded_objects.append(Light(obj))
+                        else:
+                            loaded_objects.append(Entity(obj))
 
                         # If a camera was imported
                         if obj.type == 'CAMERA':
