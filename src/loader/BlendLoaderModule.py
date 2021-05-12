@@ -1,10 +1,10 @@
 from src.loader.LoaderInterface import LoaderInterface
-from src.utility.Utility import Utility
+from src.utility.EntityUtility import Entity
 from src.utility.loader.BlendLoader import BlendLoader
 
 class BlendLoaderModule(LoaderInterface):
     """
-    This class provides functionality to load entities from a .blend file. A .blend file is a 
+    This class provides functionality to load entities from a .blend file. A .blend file is a
     blender generated  data file that wraps project resources into sections/datablocks. Resources can be
     loaded individually by name pattern matching or entire datablocks to entire project. For more
     information about a datablock see Blender's documentation for bpy.types.ID
@@ -31,7 +31,7 @@ class BlendLoaderModule(LoaderInterface):
 
     **Configuration**:
 
-    .. list-table:: 
+    .. list-table::
         :widths: 25 100 10
         :header-rows: 1
 
@@ -64,4 +64,4 @@ class BlendLoaderModule(LoaderInterface):
             name_regrex=self.config.get_string("entities", None),
             data_blocks=self.config.get_raw_value("datablocks", "objects")
         )
-        self._set_properties(newly_loaded_objects)
+        self._set_properties([obj for obj in newly_loaded_objects if isinstance(obj, Entity)])
