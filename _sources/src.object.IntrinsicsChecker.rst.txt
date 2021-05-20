@@ -1,7 +1,7 @@
-src\.object\.ObjectPoseSampler module
+src\.object\.IntrinsicsChecker module
 =====================================
 
-.. automodule:: src.object.ObjectPoseSampler
+.. automodule:: src.object.IntrinsicsChecker
     :members:
     :undoc-members:
     :show-inheritance:

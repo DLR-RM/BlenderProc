@@ -9,6 +9,7 @@ Submodules
    src.object.CalibrationboardSampler
    src.object.FloorExtractorModule
    src.object.HideModule
+   src.object.IntrinsicsChecker
    src.object.ObjectPoseSamplerModule
    src.object.ObjectReplacerModule
    src.object.OnSurfaceSampler

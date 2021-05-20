@@ -8,6 +8,10 @@
 
 # Version History
 
+## Version 1.11.1 18th May 2021
+- fix a bug on mac os, where the blender python path has changed
+- fix a bug in the BlenderLoaderModule which caused that the setting of custom properties was not successful
+
 ## Version 1.11.0 11th May 2021
 - BlenderProc now can be executed via a python script (experimental, not all modules are supported yet)
 - python API extension for the following modules:

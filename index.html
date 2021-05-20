@@ -33,7 +33,7 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 </head>
@@ -83,6 +83,7 @@
 <ul class="compound-first">
 <li class="toctree-l1"><a class="reference external" href="examples/README.html">Examples</a><ul>
 <li class="toctree-l2"><a class="reference external" href="examples/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/api/README.html">api</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/auto_shading/README.html">auto_shading</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/basic/README.html">basic</a></li>
 <li class="toctree-l2"><a class="reference external" href="examples/basic_object_pose/README.html">basic_object_pose</a></li>
@@ -164,7 +165,6 @@
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.loader.html">Loader</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.loader.AMASSLoaderModule.html#src.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.loader.BopLoaderModule.html#src.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.loader.CCMaterialLoaderModule.html#src.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.loader.Front3DLoaderModule.html#src.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference external" href="src.loader.SuncgLoaderModule.html#src.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.manipulators.html">Manipulators</a><ul>
@@ -197,6 +198,7 @@
 <li class="toctree-l2"><a class="reference external" href="src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.object.FloorExtractorModule.html#src.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.object.HideModule.html#src.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.object.IntrinsicsChecker.html#src.object.IntrinsicsChecker.IntrinsicsChecker">IntrinsicsChecker</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.object.ObjectPoseSamplerModule.html#src.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.object.ObjectReplacerModule.html#src.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
@@ -206,8 +208,8 @@
 <li class="toctree-l1"><a class="reference external" href="src.postprocessing.html">Postprocessing</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.renderer.html">Renderer</a><ul>
@@ -221,12 +223,12 @@
 <li class="toctree-l2"><a class="reference external" href="src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.writer.ShapeNetWriter.html#src.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
 </ul>
 </li>
 </ul>
@@ -263,14 +265,13 @@
 <li class="toctree-l2"><a class="reference external" href="src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.main.InitializerModule.html#src.main.InitializerModule.InitializerModule">InitializerModule</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.main.Module.html#src.main.Module.Module">Module</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference external" href="src.utility.html">Utility</a><ul>
 <li class="toctree-l2"><a class="reference external" href="src.utility.BopWriterUtility.html#src.utility.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.utility.CocoWriterUtility.html#src.utility.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.CollisionUtility.html#src.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Config.html#src.utility.Config.Config">Config</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
@@ -290,13 +291,14 @@
 <li class="toctree-l2"><a class="reference external" href="src.utility.PostProcessingUtility.html#src.utility.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
-<li class="toctree-l2"><a class="reference external" href="src.utility.SetupUtility.html#src.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.StructUtility.html#src.utility.StructUtility.Struct">Struct</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.KeyFrameState">KeyFrameState</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.CocoWriterUtility.html#src.utility.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="src.utility.SetupUtility.html#src.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
 <li class="toctree-l2"><a class="reference external" href="src.utility.WriterUtility.html#src.utility.WriterUtility.WriterUtility">WriterUtility</a></li>
 </ul>
 </li>
@@ -371,14 +373,14 @@
 <a class="reference external image-reference" href="https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basic/basic_example.ipynb"><img alt="Open In Collab" src="https://colab.research.google.com/assets/colab-badge.svg" /></a>
 <a class="reference external image-reference" href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg" /></a>
 <p align="center">
-<img src="readme.jpg" alt="Front readme image" width=500>
+<img src="images/readme.jpg" alt="Front readme image" width=500>
 </p><p>A procedural Blender pipeline for photorealistic training image generation.</p>
 <p>Check out our <a class="reference external" href="https://arxiv.org/abs/1911.01911">arXiv paper</a> (we are updating it from time to time) and our <a class="reference external" href="https://sim2real.github.io/assets/papers/2020/denninger.pdf">workshop paper</a> on sim2real transfer presented at RSS 2020.</p>
 <div class="section" id="overview-video">
 <h2>Overview Video<a class="headerlink" href="#overview-video" title="Permalink to this headline">¶</a></h2>
 <div align="center">
 <a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
-<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550> </a>
+<img src="images/BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550> </a>
 </div><p>BlenderProc also has a complete <a class="reference external" href="https://dlr-rm.github.io/BlenderProc">documentation site</a>.</p>
 <p>There is also an extended introduction video to BlenderProc, it covers the basics and a bit of the background story and how it all started. It can be found <a class="reference external" href="https://www.youtube.com/watch?v=1AvY_iS6xQA">here</a>.</p>
 </div>
@@ -408,7 +410,7 @@ An exemplary <code class="docutils literal notranslate"><span class="pre">config
 <p>BlenderProc here generates a scene, places cameras in it and renders the content. This process has to be repeated multiple times to generate a diverse dataset.
 Each run should construct a random scene to create a vast variety of different scenarios, to make the generalization to the real world easier.</p>
 <p align="center">
-<img src="BlenderProcRerun.jpg" alt="BlenderProc rerun image" width=500>
+<img src="images/BlenderProcRerun.jpg" alt="BlenderProc rerun image" width=500>
 </p><p>For that reason we offer a <code class="docutils literal notranslate"><span class="pre">rerun.py</span></code> script, which does exactly this:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python rerun.py config.yaml &lt;additional arguments&gt;
 </pre></div>
@@ -454,7 +456,7 @@ For example, to start the basic example in debug mode, run:</p>
 <p>Now the Blender UI opens up, the scripting tab is selected, the correct script is loaded and your config path and arguments are placed.
 To start the BlenderProc pipeline, one now just has to press play (see red circle in image).</p>
 <p align="center">
-<img src="debug.png" alt="Front readme image" width=500>
+<img src="images/debug.png" alt="Front readme image" width=500>
 </p><p>The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.
 To adjust the config arguments without restarting blender, just change line 32 in the scripting tab.</p>
 </div>
@@ -483,7 +485,7 @@ To adjust the config arguments without restarting blender, just change line 32 i
 </div>
 <hr class="docutils" />
 <div align="center">
-  <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="docs/source/logo.svg" height="100px" hspace="3%" vspace="60px"></a>
+  <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="images/logo.svg" hspace="3%" vspace="60px"></a>
 </div></div>
 </div>
 
@@ -498,7 +500,7 @@ To adjust the config arguments without restarting blender, just change line 32 i
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, DLR RMC
+        &copy; Copyright 2021, DLR RMC
 
     </p>
   </div>
