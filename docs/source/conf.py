@@ -62,7 +62,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'BlenderProc'
-copyright = '2020, DLR RMC'
+copyright = '2021, DLR RMC'
 author = 'DLR RMC'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -112,7 +112,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_context = {
     'css_files': [
-        '_static/theme_overrides.css',  # override wide tables in RTD theme
+        '_static/css/theme_overrides.css',  # override wide tables in RTD theme
         ],
      }
 
