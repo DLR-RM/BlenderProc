@@ -4,7 +4,7 @@ import random
 
 import bpy
 
-from src.camera.CameraSampler import CameraSampler
+from src.camera.CameraSamplerModule import CameraSampler
 from src.utility.CameraUtility import CameraUtility
 from src.utility.Config import Config
 from src.utility.Utility import Utility

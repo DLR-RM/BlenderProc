@@ -383,3 +383,46 @@ class MeshObject(Entity):
         bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
         bm.free()
         return bvh_tree
+
+    @staticmethod
+    def create_bvh_tree_multi_objects(mesh_objects):
+        """ Creates a bvh tree which contains multiple mesh objects.
+
+        Such a tree is later used for fast raycasting.
+        """
+        # Create bmesh which will contain the meshes of all objects
+        bm = bmesh.new()
+        # Go through all mesh objects
+        for obj in mesh_objects:
+            # Add object mesh to bmesh (the newly added vertices will be automatically selected)
+            bm.from_mesh(obj.get_mesh())
+            # Apply world matrix to all selected vertices
+            bm.transform(obj.get_local2world_mat(), filter={"SELECT"})
+            # Deselect all vertices
+            for v in bm.verts:
+                v.select = False
+
+        # Create tree from bmesh
+        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+        bm.free()
+        return bvh_tree
+
+    @staticmethod
+    def compute_poi(objects: ["MeshObject"]) -> mathutils.Vector:
+        """
+        :return: Point of interest in the scene. Type: mathutils.Vector.
+        """
+        # Init matrix for all points of all bounding boxes
+        mean_bb_points = []
+
+        for obj in objects:
+            # Get bounding box corners
+            bb_points = obj.get_bound_box()
+            # Compute mean coords of bounding box
+            mean_bb_points.append(np.mean(bb_points, axis=0))
+        # Query point - mean of means
+        mean_bb_point = np.mean(mean_bb_points, axis=0)
+        # Closest point (from means) to query point (mean of means)
+        poi = mathutils.Vector(mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis=1))])
+
+        return poi

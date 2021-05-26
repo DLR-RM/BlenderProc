@@ -3,7 +3,7 @@ import numpy as np
 
 import bpy
 
-from src.camera.CameraSampler import CameraSampler
+from src.camera.CameraSamplerModule import CameraSampler
 from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bounds
 from src.utility.CameraUtility import CameraUtility
 from src.utility.Config import Config
