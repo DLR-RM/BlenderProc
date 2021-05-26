@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
+SetupUtility.setup(["Pillow==5.4.1"])
 
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from src.utility.LabelIdMapping import LabelIdMapping
@@ -23,6 +23,15 @@ from mathutils import Matrix, Euler
 import argparse
 import os
 
+from PIL import Image
+import PIL
+print(PIL.__version__)
+import numpy as np
+
+np_im = np.random.rand(100,200,3).astype(np.uint8)
+im = Image.fromarray(np_im)
+im.save('test.jpg')
+exit(0)
 parser = argparse.ArgumentParser()
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
 parser.add_argument('output_dir', nargs='?', default="examples/suncg_with_cam_sampling/output", help="Path to where the final files, will be saved")

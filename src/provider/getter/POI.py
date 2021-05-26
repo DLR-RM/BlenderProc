@@ -2,9 +2,6 @@ from src.main.Provider import Provider
 from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
 
-from src.utility.NoIdea import NoIdea
-
-
 class POI(Provider):
     """
     Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
@@ -60,4 +57,4 @@ class POI(Provider):
         if len(selected_objects) == 0:
             raise Exception("No objects were selected!")
 
-        return NoIdea.compute_poi(selected_objects)
+        return MeshObject.compute_poi(selected_objects)
