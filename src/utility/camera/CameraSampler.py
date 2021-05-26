@@ -7,18 +7,29 @@ class CameraSampler:
 
     @staticmethod
     def sample(number_of_poses, sample_pose=None, is_pose_valid=None, max_tries=100000000, on_max_tries_reached=None):
-        """ Sets camera poses. """
+        """ Samples N valid camera poses.
 
+        The sampling and validation procedure are specified via a function pointer.
+        In each iteration a new camera pose is sampled via sample_pose() and only kept if is_pose_valid() returns True.
+        This is done until N valid camera poses have been found or after max_tries has been reached.
+
+        :param number_of_poses: The number of valid camera poses that should be sampled.
+        :param sample_pose: The function that samples new camera poses in the form of a cam2world transformation matrix.
+        :param is_pose_valid: The function that determines whether a sampled camera pose is a valid and should be kept.
+        :param max_tries: The maximum number of tries before giving up.
+        :param on_max_tries_reached: A function that is called if max_tries is reached. If this function then returns true, tries will be reset to 0 and the loop starts all over again.
+        """
+        # If not sample_pose function has been given, use a simple one that samples uniformly in SO(6)
         if sample_pose is None:
             sample_pose = lambda: None
+        # If no is_pose_valid function has been given, use one that accepts all poses
         if is_pose_valid is None:
-            is_pose_valid = lambda cam, cam_ob, cam2world_matrix: True
+            is_pose_valid = lambda cam2world_matrix, existing_poses: True
 
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-
-        all_tries = 0  # max_tries is now applied per each score
+        # Init
+        all_tries = 0
         tries = 0
+        existing_poses = []
 
         for i in range(number_of_poses):
             # Do until a valid pose has been found or the max number of tries has been reached
@@ -26,30 +37,33 @@ class CameraSampler:
                 tries += 1
                 all_tries += 1
                 # Sample a new cam pose and check if its valid
-                if CameraSampler.sample_and_validate_cam_pose(cam, cam_ob, sample_pose, is_pose_valid):
+                if CameraSampler.sample_and_validate_cam_pose(sample_pose, is_pose_valid, existing_poses):
                     break
 
+            # If max tries has been reached
             if tries >= max_tries and on_max_tries_reached is not None:
+                # If callback returns True, start all over again.
                 if on_max_tries_reached():
                     tries = 0
 
         print(str(all_tries) + " tries were necessary")
 
     @staticmethod
-    def sample_and_validate_cam_pose(cam, cam_ob, sample_pose, is_pose_valid):
+    def sample_and_validate_cam_pose(sample_pose, is_pose_valid: , existing_poses: [Matrix]):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
-        :param config: The config object describing how to sample
+        :param sample_pose: The function that samples new camera poses in the form of a cam2world transformation matrix.
+        :param is_pose_valid: The function that determines whether a sampled camera pose is a valid and should be kept.
+        :param existing_poses: A list of already sampled valid poses.
         :return: True, if the sampled pose was valid
         """
         # Sample camera extrinsics (we do not set them yet for performance reasons)
         cam2world_matrix = sample_pose()
 
-        if is_pose_valid(cam, cam_ob, cam2world_matrix):
+        if is_pose_valid(cam2world_matrix, existing_poses):
             # Set camera extrinsics as the pose is valid
             CameraUtility.add_camera_pose(cam2world_matrix)
+            existing_poses.append(cam2world_matrix)
             return True
         else:
             return False

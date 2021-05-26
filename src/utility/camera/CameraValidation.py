@@ -5,22 +5,31 @@ import bpy
 import sys
 import numpy as np
 import mathutils
+from mathutils import Matrix, Vector
+
+from src.utility.MeshObjectUtility import MeshObject
 
 
 class CameraValidation:
 
     @staticmethod
-    def perform_obstacle_in_view_check(cam, cam2world_matrix, proximity_checks, bvh_tree, sqrt_number_of_rays):
-        """ Check if there is an obstacle in front of the camera which is less than the configured
-            "min_dist_to_obstacle" away from it.
+    def perform_obstacle_in_view_check(cam2world_matrix: Matrix, proximity_checks: dict, bvh_tree: mathutils.bvhtree.BVHTree, sqrt_number_of_rays: int = 10):
+        """ Check if there are obstacles in front of the camera which are too far or too close based on the given proximity_checks.
 
-        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
-        :return: True, if there are no obstacles too close to the cam.
+        :param proximity_checks: A dictionary containing operators (e.g. avg, min) as keys and as values dictionaries containing
+                                 thresholds in the form of {"min": 1.0, "max":4.0} or just the numerical threshold in case of max or min.
+                                 The operators are combined in conjunction (i.e boolean AND). This can also be used to avoid the
+                                 background in images, with the no_background: True option.
+        :param bvh_tree: A bvh tree containing all objects that should be considered here.
+        :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
+        :return: True, if the given camera pose does not violate any of the specified proximity_checks.
         """
         if not proximity_checks:  # if no checks are in the settings all positions are accepted
             return True
 
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
         # Bring to world space
@@ -107,16 +116,17 @@ class CameraValidation:
         return True
 
     @staticmethod
-    def visible_objects(cam: bpy.types.Camera, cam2world_matrix: mathutils.Matrix, sqrt_number_of_rays):
+    def visible_objects(cam2world_matrix: mathutils.Matrix, sqrt_number_of_rays: int) -> [MeshObject]:
         """ Returns a set of objects visible from the given camera pose.
 
         Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
 
-        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
         :param cam2world_matrix: The world matrix which describes the camera orientation to check.
         :return: A set of objects visible hit by the sent rays.
         """
         visible_objects = set()
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
 
         # Get position of the corners of the near plane
         frame = cam.view_frame(scene=bpy.context.scene)
@@ -136,12 +146,12 @@ class CameraValidation:
                 # Send ray from the camera position through the current point on the plane
                 _, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, position, end - position)
                 # Add hit object to set
-                visible_objects.add(hit_object)
+                visible_objects.add(MeshObject(hit_object))
 
         return visible_objects
 
     @staticmethod
-    def scene_coverage_score(cam, cam2world_matrix, special_objects, special_objects_weight, sqrt_number_of_rays):
+    def scene_coverage_score(cam2world_matrix: Matrix, special_objects: list = None, special_objects_weight = 2, sqrt_number_of_rays = 10) -> float:
         """ Evaluate the interestingness/coverage of the scene.
 
         This module tries to look at as many objects at possible, this might lead to
@@ -150,10 +160,13 @@ class CameraValidation:
         Only for SUNCG and 3D Front:
             Least interesting objects: walls, ceilings, floors.
 
-        :param cam: The camera whose view frame is used (only FOV is relevant, pose of cam is ignored).
-        :param cam2world_matrix: The world matrix which describes the camera orientation to check.
+        :param cam2world_matrix: The world matrix which describes the camera pose to check.
         :return: the scoring of the scene.
         """
+        if special_objects is None:
+            special_objects = []
+        cam_ob = bpy.context.scene.camera
+        cam = cam_ob.data
 
         num_of_rays = sqrt_number_of_rays * sqrt_number_of_rays
         score = 0.0
@@ -212,17 +225,33 @@ class CameraValidation:
         return score
 
     @staticmethod
-    def decrease_interest_score(interest_score, min_interest_score, interest_score_step):
+    def decrease_interest_score(interest_score: float, min_interest_score: float, interest_score_step: float):
+        """ Decreases the interest scores in the given interval
+
+        :param interest_score: The current interest score.
+        :param min_interest_score: The minimum desired interest scores.
+        :param interest_score_step: The step size in which the interest score should be reduced.
+        :return: Returns the new interest score, and True/False if minimum has not been reached.
+        """
         if interest_score <= min_interest_score:
             return False, interest_score
         else:
             return True, interest_score - interest_score_step
 
     @staticmethod
-    def check_novel_pose(cam2world_matrix, existing_poses, check_pose_novelty_rot, check_pose_novelty_translation, min_var_diff_rot, min_var_diff_translation):
+    def check_novel_pose(cam2world_matrix: Matrix, existing_poses: [Matrix], check_pose_novelty_rot: bool, check_pose_novelty_translation: bool, min_var_diff_rot: float, min_var_diff_translation: float):
         """ Checks if a newly sampled pose is novel based on variance checks.
 
-        :param cam2world_matrix: camera pose to check
+        :param cam2world_matrix: The world matrix which describes the camera pose to check.
+        :param existing_poses: The list of already sampled valid poses.
+        :param check_pose_novelty_rot: Checks that a sampled new pose is novel with respect to the rotation component.
+        :param check_pose_novelty_translation: Checks that a sampled new pose is novel with respect to the translation component.
+        :param min_var_diff_rot: Considers a pose novel if it increases the variance of the rotation component of all poses sampled by
+                                 this parameter's value in percentage. If set to -1, then it would only check that the variance is
+                                 increased. Default: sys.float_info.min.
+        :param min_var_diff_translation: Same as min_var_diff_rot but for translation. If set to -1, then it would only check that the variance
+                                         is increased. Default: sys.float_info.min.
+        :return: True, if the given pose is novel.
         """
         def _variance_constraint(array, new_val, old_var, diff_threshold, mode):
             array.append(new_val)
@@ -258,7 +287,7 @@ class CameraValidation:
         return True
 
     @staticmethod
-    def position_is_above_object(position, object):
+    def position_is_above_object(position: Vector, object: MeshObject):
         """ Make sure the given position is straight above the given object with no obstacles in between.
 
         :param position: The position to check.

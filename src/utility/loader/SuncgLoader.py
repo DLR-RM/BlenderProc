@@ -19,7 +19,7 @@ from typing import Tuple
 class SuncgLoader:
 
     @staticmethod
-    def load(house_path: str, suncg_dir: str) -> List[MeshObject]:
+    def load(house_path: str, suncg_dir: str = None) -> List[MeshObject]:
         """ Loads a house.json file into blender.
 
         - Loads all objects files specified in the house.json file.
@@ -30,6 +30,10 @@ class SuncgLoader:
         :param suncg_dir: The path to the suncg root directory which should be used for loading objects, rooms, textures etc.
         :return: The list of loaded mesh objects.
         """
+        # If not suncg root directory has been given, determine it via the given house directory.
+        if suncg_dir is None:
+            suncg_dir = os.path.join(os.path.dirname(house_path), "../..")
+
         SuncgLoader._suncg_dir = suncg_dir
         SuncgLoader._collection_of_loaded_objs = {}
         # there are only two types of materials, textures and diffuse

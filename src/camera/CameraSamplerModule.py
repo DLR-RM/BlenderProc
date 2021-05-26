@@ -160,7 +160,7 @@ class CameraSamplerModule(CameraInterface):
         self.rotations = []
         self.translations = []
 
-        self.var_rot, self.var_translation   = 0.0, 0.0
+        self.var_rot, self.var_translation = 0.0, 0.0
         self.check_pose_novelty_rot = self.config.get_bool("check_pose_novelty_rot", False)
         self.check_pose_novelty_translation = self.config.get_bool("check_pose_novelty_translation", False)
 
@@ -219,22 +219,13 @@ class CameraSamplerModule(CameraInterface):
 
         self.interest_score = self.interest_score_range
 
-        def sample_pose():
-            cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
-            return cam2world_matrix
+        CameraSampler.sample(number_of_poses, self._sample_pose, self._is_pose_valid, self.max_tries, self._on_max_tries_reached)
 
-        def is_pose_valid(cam, cam_ob, cam2world_matrix, existing_poses):
-            return self._is_pose_valid(cam, cam_ob, cam2world_matrix, existing_poses)
+    def _sample_pose(self):
+        cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
+        return cam2world_matrix
 
-        def on_max_tries_reached():
-            continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
-            if continue_trying:
-                print("Trying a different min_interest_score value: %f" % self.interest_score)
-            return continue_trying
-
-        CameraSampler.sample(number_of_poses, sample_pose, is_pose_valid, self.max_tries, on_max_tries_reached)
-
-    def _is_pose_valid(self, cam, cam_ob, cam2world_matrix, existing_poses):
+    def _is_pose_valid(self, cam2world_matrix, existing_poses):
         """ Determines if the given pose is valid.
 
         - Checks if the distance to objects is in the configured range
@@ -245,14 +236,14 @@ class CameraSamplerModule(CameraInterface):
         :param cam2world_matrix: The sampled camera extrinsics in form of a camera to world frame transformation matrix.
         :return: True, if the pose is valid
         """
-        if not CameraValidation.perform_obstacle_in_view_check(cam, cam2world_matrix, self.proximity_checks, self.bvh_tree, self.sqrt_number_of_rays):
+        if not CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, self.proximity_checks, self.bvh_tree, self.sqrt_number_of_rays):
             return False
 
-        if self.interest_score > 0 and CameraValidation.scene_coverage_score(cam, cam2world_matrix, self.special_objects, self.special_objects_weight, self.sqrt_number_of_rays) < self.interest_score:
+        if self.interest_score > 0 and CameraValidation.scene_coverage_score(cam2world_matrix, self.special_objects, self.special_objects_weight, self.sqrt_number_of_rays) < self.interest_score:
             return False
 
         if len(self.check_visible_objects) > 0:
-            visible_objects = CameraValidation.visible_objects(cam, cam2world_matrix, self.sqrt_number_of_rays)
+            visible_objects = CameraValidation.visible_objects(cam2world_matrix, self.sqrt_number_of_rays)
             for obj in self.check_visible_objects:
                 if obj not in visible_objects:
                     return False
@@ -267,3 +258,9 @@ class CameraSamplerModule(CameraInterface):
             return False
 
         return True
+
+    def _on_max_tries_reached(self):
+        continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
+        if continue_trying:
+            print("Trying a different min_interest_score value: %f" % self.interest_score)
+        return continue_trying
