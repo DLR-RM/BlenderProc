@@ -157,7 +157,7 @@ class Utility:
         elif path.startswith("~"):
             return path.replace("~", os.getenv("HOME"))
         else:
-            return os.path.join(Utility.working_dir, path)
+            return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
     def get_temporary_directory():

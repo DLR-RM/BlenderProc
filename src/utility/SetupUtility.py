@@ -55,7 +55,7 @@ class SetupUtility:
         from src.utility.Utility import Utility
         
         Utility.temp_dir = Utility.resolve_path(temp_dir)
-        Utility.working_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+        Utility.working_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
         os.makedirs(Utility.temp_dir, exist_ok=True)
     
     @staticmethod
