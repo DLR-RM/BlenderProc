@@ -46,7 +46,7 @@ class SuncgPointInRoomSampler:
 
         raise Exception("Cannot sample any point inside the loaded suncg rooms.")
 
-    def _find_floor(self, room_obj: bpy.types.object) -> bpy.types.object:
+    def _find_floor(self, room_obj: bpy.types.Object) -> bpy.types.Object:
         """ Returns the floor object of the given room object.
 
         Goes through all children and returns the first one with type "Floor".

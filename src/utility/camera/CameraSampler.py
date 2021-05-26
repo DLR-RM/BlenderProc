@@ -1,12 +1,14 @@
+from typing import Callable, List
+
 import bpy
 
 from src.utility.CameraUtility import CameraUtility
-
+from mathutils import Matrix
 
 class CameraSampler:
 
     @staticmethod
-    def sample(number_of_poses, sample_pose=None, is_pose_valid=None, max_tries=100000000, on_max_tries_reached=None):
+    def sample(number_of_poses: int, sample_pose: Callable[[], Matrix] = None, is_pose_valid: Callable[[Matrix, List[Matrix]], bool] = None, max_tries=100000000, on_max_tries_reached: Callable[[], bool] = None):
         """ Samples N valid camera poses.
 
         The sampling and validation procedure are specified via a function pointer.
@@ -49,7 +51,7 @@ class CameraSampler:
         print(str(all_tries) + " tries were necessary")
 
     @staticmethod
-    def sample_and_validate_cam_pose(sample_pose, is_pose_valid: , existing_poses: [Matrix]):
+    def sample_and_validate_cam_pose(sample_pose: Callable[[], Matrix], is_pose_valid: Callable[[Matrix, List[Matrix]], bool], existing_poses: [Matrix]):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
         :param sample_pose: The function that samples new camera poses in the form of a cam2world transformation matrix.
