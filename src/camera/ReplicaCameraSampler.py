@@ -53,14 +53,12 @@ class ReplicaCameraSampler(CameraSamplerModule):
 
         super().run()
 
-    def _sample_pose(self):
+    def _sample_pose(self, config):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param config: The config object describing how to sample
         :return: True, if the sampled pose was valid
         """
-        cam2world_matrix = super()._sample_pose()
+        cam2world_matrix = super()._sample_pose(config)
         cam2world_matrix.translation = self.point_sampler.sample(cam2world_matrix.translation[2])
         return cam2world_matrix

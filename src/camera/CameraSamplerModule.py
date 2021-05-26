@@ -9,7 +9,7 @@ from src.utility.ItemCollection import ItemCollection
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.camera.CameraSampler import CameraSampler
 from src.utility.camera.CameraValidation import CameraValidation
-
+from mathutils import Matrix
 
 class CameraSamplerModule(CameraInterface):
     """
@@ -219,21 +219,23 @@ class CameraSamplerModule(CameraInterface):
 
         self.interest_score = self.interest_score_range
 
-        CameraSampler.sample(number_of_poses, self._sample_pose, self._is_pose_valid, self.max_tries, self._on_max_tries_reached)
+        CameraSampler.sample(number_of_poses, lambda: self._sample_pose(config), self._is_pose_valid, self.max_tries, self._on_max_tries_reached)
 
-    def _sample_pose(self):
+    def _sample_pose(self, config) -> Matrix:
+        """
+        :return: The new sampled pose.
+        """
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
         return cam2world_matrix
 
-    def _is_pose_valid(self, cam2world_matrix, existing_poses):
+    def _is_pose_valid(self, cam2world_matrix: Matrix, existing_poses: [Matrix]) -> bool:
         """ Determines if the given pose is valid.
 
         - Checks if the distance to objects is in the configured range
         - Checks if the scene coverage score is above the configured threshold
 
-        :param cam: The camera which contains only camera specific attributes.
-        :param cam_ob: The object linked to the camera which determines general properties like location/orientation
         :param cam2world_matrix: The sampled camera extrinsics in form of a camera to world frame transformation matrix.
+        :param existing_poses: The list of already sampled valid poses.
         :return: True, if the pose is valid
         """
         if not CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, self.proximity_checks, self.bvh_tree, self.sqrt_number_of_rays):
@@ -259,7 +261,10 @@ class CameraSamplerModule(CameraInterface):
 
         return True
 
-    def _on_max_tries_reached(self):
+    def _on_max_tries_reached(self) -> bool:
+        """
+        :return: True, if we should continue trying.
+        """
         continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
         if continue_trying:
             print("Trying a different min_interest_score value: %f" % self.interest_score)
