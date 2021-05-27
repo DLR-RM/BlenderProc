@@ -4,35 +4,36 @@ import numpy as np
 from mathutils import Vector
 
 from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bounds
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.camera.CameraValidation import CameraValidation
 
 
 class Front3DPointInRoomSampler:
 
-    def __init__(self, amount_of_objects_needed_per_room: int = 2):
+    def __init__(self, front3d_objects: [MeshObject], amount_of_objects_needed_per_room: int = 2):
         """ Collects the floors of all rooms with at least N objects.
 
+        :param front3d_objects: The list of front3d objects that should be considered.
         :param amount_of_objects_needed_per_room: The number of objects a rooms needs to have, such that it is considered for sampling.
         """
-        all_objects = get_all_blender_mesh_objects()
-        front_3D_objs = [obj for obj in all_objects if "is_3D_future" in obj and obj["is_3D_future"]]
+        front3d_objects = [obj for obj in front3d_objects if obj.has_cp("is_3D_future")]
 
-        floor_objs = [obj for obj in front_3D_objs if obj.name.lower().startswith("floor")]
+        floor_objs = [obj for obj in front3d_objects if obj.get_name().lower().startswith("floor")]
 
         # count objects per floor -> room
-        floor_obj_counters = {obj.name: 0 for obj in floor_objs}
+        floor_obj_counters = {obj.get_name(): 0 for obj in floor_objs}
         counter = 0
-        for obj in front_3D_objs:
-            name = obj.name.lower()
+        for obj in front3d_objects:
+            name = obj.get_name().lower()
             if "wall" in name or "ceiling" in name:
                 continue
             counter += 1
-            location = obj.location
+
             for floor_obj in floor_objs:
-                is_above = CameraValidation.position_is_above_object(location, floor_obj)
+                is_above = floor_obj.position_is_above_object(obj.get_location())
                 if is_above:
-                    floor_obj_counters[floor_obj.name] += 1
-        self.used_floors = [obj for obj in floor_objs if floor_obj_counters[obj.name] > amount_of_objects_needed_per_room]
+                    floor_obj_counters[floor_obj.get_name()] += 1
+        self.used_floors = [obj for obj in floor_objs if floor_obj_counters[obj.get_name()] > amount_of_objects_needed_per_room]
 
 
     def sample(self, height: float, max_tries: int = 1000) -> Vector:
@@ -62,7 +63,7 @@ class Front3DPointInRoomSampler:
             ])
 
             # Check if sampled pose is above the floor to make sure its really inside the room
-            if CameraValidation.position_is_above_object(point, floor_obj):
+            if floor_obj.position_is_above_object(point):
                 return point
 
         raise Exception("Cannot sample any point inside the loaded front3d rooms.")

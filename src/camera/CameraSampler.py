@@ -199,7 +199,7 @@ class CameraSampler(CameraInterface):
         self.interest_score_step = config.get_float("interest_score_step", 0.1)
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
-        self._above_objects = config.get_list("check_if_pose_above_object_list", [])
+        self._above_objects = MeshObject.convert_to_meshes(config.get_list("check_if_pose_above_object_list", []))
         self.check_visible_objects = MeshObject.convert_to_meshes(config.get_list("check_if_objects_visible", []))
 
         # Set camera intrinsics
@@ -217,6 +217,7 @@ class CameraSampler(CameraInterface):
         number_of_poses = config.get_int("number_of_samples", 1)
         print("Sampling " + str(number_of_poses) + " cam poses")
 
+        # Start with max interest score
         self.interest_score = self.interest_score_range
 
         # Init
@@ -235,8 +236,8 @@ class CameraSampler(CameraInterface):
 
             # If max tries has been reached
             if tries >= self.max_tries:
+                # Decrease interest score and try again, if we have note yet reached minimum
                 continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
-                # If callback returns True, start all over again.
                 if continue_trying:
                     tries = 0
 
@@ -245,9 +246,7 @@ class CameraSampler(CameraInterface):
     def sample_and_validate_cam_pose(self, config, existing_poses: [Matrix]):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
-        :param sample_pose: The function that samples new camera poses in the form of a cam2world transformation matrix.
-        :param is_pose_valid: The function that determines whether a sampled camera pose is a valid and should be kept.
-        :param on_new_pose_added: A function that is called everytime a validated camera pose is permanently added.
+        :param config: The config object describing how to sample
         :param existing_poses: A list of already sampled valid poses.
         :return: True, if the sampled pose was valid
         """
@@ -306,7 +305,7 @@ class CameraSampler(CameraInterface):
 
         if self._above_objects:
             for obj in self._above_objects:
-                if CameraValidation.position_is_above_object(cam2world_matrix.to_translation(), obj):
+                if obj.position_is_above_object(cam2world_matrix.to_translation()):
                     return True
             return False
 

@@ -1,9 +1,10 @@
 import os
 
 from src.camera.CameraSampler import CameraSampler
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
-
+import bpy
 
 class ReplicaCameraSampler(CameraSampler):
     """
@@ -49,8 +50,19 @@ class ReplicaCameraSampler(CameraSampler):
         else:
             folder_path = os.path.join('resources', 'replica_dataset', 'height_levels', self.config.get_string('data_set_name'))
             file_path = Utility.resolve_path(os.path.join(folder_path, 'height_list_values.txt'))
-        self.point_sampler = ReplicaPointInRoomSampler(file_path)
 
+        if 'mesh' in bpy.data.objects:
+            mesh = MeshObject(bpy.data.objects['mesh'])
+        else:
+            raise Exception("Mesh object is not defined!")
+
+        # Find floor object
+        if 'floor' in bpy.data.objects:
+            floor_object = MeshObject(bpy.data.objects['floor'])
+        else:
+            raise Exception("No floor object is defined!")
+
+        self.point_sampler = ReplicaPointInRoomSampler(mesh, floor_object, file_path)
         super().run()
 
     def _sample_pose(self, config):

@@ -1,4 +1,6 @@
 from src.camera.CameraSampler import CameraSampler
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 
 
@@ -34,7 +36,7 @@ class Front3DCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
 
     def run(self):
-        self.point_sampler = Front3DPointInRoomSampler()
+        self.point_sampler = Front3DPointInRoomSampler(MeshObject.convert_to_meshes(get_all_blender_mesh_objects()))
         super().run()
 
     def _sample_pose(self, config):

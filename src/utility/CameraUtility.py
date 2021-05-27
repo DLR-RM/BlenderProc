@@ -37,7 +37,7 @@ class CameraUtility:
 
         :param forward_vec: The forward vector which specifies the direction the camera should look.
         :param up_axis: The up axis, usually Y.
-        :param inplane_rot:
+        :param inplane_rot: The inplane rotation in radians. If None is given, the inplane rotation is determined only based on the up vector.
         :return: The corresponding rotation matrix.
         """
         rotation_matrix = forward_vec.to_track_quat('-Z', up_axis).to_matrix()

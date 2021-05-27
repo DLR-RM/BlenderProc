@@ -47,3 +47,13 @@ class MathUtility:
             return Vector(output)
         else:
             return output
+
+    @staticmethod
+    def build_t_mat(translation: Vector, rotation: Matrix) -> Matrix:
+        """ Build a transformation matrix from translation and rotation parts.
+
+        :param translation: A vector representing the translation part.
+        :param rotation: A 3x3 rotation matrix.
+        :return: The 4x4 transformation matrix.
+        """
+        return Matrix.Translation(translation) @ rotation.to_4x4()

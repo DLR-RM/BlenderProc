@@ -385,10 +385,13 @@ class MeshObject(Entity):
         return bvh_tree
 
     @staticmethod
-    def create_bvh_tree_multi_objects(mesh_objects):
+    def create_bvh_tree_multi_objects(mesh_objects: ["MeshObject"]) -> mathutils.bvhtree.BVHTree:
         """ Creates a bvh tree which contains multiple mesh objects.
 
         Such a tree is later used for fast raycasting.
+
+        :param mesh_objects: The list of mesh objects that should be put into the BVH tree.
+        :return: The built BVH tree.
         """
         # Create bmesh which will contain the meshes of all objects
         bm = bmesh.new()
@@ -409,8 +412,11 @@ class MeshObject(Entity):
 
     @staticmethod
     def compute_poi(objects: ["MeshObject"]) -> mathutils.Vector:
-        """
-        :return: Point of interest in the scene. Type: mathutils.Vector.
+        """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
+        that is the closest one to the mean location of the bboxes of the selected objects.
+
+        :param objects: The list of mesh objects that should be considered.
+        :return: Point of interest in the scene.
         """
         # Init matrix for all points of all bounding boxes
         mean_bb_points = []
@@ -426,3 +432,15 @@ class MeshObject(Entity):
         poi = mathutils.Vector(mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis=1))])
 
         return poi
+
+    def position_is_above_object(self, position: Vector):
+        """ Make sure the given position is straight above the given object with no obstacles in between.
+
+        :param position: The position to check.
+        :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
+        """
+        # Send a ray straight down and check if the first hit object is the query object
+        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
+                                                                 position,
+                                                                 mathutils.Vector([0, 0, -1]))
+        return hit and hit_object == self.blender_obj

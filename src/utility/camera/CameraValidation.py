@@ -122,6 +122,7 @@ class CameraValidation:
         Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
 
         :param cam2world_matrix: The world matrix which describes the camera orientation to check.
+        :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
         :return: A set of objects visible hit by the sent rays.
         """
         visible_objects = set()
@@ -161,6 +162,11 @@ class CameraValidation:
             Least interesting objects: walls, ceilings, floors.
 
         :param cam2world_matrix: The world matrix which describes the camera pose to check.
+        :param special_objects: Objects that weights differently in calculating whether the scene is interesting or not, uses the
+                                coarse_grained_class or if not SUNCG, 3D Front, the category_id.
+        :param special_objects_weight: Weighting factor for more special objects, used to estimate the interestingness of the scene. Default:
+                                       2.0.
+        :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
         :return: the scoring of the scene.
         """
         if special_objects is None:
@@ -285,17 +291,3 @@ class CameraValidation:
                     return False
 
         return True
-
-    @staticmethod
-    def position_is_above_object(position: Vector, object: MeshObject):
-        """ Make sure the given position is straight above the given object with no obstacles in between.
-
-        :param position: The position to check.
-        :param object: The query object to use.
-        :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
-        """
-        # Send a ray straight down and check if the first hit object is the query object
-        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
-                                                                 position,
-                                                                 mathutils.Vector([0, 0, -1]))
-        return hit and hit_object == object

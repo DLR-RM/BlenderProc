@@ -7,29 +7,24 @@ import bpy
 from src.camera.CameraSampler import CameraSampler
 from src.utility.CameraUtility import CameraUtility
 from src.utility.Config import Config
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.camera.CameraValidation import CameraValidation
 from mathutils import Vector
 
 class ReplicaPointInRoomSampler:
 
-    def __init__(self, height_list_file_path: str):
+    def __init__(self, replica_mesh: MeshObject, replica_floor: MeshObject, height_list_file_path: str):
         """ Collect object containing all floors of all rooms and read in text file containing possible height values.
 
+        :param replica_mesh: The replica mesh object.
+        :param replica_floor: The replica floor object.
         :param height_list_file_path: The path to the file containing possible height values.
         """
         # Determine bounding box of the scene
-        if 'mesh' in bpy.data.objects:
-            bounding_box = bpy.data.objects['mesh'].bound_box
-            self.bounding_box = {"min": bounding_box[0], "max": bounding_box[-2]}
-        else:
-            raise Exception("Mesh object is not defined!")
-
-        # Find floor object
-        if 'floor' in bpy.data.objects:
-            self.floor_object = bpy.data.objects['floor']
-        else:
-            raise Exception("No floor object is defined!")
+        bounding_box = replica_mesh.get_bound_box()
+        self.bounding_box = {"min": bounding_box[0], "max": bounding_box[-2]}
+        self.floor_object = replica_floor
 
         with open(height_list_file_path) as file:
             self.floor_height_values = [float(val) for val in ast.literal_eval(file.read())]
@@ -54,7 +49,7 @@ class ReplicaPointInRoomSampler:
             ])
 
             # Check if sampled pose is above the floor to make sure its really inside the room
-            if CameraValidation.position_is_above_object(point, self.floor_object):
+            if self.floor_object.position_is_above_object(point):
                 return point
 
         raise Exception("Cannot sample any point inside the loaded replica rooms.")

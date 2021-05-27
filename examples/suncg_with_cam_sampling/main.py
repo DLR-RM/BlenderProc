@@ -1,4 +1,5 @@
 from src.utility.CameraUtility import CameraUtility
+from src.utility.MathUtility import MathUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -37,17 +38,22 @@ objs = SuncgLoader.load(args.house)
 # TODO Migrate to API
 Utility.initialize_modules([{"module": "lighting.SuncgLighting"}])[0].run()
 
+# Init sampler for sampling locations inside the loaded suncg house
 point_sampler = SuncgPointInRoomSampler()
+# Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
 
 poses = 0
 tries = 0
 while tries < 10000 and poses < 5:
+    # Sample point inside house
     height = np.random.uniform(0.5, 2)
     location = point_sampler.sample(height)
+    # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    cam2world_matrix = Matrix.Translation(location) @ Euler(rotation).to_matrix().to_4x4()
+    cam2world_matrix = MathUtility.build_t_mat(location, Euler(rotation).to_matrix())
 
+    # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:
         CameraUtility.add_camera_pose(cam2world_matrix)
         poses += 1

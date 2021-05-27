@@ -3,20 +3,24 @@ from typing import Union
 
 import bpy
 
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.camera.CameraValidation import CameraValidation
 from mathutils import Vector
 
 class SuncgPointInRoomSampler:
 
-    def __init__(self):
+    def __init__(self, suncg_objects: [MeshObject]):
+        """
+        :param suncg_objects: The list of suncg objects to consider.
+        """
         # Collect all valid room objects
         self.rooms = []
-        for room_obj in bpy.context.scene.objects:
+        for room_obj in suncg_objects:
             # Check if object is from type room and has bbox
-            if "type" in room_obj and room_obj["type"] == "Room" and "bbox" in room_obj:
+            if room_obj.has_cp("type") and room_obj.get_cp("type") == "Room" and room_obj.has_cp("bbox"):
 
                 # Make sure the room has a floor which is required for sampling
-                floor_obj = self._find_floor(room_obj)
+                floor_obj = self._find_floor(suncg_objects, room_obj)
                 if floor_obj is not None:
                     self.rooms.append((room_obj, floor_obj))
 
@@ -42,20 +46,21 @@ class SuncgPointInRoomSampler:
             ])
 
             # Check if sampled pose is valid
-            if CameraValidation.position_is_above_object(point, floor_obj):
+            if floor_obj.position_is_above_object(point):
                 return point, room_id
 
         raise Exception("Cannot sample any point inside the loaded suncg rooms.")
 
-    def _find_floor(self, room_obj: bpy.types.Object) -> bpy.types.Object:
+    def _find_floor(self, suncg_objects: [MeshObject], room_obj: MeshObject) -> MeshObject:
         """ Returns the floor object of the given room object.
 
         Goes through all children and returns the first one with type "Floor".
 
+        :param suncg_objects:
         :param room_obj: The room object.
         :return: The found floor object or None if none has been found.
         """
-        for obj in bpy.context.scene.objects:
-            if obj.parent == room_obj and "type" in obj and obj["type"] == "Floor":
+        for obj in suncg_objects:
+            if obj.get_parent() == room_obj and obj.has_cp("type") and obj.get_cp("type") == "Floor":
                 return obj
         return None

@@ -19,7 +19,7 @@ class SuncgCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
 
     def run(self):
-        self.point_sampler = SuncgPointInRoomSampler()
+        self.point_sampler = SuncgPointInRoomSampler(MeshObject.convert_to_meshes(get_all_blender_mesh_objects()))
         super().run()
 
     def _sample_pose(self, config):
