@@ -1,12 +1,8 @@
-import random
-
 import bpy
 
 from src.camera.CameraSamplerModule import CameraSamplerModule
-from src.utility.CameraUtility import CameraUtility
-from src.utility.Config import Config
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
-
+from mathutils import Matrix
 
 class SuncgCameraSampler(CameraSamplerModule):
     """ Samples valid camera poses inside suncg rooms.
@@ -32,5 +28,15 @@ class SuncgCameraSampler(CameraSamplerModule):
         :return: True, if the sampled pose was valid
         """
         cam2world_matrix = super()._sample_pose(config)
-        cam2world_matrix.translation = self.point_sampler.sample(cam2world_matrix.translation[2])
+        cam2world_matrix.translation, room_id = self.point_sampler.sample(cam2world_matrix.translation[2])
+        bpy.context.scene.camera["room_id"] = room_id
         return cam2world_matrix
+
+    def _on_new_pose_added(self, cam2world_matrix: Matrix, frame: int):
+        """ Inserts keyframe for room id corresponding to new camera poses.
+
+        :param cam2world_matrix: The new camera pose.
+        :param frame: The frame containing the new pose.
+        """
+        bpy.context.scene.camera.keyframe_insert(data_path='["room_id"]', frame=frame)
+        super()._on_new_pose_added(cam2world_matrix, frame)

@@ -219,7 +219,7 @@ class CameraSamplerModule(CameraInterface):
 
         self.interest_score = self.interest_score_range
 
-        CameraSampler.sample(number_of_poses, lambda: self._sample_pose(config), self._is_pose_valid, self.max_tries, self._on_max_tries_reached)
+        CameraSampler.sample(number_of_poses, lambda: self._sample_pose(config), self._is_pose_valid, self.max_tries, self._on_new_pose_added, self._on_max_tries_reached)
 
     def _sample_pose(self, config) -> Matrix:
         """
@@ -260,6 +260,13 @@ class CameraSamplerModule(CameraInterface):
             return False
 
         return True
+
+    def _on_new_pose_added(self, cam2world_matrix: Matrix, frame: int):
+        """
+        :param cam2world_matrix: The new camera pose.
+        :param frame: The frame containing the new pose.
+        """
+        pass
 
     def _on_max_tries_reached(self) -> bool:
         """

@@ -1,4 +1,5 @@
 import random
+from typing import Union
 
 import bpy
 
@@ -19,7 +20,7 @@ class SuncgPointInRoomSampler:
                 if floor_obj is not None:
                     self.rooms.append((room_obj, floor_obj))
 
-    def sample(self, height: float, max_tries: int = 1000) -> Vector:
+    def sample(self, height: float, max_tries: int = 1000) -> Union[Vector, int]:
         """ Samples a point inside one of the loaded suncg rooms.
 
         The points are uniformly sampled along x/y over all rooms.
@@ -27,7 +28,7 @@ class SuncgPointInRoomSampler:
 
         :param height: The height above the floor to use for the z-component of the point.
         :param max_tries: The maximum number of times sampling above the floor should be tried.
-        :return: The sampled point.
+        :return: The sampled point and the id of the room it was sampled in.
         """
         for _ in range(max_tries):
             # Sample room
@@ -42,7 +43,7 @@ class SuncgPointInRoomSampler:
 
             # Check if sampled pose is valid
             if CameraValidation.position_is_above_object(point, floor_obj):
-                return point
+                return point, room_id
 
         raise Exception("Cannot sample any point inside the loaded suncg rooms.")
 
