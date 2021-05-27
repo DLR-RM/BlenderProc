@@ -40,9 +40,9 @@ class SuncgPointInRoomSampler:
             room_obj, floor_obj = self.rooms[room_id]
 
             point = Vector([
-                random.uniform(room_obj["bbox"]["min"][0], room_obj["bbox"]["max"][0]),
-                random.uniform(room_obj["bbox"]["min"][1], room_obj["bbox"]["max"][1]),
-                room_obj["bbox"]["min"][2] + height
+                random.uniform(room_obj.get_cp("bbox")["min"][0], room_obj.get_cp("bbox")["max"][0]),
+                random.uniform(room_obj.get_cp("bbox")["min"][1], room_obj.get_cp("bbox")["max"][1]),
+                room_obj.get_cp("bbox")["min"][2] + height
             ])
 
             # Check if sampled pose is valid

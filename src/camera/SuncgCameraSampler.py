@@ -1,6 +1,8 @@
 import bpy
 
 from src.camera.CameraSampler import CameraSampler
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
+from src.utility.MeshObjectUtility import MeshObject
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from mathutils import Matrix
 
@@ -19,7 +21,7 @@ class SuncgCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
 
     def run(self):
-        self.point_sampler = SuncgPointInRoomSampler(MeshObject.convert_to_meshes(get_all_blender_mesh_objects()))
+        self.point_sampler = SuncgPointInRoomSampler(MeshObject.convert_to_meshes(bpy.context.scene.objects))
         super().run()
 
     def _sample_pose(self, config):

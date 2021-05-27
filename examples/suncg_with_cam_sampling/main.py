@@ -39,7 +39,7 @@ objs = SuncgLoader.load(args.house)
 Utility.initialize_modules([{"module": "lighting.SuncgLighting"}])[0].run()
 
 # Init sampler for sampling locations inside the loaded suncg house
-point_sampler = SuncgPointInRoomSampler()
+point_sampler = SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
 
@@ -48,7 +48,7 @@ tries = 0
 while tries < 10000 and poses < 5:
     # Sample point inside house
     height = np.random.uniform(0.5, 2)
-    location = point_sampler.sample(height)
+    location, _ = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
     cam2world_matrix = MathUtility.build_t_mat(location, Euler(rotation).to_matrix())
