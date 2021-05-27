@@ -91,7 +91,7 @@ class CameraSamplerModule(CameraInterface):
           - int
         * - max_tries
           - The maximum number of tries that should be made to sample the requested number of cam poses per interest
-            score. Default: 100000000.
+            score. Default: 10000.
           - int
         * - sqrt_number_of_rays
           - The square root of the number of rays which will be used to determine, if there is an obstacle in front
@@ -191,7 +191,7 @@ class CameraSamplerModule(CameraInterface):
 
         # Set global parameters
         self.sqrt_number_of_rays = config.get_int("sqrt_number_of_rays", 10)
-        self.max_tries = config.get_int("max_tries", 100000000)
+        self.max_tries = config.get_int("max_tries", 10000)
         self.proximity_checks = config.get_raw_dict("proximity_checks", {})
         self.excluded_objects_in_proximity_check = config.get_list("excluded_objs_in_proximity_check", [])
         self.min_interest_score = config.get_float("min_interest_score", 0.0)
@@ -200,7 +200,7 @@ class CameraSamplerModule(CameraInterface):
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
         self._above_objects = config.get_list("check_if_pose_above_object_list", [])
-        self.check_visible_objects = config.get_list("check_if_objects_visible", [])
+        self.check_visible_objects = MeshObject.convert_to_meshes(config.get_list("check_if_objects_visible", []))
 
         # Set camera intrinsics
         self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))

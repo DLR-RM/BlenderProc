@@ -8,7 +8,7 @@ from mathutils import Matrix
 class CameraSampler:
 
     @staticmethod
-    def sample(number_of_poses: int, sample_pose: Callable[[], Matrix] = None, is_pose_valid: Callable[[Matrix, List[Matrix]], bool] = None, max_tries=100000000, on_new_pose_added: Callable[[Matrix, int], None] = None, on_max_tries_reached: Callable[[], bool] = None):
+    def sample(number_of_poses: int, sample_pose: Callable[[], Matrix] = None, is_pose_valid: Callable[[Matrix, List[Matrix]], bool] = None, max_tries=10000, on_new_pose_added: Callable[[Matrix, int], None] = None, on_max_tries_reached: Callable[[], bool] = None):
         """ Samples N valid camera poses.
 
         The sampling and validation procedure are specified via a function pointer.
