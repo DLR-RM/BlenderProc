@@ -4,14 +4,14 @@ import bpy
 
 from src.camera.CameraInterface import CameraInterface
 from src.utility.BlenderUtility import get_all_blender_mesh_objects
+from src.utility.CameraUtility import CameraUtility
 from src.utility.Config import Config
 from src.utility.ItemCollection import ItemCollection
 from src.utility.MeshObjectUtility import MeshObject
-from src.utility.camera.CameraSampler import CameraSampler
 from src.utility.camera.CameraValidation import CameraValidation
 from mathutils import Matrix
 
-class CameraSamplerModule(CameraInterface):
+class CameraSampler(CameraInterface):
     """
     A general camera sampler.
 
@@ -219,7 +219,58 @@ class CameraSamplerModule(CameraInterface):
 
         self.interest_score = self.interest_score_range
 
-        CameraSampler.sample(number_of_poses, lambda: self._sample_pose(config), self._is_pose_valid, self.max_tries, self._on_new_pose_added, self._on_max_tries_reached)
+        # Init
+        all_tries = 0
+        tries = 0
+        existing_poses = []
+
+        for i in range(number_of_poses):
+            # Do until a valid pose has been found or the max number of tries has been reached
+            while tries < self.max_tries:
+                tries += 1
+                all_tries += 1
+                # Sample a new cam pose and check if its valid
+                if self.sample_and_validate_cam_pose(config, existing_poses):
+                    break
+
+            # If max tries has been reached
+            if tries >= self.max_tries:
+                continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
+                # If callback returns True, start all over again.
+                if continue_trying:
+                    tries = 0
+
+        print(str(all_tries) + " tries were necessary")
+
+    def sample_and_validate_cam_pose(self, config, existing_poses: [Matrix]):
+        """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
+
+        :param sample_pose: The function that samples new camera poses in the form of a cam2world transformation matrix.
+        :param is_pose_valid: The function that determines whether a sampled camera pose is a valid and should be kept.
+        :param on_new_pose_added: A function that is called everytime a validated camera pose is permanently added.
+        :param existing_poses: A list of already sampled valid poses.
+        :return: True, if the sampled pose was valid
+        """
+        # Sample camera extrinsics (we do not set them yet for performance reasons)
+        cam2world_matrix = self._sample_pose(config)
+
+        if self._is_pose_valid(cam2world_matrix, existing_poses):
+            # Set camera extrinsics as the pose is valid
+            frame = CameraUtility.add_camera_pose(cam2world_matrix)
+            # Optional callback
+            self._on_new_pose_added(cam2world_matrix, frame)
+            # Add to the list of added cam poses
+            existing_poses.append(cam2world_matrix)
+            return True
+        else:
+            return False
+
+    def _on_new_pose_added(self, cam2world_matrix: Matrix, frame: int):
+        """
+        :param cam2world_matrix: The new camera pose.
+        :param frame: The frame containing the new pose.
+        """
+        pass
 
     def _sample_pose(self, config) -> Matrix:
         """
@@ -260,19 +311,3 @@ class CameraSamplerModule(CameraInterface):
             return False
 
         return True
-
-    def _on_new_pose_added(self, cam2world_matrix: Matrix, frame: int):
-        """
-        :param cam2world_matrix: The new camera pose.
-        :param frame: The frame containing the new pose.
-        """
-        pass
-
-    def _on_max_tries_reached(self) -> bool:
-        """
-        :return: True, if we should continue trying.
-        """
-        continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
-        if continue_trying:
-            print("Trying a different min_interest_score value: %f" % self.interest_score)
-        return continue_trying

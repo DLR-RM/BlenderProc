@@ -1,5 +1,6 @@
+from src.utility.CameraUtility import CameraUtility
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup(["Pillow==5.4.1"])
+SetupUtility.setup([])
 
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from src.utility.LabelIdMapping import LabelIdMapping
@@ -8,7 +9,6 @@ from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
 
 from src.utility.Utility import Utility
-from src.utility.camera.CameraSampler import CameraSampler
 from src.utility.camera.CameraValidation import CameraValidation
 from src.utility.loader.SuncgLoader import SuncgLoader
 
@@ -23,15 +23,6 @@ from mathutils import Matrix, Euler
 import argparse
 import os
 
-from PIL import Image
-import PIL
-print(PIL.__version__)
-import numpy as np
-
-np_im = np.random.rand(100,200,3).astype(np.uint8)
-im = Image.fromarray(np_im)
-im.save('test.jpg')
-exit(0)
 parser = argparse.ArgumentParser()
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
 parser.add_argument('output_dir', nargs='?', default="examples/suncg_with_cam_sampling/output", help="Path to where the final files, will be saved")
@@ -48,21 +39,19 @@ Utility.initialize_modules([{"module": "lighting.SuncgLighting"}])[0].run()
 
 point_sampler = SuncgPointInRoomSampler()
 bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
-def sample_pose():
+
+poses = 0
+tries = 0
+while tries < 10000 and poses < 5:
     height = np.random.uniform(0.5, 2)
     location = point_sampler.sample(height)
     rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    return Matrix.Translation(location) @ Euler(rotation).to_matrix().to_4x4()
+    cam2world_matrix = Matrix.Translation(location) @ Euler(rotation).to_matrix().to_4x4()
 
-def is_pose_valid(cam2world_matrix, existing_poses):
-    if not CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree):
-        return False
-    if CameraValidation.scene_coverage_score(cam2world_matrix) < 0.4:
-        return False
-    return True
-
-# define the camera intrinsics
-CameraSampler.sample(1, sample_pose, is_pose_valid)
+    if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:
+        CameraUtility.add_camera_pose(cam2world_matrix)
+        poses += 1
+    tries += 1
 
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()

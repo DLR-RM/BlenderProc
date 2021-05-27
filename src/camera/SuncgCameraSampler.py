@@ -1,10 +1,10 @@
 import bpy
 
-from src.camera.CameraSamplerModule import CameraSamplerModule
+from src.camera.CameraSampler import CameraSampler
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from mathutils import Matrix
 
-class SuncgCameraSampler(CameraSamplerModule):
+class SuncgCameraSampler(CameraSampler):
     """ Samples valid camera poses inside suncg rooms.
 
     Works as the standard camera sampler, except the following differences:
@@ -16,7 +16,7 @@ class SuncgCameraSampler(CameraSamplerModule):
 
     """
     def __init__(self, config):
-        CameraSamplerModule.__init__(self, config)
+        CameraSampler.__init__(self, config)
 
     def run(self):
         self.point_sampler = SuncgPointInRoomSampler()

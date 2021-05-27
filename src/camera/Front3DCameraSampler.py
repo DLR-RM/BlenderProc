@@ -1,8 +1,8 @@
-from src.camera.CameraSamplerModule import CameraSamplerModule
+from src.camera.CameraSampler import CameraSampler
 from src.utility.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 
 
-class Front3DCameraSampler(CameraSamplerModule):
+class Front3DCameraSampler(CameraSampler):
     """
     This Camera Sampler is similar to how the SuncgCameraSampler works.
 
@@ -31,7 +31,7 @@ class Front3DCameraSampler(CameraSamplerModule):
     """
 
     def __init__(self, config):
-        CameraSamplerModule.__init__(self, config)
+        CameraSampler.__init__(self, config)
 
     def run(self):
         self.point_sampler = Front3DPointInRoomSampler()

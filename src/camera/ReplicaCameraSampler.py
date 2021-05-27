@@ -1,11 +1,11 @@
 import os
 
-from src.camera.CameraSamplerModule import CameraSamplerModule
+from src.camera.CameraSampler import CameraSampler
 from src.utility.Utility import Utility
 from src.utility.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 
 
-class ReplicaCameraSampler(CameraSamplerModule):
+class ReplicaCameraSampler(CameraSampler):
     """
     Samples valid camera poses inside replica rooms.
 
@@ -40,7 +40,7 @@ class ReplicaCameraSampler(CameraSamplerModule):
     """
 
     def __init__(self, config):
-        CameraSamplerModule.__init__(self, config)
+        CameraSampler.__init__(self, config)
 
     def run(self):
         # Load the height levels of this scene
