@@ -112,6 +112,9 @@ class MeshObject(Entity):
         self.add_material(new_mat)
         return new_mat
 
+    def clear_materials(self):
+        self.blender_obj.data.materials.clear()
+
     def duplicate(self):
         """ Duplicates the object.
 
@@ -355,6 +358,8 @@ class MeshObject(Entity):
             # Optional: Free the bmesh
             if free_bm_mesh:
                 bm.free()
+        # Make sure the mesh is updated
+        self.get_mesh().update()
 
     def edit_mode(self):
         """ Switch into edit mode of this mesh object """
