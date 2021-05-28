@@ -333,8 +333,20 @@ class Utility:
         :param parameters: A dict containing the parameters that should be used.
         :return: The constructed provider.
         """
-        # Import class from src.utility
-        module_class = getattr(importlib.import_module("src.provider." + name), name.split(".")[-1])
+        module_class = None
+        for suffix in ["Module", ""]:
+            try:
+                # Import class from src.utility
+                module_class = getattr(importlib.import_module("src.provider." + name + suffix), name.split(".")[-1] + suffix)
+                break
+            except ModuleNotFoundError:
+                # Try next suffix
+                continue
+
+        # Throw an error if no module/class with the specified name + any suffix has been found
+        if module_class is None:
+            raise Exception("The module src.provider." + name + " was not found!")
+
         # Build configuration
         config = Config(parameters)
         # Construct provider

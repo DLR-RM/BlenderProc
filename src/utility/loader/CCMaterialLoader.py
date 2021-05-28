@@ -3,6 +3,7 @@ import os
 import bpy
 
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
+from src.utility.MaterialUtility import Material
 from src.utility.Utility import Utility
 
 class CCMaterialLoader:
@@ -47,6 +48,7 @@ class CCMaterialLoader:
             raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
 
         if os.path.exists(folder_path) and os.path.isdir(folder_path):
+            materials = []
             for asset in os.listdir(folder_path):
                 if used_assets:
                     skip_this_one = True
@@ -91,6 +93,9 @@ class CCMaterialLoader:
                     CCMaterialLoader.create_material(new_mat, base_image_path, ambient_occlusion_image_path,
                                                      metallic_image_path, roughness_image_path, alpha_image_path,
                                                      normal_image_path, displacement_image_path)
+
+                    materials.append(Material(new_mat))
+            return materials
         else:
             raise Exception("The folder path does not exist: {}".format(folder_path))
 

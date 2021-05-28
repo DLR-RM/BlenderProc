@@ -411,8 +411,6 @@ class RandomRoomConstructor:
         placed_objects.append(wall_obj)
         if ceiling_obj is not None:
             placed_objects.append(ceiling_obj)
-        if floor_obj is not None:
-            placed_objects.append(floor_obj)
 
         # assign materials to all existing objects
         RandomRoomConstructor.assign_materials_to_floor_wall_ceiling(floor_obj, wall_obj, ceiling_obj, assign_material_to_ceiling, materials)
@@ -507,4 +505,6 @@ class RandomRoomConstructor:
             if obj not in placed_objects:
                 obj.delete()
 
+        if floor_obj is not None:
+            placed_objects.append(floor_obj)
         return placed_objects
