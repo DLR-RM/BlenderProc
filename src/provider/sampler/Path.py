@@ -1,3 +1,4 @@
+import random
 from glob import glob
 from random import choice
 
@@ -30,6 +31,12 @@ class Path(Provider):
         * - path
           - A path to a folder containing files.
           - string
+        * - random_samples
+          - Amount of samples, which should be returned
+          - int
+        * - return_all
+          - If this is true the full list is returned
+          - bool
     """
 
     def __init__(self, config):
@@ -46,7 +53,12 @@ class Path(Provider):
         # get list of paths
         paths = glob(path)
 
-        # chose a random one
-        chosen_path = choice(paths)
+        if self.config.has_param("return_all"):
+            return paths
+        elif self.config.has_param("random_samples"):
+            return random.choices(paths, k=self.config.get_int("random_samples"))
+        else:
+            # chose a random one
+            chosen_path = choice(paths)
 
-        return chosen_path
+            return chosen_path
