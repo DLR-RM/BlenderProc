@@ -1,20 +1,22 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["Pillow==5.4.1", "pypng==0.0.20"])
+
 import json
 import os
-import math
 import glob
 import numpy as np
-import png
 import shutil
+from typing import List
+import png
+from PIL import Image
 
 import bpy
-from mathutils import Euler, Matrix, Vector
+from mathutils import Matrix
 
-from src.utility.BlenderUtility import get_all_blender_mesh_objects, load_image
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.Utility import Utility
 from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.WriterUtility import WriterUtility
-from src.writer.CameraStateWriter import CameraStateWriter
-
 
 class BopWriterUtility:
     """ Saves the synthesized dataset in the BOP format. The dataset is split
@@ -79,7 +81,6 @@ class BopWriterUtility:
 
             else:
                 json.dump(content, f, sort_keys=True)
-
     
     @staticmethod
     def _save_depth(path, im):
@@ -101,14 +102,17 @@ class BopWriterUtility:
             w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))
 
 
-
-    
     @staticmethod
-    def write(output_dir:str, dataset:str="", append_to_existing_output:bool=False, depth_scale:float=1.0, 
+    def write(output_dir:str, depths:List[np.ndarray] = [], colors:List[np.ndarray] = [], color_file_format:str="PNG", 
+              dataset:str="", append_to_existing_output:bool=True, depth_scale:float=1.0, jpg_quality:int=95,
               save_world2cam:bool=True, ignore_dist_thres:float=100., m2mm:bool=True, frames_per_chunk:int=1000):
         """Write the BOP data
 
         :param output_dir: Path to the output directory.
+        :param depths: List of depth images in m to save
+        :param colors: List of color images to save
+        :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
+        :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
         :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.
         :param append_to_existing_output: If true, the new frames will be appended to the existing ones.
         :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy 
@@ -152,12 +156,16 @@ class BopWriterUtility:
         
         # Save the data.
         BopWriterUtility._write_camera(camera_path, depth_scale=depth_scale)
-        BopWriterUtility._write_frames(chunks_dir, dataset_objects=dataset_objects, frames_per_chunk=frames_per_chunk, 
-                           m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam)
+        BopWriterUtility._write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors, 
+                                       color_file_format=color_file_format, frames_per_chunk=frames_per_chunk, 
+                                       m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam, 
+                                       depth_scale=depth_scale, jpg_quality=jpg_quality)
     
     @staticmethod
-    def _write_camera(camera_path, depth_scale = 0.1):
+    def _write_camera(camera_path, depth_scale:float=1.0):
         """ Writes camera.json into dataset_dir.
+        :param camera_path: Path to camera.json
+        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.
         """
 
         cam_K = WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam_K')
@@ -172,10 +180,13 @@ class BopWriterUtility:
         BopWriterUtility._save_json(camera_path, camera)
     
     @staticmethod
-    def _get_frame_gt(dataset_objects, unit_scaling, ignore_dist_thres, destination_frame = ["X", "-Y", "-Z"]):
+    def _get_frame_gt(dataset_objects, unit_scaling:float, ignore_dist_thres:float, destination_frame:List[str] = ["X", "-Y", "-Z"]):
         """ Returns GT pose annotations between active camera and objects.
-        
-        :return: A list of GT annotations.
+        :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json
+        :param unit_scaling: 1000. for outputting poses in mm
+        :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.
+        :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates
+        :return: A list of GT camera-object pose annotations for scene_gt.json
         """
         
         H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix', destination_frame))
@@ -209,7 +220,10 @@ class BopWriterUtility:
     @staticmethod
     def _get_frame_camera(save_world2cam, depth_scale=1.0, unit_scaling=1000., destination_frame = ["X", "-Y", "-Z"]):
         """ Returns camera parameters for the active camera.
-        
+        :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json
+        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.
+        :param unit_scaling: 1000. for outputting poses in mm
+        :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates
         :return: dict containing info for scene_camera.json 
         """
         
@@ -233,9 +247,23 @@ class BopWriterUtility:
         return frame_camera_dict
     
     @staticmethod
-    def _write_frames(chunks_dir, dataset_objects, depth_scale:float=1.0, frames_per_chunk:int=1000, m2mm:bool=True, 
-                            ignore_dist_thres:float=100., save_world2cam:bool=True):
-        """ Writes images, GT annotations and camera info.
+    def _write_frames(chunks_dir, dataset_objects, depths: List[np.ndarray] = [], colors: List[np.ndarray] = [], 
+                      color_file_format:str="PNG", depth_scale:float=1.0, frames_per_chunk:int=1000, m2mm:bool=True, 
+                      ignore_dist_thres:float=100., save_world2cam:bool=True, jpg_quality:int=95):
+        """Write each frame's ground truth into chunk directory in BOP format
+
+        :param chunks_dir: Path to the output directory of the current chunk.
+        :param dataset_objects: Save annotations for these objects.
+        :param depths: List of depth images in m to save
+        :param colors: List of color images to save
+        :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
+        :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
+        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy 
+            and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.
+        :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.
+        :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
+            is needed if BopLoader option mm2m is used.
+        :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP) 
         """
         
         # Format of the depth images.
@@ -282,6 +310,11 @@ class BopWriterUtility:
 
         # Go through all frames.
         num_new_frames = bpy.context.scene.frame_end - bpy.context.scene.frame_start
+
+        if len(depths) != len(colors) != num_new_frames:
+            raise Exception("The amount of images stored in the depths/colors does not correspond to the amount"
+                            "of images specified by frame_start to frame_end.")
+
         for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             # Activate frame.
             bpy.context.scene.frame_set(frame_id)
@@ -303,20 +336,34 @@ class BopWriterUtility:
             chunk_gt[curr_frame_id] = BopWriterUtility._get_frame_gt(dataset_objects, unit_scaling, ignore_dist_thres)
             chunk_camera[curr_frame_id] = BopWriterUtility._get_frame_camera(save_world2cam, depth_scale, unit_scaling)
 
-            # Copy the resulting RGB image.
-            rgb_output = Utility.find_registered_output_by_key("colors")
-            if rgb_output is None:
-                raise Exception("RGB image has not been rendered.")
-            image_type = '.png' if rgb_output['path'].endswith('png') else '.jpg'
-            rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type=image_type)
-            shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
+            if colors:
+                color = colors[frame_id]
+                if color_file_format == 'PNG':
+                    rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.png')
+                    im = Image.fromarray(color)
+                    im.save(rgb_fpath)
+                elif color_file_format == 'JPEG':
+                    rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.jpg')
+                    im = Image.fromarray(color)
+                    im.save(rgb_fpath, quality=jpg_quality)
+            else:
+                rgb_output = Utility.find_registered_output_by_key("colors")
+                if rgb_output is None:
+                    raise Exception("RGB image has not been rendered.")
+                color_ext = '.png' if rgb_output['path'].endswith('png') else '.jpg'
+                # Copy the resulting RGB image.
+                rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type=color_ext)
+                shutil.copyfile(rgb_output['path'] % frame_id, rgb_fpath)
 
-            # Load the resulting dist image.
-            dist_output = Utility.find_registered_output_by_key("distance")
-            if dist_output is None:
-                raise Exception("Distance image has not been rendered.")
-            distance = WriterUtility.load_output_file(Utility.resolve_path(dist_output['path'] % frame_id))
-            depth = PostProcessingUtility.dist2depth(distance)
+            if depths:
+                depth = depths[frame_id]
+            else:
+                # Load the resulting dist image.
+                dist_output = Utility.find_registered_output_by_key("distance")
+                if dist_output is None:
+                    raise Exception("Distance image has not been rendered.")
+                distance = WriterUtility.load_output_file(Utility.resolve_path(dist_output['path'] % frame_id))
+                depth = PostProcessingUtility.dist2depth(distance)
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).
