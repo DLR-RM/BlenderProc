@@ -28,32 +28,38 @@ class WriterUtility:
         Loads registered outputs with specified keys
 
         :param keys: set of output_key types to load
-        :return: dict of lists of raw loaded outputs. Keys can be 'distance', 'colors', 'normals'
+        :return: dict of lists of raw loaded outputs. Keys are e.g. 'distance', 'colors', 'normals', 'segmap'
         """
         output_data_dict = {}
         reg_outputs = Utility.get_registered_outputs()
-
         for reg_out in reg_outputs:
             if reg_out['key'] in keys:
-                for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-                    output_path = Utility.resolve_path(reg_out['path'] % frame_id)
-                    if not os.path.exists(output_path):
-                        # check for the stereo files
-                        output_paths = WriterUtility._get_stereo_path_pair(output_path)
-                        # convert to a tensor of shape [2, img_x, img_y, channels]
-                        # output_file[0] is the left image and output_file[1] the right image
-                        output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
-                        # remove the stored files
-                        for path in output_paths:
-                            os.remove(path)
-                    else:
-                        output_file = WriterUtility.load_output_file(output_path)
-                        # remove the stored file
-                        os.remove(output_path)
-                    output_data_dict.setdefault(reg_out['key'], []).append(output_file)
-
+                if not '%' in reg_out['path']:
+                    output_path = Utility.resolve_path(reg_out['path'])
+                    output_file = WriterUtility.load_output_file(output_path)
+                    output_data_dict[reg_out['key']] = output_file
+                    os.remove(output_path)
+                else:
+                    for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+                        output_path = Utility.resolve_path(reg_out['path'] % frame_id)
+                        if not os.path.exists(output_path):
+                            # check for the stereo files
+                            try:
+                                output_paths = WriterUtility._get_stereo_path_pair(output_path)
+                                # convert to a tensor of shape [2, img_x, img_y, channels]
+                                # output_file[0] is the left image and output_file[1] the right image
+                                output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
+                                # remove the stored files
+                                for path in output_paths:
+                                    os.remove(path)
+                            except:
+                                raise('Could not find {} or stereo {}'.format(output_path, output_paths))
+                        else:
+                            output_file = WriterUtility.load_output_file(output_path)
+                            os.remove(output_path)
+                        output_data_dict.setdefault(reg_out['key'], []).append(output_file)
         return output_data_dict
-
+    
     @staticmethod
     def _get_stereo_path_pair(file_path: str) -> Tuple[str, str]:
         """
@@ -103,7 +109,7 @@ class WriterUtility:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
                 rows.append(row)
-        return np.string_(json.dumps(rows))  # make the list of dicts as a string
+        return rows  # make the list of dicts as a string
 
     @staticmethod
     def get_common_attribute(item: bpy.types.Object, attribute_name: str,
@@ -291,6 +297,8 @@ class WriterUtility:
         """
         if not isinstance(data, np.ndarray) and not isinstance(data, np.bytes_):
             if isinstance(data, list):
+                if len(data)>0 and isinstance(data[0], dict):
+                    data = np.string_(json.dumps(data))
                 data = np.array(data)
             else:
                 raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray not a {type(data)}!")
