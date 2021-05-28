@@ -125,7 +125,7 @@ class SegMapRenderer(RendererInterface):
     def run(self):
 
         # get the type of mappings which should be performed
-        attributes = self.config.get_raw_dict("map_by", "class")
+        map_by = self.config.get_raw_dict("map_by", "class")
 
         default_values = self.config.get_raw_dict("default_values", {})
         if 'class' in default_values:
@@ -138,7 +138,7 @@ class SegMapRenderer(RendererInterface):
                 SegMapRendererUtility.render(
                     self._determine_output_dir(),
                     self._temp_dir,
-                    attributes,
+                    map_by,
                     default_values,
                     self.config.get_string("output_file_prefix", "segmap_"),
                     self.config.get_string("output_key", "segmap"),

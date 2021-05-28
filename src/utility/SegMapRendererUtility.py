@@ -83,8 +83,8 @@ class SegMapRendererUtility:
         return colors, num_splits_per_dimension, color_map
 
     @staticmethod
-    def render(output_dir: Union[str, None] = None, temp_dir: Union[str, None] = None, attributes: Union[str, List[str]] = "class",
-               default_values: Union[Dict[str, str]] = None, file_prefix: str = "segmap_",
+    def render(output_dir: Union[str, None] = None, temp_dir: Union[str, None] = None, map_by: Union[str, List[str]] = "class",
+               default_values: Union[Dict[str, str]] = {"class":0}, file_prefix: str = "segmap_",
                output_key: str = "segmap", segcolormap_output_file_prefix: str = "class_inst_col_map",
                segcolormap_output_key: str = "segcolormap", use_alpha_channel: bool = False,
                render_colorspace_size_per_dimension: int = 2048, return_data: bool = True) -> Dict[str, List[np.ndarray]]:
@@ -92,7 +92,7 @@ class SegMapRendererUtility:
 
         :param output_dir: The directory to write images to.
         :param temp_dir: The directory to write intermediate data to.
-        :param attributes: The attributes to be used for color mapping.
+        :param map_by: The attributes to be used for color mapping.
         :param default_values: The default values used for the keys used in attributes.
         :param file_prefix: The prefix to use for writing the images.
         :param output_key: The key to use for registering the output.
@@ -112,7 +112,7 @@ class SegMapRendererUtility:
             output_dir = Utility.get_temporary_directory()
         if temp_dir is None:
             temp_dir = Utility.get_temporary_directory()
-        
+            
         with Utility.UndoAfterExecution():
             RendererUtility.init()
             RendererUtility.set_samples(1)
@@ -120,6 +120,10 @@ class SegMapRendererUtility:
             RendererUtility.set_denoiser(None)
             RendererUtility.set_light_bounces(1, 0, 0, 1, 0, 8, 0)
 
+            attributes = map_by
+            if 'class' in default_values:
+                default_values['cp_category_id'] = default_values['class']
+                
             # Get objects with meshes (i.e. not lights or cameras)
             objs_with_mats = get_all_blender_mesh_objects()
 
@@ -138,7 +142,7 @@ class SegMapRendererUtility:
             final_segmentation_file_path = os.path.join(output_dir, file_prefix)
 
             RendererUtility.set_output_format("OPEN_EXR", 16)
-            RendererUtility.render(temp_dir, "seg_", None)
+            RendererUtility.render(temp_dir, "seg_", None, return_data=False)
 
             # Find optimal dtype of output based on max index
             for dtype in [np.uint8, np.uint16, np.uint32]:

@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["scikit-image"])
+SetupUtility.setup_pip(["scikit-image", "Pillow==5.4.1"])
 
 import datetime
 from itertools import groupby
@@ -9,6 +9,9 @@ import os
 import shutil
 import numpy as np
 from skimage import measure
+from PIL import Image
+from typing import List
+
 
 import bpy
 
@@ -17,8 +20,9 @@ from src.utility.Utility import Utility
 class CocoWriterUtility:
 
     @staticmethod
-    def write(output_dir: str, mask_encoding_format="rle", supercategory="coco_annotations", append_to_existing_output=False,
-                segmap_output_key="segmap", segcolormap_output_key="segcolormap", rgb_output_key="colors"):
+    def write(output_dir: str, segmaps:List[np.ndarray] = [], colors:List[np.ndarray] = [], color_file_format:str="PNG", segcolormap:dict={}, 
+              mask_encoding_format="rle", supercategory="coco_annotations", append_to_existing_output:bool=True, segmap_output_key="segmap", 
+              segcolormap_output_key="segcolormap", rgb_output_key="colors", jpg_quality:int=95):
         """ Writes coco annotations in the following steps:
         1. Locate the seg images
         2. Locate the rgb maps
@@ -32,7 +36,7 @@ class CocoWriterUtility:
             any loaded object with specified 'cp_supercategory'
         :param append_to_existing_output: If true and if there is already a coco_annotations.json file in the output directory, the new coco
             annotations will be appended to the existing file. Also the rgb images will be named such that there are
-            no collisions. Default: False.
+            no collisions.
         :param segmap_output_key: The output key with which the segmentation images were registered. Should be the same as the output_key
             of the SegMapRenderer module. Default: segmap.
         :param segcolormap_output_key: The output key with which the csv file for object name/class correspondences was registered. Should be
@@ -42,38 +46,37 @@ class CocoWriterUtility:
         """
 
         # Create output directory
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
+        os.makedirs(os.path.join(output_dir, 'coco_data'), exist_ok=True)
 
-        # Find path pattern of segmentation images
-        segmentation_map_output = Utility.find_registered_output_by_key(segmap_output_key)
-        if segmentation_map_output is None:
-            raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
-                            "before?".format(segmap_output_key))
+        if not segmaps:
+            # Find path pattern of segmentation images
+            segmentation_map_output = Utility.find_registered_output_by_key(segmap_output_key)
+            if segmentation_map_output is None:
+                raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
+                                "before?".format(segmap_output_key))
         
-        # Find path pattern of rgb images
-        rgb_output = Utility.find_registered_output_by_key(rgb_output_key)
-        if rgb_output is None:
-            raise Exception("There is no output registered with key {}. Are you sure you ran the RgbRenderer module "
-                            "before?".format(rgb_output_key))
+        if not colors:
+            # Find path pattern of rgb images
+            rgb_output = Utility.find_registered_output_by_key(rgb_output_key)
+            if rgb_output is None:
+                raise Exception("There is no output registered with key {}. Are you sure you ran the RgbRenderer module "
+                                "before?".format(rgb_output_key))
     
-        # collect all segmaps
-        segmentation_map_paths = []
+        if not segcolormap:
+            # Find path of name class mapping csv file
+            segcolormap_output = Utility.find_registered_output_by_key(segcolormap_output_key)
+            if segcolormap_output is None:
+                raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
+                                "with 'map_by' set to 'instance' before?".format(segcolormap_output_key))
 
-        # Find path of name class mapping csv file
-        segcolormap_output = Utility.find_registered_output_by_key(segcolormap_output_key)
-        if segcolormap_output is None:
-            raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
-                            "with 'map_by' set to 'instance' before?".format(segcolormap_output_key))
-
-        # read colormappings, which include object name/class to integer mapping
-        inst_attribute_maps = []
-        with open(segcolormap_output["path"], 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for mapping in reader:
-                inst_attribute_maps.append(mapping)
-
-        coco_annotations_path = os.path.join(output_dir, "coco_annotations.json")
+            # read colormappings, which include object name/class to integer mapping
+            segcolormap = []
+            with open(segcolormap_output["path"], 'r') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for mapping in reader:
+                    segcolormap.append(mapping)
+        
+        coco_annotations_path = os.path.join(output_dir, "coco_data/coco_annotations.json")
         # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
         if append_to_existing_output and os.path.exists(coco_annotations_path):
             with open(coco_annotations_path, 'r') as fp:
@@ -83,24 +86,47 @@ class CocoWriterUtility:
             image_offset = 0
             existing_coco_annotations = None
 
+        # collect all segmap paths
+        segmentation_map_paths = []
         # collect all RGB paths
         new_coco_image_paths = []
+        
         # for each rendered frame
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-            segmentation_map_paths.append(segmentation_map_output["path"] % frame)
+            if not segmaps:
+                segmentation_map_paths.append(segmentation_map_output["path"] % frame)
 
-            source_path = rgb_output["path"] % frame
-            target_path = os.path.join(output_dir, os.path.basename(rgb_output["path"] % (frame + image_offset)))
-
-            shutil.copyfile(source_path, target_path)
-            new_coco_image_paths.append(os.path.basename(target_path))
+            if colors:
+                color = colors[frame]
+                
+                if color_file_format=='PNG':
+                    target_base_path = 'coco_data/rgb_{:04d}.png'.format(frame + image_offset)
+                    target_path = os.path.join(output_dir, target_base_path)
+                    im = Image.fromarray(color)
+                    im.save(target_path)
+                elif color_file_format=='JPEG':
+                    target_base_path = 'coco_data/rgb_{:04d}.jpg'.format(frame + image_offset)
+                    target_path = os.path.join(output_dir, target_base_path)
+                    im = Image.fromarray(color)
+                    im.save(target_path, quality=jpg_quality)
+                else:
+                    raise('Unknown color_file_format={}. Try "PNG" or "JPEG"'.format(color_file_format))
+                
+            else:
+                source_path = rgb_output["path"] % frame
+                target_base_path = os.path.basename(rgb_output["path"] % (frame + image_offset))
+                target_path = os.path.join(output_dir, target_base_path)
+                shutil.copyfile(source_path, target_path)
+                
+            new_coco_image_paths.append(target_base_path)
 
         coco_output = CocoWriterUtility.generate_coco_annotations(segmentation_map_paths,
                                                             new_coco_image_paths,
-                                                            inst_attribute_maps,
+                                                            segcolormap,
                                                             supercategory,
                                                             mask_encoding_format,
-                                                            existing_coco_annotations)
+                                                            existing_coco_annotations,
+                                                            segmaps=segmaps)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:
@@ -108,7 +134,7 @@ class CocoWriterUtility:
 
     @staticmethod
     def generate_coco_annotations(segmentation_map_paths, image_paths, inst_attribute_maps, supercategory,
-                                  mask_encoding_format, existing_coco_annotations=None):
+                                  mask_encoding_format, existing_coco_annotations=None, segmaps=[]):
         """Generates coco annotations for images
 
         :param segmentation_map_paths: A list of paths which points to the rendered segmentation maps.
@@ -117,6 +143,7 @@ class CocoWriterUtility:
         :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset
         :param mask_encoding_format: Encoding format of the binary mask. Type: string.
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
+        :param segmaps: List of segmentation maps
         :return: dict containing coco annotations
         """
 
@@ -157,25 +184,29 @@ class CocoWriterUtility:
 
         images = []
         annotations = []
+        
+        # If segmentation_map_paths are given, load segmaps
+        for segmentation_map_path in segmentation_map_paths:
+            segmaps.append(np.load(segmentation_map_path))
 
-        for segmentation_map_path, image_path in zip(segmentation_map_paths, image_paths):
+        for segmap, image_path in zip(segmaps, image_paths):
             
             # Load instance map
             inst_channel = int(inst_attribute_maps[0]['channel_instance'])
-            segmentation_map = np.load(segmentation_map_path)[:,:,inst_channel]
-
+            inst_segmap = segmap[:,:,inst_channel]
+            
             # Add coco info for image
             image_id = len(images)
-            images.append(CocoWriterUtility.create_image_info(image_id, image_path, segmentation_map.shape))
+            images.append(CocoWriterUtility.create_image_info(image_id, image_path, inst_segmap.shape))
 
             # Go through all objects visible in this image
-            instances = np.unique(segmentation_map)
+            instances = np.unique(inst_segmap)
             # Remove background
             instances = np.delete(instances, np.where(instances == 0))
             for inst in instances:
                 if inst in instance_2_category_map:
                     # Calc object mask
-                    binary_inst_mask = np.where(segmentation_map == inst, 1, 0)
+                    binary_inst_mask = np.where(inst_segmap == inst, 1, 0)
                     # Add coco info for object in this image
                     annotation = CocoWriterUtility.create_annotation_info(len(annotations),
                                                                     image_id,
