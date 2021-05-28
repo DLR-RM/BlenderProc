@@ -51,7 +51,7 @@ class Front3DPointInRoomSampler:
             floor_obj = random.choice(self.used_floors)
 
             # Get min/max along x/y-axis from bounding box of room
-            bounding_box = get_bounds(floor_obj)
+            bounding_box = floor_obj.get_bound_box()
             min_corner = np.min(bounding_box, axis=0)
             max_corner = np.max(bounding_box, axis=0)
 
