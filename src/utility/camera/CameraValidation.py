@@ -13,7 +13,7 @@ from src.utility.MeshObjectUtility import MeshObject
 class CameraValidation:
 
     @staticmethod
-    def perform_obstacle_in_view_check(cam2world_matrix: Matrix, proximity_checks: dict, bvh_tree: mathutils.bvhtree.BVHTree, sqrt_number_of_rays: int = 10):
+    def perform_obstacle_in_view_check(cam2world_matrix: Matrix, proximity_checks: dict, bvh_tree: mathutils.bvhtree.BVHTree, sqrt_number_of_rays: int = 10) -> bool:
         """ Check if there are obstacles in front of the camera which are too far or too close based on the given proximity_checks.
 
         :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
@@ -152,7 +152,7 @@ class CameraValidation:
         return visible_objects
 
     @staticmethod
-    def scene_coverage_score(cam2world_matrix: Matrix, special_objects: list = None, special_objects_weight = 2, sqrt_number_of_rays = 10) -> float:
+    def scene_coverage_score(cam2world_matrix: Matrix, special_objects: list = None, special_objects_weight: float = 2, sqrt_number_of_rays: int = 10) -> float:
         """ Evaluate the interestingness/coverage of the scene.
 
         This module tries to look at as many objects at possible, this might lead to
@@ -245,7 +245,7 @@ class CameraValidation:
             return True, interest_score - interest_score_step
 
     @staticmethod
-    def check_novel_pose(cam2world_matrix: Matrix, existing_poses: [Matrix], check_pose_novelty_rot: bool, check_pose_novelty_translation: bool, min_var_diff_rot: float, min_var_diff_translation: float):
+    def check_novel_pose(cam2world_matrix: Matrix, existing_poses: [Matrix], check_pose_novelty_rot: bool, check_pose_novelty_translation: bool, min_var_diff_rot: float = -1, min_var_diff_translation: float = -1):
         """ Checks if a newly sampled pose is novel based on variance checks.
 
         :param cam2world_matrix: The world matrix which describes the camera pose to check.

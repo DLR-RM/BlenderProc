@@ -1,11 +1,10 @@
 import random
 from typing import Union
 
-import bpy
+from mathutils import Vector
 
 from src.utility.MeshObjectUtility import MeshObject
-from src.utility.camera.CameraValidation import CameraValidation
-from mathutils import Vector
+
 
 class SuncgPointInRoomSampler:
 

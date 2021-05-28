@@ -236,14 +236,14 @@ class CameraSampler(CameraInterface):
 
             # If max tries has been reached
             if tries >= self.max_tries:
-                # Decrease interest score and try again, if we have note yet reached minimum
+                # Decrease interest score and try again, if we have not yet reached minimum
                 continue_trying, self.interest_score = CameraValidation.decrease_interest_score(self.interest_score, self.min_interest_score, self.interest_score_step)
                 if continue_trying:
                     tries = 0
 
         print(str(all_tries) + " tries were necessary")
 
-    def sample_and_validate_cam_pose(self, config, existing_poses: [Matrix]):
+    def sample_and_validate_cam_pose(self, config: Config, existing_poses: [Matrix]) -> bool:
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
         :param config: The config object describing how to sample

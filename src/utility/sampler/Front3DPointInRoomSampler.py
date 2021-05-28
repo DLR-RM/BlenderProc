@@ -3,9 +3,7 @@ import random
 import numpy as np
 from mathutils import Vector
 
-from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bounds
 from src.utility.MeshObjectUtility import MeshObject
-from src.utility.camera.CameraValidation import CameraValidation
 
 
 class Front3DPointInRoomSampler:
@@ -59,7 +57,7 @@ class Front3DPointInRoomSampler:
             point = Vector([
                 random.uniform(min_corner[0], max_corner[0]),
                 random.uniform(min_corner[1], max_corner[1]),
-                floor_obj.location[2] + height
+                floor_obj.get_location()[2] + height
             ])
 
             # Check if sampled pose is above the floor to make sure its really inside the room
