@@ -71,18 +71,18 @@ if custom_blender_path is None:
         blender_install_path = "blender"
 
     # Determine configured version
-    # right new only support blender-2.92
-    major_version = "2.92"
+    # right new only support blender-2.93
+    major_version = "2.93"
     minor_version = "0"
     blender_version = "blender-{}.{}".format(major_version, minor_version)
     if platform == "linux" or platform == "linux2":
-        blender_version += "-linux64"
+        blender_version += "-linux-x64"
         blender_path = os.path.join(blender_install_path, blender_version)
     elif platform == "darwin":
-        blender_version += "-macOS"
+        blender_version += "-macOS-x64"
         blender_path = os.path.join(blender_install_path, "Blender.app")
     elif platform == "win32":
-        blender_version += "-windows64"
+        blender_version += "-windows-x64"
         blender_path = os.path.join(blender_install_path, blender_version)
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
@@ -133,7 +133,6 @@ if custom_blender_path is None:
 
 
         if platform == "linux" or platform == "linux2":
-
             if version_info.major == 3:
                 with tarfile.open(file_tmp) as tar:
                     tar.extractall(blender_install_path)
@@ -158,13 +157,17 @@ if custom_blender_path is None:
         elif platform == "win32":
             with zipfile.ZipFile(file_tmp) as z:
                 z.extractall(blender_install_path)
+        # rename the blender folder to better fit our existing scheme
+        for folder in os.listdir(blender_install_path):
+            if os.path.isdir(os.path.join(blender_install_path, folder)) and folder.startswith("blender-" + major_version):
+                os.rename(os.path.join(blender_install_path, folder), os.path.join(blender_install_path, blender_version))
 else:
     blender_path = os.path.expanduser(custom_blender_path)
 
     # Try to get major version of given blender installation
     major_version = None
     for sub_dir in os.listdir(blender_path):
-        # Search for the subdirectory which has the major version as its name (e.q. 2.79)
+        # Search for the subdirectory which has the major version as its name
         if os.path.isdir(os.path.join(blender_path, sub_dir)) and sub_dir.replace(".", "").isdigit():
             major_version = sub_dir
             break
