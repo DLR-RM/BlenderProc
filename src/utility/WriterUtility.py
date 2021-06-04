@@ -1,13 +1,11 @@
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
-from collections import defaultdict
 
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
 import numpy as np
 import csv
-import math
 import json
 
 import bpy
@@ -109,7 +107,7 @@ class WriterUtility:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
                 rows.append(row)
-        return rows  # make the list of dicts as a string
+        return rows
 
     @staticmethod
     def get_common_attribute(item: bpy.types.Object, attribute_name: str,
