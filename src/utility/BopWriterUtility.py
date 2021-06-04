@@ -362,7 +362,7 @@ class BopWriterUtility:
                 dist_output = Utility.find_registered_output_by_key("distance")
                 if dist_output is None:
                     raise Exception("Distance image has not been rendered.")
-                distance = WriterUtility.load_output_file(Utility.resolve_path(dist_output['path'] % frame_id))
+                distance = WriterUtility.load_output_file(Utility.resolve_path(dist_output['path'] % frame_id), remove=False)
                 depth = PostProcessingUtility.dist2depth(distance)
 
             # Scale the depth to retain a higher precision (the depth is saved

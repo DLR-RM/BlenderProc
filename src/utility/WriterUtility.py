@@ -38,8 +38,6 @@ class WriterUtility:
                         output_path = Utility.resolve_path(reg_out['path'] % frame_id)
                         if os.path.exists(output_path):
                             output_file = WriterUtility.load_output_file(output_path)
-                            # Remove files after loading
-                            os.remove(output_path)
                         else:
                             try:
                                 # check for stereo files
@@ -47,8 +45,6 @@ class WriterUtility:
                                 # convert to a tensor of shape [2, img_x, img_y, channels]
                                 # output_file[0] is the left image and output_file[1] the right image
                                 output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
-                                for path in output_paths:
-                                    os.remove(path)
                             except:
                                 raise('Could not find original or stereo paths: {}'.format(output_paths))
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
@@ -57,7 +53,6 @@ class WriterUtility:
                     output_path = Utility.resolve_path(reg_out['path'])
                     output_file = WriterUtility.load_output_file(output_path)
                     output_data_dict[reg_out['key']] = output_file
-                    os.remove(output_path)
 
         return output_data_dict
     
@@ -76,12 +71,13 @@ class WriterUtility:
         return path_l, path_r
 
     @staticmethod
-    def load_output_file(file_path: str, write_alpha_channel: bool = False) -> np.ndarray:
+    def load_output_file(file_path: str, write_alpha_channel: bool = False, remove: bool = True) -> np.ndarray:
         """ Tries to read in the file with the given path into a numpy array.
 
         :param file_path: The file path. Type: string.
         :param write_alpha_channel: Whether to load the alpha channel as well. Type: bool. Default: False
-        :return: A numpy array containing the data of the file.
+        :param remove: Whether to delete file after loading.
+        :return: Loaded data from the file as numpy array if possible.
         """
         if not os.path.exists(file_path):
             raise Exception("File not found: " + file_path)
@@ -90,13 +86,17 @@ class WriterUtility:
 
         if file_ending in ["exr", "png", "jpg"]:
             # num_channels is 4 if transparent_background is true in config
-            return load_image(file_path, num_channels=3 + (1 if write_alpha_channel else 0))
+            output = load_image(file_path, num_channels=3 + (1 if write_alpha_channel else 0))
         elif file_ending in ["npy", "npz"]:
-            return np.load(file_path)
+            output =  np.load(file_path)
         elif file_ending in ["csv"]:
-            return WriterUtility._load_csv(file_path)
+            output =  WriterUtility._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
+
+        if remove:
+            os.remove(file_path)        
+        return output
 
     @staticmethod
     def _load_csv(file_path: str) -> np.ndarray:
