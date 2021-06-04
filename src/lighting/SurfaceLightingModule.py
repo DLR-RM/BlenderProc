@@ -1,13 +1,10 @@
-import bpy
-import mathutils
-
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.utility.MeshObjectUtility import MeshObject
-from src.utility.Utility import Utility
+from src.utility.lighting.SurfaceLighting import SurfaceLighting
 
 
-class SurfaceLighting(Module):
+class SurfaceLightingModule(Module):
     """
     Adds lighting to the scene, by adding emission shader nodes to surfaces of specified objects.
     The speciality here is that the material can still look like before and now also emit light, this can be done
@@ -16,7 +13,7 @@ class SurfaceLighting(Module):
 
     **Configuration**:
 
-    .. list-table:: 
+    .. list-table::
         :widths: 25 100 10
         :header-rows: 1
 
@@ -52,41 +49,9 @@ class SurfaceLighting(Module):
         # get all objects which material should be changed
         objects = MeshObject.convert_to_meshes(self.config.get_list("selector"))
 
-        self.add_emission_to_materials(objects)
-
-    def add_emission_to_materials(self, objects):
-        """
-        Add emission shader to the materials of the objects which are selected via the `selector`
-
-        :param objects: to change the materials of
-        """
-        empty_material = None
-
-        # for each object add a material
-        for obj in objects:
-            if not obj.has_materials():
-                # If this is the first object without any material
-                if empty_material is None:
-                    # this object has no material so far -> create one
-                    empty_material = obj.new_material("TextureLess")
-                else:
-                    # Just reuse the material that was already created for other objects with no material
-                    obj.add_material(empty_material)
-                    # Material has already been made emissive, so go to the next object
-                    continue
-
-            for i, material in enumerate(obj.get_materials()):
-                # if there is more than one user make a copy and then use the new one
-                if material.get_users() > 1:
-                    material = material.duplicate()
-                    obj.set_material(i, material)
-                # rename the material
-                material.set_name(material.get_name() + "_emission")
-                # add a custom property to later identify these materials
-                material.set_cp("is_lamp", True)
-
-                material.make_emissive(emission_strength=self.emission_strength, emission_color=self.emission_color, keep_using_base_color=self.keep_using_base_color)
-
-
-
-
+        SurfaceLighting.run(
+            objects,
+            emission_strength=self.emission_strength,
+            keep_using_base_color=self.keep_using_base_color,
+            emission_color=self.emission_color
+        )

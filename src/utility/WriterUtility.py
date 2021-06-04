@@ -32,30 +32,33 @@ class WriterUtility:
         reg_outputs = Utility.get_registered_outputs()
         for reg_out in reg_outputs:
             if reg_out['key'] in keys:
-                if not '%' in reg_out['path']:
-                    output_path = Utility.resolve_path(reg_out['path'])
-                    output_file = WriterUtility.load_output_file(output_path)
-                    output_data_dict[reg_out['key']] = output_file
-                    os.remove(output_path)
-                else:
+                if '%' in reg_out['path']:
+                    # per frame outputs
                     for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
                         output_path = Utility.resolve_path(reg_out['path'] % frame_id)
-                        if not os.path.exists(output_path):
-                            # check for the stereo files
+                        if os.path.exists(output_path):
+                            output_file = WriterUtility.load_output_file(output_path)
+                            # Remove files after loading
+                            os.remove(output_path)
+                        else:
                             try:
+                                # check for stereo files
                                 output_paths = WriterUtility._get_stereo_path_pair(output_path)
                                 # convert to a tensor of shape [2, img_x, img_y, channels]
                                 # output_file[0] is the left image and output_file[1] the right image
                                 output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
-                                # remove the stored files
                                 for path in output_paths:
                                     os.remove(path)
                             except:
-                                raise('Could not find {} or stereo {}'.format(output_path, output_paths))
-                        else:
-                            output_file = WriterUtility.load_output_file(output_path)
-                            os.remove(output_path)
+                                raise('Could not find original or stereo paths: {}'.format(output_paths))
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
+                else:
+                    # per run outputs
+                    output_path = Utility.resolve_path(reg_out['path'])
+                    output_file = WriterUtility.load_output_file(output_path)
+                    output_data_dict[reg_out['key']] = output_file
+                    os.remove(output_path)
+
         return output_data_dict
     
     @staticmethod

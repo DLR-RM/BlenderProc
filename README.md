@@ -1,11 +1,11 @@
 # BlenderProc
 
 [![Documentation](https://img.shields.io/badge/documentation-passing-brightgreen.svg)](https://dlr-rm.github.io/BlenderProc/)
-[![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc)
+[![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basic/basic_example.ipynb)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <p align="center">
-<img src="readme.jpg" alt="Front readme image" width=500>
+<img src="images/readme.jpg" alt="Front readme image" width=500>
 </p>
 
 A procedural Blender pipeline for photorealistic training image generation.
@@ -16,7 +16,7 @@ Check out our [arXiv paper](https://arxiv.org/abs/1911.01911) (we are updating i
 
 <div align="center">
 <a href="http://www.youtube.com/watch?v=tQ59iGVnJWM">
-<img src="BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550> </a>
+<img src="images/BlenderProcVideoImg.jpg" alt="BlenderProc video" width=550> </a>
 </div>
 
 BlenderProc also has a complete [documentation site](https://dlr-rm.github.io/BlenderProc).
@@ -51,7 +51,7 @@ BlenderProc here generates a scene, places cameras in it and renders the content
 Each run should construct a random scene to create a vast variety of different scenarios, to make the generalization to the real world easier.
 
 <p align="center">
-<img src="BlenderProcRerun.jpg" alt="BlenderProc rerun image" width=500>
+<img src="images/BlenderProcRerun.jpg" alt="BlenderProc rerun image" width=500>
 </p>
 
 For that reason we offer a `rerun.py` script, which does exactly this:
@@ -102,7 +102,7 @@ Now the Blender UI opens up, the scripting tab is selected, the correct script i
 To start the BlenderProc pipeline, one now just has to press play (see red circle in image).
  
 <p align="center">
-<img src="debug.png" alt="Front readme image" width=500>
+<img src="images/debug.png" alt="Front readme image" width=500>
 </p>
 
 The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.
@@ -136,5 +136,5 @@ If you use BlenderProc in a research project, please cite as follows:
 ---
 
 <div align="center">
-  <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="docs/source/logo.svg" height="100px" hspace="3%" vspace="60px"></a>
+  <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="images/logo.svg" hspace="3%" vspace="60px"></a>
 </div>

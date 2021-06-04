@@ -16,12 +16,15 @@ from src.utility.RendererUtility import RendererUtility
 class Initializer:
 
     @staticmethod
-    def init(horizon_color: list = [0.05, 0.05, 0.05], clean_up_scene: bool = True):
+    def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", compute_device_type: str = None, use_experimental_features: bool = False, clean_up_scene: bool = True):
         """ Initializes basic blender settings, the world and the camera.
 
         Also cleans up the whole scene at first.
 
         :param horizon_color: The color to use for the world background.
+        :param compute_device: The compute device to use for the Cycles Render Engine i.e. CPU or GPU. (default: ``GPU``).
+        :param compute_device_type: The compute device type to use for the Cycles Render Engine i.e. OPTIX or CUDA. Only necessary to specify, if compute device is GPU. If None is given, the available device type is used (OPTIX is preferred).
+        :param use_experimental_features: Set to True, if you want to use the Experimental features of the Cycles Render Engine i.e Adaptive subdivision. (default: ``False``).
         :param clean_up_scene: Set to False, if you want to keep all scene data.
         """
         if clean_up_scene:
@@ -36,8 +39,8 @@ class Initializer:
         # Use cycles
         bpy.context.scene.render.engine = 'CYCLES'
 
-        if platform == "darwin":
-            # there is no gpu support in mac os so use the cpu with maximum power
+        if platform == "darwin" or compute_device == "CPU":
+            # if there is no gpu support (mac os) or if cpu is specified as compute device, then use the cpu with maximum power
             bpy.context.scene.cycles.device = "CPU"
             bpy.context.scene.render.threads = multiprocessing.cpu_count()
         else:
@@ -48,7 +51,7 @@ class Initializer:
             for gpu_type in ["OPTIX", "CUDA"]:
                 found = False
                 for device in preferences.devices:
-                    if device.type == gpu_type:
+                    if device.type == gpu_type and (compute_device_type is None or compute_device_type == gpu_type):
                         bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
                         print('Device {} of type {} found and used.'.format(device.name, device.type))
                         found = True
@@ -59,6 +62,10 @@ class Initializer:
             for group in prefs.get_devices():
                 for d in group:
                     d.use = True
+
+        # Set the Experimental features on/off
+        if use_experimental_features:
+            bpy.context.scene.cycles.feature_set = 'EXPERIMENTAL'
 
         # setting the frame end, will be changed by the camera loader modules
         bpy.context.scene.frame_end = 0
