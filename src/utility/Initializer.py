@@ -108,7 +108,7 @@ class Initializer:
 
         # Set number of cpu cores used for rendering (1 thread is always used for coordination => 1
         # cpu thread means GPU-only rendering)
-        RendererUtility.set_cpu_threads(1)
+        RendererUtility.set_cpu_threads(0)
         RendererUtility.set_denoiser(DefaultConfig.denoiser)
 
         RendererUtility.set_simplify_subdivision_render(DefaultConfig.simplify_subdivision_render)
