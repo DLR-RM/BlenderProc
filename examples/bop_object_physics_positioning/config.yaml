@@ -7,7 +7,8 @@
       "scikit-image",
       "pypng==0.0.20",
       "scipy",
-      "matplotlib"
+      "matplotlib",
+      "pytz"
     ]
   },
   "modules": [
