@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy==1.2.2", "matplotlib==2.2.4"])
+SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy", "matplotlib"])
 
 import os
 import sys
