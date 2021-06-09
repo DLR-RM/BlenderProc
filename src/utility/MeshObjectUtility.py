@@ -1,5 +1,5 @@
 import os
-from typing import List, Union
+from typing import List, Union, Tuple
 
 import bpy
 
@@ -383,3 +383,15 @@ class MeshObject(Entity):
         bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
         bm.free()
         return bvh_tree
+
+    def ray_cast(self, origin: Vector, direction: Vector, max_distance: float = 1.70141e+38) -> Tuple[bool, Vector, Vector, int]:
+        """ Cast a ray onto evaluated geometry, in object space.
+        :param origin: Origin of the ray, in object space.
+        :param direction: Direction of the ray, in object space.
+        :param max_distance: Maximum distance.
+        :return: Whether the ray successfully hit the geometry
+                 The hit location of this ray cast, float array of 3 items in [-inf, inf]
+                 The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
+                 The face index, -1 when original data isn’t available, int in [-inf, inf]
+        """
+        return self.blender_obj.ray_cast(origin, direction, max_distance)

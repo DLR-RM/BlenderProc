@@ -1,78 +1,39 @@
 import mathutils
 import numpy as np
 
-from src.main.Provider import Provider
+from mathutils import Vector
 
+class Shell:
 
-class Shell(Provider):
-    """
-    Samples a point from the space in between two spheres with a double spherical angle with apex in the center
-    of those two spheres. Has option for uniform elevation sampling.
+    @staticmethod
+    def sample(center: Vector, radius_min: float, radius_max: float, elevation_min: float, elevation_max: float, uniform_elevation: bool = False) -> Vector:
+        """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
+            of those two spheres. Has option for uniform elevation sampling.
 
-    Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
-    that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
+        Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
+        that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
 
-    .. code-block:: yaml
+        .. code-block:: python
 
-        {
-          "provider": "sampler.Shell",
-          "center": [0, 0, -0.8],
-          "radius_min": 1,
-          "radius_max": 4,
-          "elevation_min": 40,
-          "elevation_max": 89
-        }
+            sampler.Shell(
+                center=Vector([0, 0, -0.8]),
+                radius_min=1,
+                radius_max=4,
+                elevation_min=40,
+                elevation_max=89
+            )
 
-
-    **Configuration**:
-
-    .. list-table:: 
-        :widths: 25 100 10
-        :header-rows: 1
-
-        * - Parameter
-          - Description
-          - Type
-        * - center
-          - Center which is shared by both structure-defining spheres.
-          - mathutils.Vector
-        * - radius_min
-          - Radius of a smaller sphere.
-          - float
-        * - radius_max
-          - Radius of a bigger sphere.
-          - float
-        * - elevation_min
-          - Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].
-          - float
-        * - elevation_max
-          - Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
-          - float
-        * - uniform_elevation
-          - Uniformly sample elevation angles. Default: False
-          - bool
-    """
-
-    def __init__(self, config):
-        Provider.__init__(self, config)
-
-    def run(self):
-        """ Sample a point from a space in between two halfspheres with the same center point and a sampling cone with apex in this center.
-
-        :param config: A configuration object containing the parameters required to perform sampling.
-        :return: A sampled point. Type: mathutils.Vector.
+        :param center: Center which is shared by both structure-defining spheres.
+        :param radius_min: Radius of a smaller sphere.
+        :param radius_max: Radius of a bigger sphere.
+        :param elevation_min: Minimum angle of elevation in degrees: defines slant height of the sampling cone. Range: [0, 90].
+        :param elevation_max: Maximum angle of elevation in degrees: defines slant height of the rejection cone. Range: [0, 90].
+        :param uniform_elevation: Uniformly sample elevation angles.
+        :return: A sampled point.
         """
-        # Center of both spheres
-        center = np.array(self.config.get_list("center"))
-        # Radius of a smaller sphere
-        radius_min = self.config.get_float("radius_min")
-        # Radius of a bigger sphere
-        radius_max = self.config.get_float("radius_max")
-        # Elevation angles
-        elevation_min = self.config.get_float("elevation_min")
-        elevation_max = self.config.get_float("elevation_max")
+        center = np.array(center)
 
-        if self.config.get_bool("uniform_elevation", False):
+        if uniform_elevation:
             el_sampled = np.deg2rad(elevation_min + (elevation_max-elevation_min) * np.random.rand())
             az_sampled = 2 * np.pi * np.random.rand()
             # spherical to cartesian coordinates
