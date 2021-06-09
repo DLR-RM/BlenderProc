@@ -5,9 +5,31 @@ from mathutils import Vector
 class Disk:
 
     @staticmethod
-    def sample(center, radius, rotation: Vector = None, sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> Vector:
+    def sample(center: Vector, radius: float, rotation: Vector = None, sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> Vector:
         """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
             with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
+
+        Example 1: Sample a point from a 1-sphere.
+
+        .. code-block:: python
+
+            Disk.sample(
+                center=Vector([0, 0, 4]),
+                radius=7,
+                sample_from="circle"
+            )
+
+        Example 2: Sample a point from a sector.
+
+        .. code-block:: python
+
+            Disk.sample(
+                center=Vector([0, 0, 4]),
+                radius=7,
+                sample_from="sector",
+                start_angle=0,
+                end_angle=90
+            )
 
         :param center: Center (in 3d space) of a 2d geometrical shape to sample from.
         :param radius: The radius of the disk.

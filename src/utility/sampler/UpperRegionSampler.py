@@ -13,6 +13,17 @@ class UpperRegionSampler:
             defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
             sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
 
+        Example 1: Sample a location on the surface of the given objects with height above this
+        surface in range of [1.5, 1.8].
+
+        .. code-block:: python
+
+            UpperRegionSampler.sample(
+                objects_to_sample_on=objs,
+                min_height=1.5,
+                max_height=1.8
+            )
+
         :param objects_to_sample_on: Objects, on which to sample on.
         :param face_sample_range: Restricts the area on the face where objects are sampled. Specifically describes relative lengths of
                                   both face vectors between which points are sampled. Default: [0.0, 1.0]

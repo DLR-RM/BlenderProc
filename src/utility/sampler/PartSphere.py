@@ -12,6 +12,18 @@ class PartSphere:
         https://math.stackexchange.com/a/87238
         https://math.stackexchange.com/a/1585996
 
+        Example 1: Sample a point from the surface of the sphere that is split by a plane with displacement of 0.5
+        above center and a normal of [1, 0, 0].
+
+        .. code-block:: python
+
+            PartSphere.sample(
+                center=Vector([0, 0, 0]),
+                part_sphere_vector=Vector([1, 0, 0]),
+                mode="SURFACE",
+                distance_above_center=0.5
+            )
+
         :param center: Location of the center of the sphere.
         :param radius: The radius of the sphere.
         :param mode: Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling

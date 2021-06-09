@@ -10,6 +10,19 @@ class Shell:
         """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
             of those two spheres. Has option for uniform elevation sampling.
 
+        Example 1: Sample a point from a space in between two structure-defining spheres defined by min and max radii,
+        that lies in the sampling cone and not in the rejection cone defined by the min and max elevation degrees.
+
+        .. code-block:: python
+
+            sampler.Shell(
+                center=Vector([0, 0, -0.8]),
+                radius_min=1,
+                radius_max=4,
+                elevation_min=40,
+                elevation_max=89
+            )
+
         :param center: Center which is shared by both structure-defining spheres.
         :param radius_min: Radius of a smaller sphere.
         :param radius_max: Radius of a bigger sphere.
