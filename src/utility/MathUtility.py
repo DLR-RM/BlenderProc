@@ -49,7 +49,7 @@ class MathUtility:
             return output
 
     @staticmethod
-    def build_t_mat(translation: Vector, rotation: Matrix) -> Matrix:
+    def build_transformation_mat(translation: Vector, rotation: Matrix) -> Matrix:
         """ Build a transformation matrix from translation and rotation parts.
 
         :param translation: A vector representing the translation part.

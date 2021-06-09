@@ -51,7 +51,7 @@ while tries < 10000 and poses < 5:
     location, _ = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_t_mat(location, Euler(rotation).to_matrix())
+    cam2world_matrix = MathUtility.build_transformation_mat(location, Euler(rotation).to_matrix())
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:
