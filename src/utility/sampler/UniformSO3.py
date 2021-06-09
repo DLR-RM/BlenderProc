@@ -2,47 +2,20 @@ import mathutils
 import random
 import numpy as np
 
-from src.main.Provider import Provider
+class UniformSO3:
 
+    @staticmethod
+    def sample(around_x: bool = True, around_y: bool = True, around_z: bool = True) -> mathutils.Vector:
+        """ Uniformly samples rotations from SO(3). Allows to limit the rotation around Blender World coordinate axes.
 
-class UniformSO3(Provider):
-    """ Uniformly samples rotations from SO(3). Allows to limit the rotation around Blender World coordinate axes.
-
-    **Configuration**:
-
-    .. list-table:: 
-        :widths: 25 100 10
-        :header-rows: 1
-
-        * - Parameter
-          - Description
-          - Type
-        * - around_x
-          - Whether to rotate around X-axis. Default: True.
-          - bool
-        * - around_y
-          - Whether to rotate around Y-axis. Default: True.
-          - bool
-        * - around_z
-          - Whether to rotate around Z-axis. Default: True.
-          - bool
-    """
-
-    def __init__(self, config):
-        Provider.__init__(self, config)
-
-    def run(self):
+        :param around_x: Whether to rotate around X-axis.
+        :param around_y: Whether to rotate around Y-axis.
+        :param around_z: Whether to rotate around Z-axis.
+        :return: Sampled rotation in euler angles.
         """
-        :return: Sampled rotation in euler angles. Type: mathutils.Vector
-        """
-        # Indicators of which axes to rotate around.
-        around_x = self.config.get_bool('around_x', True)
-        around_y = self.config.get_bool('around_y', True)
-        around_z = self.config.get_bool('around_z', True)
-
         # Uniform sampling in full SO3.
         if around_x and around_y and around_z:
-            quat_rand = self._random_quaternion()
+            quat_rand = UniformSO3._random_quaternion()
             euler_rand = mathutils.Quaternion(quat_rand).to_euler()
 
         # Uniform sampling of angles around the selected axes.
@@ -60,13 +33,14 @@ class UniformSO3(Provider):
 
         return mathutils.Vector(euler_rand)
 
-    def _random_quaternion(self, rand=None):
+    @staticmethod
+    def _random_quaternion(rand: list = None) -> np.array:
         """ Return uniform random unit quaternion.
 
         https://github.com/thodan/bop_toolkit/blob/master/bop_toolkit_lib/transform.py
 
-        :param rand: Three independent random variables that are uniformly distributed between 0 and 1. Type: list.
-        :return: Unit quaternion. Type: np.array.
+        :param rand: Three independent random variables that are uniformly distributed between 0 and 1.
+        :return: Unit quaternion.
         """
         if rand is None:
             rand = np.random.rand(3)
@@ -79,5 +53,4 @@ class UniformSO3(Provider):
         t1 = pi2 * rand[1]
         t2 = pi2 * rand[2]
 
-        return np.array([np.cos(t2) * r2, np.sin(t1) * r1,
-                            np.cos(t1) * r1, np.sin(t2) * r2])
+        return np.array([np.cos(t2) * r2, np.sin(t1) * r1, np.cos(t1) * r1, np.sin(t2) * r2])

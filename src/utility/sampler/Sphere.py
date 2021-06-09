@@ -1,10 +1,9 @@
 import mathutils
 import numpy as np
 
-from src.main.Provider import Provider
+from mathutils import Vector
 
-
-class Sphere(Provider):
+class Sphere:
     """
     Samples a point from the surface or from the interior of solid sphere
 
@@ -40,34 +39,21 @@ class Sphere(Provider):
           - string
     """
 
-    def __init__(self, config):
-        Provider.__init__(self, config)
-
-    # https://math.stackexchange.com/a/87238
-    # https://math.stackexchange.com/a/1585996
-    def run(self):
-        """
-        :param config: A configuration object containing the parameters necessary to sample.
-        :return: A random point lying inside or on the surface of a solid sphere. Type: mathutils.Vector
-        """
-        # Center of the sphere.
-        center = np.array(self.config.get_list("center"))
-        # Radius of the sphere.
-        radius = self.config.get_float("radius")
-        # Mode of operation.
-        mode = self.config.get_string("mode")
-
-        return Sphere.sample(center, radius, mode)
 
     @staticmethod
-    def sample(center, radius, mode):
-        """
-        Samples a point according to the mode, the center and the radius.
+    def sample(center: Vector, radius: float, mode: str) -> Vector:
+        """ Samples a point from the surface or from the interior of solid sphere.
 
-       :param center: A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
-       :param radius: The radius of the sphere. Type: float
-       :param mode: Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
+        https://math.stackexchange.com/a/87238
+        https://math.stackexchange.com/a/1585996
+
+        :param center: Location of the center of the sphere.
+        :param radius: The radius of the sphere.
+        :param mode: Mode of sampling. Determines the geometrical structure used for sampling. Available: SURFACE (sampling
+                     from the 2-sphere), INTERIOR (sampling from the 3-ball).
         """
+        center = np.array(center)
+
         # Sample
         direction = np.random.normal(size=3)
         

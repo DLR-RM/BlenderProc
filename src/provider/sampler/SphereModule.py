@@ -1,10 +1,10 @@
-import mathutils
 import numpy as np
 
 from src.main.Provider import Provider
+from src.utility.sampler.Sphere import Sphere
 
 
-class Sphere(Provider):
+class SphereModule(Provider):
     """
     Samples a point from the surface or from the interior of solid sphere
 
@@ -59,37 +59,3 @@ class Sphere(Provider):
 
         return Sphere.sample(center, radius, mode)
 
-    @staticmethod
-    def sample(center, radius, mode):
-        """
-        Samples a point according to the mode, the center and the radius.
-
-       :param center: A list of three values, describing the x, y and z coordinate of the center of the sphere. Type: mathutils.Vector
-       :param radius: The radius of the sphere. Type: float
-       :param mode: Mode of sampling. SURFACE - sampling from the 2-sphere, INTERIOR - sampling from the 3-ball. Type: str
-        """
-        # Sample
-        direction = np.random.normal(size=3)
-        
-        if np.count_nonzero(direction) == 0:  # Check no division by zero
-            direction[0] = 1e-5
-
-        # For normalization
-        norm = np.sqrt(direction.dot(direction))
-
-        # If sampling from the surface set magnitude to radius of the sphere
-        if mode == "SURFACE":
-            magnitude = radius
-        # If sampling from the interior set it to scaled radius
-        elif mode == "INTERIOR":
-            magnitude = radius * np.cbrt(np.random.uniform())
-        else:
-            raise Exception("Unknown sampling mode: " + mode)
-        
-        # Normalize
-        sampled_point = list(map(lambda x: magnitude*x/norm, direction))
-        
-        # Add center
-        location = mathutils.Vector(np.array(sampled_point) + center)
-
-        return location
