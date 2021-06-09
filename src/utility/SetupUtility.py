@@ -2,6 +2,7 @@ import os
 import sys
 from sys import platform
 import subprocess
+import importlib
 
 class SetupUtility:
 
@@ -107,6 +108,7 @@ class SetupUtility:
         SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path)
 
         # Install all packages
+        packages_were_installed = False
         for package in required_packages:
             # Extract name and target version
             if "==" in package:
@@ -139,7 +141,11 @@ class SetupUtility:
                 print("Installing pip package {} {}".format(package_name, package_version))
                 subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                 SetupUtility.installed_packages[package_name] = package_version
+                packages_were_installed = True
 
+        # If packages were installed, invalidate the module cache, s.t. the new modules can be imported right away
+        if packages_were_installed:
+            importlib.invalidate_caches()
         return packages_path
 
     @staticmethod
