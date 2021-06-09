@@ -27,6 +27,7 @@ class SuncgCameraSampler(CameraSampler):
     def _sample_pose(self, config):
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
+        :param config: The config object describing how to sample
         :return: True, if the sampled pose was valid
         """
         cam2world_matrix = super()._sample_pose(config)
