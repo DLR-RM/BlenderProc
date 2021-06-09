@@ -96,7 +96,7 @@ class SegMapRenderer(RendererInterface):
           - string
         * - segcolormap_output_file_prefix
           - The file prefix that should be used when writing the class instance to color mapping to file. Default:
-            class_inst_col_map
+            instance_attribute_map
           - string
         * - output_file_prefix
           - The file prefix that should be used when writing semantic information to a file. Default: `"segmap_"`
@@ -128,8 +128,6 @@ class SegMapRenderer(RendererInterface):
         map_by = self.config.get_raw_dict("map_by", "class")
 
         default_values = self.config.get_raw_dict("default_values", {})
-        if 'class' in default_values:
-            default_values['cp_category_id'] = default_values['class']
 
         with Utility.UndoAfterExecution():
             self._configure_renderer(default_samples=1)
@@ -142,7 +140,7 @@ class SegMapRenderer(RendererInterface):
                     default_values,
                     self.config.get_string("output_file_prefix", "segmap_"),
                     self.config.get_string("output_key", "segmap"),
-                    self.config.get_string("segcolormap_output_file_prefix", "class_inst_col_map"),
+                    self.config.get_string("segcolormap_output_file_prefix", "instance_attribute_map"),
                     self.config.get_string("segcolormap_output_key", "segcolormap"),
                     use_alpha_channel=self._use_alpha_channel,
                     return_data=False

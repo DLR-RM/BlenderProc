@@ -85,7 +85,7 @@ class SegMapRendererUtility:
     @staticmethod
     def render(output_dir: Union[str, None] = None, temp_dir: Union[str, None] = None, map_by: Union[str, List[str]] = "class",
                default_values: Union[Dict[str, str]] = {"class":0}, file_prefix: str = "segmap_",
-               output_key: str = "segmap", segcolormap_output_file_prefix: str = "class_inst_col_map",
+               output_key: str = "segmap", segcolormap_output_file_prefix: str = "instance_attribute_map_",
                segcolormap_output_key: str = "segcolormap", use_alpha_channel: bool = False,
                render_colorspace_size_per_dimension: int = 2048, return_data: bool = True) -> Dict[str, List[np.ndarray]]:
         """ Renders segmentation maps for all frames
@@ -163,7 +163,6 @@ class SegMapRendererUtility:
             else:
                 raise Exception("The type of this is not supported here: {}".format(attributes))
 
-            save_in_csv_attributes = {}
             # define them for the avoid rendering case
             there_was_an_instance_rendering = False
             list_of_attributes = []
@@ -174,8 +173,11 @@ class SegMapRendererUtility:
             else:
                 suffixes = [""]
 
+            return_dict = {}
+            
             # After rendering
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
+                save_in_csv_attributes = {}
                 for suffix in suffixes:
                     file_path = temporary_segmentation_file_path + ("%04d" % frame) + suffix + ".exr"
                     segmentation = load_image(file_path)
@@ -283,6 +285,7 @@ class SegMapRendererUtility:
                         if was_used and non_default_value_was_used:
                             channels.append(org_attribute)
                             combined_result_map.append(resulting_map)
+                            return_dict.setdefault("{}_segmaps{}".format(org_attribute, suffix), []).append(resulting_map)
 
                     fname = final_segmentation_file_path + ("%04d" % frame) + suffix
                     # combine all resulting images to one image
@@ -290,47 +293,51 @@ class SegMapRendererUtility:
                     # remove the unneeded third dimension
                     if resulting_map.shape[2] == 1:
                         resulting_map = resulting_map[:, :, 0]
+                    # TODO: Remove unnecessary save when we give up backwards compatibility
                     np.save(fname, resulting_map)
-
-            if not there_was_an_instance_rendering:
-                if len(list_of_attributes) > 0:
-                    raise Exception("There were attributes specified in the may_by, which could not be saved as "
-                                    "there was no \"instance\" may_by key used. This is true for this/these "
-                                    "keys: {}".format(", ".join(list_of_attributes)))
-                # if there was no instance rendering no .csv file is generated!
-                # delete all saved infos about .csv
-                save_in_csv_attributes = {}
-
-            # write color mappings to file
-            if save_in_csv_attributes:
-                csv_file_path = os.path.join(output_dir, segcolormap_output_file_prefix + ".csv")
-                with open(csv_file_path, 'w', newline='') as csvfile:
-                    # get from the first element the used field names
-                    fieldnames = ["idx"]
-                    # get all used object element keys
-                    for object_element in save_in_csv_attributes.values():
-                        fieldnames.extend(list(object_element.keys()))
-                        break
-                    for channel_name in channels:
-                        fieldnames.append("channel_{}".format(channel_name))
-                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                    writer.writeheader()
-                    # save for each object all values in one row
-                    for obj_idx, object_element in save_in_csv_attributes.items():
-                        object_element["idx"] = obj_idx
-                        for i, channel_name in enumerate(channels):
-                            object_element["channel_{}".format(channel_name)] = i
-                        writer.writerow(object_element)
+                
+                if there_was_an_instance_rendering:
+                    mappings = []
+                    for object_id, attribute_dict in save_in_csv_attributes.items():
+                        mappings.append({"idx" : object_id, **attribute_dict})
+                    return_dict.setdefault("instance_attribute_maps", []).append(mappings)
+                    
+                    # write color mappings to file 
+                    # TODO: Remove unnecessary csv file when we give up backwards compatibility
+                    csv_file_path = os.path.join(output_dir, segcolormap_output_file_prefix + ("%04d.csv" % frame))
+                    with open(csv_file_path, 'w', newline='') as csvfile:
+                        # get from the first element the used field names
+                        fieldnames = ["idx"]
+                        # get all used object element keys
+                        for object_element in save_in_csv_attributes.values():
+                            fieldnames.extend(list(object_element.keys()))
+                            break
+                        for channel_name in channels:
+                            fieldnames.append("channel_{}".format(channel_name))
+                        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                        writer.writeheader()
+                        # save for each object all values in one row
+                        for obj_idx, object_element in save_in_csv_attributes.items():
+                            object_element["idx"] = obj_idx
+                            for i, channel_name in enumerate(channels):
+                                object_element["channel_{}".format(channel_name)] = i
+                            writer.writerow(object_element)
+                else:
+                    if len(list_of_attributes) > 0:
+                        raise Exception("There were attributes specified in the may_by, which could not be saved as "
+                                        "there was no \"instance\" may_by key used. This is true for this/these "
+                                        "keys: {}".format(", ".join(list_of_attributes)))
+                    # if there was no instance rendering no .csv file is generated!
+                    # delete all saved infos about .csv
+                    save_in_csv_attributes = {}
 
         Utility.register_output(output_dir, file_prefix, output_key, ".npy", "2.0.0")
-        load_keys = {output_key}
+
         if save_in_csv_attributes:
             Utility.register_output(output_dir,
                                     segcolormap_output_file_prefix,
                                     segcolormap_output_key,
                                     ".csv",
-                                    "2.0.0",
-                                    unique_for_camposes=False)
-            load_keys.add(segcolormap_output_key)
-        
-        return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
+                                    "2.0.0")
+                
+        return return_dict
