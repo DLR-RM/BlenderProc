@@ -28,7 +28,7 @@ class UniformSO3Module(Provider):
     def __init__(self, config):
         Provider.__init__(self, config)
 
-    def sample(self):
+    def run(self):
         """
         :return: Sampled rotation in euler angles. Type: mathutils.Vector
         """
