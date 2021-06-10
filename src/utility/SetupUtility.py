@@ -34,9 +34,9 @@ class SetupUtility:
         
         # Setup temporary directory
         if is_debug_mode:
-            SetupUtility.setup_temp_dir("examples/debugging/temp")
+            SetupUtility.setup_utility_paths("examples/debugging/temp")
         else:
-            SetupUtility.setup_temp_dir(sys.argv[sys.argv.index("--") + 2])
+            SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
         
         # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
         if not is_debug_mode:
@@ -48,16 +48,15 @@ class SetupUtility:
         return sys.argv
 
     @staticmethod
-    def setup_temp_dir(temp_dir):
-        """
-        Set temporary directory
+    def setup_utility_paths(temp_dir):
+        """ Set utility paths: Temp dir and working dir.
 
-        Arguments:
         :param temp_dir: Path to temporary directory where Blender saves output. Default is shared memory.
         """
         from src.utility.Utility import Utility
         
         Utility.temp_dir = Utility.resolve_path(temp_dir)
+        Utility.working_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
         os.makedirs(Utility.temp_dir, exist_ok=True)
     
     @staticmethod
