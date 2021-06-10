@@ -1,58 +1,64 @@
 import math
 import random
-from typing import Tuple
 
-import mathutils
-
-from src.utility.BlenderUtility import get_bounds
-from src.utility.MeshObjectUtility import MeshObject
 from mathutils import Vector
+
+from src.utility.MeshObjectUtility import MeshObject
 
 class UpperRegionSampler:
 
     @staticmethod
-    def _calc_vec_and_normals(face: list) -> Tuple[Tuple[Vector, Vector], Vector]:
-        """ Calculates the two vectors, which lie in the plane of the face and the normal of the face.
-
-        :param face: Four corner coordinates of a face. Type: [4x[3xfloat]].
-        :return: (two vectors in the plane), and the normal.
-        """
-        vec1 = face[1] - face[0]
-        vec2 = face[3] - face[0]
-        normal = vec1.cross(vec2)
-        normal.normalize()
-        return (vec1, vec2), normal
-    
-    @staticmethod
-    def sample(objects_to_sample_on: [MeshObject], min_height: float = 0.0, max_height: float = 1.0, face_sample_range: list = None, use_ray_trace_check: bool = False, upper_dir: Vector = None, use_upper_dir: bool = True) -> Vector:
+    def sample(objects_to_sample_on: [MeshObject], face_sample_range: Vector = None, min_height: float = 0.0, max_height: float = 1.0, use_ray_trace_check: bool = False, upper_dir: Vector = None, use_upper_dir: bool = True) -> Vector:
         """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
             defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
             sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
 
+        Example 1: Sample a location on the surface of the given objects with height above this
+        surface in range of [1.5, 1.8].
+
+        .. code-block:: python
+
+            UpperRegionSampler.sample(
+                objects_to_sample_on=objs,
+                min_height=1.5,
+                max_height=1.8
+            )
+
         :param objects_to_sample_on: Objects, on which to sample on.
+        :param face_sample_range: Restricts the area on the face where objects are sampled. Specifically describes relative lengths of
+                                  both face vectors between which points are sampled. Default: [0.0, 1.0]
         :param min_height: Minimum distance to the bounding box that a point is sampled on.
         :param max_height: Maximum distance to the bounding box that a point is sampled on.
-        :param face_sample_range: Restricts the area on the face where objects are sampled. Specifically describes relative lengths of
-                                  both face vectors between which points are sampled.
         :param use_ray_trace_check: Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
                                     position is the position accepted).
-        :param upper_dir: The 'up' direction of the sampling box.
-        :param use_upper_dir: Toggles the sampling above the selected surface, can be done with the upper_dir or with the face normal,
-                              if this is true the upper_dir is used.
+        :param upper_dir: The 'up' direction of the sampling box. Default: [0.0, 0.0, 1.0].
+        :param use_upper_dir: Toggles using a ray casting towards the sampled object (if the object is directly below the sampled
+                              position is the position accepted).
         :return: Sampled value.
         """
         if face_sample_range is None:
-            face_sample_range = [0.0, 1.0]
+            face_sample_range = Vector([0.0, 1.0])
         if upper_dir is None:
             upper_dir = Vector([0.0, 0.0, 1.0])
         upper_dir.normalize()
-        if not isinstance(objects_to_sample_on, list):
-            objects_to_sample_on = [objects_to_sample_on]
         if max_height < min_height:
             raise Exception("The minimum height ({}) must be smaller "
                             "than the maximum height ({})!".format(min_height, max_height))
 
         regions = []
+
+        def calc_vec_and_normals(face):
+            """ Calculates the two vectors, which lie in the plane of the face and the normal of the face.
+
+            :param face: Four corner coordinates of a face. Type: [4x[3xfloat]].
+            :return: (two vectors in the plane), and the normal.
+            """
+            vec1 = face[1] - face[0]
+            vec2 = face[3] - face[0]
+            normal = vec1.cross(vec2)
+            normal.normalize()
+            return (vec1, vec2), normal
+
         # determine for each object in objects the region, where to sample on
         for obj in objects_to_sample_on:
             bb = obj.get_bound_box()
@@ -68,15 +74,15 @@ class UpperRegionSampler:
             selected_face = None
             for face in faces:
                 # calc the normal of all faces
-                _, normal = UpperRegionSampler._calc_vec_and_normals(face)
+                _, normal = calc_vec_and_normals(face)
                 diff_angle = math.acos(normal.dot(upper_dir))
                 if diff_angle < min_diff_angle:
                     min_diff_angle = diff_angle
                     selected_face = face
             # save the selected face values
             if selected_face is not None:
-                vectors, normal = UpperRegionSampler._calc_vec_and_normals(selected_face)
-                base_point = mathutils.Vector(selected_face[0])
+                vectors, normal = calc_vec_and_normals(selected_face)
+                base_point = Vector(selected_face[0])
                 regions.append(Region2D(vectors, normal, base_point))
             else:
                 raise Exception("Couldn't find a face, for this obj: {}".format(obj.get_name()))

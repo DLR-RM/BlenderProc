@@ -135,6 +135,10 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
             raise Exception("No output produced by convex decomposition of object " + ob.name)
 
         if cache_dir is not None:
+            # Create cache dir, if it not exists yet
+            if not os.path.exists(cache_dir):
+                os.makedirs(cache_dir, exist_ok=True)
+            # Copy decomposition into cache dir
             shutil.copyfile(outFileName, os.path.join(cache_dir, str(mesh_hash) + ".wrl"))
     else:
         outFileName = os.path.join(cache_dir, str(mesh_hash) + ".wrl")

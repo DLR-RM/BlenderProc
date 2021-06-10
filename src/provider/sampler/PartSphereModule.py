@@ -1,10 +1,11 @@
 import mathutils
 
 from src.main.Provider import Provider
-from src.provider.sampler.Sphere import Sphere
+
+from src.utility.sampler.PartSphere import PartSphere
 
 
-class PartSphere(Provider):
+class PartSphereModule(Provider):
     """
     Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 
@@ -57,7 +58,6 @@ class PartSphere(Provider):
 
     def run(self):
         """
-        :param config: A configuration object containing the parameters necessary to sample.
         :return: A random point lying inside or on the surface of a solid sphere. Type: mathutils.Vector
         """
         # Center of the sphere.
@@ -68,15 +68,11 @@ class PartSphere(Provider):
         mode = self.config.get_string("mode")
         dist_above_center = self.config.get_float("distance_above_center", 0.0)
         part_sphere_dir_vector = self.config.get_vector3d("part_sphere_vector", [0, 0, 1])
-        part_sphere_dir_vector.normalize()
 
-        if dist_above_center >= radius:
-            raise Exception("The dist_above_center value is bigger or as big as the radius!")
-
-        while True:
-            location = Sphere.sample(center, radius, mode)
-            # project the location onto the part_sphere_dir_vector and get the length
-            loc_in_sphere = location - center
-            length = loc_in_sphere.dot(part_sphere_dir_vector)
-            if length > dist_above_center:
-                return location
+        return PartSphere.sample(
+            center=center,
+            radius=radius,
+            mode=mode,
+            dist_above_center=dist_above_center,
+            part_sphere_dir_vector=part_sphere_dir_vector
+        )
