@@ -29,13 +29,16 @@ args = parser.parse_args()
 
 Initializer.init()
 
+# Load materials and objects that can be placed into the room
 materials = CCMaterialLoader.load(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
 interior_objects = []
 for i in range(15):
     interior_objects.extend(IKEALoader.load(args.ikea_path, ["bed", "chair", "desk", "bookshelf"]))
 
+# Construct random room and fill with interior_objects
 objects = RandomRoomConstructor.construct(25, interior_objects, materials, amount_of_extrusions=5)
 
+# Bring light into the room
 SurfaceLighting.run([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
 
 # Init bvh tree containing all mesh objects
@@ -48,7 +51,7 @@ while tries < 10000 and poses < 5:
     location = UpperRegionSampler.sample(floor, min_height=1.5, max_height=1.8)
     # Sample rotation
     rotation = np.random.uniform([1.0, 0, 0], [1.4217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_t_mat(location, Euler(rotation).to_matrix())
+    cam2world_matrix = MathUtility.build_transformation_mat(location, Euler(rotation).to_matrix())
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.2}, bvh_tree) and \
