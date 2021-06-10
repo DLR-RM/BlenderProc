@@ -41,6 +41,8 @@ class UpperRegionSampler:
         if upper_dir is None:
             upper_dir = Vector([0.0, 0.0, 1.0])
         upper_dir.normalize()
+        if not isinstance(objects_to_sample_on, list):
+            objects_to_sample_on = [objects_to_sample_on]
         if max_height < min_height:
             raise Exception("The minimum height ({}) must be smaller "
                             "than the maximum height ({})!".format(min_height, max_height))
