@@ -5,7 +5,7 @@
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
       "h5py",
-      "pypng==0.0.20",
+      "pypng==0.0.20"
     ]
   },
   "modules": [

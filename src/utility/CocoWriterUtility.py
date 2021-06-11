@@ -136,8 +136,8 @@ class CocoWriterUtility:
         instance_segmaps = inst_segmaps if inst_segmaps else instance_segmaps
         
         coco_output = CocoWriterUtility.generate_coco_annotations(instance_segmaps, 
-                                                                  new_coco_image_paths,
                                                                   instance_attibute_maps,
+                                                                  new_coco_image_paths,
                                                                   supercategory,
                                                                   mask_encoding_format,
                                                                   existing_coco_annotations)

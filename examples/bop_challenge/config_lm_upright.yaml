@@ -6,7 +6,10 @@
     "pip": [
       "h5py",
       "scikit-image",
-      "pypng==0.0.20"
+      "pypng==0.0.20",
+      "scipy",
+      "matplotlib",
+      "pytz"
     ]
   },
   "modules": [
