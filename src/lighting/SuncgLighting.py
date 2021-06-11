@@ -25,4 +25,7 @@ class SuncgLighting(Module):
         Module.__init__(self, config)
         
     def run(self):
+        """
+        Run this current module.
+        """
         SuncgLightingUtility.light(self.config.get_float("lightbulb_emission_strength", 15), self.config.get_float("lampshade_emission_strength", 7), self.config.get_float("ceiling_emission_strength", 1.5))
