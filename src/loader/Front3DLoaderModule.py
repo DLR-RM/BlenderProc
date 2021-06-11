@@ -57,7 +57,7 @@ class Front3DLoaderModule(LoaderInterface):
             raise Exception("The mapping file could not be found: {}".format(self.mapping_file))
 
     def run(self):
-        label_mapping = LabelIdMapping.from_file(self.mapping_file)
+        label_mapping = LabelIdMapping.from_csv(self.mapping_file)
         loaded_objects = Front3DLoader.load(
             json_path=self.config.get_string("json_path"),
             future_model_path=self.config.get_string("3D_future_model_path"),

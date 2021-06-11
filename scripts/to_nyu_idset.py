@@ -6,8 +6,8 @@ from src.utility.LabelIdMapping import LabelIdMapping
 def switch_mapping(segmap, source_map, destination_map):
 	# This assumes label names in different mappings are the same.
 	# This function is mainly useful to map from the old class mapping to the now default NYU mapping.
-	source_label_map = LabelIdMapping.from_file(source_map)
-	destination_label_map = LabelIdMapping.from_file(destination_map)
+	source_label_map = LabelIdMapping.from_csv(source_map)
+	destination_label_map = LabelIdMapping.from_csv(destination_map)
 
 	new_segmap = np.zeros_like(segmap)
 	unq = np.unique(segmap)

@@ -11,7 +11,14 @@ class LabelIdMapping:
 		self._num_ids = 0
 
 	@staticmethod
-	def from_file(path, label_col_name="name", id_col_name="id"):
+	def from_csv(path, label_col_name="name", id_col_name="id") -> "LabelIdMapping":
+		""" Builds a label-id mapping based on the given csv file.
+
+		:param path: The path to a csv file.
+		:param label_col_name: The name of the column which should be used as label.
+		:param id_col_name: The name of the column which should be used as id.
+		:return: The built label mapping object.
+		"""
 		with open(path, 'r') as csvfile:
 			reader = csv.DictReader(csvfile)
 			mapping = LabelIdMapping()
@@ -21,19 +28,56 @@ class LabelIdMapping:
 
 			return mapping
 
-	def add(self, label, id):
+	@staticmethod
+	def from_dict(label_to_id: dict) -> "LabelIdMapping":
+		""" Builds a label-id mapping based on the given dict.
+
+		:param label_to_id: A dict where keys are labels and values are ids.
+		:return: The built label mapping object.
+		"""
+		mapping = LabelIdMapping()
+		for label, id in label_to_id.items():
+			mapping.add(label, id)
+		return mapping
+
+	def add(self, label: str, id: int):
+		""" Inserts the given label-id pair into the mapping.
+
+		:param label: The label of the pair.
+		:param id: The id of the pair
+		"""
 		self._id_label_map[id] = label
 		self._label_id_map[label] = id
 		self._num_ids = max(self._num_ids, id + 1)
 
-	def id_from_label(self, label):
+	def id_from_label(self, label: str):
+		""" Returns the id assigned to the given label.
+
+		:param label: The label to look for.
+		:return: The id with the given label.
+		"""
 		return self._label_id_map[label]
 
-	def label_from_id(self, id):
+	def label_from_id(self, id: int):
+		""" Returns the label assigned to the given id.
+
+		:param id: The id to look for.
+		:return: The label with the given id.
+		"""
 		return self._id_label_map[id]
 
-	def has_label(self, label):
-		return label in self._id_label_map
+	def has_label(self, label: str):
+		""" Checks if the mapping contains the given label.
 
-	def has_id(self, label):
-		return label in self._id_label_map
+		:param label: The label to look for.
+		:return: True, if the label is already in use.
+		"""
+		return label in self._label_id_map
+
+	def has_id(self, id: int):
+		""" Checks if the mapping contains the given id.
+
+		:param id: The id to look for.
+		:return: True, if the id is already in use.
+		"""
+		return id in self._id_label_map

@@ -39,6 +39,6 @@ class SuncgLoaderModule(LoaderInterface):
         self.suncg_dir = self.config.get_string("suncg_path", suncg_folder_path)
 
     def run(self):
-        label_mapping = LabelIdMapping.from_file(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
         loaded_objects = SuncgLoader.load(self.house_path, label_mapping, self.suncg_dir)
         self._set_properties(loaded_objects)
