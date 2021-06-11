@@ -1,6 +1,6 @@
 import bpy
 import numpy as np
-from mathutils import Matrix
+from mathutils import Matrix, Vector, Euler
 
 class CameraUtility:
 
@@ -32,14 +32,18 @@ class CameraUtility:
         return frame
 
     @staticmethod
-    def rotation_from_forward_vec(forward_vec, up_axis='Y'):
+    def rotation_from_forward_vec(forward_vec: Vector, up_axis: str = 'Y', inplane_rot: float = None) -> Matrix:
         """ Returns a camera rotation matrix for the given forward vector and up axis
 
         :param forward_vec: The forward vector which specifies the direction the camera should look.
         :param up_axis: The up axis, usually Y.
+        :param inplane_rot: The inplane rotation in radians. If None is given, the inplane rotation is determined only based on the up vector.
         :return: The corresponding rotation matrix.
         """
-        return forward_vec.to_track_quat('-Z', up_axis).to_matrix()
+        rotation_matrix = forward_vec.to_track_quat('-Z', up_axis).to_matrix()
+        if inplane_rot is not None:
+            rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
+        return rotation_matrix
 
     @staticmethod
     def set_intrinsics_from_blender_params(lens, image_width, image_height, clip_start=0.1, clip_end=1000, pixel_aspect_x=1, pixel_aspect_y=1, shift_x=0, shift_y=0, lens_unit="MILLIMETERS"):
