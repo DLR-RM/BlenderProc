@@ -180,7 +180,7 @@ class BopWriterUtility:
         BopWriterUtility._save_json(camera_path, camera)
     
     @staticmethod
-    def _get_frame_gt(dataset_objects, unit_scaling:float, ignore_dist_thres:float, destination_frame:List[str] = ["X", "-Y", "-Z"]):
+    def _get_frame_gt(dataset_objects:List[bpy.types.Mesh], unit_scaling:float, ignore_dist_thres:float, destination_frame:List[str] = ["X", "-Y", "-Z"]):
         """ Returns GT pose annotations between active camera and objects.
         :param dataset_objects: Save annotations for these objects.
         :param unit_scaling: 1000. for outputting poses in mm
