@@ -9,7 +9,7 @@ from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
 from src.utility.loader.SuncgLoader import SuncgLoader
-from src.utility.SuncgLightingUtility import SuncgLightingUtility
+from src.utility.lighting.SuncgLighting import SuncgLighting
 
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
@@ -46,7 +46,7 @@ with open(args.camera, "r") as f:
         CameraUtility.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
-SuncgLightingUtility.light()
+SuncgLighting.light()
 
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()

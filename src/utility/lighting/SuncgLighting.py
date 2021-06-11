@@ -1,8 +1,3 @@
-import csv
-import os
-
-import bpy
-
 from src.utility.Utility import Utility
 from src.utility.ProviderUtility import get_all_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
@@ -118,8 +113,8 @@ class SuncgLighting:
         :param lampshade_emission_strength: The emission strength that should be used for lamp shades. Default: 7
         :param ceiling_emission_strength: The emission strength that should be used for the ceiling. Default: 1.5
         """
-        # Read in lights and windows
-        lights, windows = Utility.read_suncg_lights_windows()
+        # Read in the materials for lights and windows
+        lights, windows = Utility.read_suncg_lights_windows_materials()
         
         collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
         
@@ -130,12 +125,12 @@ class SuncgLighting:
 
                 # In the case of the lamp
                 if obj_id in lights:
-                    SuncgLightingUtility._make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength, lampshade_emission_strength)
+                    SuncgLighting._make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength, lampshade_emission_strength)
 
                 # Make the windows emit light
                 if obj_id in windows:
-                    SuncgLightingUtility._make_window_emissive(obj, collection_of_mats)
+                    SuncgLighting._make_window_emissive(obj, collection_of_mats)
 
                 # Also make ceilings slightly emit light
                 if obj.get_name().startswith("Ceiling#"):
-                    SuncgLightingUtility._make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)
+                    SuncgLighting._make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)
