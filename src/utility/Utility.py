@@ -1,5 +1,6 @@
 import os
 import math
+import csv
 import threading
 import uuid
 from typing import List, Dict, Any, Tuple
@@ -289,7 +290,7 @@ class Utility:
             raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
 
     @staticmethod
-    def read_lights_windows():
+    def read_suncg_lights_windows_materials():
         """
         Returns the lights and windows lists which contains their respective materials
 
