@@ -6,7 +6,17 @@
     "pip": [
       "h5py",
       "scikit-image",
+      "pypng==0.0.20",
+      "scipy",
+      "matplotlib",
+      "pytz"
     ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
           "output_dir": "<args:4>",
           "sys_paths": ["<args:2>"]
         }
