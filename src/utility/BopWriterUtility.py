@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["Pillow==5.4.1", "pypng==0.0.20"])
+SetupUtility.setup_pip(["Pillow", "pypng==0.0.20"])
 
 import json
 import os

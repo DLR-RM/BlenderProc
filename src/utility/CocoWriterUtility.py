@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["scikit-image", "Pillow==5.4.1"])
+SetupUtility.setup_pip(["scikit-image", "Pillow"])
 
 import datetime
 from itertools import groupby
