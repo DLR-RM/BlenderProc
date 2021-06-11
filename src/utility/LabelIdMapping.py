@@ -1,46 +1,39 @@
 import csv
 
-class LabelIdMapping(object):
-	""" Handles category id mapping for semantic segmentation maps. It's used as a static Singleton class
-
-	Attributes:
-	id_label_map: maps from an id to its name. E.g. id_label_map[0] = "void".
-	label_id_map: maps a class/category name to its id. E.g. label_id_map["void"] = 0.
-	"""
-	id_label_map = []
-	label_id_map = {}
+class LabelIdMapping:
+	""" Handles category id mapping for semantic segmentation maps. """
 
 	def __init__(self):
-		pass
+		# maps from an id to its name. E.g. id_label_map[0] = "void"
+		self._id_label_map = {}
+		# maps a class/category name to its id. E.g. label_id_map["void"] = 0
+		self._label_id_map = {}
+		self._num_ids = 0
 
 	@staticmethod
-	def read_csv_mapping(path):
-		""" Loads an idset mapping from a csv file, assuming the rows are sorted by their ids.
-		
-		:param path: Path to csv file
-		"""
-
+	def from_file(path, label_col_name="name", id_col_name="id"):
 		with open(path, 'r') as csvfile:
-				reader = csv.DictReader(csvfile)
-				new_id_label_map = []
-				new_label_id_map = {}
+			reader = csv.DictReader(csvfile)
+			mapping = LabelIdMapping()
 
-				for row in reader:
-					new_id_label_map.append(row["name"])
-					new_label_id_map[row["name"]] = int(row["id"])
+			for row in reader:
+				mapping.add(row[label_col_name], int(row[id_col_name]))
 
-				return new_id_label_map, new_label_id_map
+			return mapping
 
-	@staticmethod
-	def assign_mapping(mapping):
-		""" Assign a mapping based on a given id-set. This mapping could be a path to a csv file holding the \
-		id-set, or a tuple contaning the attributes that should be assigned to this class
+	def add(self, label, id):
+		self._id_label_map[id] = label
+		self._label_id_map[label] = id
+		self._num_ids = max(self._num_ids, id + 1)
 
-		:param mapping: If string then it's assumed it's a csv file holding the mapping, otherwise a tuple \
-						holding the values that should be assigned to the attributes id_label_map, label_id_map, \
-						respectively.
-		"""
-		if isinstance(mapping, str):
-			mapping = LabelIdMapping.read_csv_mapping(mapping)
+	def id_from_label(self, label):
+		return self._label_id_map[label]
 
-		LabelIdMapping.id_label_map, LabelIdMapping.label_id_map = mapping
+	def label_from_id(self, id):
+		return self._id_label_map[id]
+
+	def has_label(self, label):
+		return label in self._id_label_map
+
+	def has_id(self, label):
+		return label in self._id_label_map

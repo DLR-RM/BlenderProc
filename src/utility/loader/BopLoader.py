@@ -81,8 +81,7 @@ class BopLoader:
             split_p = dataset_params.get_split_params(datasets_path, dataset, split=split)
         except ValueError:
             raise Exception("Wrong path or {} split does not exist in {}.".format(split, dataset))
-        
-        bpy.context.scene.world["category_id"] = 0
+
         bpy.context.scene.render.resolution_x = cam_p['im_size'][0]
         bpy.context.scene.render.resolution_y = cam_p['im_size'][1]
 

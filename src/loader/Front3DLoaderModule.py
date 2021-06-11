@@ -55,13 +55,13 @@ class Front3DLoaderModule(LoaderInterface):
         self.mapping_file = Utility.resolve_path(self.config.get_string("mapping_file", os.path.join("resources", "front_3D", "3D_front_mapping.csv")))
         if not os.path.exists(self.mapping_file):
             raise Exception("The mapping file could not be found: {}".format(self.mapping_file))
-        _, self.mapping = LabelIdMapping.read_csv_mapping(self.mapping_file)
 
     def run(self):
+        label_mapping = LabelIdMapping.from_file(self.mapping_file)
         loaded_objects = Front3DLoader.load(
             json_path=self.config.get_string("json_path"),
             future_model_path=self.config.get_string("3D_future_model_path"),
-            mapping=self.mapping,
+            label_mapping=label_mapping,
             ceiling_light_strength=self.config.get_float("ceiling_light_strength", 0.8),
             lamp_light_strength=self.config.get_float("lamp_light_strength", 7.0)
         )

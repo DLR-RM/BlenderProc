@@ -14,7 +14,6 @@ import numpy as np
 import torch
 from human_body_prior.body_model.body_model import BodyModel
 
-from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -25,9 +24,6 @@ class AMASSLoader:
     AMASS is a large database of human motion unifying 15 different optical marker-based motion capture datasets by representing them within a common framework and parameterization. All of the mocap data is convereted into realistic 3D human meshes represented by a rigged body model called SMPL, which provides a standard skeletal representation as well as a fully rigged surface mesh. Warning: Only one part of the AMASS database is currently supported by the loader! Please refer to the AMASSLoader example for more information about the currently supported datasets.
 
     Any human pose recorded in these motions could be reconstructed using the following parameters: `"sub_dataset_identifier"`, `"sequence id"`, `"frame id"` and `"model gender"` which will represent the pose, these parameters specify the exact pose to be generated based on the selected mocap dataset and motion category recorded in this dataset.
-
-    Finally it sets all objects to have a category_id corresponding to the void class,
-    so it wouldn't trigger an exception in the SegMapRenderer.
 
     Note: if this module is used with another loader that loads objects with semantic mapping, make sure the other
     module is loaded first in the config file.
@@ -82,10 +78,6 @@ class AMASSLoader:
         # set the shading mode explicitly to smooth
         for obj in loaded_obj:
             obj.set_shading_mode("SMOOTH")
-
-        if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
-            for obj in loaded_obj:
-                obj.set_cp('category_id', LabelIdMapping.label_id_map["void"])
 
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]

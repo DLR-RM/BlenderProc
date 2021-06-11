@@ -55,21 +55,20 @@ class SceneNetLoaderModule(LoaderInterface):
         self._unknown_texture_folder = Utility.resolve_path(self.config.get_string("unknown_texture_folder",
                                                             default_unknown_texture_folder))
 
-        LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 
-            'id_mappings', 'nyu_idset.csv')))
-
-        if LabelIdMapping.label_id_map:
-            bpy.context.scene.world["category_id"] = LabelIdMapping.label_id_map["void"]
-        else:
-            print("Warning: The category labeling file could not be found -> no semantic segmentation available!")
 
 
     def run(self):
         """
         Run the module, loads all the objects and set the properties correctly (including the category_id)
         """
+        label_mapping = LabelIdMapping.from_file(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
         # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
-        loaded_objects = SceneNetLoader.load(file_path=self._file_path, texture_folder=self._texture_folder, unknown_texture_folder=self._unknown_texture_folder)
+        loaded_objects = SceneNetLoader.load(
+            file_path=self._file_path,
+            texture_folder=self._texture_folder,
+            label_mapping=label_mapping,
+            unknown_texture_folder=self._unknown_texture_folder
+        )
 
         # add custom properties
         self._set_properties(loaded_objects)

@@ -32,8 +32,8 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house)
+label_mapping = LabelIdMapping.from_file(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+objs = SuncgLoader.load(args.house, label_mapping)
 
 # TODO Migrate to API
 Utility.initialize_modules([{"module": "lighting.SuncgLighting"}])[0].run()

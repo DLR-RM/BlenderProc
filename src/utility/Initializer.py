@@ -74,6 +74,7 @@ class Initializer:
         world = bpy.data.worlds['World']
         world.use_nodes = True
         world.node_tree.nodes["Background"].inputs[0].default_value[:3] = horizon_color
+        world["category_id"] = 0
 
         # Create the camera
         cam = bpy.data.cameras.new("Camera")

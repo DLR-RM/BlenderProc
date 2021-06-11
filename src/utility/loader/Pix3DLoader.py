@@ -5,7 +5,6 @@ from typing import List
 
 import bpy
 
-from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -16,9 +15,6 @@ class Pix3DLoader:
     This loads an object from Pix3D based on the given category of objects to use.
 
     From these objects one is randomly sampled and loaded.
-
-    Finally it sets all objects to have a category_id corresponding to the void class,
-    so it wouldn't trigger an exception in the SegMapRenderer.
 
     Note: if this class is used with another loader that loads objects with semantic mapping, make sure the other
     module is loaded first. TODO: Really?
@@ -75,10 +71,6 @@ class Pix3DLoader:
         loaded_obj = ObjectLoader.load(selected_obj)
 
         Pix3DLoader._correct_materials(loaded_obj)
-
-        if "void" in LabelIdMapping.label_id_map:  # Check if using an id map
-            for obj in loaded_obj:
-                obj.set_cp('category_id', LabelIdMapping.label_id_map["void"])
 
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
