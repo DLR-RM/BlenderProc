@@ -42,7 +42,7 @@ with open(args.camera, "r") as f:
         line = [float(x) for x in line.split()]
         position = MathUtility.transform_point_to_blender_coord_frame(Vector(line[:3]), ["X", "-Z", "Y"])
         rotation = MathUtility.transform_point_to_blender_coord_frame(Vector(line[3:6]), ["X", "-Z", "Y"])
-        matrix_world = Matrix.Translation(position) @ CameraUtility.rotation_from_forward_vec(rotation).to_4x4()
+        matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
         CameraUtility.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
