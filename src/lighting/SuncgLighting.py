@@ -1,8 +1,8 @@
 from src.main.Module import Module
-from src.utility.SuncgLightingUtility import SuncgLightingUtility
+from src.utility.lighting.SuncgLighting import SuncgLighting
 
 
-class SuncgLighting(Module):
+class SuncgLightingModule(Module):
     """ Adds emission shader to lamps, windows and ceilings.
     **Configuration**:
     .. list-table:: 
@@ -28,4 +28,4 @@ class SuncgLighting(Module):
         """
         Run this current module.
         """
-        SuncgLightingUtility.light(self.config.get_float("lightbulb_emission_strength", 15), self.config.get_float("lampshade_emission_strength", 7), self.config.get_float("ceiling_emission_strength", 1.5))
+        SuncgLighting.light(self.config.get_float("lightbulb_emission_strength", 15), self.config.get_float("lampshade_emission_strength", 7), self.config.get_float("ceiling_emission_strength", 1.5))
