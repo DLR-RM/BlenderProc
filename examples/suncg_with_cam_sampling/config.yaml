@@ -47,7 +47,7 @@
       }
     },
     {
-      "module": "lighting.SuncgLighting",
+      "module": "lighting.SuncgLightingModule",
       "config": {}
     },
     {

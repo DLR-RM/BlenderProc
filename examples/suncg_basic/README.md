@@ -29,7 +29,7 @@ python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
 
 * Loads a SUNCG scene: `loader.SuncgLoader` module.
 * Loads camera positions from a given file: `camera.CameraLoader` module.
-* Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
+* Automatically adds light sources inside each room: `lighting.SuncgLightingModule` module.
 * Renders semantic segmentation map: `renderer.SegMapRenderer` module.
 * Renders rgb, distance and normals: `renderer.RgbRenderer` module, by using the alpha mode.
 * Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
@@ -99,11 +99,11 @@ We change the `rotation/format`. This is necessary as rotations are specified vi
 
 In the `intrinsics`, we further set the FOV and pixel aspect ratio to the same values used by `scn2cam`.
 
-### SuncgLighting
+### SuncgLightingModule
 
 ```yaml
 {
-  "module": "lighting.SuncgLighting",
+  "module": "lighting.SuncgLightingModule",
 }
 ```
 

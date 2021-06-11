@@ -52,7 +52,7 @@
       }
     },
     {
-      "module": "lighting.SuncgLighting",
+      "module": "lighting.SuncgLightingModule",
     },
     {
       "module": "manipulators.MaterialManipulator",

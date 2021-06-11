@@ -37,7 +37,7 @@ python scripts/visHdf5Files.py examples/suncg_with_improved_mat/output/0.hdf5
 
 * Loads a SUNCG scene: `loader.SuncgLoader` module.
 * Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
-* Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
+* Automatically adds light sources inside each room: `lighting.SuncgLightingModule` module.
 * After that we change the materials with the `MaterialManipulator`, we call it three times, with different values.
 * Writes sampled camera poses to file: `writer.CameraStateWriter` module.
 * Renders semantic segmentation map: `renderer.SegMapRenderer` module.
