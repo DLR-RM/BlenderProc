@@ -182,7 +182,7 @@ class BopWriterUtility:
     @staticmethod
     def _get_frame_gt(dataset_objects, unit_scaling:float, ignore_dist_thres:float, destination_frame:List[str] = ["X", "-Y", "-Z"]):
         """ Returns GT pose annotations between active camera and objects.
-        :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json
+        :param dataset_objects: Save annotations for these objects.
         :param unit_scaling: 1000. for outputting poses in mm
         :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.
         :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates
