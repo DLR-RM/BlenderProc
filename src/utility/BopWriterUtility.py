@@ -162,7 +162,7 @@ class BopWriterUtility:
                                        depth_scale=depth_scale, jpg_quality=jpg_quality)
     
     @staticmethod
-    def _write_camera(camera_path, depth_scale:float=1.0):
+    def _write_camera(camera_path: str, depth_scale:float=1.0):
         """ Writes camera.json into dataset_dir.
         :param camera_path: Path to camera.json
         :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.
