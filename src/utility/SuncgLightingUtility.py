@@ -7,10 +7,10 @@ from src.utility.Utility import Utility
 from src.utility.ProviderUtility import get_all_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
 
-class SuncgLightingUtility:
+class SuncgLighting:
 
     @staticmethod
-    def _make_lamp_emissive(obj: MeshObject, light: list, collection_of_mats: dict, lightbulb_emission_strength=15, lampshade_emission_strength=7):
+    def _make_lamp_emissive(obj: MeshObject, light: list, collection_of_mats: dict, lightbulb_emission_strength: float=15, lampshade_emission_strength: float=7):
         """ Adds an emission shader to the object materials which are specified in the light list
 
         :param obj: The blender object.
@@ -86,7 +86,7 @@ class SuncgLightingUtility:
                 collection_of_mats["window"][mat_name] = m
 
     @staticmethod
-    def _make_ceiling_emissive(obj: MeshObject, collection_of_mats: dict, ceiling_emission_strength=1.5):
+    def _make_ceiling_emissive(obj: MeshObject, collection_of_mats: dict, ceiling_emission_strength: float=1.5):
         """ Makes the given ceiling object emissive, s.t. there is always a little bit ambient light.
 
         :param obj: The ceiling object.
@@ -111,40 +111,16 @@ class SuncgLightingUtility:
                 collection_of_mats["ceiling"][mat_name] = m
     
     @staticmethod
-    def light(lightbulb_emission_strength=15, lampshade_emission_strength=7, ceiling_emission_strength=1.5):
+    def light(lightbulb_emission_strength :float=15, lampshade_emission_strength :float=7, ceiling_emission_strength: float=1.5):
+        """ Makes the lamps, windows and ceilings object emit light.
 
-        # Read in lights
-        lights = {}
-        # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(Utility.resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
-            lines = f.readlines()
-            for row in lines:
-                row = row.strip().split()
-                lights[row[0]] = [[], []]
-
-                index = 1
-
-                # Read in lightbulb materials
-                number = int(row[index])
-                index += 1
-                for i in range(number):
-                    lights[row[0]][0].append(row[index])
-                    index += 1
-
-                # Read in lampshade materials
-                number = int(row[index])
-                index += 1
-                for i in range(number):
-                    lights[row[0]][1].append(row[index])
-                    index += 1
-
-        # Read in windows
-        windows = []
-        with open(Utility.resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                if row["coarse_grained_class"] == "window":
-                    windows.append(row["model_id"])
+        :param lightbulb_emission_strength: The emission strength that should be used for light bulbs. Default: 15
+        :param lampshade_emission_strength: The emission strength that should be used for lamp shades. Default: 7
+        :param ceiling_emission_strength: The emission strength that should be used for the ceiling. Default: 1.5
+        """
+        # Read in lights and windows
+        lights, windows = Utility.read_suncg_lights_windows()
+        
         collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
         
         # Make some objects emit lights
@@ -154,7 +130,7 @@ class SuncgLightingUtility:
 
                 # In the case of the lamp
                 if obj_id in lights:
-                    SuncgLightingUtility._make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength=15, lampshade_emission_strength=7)
+                    SuncgLightingUtility._make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength, lampshade_emission_strength)
 
                 # Make the windows emit light
                 if obj_id in windows:
@@ -162,4 +138,4 @@ class SuncgLightingUtility:
 
                 # Also make ceilings slightly emit light
                 if obj.get_name().startswith("Ceiling#"):
-                    SuncgLightingUtility._make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength=1.5)
+                    SuncgLightingUtility._make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)
