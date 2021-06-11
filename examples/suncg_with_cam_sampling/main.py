@@ -12,7 +12,7 @@ from src.utility.SegMapRendererUtility import SegMapRendererUtility
 from src.utility.Utility import Utility
 from src.utility.camera.CameraValidation import CameraValidation
 from src.utility.loader.SuncgLoader import SuncgLoader
-
+from src.utility.lighting.SuncgLighting import SuncgLighting
 
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
@@ -35,8 +35,8 @@ Initializer.init()
 LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 objs = SuncgLoader.load(args.house)
 
-# TODO Migrate to API
-Utility.initialize_modules([{"module": "lighting.SuncgLighting"}])[0].run()
+# makes Suncg objects emit light
+SuncgLighting.light()
 
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = SuncgPointInRoomSampler(objs)
