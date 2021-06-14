@@ -47,11 +47,20 @@ for i, json_path in enumerate(json_files):
 
             category_name = used_obj_name.lower()
             all_category_names.add(category_name)
+    for mesh_data in data["mesh"]:
+        # extract the obj name, which also is used as the category_id name
+        used_obj_name = mesh_data["type"].strip()
+        if used_obj_name == "":
+            used_obj_name = "void"
+        category_name = used_obj_name.lower()
+        all_category_names.add(category_name)
     print(f"Done with {i} of {len(json_files)}")
 
 # this is already represented by void
 if "unknown" in all_category_names:
     all_category_names.remove("unknown")
+if "void" in all_category_names:
+    all_category_names.remove("void")
 
 print(f"These are all categories: {list(all_category_names)}")
 print(f"There are {len(all_category_names)} categories found.")
