@@ -12,6 +12,7 @@ resources/scenenet/texture*
 resources/blenderkit
 resources/IKEA
 resources/pix3d
+resources/front_3D/3D_front_mapping_generated.csv
 *.blend1
 .vscode
 *.pyc

@@ -1,80 +1,66 @@
 id,name
 0,void
-1,single bed
-2,customizedplatform
-3,tv stand
-4,barstool
-5,hole
-6,door
-7,coffee table
-8,cabinet
-9,customizedceiling
+1,chair
+2,build element
+3,wardrobe
+4,basin
+5,tea table
+6,storage unit
+7,nightstand
+8,dressing chair
+9,400 - attach to wall
 10,shelf
-11,smartcustomizedceiling
-12,wine cabinet
-12,wine cooler
-13,wallinner
-14,sideboard / side cabinet / console table
-14,sideboard / side cabinet / console
-15,dressing table
-16,wardrobe
-17,ceiling lamp
-18,wallbottom
-19,customizedpersonalizedmodel
-20,lazy sofa
-21,chaise longue sofa
-22,wallouter
-23,dressing chair
-24,window
-25,column
-26,cornice
-27,bunk bed
-28,lounge chair / cafe chair / office chair
-28,lounge chair / book-chair / computer chair
-29,footstool / sofastool / bed end stool / stool
-30,three-seat / multi-seat sofa
-30,three-seat / multi-person sofa
-31,drawer chest / corner cabinet
-32,walltop
-33,armchair
-34,nightstand
-35,loveseat sofa
-36,children cabinet
-37,pocket
-38,ceiling
-39,dining table
-40,kids bed
-41,bookcase / jewelry armoire
-42,sewerpipe
-43,baywindow
-44,l-shaped sofa
-45,floor
-46,classic chinese chair
-47,dining chair
-48,king-size bed
-49,corner/side table
-50,round end table
-51,customizedbackgroundmodel
-52,customizedfixedfurniture
-53,flue
-54,customizedfurniture
-55,beam
-56,desk
-57,pendant lamp
-58,bed frame
-59,customizedfeaturewall
-60,baseboard
-61,slabside
-62,slabtop
-63,clipmesh
-64,front
-65,customized_wainscot
-66,cabinet/lightband
-67,extrusioncustomizedceilingmodel
-68,lightband
-69,slabbottom
-70,back
-71,extrusioncustomizedbackgroundwall
-72,two-seat sofa
-73,tea table
-74,double bed
+11,sideboard / side cabinet / console
+12,recreation
+13,art
+14,lighting
+15,round end table
+16,others
+17,bed frame
+18,double bed
+19,electric
+20,desk
+21,500 - attach to ceiling
+22,armchair
+23,kitchen cabinet
+24,bookcase / jewelry armoire
+25,chaise longue sofa
+26,200 - on the floor
+27,tv stand
+28,dressing table
+29,media unit
+30,l-shaped sofa
+31,cabinet
+32,cabinet/shelf/desk
+33,lazy sofa
+34,dining table
+35,electronics
+36,door
+37,bunk bed
+38,two-seat sofa
+39,bed
+40,plants
+41,mirror
+42,appliance
+43,dining chair
+44,lounge chair / book-chair / computer chair
+45,stair
+46,footstool / sofastool / bed end stool / stool
+47,kids bed
+48,outdoor furniture
+49,drawer chest / corner cabinet
+50,children cabinet
+51,pendant lamp
+52,pier/stool
+53,300 - on top of others
+54,wine cooler
+55,sofa
+56,three-seat / multi-person sofa
+57,table
+58,corner/side table
+59,accessory
+60,ceiling lamp
+61,classic chinese chair
+62,bath
+63,barstool
+64,single bed
