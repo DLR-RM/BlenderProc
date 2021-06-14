@@ -3,6 +3,7 @@ import os
 import bpy
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.Utility import Utility
 from src.utility.loader.SceneNetLoader import SceneNetLoader
@@ -62,6 +63,7 @@ class SceneNetLoaderModule(LoaderInterface):
         Run the module, loads all the objects and set the properties correctly (including the category_id)
         """
         label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        GlobalStorage.set("label_mapping", label_mapping)
         # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
         loaded_objects = SceneNetLoader.load(
             file_path=self._file_path,

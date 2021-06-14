@@ -59,7 +59,8 @@
     {
       "module": "renderer.SegMapRenderer",
       "config": {
-        "use_alpha": True
+        "use_alpha": True,
+        "map_by": ["instance", "class", "name"]
       }
     },
     {

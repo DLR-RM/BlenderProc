@@ -40,5 +40,7 @@ class SuncgLoaderModule(LoaderInterface):
 
     def run(self):
         label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        GlobalStorage.set("label_mapping", label_mapping)
+
         loaded_objects = SuncgLoader.load(self.house_path, label_mapping, self.suncg_dir)
         self._set_properties(loaded_objects)

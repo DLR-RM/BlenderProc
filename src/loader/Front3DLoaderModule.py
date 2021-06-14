@@ -1,6 +1,7 @@
 import os
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.Utility import Utility
@@ -58,6 +59,8 @@ class Front3DLoaderModule(LoaderInterface):
 
     def run(self):
         label_mapping = LabelIdMapping.from_csv(self.mapping_file)
+        GlobalStorage.set("label_mapping", label_mapping)
+
         loaded_objects = Front3DLoader.load(
             json_path=self.config.get_string("json_path"),
             future_model_path=self.config.get_string("3D_future_model_path"),
