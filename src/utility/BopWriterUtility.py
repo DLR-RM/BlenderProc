@@ -247,7 +247,7 @@ class BopWriterUtility:
         return frame_camera_dict
     
     @staticmethod
-    def _write_frames(chunks_dir, dataset_objects, depths: List[np.ndarray] = [], colors: List[np.ndarray] = [], 
+    def _write_frames(chunks_dir: str, dataset_objects: list, depths: List[np.ndarray] = [], colors: List[np.ndarray] = [], 
                       color_file_format:str="PNG", depth_scale:float=1.0, frames_per_chunk:int=1000, m2mm:bool=True, 
                       ignore_dist_thres:float=100., save_world2cam:bool=True, jpg_quality:int=95):
         """Write each frame's ground truth into chunk directory in BOP format
