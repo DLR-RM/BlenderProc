@@ -474,7 +474,7 @@ class RendererUtility:
         if output_dir is None:
             output_dir = Utility.get_temporary_directory()
         if load_keys is None:
-            load_keys = {'colors', 'distance', 'normals', 'segmap'}
+            load_keys = {'colors', 'distance', 'normals'}
 
         if output_key is not None:
             Utility.add_output_entry({
