@@ -322,6 +322,9 @@ class Front3DLoader:
                     # walk over all materials
                     for mat in obj.get_materials():
                         principled_node = mat.get_nodes_with_type("BsdfPrincipled")
+                        if "bed" in used_obj_name.lower() or "sofa" in used_obj_name.lower():
+                            if len(principled_node) == 1:
+                                principled_node[0].inputs["Roughness"].default_value = 0.5
                         is_lamp = "lamp" in used_obj_name.lower()
                         if len(principled_node) == 0 and is_lamp:
                             # this material has already been transformed
