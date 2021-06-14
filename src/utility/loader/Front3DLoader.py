@@ -204,7 +204,8 @@ class Front3DLoader:
                         # if the object is a ceiling add some light output
                         if "ceiling" in used_obj_name.lower():
                             mat.make_emissive(ceiling_light_strength, keep_using_base_color=False, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
-                        used_materials_based_on_color[used_hash] = mat
+                        else:
+                            used_materials_based_on_color[used_hash] = mat
 
                     # as this material was just created the material is just append it to the empty list
                     obj.add_material(mat)
