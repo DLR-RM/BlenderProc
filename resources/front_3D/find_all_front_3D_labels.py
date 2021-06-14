@@ -3,12 +3,14 @@ import json
 import os
 import glob
 
-
-parser = argparse.ArgumentParser("This detects all labels which are currently used in the 3D Front dataset")
+# This script extracts all id labels used in 3D Front, as they change every few months, this can be used to
+# regenerate them. Results will be saved in 3D_front_mapping_generated.csv
+parser = argparse.ArgumentParser("This detects all labels which are currently used in the 3D Front dataset.")
 parser.add_argument("front_folder", help="Folder path to the 3D FRONT dataset. The folder should contain the json files.")
 parser.add_argument("future_folder", help="Folder path to the 3D FUTURE model dataset.")
 args = parser.parse_args()
 
+# check if the given folder paths exist
 folder_path = args.front_folder
 if not os.path.exists(folder_path):
     raise Exception("The given front folder path does not exist!")
@@ -17,6 +19,7 @@ model_path = args.future_folder
 if not os.path.exists(model_path):
     raise Exception("The given future folder path does not exist!")
 
+# find all json files
 json_files = glob.glob(os.path.join(folder_path, "*.json"))
 all_category_names = set()
 not_used_models = set()
@@ -44,7 +47,7 @@ for i, json_path in enumerate(json_files):
             if len(used_obj_name) == 0:
                 not_used_models.add(obj_file)
                 continue
-
+            # add category name for each object to the set
             category_name = used_obj_name.lower()
             all_category_names.add(category_name)
     for mesh_data in data["mesh"]:
@@ -52,6 +55,7 @@ for i, json_path in enumerate(json_files):
         used_obj_name = mesh_data["type"].strip()
         if used_obj_name == "":
             used_obj_name = "void"
+        # add category name for each structure to the set
         category_name = used_obj_name.lower()
         all_category_names.add(category_name)
     print(f"Done with {i} of {len(json_files)}")
