@@ -108,10 +108,14 @@ class SetupUtility:
 
         # Install all packages
         packages_were_installed = False
+        find_link = None
         for package in required_packages:
             # Extract name and target version
             if "==" in package:
                 package_name, package_version = package.lower().split('==')
+                if '-f' in package_version:
+                    find_link = package_version.split('-f')[1].strip()
+                    package_version = package_version.split('-f')[0].strip()
             else:
                 package_name, package_version = package.lower(), None
 
@@ -138,7 +142,13 @@ class SetupUtility:
             # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
             if not already_installed or reinstall_packages:
                 print("Installing pip package {} {}".format(package_name, package_version))
-                subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                if find_link:
+                    print(subprocess.list2cmdline([python_bin, "-m", "pip", "install", package_name+"=="+package_version, "-f", find_link, "--target", packages_path, "--upgrade"]))
+                    subprocess.Popen(
+                        [python_bin, "-m", "pip", "install", package_name+"=="+package_version, "-f", find_link, "--target", packages_path, "--upgrade"],
+                        env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                else:
+                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                 SetupUtility.installed_packages[package_name] = package_version
                 packages_were_installed = True
 
