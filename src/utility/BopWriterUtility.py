@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["Pillow", "pypng==0.0.20"])
+SetupUtility.setup_pip(["opencv-python", "pypng==0.0.20"])
 
 import json
 import os
@@ -8,8 +8,7 @@ import numpy as np
 import shutil
 from typing import List
 import png
-from PIL import Image
-
+import cv2
 import bpy
 from mathutils import Matrix
 
@@ -337,15 +336,14 @@ class BopWriterUtility:
             chunk_camera[curr_frame_id] = BopWriterUtility._get_frame_camera(save_world2cam, depth_scale, unit_scaling)
 
             if colors:
-                color = colors[frame_id]
+                color_rgb = colors[frame_id]
+                color_bgr = color_rgb[...,::-1].copy()
                 if color_file_format == 'PNG':
                     rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.png')
-                    im = Image.fromarray(color)
-                    im.save(rgb_fpath)
+                    cv2.imwrite(rgb_fpath, color_bgr)
                 elif color_file_format == 'JPEG':
                     rgb_fpath = rgb_tpath.format(chunk_id=curr_chunk_id, im_id=curr_frame_id, im_type='.jpg')
-                    im = Image.fromarray(color)
-                    im.save(rgb_fpath, quality=jpg_quality)
+                    cv2.imwrite(rgb_fpath, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
             else:
                 rgb_output = Utility.find_registered_output_by_key("colors")
                 if rgb_output is None:

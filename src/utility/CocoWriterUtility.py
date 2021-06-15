@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["scikit-image", "Pillow"])
+SetupUtility.setup_pip(["scikit-image", "opencv-python"])
 
 import datetime
 from itertools import groupby
@@ -9,10 +9,8 @@ import os
 import shutil
 import numpy as np
 from skimage import measure
-from PIL import Image
 from typing import List
-
-
+import cv2
 import bpy
 
 from src.utility.Utility import Utility
@@ -109,18 +107,17 @@ class CocoWriterUtility:
                 inst_segmaps.append(segmap[:,:,inst_channel])
                 
             if colors:
-                color = colors[frame]
+                color_rgb = colors[frame]
+                color_bgr = color_rgb[...,::-1].copy()
                 
                 if color_file_format=='PNG':
                     target_base_path = 'coco_data/rgb_{:04d}.png'.format(frame + image_offset)
                     target_path = os.path.join(output_dir, target_base_path)
-                    im = Image.fromarray(color)
-                    im.save(target_path)
+                    cv2.imwrite(target_path, color_bgr)
                 elif color_file_format=='JPEG':
                     target_base_path = 'coco_data/rgb_{:04d}.jpg'.format(frame + image_offset)
                     target_path = os.path.join(output_dir, target_base_path)
-                    im = Image.fromarray(color)
-                    im.save(target_path, quality=jpg_quality)
+                    cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
                 else:
                     raise('Unknown color_file_format={}. Try "PNG" or "JPEG"'.format(color_file_format))
                 
