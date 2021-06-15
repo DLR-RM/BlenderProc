@@ -4,7 +4,7 @@
   "setup": {
     "blender_install_path": "/home_local/<env:USER>/blender/",
     "pip": [
-      "h5py", "git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"
+      "h5py", "torch==1.8.1+cu111 -f https://download.pytorch.org/whl/torch_stable.html", "git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"
     ]
   },
   "modules": [
