@@ -59,6 +59,7 @@ class Front3DLoaderModule(LoaderInterface):
 
     def run(self):
         label_mapping = LabelIdMapping.from_csv(self.mapping_file)
+        # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
 
         loaded_objects = Front3DLoader.load(
