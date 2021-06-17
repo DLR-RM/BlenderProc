@@ -113,9 +113,9 @@ class SetupUtility:
             # Extract name and target version
             if "==" in package:
                 package_name, package_version = package.lower().split('==')
-                if '-f' in package_version:
-                    find_link = package_version.split('-f')[1].strip()
-                    package_version = package_version.split('-f')[0].strip()
+                if ' -f ' in package_version:
+                    find_link = package_version.split(' -f ')[1].strip()
+                    package_version = package_version.split(' -f ')[0].strip()
             else:
                 package_name, package_version = package.lower(), None
 
