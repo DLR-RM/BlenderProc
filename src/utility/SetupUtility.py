@@ -143,10 +143,7 @@ class SetupUtility:
             if not already_installed or reinstall_packages:
                 print("Installing pip package {} {}".format(package_name, package_version))
                 if find_link:
-                    print(subprocess.list2cmdline([python_bin, "-m", "pip", "install", package_name+"=="+package_version, "-f", find_link, "--target", packages_path, "--upgrade"]))
-                    subprocess.Popen(
-                        [python_bin, "-m", "pip", "install", package_name+"=="+package_version, "-f", find_link, "--target", packages_path, "--upgrade"],
-                        env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                    subprocess.Popen([python_bin, "-m", "pip", "install", package_name+"=="+package_version, "-f", find_link, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                 else:
                     subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                 SetupUtility.installed_packages[package_name] = package_version
