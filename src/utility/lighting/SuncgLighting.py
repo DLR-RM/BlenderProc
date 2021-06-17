@@ -82,7 +82,7 @@ class SuncgLighting:
                 collection_of_mats["window"][mat_name] = m
 
     @staticmethod
-    def _make_ceiling_emissive(obj: MeshObject, collection_of_mats: dict[dict[Material], ceiling_emission_strength: float=1.5):
+    def _make_ceiling_emissive(obj: MeshObject, collection_of_mats: dict[dict[Material]], ceiling_emission_strength: float=1.5):
         """ Makes the given ceiling object emissive, s.t. there is always a little bit ambient light.
 
         :param obj: The ceiling object.
