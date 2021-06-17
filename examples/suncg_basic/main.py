@@ -1,16 +1,13 @@
 from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
+from src.utility.Utility import Utility
+from src.utility.MathUtility import MathUtility
+
 from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshObjectUtility import MeshObject
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
-
-from src.utility.Utility import Utility
-from src.utility.camera.CameraValidation import CameraValidation
 from src.utility.loader.SuncgLoader import SuncgLoader
 from src.utility.lighting.SuncgLighting import SuncgLighting
 
@@ -19,14 +16,15 @@ from src.utility.Initializer import Initializer
 
 from src.utility.RendererUtility import RendererUtility
 import numpy as np
-from mathutils import Matrix, Euler
+from mathutils import Matrix, Vector, Euler
 
 import argparse
 import os
 
 parser = argparse.ArgumentParser()
+parser.add_argument('camera', help="Path to the camera file which describes one camera pose per line, here the output of scn2cam from the SUNCGToolbox can be used")
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
-parser.add_argument('output_dir', nargs='?', default="examples/suncg_with_cam_sampling/output", help="Path to where the final files, will be saved")
+parser.add_argument('output_dir', nargs='?', default="examples/suncg_basic/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
 Initializer.init()
@@ -35,29 +33,20 @@ Initializer.init()
 LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 objs = SuncgLoader.load(args.house)
 
+# define the camera intrinsics
+CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
+
+# read the camera positions file and convert into homogeneous camera-world transformation
+with open(args.camera, "r") as f:
+    for line in f.readlines():
+        line = [float(x) for x in line.split()]
+        position = MathUtility.transform_point_to_blender_coord_frame(Vector(line[:3]), ["X", "-Z", "Y"])
+        rotation = MathUtility.transform_point_to_blender_coord_frame(Vector(line[3:6]), ["X", "-Z", "Y"])
+        matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
+        CameraUtility.add_camera_pose(matrix_world)
+
 # makes Suncg objects emit light
 SuncgLighting.light()
-
-# Init sampler for sampling locations inside the loaded suncg house
-point_sampler = SuncgPointInRoomSampler(objs)
-# Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
-
-poses = 0
-tries = 0
-while tries < 10000 and poses < 5:
-    # Sample point inside house
-    height = np.random.uniform(0.5, 2)
-    location, _ = point_sampler.sample(height)
-    # Sample rotation (fix around X and Y axis)
-    rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, Euler(rotation).to_matrix())
-
-    # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
-    if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:
-        CameraUtility.add_camera_pose(cam2world_matrix)
-        poses += 1
-    tries += 1
 
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()
