@@ -40,7 +40,7 @@
       }
     },
     {
-      "module": "lighting.SuncgLightingModule",
+      "module": "lighting.SuncgLighting",
     },
     {
       "module": "renderer.SegMapRenderer",
