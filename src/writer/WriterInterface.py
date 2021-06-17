@@ -1,9 +1,5 @@
 import os
-import csv
-import json
 import numpy as np
-
-import mathutils
 
 from src.main.Module import Module
 from src.utility.MathUtility import MathUtility
@@ -104,8 +100,11 @@ class WriterInterface(Module):
         :param version: The version number original data. Type: String. Default: 1.0.0.
         :return: The post-processed image that was loaded using the file path.
         """
-        data = WriterUtility.load_output_file(Utility.resolve_path(file_path), self.write_alpha_channel)
+        data = WriterUtility.load_output_file(Utility.resolve_path(file_path), self.write_alpha_channel, remove=False)
         data, new_key, new_version = self._apply_postprocessing(key, data, version)
-        print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
+        if isinstance(data, np.ndarray):
+            print("Key: " + key + " - shape: " + str(data.shape) + " - dtype: " + str(data.dtype) + " - path: " + file_path)
+        else:
+            print("Key: " + key + " - path: " + file_path)
         return data, new_key, new_version
 
