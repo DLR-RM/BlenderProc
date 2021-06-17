@@ -1,11 +1,12 @@
 from src.utility.Utility import Utility
 from src.utility.ProviderUtility import get_all_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
+from src.utility.MaterialUtility import Material
 
 class SuncgLighting:
 
     @staticmethod
-    def _make_lamp_emissive(obj: MeshObject, light: dict, collection_of_mats: dict, lightbulb_emission_strength: float=15, lampshade_emission_strength: float=7):
+    def _make_lamp_emissive(obj: MeshObject, light: dict[list[str], list[str]], collection_of_mats: dict[dict[Material]], lightbulb_emission_strength: float=15, lampshade_emission_strength: float=7):
         """ Adds an emission shader to the object materials which are specified in the light dictionary
 
         :param obj: The blender object.
@@ -44,7 +45,7 @@ class SuncgLighting:
                     collection_of_mats["lamp"][old_mat_name] = m
 
     @staticmethod
-    def _make_window_emissive(obj: MeshObject, collection_of_mats: dict):
+    def _make_window_emissive(obj: MeshObject, collection_of_mats: dict[dict[Material]]):
         """ Makes the given window object emissive.
 
         For each material with alpha < 1.
@@ -81,7 +82,7 @@ class SuncgLighting:
                 collection_of_mats["window"][mat_name] = m
 
     @staticmethod
-    def _make_ceiling_emissive(obj: MeshObject, collection_of_mats: dict, ceiling_emission_strength: float=1.5):
+    def _make_ceiling_emissive(obj: MeshObject, collection_of_mats: dict[dict[Material], ceiling_emission_strength: float=1.5):
         """ Makes the given ceiling object emissive, s.t. there is always a little bit ambient light.
 
         :param obj: The ceiling object.
