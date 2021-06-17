@@ -5,11 +5,11 @@ from src.utility.MeshObjectUtility import MeshObject
 class SuncgLighting:
 
     @staticmethod
-    def _make_lamp_emissive(obj: MeshObject, light: list, collection_of_mats: dict, lightbulb_emission_strength: float=15, lampshade_emission_strength: float=7):
-        """ Adds an emission shader to the object materials which are specified in the light list
+    def _make_lamp_emissive(obj: MeshObject, light: dict, collection_of_mats: dict, lightbulb_emission_strength: float=15, lampshade_emission_strength: float=7):
+        """ Adds an emission shader to the object materials which are specified in the light dictionary
 
         :param obj: The blender object.
-        :param light: A list of two lists. The first list specifies all materials which should act as a lightbulb, the second one lists all materials corresponding to lampshades.
+        :param light: A dictionary of two lists. The first list specifies all materials which should act as a lightbulb, the second one lists all materials corresponding to lampshades.
         :param collection_of_mats: A dictionary that contains materials for lamps, windows and ceilings.
         :param lightbulb_emission_strength: The emission strength that should be used for light bulbs. Default: 15
         :param lampshade_emission_strength: The emission strength that should be used for lamp shades. Default: 7

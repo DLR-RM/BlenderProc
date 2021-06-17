@@ -292,9 +292,9 @@ class Utility:
     @staticmethod
     def read_suncg_lights_windows_materials():
         """
-        Returns the lights and windows lists which contains their respective materials
+        Returns the lights dictionary and windows list which contains their respective materials
 
-        :return: list of lights' and windows' materials (separately)
+        :return: dictionary of lights' and list of windows' materials
         """
         # Read in lights
         lights = {}
