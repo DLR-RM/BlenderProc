@@ -108,8 +108,10 @@ class SetupUtility:
 
         # Install all packages
         packages_were_installed = False
-        find_link = None
         for package in required_packages:
+            # If -f (find_links) flag for pip install in required package set find_link = link to parse
+            find_link = None
+
             # Extract name and target version
             if "==" in package:
                 package_name, package_version = package.lower().split('==')
