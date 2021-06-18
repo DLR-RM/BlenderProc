@@ -219,11 +219,12 @@ class Entity(Provider):
             conditions = [conditions]
 
         all_objects = EntityUtility.convert_to_entities(bpy.context.scene.objects)
-        filtered_objects = set()
+        filtered_objects = []
         # each single condition is treated as and condition
         for and_condition in conditions:
-            filtered_objects.update(self.perform_and_condition_check(and_condition, all_objects))
-        filtered_objects = list(filtered_objects)
+            new_filtered_objects = self.perform_and_condition_check(and_condition, all_objects)
+            # Add objects to the total list, if they are not already present there
+            filtered_objects.extend([obj for obj in new_filtered_objects if obj not in filtered_objects])
 
         random_samples = self.config.get_int("random_samples", 0)
         has_index = self.config.has_param("index")
