@@ -8,5 +8,11 @@ from src.utility.filter.StructFilter import StructFilter
 
 class MeshObjectFilter(StructFilter):
 
-    def all_mesh_objects(self, structs: [Struct]) -> [MeshObject]:
+    @staticmethod
+    def all_mesh_objects(structs: [Struct]) -> [MeshObject]:
+        """ Returns all mesh objects from the given list.
+
+        :param structs: A list of elements.
+        :return: All mesh objects from the given list.
+        """
         return filter(lambda x: isinstance(x, MeshObject), structs)

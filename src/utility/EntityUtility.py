@@ -209,7 +209,11 @@ class Entity(Struct):
         """ Deletes the entity """
         bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
+        """ Returns whether the entity is from type "EMPTY".
+
+        :return: True, if its an empty.
+        """
         return self.blender_obj.type == "EMPTY"
 
     def __setattr__(self, key, value):

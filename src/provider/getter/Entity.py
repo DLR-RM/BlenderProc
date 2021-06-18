@@ -151,13 +151,14 @@ class Entity(Provider):
                 requested_custom_function = True
                 key = key[3:]
 
-            # check if an attribute with this name exists and the key was not a requested custom property
             if not requested_custom_property and not requested_custom_function:
+                # Filter by normal attributes
                 objects = EntityFilter.by_attr(objects, key, value, regex=True)
-            # check if a custom property with this name exists
             elif requested_custom_property:
+                # Filter by custom property
                 objects = EntityFilter.by_cp(objects, key, value, regex=True)
             elif requested_custom_function:
+                # Build boundaries of interval
                 conditions = Config(value)
                 if conditions.has_param("min") and conditions.has_param("max"):
                     if any(conditions.has_param(key) for key in
@@ -172,9 +173,11 @@ class Entity(Provider):
                         raise RuntimeError("An inside/outside condition cannot mix the min/max syntax with "
                                            "the x_min/x_max/y_min/... syntax.")
 
+                    # Set the interval +/- inf per default, so they will be ignored if they are not set
                     bb_min = mathutils.Vector((-np.inf, -np.inf, -np.inf))
                     bb_max = mathutils.Vector((np.inf, np.inf, np.inf))
 
+                    # Set boundaries given by config
                     for axis_index in range(3):
                         axis_name = "xyz"[axis_index]
                         for direction in ["min", "max"]:
@@ -216,10 +219,11 @@ class Entity(Provider):
             conditions = [conditions]
 
         all_objects = EntityUtility.convert_to_entities(bpy.context.scene.objects)
-        filtered_objects = []
+        filtered_objects = set()
         # each single condition is treated as and condition
         for and_condition in conditions:
-            filtered_objects.extend(self.perform_and_condition_check(and_condition, all_objects))
+            filtered_objects.update(self.perform_and_condition_check(and_condition, all_objects))
+        filtered_objects = list(filtered_objects)
 
         random_samples = self.config.get_int("random_samples", 0)
         has_index = self.config.has_param("index")
@@ -236,6 +240,7 @@ class Entity(Provider):
             raise Exception(f"There were no objects selected with the following "
                             f"condition: \n{self._get_conditions_as_string()}")
 
+        # Map back to blender objects for now (TODO: Remove in the future)
         filtered_objects = [filtered_object.blender_obj for filtered_object in filtered_objects]
 
         return filtered_objects
