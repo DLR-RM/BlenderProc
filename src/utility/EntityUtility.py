@@ -209,6 +209,9 @@ class Entity(Struct):
         """ Deletes the entity """
         bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
 
+    def is_empty(self):
+        return self.blender_obj.type == "EMPTY"
+
     def __setattr__(self, key, value):
         if key != "blender_obj":
             raise Exception("The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")

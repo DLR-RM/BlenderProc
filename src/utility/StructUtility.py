@@ -81,3 +81,9 @@ class Struct:
             raise Exception("The API class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
         else:
             object.__setattr__(self, key, value)
+
+    def get_attr(self, name: str) -> Any:
+        if hasattr(self.blender_obj, name):
+            return getattr(self.blender_obj, name)
+        else:
+            raise Exception("This element does not have an attribute " + str(name))
