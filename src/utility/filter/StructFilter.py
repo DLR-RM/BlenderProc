@@ -17,7 +17,7 @@ class StructFilter:
         return structs[0]
 
     @staticmethod
-    def _check_equality(attr_value, filter_value, regex):
+    def _check_equality(attr_value: Any, filter_value: Any, regex: bool) -> bool:
         """ Checks whether the two values are equal.
 
         :param attr_value: The first value.
@@ -94,7 +94,7 @@ class StructFilter:
         return StructFilter._check_its_one(structs)
 
     @staticmethod
-    def by_attr_in_interval(structs: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None):
+    def by_attr_in_interval(structs: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
         """ Returns all elements from the given list whose specified attribute has a value in the given interval.
 
         :param structs: A list of elements.
@@ -106,7 +106,7 @@ class StructFilter:
         return filter(lambda struct: (min_value is None or min_value < struct.get_attr(attr_name)) and (max_value is None or max_value > struct.get_attr(attr_name)), structs)
 
     @staticmethod
-    def by_attr_outside_interval(structs: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None):
+    def by_attr_outside_interval(structs: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
         """ Returns all elements from the given list whose specified attribute has a value outside the given interval.
 
         :param structs: A list of elements.
