@@ -27,7 +27,7 @@ class EntityFilter(StructFilter):
     
 
     @staticmethod
-    def by_attr(elements: [Struct], attr_name: str, value: Any, regex: bool = False) -> [MeshObject]:
+    def by_attr(elements: [Struct], attr_name: str, value: Any, regex: bool = False) -> [Entity]:
         """ Returns all entities from the given list whose specified attribute has the given value.
 
         :param elements: A list of elements.
@@ -39,7 +39,7 @@ class EntityFilter(StructFilter):
         return StructFilter.by_attr(EntityFilter.all_entities(elements), attr_name, value, regex)
 
     @staticmethod
-    def one_by_attr(elements: [Struct], attr_name: str, value: Any, regex: bool = False) -> MeshObject:
+    def one_by_attr(elements: [Struct], attr_name: str, value: Any, regex: bool = False) -> Entity:
         """ Returns the one entity from the given list whose specified attribute has the given value.
 
         An error is thrown is more than one or no element has been found.
@@ -53,7 +53,7 @@ class EntityFilter(StructFilter):
         return StructFilter.one_by_attr(EntityFilter.all_entities(elements), attr_name, value, regex)
 
     @staticmethod
-    def by_cp(elements: [Struct], cp_name: str, value: Any, regex: bool = False) -> [MeshObject]:
+    def by_cp(elements: [Struct], cp_name: str, value: Any, regex: bool = False) -> [Entity]:
         """  Returns all entities from the given list whose specified custom property has the given value.
 
         :param elements: A list of elements.
@@ -65,7 +65,7 @@ class EntityFilter(StructFilter):
         return StructFilter.by_cp(EntityFilter.all_entities(elements), cp_name, value, regex)
 
     @staticmethod
-    def one_by_cp(elements: [Struct], cp_name: str, value: Any, regex: bool = False) -> MeshObject:
+    def one_by_cp(elements: [Struct], cp_name: str, value: Any, regex: bool = False) -> Entity:
         """ Returns the one entity from the given list whose specified custom property has the given value.
 
         An error is thrown is more than one or no element has been found.
@@ -79,7 +79,7 @@ class EntityFilter(StructFilter):
         return StructFilter.one_by_cp(EntityFilter.all_entities(elements), cp_name, value, regex)
 
     @staticmethod
-    def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
+    def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Entity]:
         """ Returns all entities from the given list whose specified attribute has a value in the given interval.
 
         :param elements: A list of elements.
@@ -91,7 +91,7 @@ class EntityFilter(StructFilter):
         return StructFilter.by_attr_in_interval(EntityFilter.all_entities(elements), attr_name, min_value, max_value)
 
     @staticmethod
-    def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
+    def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Entity]:
         """ Returns all entities from the given list whose specified attribute has a value outside the given interval.
 
         :param elements: A list of elements.

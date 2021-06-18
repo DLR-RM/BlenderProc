@@ -69,7 +69,7 @@ class MeshObjectFilter(StructFilter):
         return StructFilter.one_by_cp(MeshObjectFilter.all_mesh_objects(elements), cp_name, value, regex)
 
     @staticmethod
-    def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
+    def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [MeshObject]:
         """ Returns all mesh objects from the given list whose specified attribute has a value in the given interval.
 
         :param elements: A list of elements.
@@ -81,7 +81,7 @@ class MeshObjectFilter(StructFilter):
         return StructFilter.by_attr_in_interval(MeshObjectFilter.all_mesh_objects(elements), attr_name, min_value, max_value)
 
     @staticmethod
-    def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
+    def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [MeshObject]:
         """ Returns all mesh objects from the given list whose specified attribute has a value outside the given interval.
 
         :param elements: A list of elements.
