@@ -6,7 +6,7 @@ import re
 
 class StructFilter:
     @staticmethod
-    def _check_its_one(elements: [Any]) -> Any:
+    def _check_list_has_length_one(elements: [Any]) -> Any:
         """ Checks if the given list only contains one element and returns it.
 
         :param elements: The list of elements to check.
@@ -19,7 +19,7 @@ class StructFilter:
         return elements[0]
 
     @staticmethod
-    def _check_equality(attr_value: Any, filter_value: Any, regex: bool) -> bool:
+    def _check_equality(attr_value: Any, filter_value: Any, regex: bool = False) -> bool:
         """ Checks whether the two values are equal.
 
         :param attr_value: The first value.
@@ -66,7 +66,7 @@ class StructFilter:
         :return: The one element from the given list that matches the given value at the specified attribute.
         """
         elements = StructFilter.by_attr(elements, attr_name, value, regex)
-        return StructFilter._check_its_one(elements)
+        return StructFilter._check_list_has_length_one(elements)
 
     @staticmethod
     def by_cp(elements: [Struct], cp_name: str, value: Any, regex: bool = False) -> [Struct]:
@@ -93,7 +93,7 @@ class StructFilter:
         :return: The one element from the given list that matches the given value at the specified custom property.
         """
         elements = StructFilter.by_cp(elements, cp_name, value, regex)
-        return StructFilter._check_its_one(elements)
+        return StructFilter._check_list_has_length_one(elements)
 
     @staticmethod
     def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None) -> [Struct]:
