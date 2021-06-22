@@ -109,7 +109,7 @@ class Filter:
 
     @staticmethod
     def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None, filtered_data_type: Type[Struct] = None) -> [Struct]:
-        """ Returns all elements from the given list whose specified attribute has a value in the given interval.
+        """ Returns all elements from the given list whose specified attribute has a value in the given interval (including the boundaries).
 
         :param elements: A list of elements.
         :param attr_name: The name of the attribute to look for.
@@ -119,7 +119,7 @@ class Filter:
         :return: The elements from the given list that match the given value at the specified attribute.
         """
         elements = Filter.all_with_type(elements, filtered_data_type)
-        return list(filter(lambda struct: (min_value is None or min_value < struct.get_attr(attr_name)) and (max_value is None or max_value > struct.get_attr(attr_name)), elements))
+        return list(filter(lambda struct: (min_value is None or min_value <= struct.get_attr(attr_name)) and (max_value is None or max_value >= struct.get_attr(attr_name)), elements))
 
     @staticmethod
     def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None, filtered_data_type: Type[Struct] = None) -> [Struct]:
