@@ -22,7 +22,7 @@ class Filter:
     def _check_equality(attr_value: Any, filter_value: Any, regex: bool = False) -> bool:
         """ Checks whether the two values are equal.
 
-        :param attr_value: The first value. Either str or numpy array.
+        :param attr_value: The first value.
         :param filter_value: The second value.
         :param regex: If True, string values will be matched via regex.
         :return: True, if the two values are equal.
@@ -32,7 +32,8 @@ class Filter:
         if isinstance(attr_value, str) and regex:
             return re.fullmatch(filter_value, attr_value)
         else:
-            return np.all(np.array(filter_value) == attr_value)
+            # Custom properties have arbitrary types, but this works for all Python objects and allows broadcasting
+            return np.all(np.array(filter_value) == np.array(attr_value))
 
     @staticmethod
     def all_with_type(elements: [Struct], filtered_data_type: Type[Struct] = None) -> [Struct]:
