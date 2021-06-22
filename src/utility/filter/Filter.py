@@ -1,8 +1,8 @@
 from typing import Any, Type
+import numpy as np
+import re
 
 from src.utility.StructUtility import Struct
-import mathutils
-import re
 
 class Filter:
     @staticmethod
@@ -22,24 +22,17 @@ class Filter:
     def _check_equality(attr_value: Any, filter_value: Any, regex: bool = False) -> bool:
         """ Checks whether the two values are equal.
 
-        :param attr_value: The first value.
+        :param attr_value: The first value. Either str or numpy array.
         :param filter_value: The second value.
         :param regex: If True, string values will be matched via regex.
         :return: True, if the two values are equal.
         """
-        # Optionally cast type
-        if isinstance(attr_value, mathutils.Vector):
-            filter_value = mathutils.Vector(filter_value)
-        elif isinstance(attr_value, mathutils.Euler):
-            filter_value = mathutils.Euler(filter_value)
-        elif isinstance(attr_value, mathutils.Color):
-            filter_value = mathutils.Color(filter_value)
-
+            
         # If desired do regex matching for strings
         if isinstance(attr_value, str) and regex:
             return re.fullmatch(filter_value, attr_value)
         else:
-            return filter_value == attr_value
+            return np.all(np.array(filter_value) == attr_value)
 
     @staticmethod
     def all_with_type(elements: [Struct], filtered_data_type: Type[Struct] = None) -> [Struct]:
