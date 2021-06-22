@@ -132,29 +132,6 @@ class Entity(Struct):
         """
         return self.blender_obj.matrix_world
 
-    def get_cp(self, key: str, frame: int = None) -> Any:
-        """ Returns the custom property with the given key.
-
-        :param key: The key of the custom property.
-        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
-        :return: The value of the custom property.
-        """
-        with KeyFrame(frame):
-            return self.blender_obj[key]
-
-    def set_cp(self, key: str, value: Any, frame: int = None):
-        """ Sets the custom property with the given key.
-
-        Keyframes can be only set for custom properties from type int, float or bool.
-
-        :param key: The key of the custom property.
-        :param value: The value to set.
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
-        """
-        self.blender_obj[key] = value
-        if isinstance(self.blender_obj[key], float) or isinstance(self.blender_obj[key], int):
-            Utility.insert_keyframe(self.blender_obj, "[\"" + key + "\"]", frame)
-
     def del_cp(self, key):
         """ Removes the custom property with the given key.
 
