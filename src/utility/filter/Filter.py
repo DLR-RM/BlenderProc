@@ -4,7 +4,7 @@ from src.utility.StructUtility import Struct
 import mathutils
 import re
 
-class EntityFilter:
+class Filter:
     @staticmethod
     def _check_list_has_length_one(elements: [Any]) -> Any:
         """ Checks if the given list only contains one element and returns it.
@@ -65,8 +65,8 @@ class EntityFilter:
         :param regex: If True, string values will be matched via regex.
         :return: The elements from the given list that match the given value at the specified attribute.
         """
-        elements = EntityFilter.all_with_type(elements, filtered_data_type)
-        return list(filter(lambda struct: EntityFilter._check_equality(struct.get_attr(attr_name), value, regex), elements))
+        elements = Filter.all_with_type(elements, filtered_data_type)
+        return list(filter(lambda struct: Filter._check_equality(struct.get_attr(attr_name), value, regex), elements))
 
     @staticmethod
     def one_by_attr(elements: [Struct], attr_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> Struct:
@@ -81,8 +81,8 @@ class EntityFilter:
         :param regex: If True, string values will be matched via regex.
         :return: The one element from the given list that matches the given value at the specified attribute.
         """
-        elements = EntityFilter.by_attr(elements, attr_name, value, filtered_data_type, regex)
-        return EntityFilter._check_list_has_length_one(elements)
+        elements = Filter.by_attr(elements, attr_name, value, filtered_data_type, regex)
+        return Filter._check_list_has_length_one(elements)
 
     @staticmethod
     def by_cp(elements: [Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> [Struct]:
@@ -95,8 +95,8 @@ class EntityFilter:
         :param regex: If True, string values will be matched via regex.
         :return: The elements from the given list that match the given value at the specified custom property.
         """
-        elements = EntityFilter.all_with_type(elements, filtered_data_type)
-        return list(filter(lambda struct: struct.has_cp(cp_name) and EntityFilter._check_equality(struct.get_cp(cp_name), value, regex), elements))
+        elements = Filter.all_with_type(elements, filtered_data_type)
+        return list(filter(lambda struct: struct.has_cp(cp_name) and Filter._check_equality(struct.get_cp(cp_name), value, regex), elements))
 
     @staticmethod
     def one_by_cp(elements: [Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> Struct:
@@ -111,8 +111,8 @@ class EntityFilter:
         :param regex: If True, string values will be matched via regex.
         :return: The one element from the given list that matches the given value at the specified custom property.
         """
-        elements = EntityFilter.by_cp(elements, cp_name, value, filtered_data_type, regex)
-        return EntityFilter._check_list_has_length_one(elements)
+        elements = Filter.by_cp(elements, cp_name, value, filtered_data_type, regex)
+        return Filter._check_list_has_length_one(elements)
 
     @staticmethod
     def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None, filtered_data_type: Type[Struct] = None) -> [Struct]:
@@ -125,7 +125,7 @@ class EntityFilter:
         :param filtered_data_type: If not None, only elements from the given type are returned.
         :return: The elements from the given list that match the given value at the specified attribute.
         """
-        elements = EntityFilter.all_with_type(elements, filtered_data_type)
+        elements = Filter.all_with_type(elements, filtered_data_type)
         return list(filter(lambda struct: (min_value is None or min_value < struct.get_attr(attr_name)) and (max_value is None or max_value > struct.get_attr(attr_name)), elements))
 
     @staticmethod
@@ -139,6 +139,6 @@ class EntityFilter:
         :param filtered_data_type: If not None, only elements from the given type are returned.
         :return: The elements from the given list that match the given value at the specified attribute.
         """
-        elements = EntityFilter.all_with_type(elements, filtered_data_type)
-        in_interval = EntityFilter.by_attr_in_interval(elements, attr_name, min_value, max_value)
+        elements = Filter.all_with_type(elements, filtered_data_type)
+        in_interval = Filter.by_attr_in_interval(elements, attr_name, min_value, max_value)
         return [e for e in elements if e not in in_interval]

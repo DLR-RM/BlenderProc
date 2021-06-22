@@ -7,7 +7,7 @@ import mathutils
 
 from src.main.Provider import Provider
 from src.utility.Config import Config
-from src.utility.filter.EntityFilter import EntityFilter
+from src.utility.filter.Filter import Filter
 from src.utility.EntityUtility import Entity as EntityUtility
 import numpy as np
 class Entity(Provider):
@@ -153,10 +153,10 @@ class Entity(Provider):
 
             if not requested_custom_property and not requested_custom_function:
                 # Filter by normal attributes
-                objects = EntityFilter.by_attr(objects, key, value, regex=True)
+                objects = Filter.by_attr(objects, key, value, regex=True)
             elif requested_custom_property:
                 # Filter by custom property
-                objects = EntityFilter.by_cp(objects, key, value, regex=True)
+                objects = Filter.by_cp(objects, key, value, regex=True)
             elif requested_custom_function:
                 # Build boundaries of interval
                 conditions = Config(value)
@@ -189,9 +189,9 @@ class Entity(Provider):
                                     bb_max[axis_index] = float(value[key_name])
 
                 if key == "inside":
-                    objects = EntityFilter.by_attr_in_interval(objects, "location", bb_min, bb_max)
+                    objects = Filter.by_attr_in_interval(objects, "location", bb_min, bb_max)
                 elif key == "outside":
-                    objects = EntityFilter.by_attr_outside_interval(objects, "location", bb_min, bb_max)
+                    objects = Filter.by_attr_outside_interval(objects, "location", bb_min, bb_max)
                 else:
                     raise Exception("No such custom function: " + str(key))
 
