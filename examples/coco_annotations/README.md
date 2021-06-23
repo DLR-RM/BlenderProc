@@ -57,12 +57,13 @@ python scripts/vis_coco_annotation.py
   {
     "module": "renderer.SegMapRenderer",
     "config": {
-      "map_by": ["instance", "class"],
+      "map_by": ["instance", "class", "name"],
     }
   }
 ```
 
-The `renderer.SegMapRenderer` needs to render both instance and class maps. The class is defined in terms of a custom property `category_id` which must be previously defined for each instance. The `category_id` can be either set in a custom Loader module or in a `.blend` file. 
+The `renderer.SegMapRenderer` needs to render both instance and class maps. The class is defined in terms of a custom property `category_id` which must be previously defined for each instance. The `category_id` can be either set in a custom Loader module or in a `.blend` file.
+We also add `"name"` to the mapping, s.t. we can later use the object's names for labeling the categories in the coco annotations writer. 
 
 ### CocoAnnotationsWriter
 
