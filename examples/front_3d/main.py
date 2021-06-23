@@ -88,8 +88,7 @@ while tries < 10000 and poses < 10:
         poses += 1
     tries += 1
 
-# set the category_id of the world to 0
-bpy.context.scene.world["category_id"] = 0
+# set the sample amount to 350
 RendererUtility.set_samples(350)
 
 # render the whole pipeline
