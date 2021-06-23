@@ -36,7 +36,10 @@ class Front3DLoaderModule(LoaderInterface):
           - Path to the json file, where the house information is stored.
           - string
         * - 3D_future_model_path
-          - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
+          - Path to the models used in the 3D-Front dataset. Type: str
+          - string
+        * - 3D_front_texture_path
+          - Path to the 3D-front-texture folder. Type: str
           - string
         * - mapping_file
           - Path to a file, which maps the names of the objects to ids. Default:
