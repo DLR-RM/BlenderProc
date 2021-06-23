@@ -2,8 +2,7 @@ import json
 import os
 import warnings
 from math import radians
-from typing import List
-
+from typing import List, Mapping
 import bpy
 import mathutils
 import numpy as np
@@ -75,6 +74,50 @@ class Front3DLoader:
         return created_objects
 
     @staticmethod
+    def _extract_hash_nr_for_texture(given_url: str, front_3D_texture_path: str) -> str:
+        """
+        Constructs the path of the hash folder and checks if the texture is available if not it is downloaded
+
+        :param given_url: The url of the texture
+        :param front_3D_texture_path: The path to where the texture are saved
+        :return: The hash id, which is used in the url
+        """
+        # extract the hash nr from the given url
+        hash_nr = given_url.split("/")[-2]
+        hash_folder = os.path.join(front_3D_texture_path, hash_nr)
+        if not os.path.exists(hash_folder):
+            # download the file
+            os.makedirs(hash_folder)
+            warnings.warn(f"This texture: {hash_nr} could not be found it will be downloaded.")
+            # replace https with http as ssl connection out of blender are difficult
+            urlretrieve(given_url.replace("https://", "http://"), os.path.join(hash_folder, "texture.png"))
+            if not os.path.exists(os.path.join(hash_folder, "texture.png")):
+                raise Exception(f"The texture could not be found, the following url was used: "
+                                f"{front_3D_texture_path}, this is the extracted hash: {hash_nr}, "
+                                f"given url: {given_url}")
+        return hash_folder
+
+    @staticmethod
+    def _get_used_image(hash_folder_path: str, saved_image_dict: Mapping[str, bpy.types.Texture]) -> bpy.types.Texture:
+        """
+        Returns a texture object for the given hash_folder_path, the textures are stored in the saved_image_dict,
+        to avoid that texture are loaded multiple times
+
+        :param hash_folder_path: Path to the hash folder
+        :param saved_image_dict: Dict which maps the hash_folder_paths to bpy.types.Texture
+        :return: The loaded texture bpy.types.Texture
+        """
+        if hash_folder_path in saved_image_dict:
+            ret_used_image = saved_image_dict[hash_folder_path]
+        else:
+            textures = TextureLoader.load(hash_folder_path)
+            if len(textures) != 1:
+                raise Exception(f"There is not just one texture: {len(textures)}")
+            ret_used_image = textures[0].image
+            saved_image_dict[hash_folder_path] = ret_used_image
+        return ret_used_image
+
+    @staticmethod
     def _create_mesh_objects_from_file(data: dict, front_3D_texture_path: str, ceiling_light_strength: float,
                                        mapping: dict, json_path: str) -> List[MeshObject]:
         """
@@ -131,23 +174,8 @@ class Front3DLoader:
             # If there should be a material used
             if used_mat:
                 if used_mat["texture"]:
-                    def extract_texture(given_url: str):
-                        # extract the has nr from the given url
-                        hash_nr = given_url.split("/")[-2]
-                        hash_folder = os.path.join(front_3D_texture_path, hash_nr)
-                        if not os.path.exists(hash_folder):
-                            # download the file
-                            os.makedirs(hash_folder)
-                            warnings.warn(f"This texture: {hash_nr} could not be found it will be downloaded.")
-                            # replace https with http as ssl connection out of blender are difficult
-                            urlretrieve(given_url.replace("https://", "http://"), os.path.join(hash_folder, "texture.png"))
-                            if not os.path.exists(os.path.join(hash_folder, "texture.png")):
-                                raise Exception(f"The texture could not be found, the following url was used: "
-                                                f"{front_3D_texture_path}, this is the extracted hash: {hash_nr}, "
-                                                f"given url: {given_url}")
-                        return hash_folder
-
-                    hash_folder = extract_texture(used_mat["texture"])
+                    # extract the has folder is from the url and download it if necessary
+                    hash_folder = Front3DLoader._extract_hash_nr_for_texture(used_mat["texture"], front_3D_texture_path)
                     if hash_folder in used_materials_based_on_texture and "ceiling" not in used_obj_name.lower():
                         mat = used_materials_based_on_texture[hash_folder]
                         obj.add_material(mat)
@@ -158,27 +186,18 @@ class Front3DLoader:
                         if used_mat["color"]:
                             principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
 
-                        def get_used_image(saved_image_dict: dict, hash_folder_path: str):
-                            if hash_folder_path in saved_image_dict:
-                                ret_used_image = saved_image_dict[hash_folder_path]
-                            else:
-                                textures = TextureLoader.load(hash_folder_path)
-                                if len(textures) != 1:
-                                    raise Exception(f"There is not just one texture: {len(textures)}")
-                                ret_used_image = textures[0].image
-                                saved_image_dict[hash_folder_path] = ret_used_image
-                            return ret_used_image
-                        used_image = get_used_image(saved_images, hash_folder)
+                        used_image = Front3DLoader._get_used_image(hash_folder, saved_images)
                         mat.set_principled_shader_value("Base Color", used_image)
-
 
                         if "ceiling" in used_obj_name.lower():
                             mat.make_emissive(ceiling_light_strength, keep_using_base_color=False, emission_color=mathutils.Vector(used_mat["color"]) / 255.0)
 
                         if used_mat["normaltexture"]:
                             # get the used image based on the normal texture path
-                            hash_folder = extract_texture(used_mat["normaltexture"])
-                            used_image = get_used_image(saved_normal_images, hash_folder)
+                            # extract the has folder is from the url and download it if necessary
+                            hash_folder = Front3DLoader._extract_hash_nr_for_texture(used_mat["normaltexture"],
+                                                                                     front_3D_texture_path)
+                            used_image = Front3DLoader._get_used_image(hash_folder, saved_normal_images)
 
                             # create normal texture
                             normal_texture = MaterialLoaderUtility.create_image_node(mat.nodes, used_image, True)
