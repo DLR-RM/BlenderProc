@@ -20,7 +20,7 @@ class Filter:
 
     @staticmethod
     def _check_equality(attr_value: Any, filter_value: Any, regex: bool = False) -> bool:
-        """ Checks whether the two values are equal.
+        """ Checks whether the two values are equal. If the values have multiple elements, they must all match (uses broadcasting).
 
         :param attr_value: The first value.
         :param filter_value: The second value.
@@ -32,8 +32,12 @@ class Filter:
         if isinstance(attr_value, str) and regex:
             return re.fullmatch(filter_value, attr_value)
         else:
-            # Custom properties have arbitrary types, but this works for all Python objects and allows broadcasting
-            return np.all(np.array(filter_value) == np.array(attr_value))
+            try:
+                return np.all(np.array(filter_value) == np.array(attr_value))
+            except:
+                raise Exception('Could not broadcast attribute {} with shape {} ' 
+                                'to filter_value {} with shape {}! '.format(attr_value, np.array(attr_value).shape,
+                                                                            filter_value, np.array(filter_value).shape))
 
     @staticmethod
     def all_with_type(elements: [Struct], filtered_data_type: Type[Struct] = None) -> [Struct]:
