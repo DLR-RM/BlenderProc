@@ -1,5 +1,6 @@
 import os
 
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.CocoWriterUtility import CocoWriterUtility
 from src.writer.WriterInterface import WriterInterface
 
@@ -47,7 +48,6 @@ class CocoAnnotationsWriter(WriterInterface):
         self._supercategory = self.config.get_string("supercategory", "coco_annotations")
         self.segmap_output_key = self.config.get_string("segmap_output_key", "segmap")
         self.segcolormap_output_key = self.config.get_string("segcolormap_output_key", "segcolormap")
-        self._coco_data_dir = os.path.join(self._determine_output_dir(False), 'coco_data')
         self.mask_encoding_format = self.config.get_string("mask_encoding_format", "rle")
         self._append_to_existing_output = self.config.get_bool("append_to_existing_output", False)
 
@@ -63,10 +63,17 @@ class CocoAnnotationsWriter(WriterInterface):
             print("Avoid output is on, no output produced!")
             return
 
-        CocoWriterUtility.write(self._coco_data_dir,
-                                mask_encoding_format = self.mask_encoding_format,
-                                supercategory = self._supercategory,
-                                append_to_existing_output = self._append_to_existing_output,
-                                segmap_output_key = self.segmap_output_key,
-                                segcolormap_output_key = self.segcolormap_output_key,
-                                rgb_output_key = self.rgb_output_key)
+        # Check if a label mapping is registered which could be used for naming the categories.
+        if GlobalStorage.is_in_storage("label_mapping"):
+            label_mapping = GlobalStorage.get("label_mapping")
+        else:
+            label_mapping = None
+
+        CocoWriterUtility.write(self._determine_output_dir(False),
+                                mask_encoding_format=self.mask_encoding_format,
+                                supercategory=self._supercategory,
+                                append_to_existing_output=self._append_to_existing_output,
+                                segmap_output_key=self.segmap_output_key,
+                                segcolormap_output_key=self.segcolormap_output_key,
+                                rgb_output_key=self.rgb_output_key,
+                                label_mapping=label_mapping)

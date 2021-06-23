@@ -76,6 +76,17 @@ class Struct:
         for key in keys:
             del self.blender_obj[key]
 
+    def get_attr(self, attr_name: str) -> Any:
+        """ Returns the value of the attribute with the given name.
+
+        :param attr_name: The name of the attribute.
+        :return: The value of the attribute
+        """
+        if hasattr(self.blender_obj, attr_name):
+            return getattr(self.blender_obj, attr_name)
+        else:
+            raise Exception("This element does not have an attribute " + str(attr_name))
+
     def __setattr__(self, key, value):
         if key != "blender_obj":
             raise Exception("The API class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")

@@ -9,6 +9,7 @@ import numpy as np
 from urllib.request import urlretrieve
 
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
+from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MaterialUtility import Material
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
@@ -31,13 +32,13 @@ class Front3DLoader:
     """
 
     @staticmethod
-    def load(json_path: str, future_model_path: str, front_3D_texture_path: str, mapping: dict, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
+    def load(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
         """ Loads the 3D-Front scene specified by the given json file.
 
         :param json_path: Path to the json file, where the house information is stored.
         :param future_model_path: Path to the models used in the 3D-Front dataset.
         :param front_3D_texture_path: Path to the 3D-FRONT-texture folder.
-        :param mapping: A dict which maps the names of the objects to ids.
+        :param label_mapping: A dict which maps the names of the objects to ids.
         :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
         :param lamp_light_strength: Strength of the emission shader used in each lamp.
         :return: The list of loaded mesh objects.
@@ -61,9 +62,9 @@ class Front3DLoader:
             raise Exception("There is no scene data in this json file: {}".format(json_path))
 
         created_objects = Front3DLoader._create_mesh_objects_from_file(data, front_3D_texture_path,
-                                                                       ceiling_light_strength, mapping, json_path)
+                                                                       ceiling_light_strength, label_mapping, json_path)
 
-        all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, mapping)
+        all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping)
 
         created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture)
 
@@ -119,7 +120,7 @@ class Front3DLoader:
 
     @staticmethod
     def _create_mesh_objects_from_file(data: dict, front_3D_texture_path: str, ceiling_light_strength: float,
-                                       mapping: dict, json_path: str) -> List[MeshObject]:
+                                       label_mapping: LabelIdMapping, json_path: str) -> List[MeshObject]:
         """
         This creates for a given data json block all defined meshes and assigns the correct materials.
         This means that the json file contains some mesh, like walls and floors, which have to built up manually.
@@ -129,7 +130,7 @@ class Front3DLoader:
         :param data: json data dir. Must contain "material" and "mesh"
         :param front_3D_texture_path: Path to the 3D-FRONT-texture folder.
         :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
-        :param mapping: A dict which maps the names of the objects to ids.
+        :param label_mapping: A dict which maps the names of the objects to ids.
         :param json_path: Path to the json file, where the house information is stored.
         :return: The list of loaded mesh objects.
         """
@@ -161,7 +162,7 @@ class Front3DLoader:
 
             # set two custom properties, first that it is a 3D_future object and second the category_id
             obj.set_cp("is_3D_future", True)
-            obj.set_cp("category_id", mapping[used_obj_name.lower()])
+            obj.set_cp("category_id", label_mapping.id_from_label(used_obj_name.lower()))
 
             # get the material uid of the current mesh data
             current_mat = mesh_data["material"]
@@ -295,7 +296,7 @@ class Front3DLoader:
         return created_objects
 
     @staticmethod
-    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, mapping: dict) -> List[MeshObject]:
+    def _load_furniture_objs(data: dict, future_model_path: str, lamp_light_strength: float, label_mapping: LabelIdMapping) -> List[MeshObject]:
         """
         Load all furniture objects specified in the json file, these objects are stored as "raw_model.obj" in the
         3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.
@@ -303,7 +304,7 @@ class Front3DLoader:
         :param data: json data dir. Should contain "furniture"
         :param future_model_path: Path to the models used in the 3D-Front dataset.
         :param lamp_light_strength: Strength of the emission shader used in each lamp.
-        :param mapping: A dict which maps the names of the objects to ids.
+        :param label_mapping: A dict which maps the names of the objects to ids.
         :return: The list of loaded mesh objects.
         """
         # collect all loaded furniture objects
@@ -338,7 +339,7 @@ class Front3DLoader:
                     obj.set_cp("is_3D_future", True)
                     obj.set_cp("type", "Non-Object")  # is an non object used for the interesting score
                     # set the category id based on the used obj name
-                    obj.set_cp("category_id", mapping[used_obj_name.lower()])
+                    obj.set_cp("category_id", label_mapping.id_from_label(used_obj_name.lower()))
                     # walk over all materials
                     for mat in obj.get_materials():
                         principled_node = mat.get_nodes_with_type("BsdfPrincipled")

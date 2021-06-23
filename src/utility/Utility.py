@@ -1,5 +1,6 @@
 import os
 import math
+import csv
 import threading
 import uuid
 from typing import List, Dict, Any, Tuple
@@ -287,6 +288,48 @@ class Utility:
             return node[0]
         else:
             raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
+
+    @staticmethod
+    def read_suncg_lights_windows_materials():
+        """
+        Returns the lights dictionary and windows list which contains their respective materials
+
+        :return: dictionary of lights' and list of windows' materials
+        """
+        # Read in lights
+        lights = {}
+        # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
+        with open(Utility.resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
+            lines = f.readlines()
+            for row in lines:
+                row = row.strip().split()
+                lights[row[0]] = [[], []]
+
+                index = 1
+
+                # Read in lightbulb materials
+                number = int(row[index])
+                index += 1
+                for i in range(number):
+                    lights[row[0]][0].append(row[index])
+                    index += 1
+
+                # Read in lampshade materials
+                number = int(row[index])
+                index += 1
+                for i in range(number):
+                    lights[row[0]][1].append(row[index])
+                    index += 1
+
+        # Read in windows
+        windows = []
+        with open(Utility.resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                if row["coarse_grained_class"] == "window":
+                    windows.append(row["model_id"])
+
+        return lights, windows
 
     class BlockStopWatch:
         """ Calls a print statement to mark the start and end of this block and also measures execution time.

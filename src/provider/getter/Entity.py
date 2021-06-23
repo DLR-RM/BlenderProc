@@ -7,8 +7,9 @@ import mathutils
 
 from src.main.Provider import Provider
 from src.utility.Config import Config
-
-
+from src.utility.filter.Filter import Filter
+from src.utility.EntityUtility import Entity as EntityUtility
+import numpy as np
 class Entity(Provider):
     """
     Returns a list of objects that comply with defined conditions.
@@ -138,96 +139,63 @@ class Entity(Provider):
         :param objects: Objects, that are already in the return list. Type: list.
         :return: Objects that fulfilled given conditions. Type: list.
         """
-        new_objects = []
-        # through every object
-        for obj in bpy.context.scene.objects:
-            # if object is in list, skip it
-            if obj in objects:
-                continue
-            select_object = True
-            # run over all conditions and check if any one of them holds, if one does not work -> go to next obj
-            for key, value in and_condition.items():
-                # check if the key is a requested custom property
-                requested_custom_property = False
-                requested_custom_function = False
-                if key.startswith('cp_'):
-                    requested_custom_property = True
-                    key = key[3:]
-                if key.startswith('cf_'):
-                    requested_custom_function = True
-                    key = key[3:]
+        # run over all conditions and check if any one of them holds, if one does not work -> go to next obj
+        for key, value in and_condition.items():
+            # check if the key is a requested custom property
+            requested_custom_property = False
+            requested_custom_function = False
+            if key.startswith('cp_'):
+                requested_custom_property = True
+                key = key[3:]
+            if key.startswith('cf_'):
+                requested_custom_function = True
+                key = key[3:]
 
-                # check if an attribute with this name exists and the key was not a requested custom property
-                if hasattr(obj, key) and not requested_custom_property:
-                    # check if the type of the value of attribute matches desired
-                    if isinstance(getattr(obj, key), type(value)):
-                        new_value = value
-                    # if not, try to enforce some mathutils-specific type
-                    else:
-                        if isinstance(getattr(obj, key), mathutils.Vector):
-                            new_value = mathutils.Vector(value)
-                        elif isinstance(getattr(obj, key), mathutils.Euler):
-                            new_value = mathutils.Euler(value)
-                        elif isinstance(getattr(obj, key), mathutils.Color):
-                            new_value = mathutils.Color(value)
-                        # raise an exception if it is none of them
-                        else:
-                            raise Exception("Types are not matching: %s and %s !"
-                                            % (type(getattr(obj, key)), type(value)))
-                    # or check for equality
-                    if not ((isinstance(getattr(obj, key), str) and re.fullmatch(value, getattr(obj, key)) is not None)
-                            or getattr(obj, key) == new_value):
-                        select_object = False
-                        break
-                # check if a custom property with this name exists
-                elif key in obj and requested_custom_property:
-                    # check if the type of the value of such custom property matches desired
-                    if isinstance(obj[key], type(value)) or (isinstance(obj[key], int) and isinstance(value, bool)):
-                        # if is a string and if the whole string matches the given pattern
-                        if not ((isinstance(obj[key], str) and re.fullmatch(value, obj[key]) is not None) or
-                                obj[key] == value):
-                            select_object = False
-                            break
-                    # raise an exception if not
-                    else:
-                        raise Exception("Types are not matching: {} and {} for key: {}".format(type(obj[key]),
-                                                                                               type(value), key))
-                elif requested_custom_function and any([key == "inside", key == "outside"]):
-                    conditions = Config(value)
-                    if conditions.has_param("min") and conditions.has_param("max"):
-                        if any(conditions.has_param(key) for key in
-                               ["x_min", "x_max", "y_min", "y_max", "z_min", "z_max"]):
-                            raise RuntimeError("An inside/outside condition cannot mix the min/max vector syntax with "
-                                               "the x_min/x_max/y_min/... syntax.")
+            if not requested_custom_property and not requested_custom_function:
+                # Filter by normal attributes
+                objects = Filter.by_attr(objects, key, value, regex=True)
+            elif requested_custom_property:
+                # Filter by custom property
+                objects = Filter.by_cp(objects, key, value, regex=True)
+            elif requested_custom_function:
+                # Build boundaries of interval
+                conditions = Config(value)
+                if conditions.has_param("min") and conditions.has_param("max"):
+                    if any(conditions.has_param(key) for key in
+                           ["x_min", "x_max", "y_min", "y_max", "z_min", "z_max"]):
+                        raise RuntimeError("An inside/outside condition cannot mix the min/max vector syntax with "
+                                           "the x_min/x_max/y_min/... syntax.")
 
-                        bb_min = conditions.get_vector3d("min")
-                        bb_max = conditions.get_vector3d("max")
-                        is_inside = all(bb_min[i] < obj.location[i] < bb_max[i] for i in range(3))
-                    else:
-                        if any(conditions.has_param(key) for key in ["min", "max"]):
-                            raise RuntimeError("An inside/outside condition cannot mix the min/max syntax with "
-                                               "the x_min/x_max/y_min/... syntax.")
-                        is_inside = True
-                        for axis_index in range(3):
-                            axis_name = "xyz"[axis_index]
-                            for direction in ["min", "max"]:
-                                key_name = "{}_{}".format(axis_name, direction)
-                                if key_name in value:
-                                    real_position = obj.location[axis_index]
-                                    border_position = float(value[key_name])
-                                    if (direction == "max" and real_position > border_position) or (
-                                            direction == "min" and real_position < border_position):
-                                        is_inside = False
-
-                    if (key == "inside" and not is_inside) or (key == "outside" and is_inside):
-                        select_object = False
-                        break
+                    bb_min = conditions.get_vector3d("min")
+                    bb_max = conditions.get_vector3d("max")
                 else:
-                    select_object = False
-                    break
-            if select_object:
-                new_objects.append(obj)
-        return new_objects
+                    if any(conditions.has_param(key) for key in ["min", "max"]):
+                        raise RuntimeError("An inside/outside condition cannot mix the min/max syntax with "
+                                           "the x_min/x_max/y_min/... syntax.")
+
+                    # Set the interval +/- inf per default, so they will be ignored if they are not set
+                    bb_min = mathutils.Vector((-np.inf, -np.inf, -np.inf))
+                    bb_max = mathutils.Vector((np.inf, np.inf, np.inf))
+
+                    # Set boundaries given by config
+                    for axis_index in range(3):
+                        axis_name = "xyz"[axis_index]
+                        for direction in ["min", "max"]:
+                            key_name = "{}_{}".format(axis_name, direction)
+                            if key_name in value:
+                                if direction == "min":
+                                    bb_min[axis_index] = float(value[key_name])
+                                else:
+                                    bb_max[axis_index] = float(value[key_name])
+
+                if key == "inside":
+                    objects = Filter.by_attr_in_interval(objects, "location", bb_min, bb_max)
+                elif key == "outside":
+                    objects = Filter.by_attr_outside_interval(objects, "location", bb_min, bb_max)
+                else:
+                    raise Exception("No such custom function: " + str(key))
+
+        return objects
 
     def _get_conditions_as_string(self):
         """
@@ -247,14 +215,16 @@ class Entity(Provider):
         conditions = self.config.get_raw_dict('conditions')
 
         # the list of conditions is treated as or condition
-        if isinstance(conditions, list):
-            objects = []
-            # each single condition is treated as and condition
-            for and_condition in conditions:
-                objects.extend(self.perform_and_condition_check(and_condition, objects))
-        else:
-            # only one condition was given, treat it as and condition
-            objects = self.perform_and_condition_check(conditions, [])
+        if not isinstance(conditions, list):
+            conditions = [conditions]
+
+        all_objects = EntityUtility.convert_to_entities(bpy.context.scene.objects)
+        filtered_objects = []
+        # each single condition is treated as and condition
+        for and_condition in conditions:
+            new_filtered_objects = self.perform_and_condition_check(and_condition, all_objects)
+            # Add objects to the total list, if they are not already present there
+            filtered_objects.extend([obj for obj in new_filtered_objects if obj not in filtered_objects])
 
         random_samples = self.config.get_int("random_samples", 0)
         has_index = self.config.has_param("index")
@@ -262,13 +232,16 @@ class Entity(Provider):
         if has_index and random_samples:
             raise RuntimeError("Please, define only one of two: `index` or `random_samples`.")
         elif has_index:
-            objects = [objects[self.config.get_int("index")]]
+            filtered_objects = [filtered_objects[self.config.get_int("index")]]
         elif random_samples:
-            objects = sample(objects, k=min(random_samples, len(objects)))
+            filtered_objects = sample(filtered_objects, k=min(random_samples, len(filtered_objects)))
 
         check_if_return_is_empty = self.config.get_bool("check_empty", False)
-        if check_if_return_is_empty and not objects:
+        if check_if_return_is_empty and not filtered_objects:
             raise Exception(f"There were no objects selected with the following "
                             f"condition: \n{self._get_conditions_as_string()}")
 
-        return objects
+        # Map back to blender objects for now (TODO: Remove in the future)
+        filtered_objects = [filtered_object.blender_obj for filtered_object in filtered_objects]
+
+        return filtered_objects
