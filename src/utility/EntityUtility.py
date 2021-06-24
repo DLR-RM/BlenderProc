@@ -2,6 +2,7 @@ from typing import Union, Any
 
 import bpy
 
+from src.provider.getter.Entity import Entity
 from src.utility.StructUtility import Struct
 from src.utility.Utility import Utility, KeyFrame
 from mathutils import Vector, Euler, Color, Matrix
@@ -208,6 +209,14 @@ class Entity(Struct):
     def delete(self):
         """ Deletes the entity """
         bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
+
+    @staticmethod
+    def delete_multiple(entities: [Entity]):
+        """ Deletes multiple entities at once
+
+        :param entities: A list of entities that should be deleted
+        """
+        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})
 
     def __setattr__(self, key, value):
         if key != "blender_obj":

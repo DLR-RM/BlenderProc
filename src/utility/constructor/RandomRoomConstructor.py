@@ -11,6 +11,7 @@ import random
 from src.provider.getter.Material import Material
 from src.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
 from src.utility.CollisionUtility import CollisionUtility
+from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility, Config
 from src.utility.object.FloorExtractor import FloorExtractor
@@ -496,14 +497,10 @@ class RandomRoomConstructor:
                 # delete the duplicated object
                 list_of_deleted_objects.append(current_obj)
 
-        # delete all objects, which have not been placed during the operation
-        for obj in list_of_deleted_objects:
-            obj.delete()
-
-        # delete the loaded objects, which couldn't be placed
-        for obj in interior_objects:
-            if obj not in placed_objects:
-                obj.delete()
+        # Add the loaded objects, which couldn't be placed
+        list_of_deleted_objects.extend([obj for obj in interior_objects if obj not in placed_objects])
+        # Delete them all
+        Entity.delete_multiple(list_of_deleted_objects)
 
         if floor_obj is not None:
             placed_objects.append(floor_obj)
