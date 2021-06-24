@@ -356,6 +356,10 @@ class Front3DLoader:
                             raise Exception("The amount of principle nodes can not be more than 1, "
                                             "for obj: {}!".format(obj.get_name()))
 
+                        # Front3d .mtl files contain emission color which make the object mistakenly emissive
+                        # => Reset the emission color
+                        principled_node.inputs["Emission"].default_value[:3] = [0, 0, 0]
+
                         # For each a texture node
                         image_node = mat.new_node('ShaderNodeTexImage')
                         # and load the texture.png
