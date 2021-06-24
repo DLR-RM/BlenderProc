@@ -218,6 +218,13 @@ class Entity(Struct):
         """
         bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})
 
+    def is_empty(self) -> bool:
+        """ Returns whether the entity is from type "EMPTY".
+
+        :return: True, if its an empty.
+        """
+        return self.blender_obj.type == "EMPTY"
+
     def __setattr__(self, key, value):
         if key != "blender_obj":
             raise Exception("The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")

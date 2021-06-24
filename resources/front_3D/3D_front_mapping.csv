@@ -12,10 +12,8 @@ id,name
 10,shelf
 11,smartcustomizedceiling
 12,wine cabinet
-12,wine cooler
 13,wallinner
 14,sideboard / side cabinet / console table
-14,sideboard / side cabinet / console
 15,dressing table
 16,wardrobe
 17,ceiling lamp
@@ -32,7 +30,6 @@ id,name
 28,lounge chair / cafe chair / office chair
 29,footstool / sofastool / bed end stool / stool
 30,three-seat / multi-seat sofa
-30,three-seat / multi-person sofa
 31,drawer chest / corner cabinet
 32,walltop
 33,armchair

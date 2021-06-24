@@ -14,13 +14,14 @@ import cv2
 import bpy
 
 from src.utility.Utility import Utility
+from src.utility.LabelIdMapping import LabelIdMapping
 
 class CocoWriterUtility:
 
     @staticmethod
-    def write(output_dir: str, instance_segmaps:List[np.ndarray] = [], instance_attribute_maps:List[dict]=[], colors:List[np.ndarray] = [], color_file_format:str="PNG",  
-              mask_encoding_format="rle", supercategory="coco_annotations", append_to_existing_output:bool=True, segmap_output_key="segmap", 
-              segcolormap_output_key="segcolormap", rgb_output_key="colors", jpg_quality:int=95):
+    def write(output_dir: str, instance_segmaps:List[np.ndarray] = [], instance_attribute_maps:List[dict]=[], colors:List[np.ndarray] = [], color_file_format:str="PNG",
+              mask_encoding_format="rle", supercategory="coco_annotations", append_to_existing_output:bool=True, segmap_output_key="segmap",
+              segcolormap_output_key="segcolormap", rgb_output_key="colors", jpg_quality:int=95, label_mapping: LabelIdMapping = None):
         """ Writes coco annotations in the following steps:
         1. Locate the seg images
         2. Locate the rgb maps
@@ -32,7 +33,7 @@ class CocoWriterUtility:
         :param instance_segmaps: List of instance segmentation maps
         :param segcolormaps: per-frame mappings with idx, class and optionally supercategory/bop_dataset_name
         :param colors: List of color images
-        :param color_file_format: Format to save color images in 
+        :param color_file_format: Format to save color images in
         :param mask_encoding_format: Encoding format of the binary masks. Default: 'rle'. Available: 'rle', 'polygon'.
         :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset set by 'bop_dataset_name' or 
             any loaded object with specified 'cp_supercategory'
@@ -45,6 +46,8 @@ class CocoWriterUtility:
             the same as the colormap_output_key of the SegMapRenderer module. Default: segcolormap.
         :param rgb_output_key: The output key with which the rgb images were registered. Should be the same as the output_key of the
             RgbRenderer module. Default: colors.
+        :param label_mapping: The label mapping which should be used to label the categories based on their ids.
+                              If None, is given then the `name` field in the csv files is used or - if not existing - the category id itself is used.
         """
 
         # Create output directory
@@ -70,7 +73,7 @@ class CocoWriterUtility:
             if segcolormap_output is None:
                 raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
                                 "with 'map_by' set to 'instance' before?".format(segcolormap_output_key))
-        
+
         coco_annotations_path = os.path.join(output_dir, "coco_data/coco_annotations.json")
         # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
         if append_to_existing_output and os.path.exists(coco_annotations_path):
@@ -87,10 +90,10 @@ class CocoWriterUtility:
         segcolormaps = []
         # collect all instance segmaps (backwards compat)
         inst_segmaps = []
-        
+
         # for each rendered frame
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-            
+
             if not instance_attribute_maps:
                 # read colormappings, which include object name/class to integer mapping
                 segcolormap = []
@@ -99,17 +102,17 @@ class CocoWriterUtility:
                     for mapping in reader:
                         segcolormap.append(mapping)
                 segcolormaps.append(segcolormap)
-            
+
             if not instance_segmaps:
                 # Load segmaps (backwards compat)
                 segmap = np.load(segmentation_map_output["path"] % frame)
                 inst_channel = int(segcolormap[0]['channel_instance'])
                 inst_segmaps.append(segmap[:,:,inst_channel])
-                
+
             if colors:
                 color_rgb = colors[frame]
                 color_bgr = color_rgb[...,::-1].copy()
-                
+
                 if color_file_format=='PNG':
                     target_base_path = 'coco_data/rgb_{:04d}.png'.format(frame + image_offset)
                     target_path = os.path.join(output_dir, target_base_path)
@@ -120,24 +123,25 @@ class CocoWriterUtility:
                     cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
                 else:
                     raise('Unknown color_file_format={}. Try "PNG" or "JPEG"'.format(color_file_format))
-                
+
             else:
                 source_path = rgb_output["path"] % frame
                 target_base_path =  os.path.join('coco_data', os.path.basename(rgb_output["path"] % (frame + image_offset)))
                 target_path = os.path.join(output_dir, target_base_path)
                 shutil.copyfile(source_path, target_path)
-                
+
             new_coco_image_paths.append(target_base_path)
 
         instance_attibute_maps = segcolormaps if segcolormaps else instance_attribute_maps
         instance_segmaps = inst_segmaps if inst_segmaps else instance_segmaps
-        
-        coco_output = CocoWriterUtility.generate_coco_annotations(instance_segmaps, 
+
+        coco_output = CocoWriterUtility.generate_coco_annotations(instance_segmaps,
                                                                   instance_attibute_maps,
                                                                   new_coco_image_paths,
                                                                   supercategory,
                                                                   mask_encoding_format,
-                                                                  existing_coco_annotations)
+                                                                  existing_coco_annotations,
+                                                                  label_mapping)
 
         print("Writing coco annotations to " + coco_annotations_path)
         with open(coco_annotations_path, 'w') as fp:
@@ -145,7 +149,7 @@ class CocoWriterUtility:
 
     @staticmethod
     def generate_coco_annotations(inst_segmaps, inst_attribute_maps, image_paths, supercategory,
-                                  mask_encoding_format, existing_coco_annotations=None):
+                                  mask_encoding_format, existing_coco_annotations=None, label_mapping: LabelIdMapping = None):
         """Generates coco annotations for images
 
         :param inst_segmaps: List of instance segmentation maps
@@ -154,10 +158,13 @@ class CocoWriterUtility:
         :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset
         :param mask_encoding_format: Encoding format of the binary mask. Type: string.
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
+        :param label_mapping: The label mapping which should be used to label the categories based on their ids.
+                              If None, is given then the `name` field in the csv files is used or - if not existing - the category id itself is used.
         :return: dict containing coco annotations
         """
 
         categories = []
+        visited_categories = []
         instance_2_category_maps = []
 
         for inst_attribute_map in inst_attribute_maps:
@@ -173,11 +180,21 @@ class CocoWriterUtility:
                         inst_supercategory = inst["supercategory"]
 
                     if supercategory == inst_supercategory or supercategory == 'coco_annotations':
-                        cat_dict = {'id': int(inst["category_id"]),
-                                    'name': inst["category_id"],
-                                    'supercategory': inst_supercategory}
-                        if cat_dict not in categories:
+                        if int(inst["category_id"]) not in visited_categories:
+                            cat_dict = {}
+                            cat_dict['id'] = int(inst["category_id"])
+                            cat_dict['supercategory'] = inst_supercategory
+
+                            # Determine name of category based on label_mapping, name or category_id
+                            if label_mapping is not None:
+                                cat_dict["name"] = label_mapping.label_from_id(cat_dict['id'])
+                            elif "name" in inst:
+                                cat_dict["name"] = inst["name"]
+                            else:
+                                cat_dict["name"] = inst["category_id"]
+
                             categories.append(cat_dict)
+                            visited_categories.append(cat_dict['id'])
                         instance_2_category_map[int(inst["idx"])] = int(inst["category_id"])
             instance_2_category_maps.append(instance_2_category_map)
 
@@ -199,7 +216,7 @@ class CocoWriterUtility:
         annotations = []
 
         for inst_segmap, image_path, instance_2_category_map in zip(inst_segmaps, image_paths, instance_2_category_maps):
-            
+
             # Add coco info for image
             image_id = len(images)
             images.append(CocoWriterUtility.create_image_info(image_id, image_path, inst_segmap.shape))
