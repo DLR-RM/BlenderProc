@@ -1,12 +1,13 @@
 import mathutils
 import numpy as np
+from typing import Union
 
 from mathutils import Vector
 
 class Shell:
 
     @staticmethod
-    def sample(center: Vector, radius_min: float, radius_max: float, elevation_min: float, elevation_max: float, uniform_elevation: bool = False) -> Vector:
+    def sample(center: Union[Vector, np.ndarray, list], radius_min: float, radius_max: float, elevation_min: float, elevation_max: float, uniform_elevation: bool = False) -> np.ndarray:
         """ Samples a point from the space in between two spheres with a double spherical angle with apex in the center
             of those two spheres. Has option for uniform elevation sampling.
 
@@ -16,7 +17,7 @@ class Shell:
         .. code-block:: python
 
             sampler.Shell(
-                center=Vector([0, 0, -0.8]),
+                center=[0, 0, -0.8],
                 radius_min=1,
                 radius_max=4,
                 elevation_min=40,
@@ -78,6 +79,6 @@ class Shell:
         # Calculate the factor for the unit vector
         factor = np.random.uniform(radius_min, radius_max)
         # Get the coordinates of a sampled point inside the shell
-        position = mathutils.Vector(direction_vector * factor + center)
+        position = direction_vector * factor + center
         
         return position

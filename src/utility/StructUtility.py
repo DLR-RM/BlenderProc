@@ -33,8 +33,11 @@ class Struct:
         :return: The value of the custom property.
         """
         with KeyFrame(frame):
-            return self.blender_obj[key]
-
+            value = self.blender_obj[key]
+            if isinstance(value, (Vector, Euler, Color, Matrix, Quaternion)):
+                value = np.array(value)
+            return value
+        
     def set_cp(self, key: str, value: Any, frame: int = None):
         """ Sets the custom property with the given key.
 

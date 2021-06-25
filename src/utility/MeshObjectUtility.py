@@ -6,7 +6,7 @@ import bpy
 from external.vhacd.decompose import convex_decomposition
 from src.utility.EntityUtility import Entity
 import numpy as np
-from mathutils import Vector
+from mathutils import Vector, Matrix
 
 from src.utility.Utility import Utility
 
@@ -379,13 +379,13 @@ class MeshObject(Entity):
         """
         bm = bmesh.new()
         bm.from_mesh(self.get_mesh())
-        bm.transform(self.get_local2world_mat())
+        bm.transform(Matrix(self.get_local2world_mat()))
         bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
         bm.free()
         return bvh_tree
 
     @staticmethod
-    def create_bvh_tree_multi_objects(mesh_objects: ["MeshObject"]) -> mathutils.bvhtree.BVHTree:
+    def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils.bvhtree.BVHTree:
         """ Creates a bvh tree which contains multiple mesh objects.
 
         Such a tree is later used for fast raycasting.
@@ -400,7 +400,7 @@ class MeshObject(Entity):
             # Add object mesh to bmesh (the newly added vertices will be automatically selected)
             bm.from_mesh(obj.get_mesh())
             # Apply world matrix to all selected vertices
-            bm.transform(obj.get_local2world_mat(), filter={"SELECT"})
+            bm.transform(Matrix(obj.get_local2world_mat()), filter={"SELECT"})
             # Deselect all vertices
             for v in bm.verts:
                 v.select = False
@@ -411,7 +411,7 @@ class MeshObject(Entity):
         return bvh_tree
 
     @staticmethod
-    def compute_poi(objects: ["MeshObject"]) -> mathutils.Vector:
+    def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
         """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
         that is the closest one to the mean location of the bboxes of the selected objects.
 
@@ -429,11 +429,11 @@ class MeshObject(Entity):
         # Query point - mean of means
         mean_bb_point = np.mean(mean_bb_points, axis=0)
         # Closest point (from means) to query point (mean of means)
-        poi = mathutils.Vector(mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis=1))])
+        poi = mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis=1))]
 
         return poi
 
-    def position_is_above_object(self, position: Vector):
+    def position_is_above_object(self, position: Union[Vector, np.ndarray]):
         """ Make sure the given position is straight above the given object with no obstacles in between.
 
         :param position: The position to check.
@@ -441,8 +441,8 @@ class MeshObject(Entity):
         """
         # Send a ray straight down and check if the first hit object is the query object
         hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
-                                                                 position,
-                                                                 mathutils.Vector([0, 0, -1]))
+                                                                 Vector(position),
+                                                                 Vector([0, 0, -1]))
         return hit and hit_object == self.blender_obj
 
     def ray_cast(self, origin: Vector, direction: Vector, max_distance: float = 1.70141e+38) -> Tuple[bool, Vector, Vector, int]:

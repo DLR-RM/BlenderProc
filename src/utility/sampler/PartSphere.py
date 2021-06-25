@@ -1,4 +1,5 @@
-
+from typing import Union
+import numpy as np
 from mathutils import Vector
 
 from src.utility.sampler.Sphere import Sphere
@@ -6,7 +7,7 @@ from src.utility.sampler.Sphere import Sphere
 class PartSphere:
 
     @staticmethod
-    def sample(center: Vector, radius: float, mode: str, dist_above_center: float = 0.0, part_sphere_dir_vector: Vector = None) -> Vector:
+    def sample(center: Union[Vector, np.ndarray, list], radius: float, mode: str, dist_above_center: float = 0.0, part_sphere_dir_vector: Union[Vector, np.ndarray, list] = None) -> np.ndarray:
         """ Samples a point from the surface or from the interior of solid sphere which is split in two parts.
 
         https://math.stackexchange.com/a/87238
@@ -18,8 +19,8 @@ class PartSphere:
         .. code-block:: python
 
             PartSphere.sample(
-                center=Vector([0, 0, 0]),
-                part_sphere_vector=Vector([1, 0, 0]),
+                center=[0, 0, 0],
+                part_sphere_vector=[1, 0, 0],
                 mode="SURFACE",
                 distance_above_center=0.5
             )
@@ -43,7 +44,7 @@ class PartSphere:
         while True:
             location = Sphere.sample(center, radius, mode)
             # project the location onto the part_sphere_dir_vector and get the length
-            loc_in_sphere = location - center
+            loc_in_sphere = location - np.array(center)
             length = loc_in_sphere.dot(part_sphere_dir_vector)
             if length > dist_above_center:
                 return location

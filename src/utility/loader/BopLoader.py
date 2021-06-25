@@ -13,6 +13,8 @@ from mathutils import Matrix, Vector
 from src.utility.CameraUtility import CameraUtility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
+from src.utility.MathUtility import MathUtility
+
 
 
 class BopLoader:
@@ -173,7 +175,7 @@ class BopLoader:
         return loaded_objects
 
     @staticmethod
-    def _compute_camera_to_world_trafo(cam_H_m2w_ref: np.array, cam_H_m2c_ref: np.array, source_frame: list) -> Matrix:
+    def _compute_camera_to_world_trafo(cam_H_m2w_ref: np.array, cam_H_m2c_ref: np.array, source_frame: list) -> np.ndarray:
         """ Returns camera to world transformation in blender coords.
 
         :param cam_H_m2c_ref: (4x4) Homog trafo from object to camera coords.
@@ -189,7 +191,7 @@ class BopLoader:
         print('-----------------------------')
         
         # transform from OpenCV to blender coords
-        cam_H_c2w = Utility.transform_matrix_to_blender_coord_frame(Matrix(cam_H_c2w), source_frame)
+        cam_H_c2w = MathUtility.transform_matrix_to_blender_coord_frame(cam_H_c2w, source_frame)
  
         return cam_H_c2w
 

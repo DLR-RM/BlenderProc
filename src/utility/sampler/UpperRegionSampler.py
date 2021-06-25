@@ -1,14 +1,17 @@
 import math
 import random
+import numpy as np
 
-from mathutils import Vector
+from typing import List, Union
+from mathutils import Vector, Matrix
 
 from src.utility.MeshObjectUtility import MeshObject
 
 class UpperRegionSampler:
 
     @staticmethod
-    def sample(objects_to_sample_on: [MeshObject], face_sample_range: Vector = None, min_height: float = 0.0, max_height: float = 1.0, use_ray_trace_check: bool = False, upper_dir: Vector = None, use_upper_dir: bool = True) -> Vector:
+    def sample(objects_to_sample_on: List[MeshObject], face_sample_range: Union[Vector, np.ndarray, list] = None, min_height: float = 0.0, 
+               max_height: float = 1.0, use_ray_trace_check: bool = False, upper_dir: Union[Vector, np.ndarray, list] = None, use_upper_dir: bool = True) -> np.ndarray:
         """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
             defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
             sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
@@ -36,10 +39,10 @@ class UpperRegionSampler:
                               position is the position accepted).
         :return: Sampled value.
         """
-        if face_sample_range is None:
-            face_sample_range = Vector([0.0, 1.0])
-        if upper_dir is None:
-            upper_dir = Vector([0.0, 0.0, 1.0])
+        
+        face_sample_range = Vector([0.0, 1.0]) if face_sample_range is None else Vector(face_sample_range)
+        upper_dir = Vector([0.0, 0.0, 1.0]) if upper_dir is None else Vector(upper_dir)
+        
         upper_dir.normalize()
         if max_height < min_height:
             raise Exception("The minimum height ({}) must be smaller "
@@ -91,7 +94,7 @@ class UpperRegionSampler:
             selected_region_id = random.randint(0, len(regions) - 1)
             selected_region, obj = regions[selected_region_id], objects_to_sample_on[selected_region_id]
             if use_ray_trace_check:
-                inv_world_matrix = obj.get_local2world_mat().inverted()
+                inv_world_matrix = Matrix(obj.get_local2world_mat()).inverted()
             while True:
                 ret = selected_region.sample_point(face_sample_range)
                 dir = upper_dir if use_upper_dir else selected_region.normal()
@@ -106,7 +109,7 @@ class UpperRegionSampler:
                         break
                 else:
                     break
-            return ret
+            return np.array(ret)
         else:
             raise Exception("The amount of regions is either zero or does not match the amount of objects!")
 

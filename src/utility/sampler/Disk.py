@@ -1,11 +1,12 @@
 import mathutils
 import numpy as np
 from mathutils import Vector
+from typing import Union
 
 class Disk:
 
     @staticmethod
-    def sample(center: Vector, radius: float, rotation: Vector = None, sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> Vector:
+    def sample(center: Union[Vector, np.ndarray, list], radius: float, rotation: Union[Vector, np.ndarray, list] = None, sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> np.ndarray:
         """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
             with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
 
@@ -14,7 +15,7 @@ class Disk:
         .. code-block:: python
 
             Disk.sample(
-                center=Vector([0, 0, 4]),
+                center=[0, 0, 4],
                 radius=7,
                 sample_from="circle"
             )
@@ -24,7 +25,7 @@ class Disk:
         .. code-block:: python
 
             Disk.sample(
-                center=Vector([0, 0, 4]),
+                center=[0, 0, 4],
                 radius=7,
                 sample_from="sector",
                 start_angle=0,
@@ -76,9 +77,9 @@ class Disk:
         # get rotation
         rot_mat = mathutils.Euler(rotation, 'XYZ').to_matrix()
         # apply rotation and add center
-        location = rot_mat @ mathutils.Vector(sampled_point) + center
+        location = rot_mat @ mathutils.Vector(sampled_point) + np.array(center)
 
-        return location
+        return np.array(location)
 
     @staticmethod
     def _sample_point(magnitude: float) -> np.array:

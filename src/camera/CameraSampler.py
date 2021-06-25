@@ -1,6 +1,9 @@
 import sys
+from typing import Union, List
+import numpy as np
 
 import bpy
+from mathutils import Matrix
 
 from src.camera.CameraInterface import CameraInterface
 from src.utility.BlenderUtility import get_all_blender_mesh_objects
@@ -9,7 +12,6 @@ from src.utility.Config import Config
 from src.utility.ItemCollection import ItemCollection
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.camera.CameraValidation import CameraValidation
-from mathutils import Matrix
 
 class CameraSampler(CameraInterface):
     """
@@ -243,7 +245,7 @@ class CameraSampler(CameraInterface):
 
         print(str(all_tries) + " tries were necessary")
 
-    def sample_and_validate_cam_pose(self, config: Config, existing_poses: [Matrix]) -> bool:
+    def sample_and_validate_cam_pose(self, config: Config, existing_poses: List[Union[Matrix, np.ndarray]]) -> bool:
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
         :param config: The config object describing how to sample
@@ -264,21 +266,21 @@ class CameraSampler(CameraInterface):
         else:
             return False
 
-    def _on_new_pose_added(self, cam2world_matrix: Matrix, frame: int):
+    def _on_new_pose_added(self, cam2world_matrix: Union[Matrix, np.ndarray], frame: int):
         """
         :param cam2world_matrix: The new camera pose.
         :param frame: The frame containing the new pose.
         """
         pass
 
-    def _sample_pose(self, config) -> Matrix:
+    def _sample_pose(self, config) -> np.ndarray:
         """
         :return: The new sampled pose.
         """
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
         return cam2world_matrix
 
-    def _is_pose_valid(self, cam2world_matrix: Matrix, existing_poses: [Matrix]) -> bool:
+    def _is_pose_valid(self, cam2world_matrix: Union[Matrix, np.ndarray], existing_poses: List[Union[Matrix, np.ndarray]]) -> bool:
         """ Determines if the given pose is valid.
 
         - Checks if the distance to objects is in the configured range
