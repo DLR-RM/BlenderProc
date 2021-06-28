@@ -245,7 +245,7 @@ class CameraSampler(CameraInterface):
 
         print(str(all_tries) + " tries were necessary")
 
-    def sample_and_validate_cam_pose(self, config: Config, existing_poses: List[Union[Matrix, np.ndarray]]) -> bool:
+    def sample_and_validate_cam_pose(self, config: Config, existing_poses: List[np.ndarray]) -> bool:
         """ Samples a new camera pose, sets the parameters of the given camera object accordingly and validates it.
 
         :param config: The config object describing how to sample
@@ -266,7 +266,7 @@ class CameraSampler(CameraInterface):
         else:
             return False
 
-    def _on_new_pose_added(self, cam2world_matrix: Union[Matrix, np.ndarray], frame: int):
+    def _on_new_pose_added(self, cam2world_matrix: np.ndarray, frame: int):
         """
         :param cam2world_matrix: The new camera pose.
         :param frame: The frame containing the new pose.
@@ -280,7 +280,7 @@ class CameraSampler(CameraInterface):
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
         return cam2world_matrix
 
-    def _is_pose_valid(self, cam2world_matrix: Union[Matrix, np.ndarray], existing_poses: List[Union[Matrix, np.ndarray]]) -> bool:
+    def _is_pose_valid(self, cam2world_matrix: np.ndarray, existing_poses: List[np.ndarray]) -> bool:
         """ Determines if the given pose is valid.
 
         - Checks if the distance to objects is in the configured range
@@ -307,7 +307,7 @@ class CameraSampler(CameraInterface):
 
         if self._above_objects:
             for obj in self._above_objects:
-                if obj.position_is_above_object(cam2world_matrix.to_translation()):
+                if obj.position_is_above_object(cam2world_matrix[:3,3]):
                     return True
             return False
 
