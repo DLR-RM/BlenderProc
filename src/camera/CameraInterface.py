@@ -277,7 +277,7 @@ class CameraInterface(Module):
                 rotation_matrix = CameraUtility.rotation_from_forward_vec(value)
             elif rotation_format == "look_at":
                 # Convert forward vector to euler angle (Assume Up = Z)
-                rotation_matrix = CameraUtility.rotation_from_forward_vec((value - position).normalized())
+                rotation_matrix = CameraUtility.rotation_from_forward_vec(value - position)
             else:
                 raise Exception("No such rotation format:" + str(rotation_format))
 
