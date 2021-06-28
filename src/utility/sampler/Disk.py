@@ -77,9 +77,9 @@ class Disk:
         # get rotation
         rot_mat = mathutils.Euler(rotation, 'XYZ').to_matrix()
         # apply rotation and add center
-        location = rot_mat @ mathutils.Vector(sampled_point) + np.array(center)
+        location = np.array(rot_mat) @ sampled_point + np.array(center)
 
-        return np.array(location)
+        return location
 
     @staticmethod
     def _sample_point(magnitude: float) -> np.array:
