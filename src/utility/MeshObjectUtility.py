@@ -168,14 +168,14 @@ class MeshObject(Entity):
         self.deselect()
         bpy.context.view_layer.update()
 
-    def get_bound_box(self, local_coords=False):
+    def get_bound_box(self, local_coords: bool = False) -> np.ndarray:
         """
-        :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
+        :return: 8x3 array describing the object aligned bounding box coordinates in world coordinates
         """
         if not local_coords:
-            return [self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box]
+            return np.array([self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box])
         else:
-            return [Vector(cord) for cord in self.blender_obj.bound_box]
+            return np.array([Vector(cord) for cord in self.blender_obj.bound_box])
 
     def persist_transformation_into_mesh(self, location: bool = True, rotation: bool = True, scale: bool = True):
         """
@@ -188,14 +188,14 @@ class MeshObject(Entity):
         """
         bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location, rotation=rotation, scale=scale)
 
-    def get_origin(self) -> Vector:
+    def get_origin(self) -> np.ndarray:
         """ Returns the origin of the object.
 
         :return: The origin in world coordinates.
         """
-        return self.blender_obj.location.copy()
+        return np.array(self.blender_obj.location.copy())
 
-    def set_origin(self, point: Union[list, Vector] = None, mode: str = "POINT") -> Vector:
+    def set_origin(self, point: Union[list, np.ndarray, Vector] = None, mode: str = "POINT") -> np.ndarray:
         """ Sets the origin of the object.
 
         This will not change the appearing pose of the object, as the vertex locations experience the inverse transformation applied to the origin.
@@ -314,7 +314,7 @@ class MeshObject(Entity):
         min_point, max_point = bb[0], None
         max_dist = -1
         for point in bb:
-            dist = (point - min_point).length
+            dist = np.linalg.norm(point - min_point)
             if dist > max_dist:
                 max_point = point
                 max_dist = dist
@@ -445,7 +445,7 @@ class MeshObject(Entity):
                                                                  Vector([0, 0, -1]))
         return hit and hit_object == self.blender_obj
 
-    def ray_cast(self, origin: Vector, direction: Vector, max_distance: float = 1.70141e+38) -> Tuple[bool, Vector, Vector, int]:
+    def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
         :param origin: Origin of the ray, in object space.
         :param direction: Direction of the ray, in object space.
@@ -455,4 +455,5 @@ class MeshObject(Entity):
                  The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
                  The face index, -1 when original data isn’t available, int in [-inf, inf]
         """
-        return self.blender_obj.ray_cast(origin, direction, max_distance)
+        result, location, normal, index = self.blender_obj.ray_cast(Vector(origin), Vector(direction), max_distance)
+        return (result, np.array(location), np.array(normal), index)

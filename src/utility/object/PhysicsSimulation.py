@@ -51,7 +51,7 @@ class PhysicsSimulation:
                 R_obj_after = mathutils.Euler(obj_poses_after_sim[obj.get_name()]['rotation']).to_matrix()
                 R_obj_rel = R_obj_before_sim @ R_obj_after.transposed()
                 # Apply relative rotation to origin shift
-                origin_shift = R_obj_rel.transposed() @ origin_shifts[obj.get_name()]
+                origin_shift = R_obj_rel.transposed() @ mathutils.Vector(origin_shifts[obj.get_name()])
 
                 # Fix pose of object to the one it had at the end of the simulation
                 obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
