@@ -1,6 +1,8 @@
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
+import argparse
+
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader
@@ -11,7 +13,6 @@ from src.utility.MathUtility import MathUtility
 from src.utility.RendererUtility import RendererUtility
 from src.utility.PostProcessingUtility import PostProcessingUtility
 
-import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file, should be examples/basic/camera_positions")

@@ -1,80 +1,100 @@
 id,name
 0,void
-1,single bed
-2,customizedplatform
-3,tv stand
-4,barstool
-5,hole
-6,door
-7,coffee table
-8,cabinet
-9,customizedceiling
-10,shelf
-11,smartcustomizedceiling
-12,wine cabinet
-12,wine cooler
-13,wallinner
-14,sideboard / side cabinet / console table
-14,sideboard / side cabinet / console
-15,dressing table
-16,wardrobe
-17,ceiling lamp
-18,wallbottom
-19,customizedpersonalizedmodel
-20,lazy sofa
-21,chaise longue sofa
-22,wallouter
-23,dressing chair
-24,window
-25,column
-26,cornice
-27,bunk bed
-28,lounge chair / cafe chair / office chair
-28,lounge chair / book-chair / computer chair
-29,footstool / sofastool / bed end stool / stool
-30,three-seat / multi-seat sofa
-30,three-seat / multi-person sofa
-31,drawer chest / corner cabinet
-32,walltop
-33,armchair
-34,nightstand
-35,loveseat sofa
-36,children cabinet
-37,pocket
-38,ceiling
-39,dining table
-40,kids bed
-41,bookcase / jewelry armoire
-42,sewerpipe
-43,baywindow
-44,l-shaped sofa
-45,floor
-46,classic chinese chair
-47,dining chair
-48,king-size bed
-49,corner/side table
-50,round end table
-51,customizedbackgroundmodel
-52,customizedfixedfurniture
-53,flue
-54,customizedfurniture
-55,beam
-56,desk
-57,pendant lamp
-58,bed frame
-59,customizedfeaturewall
-60,baseboard
-61,slabside
-62,slabtop
-63,clipmesh
-64,front
-65,customized_wainscot
-66,cabinet/lightband
-67,extrusioncustomizedceilingmodel
-68,lightband
-69,slabbottom
-70,back
-71,extrusioncustomizedbackgroundwall
-72,two-seat sofa
-73,tea table
-74,double bed
+1,smartcustomizedceiling
+2,cabinet/lightband
+3,tea table
+4,cornice
+5,sewerpipe
+6,children cabinet
+7,hole
+8,ceiling lamp
+9,chaise longue sofa
+10,lazy sofa
+11,appliance
+12,round end table
+13,build element
+14,dining chair
+15,others
+16,armchair
+17,bed
+18,two-seat sofa
+19,lighting
+20,kids bed
+21,pocket
+22,storage unit
+23,media unit
+24,slabside
+25,footstool / sofastool / bed end stool / stool
+26,300 - on top of others
+27,customizedplatform
+28,sideboard / side cabinet / console
+29,plants
+30,ceiling
+31,slabtop
+32,pendant lamp
+33,lightband
+34,electric
+35,pier/stool
+36,table
+37,extrusioncustomizedceilingmodel
+38,baseboard
+39,front
+40,wallinner
+41,basin
+42,bath
+43,customizedpersonalizedmodel
+44,baywindow
+45,customizedfurniture
+46,sofa
+47,kitchen cabinet
+48,cabinet
+49,walltop
+50,chair
+51,floor
+52,customizedceiling
+53,500 - attach to ceiling
+54,customizedbackgroundmodel
+55,drawer chest / corner cabinet
+56,tv stand
+57,400 - attach to wall
+58,window
+59,art
+60,back
+61,accessory
+62,200 - on the floor
+63,beam
+64,stair
+65,wine cooler
+66,outdoor furniture
+67,double bed
+68,dining table
+69,cabinet/shelf/desk
+70,single bed
+71,classic chinese chair
+72,corner/side table
+73,flue
+74,shelf
+75,customizedfeaturewall
+76,nightstand
+77,recreation
+78,lounge chair / book-chair / computer chair
+79,slabbottom
+80,dressing table
+81,desk
+82,column
+83,dressing chair
+84,wardrobe
+85,extrusioncustomizedbackgroundwall
+86,electronics
+87,bunk bed
+88,bed frame
+89,three-seat / multi-person sofa
+90,customizedfixedfurniture
+91,bookcase / jewelry armoire
+92,mirror
+93,wallbottom
+94,barstool
+95,wallouter
+96,l-shaped sofa
+97,customized_wainscot
+98,door

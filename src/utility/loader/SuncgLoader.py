@@ -19,7 +19,7 @@ from typing import Tuple
 class SuncgLoader:
 
     @staticmethod
-    def load(house_path: str, suncg_dir: str = None) -> List[MeshObject]:
+    def load(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = None) -> List[MeshObject]:
         """ Loads a house.json file into blender.
 
         - Loads all objects files specified in the house.json file.
@@ -42,7 +42,7 @@ class SuncgLoader:
         with open(Utility.resolve_path(house_path), "r") as f:
             config = json.load(f)
 
-        object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(os.path.join('resources','suncg','Better_labeling_for_NYU.csv'))
+        object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(os.path.join('resources', 'suncg', 'Better_labeling_for_NYU.csv'))
 
         house_id = config["id"]
         loaded_objects = []
@@ -76,7 +76,7 @@ class SuncgLoader:
                     if node["modelId"] in object_fine_grained_label_map:
                         metadata["fine_grained_class"] = object_fine_grained_label_map[node["modelId"]]
                         metadata["coarse_grained_class"] = object_coarse_grained_label_map[node["modelId"]]
-                        metadata["category_id"] = SuncgLoader._get_label_id(node["modelId"], object_label_map)
+                        metadata["category_id"] = label_mapping.id_from_label(object_label_map[node["modelId"]])
 
                 if "bbox" in node:
                     metadata["bbox"] = SuncgLoader._correct_bbox_frame(node["bbox"])
@@ -101,13 +101,13 @@ class SuncgLoader:
                     parent = level_obj
 
                 if node["type"] == "Room":
-                    loaded_objects += SuncgLoader._load_room(node, metadata, material_adjustments, transform, house_id, level_obj, room_per_object)
+                    loaded_objects += SuncgLoader._load_room(node, metadata, material_adjustments, transform, house_id, level_obj, room_per_object, label_mapping)
                 elif node["type"] == "Ground":
-                    loaded_objects += SuncgLoader._load_ground(node, metadata, material_adjustments, transform, house_id, parent)
+                    loaded_objects += SuncgLoader._load_ground(node, metadata, material_adjustments, transform, house_id, parent, label_mapping)
                 elif node["type"] == "Object":
                     loaded_objects += SuncgLoader._load_object(node, metadata, material_adjustments, transform, parent)
                 elif node["type"] == "Box":
-                    loaded_objects += SuncgLoader._load_box(node, material_adjustments, transform, parent)
+                    loaded_objects += SuncgLoader._load_box(node, material_adjustments, transform, parent, label_mapping)
         SuncgLoader._rename_materials()
         return loaded_objects
 
@@ -127,7 +127,7 @@ class SuncgLoader:
                     material.name = textures[0].image.name
 
     @staticmethod
-    def _load_room(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: MeshObject, room_per_object: dict) -> List[MeshObject]:
+    def _load_room(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: MeshObject, room_per_object: dict, label_mapping: LabelIdMapping) -> List[MeshObject]:
         """ Load the room specified in the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -154,26 +154,26 @@ class SuncgLoader:
 
         if "hideFloor" not in node or node["hideFloor"] != 1:
             metadata["type"] = "Floor"
-            metadata["category_id"] = LabelIdMapping.label_id_map["floor"]
+            metadata["category_id"] = label_mapping.id_from_label("floor")
             metadata["fine_grained_class"] = "floor"
             loaded_objects += SuncgLoader._load_obj(os.path.join(SuncgLoader._suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, room_obj)
 
         if "hideCeiling" not in node or node["hideCeiling"] != 1:
             metadata["type"] = "Ceiling"
-            metadata["category_id"] = LabelIdMapping.label_id_map["ceiling"]
+            metadata["category_id"] = label_mapping.id_from_label("ceiling")
             metadata["fine_grained_class"] = "ceiling"
             loaded_objects += SuncgLoader._load_obj(os.path.join(SuncgLoader._suncg_dir, "room", house_id, node["modelId"] + "c.obj"), metadata, material_adjustments, transform, room_obj)
 
         if "hideWalls" not in node or node["hideWalls"] != 1:
             metadata["type"] = "Wall"
-            metadata["category_id"] = LabelIdMapping.label_id_map["wall"]
+            metadata["category_id"] = label_mapping.id_from_label("wall")
             metadata["fine_grained_class"] = "wall"
             loaded_objects += SuncgLoader._load_obj(os.path.join(SuncgLoader._suncg_dir, "room", house_id, node["modelId"] + "w.obj"), metadata, material_adjustments, transform, room_obj)
 
         return loaded_objects
 
     @staticmethod
-    def _load_ground(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: MeshObject) -> List[MeshObject]:
+    def _load_ground(node: dict, metadata: dict, material_adjustments: list, transform: Matrix, house_id: str, parent: MeshObject, label_mapping: LabelIdMapping) -> List[MeshObject]:
         """ Load the ground specified in the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -185,7 +185,7 @@ class SuncgLoader:
         :return: The list of loaded mesh objects.
         """
         metadata["type"] = "Ground"
-        metadata["category_id"] = LabelIdMapping.label_id_map["floor"]
+        metadata["category_id"] = label_mapping.id_from_label("floor")
         metadata["fine_grained_class"] = "ground"
         return SuncgLoader._load_obj(os.path.join(SuncgLoader._suncg_dir, "room", house_id, node["modelId"] + "f.obj"), metadata, material_adjustments, transform, parent)
 
@@ -218,7 +218,7 @@ class SuncgLoader:
         }
 
     @staticmethod
-    def _load_box(node: dict, material_adjustments: list, transform: Matrix, parent: MeshObject) -> List[MeshObject]:
+    def _load_box(node: dict, material_adjustments: list, transform: Matrix, parent: MeshObject, label_mapping: LabelIdMapping) -> List[MeshObject]:
         """ Creates a cube inside blender which follows the specifications of the given node.
 
         :param node: The node dict which contains information from house.json..
@@ -243,7 +243,7 @@ class SuncgLoader:
 
         SuncgLoader._transform_and_colorize_object(box, material_adjustments, transform, parent)
         # set class to void
-        box.set_cp("category_id", LabelIdMapping.label_id_map["void"])
+        box.set_cp("category_id", label_mapping.id_from_label("void"))
         # Rotate cube to match objects loaded from .obj, has to be done after transformations have been applied
         box.set_local2world_mat(Matrix.Rotation(math.radians(90), 4, "X") @ Matrix(box.get_local2world_mat()))
 
@@ -417,16 +417,5 @@ class SuncgLoader:
                 object_label_map[row["model_id"]] = row["nyuv2_40class"]
                 object_fine_grained_label_map[row["model_id"]] = row["fine_grained_class"]
                 object_coarse_grained_label_map[row["model_id"]] = row["coarse_grained_class"]
-        
-        # Use the void category as label for the world background
-        bpy.context.scene.world["category_id"] = LabelIdMapping.label_id_map["void"]
+
         return object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map
-
-    @staticmethod
-    def _get_label_id(obj_id: str, object_label_map: dict) -> int:
-        """ Returns the label id for an object with the given model_id.
-
-        :param obj_id: The model_id of the object.
-        :return: The corresponding label index.
-        """
-        return LabelIdMapping.label_id_map[object_label_map[obj_id]]

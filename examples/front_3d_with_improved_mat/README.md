@@ -14,7 +14,7 @@ It is also necessary to download the textures from cc_textures, we provide a scr
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} resources/cctextures examples/front_3d_with_improved_mat/output  
+python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} resources/cctextures examples/front_3d_with_improved_mat/output  
 ```
 
 * `examples/front_3d_with_improved_mat/config.yaml`: path to the configuration file with pipeline configuration.
@@ -22,6 +22,7 @@ python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
+* `PATH_TO_3D-Front-texture`: path to the folder where all 3D-Front textures are stored 
 * `resources/cctextures`: path to the cc texture folder
 * `examples/front_3d_with_improved_mat/output`: path to the output directory
 
