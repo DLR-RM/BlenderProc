@@ -144,10 +144,17 @@ class SetupUtility:
             # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
             if not already_installed or reinstall_packages:
                 print("Installing pip package {} {}".format(package_name, package_version))
+                extra_args = []
+                # Set find link flag, if required
                 if find_link:
-                    subprocess.Popen([python_bin, "-m", "pip", "install", package_name+"=="+package_version, "-f", find_link, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
-                else:
-                    subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                    extra_args.extend(["-f", find_link])
+                    package = package_name + "==" + package_version
+                # If the env var is set, disable pip cache
+                if os.getenv("BLENDER_PROC_NO_PIP_CACHE", 'False').lower() in ('true', '1', 't'):
+                    extra_args.append("--no-cache-dir")
+
+                # Run pip install
+                subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                 SetupUtility.installed_packages[package_name] = package_version
                 packages_were_installed = True
 
