@@ -10,8 +10,8 @@ from src.utility.MeshObjectUtility import MeshObject
 class UpperRegionSampler:
 
     @staticmethod
-    def sample(objects_to_sample_on: List[MeshObject], face_sample_range: Union[Vector, np.ndarray, list] = None, min_height: float = 0.0, 
-               max_height: float = 1.0, use_ray_trace_check: bool = False, upper_dir: Union[Vector, np.ndarray, list] = None, use_upper_dir: bool = True) -> np.ndarray:
+    def sample(objects_to_sample_on: List[MeshObject], face_sample_range: Union[Vector, np.ndarray, list] = [0.0, 1.0], min_height: float = 0.0, 
+               max_height: float = 1.0, use_ray_trace_check: bool = False, upper_dir: Union[Vector, np.ndarray, list] = [0.0, 0.0, 1.0], use_upper_dir: bool = True) -> np.ndarray:
         """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
             defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
             sampling volume results in a parallelepiped. "min_height" and "max_height" define the sampling distance from the face.
@@ -40,17 +40,17 @@ class UpperRegionSampler:
         :return: Sampled value.
         """
         
-        face_sample_range = Vector([0.0, 1.0]) if face_sample_range is None else Vector(face_sample_range)
-        upper_dir = Vector([0.0, 0.0, 1.0]) if upper_dir is None else Vector(upper_dir)
+        face_sample_range = np.array(face_sample_range)
+        upper_dir = np.array(upper_dir)
+        upper_dir /= np.linalg.norm(upper_dir)
         
-        upper_dir.normalize()
         if max_height < min_height:
             raise Exception("The minimum height ({}) must be smaller "
                             "than the maximum height ({})!".format(min_height, max_height))
 
         regions = []
 
-        def calc_vec_and_normals(face):
+        def calc_vec_and_normals(face: np.ndarray) -> np.ndarray:
             """ Calculates the two vectors, which lie in the plane of the face and the normal of the face.
 
             :param face: Four corner coordinates of a face. Type: [4x[3xfloat]].
@@ -58,8 +58,8 @@ class UpperRegionSampler:
             """
             vec1 = face[1] - face[0]
             vec2 = face[3] - face[0]
-            normal = vec1.cross(vec2)
-            normal.normalize()
+            normal = np.cross(vec1, vec2)
+            normal = normal/np.linalg.norm(normal)
             return (vec1, vec2), normal
 
         # determine for each object in objects the region, where to sample on
@@ -85,7 +85,7 @@ class UpperRegionSampler:
             # save the selected face values
             if selected_face is not None:
                 vectors, normal = calc_vec_and_normals(selected_face)
-                base_point = Vector(selected_face[0])
+                base_point = selected_face[0]
                 regions.append(Region2D(vectors, normal, base_point))
             else:
                 raise Exception("Couldn't find a face, for this obj: {}".format(obj.get_name()))
@@ -94,7 +94,7 @@ class UpperRegionSampler:
             selected_region_id = random.randint(0, len(regions) - 1)
             selected_region, obj = regions[selected_region_id], objects_to_sample_on[selected_region_id]
             if use_ray_trace_check:
-                inv_world_matrix = Matrix(obj.get_local2world_mat()).inverted()
+                inv_world_matrix = np.linalg.inv(obj.get_local2world_mat())
             while True:
                 ret = selected_region.sample_point(face_sample_range)
                 dir = upper_dir if use_upper_dir else selected_region.normal()
@@ -118,12 +118,12 @@ class Region2D(object):
     """ Helper class for UpperRegionSampler: Defines a 2D region in 3D.
     """
 
-    def __init__(self, vectors, normal, base_point):
+    def __init__(self, vectors: np.ndarray, normal: np.ndarray, base_point: np.ndarray):
         self._vectors = vectors  # the two vectors which lie in the selected face
         self._normal = normal  # the normal of the selected face
         self._base_point = base_point  # the base point of the selected face
 
-    def sample_point(self, face_sample_range):
+    def sample_point(self, face_sample_range: np.ndarray) -> np.ndarray:
         """
         Samples a point in the 2D Region
 
