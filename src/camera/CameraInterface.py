@@ -283,7 +283,7 @@ class CameraInterface(Module):
 
             if rotation_format == "look_at" or rotation_format == "forward_vec":
                 inplane_rot = config.get_float("rotation/inplane_rot", 0.0)
-                rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
+                rotation_matrix = np.matmul(rotation_matrix, Euler((0.0, 0.0, inplane_rot)).to_matrix())
 
             cam2world_matrix = MathUtility.build_transformation_mat(position, rotation_matrix)
         else: 
