@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 from typing import List, Union
-from mathutils import Vector, Matrix
+from mathutils import Vector
 
 from src.utility.MeshObjectUtility import MeshObject
 

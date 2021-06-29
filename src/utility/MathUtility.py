@@ -68,7 +68,7 @@ class MathUtility:
         return output
 
     @staticmethod
-    def build_transformation_mat(translation: Union[np.ndarray, Vector], rotation: Union[np.ndarray, Matrix]) -> np.ndarray:
+    def build_transformation_mat(translation: Union[np.ndarray, list, Vector], rotation: Union[np.ndarray, List[list], Matrix]) -> np.ndarray:
         """ Build a transformation matrix from translation and rotation parts.
 
         :param translation: A (3,) vector representing the translation part.
@@ -81,9 +81,13 @@ class MathUtility:
         mat = np.eye(4)
         if translation.shape[0] == 3:
             mat[:3, 3] = translation
+        else:
+            raise Exception("translation has invalid shape: {}. Must be (3,) or (3,1) vector.".format(translation.shape))
         if rotation.shape == (3,3):
             mat[:3,:3] = rotation
         elif rotation.shape[0] == 3:
             mat[:3,:3] = np.array(Euler(rotation).to_matrix())
+        else:
+            raise Exception("rotation has invalid shape: {}. Must be rotation matrix of shape (3,3) or Euler angles of shape (3,) or (3,1).".format(rotation.shape))
         
         return mat
