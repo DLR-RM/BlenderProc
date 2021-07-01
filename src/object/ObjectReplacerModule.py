@@ -62,7 +62,7 @@ class ObjectReplacerModule(Module):
         if self.config.has_param("relative_rotation_sampler"):
             def relative_pose_sampler(obj):
                 # Sample random rotation and apply it to the objects pose
-                obj.set_rotation(Euler(obj.get_rotation()).rotate(Euler(self.config.get_list("relative_rotation_sampler"))))
+                obj.set_rotation_euler(Euler(obj.get_rotation()).rotate(Euler(self.config.get_list("relative_rotation_sampler"))))
         else:
             relative_pose_sampler = None
 
