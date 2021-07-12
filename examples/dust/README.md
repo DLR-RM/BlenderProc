@@ -1,4 +1,4 @@
-# Haven 
+# How to apply dust to objects 
 <p align="center">
 <img src="rendered_example.jpg" alt="normals and color rendering of example table" width=300>
 </p>
@@ -13,10 +13,10 @@ Make sure that you have downloaded the haven dataset first, see the [haven examp
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/haven_dataset/config.yaml resources/haven/models/ArmChair_01/ArmChair_01.blend resources/haven examples/haven_dataset/output
+python run.py examples/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01.blend resources/haven examples/haven_dataset/output
 ``` 
 
-* `examples/haven_dataset/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/dust/config.yaml`: path to the configuration file with pipeline configuration.
 * `resources/haven/models/ArmChair_01/ArmChair_01.blend`:  Path to the blend file, from the haven dataset, browse the model folder, for all possible options
 * `resources/haven`: The folder where the `hdri` folder can be found, to load an world environment
 * `examples/haven_dataset/output`: path to the output directory.

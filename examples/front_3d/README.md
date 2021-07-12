@@ -16,9 +16,10 @@ However, we will give you a step by step explanation on how to get access.
 
 1. Visit the following webiste and download the "3D-FRONT Terms of Use" as a pdf: `https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset`
 2. Write an E-Mail to `3dfront@list.alibaba-inc.com` with the content shown below and **attach the Terms of Use pdf**: 
-3. They will reply with two links one for the house, which is referred to as the 3D-Front dataset and a link to the furniture, which is called 3D-Future. Download both and save them in a folder.
-4. Unzip both files, which should give you two folders one for the houses (3D-FRONT) and one for the furniture (3D-FUTURE-model). So far we have no use for the `categories.py` and the `model_info.json`.
-5. Inside the 3D-FRONT folder you will find the json files, where each file represent its own house/flat. The 3D-FUTURE-model path only has to be passed as second argument, the objects will be automatically selected.
+3. They will reply with three links one for the house, which is referred to as the 3D-Front dataset and a link to the furniture, which is called 3D-Future and lastly one for the 3D-Front-textures. Download all of them and save them in a folder.
+4. Unzip all files, which should give you three folders one for the houses (3D-FRONT) and one for the furniture (3D-FUTURE-model) and one for the textures. So far we have no use for the `categories.py` and the `model_info.json`.
+5. Inside the 3D-FRONT folder you will find the json files, where each file represent its own house/flat. The 3D-FUTURE-model path only has to be passed as second argument, the objects will be automatically selected, same for the 3D-front-texture path.
+
 
 ```text
 Dear 3D Future Team,
@@ -37,7 +38,7 @@ Best regards,
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} examples/front_3d/output 
+python run.py examples/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} examples/front_3d/output 
 ```
 
 * `examples/front_3d/config.yaml`: path to the configuration file with pipeline configuration.
@@ -45,6 +46,7 @@ python run.py examples/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_T
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
+* `PATH_TO_3D-Front-texture`: path to the folder where all 3D-Front textures are stored 
 * `examples/front_3d/output`: path to the output directory
 
 ## Visualization
@@ -74,13 +76,14 @@ python scripts/visHdf5Files.py examples/front_3d/output/0.hdf5
   "module": "loader.Front3DLoader",
   "config": {
     "json_path": "<args:0>",
-    "3D_future_model_path": "<args:1>"
+    "3D_future_model_path": "<args:1>",
+    "3D_front_texture_path": "<args:2>"
   }
 }
 ```
 
 * This module imports an 3D-Front.json file into the scene.
-* It also needs the path to the `3D-FUTURE-model`
+* It also needs the path to the `3D-FUTURE-model` and to the `3D-Front-texture`
 * It is also possible to set the strength of the lights here, check the top of the Front3DLoader for more information.
 
 #### Front3DCameraSampler 
