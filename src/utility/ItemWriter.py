@@ -3,29 +3,34 @@ from mathutils import Vector, Euler
 import bpy
 import json
 
+from src.utility.MathUtility import MathUtility
+
+
 class ItemWriter:
 
     def __init__(self, get_item_attribute_func):
         self.get_item_attribute_func = get_item_attribute_func
 
-    def write_items_to_file(self, path_prefix, items, attributes):
+    def write_items_to_file(self, path_prefix, items, attributes, destination_frame):
         """ Writes the state of the given items to one numpy file per frame.
 
         :param path_prefix: The prefix path to write the files to.
         :param items: A list of items.
         :param attributes: A list of attributes to write per item.
+        :param destination_frame: Used to transform points to the blender coordinate frame.
         """
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
             bpy.context.scene.frame_set(frame)
-            self._write_items_to_file_for_current_frame(path_prefix, items, attributes, frame)
+            self._write_items_to_file_for_current_frame(path_prefix, items, attributes, frame, destination_frame)
 
-    def _write_items_to_file_for_current_frame(self, path_prefix, items, attributes, frame=None):
+    def _write_items_to_file_for_current_frame(self, path_prefix, items, attributes, frame, destination_frame):
         """ Writes the state of the given items to one numpy file for the given frame.
 
         :param path_prefix: The prefix path to write the files to.
         :param items: A list of items.
         :param attributes: A list of attributes to write per item.
         :param frame: The frame number.
+        :param destination_frame: Used to transform points to the blender coordinate frame.
         """
         value_list = []
         # Go over all items
@@ -34,11 +39,14 @@ class ItemWriter:
             # Go through all attributes
             for attribute in attributes:
                 # Get the attribute value
-                value = self.get_item_attribute_func(item, attribute)
+                value = self.get_item_attribute_func(item, attribute, destination_frame)
 
                 # If its a list of numbers, just add to the array, else just add one value
                 if isinstance(value, Vector) or isinstance(value, Euler):
                     value = list(value)
+
+                if isinstance(value, list) and len(value) == 3:
+                    MathUtility.transform_point_to_blender_coord_frame(value, destination_frame)
 
                 value_list_per_item[attribute] = value
 

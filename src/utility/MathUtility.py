@@ -49,6 +49,41 @@ class MathUtility:
             return output
 
     @staticmethod
+    def transform_matrix_to_blender_coord_frame(matrix: Matrix, source_frame: list) -> Matrix:
+        """ Transforms the given homog into the blender coordinate frame.
+
+        :param matrix: The matrix to convert in form of a mathutils.Matrix.
+        :param source_frame: An array containing three elements, describing the axes of the coordinate frame of the \
+                               source frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
+        :return: The converted point is in form of a mathutils.Matrix.
+        """
+        assert len(source_frame) == 3, "The specified coordinate frame has more or less than tree axes: {}".format(source_frame)
+        matrix = np.array(matrix)
+
+        # Build transformation matrix that maps the given matrix to the specified coordinate frame.
+        tmat = np.zeros((4, 4))
+        for i, axis in enumerate(source_frame):
+            axis = axis.upper()
+
+            if axis.endswith("X"):
+                tmat[i, 0] = 1
+            elif axis.endswith("Y"):
+                tmat[i, 1] = 1
+            elif axis.endswith("Z"):
+                tmat[i, 2] = 1
+            else:
+                raise Exception("Invalid axis: " + axis)
+
+            if axis.startswith("-"):
+                tmat[i] *= -1
+        tmat[3, 3] = 1
+
+        # Apply transformation matrix
+        output = np.matmul(tmat, matrix)
+        output = Matrix(output)
+        return output
+
+    @staticmethod
     def build_transformation_mat(translation: Vector, rotation: Matrix) -> Matrix:
         """ Build a transformation matrix from translation and rotation parts.
 

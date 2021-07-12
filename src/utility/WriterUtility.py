@@ -146,7 +146,7 @@ class WriterUtility:
             return MathUtility.transform_point_to_blender_coord_frame(up, destination_frame)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = Utility.transform_matrix_to_blender_coord_frame(item.matrix_world, destination_frame)
+            matrix_world = MathUtility.transform_matrix_to_blender_coord_frame(item.matrix_world, destination_frame)
             return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]
@@ -192,24 +192,26 @@ class WriterUtility:
                 return WriterUtility.get_common_attribute(cam_ob, attribute_name, destination_frame)
 
     @staticmethod
-    def get_light_attribute(light: bpy.types.Light, attribute_name: str) -> Any:
+    def get_light_attribute(light: bpy.types.Light, attribute_name: str, destination_frame: Union[List[str], None] = None) -> Any:
         """ Returns the value of the requested attribute for the given light.
 
         :param light: The light. Type: blender scene object of type light.
         :param attribute_name: The attribute name.
+        :param destination_frame: Used to transform points to the blender coordinate frame.
         :return: The attribute value.
         """
         if attribute_name == "energy":
             return light.data.energy
         else:
-            return WriterUtility.get_common_attribute(light, attribute_name)
+            return WriterUtility.get_common_attribute(light, attribute_name, destination_frame)
 
     @staticmethod
-    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str):
+    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str, destination_frame: Union[List[str], None] = None):
         """ Returns the value of the requested attribute for the given object.
 
         :param shapenet_obj: The ShapeNet object.
         :param attribute_name: The attribute name.
+        :param destination_frame: Used to transform points to the blender coordinate frame.
         :return: The attribute value.
         """
 
@@ -218,7 +220,7 @@ class WriterUtility:
         elif attribute_name == "used_source_id":
             return shapenet_obj.get("used_source_id", "")
         else:
-            return WriterUtility.get_common_attribute(shapenet_obj, attribute_name)
+            return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, destination_frame)
 
     @staticmethod
     def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[np.ndarray]],

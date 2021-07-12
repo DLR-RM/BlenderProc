@@ -70,7 +70,7 @@ class WriterInterface(Module):
 
         file_prefix = self.config.get_string("output_file_prefix", default_file_prefix)
         path_prefix = os.path.join(self._determine_output_dir(), file_prefix)
-        item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes))
+        item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes), self.destination_frame)
         Utility.register_output(self._determine_output_dir(), file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
             
     def _apply_postprocessing(self, output_key, data, version):
