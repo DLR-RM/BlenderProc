@@ -13,7 +13,7 @@ Make sure that you have downloaded the haven dataset first, see the [haven examp
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01.blend resources/haven examples/haven_dataset/output
+python run.py examples/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/haven_dataset/output
 ``` 
 
 * `examples/dust/config.yaml`: path to the configuration file with pipeline configuration.
