@@ -507,7 +507,8 @@ class MaterialManipulator(Module):
         :param value: Value to set.
         """
         principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
-        shader_input_key_copy = shader_input_key.replace("_", " ").title()
+        shader_input_key_copy =  shader_input_key.replace("_", " ").upper() if shader_input_key.replace("_", " ").title() == "Ior" else shader_input_key.replace("_", " ").title()
+
         if principled_bsdf.inputs[shader_input_key_copy].links:
             material.links.remove(principled_bsdf.inputs[shader_input_key_copy].links[0])
         if shader_input_key_copy in principled_bsdf.inputs:
