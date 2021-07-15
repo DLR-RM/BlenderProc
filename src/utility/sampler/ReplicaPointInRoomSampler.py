@@ -1,6 +1,7 @@
 import ast
 import os
 import random
+import numpy as np
 
 import bpy
 
@@ -29,7 +30,7 @@ class ReplicaPointInRoomSampler:
         with open(height_list_file_path) as file:
             self.floor_height_values = [float(val) for val in ast.literal_eval(file.read())]
 
-    def sample(self, height: float, max_tries: int = 1000) -> Vector:
+    def sample(self, height: float, max_tries: int = 1000) -> np.ndarray:
         """ Samples a point inside one of the loaded replica rooms.
 
         The points are uniformly sampled along x/y over all rooms.
@@ -42,7 +43,7 @@ class ReplicaPointInRoomSampler:
         for _ in range(max_tries):
 
             # Sample uniformly inside bounding box
-            point = Vector([
+            point = np.array([
                 random.uniform(self.bounding_box["min"][0], self.bounding_box["max"][0]),
                 random.uniform(self.bounding_box["min"][1], self.bounding_box["max"][1]),
                 self.floor_height_values[random.randrange(0, len(self.floor_height_values))] + height

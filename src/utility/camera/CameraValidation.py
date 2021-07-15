@@ -5,7 +5,8 @@ import bpy
 import sys
 import numpy as np
 import mathutils
-from mathutils import Matrix, Vector
+from mathutils import Matrix
+from typing import Union, List
 
 from src.utility.MeshObjectUtility import MeshObject
 
@@ -13,7 +14,7 @@ from src.utility.MeshObjectUtility import MeshObject
 class CameraValidation:
 
     @staticmethod
-    def perform_obstacle_in_view_check(cam2world_matrix: Matrix, proximity_checks: dict, bvh_tree: mathutils.bvhtree.BVHTree, sqrt_number_of_rays: int = 10) -> bool:
+    def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], proximity_checks: dict, bvh_tree: mathutils.bvhtree.BVHTree, sqrt_number_of_rays: int = 10) -> bool:
         """ Check if there are obstacles in front of the camera which are too far or too close based on the given proximity_checks.
 
         :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
@@ -28,6 +29,8 @@ class CameraValidation:
         if not proximity_checks:  # if no checks are in the settings all positions are accepted
             return True
 
+        cam2world_matrix = Matrix(cam2world_matrix)
+        
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
         # Get position of the corners of the near plane
@@ -116,7 +119,7 @@ class CameraValidation:
         return True
 
     @staticmethod
-    def visible_objects(cam2world_matrix: mathutils.Matrix, sqrt_number_of_rays: int) -> [MeshObject]:
+    def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_rays: int) -> [MeshObject]:
         """ Returns a set of objects visible from the given camera pose.
 
         Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
@@ -125,6 +128,8 @@ class CameraValidation:
         :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
         :return: A set of objects visible hit by the sent rays.
         """
+        cam2world_matrix = Matrix(cam2world_matrix)
+        
         visible_objects = set()
         cam_ob = bpy.context.scene.camera
         cam = cam_ob.data
@@ -152,7 +157,7 @@ class CameraValidation:
         return visible_objects
 
     @staticmethod
-    def scene_coverage_score(cam2world_matrix: Matrix, special_objects: list = None, special_objects_weight: float = 2, sqrt_number_of_rays: int = 10) -> float:
+    def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_objects: list = None, special_objects_weight: float = 2, sqrt_number_of_rays: int = 10) -> float:
         """ Evaluate the interestingness/coverage of the scene.
 
         This module tries to look at as many objects at possible, this might lead to
@@ -169,6 +174,8 @@ class CameraValidation:
         :param sqrt_number_of_rays: The square root of the number of rays which will be used to determine the visible objects.
         :return: the scoring of the scene.
         """
+        cam2world_matrix = Matrix(cam2world_matrix)
+        
         if special_objects is None:
             special_objects = []
         cam_ob = bpy.context.scene.camera
@@ -245,7 +252,8 @@ class CameraValidation:
             return True, interest_score - interest_score_step
 
     @staticmethod
-    def check_novel_pose(cam2world_matrix: Matrix, existing_poses: [Matrix], check_pose_novelty_rot: bool, check_pose_novelty_translation: bool, min_var_diff_rot: float = -1, min_var_diff_translation: float = -1):
+    def check_novel_pose(cam2world_matrix: Union[Matrix, np.ndarray], existing_poses: List[Union[Matrix, np.ndarray]], check_pose_novelty_rot: bool, 
+                         check_pose_novelty_translation: bool, min_var_diff_rot: float = -1, min_var_diff_translation: float = -1):
         """ Checks if a newly sampled pose is novel based on variance checks.
 
         :param cam2world_matrix: The world matrix which describes the camera pose to check.
@@ -276,15 +284,16 @@ class CameraValidation:
             return True
 
         if len(existing_poses) > 0:  # First pose is always novel
+            cam2world_matrix = Matrix(cam2world_matrix)
             if check_pose_novelty_rot:
-                rotations = [pose.to_euler() for pose in existing_poses]
+                rotations = [Matrix(pose).to_euler() for pose in existing_poses]
                 var_rot = np.var(rotations)
 
                 if not _variance_constraint(rotations, cam2world_matrix.to_euler(), var_rot, min_var_diff_rot, "rotation"):
                     return False
 
             if check_pose_novelty_translation:
-                translations = [pose.to_translation() for pose in existing_poses]
+                translations = [Matrix(pose).to_translation() for pose in existing_poses]
                 var_translation = np.var(translations)
 
                 if not _variance_constraint(translations, cam2world_matrix.to_translation(), var_translation, min_var_diff_translation, "translation"):

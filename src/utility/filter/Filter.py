@@ -1,8 +1,8 @@
 from typing import Any, Type
+import numpy as np
+import re
 
 from src.utility.StructUtility import Struct
-import mathutils
-import re
 
 class Filter:
     @staticmethod
@@ -20,26 +20,24 @@ class Filter:
 
     @staticmethod
     def _check_equality(attr_value: Any, filter_value: Any, regex: bool = False) -> bool:
-        """ Checks whether the two values are equal.
+        """ Checks whether the two values are equal. If the values have multiple elements, they must all match (uses broadcasting).
 
         :param attr_value: The first value.
         :param filter_value: The second value.
         :param regex: If True, string values will be matched via regex.
         :return: True, if the two values are equal.
         """
-        # Optionally cast type
-        if isinstance(attr_value, mathutils.Vector):
-            filter_value = mathutils.Vector(filter_value)
-        elif isinstance(attr_value, mathutils.Euler):
-            filter_value = mathutils.Euler(filter_value)
-        elif isinstance(attr_value, mathutils.Color):
-            filter_value = mathutils.Color(filter_value)
-
+            
         # If desired do regex matching for strings
         if isinstance(attr_value, str) and regex:
             return re.fullmatch(filter_value, attr_value)
         else:
-            return filter_value == attr_value
+            try:
+                return np.all(np.array(filter_value) == np.array(attr_value))
+            except:
+                raise Exception('Could not broadcast attribute {} with shape {} ' 
+                                'to filter_value {} with shape {}! '.format(attr_value, np.array(attr_value).shape,
+                                                                            filter_value, np.array(filter_value).shape))
 
     @staticmethod
     def all_with_type(elements: [Struct], filtered_data_type: Type[Struct] = None) -> [Struct]:

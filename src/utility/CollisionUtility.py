@@ -1,6 +1,7 @@
 import mathutils
 import numpy as np
-from mathutils import Vector
+from mathutils import Vector, Euler, Matrix
+from typing import Union
 
 from src.utility.MeshObjectUtility import MeshObject
 
@@ -142,7 +143,7 @@ class CollisionUtility:
 
         # Optionally check whether obj2 is contained in obj1
         if not inter and not skip_inside_check:
-            inter = CollisionUtility.is_point_inside_object(obj1, obj1_BVHtree, obj2.get_local2world_mat() @ obj2.get_mesh().vertices[0].co)
+            inter = CollisionUtility.is_point_inside_object(obj1, obj1_BVHtree, Matrix(obj2.get_local2world_mat()) @ obj2.get_mesh().vertices[0].co)
             if inter:
                 print("Warning: Detected that " + obj2.get_name() + " is completely inside " + obj1.get_name() +
                       ". This might be wrong, if " + obj1.get_name() +
@@ -151,7 +152,7 @@ class CollisionUtility:
 
         # Optionally check whether obj1 is contained in obj2
         if not inter and not skip_inside_check:
-            inter = CollisionUtility.is_point_inside_object(obj2, obj2_BVHtree, obj1.get_local2world_mat() @ obj1.get_mesh().vertices[0].co)
+            inter = CollisionUtility.is_point_inside_object(obj2, obj2_BVHtree, Matrix(obj1.get_local2world_mat()) @ obj1.get_mesh().vertices[0].co)
             if inter:
                 print("Warning: Detected that " + obj1.get_name() + " is completely inside " + obj2.get_name() +
                       ". This might be wrong, if " + obj2.get_name() + " is not water tight or has incorrect "
@@ -161,7 +162,7 @@ class CollisionUtility:
         return inter, bvh_cache
 
     @staticmethod
-    def is_point_inside_object(obj: MeshObject, obj_BVHtree: mathutils.bvhtree.BVHTree, point: Vector):
+    def is_point_inside_object(obj: MeshObject, obj_BVHtree: mathutils.bvhtree.BVHTree, point: Union[Vector, np.ndarray]) -> bool:
         """ Checks whether the given point is inside the given object.
 
         This only works if the given object is watertight and has correct normals
@@ -171,10 +172,11 @@ class CollisionUtility:
         :param point: The point to check
         :return: True, if the point is inside the object
         """
+        point = Vector(point)
         # Look for closest point on object
         nearest, normal, _, _ = obj_BVHtree.find_nearest(point)
         # Compute direction
         p2 = nearest - point
         # Compute dot product between direction and normal vector
-        a = p2.normalized().dot((obj.get_rotation().to_matrix() @ normal).normalized())
+        a = p2.normalized().dot((Euler(obj.get_rotation()).to_matrix() @ normal).normalized())
         return a >= 0.0

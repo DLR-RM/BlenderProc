@@ -1,5 +1,5 @@
 import numpy as np
-from mathutils import Vector, Euler
+from mathutils import Vector, Euler, Color, Matrix, Quaternion
 import bpy
 import json
 
@@ -37,8 +37,10 @@ class ItemWriter:
                 value = self.get_item_attribute_func(item, attribute)
 
                 # If its a list of numbers, just add to the array, else just add one value
-                if isinstance(value, Vector) or isinstance(value, Euler):
-                    value = list(value)
+                if isinstance(value, (Vector, Euler, Color, Quaternion)):
+                    value = list(value)  
+                elif isinstance(value, (Matrix, np.ndarray)):
+                    value = np.array(value).tolist()
 
                 value_list_per_item[attribute] = value
 
