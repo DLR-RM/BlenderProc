@@ -10,9 +10,8 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 from src.utility.LightUtility import Light
 
 from src.utility.RendererUtility import RendererUtility
-import numpy as np
-from mathutils import Matrix, Vector
 
+import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -38,9 +37,10 @@ for i in range(5):
     # Sample random camera location above objects
     location = np.random.uniform([-10, -10, 12], [10, 10, 8])
     # Compute rotation based on vector going from location towards poi
-    rotation = CameraUtility.rotation_from_forward_vec(poi - Vector(location), inplane_rot=np.random.uniform(-0.7854, 0.7854))
-    # Add cam pose based on location an rotation
-    CameraUtility.add_camera_pose(MathUtility.build_transformation_mat(location, rotation))
+    rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
+    # Add homog cam pose based on location an rotation
+    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    CameraUtility.add_camera_pose(cam2world_matrix)
 
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()

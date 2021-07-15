@@ -6,11 +6,10 @@ from src.utility.Initializer import Initializer
 from src.utility.loader.BlendLoader import BlendLoader
 from src.utility.CameraUtility import CameraUtility
 from src.utility.LightUtility import Light
-from mathutils import Matrix, Vector, Euler
-
 from src.utility.RendererUtility import RendererUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
 from src.utility.CocoWriterUtility import CocoWriterUtility
+from src.utility.MathUtility import MathUtility
 
 import argparse
 
@@ -42,7 +41,8 @@ CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
-        matrix_world = Matrix.Translation(Vector(line[:3])) @ Euler(line[3:6], 'XYZ').to_matrix().to_4x4()
+        position, euler_rotation = line[:3], line[3:6]
+        matrix_world = MathUtility.build_transformation_mat(position, euler_rotation)
         CameraUtility.add_camera_pose(matrix_world)
 
 # activate normal and distance rendering

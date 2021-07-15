@@ -146,7 +146,7 @@ class WriterUtility:
             return MathUtility.transform_point_to_blender_coord_frame(up, destination_frame)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = Utility.transform_matrix_to_blender_coord_frame(item.matrix_world, destination_frame)
+            matrix_world = MathUtility.transform_matrix_to_blender_coord_frame(item.matrix_world, destination_frame)
             return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]

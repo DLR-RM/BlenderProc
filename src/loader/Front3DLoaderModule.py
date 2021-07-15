@@ -36,7 +36,10 @@ class Front3DLoaderModule(LoaderInterface):
           - Path to the json file, where the house information is stored.
           - string
         * - 3D_future_model_path
-          - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
+          - Path to the models used in the 3D-Front dataset. Type: str
+          - string
+        * - 3D_front_texture_path
+          - Path to the 3D-front-texture folder. Type: str
           - string
         * - mapping_file
           - Path to a file, which maps the names of the objects to ids. Default:
@@ -65,6 +68,7 @@ class Front3DLoaderModule(LoaderInterface):
         loaded_objects = Front3DLoader.load(
             json_path=self.config.get_string("json_path"),
             future_model_path=self.config.get_string("3D_future_model_path"),
+            front_3D_texture_path=self.config.get_string("3D_front_texture_path"),
             label_mapping=label_mapping,
             ceiling_light_strength=self.config.get_float("ceiling_light_strength", 0.8),
             lamp_light_strength=self.config.get_float("lamp_light_strength", 7.0)

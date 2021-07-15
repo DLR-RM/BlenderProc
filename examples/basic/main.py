@@ -1,17 +1,18 @@
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
+import argparse
+
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
 from src.utility.loader.ObjectLoader import ObjectLoader
 from src.utility.CameraUtility import CameraUtility
 from src.utility.LightUtility import Light
-from mathutils import Matrix, Vector, Euler
+from src.utility.MathUtility import MathUtility
 
 from src.utility.RendererUtility import RendererUtility
 from src.utility.PostProcessingUtility import PostProcessingUtility
 
-import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file, should be examples/basic/camera_positions")
@@ -37,7 +38,8 @@ CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
-        matrix_world = Matrix.Translation(Vector(line[:3])) @ Euler(line[3:6], 'XYZ').to_matrix().to_4x4()
+        position, euler_rotation = line[:3], line[3:6]
+        matrix_world = MathUtility.build_transformation_mat(position, euler_rotation)
         CameraUtility.add_camera_pose(matrix_world)
 
 # activate normal and distance rendering
