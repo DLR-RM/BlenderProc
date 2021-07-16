@@ -191,7 +191,7 @@ class BopLoader:
         print('-----------------------------')
         
         # transform from OpenCV to blender coords
-        cam_H_c2w = MathUtility.transform_matrix_to_blender_coord_frame(cam_H_c2w, source_frame)
+        cam_H_c2w = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
  
         return cam_H_c2w
 

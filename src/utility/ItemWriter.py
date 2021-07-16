@@ -48,7 +48,7 @@ class ItemWriter:
                     value = np.array(value).tolist()
 
                 if isinstance(value, list) and len(value) == 3:
-                    MathUtility.transform_point_to_blender_coord_frame(value, destination_frame)
+                    MathUtility.change_coordinate_frame_of_point(value, destination_frame)
 
                 value_list_per_item[attribute] = value
 

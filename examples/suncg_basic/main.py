@@ -36,8 +36,8 @@ CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.3
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
-        position = MathUtility.transform_point_to_blender_coord_frame(line[:3], ["X", "-Z", "Y"])
-        rotation = MathUtility.transform_point_to_blender_coord_frame(line[3:6], ["X", "-Z", "Y"])
+        position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
+        rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
         matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
         CameraUtility.add_camera_pose(matrix_world)
 

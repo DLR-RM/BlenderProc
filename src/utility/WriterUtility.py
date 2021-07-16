@@ -131,22 +131,22 @@ class WriterUtility:
         if attribute_name == "name":
             return item.name
         elif attribute_name == "location":
-            return MathUtility.transform_point_to_blender_coord_frame(item.location, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(item.location, destination_frame)
         elif attribute_name == "rotation_euler":
-            return MathUtility.transform_point_to_blender_coord_frame(item.rotation_euler, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(item.rotation_euler, destination_frame)
         elif attribute_name == "rotation_forward_vec":
             # Calc forward vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             forward = rot_mat @ mathutils.Vector([0, 0, -1])
-            return MathUtility.transform_point_to_blender_coord_frame(forward, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(forward, destination_frame)
         elif attribute_name == "rotation_up_vec":
             # Calc up vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             up = rot_mat @ mathutils.Vector([0, 1, 0])
-            return MathUtility.transform_point_to_blender_coord_frame(up, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(up, destination_frame)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = MathUtility.transform_matrix_to_blender_coord_frame(item.matrix_world, destination_frame)
+            matrix_world = MathUtility.change_target_coordinate_frame_of_transformation_matrix(item.matrix_world, destination_frame)
             return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]
