@@ -1,12 +1,12 @@
-import mathutils
 import numpy as np
+from typing import Union
 
 from mathutils import Vector
 
 class Sphere:
 
     @staticmethod
-    def sample(center: Vector, radius: float, mode: str) -> Vector:
+    def sample(center: Union[Vector, np.ndarray, list], radius: float, mode: str) -> np.ndarray:
         """ Samples a point from the surface or from the interior of solid sphere.
 
         https://math.stackexchange.com/a/87238
@@ -51,6 +51,6 @@ class Sphere:
         sampled_point = list(map(lambda x: magnitude*x/norm, direction))
         
         # Add center
-        location = mathutils.Vector(np.array(sampled_point) + center)
+        location = np.array(sampled_point) + center
 
         return location

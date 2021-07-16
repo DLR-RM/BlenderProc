@@ -1,7 +1,6 @@
 import random
 
 import numpy as np
-from mathutils import Vector
 
 from src.utility.MeshObjectUtility import MeshObject
 
@@ -34,7 +33,7 @@ class Front3DPointInRoomSampler:
         self.used_floors = [obj for obj in floor_objs if floor_obj_counters[obj.get_name()] > amount_of_objects_needed_per_room]
 
 
-    def sample(self, height: float, max_tries: int = 1000) -> Vector:
+    def sample(self, height: float, max_tries: int = 1000) -> np.ndarray:
         """ Samples a point inside one of the loaded Front3d rooms.
 
         The points are uniformly sampled along x/y over all rooms.
@@ -54,7 +53,7 @@ class Front3DPointInRoomSampler:
             max_corner = np.max(bounding_box, axis=0)
 
             # Sample uniformly inside bounding box
-            point = Vector([
+            point = np.array([
                 random.uniform(min_corner[0], max_corner[0]),
                 random.uniform(min_corner[1], max_corner[1]),
                 floor_obj.get_location()[2] + height

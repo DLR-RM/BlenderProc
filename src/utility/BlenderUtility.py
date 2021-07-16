@@ -9,6 +9,7 @@ from mathutils import Vector
 
 import numpy as np
 import imageio
+from typing import Union
 
 from src.utility.Utility import Utility
 
@@ -158,7 +159,7 @@ def create_bvh_tree_for_object(obj):
     return obj_BVHtree
 
 
-def is_point_inside_object(obj, obj_BVHtree, point):
+def is_point_inside_object(obj, obj_BVHtree:mathutils.bvhtree.BVHTree, point: Union[Vector, np.ndarray]) -> bool:
     """ Checks whether the given point is inside the given object.
 
     This only works if the given object is watertight and has correct normals
@@ -168,6 +169,7 @@ def is_point_inside_object(obj, obj_BVHtree, point):
     :param point: The point to check
     :return: True, if the point is inside the object
     """
+    point = Vector(point)
     # Look for closest point on object
     nearest, normal, _, _ = obj_BVHtree.find_nearest(point)
     # Compute direction

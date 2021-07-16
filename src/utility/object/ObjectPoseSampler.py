@@ -5,13 +5,13 @@ from src.main.Module import Module
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
 from src.utility.CollisionUtility import CollisionUtility
 from src.utility.MeshObjectUtility import MeshObject
-from typing import Callable
+from typing import Callable, List
 
 
 class ObjectPoseSampler:
 
     @staticmethod
-    def sample(objects_to_sample: [MeshObject], sample_pose_func: Callable[[MeshObject], None], objects_to_check_collisions: [MeshObject] = None, max_tries: int = 1000):
+    def sample(objects_to_sample: List[MeshObject], sample_pose_func: Callable[[MeshObject], None], objects_to_check_collisions: List[MeshObject] = None, max_tries: int = 1000):
         """ Samples positions and rotations of selected object inside the sampling volume while performing mesh and bounding box collision checks.
 
         :param objects_to_sample: A list of mesh objects whose poses are sampled based on the given function.
