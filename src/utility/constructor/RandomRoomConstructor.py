@@ -350,23 +350,11 @@ class RandomRoomConstructor:
                 bpy.ops.uv.cube_project(cube_size=1.0)
                 obj.object_mode()
 
-        def assign_material(cur_obj: MeshObject, material: bpy.types.Material):
-            """
-            First all materials are removed and then the given material is assigned
-
-            :param cur_obj: Current object
-            :param material: Current material, which will be assigned
-            """
-            # first remove all existing
-            cur_obj.clear_materials()
-            # add the new one
-            cur_obj.add_material(material)
-
         if materials:
-            assign_material(floor_obj, random.choice(materials))
-            assign_material(wall_obj, random.choice(materials))
+            floor_obj.replace_materials(random.choice(materials))
+            wall_obj.replace_materials(random.choice(materials))
             if ceiling_obj is not None and assign_material_to_ceiling:
-                assign_material(ceiling_obj, random.choice(materials))
+                ceiling_obj.replace_materials(random.choice(materials))
         else:
             warnings.warn("There were no CCMaterials found, which means the CCMaterialLoader was not executed first!"
                           "No materials have been assigned to the walls, floors and possible ceiling.")

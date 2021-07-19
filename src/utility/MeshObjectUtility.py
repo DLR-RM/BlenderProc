@@ -116,6 +116,16 @@ class MeshObject(Entity):
         """ Removes all materials from the object. """
         self.blender_obj.data.materials.clear()
 
+    def replace_materials(self, material: bpy.types.Material):
+        """ Replaces all materials of the object with the given new material.
+
+        :param material: A material that should exclusively be used as new material for the object.
+        """
+        # first remove all existing
+        self.clear_materials()
+        # add the new one
+        self.add_material(material)
+
     def duplicate(self):
         """ Duplicates the object.
 
