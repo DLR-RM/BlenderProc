@@ -14,6 +14,9 @@ parser.add_argument('--resolution', help="Desired resolution for the hdr images.
 parser.add_argument('--format', help="Desired download format for the images.", default="jpg")
 output_dir = Path(__file__).parent / ".." / "resources" / "haven"
 parser.add_argument('--output_folder', help="Determines where the data is going to be saved.", default=output_dir)
+parser.add_argument('--tags', nargs='+', help="Filter by asset tag.", default=None)
+parser.add_argument('--categories', nargs='+', help="Filter by asset category.", default=[])
+parser.add_argument('--types', nargs='+', help="Only download the given types", default=None, choices=["textures", "hdris", "models"])
 args = parser.parse_args()
 
 output_dir = Path(args.output_folder)
@@ -26,12 +29,20 @@ def download_file(url, output_path):
         file.write(request.content)
 
 def download_items(item_type, output_dir, item_download_func):
+    # Filter for type
+    if args.types and item_type not in args.types:
+        return
+
     print("Downloading " + output_dir.name + "...")
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # Download listing
-    response = get("https://api.polyhaven.com/assets?t=" + item_type)
+    response = get("https://api.polyhaven.com/assets?t=" + item_type + "&categories=" + ",".join(args.categories))
     data = response.json()
+
+    # Filter for tags
+    if args.tags:
+        data = {key: value for key, value in data.items() if any(tag_list in args.tags for tag_list in value.get("tags"))}
 
     for i, item_id in enumerate(data.keys()):
         # Get item_id and download the item
