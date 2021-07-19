@@ -104,7 +104,9 @@ class RendererUtility:
     @staticmethod
     def set_light_bounces(diffuse_bounces: int = None, glossy_bounces: int = None, ao_bounces_render: int = None, max_bounces: int = None,
                           transmission_bounces: int = None, transparent_max_bounces: int = None, volume_bounces: int = None):
-        """ Sets the number of light bounces that should be used by the raytracing renderer.
+        """ 
+        Sets the number of light bounces that should be used by the raytracing renderer. 
+        Default values are defined in DefaultConfig.py
 
         :param diffuse_bounces: Maximum number of diffuse reflection bounces, bounded by total maximum.
         :param glossy_bounces: Maximum number of glossy reflection bounces, bounded by total maximum.
