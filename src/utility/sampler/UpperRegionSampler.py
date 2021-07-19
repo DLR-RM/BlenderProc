@@ -10,7 +10,7 @@ from src.utility.MeshObjectUtility import MeshObject
 class UpperRegionSampler:
 
     @staticmethod
-    def sample(objects_to_sample_on: List[MeshObject], face_sample_range: Union[Vector, np.ndarray, list] = [0.0, 1.0], min_height: float = 0.0, 
+    def sample(objects_to_sample_on: List[MeshObject], face_sample_range: Union[Vector, np.ndarray, list] = [0.0, 1.0], min_height: float = 0.0,
                max_height: float = 1.0, use_ray_trace_check: bool = False, upper_dir: Union[Vector, np.ndarray, list] = [0.0, 0.0, 1.0], use_upper_dir: bool = True) -> np.ndarray:
         """ Uniformly samples 3-dimensional value over the bounding box of the specified objects (can be just a plane) in the
             defined upper direction. If "use_upper_dir" is False, samples along the face normal closest to "upper_dir". The
@@ -39,11 +39,13 @@ class UpperRegionSampler:
                               position is the position accepted).
         :return: Sampled value.
         """
-        
+
         face_sample_range = np.array(face_sample_range)
         upper_dir = np.array(upper_dir)
         upper_dir /= np.linalg.norm(upper_dir)
-        
+        if not isinstance(objects_to_sample_on, list):
+            objects_to_sample_on = [objects_to_sample_on]
+
         if max_height < min_height:
             raise Exception("The minimum height ({}) must be smaller "
                             "than the maximum height ({})!".format(min_height, max_height))

@@ -143,6 +143,14 @@ class Entity(Struct):
         """ Deletes the entity """
         bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
 
+    @staticmethod
+    def delete_multiple(entities: ["Entity"]):
+        """ Deletes multiple entities at once
+
+        :param entities: A list of entities that should be deleted
+        """
+        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})
+
     def is_empty(self) -> bool:
         """ Returns whether the entity is from type "EMPTY".
 

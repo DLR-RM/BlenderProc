@@ -112,6 +112,20 @@ class MeshObject(Entity):
         self.add_material(new_mat)
         return new_mat
 
+    def clear_materials(self):
+        """ Removes all materials from the object. """
+        self.blender_obj.data.materials.clear()
+
+    def replace_materials(self, material: bpy.types.Material):
+        """ Replaces all materials of the object with the given new material.
+
+        :param material: A material that should exclusively be used as new material for the object.
+        """
+        # first remove all existing
+        self.clear_materials()
+        # add the new one
+        self.add_material(material)
+
     def duplicate(self):
         """ Duplicates the object.
 
@@ -355,6 +369,8 @@ class MeshObject(Entity):
             # Optional: Free the bmesh
             if free_bm_mesh:
                 bm.free()
+        # Make sure the mesh is updated
+        self.get_mesh().update()
 
     def edit_mode(self):
         """ Switch into edit mode of this mesh object """
@@ -447,6 +463,7 @@ class MeshObject(Entity):
 
     def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
+
         :param origin: Origin of the ray, in object space.
         :param direction: Direction of the ray, in object space.
         :param max_distance: Maximum distance.
