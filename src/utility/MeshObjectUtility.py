@@ -113,6 +113,7 @@ class MeshObject(Entity):
         return new_mat
 
     def clear_materials(self):
+        """ Removes all materials from the object. """
         self.blender_obj.data.materials.clear()
 
     def duplicate(self):
