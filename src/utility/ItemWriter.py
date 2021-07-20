@@ -11,7 +11,7 @@ class ItemWriter:
     def __init__(self, get_item_attribute_func):
         self.get_item_attribute_func = get_item_attribute_func
 
-    def write_items_to_file(self, path_prefix, items, attributes, local_frame_change, world_frame_change):
+    def write_items_to_file(self, path_prefix, items, attributes, local_frame_change=None, world_frame_change=None):
         """ Writes the state of the given items to one numpy file per frame.
 
         :param path_prefix: The prefix path to write the files to.
