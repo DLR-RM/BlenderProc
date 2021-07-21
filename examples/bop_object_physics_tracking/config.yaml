@@ -1,0 +1,363 @@
+# Args: <path_to_bop_data> <bop_datset_name> <bop_toolkit_path> <path_to_cc_textures> <output_dir>
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "scikit-image",
+      "pypng==0.0.20",
+      "scipy",
+      "matplotlib",
+      "pytz"
+    ]
+  },
+  "modules": [
+    {
+      "module": "main.Initializer",
+      "config": {
+        "global": {
+          "output_dir": "<args:4>",
+          "sys_paths": ["<args:2>"]
+        }
+      }
+    },
+    {
+      "module": "loader.BopLoader",
+      "config": {
+        "bop_dataset_path": "<args:0>/tless",
+        "model_type": "cad",
+        "mm2m": True,
+        "sample_objects": True,
+        "num_of_objs_to_sample": 3,
+        "add_properties": {
+          "cp_physics": True
+        }
+      }
+    },
+    {
+      "module": "loader.BopLoader",
+      "config": {
+        "bop_dataset_path": "<args:0>/lm",
+        "model_type": "",
+        "mm2m": True,
+        "sample_objects": True,
+        "num_of_objs_to_sample": 3,
+        "obj_instances_limit": 1,
+        "add_properties": {
+          "cp_physics": True
+        },
+        "cf_set_shading": "SMOOTH"
+      }
+    },
+    {
+      "module": "loader.BopLoader",
+      "config": {
+        "bop_dataset_path": "<args:0>/<args:1>",
+        "model_type": "",
+        "mm2m": True,
+        "sample_objects": True,
+        "num_of_objs_to_sample": 10,
+        "add_properties": {
+          "cp_physics": True
+        },
+        "cf_set_shading": "SMOOTH"
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": [
+          {
+            "name": "bop_tless_vertex_col_material.*"
+          }
+          ]
+        },
+        "cf_set_base_color": {
+          "provider": "sampler.Color",
+          "grey": True,
+          "min": [0.1, 0.1, 0.1, 1.0],
+          "max": [0.9, 0.9, 0.9, 1.0]
+        }
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": [
+          {
+            "name": "bop_tless_vertex_col_material.*"
+          },
+          {
+            "name": "bop_lm_vertex_col_material.*"
+          },
+          {
+            "name": "bop_<args:1>_vertex_col_material.*"
+          }
+          ]
+        },
+        "cf_set_specular": {
+          "provider": "sampler.Value",
+          "type": "float",
+          "min": 0.0,
+          "max": 1.0
+        },
+        "cf_set_roughness": {
+          "provider": "sampler.Value",
+          "type": "float",
+          "min": 0.0,
+          "max": 1.0
+        }
+      }
+    },
+    {
+      "module": "constructor.BasicMeshInitializer",
+      "config": {
+        "meshes_to_add": [
+        {
+          "type": "plane",
+          "name": "ground_plane0",
+          "scale": [2, 2, 1]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane1",
+          "scale": [2, 2, 1],
+          "location": [0, -2, 2],
+          "rotation": [-1.570796, 0, 0] # switch the sign to turn the normals to the outside
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane2",
+          "scale": [2, 2, 1],
+          "location": [0, 2, 2],
+          "rotation": [1.570796, 0, 0]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane4",
+          "scale": [2, 2, 1],
+          "location": [2, 0, 2],
+          "rotation": [0, -1.570796, 0]
+        },
+        {
+          "type": "plane",
+          "name": "ground_plane5",
+          "scale": [2, 2, 1],
+          "location": [-2, 0, 2],
+          "rotation": [0, 1.570796, 0]
+        },
+        {
+          "type": "plane",
+          "name": "light_plane",
+          "location": [0, 0, 10],
+          "scale": [3, 3, 1]
+        }
+        ]
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": '.*plane.*'
+          }
+        },
+        "cp_physics": False,
+        "cp_physics_collision_shape": "BOX"
+      }
+    },
+    {
+      "module": "manipulators.MaterialManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Material",
+          "conditions": {
+            "name": "light_plane_material"
+          }
+        },
+        "cf_switch_to_emission_shader": {
+          "color": {
+            "provider": "sampler.Color",
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
+          },
+          "strength": {
+            "provider": "sampler.Value",
+            "type": "float",
+            "min": 3,
+            "max": 6
+          }
+        }
+      }
+    },
+    {
+      "module": "loader.CCMaterialLoader",
+      "config": {
+        "folder_path": "<args:3>"
+      }
+    },
+    {
+      "module": "manipulators.EntityManipulator",
+      "config": {
+        "selector": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "name": "ground_plane.*"
+          }
+        },
+        "mode": "once_for_all",
+        "cf_randomize_materials": {
+          "randomization_level": 1,
+          "materials_to_replace_with": {
+            "provider": "getter.Material",
+            "random_samples": 1,
+            "conditions": {
+              "cp_is_cc_texture": True
+            }
+          }
+        }
+      }
+    },
+    {
+      "module": "object.ObjectPoseSampler",
+      "config": {
+        "objects_to_sample": {
+          "provider": "getter.Entity",
+          "conditions": {
+            "cp_physics": True
+          }
+        },
+        "pos_sampler": {
+          "provider":"sampler.Uniform3d",
+          "min": {
+            "provider": "sampler.Uniform3d",
+            "min": [-0.3, -0.3, 0.0],
+            "max": [-0.2, -0.2, 0.0]
+          },
+          "max": {
+            "provider": "sampler.Uniform3d",
+            "min": [0.2, 0.2, 0.4],
+            "max": [0.3, 0.3, 0.6]
+          }
+        },
+        "rot_sampler":{
+          "provider":"sampler.UniformSO3"
+        }
+      }
+    },
+    {
+      "module": "object.PhysicsPositioning",
+      "config": {
+        "min_simulation_time": 3,
+        "max_simulation_time": 10,
+        "check_object_interval": 1,
+        "solver_iters": 25,
+        "substeps_per_frame": 20,
+        "friction": 100.0,
+        "linear_damping": 0.99,
+        "angular_damping": 0.99
+      }
+    },
+    {
+      "module": "lighting.LightSampler",
+      "config": {
+        "lights": [
+        {
+          "location": {
+            "provider": "sampler.Shell",
+            "center": [0, 0, 0],
+            "radius_min": 1,
+            "radius_max": 1.5,
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
+          },
+          "color": {
+            "provider": "sampler.Color",
+            "min": [0.5, 0.5, 0.5, 1.0],
+            "max": [1.0, 1.0, 1.0, 1.0]
+          },
+          "type": "POINT",
+          "energy": 200
+        }
+        ]
+      }
+    },
+    {
+      "module": "camera.CameraSampler",
+      "config": {
+        "cam_poses": [
+        {
+          "proximity_checks": {
+            "min": 0.3
+          },
+          "excluded_objs_in_proximity_check":  {
+            "provider": "getter.Entity",
+            "conditions": {
+              "name": "ground_plane.*",
+              "type": "MESH"
+            }
+          },
+          "number_of_samples": 10,
+          "location": {
+            "provider": "sampler.Shell",
+            "center": [0, 0, 0],
+            "radius_min": 0.61,
+            "radius_max": 1.24,
+            "elevation_min": 5,
+            "elevation_max": 89,
+            "uniform_elevation": True
+          },
+          "rotation": {
+            "format": "look_at",
+            "value": {
+              "provider": "getter.POI",
+              "selector": {
+                "provider": "getter.Entity",
+                "conditions": {
+                  "type": "MESH",
+                  "cp_bop_dataset_name": "<args:1>",
+                },
+                "random_samples": 10
+              }
+            },
+            "inplane_rot": {
+              "provider": "sampler.Value",
+              "type": "float",
+              "min": -0.7854,
+              "max": 0.7854
+            }
+          }
+        }
+        ]
+      }
+    },
+    {
+      "module": "renderer.RgbRenderer",
+      "config": {
+        "samples": 50,
+        "render_distance": True,
+        "image_type": "JPEG"
+      }
+    },
+    {
+      "module": "writer.BopWriter",
+      "config": {
+        "dataset": "<args:1>",
+        "append_to_existing_output": True,
+        "ignore_dist_thres": 10.,
+        "postprocessing_modules": {
+          "distance": [
+            {"module": "postprocessing.Dist2Depth"}
+          ]
+        }
+      }
+    }
+  ]
+}
