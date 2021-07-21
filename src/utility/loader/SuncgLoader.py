@@ -213,8 +213,8 @@ class SuncgLoader:
         :return: The corrected bbox.
         """
         return {
-            "min": MathUtility.transform_point_to_blender_coord_frame(bbox["min"], ["X", "-Z", "Y"]),
-            "max": MathUtility.transform_point_to_blender_coord_frame(bbox["max"], ["X", "-Z", "Y"])
+            "min": MathUtility.change_coordinate_frame_of_point(bbox["min"], ["X", "-Z", "Y"]),
+            "max": MathUtility.change_coordinate_frame_of_point(bbox["max"], ["X", "-Z", "Y"])
         }
 
     @staticmethod
