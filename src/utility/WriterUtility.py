@@ -130,6 +130,10 @@ class WriterUtility:
         if world_frame_change is None:
             world_frame_change = ["X", "Y", "Z"]
 
+        # Print warning if local_frame_change is used with other attributes than matrix_world
+        if local_frame_change != ["X", "Y", "Z"] and attribute_name in ["location", "rotation_euler", "rotation_forward_vec", "rotation_up_vec"]:
+            print("Warning: The local_frame_change parameter is at the moment only supported by the matrix_world attribute.")
+
         if attribute_name == "name":
             return item.name
         elif attribute_name == "location":
