@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["opencv-python", "pypng==0.0.20"])
+SetupUtility.setup_pip(["opencv-contrib-python", "pypng==0.0.20"])
 
 import json
 import os

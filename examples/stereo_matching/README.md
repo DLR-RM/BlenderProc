@@ -42,7 +42,7 @@ python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
 ```
 "pip": [
       "h5py",
-      "opencv-python",
+      "python-dateutil==2.1",
       "numpy",
       "Pillow",
       "opencv-contrib-python",

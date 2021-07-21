@@ -121,6 +121,9 @@ class SetupUtility:
             else:
                 package_name, package_version = package.lower(), None
 
+            if package_name == "opencv-python":
+                raise Exception("Please use opencv-contrib-python instead of opencv-python, as having both packages installed in the same environment can lead to complications.")
+
             # If the package is given via git, extract package name from url
             if package_name.startswith("git+"):
                 # Extract part after last slash
