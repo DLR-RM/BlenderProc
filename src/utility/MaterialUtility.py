@@ -200,27 +200,25 @@ class Material(Struct):
         else:
             principled_bsdf.inputs[input_name].default_value = value
 
-    def get_principled_shader_value(self, input_name: str) -> Union[float, List[bpy.types.Node]]:
-        """ Gets value or the connected nodes to an input socket of the principled shader node of the material.
+    def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.Node]:
+        """
+        Gets the default value or the connected node to an input socket of the principled shader node of the material.
 
         :param input_name: The name of the input socket of the principled shader node.
-        :return a list of connected nodes or the default_value of the given input_name
+        :return the connected node to the input socket or the default_value of the given input_name
         """
         # get the one node from type Principled BSDF
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
         # check if the input name is a valid input
         if input_name in principled_bsdf.inputs:
-            list_of_connected_sockets = []
-            # iterate over all possible links
-            for link in self.links:
-                # check if the links is connected to the bsdf node and then check if it is connected to the
-                # relevant input socket
-                if link.to_node == principled_bsdf and link.to_socket == principled_bsdf.inputs[input_name]:
-                    # if that is the case save the originating node
-                    list_of_connected_sockets.append(link.from_node)
-            # if any elements where found return them
-            if list_of_connected_sockets:
-                return list_of_connected_sockets
+            # check if there are any connections to this input socket
+            if principled_bsdf.inputs[input_name].links:
+                if len(principled_bsdf.inputs[input_name].links) == 1:
+                    # return the connected node
+                    return principled_bsdf.inputs[input_name].links[0].from_node
+                else:
+                    raise Exception(f"The input socket has more than one input link: "
+                                    f"{principled_bsdf.inputs[input_name].links}")
             else:
                 # else return the default value
                 return principled_bsdf.inputs[input_name].default_value
