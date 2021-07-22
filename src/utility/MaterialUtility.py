@@ -83,7 +83,10 @@ class Material(Struct):
         """
         self.nodes.remove(node)
 
-    def insert_node_instead_existing_link(self, source_socket: bpy.types.NodeSocket, new_node_dest_socket: bpy.types.NodeSocket, new_node_src_socket: bpy.types.NodeSocket, dest_socket: bpy.types.NodeSocket):
+    def insert_node_instead_existing_link(self, source_socket: bpy.types.NodeSocket,
+                                          new_node_dest_socket: bpy.types.NodeSocket,
+                                          new_node_src_socket: bpy.types.NodeSocket,
+                                          dest_socket: bpy.types.NodeSocket):
         """ Replaces the node between source_socket and dest_socket with a new node.
 
         Before: source_socket -> dest_socket
@@ -94,7 +97,8 @@ class Material(Struct):
         :param new_node_src_socket: The new source for the link towards dest_socket.
         :param dest_socket: The destination socket
         """
-        Utility.insert_node_instead_existing_link(self.links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket)
+        Utility.insert_node_instead_existing_link(self.links, source_socket, new_node_dest_socket, new_node_src_socket,
+                                                  dest_socket)
 
     def link(self, source_socket: bpy.types.NodeSocket, dest_socket: bpy.types.NodeSocket):
         """ Creates a new link between the two given sockets.
@@ -130,7 +134,8 @@ class Material(Struct):
             raise Exception("Material '{}' has no node connected to the output, "
                             "which has as a 'Base Color' input.".format(self.blender_obj.name))
 
-    def make_emissive(self, emission_strength: float, replace: bool = False, keep_using_base_color: bool = True, emission_color: list = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
+    def make_emissive(self, emission_strength: float, replace: bool = False, keep_using_base_color: bool = True,
+                      emission_color: list = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
         """ Makes the material emit light.
 
         :param emission_strength: The strength of the emitted light.
@@ -146,7 +151,8 @@ class Material(Struct):
             if non_emissive_color_socket is None:
                 principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
                 non_emissive_color_socket = principled_bsdf.outputs['BSDF']
-            self.insert_node_instead_existing_link(non_emissive_color_socket, mix_node.inputs[2], mix_node.outputs['Shader'], output_node.inputs['Surface'])
+            self.insert_node_instead_existing_link(non_emissive_color_socket, mix_node.inputs[2],
+                                                   mix_node.outputs['Shader'], output_node.inputs['Surface'])
 
             # The light path node returns 1, if the material is hit by a ray coming from the camera, else it
             # returns 0. In this way the mix shader will use the principled shader for rendering the color of
