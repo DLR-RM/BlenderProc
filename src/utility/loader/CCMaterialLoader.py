@@ -11,7 +11,7 @@ class CCMaterialLoader:
     @staticmethod
     def load(folder_path: str = "resources/cctextures", used_assets: list = None, preload: bool = False,
              fill_used_empty_materials: bool = False, add_custom_properties: dict = None,
-             use_all_materials: bool = False):
+             use_all_materials: bool = False) -> List[Material]:
         """ This method loads all textures obtained from https://cc0textures.com, use the script
         (scripts/download_cc_textures.py) to download all the textures to your pc.
 
@@ -27,6 +27,9 @@ class CCMaterialLoader:
         :param add_custom_properties:  A dictionary of materials and the respective properties.
         :param use_all_materials: If this is false only a selection of probably useful textures is used. This excludes \
                                   some see through texture and non tileable texture.
+        :return a list of all loaded materials, if preload is active these materials do not contain any textures yet
+                and have to be filled before rendering (by calling this function again, no need to save the prior
+                returned list)
         """
         folder_path = Utility.resolve_path(folder_path)
         # this selected textures are probably useful for random selection
@@ -84,6 +87,8 @@ class CCMaterialLoader:
                         nodes = new_mat.node_tree.nodes
                         principled_bsdf = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
                         principled_bsdf.inputs["Alpha"].default_value = 0 if os.path.exists(alpha_image_path) else 1
+                        # add it here for the preload case
+                        materials.append(Material(new_mat))
                         continue
                     elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
                         # now only the materials, which have been used should be filled
