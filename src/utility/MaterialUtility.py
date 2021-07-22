@@ -218,7 +218,7 @@ class Material(Struct):
                     return principled_bsdf.inputs[input_name].links[0].from_node
                 else:
                     raise Exception(f"The input socket has more than one input link: "
-                                    f"{principled_bsdf.inputs[input_name].links}")
+                                    f"{[link.from_node.name for link in principled_bsdf.inputs[input_name].links]}")
             else:
                 # else return the default value
                 return principled_bsdf.inputs[input_name].default_value
