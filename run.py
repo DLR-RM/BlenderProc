@@ -20,6 +20,33 @@ else:
 import uuid
 from src.utility.ConfigParser import ConfigParser
 
+
+def check_if_setup_utilities_are_top(path_to_run_file):
+    """
+    Checks if the given python scripts has at the top an import to SetupUtility, if not an
+    exception is thrown. With an explanation that each python script has to start with SetupUtility.
+
+    :param path_to_run_file: path to the used python script
+    """
+    if os.path.exists(path_to_run_file):
+        with open(path_to_run_file, "r") as file:
+            text = file.read()
+            lines = [l.strip() for l in text.split("\n")]
+            lines = [l for l in lines if l and not l.startswith("#")]
+            for index, line in enumerate(lines):
+                if "import" in line and "SetupUtility" in line:
+                    return
+                elif "import" in line:
+                    code = "\n".join(lines[:index + 2])
+                    raise Exception('The given script "{}" does not have a SetupUtility call at the top! '
+                                    "Make sure that is the first thing you import and run! Before importing "
+                                    "anything else!\nYour code:\n#####################\n{}\n"
+                                    "####################\nReplaces this with:\nfrom src.utility.SetupUtility "
+                                    "import SetupUtility\nSetupUtility.setup([])".format(path_to_run_file, code))
+    else:
+        raise Exception("The given run script does not exist: {}".format(path_to_run_file))
+
+
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
 parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
@@ -192,6 +219,7 @@ if is_config:
     path_src_run = os.path.join(repo_root_directory, "src/run.py")
 else:
     path_src_run = args.file
+    check_if_setup_utilities_are_top(path_src_run)
 
 # Determine perfect temp dir
 if args.temp_dir is None:
