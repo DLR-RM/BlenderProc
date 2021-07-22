@@ -194,6 +194,33 @@ class Material(Struct):
         else:
             principled_bsdf.inputs[input_name].default_value = value
 
+    def get_principled_shader_value(self, input_name: str) -> Union[float, List[bpy.types.Node]]:
+        """ Gets value or the connected nodes to an input socket of the principled shader node of the material.
+
+        :param input_name: The name of the input socket of the principled shader node.
+        :return a list of connected nodes or the default_value of the given input_name
+        """
+        # get the one node from type Principled BSDF
+        principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
+        # check if the input name is a valid input
+        if input_name in principled_bsdf.inputs:
+            list_of_connected_sockets = []
+            # iterate over all possible links
+            for link in self.links:
+                # check if the links is connected to the bsdf node and then check if it is connected to the
+                # relevant input socket
+                if link.to_node == principled_bsdf and link.to_socket == principled_bsdf.inputs[input_name]:
+                    # if that is the case save the originating node
+                    list_of_connected_sockets.append(link.from_node)
+            # if any elements where found return them
+            if list_of_connected_sockets:
+                return list_of_connected_sockets
+            else:
+                # else return the default value
+                return principled_bsdf.inputs[input_name].default_value
+        else:
+            raise Exception(f"The input name could not be found in the inputs: {input_name}")
+
     def get_node_connected_to_the_output_and_unlink_it(self):
         """
         Searches for the OutputMaterial in the material and finds the connected node to it,
