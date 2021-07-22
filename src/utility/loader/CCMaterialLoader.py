@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import bpy
 
@@ -43,6 +44,8 @@ class CCMaterialLoader:
                                    "wood chips"]
         if not use_all_materials and used_assets is None:
             used_assets = probably_useful_texture
+        else:
+            used_assets = [asset.lower() for asset in used_assets]
 
         if add_custom_properties is None:
             add_custom_properties = dict()
@@ -56,7 +59,8 @@ class CCMaterialLoader:
                 if used_assets:
                     skip_this_one = True
                     for used_asset in used_assets:
-                        if asset.startswith(used_asset):
+                        # lower is necessary here, as all used assets are made that that way
+                        if asset.lower().startswith(used_asset.replace(" ", "")):
                             skip_this_one = False
                             break
                     if skip_this_one:
