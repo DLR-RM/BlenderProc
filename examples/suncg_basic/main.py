@@ -1,10 +1,9 @@
-from src.utility.CameraUtility import CameraUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
-
+from src.utility.CameraUtility import CameraUtility
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
