@@ -26,8 +26,8 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house)
+label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+objs = SuncgLoader.load(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
