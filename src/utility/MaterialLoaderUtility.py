@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 import bpy
 
@@ -73,19 +74,22 @@ class MaterialLoaderUtility(object):
         return new_mat
 
     @staticmethod
-    def create_image_node(nodes: bpy.types.Nodes, image_path: str, non_color_mode=False, x_location=0, y_location=0):
+    def create_image_node(nodes: bpy.types.Nodes, image: Union[str, bpy.types.Image], non_color_mode=False, x_location=0, y_location=0):
         """
         Creates a texture image node inside of a material.
 
         :param nodes: Nodes from the current material
-        :param image_path: Path to the image which should be loaded
+        :param image: Either the path to the image which should be loaded or the bpy.types.Image
         :param non_color_mode: If this True, the color mode of the image will be "Non-Color"
         :param x_location: X Location in the node tree
         :param y_location: Y Location in the node tree
         :return: bpy.type.Node: Return the newly constructed image node
         """
         image_node = nodes.new('ShaderNodeTexImage')
-        image_node.image = bpy.data.images.load(image_path, check_existing=True)
+        if isinstance(image, bpy.types.Image):
+            image_node.image = image
+        else:
+            image_node.image = bpy.data.images.load(image, check_existing=True)
         if non_color_mode:
             image_node.image.colorspace_settings.name = 'Non-Color'
         image_node.location.x = x_location

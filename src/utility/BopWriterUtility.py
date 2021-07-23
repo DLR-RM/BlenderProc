@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["opencv-python", "pypng==0.0.20"])
+SetupUtility.setup_pip(["opencv-contrib-python", "pypng==0.0.20"])
 
 import json
 import os
@@ -188,7 +188,7 @@ class BopWriterUtility:
         :return: A list of GT camera-object pose annotations for scene_gt.json
         """
         
-        H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix', destination_frame))
+        H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix', local_frame_change=destination_frame))
         
         frame_gt = []
         for obj in dataset_objects:
@@ -226,7 +226,7 @@ class BopWriterUtility:
         :return: dict containing info for scene_camera.json 
         """
         
-        cam_K = WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam_K', destination_frame)
+        cam_K = WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam_K')
         
         frame_camera_dict = {
             'cam_K': cam_K[0] + cam_K[1] + cam_K[2],
@@ -234,7 +234,7 @@ class BopWriterUtility:
         }
         
         if save_world2cam:
-            H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix', destination_frame))
+            H_c2w_opencv = Matrix(WriterUtility.get_cam_attribute(bpy.context.scene.camera, 'cam2world_matrix', local_frame_change=destination_frame))
             
             H_w2c_opencv = H_c2w_opencv.inverted()
             R_w2c_opencv = H_w2c_opencv.to_quaternion().to_matrix()

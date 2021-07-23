@@ -5,7 +5,7 @@ import numpy as np
 class UniformSO3:
 
     @staticmethod
-    def sample(around_x: bool = True, around_y: bool = True, around_z: bool = True) -> mathutils.Vector:
+    def sample(around_x: bool = True, around_y: bool = True, around_z: bool = True) -> np.ndarray:
         """ Uniformly samples rotations from SO(3). Allows to limit the rotation around Blender World coordinate axes.
 
         :param around_x: Whether to rotate around X-axis.
@@ -31,7 +31,7 @@ class UniformSO3:
                 mat_rand @= mathutils.Matrix.Rotation(random_angle(), 3, 'Z')
             euler_rand = mat_rand.to_euler()
 
-        return mathutils.Vector(euler_rand)
+        return np.array(euler_rand)
 
     @staticmethod
     def _random_quaternion(rand: list = None) -> np.array:

@@ -1,6 +1,7 @@
 import os
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.Utility import Utility
@@ -35,7 +36,10 @@ class Front3DLoaderModule(LoaderInterface):
           - Path to the json file, where the house information is stored.
           - string
         * - 3D_future_model_path
-          - Path to the models used in the 3D-Front dataset. to the models used in the 3D-Front dataset. Type: str
+          - Path to the models used in the 3D-Front dataset. Type: str
+          - string
+        * - 3D_front_texture_path
+          - Path to the 3D-front-texture folder. Type: str
           - string
         * - mapping_file
           - Path to a file, which maps the names of the objects to ids. Default:
@@ -55,13 +59,17 @@ class Front3DLoaderModule(LoaderInterface):
         self.mapping_file = Utility.resolve_path(self.config.get_string("mapping_file", os.path.join("resources", "front_3D", "3D_front_mapping.csv")))
         if not os.path.exists(self.mapping_file):
             raise Exception("The mapping file could not be found: {}".format(self.mapping_file))
-        _, self.mapping = LabelIdMapping.read_csv_mapping(self.mapping_file)
 
     def run(self):
+        label_mapping = LabelIdMapping.from_csv(self.mapping_file)
+        # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
+        GlobalStorage.set("label_mapping", label_mapping)
+
         loaded_objects = Front3DLoader.load(
             json_path=self.config.get_string("json_path"),
             future_model_path=self.config.get_string("3D_future_model_path"),
-            mapping=self.mapping,
+            front_3D_texture_path=self.config.get_string("3D_front_texture_path"),
+            label_mapping=label_mapping,
             ceiling_light_strength=self.config.get_float("ceiling_light_strength", 0.8),
             lamp_light_strength=self.config.get_float("lamp_light_strength", 7.0)
         )

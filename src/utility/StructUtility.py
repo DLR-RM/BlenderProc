@@ -1,10 +1,10 @@
-from typing import Union, Any
+from typing import Union, Any, List
+import numpy as np
 
 import bpy
 from src.utility.Utility import Utility, KeyFrame
-from mathutils import Vector, Euler, Color, Matrix
+from mathutils import Vector, Euler, Color, Matrix, Quaternion
 
-from typing import List
 
 class Struct:
 
@@ -12,14 +12,14 @@ class Struct:
         self.blender_obj = object
 
     def set_name(self, name: str):
-        """ Sets the name of the entity.
+        """ Sets the name of the struct.
 
         :param name: The new name.
         """
         self.blender_obj.name = name
 
     def get_name(self) -> str:
-        """ Returns the name of the entity.
+        """ Returns the name of the struct.
 
         :return: The name.
         """
@@ -33,8 +33,11 @@ class Struct:
         :return: The value of the custom property.
         """
         with KeyFrame(frame):
-            return self.blender_obj[key]
-
+            value = self.blender_obj[key]
+            if isinstance(value, (Vector, Euler, Color, Matrix, Quaternion)):
+                value = np.array(value)
+            return value
+        
     def set_cp(self, key: str, value: Any, frame: int = None):
         """ Sets the custom property with the given key.
 
@@ -75,6 +78,20 @@ class Struct:
         keys = self.blender_obj.keys()
         for key in keys:
             del self.blender_obj[key]
+
+    def get_attr(self, attr_name: str) -> Any:
+        """ Returns the value of the attribute with the given name.
+
+        :param attr_name: The name of the attribute.
+        :return: The value of the attribute
+        """
+        if hasattr(self.blender_obj, attr_name):
+            value = getattr(self.blender_obj, attr_name)
+            if isinstance(value, (Vector, Euler, Color, Matrix, Quaternion)):
+                value = np.array(value)
+            return value
+        else:
+            raise Exception("This element does not have an attribute " + str(attr_name))
 
     def __setattr__(self, key, value):
         if key != "blender_obj":

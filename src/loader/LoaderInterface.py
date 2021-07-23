@@ -1,11 +1,13 @@
+from typing import Union
+
 import bpy
+import numpy as np
 
 from src.main.Module import Module
 from src.utility.EntityUtility import Entity
 from src.utility.MeshObjectUtility import MeshObject
+from src.utility.StructUtility import Struct
 from src.utility.object.ObjectMerging import ObjectMerging
-from typing import Union
-import numpy as np
 
 class LoaderInterface(Module):
     """
@@ -70,7 +72,10 @@ class LoaderInterface(Module):
             for key, value in properties.items():
                 if key.startswith("cp_"):
                     key = key[3:]
-                    obj.set_cp(key, value)
+                    if isinstance(obj, Struct):
+                        obj.set_cp(key, value)
+                    else:
+                        obj[key] = value
                 else:
                     raise RuntimeError(
                         "Loader modules support setting only custom properties. Use 'cp_' prefix for keys. "

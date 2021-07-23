@@ -14,7 +14,7 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 class SceneNetLoader:
 
     @staticmethod
-    def load(file_path: str, texture_folder: str, unknown_texture_folder: str = "unknown") -> List[MeshObject]:
+    def load(file_path: str, texture_folder: str, label_mapping: LabelIdMapping, unknown_texture_folder: str = "unknown") -> List[MeshObject]:
         """ Loads all SceneNet objects at the given "file_path".
 
         The textures for each object are sampled based on the name of the object, if the name is not represented in the
@@ -38,7 +38,7 @@ class SceneNetLoader:
         SceneNetLoader._random_sample_materials_for_each_obj(loaded_objects, texture_folder, unknown_texture_folder)
 
         # set the category ids for each object
-        SceneNetLoader._set_category_ids(loaded_objects)
+        SceneNetLoader._set_category_ids(loaded_objects, label_mapping)
 
         for obj in loaded_objects:
             obj.set_cp("is_scene_net_obj", True)
@@ -101,7 +101,7 @@ class SceneNetLoader:
                 obj.set_shading_mode("FLAT")
 
     @staticmethod
-    def _set_category_ids(loaded_objects: List[MeshObject]):
+    def _set_category_ids(loaded_objects: List[MeshObject], label_mapping: LabelIdMapping):
         """
         Set the category ids for the objs based on the .csv file loaded in LabelIdMapping
 
@@ -116,27 +116,26 @@ class SceneNetLoader:
         "Other-prop": "otherprop", "floor_tiles_floor_tiles_0125": "floor", "ground": "floor", "floor_enclose": "floor", "floor_enclose2": "floor",
         "floor_base_object01_56": "floor", "walls1_line01_12": "wall", "room_skeleton": "wall", "ceilingwall": "ceiling"}
 
-        if LabelIdMapping.label_id_map:
-            for obj in loaded_objects:
-                obj_name = obj.get_name().lower().split(".")[0]
+        for obj in loaded_objects:
+            obj_name = obj.get_name().lower().split(".")[0]
 
-                # If it's one of the cases that the category have different names in both idsets.
-                if obj_name in normalize_name:
-                    obj_name = normalize_name[obj_name]  # Then normalize it.
+            # If it's one of the cases that the category have different names in both idsets.
+            if obj_name in normalize_name:
+                obj_name = normalize_name[obj_name]  # Then normalize it.
 
-                if obj_name in LabelIdMapping.label_id_map:
-                    obj.set_cp("category_id", LabelIdMapping.label_id_map[obj_name])
-                # Check whether the object's name without suffixes like 's', '1' or '2' exist in the mapping.
-                elif obj_name[:-1] in LabelIdMapping.label_id_map:
-                    obj.set_cp("category_id", LabelIdMapping.label_id_map[obj_name[:-1]])
-                elif "painting" in obj_name:
-                    obj.set_cp("category_id", LabelIdMapping.label_id_map["picture"])
-                else:
-                    print("This object was not specified: {} use objects for it.".format(obj_name))
-                    obj.set_cp("category_id", LabelIdMapping.label_id_map["otherstructure".lower()])
+            if label_mapping.has_label(obj_name):
+                obj.set_cp("category_id", label_mapping.id_from_label(obj_name))
+            # Check whether the object's name without suffixes like 's', '1' or '2' exist in the mapping.
+            elif label_mapping.has_label(obj_name[:-1]):
+                obj.set_cp("category_id", label_mapping.id_from_label(obj_name[:-1]))
+            elif "painting" in obj_name:
+                obj.set_cp("category_id", label_mapping.id_from_label("picture"))
+            else:
+                print("This object was not specified: {} use objects for it.".format(obj_name))
+                obj.set_cp("category_id", label_mapping.id_from_label("otherstructure".lower()))
 
-                # Correct names of floor and ceiling objects to make them later easier to identify (e.g. by the FloorExtractor)
-                if obj.get_cp("category_id") == LabelIdMapping.label_id_map["floor"]:
-                    obj.set_name("floor")
-                elif obj.get_cp("category_id") == LabelIdMapping.label_id_map["ceiling"]:
-                    obj.set_name("ceiling")
+            # Correct names of floor and ceiling objects to make them later easier to identify (e.g. by the FloorExtractor)
+            if obj.get_cp("category_id") == label_mapping.id_from_label("floor"):
+                obj.set_name("floor")
+            elif obj.get_cp("category_id") == label_mapping.id_from_label("ceiling"):
+                obj.set_name("ceiling")

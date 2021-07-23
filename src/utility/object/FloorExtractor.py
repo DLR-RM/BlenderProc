@@ -1,11 +1,12 @@
 import os
 import warnings
 from math import radians, fabs, acos
+from typing import Union, List
+import numpy as np
 
 import bmesh
 import bpy
 import mathutils
-import numpy as np
 
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
@@ -15,7 +16,7 @@ class FloorExtractor:
 
     @staticmethod
     def select_at_height_value(bm: bmesh.types.BMesh, height_value: float, compare_height: float,
-                              up_vector: mathutils.Vector, cmp_angle: float, matrix_world: mathutils.Matrix):
+                              up_vector: Union[mathutils.Vector, np.ndarray], cmp_angle: float, matrix_world: Union[mathutils.Matrix, np.ndarray]):
         """
         Selects for a given `height_value` all faces, which are inside the given `compare_height` band and also face
         upwards. This is done by comparing the face.normal in world coordinates to the `up_vector` and the resulting
@@ -40,7 +41,8 @@ class FloorExtractor:
 
 
     @staticmethod
-    def extract(mesh_objects: [MeshObject], compare_angle_degrees: float = 7.5, compare_height: float = 0.15, up_vector_upwards: bool = True, height_list_path: str = None, new_name_for_object: str = "Floor", should_skip_if_object_is_already_there: bool = False) -> [MeshObject]:
+    def extract(mesh_objects: List[MeshObject], compare_angle_degrees: float = 7.5, compare_height: float = 0.15, up_vector_upwards: bool = True, height_list_path: str = None, 
+                new_name_for_object: str = "Floor", should_skip_if_object_is_already_there: bool = False) -> List[MeshObject]:
         """ Extracts floors in the following steps:
         1. Searchs for the specified object.
         2. Splits the surfaces which point upwards at a specified level away.
@@ -168,7 +170,7 @@ class FloorExtractor:
         return newly_created_objects
 
     @staticmethod
-    def _get_median_face_pose(face: bmesh.types.BMFace, matrix_world: mathutils.Matrix):
+    def _get_median_face_pose(face: bmesh.types.BMFace, matrix_world: Union[mathutils.Matrix, np.ndarray]):
         """
         Returns the median face pose of all its vertices in the world coordinate frame.
 
@@ -179,12 +181,12 @@ class FloorExtractor:
         # calculate the median position of the current face
         median_pose = face.calc_center_median().to_4d()
         median_pose[3] = 1.0
-        median_pose = matrix_world @ median_pose
+        median_pose = mathutils.Matrix(matrix_world) @ median_pose
         return median_pose
 
     @staticmethod
-    def _check_face_angle(face: bmesh.types.BMFace, matrix_world: mathutils.Matrix,
-                          up_vector: mathutils.Vector, cmp_angle: float):
+    def _check_face_angle(face: bmesh.types.BMFace, matrix_world: Union[mathutils.Matrix, np.ndarray],
+                          up_vector: Union[mathutils.Vector, np.ndarray], cmp_angle: float):
         """
         Checks if a face.normal in world coordinates angular difference to the `up_vec` is closer as
         `cmp_anlge`.
@@ -198,13 +200,13 @@ class FloorExtractor:
         # calculate the normal
         normal_face = face.normal.to_4d()
         normal_face[3] = 0.0
-        normal_face = (matrix_world @ normal_face).to_3d()
+        normal_face = (mathutils.Matrix(matrix_world) @ normal_face).to_3d()
         # compare the normal to the current up_vec
-        return acos(normal_face @ up_vector) < cmp_angle
+        return acos(normal_face @ mathutils.Vector(up_vector)) < cmp_angle
 
     @staticmethod
-    def _check_face_with(face: bmesh.types.BMFace, matrix_world: mathutils.Matrix, height_value: float,
-                        cmp_height: float, up_vector: mathutils.Vector, cmp_angle: float):
+    def _check_face_with(face: bmesh.types.BMFace, matrix_world: Union[mathutils.Matrix, np.ndarray], height_value: float,
+                        cmp_height: float, up_vector: Union[mathutils.Vector, np.ndarray], cmp_angle: float):
         """
         Check if the face is on a certain `height_value` by checking if it is inside of the band spanned by
         `cmp_height` -> [`height_value` - `cmp_height`, `height_value` + `cmp_height`] and then if the face

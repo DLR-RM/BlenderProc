@@ -1,6 +1,7 @@
 import os
 from random import choice
-from typing import List
+import numpy as np
+from typing import List, Union
 
 import bpy
 from mathutils import Vector
@@ -63,7 +64,8 @@ class RockEssentialsRockLoader:
         return loaded_objects
 
     @staticmethod
-    def set_rocks_properties(objects: List[MeshObject], physics: bool = False, render_levels: int = 3, high_detail_mode: bool = False, scale: Vector = Vector([1, 1, 1]), reflection_amount: float = None, reflection_roughness: float = None, hsv: list = None):
+    def set_rocks_properties(objects: List[MeshObject], physics: bool = False, render_levels: int = 3, high_detail_mode: bool = False, 
+                             scale: Union[Vector, np.ndarray, list] = [1, 1, 1], reflection_amount: float = None, reflection_roughness: float = None, hsv: list = None):
         """ Sets rocks properties in accordance to the given parameters.
 
         :param objects: List of loaded rock mesh objects.

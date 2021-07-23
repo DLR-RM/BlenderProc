@@ -113,11 +113,20 @@ class SetupUtility:
         # Install all packages
         packages_were_installed = False
         for package in required_packages:
+            # If -f (find_links) flag for pip install in required package set find_link = link to parse
+            find_link = None
+
             # Extract name and target version
             if "==" in package:
                 package_name, package_version = package.lower().split('==')
+                if ' -f ' in package_version:
+                    find_link = package_version.split(' -f ')[1].strip()
+                    package_version = package_version.split(' -f ')[0].strip()
             else:
                 package_name, package_version = package.lower(), None
+
+            if package_name == "opencv-python":
+                raise Exception("Please use opencv-contrib-python instead of opencv-python, as having both packages installed in the same environment can lead to complications.")
 
             # If the package is given via git, extract package name from url
             if package_name.startswith("git+"):
@@ -142,7 +151,17 @@ class SetupUtility:
             # Only install if its not already installed (pip would check this itself, but at first downloads the requested package which of course always takes a while)
             if not already_installed or reinstall_packages:
                 print("Installing pip package {} {}".format(package_name, package_version))
-                subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"], env=dict(os.environ, PYTHONPATH=packages_path)).wait()
+                extra_args = []
+                # Set find link flag, if required
+                if find_link:
+                    extra_args.extend(["-f", find_link])
+                    package = package_name + "==" + package_version
+                # If the env var is set, disable pip cache
+                if os.getenv("BLENDER_PROC_NO_PIP_CACHE", 'False').lower() in ('true', '1', 't'):
+                    extra_args.append("--no-cache-dir")
+
+                # Run pip install
+                subprocess.Popen([python_bin, "-m", "pip", "install", package, "--target", packages_path, "--upgrade"] + extra_args, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
                 SetupUtility.installed_packages[package_name] = package_version
                 packages_were_installed = True
 
@@ -201,3 +220,30 @@ class SetupUtility:
         """
         file = BytesIO(response.content)
         SetupUtility.extract_file(output_dir, file)
+
+    def check_if_setup_utilities_are_at_the_top(path_to_run_file):
+        """
+        Checks if the given python scripts has at the top an import to SetupUtility, if not an
+        exception is thrown. With an explanation that each python script has to start with SetupUtility.
+
+        :param path_to_run_file: path to the used python script
+        """
+        if os.path.exists(path_to_run_file):
+            with open(path_to_run_file, "r") as file:
+                text = file.read()
+                lines = [l.strip() for l in text.split("\n")]
+                lines = [l for l in lines if l and not l.startswith("#")]
+                for index, line in enumerate(lines):
+                    if "import" in line and "SetupUtility" in line:
+                        return
+                    elif "import" in line:
+                        code = "\n".join(lines[:index + 2])
+                        raise Exception('The given script "{}" does not have a SetupUtility call at the top! '
+                                        "Make sure that is the first thing you import and run! Before importing "
+                                        "anything else!\nYour code:\n#####################\n{}\n"
+                                        "####################\nReplaces this with:\nfrom src.utility.SetupUtility "
+                                        "import SetupUtility\nSetupUtility.setup([])".format(path_to_run_file, code))
+        else:
+            raise Exception("The given run script does not exist: {}".format(path_to_run_file))
+
+

@@ -1,4 +1,5 @@
 from typing import Union, Any
+import numpy as np
 
 import bpy
 
@@ -40,21 +41,7 @@ class Entity(Struct):
         """
         return [Entity(obj) for obj in blender_objects]
 
-    def set_name(self, name: str):
-        """ Sets the name of the entity.
-
-        :param name: The new name.
-        """
-        self.blender_obj.name = name
-
-    def get_name(self) -> str:
-        """ Returns the name of the entity.
-
-        :return: The name.
-        """
-        return self.blender_obj.name
-
-    def set_location(self, location: Union[list, Vector], frame: int = None):
+    def set_location(self, location: Union[list, Vector, np.ndarray], frame: int = None):
         """ Sets the location of the entity in 3D world coordinates.
 
         :param location: The location to set.
@@ -63,7 +50,7 @@ class Entity(Struct):
         self.blender_obj.location = location
         Utility.insert_keyframe(self.blender_obj, "location", frame)
 
-    def set_rotation_euler(self, rotation_euler: Union[list, Euler], frame: int = None):
+    def set_rotation_euler(self, rotation_euler: Union[list, Euler, np.ndarray], frame: int = None):
         """ Sets the rotation of the entity in euler angles.
 
         :param rotation_euler: The euler angles to set.
@@ -72,7 +59,7 @@ class Entity(Struct):
         self.blender_obj.rotation_euler = rotation_euler
         Utility.insert_keyframe(self.blender_obj, "rotation_euler", frame)
 
-    def set_scale(self, scale: Union[list, Vector], frame: int = None):
+    def set_scale(self, scale: Union[list, np.ndarray, Vector], frame: int = None):
         """ Sets the scale of the entity along all three axes.
 
         :param scale: The scale to set.
@@ -81,107 +68,54 @@ class Entity(Struct):
         self.blender_obj.scale = scale
         Utility.insert_keyframe(self.blender_obj, "scale", frame)
 
-    def get_location(self, frame: int = None) -> Vector:
+    def get_location(self, frame: int = None) -> np.ndarray:
         """ Returns the location of the entity in 3D world coordinates.
 
         :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
         :return: The location at the specified frame.
         """
         with KeyFrame(frame):
-            return self.blender_obj.location
+            return np.array(self.blender_obj.location)
 
-    def get_rotation(self, frame: int = None) -> Euler:
+    def get_rotation(self, frame: int = None) -> np.ndarray:
         """ Returns the rotation of the entity in euler angles.
 
         :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
         :return: The rotation at the specified frame.
         """
         with KeyFrame(frame):
-            return self.blender_obj.rotation_euler
+            return np.array(self.blender_obj.rotation_euler)
 
-    def get_scale(self, frame: int = None) -> Vector:
+    def get_scale(self, frame: int = None) -> np.ndarray:
         """ Returns the scale of the entity along all three axes.
 
         :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
         :return: The scale at the specified frame.
         """
         with KeyFrame(frame):
-            return self.blender_obj.scale
+            return np.array(self.blender_obj.scale)
 
-    def apply_T(self, transform: Matrix):
+    def apply_T(self, transform: Union[np.ndarray, Matrix]):
         """ Apply the given transformation to the pose of the entity.
 
         :param transform: A 4x4 matrix representing the transformation.
         """
-        self.blender_obj.matrix_world @= transform
+        self.blender_obj.matrix_world @= Matrix(transform)
 
-    def set_local2world_mat(self, matrix_world: Matrix):
+    def set_local2world_mat(self, matrix_world: Union[np.ndarray, Matrix]):
         """ Sets the pose of the object in the form of a local2world matrix.
 
         :param matrix_world: A 4x4 matrix.
         """
         # To make sure matrices are always interpreted row-wise, we first convert them to a mathutils matrix.
-        if not isinstance(matrix_world, Matrix):
-            matrix_world = Matrix(matrix_world)
         self.blender_obj.matrix_world = Matrix(matrix_world)
 
-    def get_local2world_mat(self) -> Matrix:
+    def get_local2world_mat(self) -> np.ndarray:
         """ Returns the pose of the object in the form of a local2world matrix.
 
         :return: The 4x4 local2world matrix.
         """
-        return self.blender_obj.matrix_world
-
-    def get_cp(self, key: str, frame: int = None) -> Any:
-        """ Returns the custom property with the given key.
-
-        :param key: The key of the custom property.
-        :param frame: The frame number at which the value should be returned. If None is given, the current frame number is used.
-        :return: The value of the custom property.
-        """
-        with KeyFrame(frame):
-            return self.blender_obj[key]
-
-    def set_cp(self, key: str, value: Any, frame: int = None):
-        """ Sets the custom property with the given key.
-
-        Keyframes can be only set for custom properties from type int, float or bool.
-
-        :param key: The key of the custom property.
-        :param value: The value to set.
-        :param frame: The frame number which the value should be set to. If None is given, the current frame number is used.
-        """
-        self.blender_obj[key] = value
-        if isinstance(self.blender_obj[key], float) or isinstance(self.blender_obj[key], int):
-            Utility.insert_keyframe(self.blender_obj, "[\"" + key + "\"]", frame)
-
-    def del_cp(self, key):
-        """ Removes the custom property with the given key.
-
-        :param key: The key of the custom property to remove.
-        """
-        del self.blender_obj[key]
-
-    def has_cp(self, key: str) -> bool:
-        """ Return whether a custom property with the given key exists.
-
-        :param key: The key of the custom property to check.
-        :return: True, if the custom property exists.
-        """
-        return key in self.blender_obj
-
-    def get_all_cps(self) -> list:
-        """ Returns all custom properties as key, value pairs.
-
-        :return: A list of key value pairs
-        """
-        return self.blender_obj.items()
-
-    def clear_all_cps(self):
-        """ Removes all existing custom properties the entity has. """
-        keys = self.blender_obj.keys()
-        for key in keys:
-            del self.blender_obj[key]
+        return np.array(self.blender_obj.matrix_world)
 
     def select(self):
         """ Selects the entity. """
@@ -208,6 +142,21 @@ class Entity(Struct):
     def delete(self):
         """ Deletes the entity """
         bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
+
+    @staticmethod
+    def delete_multiple(entities: ["Entity"]):
+        """ Deletes multiple entities at once
+
+        :param entities: A list of entities that should be deleted
+        """
+        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})
+
+    def is_empty(self) -> bool:
+        """ Returns whether the entity is from type "EMPTY".
+
+        :return: True, if its an empty.
+        """
+        return self.blender_obj.type == "EMPTY"
 
     def __setattr__(self, key, value):
         if key != "blender_obj":

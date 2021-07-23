@@ -1,8 +1,8 @@
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
+from src.utility.CameraUtility import CameraUtility
+from src.utility.MathUtility import MathUtility
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MeshObjectUtility import MeshObject
@@ -19,7 +19,6 @@ from src.utility.Initializer import Initializer
 
 from src.utility.RendererUtility import RendererUtility
 import numpy as np
-from mathutils import Matrix, Euler
 
 import argparse
 import os
@@ -32,8 +31,8 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house)
+label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+objs = SuncgLoader.load(args.house, label_mapping)
 
 # makes Suncg objects emit light
 SuncgLighting.light()
@@ -50,8 +49,8 @@ while tries < 10000 and poses < 5:
     height = np.random.uniform(0.5, 2)
     location, _ = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
-    rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, Euler(rotation).to_matrix())
+    euler_rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
+    cam2world_matrix = MathUtility.build_transformation_mat(location, euler_rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:

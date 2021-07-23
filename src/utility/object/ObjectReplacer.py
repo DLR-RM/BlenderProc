@@ -15,16 +15,16 @@ class ObjectReplacer:
     """
 
     @staticmethod
-    def _bb_ratio(bb1, bb2):
+    def _bb_ratio(bb1: np.ndarray, bb2: np.ndarray) -> list:
         """ Rough estimation of the ratios between two bounding boxes sides, not axis aligned
 
         :param bb1: bounding box 1. Type: float multi-dimensional array of 8 * 3.
         :param bb2: bounding box 2. Type: float multi-dimensional array of 8 * 3.
         returns the ratio between each side of the bounding box. Type: a list of floats.
         """
-        ratio_a = (bb1[0][0] - bb1[4][0]) / (bb2[0][0] - bb2[4][0])
-        ratio_b = (bb1[0][1] - bb1[3][1]) / (bb2[0][1] - bb2[3][1])
-        ratio_c = (bb1[0][2] - bb1[1][2]) / (bb2[0][2] - bb2[1][2])
+        ratio_a = (bb1[0,0] - bb1[4,0]) / (bb2[0,0] - bb2[4,0])
+        ratio_b = (bb1[0,1] - bb1[3,1]) / (bb2[0,1] - bb2[3,1])
+        ratio_c = (bb1[0,2] - bb1[1,2]) / (bb2[0,2] - bb2[1,2])
         return [ratio_a, ratio_b, ratio_c]
 
     @staticmethod

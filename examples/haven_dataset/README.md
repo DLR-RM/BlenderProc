@@ -18,7 +18,7 @@ This will download all 3D models, all environment HDRs and also all textures the
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/haven_dataset/config.yaml resources/haven/models/ArmChair_01/ArmChair_01.blend resources/haven examples/haven_dataset/output
+python run.py examples/haven_dataset/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/haven_dataset/output
 ``` 
 
 * `examples/haven_dataset/config.yaml`: path to the configuration file with pipeline configuration.

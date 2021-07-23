@@ -1,6 +1,7 @@
 import os
 
 from src.loader.LoaderInterface import LoaderInterface
+from src.main.GlobalStorage import GlobalStorage
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.Utility import Utility
 from src.utility.loader.SuncgLoader import SuncgLoader
@@ -37,8 +38,10 @@ class SuncgLoaderModule(LoaderInterface):
         suncg_folder_path = os.path.join(os.path.dirname(self.house_path), "../..")
         self.suncg_dir = self.config.get_string("suncg_path", suncg_folder_path)
 
-        LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-
     def run(self):
-        loaded_objects = SuncgLoader.load(self.house_path, self.suncg_dir)
+        label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
+        GlobalStorage.set("label_mapping", label_mapping)
+
+        loaded_objects = SuncgLoader.load(self.house_path, label_mapping, self.suncg_dir)
         self._set_properties(loaded_objects)

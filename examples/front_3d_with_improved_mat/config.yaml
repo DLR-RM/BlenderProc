@@ -1,4 +1,4 @@
-# Args: <PATH_TO_3D-Front_json> <PATH_TO_3D-Future-model> <CC_Material_path> <output>
+# Args: <PATH_TO_3D-Front_json> <PATH_TO_3D-Future-model> <PATH_TO_3D-FRONT-texture-path> <CC_Material_path> <output>
 {
   "version": 3,
   "setup": {
@@ -12,7 +12,7 @@
       "module": "main.Initializer",
       "config":{
         "global": {
-          "output_dir": "<args:3>",
+          "output_dir": "<args:4>",
           "max_bounces": 200,
           "diffuse_bounces": 200,
           "glossy_bounces": 200,
@@ -25,7 +25,8 @@
       "module": "loader.Front3DLoader",
       "config": {
         "json_path": "<args:0>",
-        "3D_future_model_path": "<args:1>"
+        "3D_future_model_path": "<args:1>",
+        "3D_front_texture_path": "<args:2>"
       }
     },
     {
@@ -37,7 +38,7 @@
     {
       "module": "loader.CCMaterialLoader",
       "config": {
-        "folder_path": "<args:2>",
+        "folder_path": "<args:3>",
         "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
       }
     },

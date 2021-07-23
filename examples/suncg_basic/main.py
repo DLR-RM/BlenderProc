@@ -1,22 +1,17 @@
-from src.utility.CameraUtility import CameraUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
-
+from src.utility.CameraUtility import CameraUtility
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
 from src.utility.loader.SuncgLoader import SuncgLoader
 from src.utility.lighting.SuncgLighting import SuncgLighting
-
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Initializer import Initializer
-
 from src.utility.RendererUtility import RendererUtility
-import numpy as np
-from mathutils import Matrix, Vector, Euler
 
 import argparse
 import os
@@ -30,8 +25,8 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house)
+label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+objs = SuncgLoader.load(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
@@ -40,8 +35,8 @@ CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.3
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
-        position = MathUtility.transform_point_to_blender_coord_frame(Vector(line[:3]), ["X", "-Z", "Y"])
-        rotation = MathUtility.transform_point_to_blender_coord_frame(Vector(line[3:6]), ["X", "-Z", "Y"])
+        position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
+        rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
         matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
         CameraUtility.add_camera_pose(matrix_world)
 

@@ -5,7 +5,6 @@ from mathutils import Matrix, Vector, Euler
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.utility.CameraUtility import CameraUtility
-from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
 
 
@@ -256,20 +255,20 @@ class CameraInterface(Module):
         cam2world_matrix = self._cam2world_matrix_from_cam_extrinsics(config)
         CameraUtility.add_camera_pose(cam2world_matrix, frame)
 
-    def _cam2world_matrix_from_cam_extrinsics(self, config):
+    def _cam2world_matrix_from_cam_extrinsics(self, config: Config) -> np.ndarray:
         """ Determines camera extrinsics by using the given config and returns them in form of a cam to world frame transformation matrix.
 
         :param config: The configuration object.
-        :return: The cam to world transformation matrix.
+        :return: The 4x4 cam to world transformation matrix.
         """
         if not config.has_param("cam2world_matrix"):
-            position = MathUtility.transform_point_to_blender_coord_frame(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
+            position = MathUtility.change_coordinate_frame_of_point(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
 
             # Rotation
             rotation_format = config.get_string("rotation/format", "euler")
             value = config.get_vector3d("rotation/value", [0, 0, 0])
             # Transform to blender coord frame
-            value = MathUtility.transform_point_to_blender_coord_frame(Vector(value), self.source_frame)
+            value = MathUtility.change_coordinate_frame_of_point(value, self.source_frame)
             if rotation_format == "euler":
                 # Rotation, specified as euler angles
                 rotation_matrix = Euler(value, 'XYZ').to_matrix()
@@ -278,16 +277,16 @@ class CameraInterface(Module):
                 rotation_matrix = CameraUtility.rotation_from_forward_vec(value)
             elif rotation_format == "look_at":
                 # Convert forward vector to euler angle (Assume Up = Z)
-                rotation_matrix = CameraUtility.rotation_from_forward_vec((value - position).normalized())
+                rotation_matrix = CameraUtility.rotation_from_forward_vec(value - position)
             else:
                 raise Exception("No such rotation format:" + str(rotation_format))
 
             if rotation_format == "look_at" or rotation_format == "forward_vec":
                 inplane_rot = config.get_float("rotation/inplane_rot", 0.0)
-                rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
+                rotation_matrix = np.matmul(rotation_matrix, Euler((0.0, 0.0, inplane_rot)).to_matrix())
 
-            cam2world_matrix = Matrix.Translation(Vector(position)) @ rotation_matrix.to_4x4()
+            cam2world_matrix = MathUtility.build_transformation_mat(position, rotation_matrix)
         else: 
-            cam2world_matrix = Matrix(np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32))
-            cam2world_matrix = Utility.transform_matrix_to_blender_coord_frame(cam2world_matrix, self.source_frame)
+            cam2world_matrix = np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32)
+            cam2world_matrix = MathUtility.change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.source_frame)
         return cam2world_matrix
