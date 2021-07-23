@@ -9,19 +9,19 @@ In contrast to the SUNCG basic example, we do here not load precomputed camera p
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/suncg_with_cam_sampling/config.yaml <path to house.json> examples/suncg_with_cam_sampling/output
+python run.py examples/datasets/suncg_with_cam_sampling/config.yaml <path to house.json> examples/datasets/suncg_with_cam_sampling/output
 ```
 
-* `examples/suncg_with_cam_sampling/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/suncg_with_cam_sampling/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
-* `examples/suncg_with_cam_sampling/output`: path to the output directory.
+* `examples/datasets/suncg_with_cam_sampling/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/suncg_with_cam_sampling/output/0.hdf5
+python scripts/visHdf5Files.py examples/datasets/suncg_with_cam_sampling/output/0.hdf5
 ```
 
 ## Steps

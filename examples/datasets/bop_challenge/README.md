@@ -23,20 +23,20 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/bop_challenge/<config_dataset.yaml> 
+python run.py examples/datasets/bop_challenge/<config_dataset.yaml> 
               <path_to_bop_data> 
               <bop_dataset_name> 
               <path_to_bop_toolkit> 
               resources/cctextures 
-              examples/bop_challenge/output
+              examples/datasets/bop_challenge/output
 ``` 
 
-* `examples/bop_challenge/<config_dataset.yaml>`: path to the pipeline configuration file.
+* `examples/datasets/bop_challenge/<config_dataset.yaml>`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset.
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
-* `examples/bop_challenge/output`: path to an output folder where the bop_data will be saved
+* `examples/datasets/bop_challenge/output`: path to an output folder where the bop_data will be saved
 
 This creates 25 images of a single scene. To create a whole dataset, simply run the command multiple times.
 

@@ -14,17 +14,17 @@ It is also necessary to download the textures from cc_textures, we provide a scr
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} resources/cctextures examples/front_3d_with_improved_mat/output  
+python run.py examples/datasets/front_3d_with_improved_mat/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} resources/cctextures examples/datasets/front_3d_with_improved_mat/output  
 ```
 
-* `examples/front_3d_with_improved_mat/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/front_3d_with_improved_mat/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
 * `PATH_TO_3D-Front-texture`: path to the folder where all 3D-Front textures are stored 
 * `resources/cctextures`: path to the cc texture folder
-* `examples/front_3d_with_improved_mat/output`: path to the output directory
+* `examples/datasets/front_3d_with_improved_mat/output`: path to the output directory
 
 Be aware that the default path for the CCMaterialLoader is used, if you want to change this please refer to the documentation in the `CCMaterialLoader` class.
 
@@ -33,7 +33,7 @@ Be aware that the default path for the CCMaterialLoader is used, if you want to 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/front_3d_with_improved_mat/output/0.hdf5
+python scripts/visHdf5Files.py examples/datasets/front_3d_with_improved_mat/output/0.hdf5
 ```
 
 ## Steps

@@ -53,19 +53,19 @@ However, we will give you a step by step explanation on how to get access.
 Execute in the BlenderProc main directory:
 
 ```shell
-python run.py examples/amass_human_poses/config.yaml resources/AMASS examples/amass_human_poses/output
+python run.py examples/datasets/amass_human_poses/config.yaml resources/AMASS examples/datasets/amass_human_poses/output
 ```
 
-* `examples/amass_human_poses/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/amass_human_poses/config.yaml`: path to the configuration file with pipeline configuration.
 * `esources/AMASS`: path to the AMASS Dataset folder in resources folder
-* `examples/amass_human_poses/output`: path to the output directory
+* `examples/datasets/amass_human_poses/output`: path to the output directory
 
 ## Visualization
 
 In the output folder you will find multiple `.hdf5` files. These can be visualized with the script:
 
 ```shell
-python scripts/visHdf5Files.py examples/amass_human_poses/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/amass_human_poses/output/*.hdf5
 ```
 
 ## Steps

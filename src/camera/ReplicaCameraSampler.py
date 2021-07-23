@@ -48,7 +48,7 @@ class ReplicaCameraSampler(CameraSampler):
         if not self.config.get_bool('is_replica_object', False):
             file_path = self.config.get_string('height_list_path')
         else:
-            folder_path = os.path.join('resources', 'replica_dataset', 'height_levels', self.config.get_string('data_set_name'))
+            folder_path = os.path.join('resources', 'replica', 'height_levels', self.config.get_string('data_set_name'))
             file_path = Utility.resolve_path(os.path.join(folder_path, 'height_list_values.txt'))
 
         if 'mesh' in bpy.data.objects:

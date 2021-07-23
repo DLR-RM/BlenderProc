@@ -15,20 +15,20 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/bop_object_on_surface_sampling/config.yaml 
+python run.py examples/datasets/bop_object_on_surface_sampling/config.yaml 
               <path_to_bop_data> 
               <bop_dataset_name> 
               <path_to_bop_toolkit> 
               resources/cctextures 
-              examples/bop_object_on_surface_sampling/output
+              examples/datasets/bop_object_on_surface_sampling/output
 ``` 
 
-* `examples/bop_object_on_surface_sampling/config.yaml`: path to the pipeline configuration file.
+* `examples/datasets/bop_object_on_surface_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset for which ground truth should be saved, e.g. lm
 * `<path_to_bop_toolkit>`: path to a bop_toolkit folder.
 * `resources/cctextures`: path to CCTextures folder
-* `examples/bop_object_on_surface_sampling/output`: path to an output folder.
+* `examples/datasets/bop_object_on_surface_sampling/output`: path to an output folder.
 
 ## Generate a dataset
 To aggregate data and labels over multiple scenes, simply run the script multiple times using the same command. As data is saved in chunks of 1000 images, you can easily distribute the data generation by running the scripts on different machines/servers and then collecting all chunks.

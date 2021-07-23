@@ -9,20 +9,20 @@ Renders a SUNCG scene using precomputed camera poses read from file.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/suncg_basic/config.yaml <path to cam_pose file> <path to house.json> examples/suncg_basic/output
+python run.py examples/datasets/suncg_basic/config.yaml <path to cam_pose file> <path to house.json> examples/datasets/suncg_basic/output
 ```
 
-* `examples/suncg_basic/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/suncg_basic/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
-* `examples/suncg_basic/output`: path to the output directory.
+* `examples/datasets/suncg_basic/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/suncg_basic/output/0.hdf5
+python scripts/visHdf5Files.py examples/datasets/suncg_basic/output/0.hdf5
 ```
 
 ## Steps

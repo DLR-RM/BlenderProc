@@ -38,23 +38,23 @@ Best regards,
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} examples/front_3d/output 
+python run.py examples/datasets/front_3d/config.yaml {PATH_TO_3D-Front-Json-File} {PATH_TO_3D-Future} {PATH_TO_3D-Front-texture} examples/datasets/front_3d/output 
 ```
 
-* `examples/front_3d/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/front_3d/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
 * `PATH_TO_3D-Front-texture`: path to the folder where all 3D-Front textures are stored 
-* `examples/front_3d/output`: path to the output directory
+* `examples/datasets/front_3d/output`: path to the output directory
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/front_3d/output/0.hdf5
+python scripts/visHdf5Files.py examples/datasets/front_3d/output/0.hdf5
 ```
 
 ## Steps

@@ -8,24 +8,24 @@ This example shows how to load BOP objects and alternatingly sample light poses,
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-In [examples/bop_object_pose_sampling/config.yaml](config.yaml) set the `blender_install_path` where Blender is or should be installed.
+In [examples/datasets/bop_object_pose_sampling/config.yaml](config.yaml) set the `blender_install_path` where Blender is or should be installed.
 
 Execute in the BlenderProc main directory:  
 
 ```
-python run.py examples/bop_object_pose_sampling/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/bop_object_pose_sampling/output
+python run.py examples/datasets/bop_object_pose_sampling/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/datasets/bop_object_pose_sampling/output
 ```
-* `examples/bop_object_pose_sampling/config.yaml`: path to the pipeline configuration file.
+* `examples/datasets/bop_object_pose_sampling/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset, e.g. lm
 * `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
-* `examples/bop_object_pose_sampling/output`: path to the output directory.
+* `examples/datasets/bop_object_pose_sampling/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data and labels:
 ```
-python scripts/visHdf5Files.py examples/bop_object_pose_sampling/output/0.hdf5
+python scripts/visHdf5Files.py examples/datasets/bop_object_pose_sampling/output/0.hdf5
 ```
 
 Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:

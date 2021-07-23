@@ -18,19 +18,19 @@ This is an advanced example please check these example before:
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/suncg_with_improved_mat/config.yaml <path to house.json> examples/suncg_with_improved_mat/output
+python run.py examples/datasets/suncg_with_improved_mat/config.yaml <path to house.json> examples/datasets/suncg_with_improved_mat/output
 ```
 
-* `examples/suncg_with_improved_mat/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/suncg_with_improved_mat/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
-* `examples/suncg_with_improved_mat/output`: path to the output directory.
+* `examples/datasets/suncg_with_improved_mat/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/suncg_with_improved_mat/output/0.hdf5
+python scripts/visHdf5Files.py examples/datasets/suncg_with_improved_mat/output/0.hdf5
 ```
 
 ## Steps

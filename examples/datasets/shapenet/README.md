@@ -13,19 +13,19 @@ See the [ShapeNet Webpage](http://www.shapenet.org/) for downloading the data. W
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/shapenet/config.yaml <PATH_TO_ShapeNetCore.v2> examples/shapenet/output
+python run.py examples/datasets/shapenet/config.yaml <PATH_TO_ShapeNetCore.v2> examples/datasets/shapenet/output
 ``` 
 
-* `examples/shapenet/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/shapenet/config.yaml`: path to the configuration file with pipeline configuration.
 * `<PATH_TO_ShapeNetCore.v2>`: path to the downloaded shape net core v2 dataset, get it [here](http://www.shapenet.org/) 
-* `examples/shapenet/output`: path to the output directory.
+* `examples/datasets/shapenet/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/shapenet/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/shapenet/output/*.hdf5
 ``` 
 
 ## Steps
