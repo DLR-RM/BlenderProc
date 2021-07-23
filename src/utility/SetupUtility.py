@@ -219,6 +219,7 @@ class SetupUtility:
         file = BytesIO(response.content)
         SetupUtility.extract_file(output_dir, file)
 
+    @staticmethod
     def check_if_setup_utilities_are_at_the_top(path_to_run_file):
         """
         Checks if the given python scripts has at the top an import to SetupUtility, if not an
