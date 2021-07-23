@@ -213,8 +213,8 @@ class SuncgLoader:
         :return: The corrected bbox.
         """
         return {
-            "min": MathUtility.transform_point_to_blender_coord_frame(bbox["min"], ["X", "-Z", "Y"]),
-            "max": MathUtility.transform_point_to_blender_coord_frame(bbox["max"], ["X", "-Z", "Y"])
+            "min": MathUtility.change_coordinate_frame_of_point(bbox["min"], ["X", "-Z", "Y"]),
+            "max": MathUtility.change_coordinate_frame_of_point(bbox["max"], ["X", "-Z", "Y"])
         }
 
     @staticmethod
@@ -245,7 +245,7 @@ class SuncgLoader:
         # set class to void
         box.set_cp("category_id", label_mapping.id_from_label("void"))
         # Rotate cube to match objects loaded from .obj, has to be done after transformations have been applied
-        box.set_local2world_mat(Matrix.Rotation(math.radians(90), 4, "X") @ box.get_local2world_mat())
+        box.set_local2world_mat(Matrix.Rotation(math.radians(90), 4, "X") @ Matrix(box.get_local2world_mat()))
 
         return [box]
 

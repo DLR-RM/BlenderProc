@@ -113,40 +113,47 @@ class WriterUtility:
         return rows
 
     @staticmethod
-    def get_common_attribute(item: bpy.types.Object, attribute_name: str,
-                             destination_frame: Union[None, List[str]] = None) -> Any:
+    def get_common_attribute(item: bpy.types.Object, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given item.
 
         This method covers all general attributes that blender objects have.
 
         :param item: The item. Type: blender object.
         :param attribute_name: The attribute name. Type: string.
-        :param destination_frame: Used to transform item to blender coordinates. Default: ["X", "Y", "Z"]
+     :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
+     :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
 
-        if destination_frame is None:
-            destination_frame = ["X", "Y", "Z"]
+        if local_frame_change is None:
+            local_frame_change = ["X", "Y", "Z"]
+        if world_frame_change is None:
+            world_frame_change = ["X", "Y", "Z"]
+
+        # Print warning if local_frame_change is used with other attributes than matrix_world
+        if local_frame_change != ["X", "Y", "Z"] and attribute_name in ["location", "rotation_euler", "rotation_forward_vec", "rotation_up_vec"]:
+            print("Warning: The local_frame_change parameter is at the moment only supported by the matrix_world attribute.")
 
         if attribute_name == "name":
             return item.name
         elif attribute_name == "location":
-            return MathUtility.transform_point_to_blender_coord_frame(item.location, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(item.location, world_frame_change)
         elif attribute_name == "rotation_euler":
-            return MathUtility.transform_point_to_blender_coord_frame(item.rotation_euler, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(item.rotation_euler, world_frame_change)
         elif attribute_name == "rotation_forward_vec":
             # Calc forward vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             forward = rot_mat @ mathutils.Vector([0, 0, -1])
-            return MathUtility.transform_point_to_blender_coord_frame(forward, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(forward, world_frame_change)
         elif attribute_name == "rotation_up_vec":
             # Calc up vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             up = rot_mat @ mathutils.Vector([0, 1, 0])
-            return MathUtility.transform_point_to_blender_coord_frame(up, destination_frame)
+            return MathUtility.change_coordinate_frame_of_point(up, world_frame_change)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = Utility.transform_matrix_to_blender_coord_frame(item.matrix_world, destination_frame)
+            matrix_world = MathUtility.change_source_coordinate_frame_of_transformation_matrix(item.matrix_world, local_frame_change)
+            matrix_world = MathUtility.change_target_coordinate_frame_of_transformation_matrix(matrix_world, world_frame_change)
             return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]
@@ -159,13 +166,13 @@ class WriterUtility:
             raise Exception("No such attribute: " + attribute_name)
 
     @staticmethod
-    def get_cam_attribute(cam_ob: bpy.context.scene.camera, attribute_name: str,
-                          destination_frame: Union[List[str], None] = None) -> Any:
+    def get_cam_attribute(cam_ob: bpy.context.scene.camera, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given object.
 
         :param cam_ob: The camera object.
         :param attribute_name: The attribute name.
-        :param destination_frame: Used to transform camera to blender coordinates. Default: ["X", "Y", "Z"]
+        :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
+        :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
 
@@ -184,32 +191,34 @@ class WriterUtility:
         elif attribute_name == "cam_K":
             return [[x for x in c] for c in CameraUtility.get_intrinsics_as_K_matrix()]
         else:
-            if destination_frame is None:
-                destination_frame = ["X", "Y", "Z"]
             if attribute_name == "cam2world_matrix":
-                return WriterUtility.get_common_attribute(cam_ob, "matrix_world", destination_frame)
+                return WriterUtility.get_common_attribute(cam_ob, "matrix_world", local_frame_change, world_frame_change)
             else:
-                return WriterUtility.get_common_attribute(cam_ob, attribute_name, destination_frame)
+                return WriterUtility.get_common_attribute(cam_ob, attribute_name, local_frame_change, world_frame_change)
 
     @staticmethod
-    def get_light_attribute(light: bpy.types.Light, attribute_name: str) -> Any:
+    def get_light_attribute(light: bpy.types.Light, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given light.
 
         :param light: The light. Type: blender scene object of type light.
         :param attribute_name: The attribute name.
+        :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
+        :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
         if attribute_name == "energy":
             return light.data.energy
         else:
-            return WriterUtility.get_common_attribute(light, attribute_name)
+            return WriterUtility.get_common_attribute(light, attribute_name, local_frame_change, world_frame_change)
 
     @staticmethod
-    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str):
+    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None):
         """ Returns the value of the requested attribute for the given object.
 
         :param shapenet_obj: The ShapeNet object.
         :param attribute_name: The attribute name.
+        :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
+        :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
 
@@ -218,7 +227,7 @@ class WriterUtility:
         elif attribute_name == "used_source_id":
             return shapenet_obj.get("used_source_id", "")
         else:
-            return WriterUtility.get_common_attribute(shapenet_obj, attribute_name)
+            return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, local_frame_change, world_frame_change)
 
     @staticmethod
     def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[np.ndarray]],

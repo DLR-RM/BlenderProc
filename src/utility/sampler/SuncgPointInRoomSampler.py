@@ -1,5 +1,6 @@
 import random
-from typing import Union
+from typing import Tuple, List
+import numpy as np
 
 from mathutils import Vector
 
@@ -8,7 +9,7 @@ from src.utility.MeshObjectUtility import MeshObject
 
 class SuncgPointInRoomSampler:
 
-    def __init__(self, suncg_objects: [MeshObject]):
+    def __init__(self, suncg_objects: List[MeshObject]):
         """
         :param suncg_objects: The list of suncg objects to consider.
         """
@@ -23,7 +24,7 @@ class SuncgPointInRoomSampler:
                 if floor_obj is not None:
                     self.rooms.append((room_obj, floor_obj))
 
-    def sample(self, height: float, max_tries: int = 1000) -> Union[Vector, int]:
+    def sample(self, height: float, max_tries: int = 1000) -> Tuple[np.ndarray, int]:
         """ Samples a point inside one of the loaded suncg rooms.
 
         The points are uniformly sampled along x/y over all rooms.
@@ -38,7 +39,7 @@ class SuncgPointInRoomSampler:
             room_id = random.randrange(len(self.rooms))
             room_obj, floor_obj = self.rooms[room_id]
 
-            point = Vector([
+            point = np.array([
                 random.uniform(room_obj.get_cp("bbox")["min"][0], room_obj.get_cp("bbox")["max"][0]),
                 random.uniform(room_obj.get_cp("bbox")["min"][1], room_obj.get_cp("bbox")["max"][1]),
                 room_obj.get_cp("bbox")["min"][2] + height
@@ -50,7 +51,7 @@ class SuncgPointInRoomSampler:
 
         raise Exception("Cannot sample any point inside the loaded suncg rooms.")
 
-    def _find_floor(self, suncg_objects: [MeshObject], room_obj: MeshObject) -> MeshObject:
+    def _find_floor(self, suncg_objects: List[MeshObject], room_obj: MeshObject) -> MeshObject:
         """ Returns the floor object of the given room object.
 
         Goes through all children and returns the first one with type "Floor".

@@ -1,4 +1,5 @@
-import mathutils
+import mathutils 
+import numpy as np
 
 from src.main.Provider import Provider
 from src.utility.Config import Config
@@ -132,7 +133,7 @@ class AttributeMerger(Provider):
         :param raw_result: list of provider output values. Type: List
         :return: True if list is of of int (and/or) float, or mathutils.Vector data type. False if not. Type: bool.
         """
-        return any([all(isinstance(item, mathutils.Vector) for item in raw_result),
+        return any([all(isinstance(item, (mathutils.Vector, np.ndarray)) for item in raw_result),
                     all(isinstance(item, (int, float)) for item in raw_result)])
 
     def _sum(self, raw_result):

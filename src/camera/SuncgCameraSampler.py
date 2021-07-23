@@ -31,7 +31,7 @@ class SuncgCameraSampler(CameraSampler):
         :return: True, if the sampled pose was valid
         """
         cam2world_matrix = super()._sample_pose(config)
-        cam2world_matrix.translation, room_id = self.point_sampler.sample(cam2world_matrix.translation[2])
+        cam2world_matrix[:3,3], room_id = self.point_sampler.sample(height = cam2world_matrix[2,3])
         bpy.context.scene.camera["room_id"] = room_id
         return cam2world_matrix
 

@@ -1,5 +1,4 @@
 from src.utility.SetupUtility import SetupUtility
-
 SetupUtility.setup([])
 
 import argparse
@@ -35,7 +34,7 @@ if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
 
 Initializer.init()
 mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
-_, mapping = LabelIdMapping.read_csv_mapping(mapping_file)
+mapping = LabelIdMapping.from_csv(mapping_file)
 
 # set the light bounces
 RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, ao_bounces_render=200, max_bounces=200,
@@ -46,7 +45,7 @@ loaded_objects = Front3DLoader.load(
     json_path=args.front,
     future_model_path=args.future_folder,
     front_3D_texture_path=args.front_3D_texture_path,
-    mapping=mapping,
+    label_mapping=mapping,
     ceiling_light_strength=0.8,
     lamp_light_strength=0.8
 )

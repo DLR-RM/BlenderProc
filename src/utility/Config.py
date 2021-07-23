@@ -1,4 +1,5 @@
 import mathutils
+import numpy as np
 
 import src.utility.Utility as Utility
 from src.main.Provider import Provider
@@ -188,7 +189,7 @@ class Config:
         value = self._get_value_with_fallback(name, fallback, True)
 
         if value is not None:
-            if isinstance(value, mathutils.Vector):
+            if isinstance(value, (mathutils.Vector, np.ndarray)):
                 value = list(value)
 
             if not isinstance(value, list):
