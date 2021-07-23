@@ -1,7 +1,7 @@
 import bpy
 import numpy as np
 from mathutils import Matrix, Vector, Euler
-from typing import Union
+from typing import Union, Tuple
 
 
 class CameraUtility:
@@ -233,6 +233,21 @@ class CameraUtility:
                       [0, 0, 1]])
         return K
 
+    @staticmethod
+    def get_fov() -> Tuple[float, float]:
+        """ Returns the horizontal and vertical FOV of the current camera.
+
+        Blender also offers the current FOV as direct attributes of the camera object, however
+        at least the vertical FOV heavily differs from how it would usually be defined.
+
+        :return: The horizontal and vertical FOV in radians.
+        """
+        # Get focal length
+        K = CameraUtility.get_intrinsics_as_K_matrix()
+        # Convert focal length to FOV
+        fov_x = 2 * np.arctan(bpy.context.scene.render.resolution_x / 2 / K[0, 0])
+        fov_y = 2 * np.arctan(bpy.context.scene.render.resolution_y / 2 / K[1, 1])
+        return fov_x, fov_y
 
     @staticmethod
     def add_depth_of_field(camera: bpy.types.Camera, focal_point_obj: bpy.types.Object, fstop_value: float,

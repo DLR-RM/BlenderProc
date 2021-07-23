@@ -183,17 +183,17 @@ class WriterUtility:
         """
 
         if attribute_name == "fov_x":
-            return cam_ob.data.angle_x
+            return CameraUtility.get_fov()[0]
         elif attribute_name == "fov_y":
-            return cam_ob.data.angle_y
+            return CameraUtility.get_fov()[1]
         elif attribute_name == "shift_x":
             return cam_ob.data.shift_x
         elif attribute_name == "shift_y":
             return cam_ob.data.shift_y
         elif attribute_name == "half_fov_x":
-            return cam_ob.data.angle_x * 0.5
+            return CameraUtility.get_fov()[0] * 0.5
         elif attribute_name == "half_fov_y":
-            return cam_ob.data.angle_y * 0.5
+            return CameraUtility.get_fov()[1] * 0.5
         elif attribute_name == "cam_K":
             return [[x for x in c] for c in CameraUtility.get_intrinsics_as_K_matrix()]
         else:
