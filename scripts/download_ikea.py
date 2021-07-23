@@ -1,3 +1,4 @@
+from src.utility.SetupUtility import SetupUtility
 from sys import version_info
 
 if version_info.major == 2:
@@ -80,11 +81,9 @@ if __name__ == "__main__":
 
     # unzip the zip file
     print("Unzipping the zip file...")
-    cmd = "unzip {} > /dev/null".format(zip_file_path)
-    subprocess.call(cmd, shell=True, cwd=os.path.dirname(zip_file_path))
-
-    os.remove(zip_file_path)
     ikea_dir = os.path.join(ikea_dir, "IKEA")
+    SetupUtility.unzip_file(ikea_dir, zip_file_path) 
+    os.remove(zip_file_path)
 
     subprocess.call("chmod -R a+rw *", shell=True, cwd=ikea_dir)
 
