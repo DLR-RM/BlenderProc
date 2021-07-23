@@ -14,19 +14,19 @@ In this example we are demonstrating the sampling features in relation to camera
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/camera_sampling/config.yaml examples/resources/scene.obj examples/camera_sampling/output
+python run.py examples/basics/camera_sampling/config.yaml examples/resources/scene.obj examples/basics/camera_sampling/output
 ```
 
-* `examples/camera_sampling/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/camera_sampling/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
-* `examples/camera_sampling/output`: path to the output directory.
+* `examples/basics/camera_sampling/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/camera_sampling/output/0.hdf5
+python scripts/visHdf5Files.py examples/basics/camera_sampling/output/0.hdf5
 ```
 
 ## Steps

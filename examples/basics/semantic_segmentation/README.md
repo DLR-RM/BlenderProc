@@ -12,13 +12,13 @@ The focus of this example is to introduce user to `renderer.SegMapRenderer` modu
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/semantic_segmentation/config.yaml examples/resources/camera_positions examples/semantic_segmentation/scene.blend examples/semantic_segmentation/output
+python run.py examples/basics/semantic_segmentation/config.yaml examples/resources/camera_positions examples/basics/semantic_segmentation/scene.blend examples/basics/semantic_segmentation/output
 ```
 
-* `examples/semantic_segmentation/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/semantic_segmentation/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/resources/camera_positions`: text file with parameters of camera positions.
-* `examples/semantic_segmentation/scene.blend`: path to the blend file with the basic scene.
-* `examples/semantic_segmentation/output`: path to the output directory.
+* `examples/basics/semantic_segmentation/scene.blend`: path to the blend file with the basic scene.
+* `examples/basics/semantic_segmentation/output`: path to the output directory.
 
 ## Steps
 

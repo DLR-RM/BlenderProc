@@ -13,20 +13,20 @@ In this example we demonstrate how to select materials in the scene using `gette
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/material_manipulation/config.yaml examples/material_manipulation/scene.obj examples/material_manipulation examples/material_manipulation/output
+python run.py examples/basics/material_manipulation/config.yaml examples/basics/material_manipulation/scene.obj examples/basics/material_manipulation examples/basics/material_manipulation/output
 ```
 
-* `examples/material_manipulation/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/material_manipulation/scene.obj`: path to the object file with the basic scene.
-* `examples/material_manipulation`: path to a folder with .jpg textures to be used in the sampling process.
-* `examples/material_manipulation/output`: path to the output directory.
+* `examples/basics/material_manipulation/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/material_manipulation/scene.obj`: path to the object file with the basic scene.
+* `examples/basics/material_manipulation`: path to a folder with .jpg textures to be used in the sampling process.
+* `examples/basics/material_manipulation/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/material_manipulation/output/0.hdf5
+python scripts/visHdf5Files.py examples/basics/material_manipulation/output/0.hdf5
 ```
 
 ## Steps
