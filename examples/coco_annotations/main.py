@@ -26,7 +26,7 @@ objs = BlendLoader.load(args.scene)
 
 # Set some category ids for loaded objects
 for j, obj in enumerate(objs):
-    obj.set_cp("category_id", j)
+    obj.set_cp("category_id", j+1)
 
 # define a light and set its location and energy level
 light = Light()
