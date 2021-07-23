@@ -81,11 +81,11 @@ The following modules are already implemented and ready to use:
 We provide a lot of [examples](examples/README.md) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
 
 * [Basic scene](examples/basics/basic/README.md): Basic example, this is the ideal place to start for beginners
-* [Camera sampling](basics/camera_sampling/README.md): Sampling of different camera positions inside of a shape with constraints for the rotation.
-* [Object manipluation](basics/entity_manipulation/README.md): Changing various parameters of objects via selecting them in the config file.
-* [Material manipulation](basics/material_manipulation/README.md): Material selecting and manipulation.
-* [Physics positioning](basics/physics_positioning/README.md): Enabling simple simulated physical interactions between objects in the scene.
-* [Semantic segmentation](basics/semantic_segmentation/README.md): Generating semantic segmentation labels for a given scene.
+* [Camera sampling](examples/basics/camera_sampling/README.md): Sampling of different camera positions inside of a shape with constraints for the rotation.
+* [Object manipluation](examples/basics/entity_manipulation/README.md): Changing various parameters of objects via selecting them in the config file.
+* [Material manipulation](examples/basics/material_manipulation/README.md): Material selecting and manipulation.
+* [Physics positioning](examples/basics/physics_positioning/README.md): Enabling simple simulated physical interactions between objects in the scene.
+* [Semantic segmentation](examples/basics/semantic_segmentation/README.md): Generating semantic segmentation labels for a given scene.
 * [BOP Challenge](README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
 * [COCO annotations](examples/coco_annotations/README.md): Write COCO annotations to a .json file for selected objects in the scene.
 
