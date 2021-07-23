@@ -387,6 +387,32 @@
 </div>
 <div class="section" id="version-history">
 <h1>Version History<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-1-12-0-23th-july-2021">
+<h2>Version 1.12.0 23th July 2021<a class="headerlink" href="#version-1-12-0-23th-july-2021" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>switch to blender 2.93, with that textures are now stored on the GPU between different frames increasing the speed drastically</li>
+<li>moved a lot of modules to the python API<ul>
+<li>all camera samplers</li>
+<li>all writer classes</li>
+<li>sampler and getters</li>
+<li>surface lighting</li>
+<li>random room constructor</li>
+</ul>
+</li>
+<li>all outer API functions work now with numpy arrays instead of mathutils classes</li>
+<li>regroup all examples to make them more easily accessible</li>
+<li>refactoring of the LabelIdMapping class</li>
+<li>sampler.Path now has a <code class="docutils literal notranslate"><span class="pre">return_all</span></code> and <code class="docutils literal notranslate"><span class="pre">random_samples</span></code> option</li>
+<li>add support for the new 3D front labels and script to find them more easily in the future</li>
+<li>AMASS now also supports <code class="docutils literal notranslate"><span class="pre">torch=1.8.1+cu111</span></code>, to better support modern GPUs</li>
+<li>refactor download script for haven</li>
+<li>added a flag to not center objects from the ShapeNet dataset</li>
+<li>added a platform independent unzipping function to solve the problems on windows</li>
+<li>add function to return the default_value or the connected node based on the input name of a BSDF shader node of a material</li>
+<li>fix for MacOS, where the blender version was not used in prior installations, leading to the problem that users had to remove blender on their own</li>
+<li>the writer now correctly writes the fov if asked</li>
+</ul>
+</div>
 <div class="section" id="version-1-11-1-18th-may-2021">
 <h2>Version 1.11.1 18th May 2021<a class="headerlink" href="#version-1-11-1-18th-may-2021" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
