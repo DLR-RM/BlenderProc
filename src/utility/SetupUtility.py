@@ -179,34 +179,25 @@ class SetupUtility:
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
 
     @staticmethod
-    def upzip_file(output_dir: str, file_: bytes = None) -> int:
+    def extract_file(output_dir: str, file: bytes = None) -> int:
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
         :param file_: file_ to extract
-        :return 1 if unzipped with no errors, else -1
         """
         try:
-            with zipfile.ZipFile(file_) as tar:
+            with zipfile.ZipFile(file) as tar:
                 tar.extractall(str(output_dir))
-                return 1
         except (IOError, zipfile.BadZipfile) as e:
             print('Bad zip file given as input.  %s' % e)
-            return -1
+            raise e
 
     @staticmethod
-    def upzip_from_response(output_dir: str, response: Response = None) -> int:
+    def extract_from_response(output_dir: str, response: Response = None) -> int:
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
         :param response: the response to a requested url that contains a zip file
-        :return 1 if unzipped with no errors, else -1
         """
-        f = BytesIO(response.content)
-        try:
-            with zipfile.ZipFile(f) as tar:
-                tar.extractall(str(output_dir))
-                return 1
-        except (IOError, zipfile.BadZipfile) as e:
-            print('Bad zip file given as input.  %s' % e)
-            return -1
+        file = BytesIO(response.content)
+        SetupUtility.extract_file(output_dir, file)

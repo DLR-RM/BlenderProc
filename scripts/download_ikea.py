@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # unzip the zip file
     print("Unzipping the zip file...")
     ikea_dir = os.path.join(ikea_dir, "IKEA")
-    SetupUtility.unzip_file(ikea_dir, zip_file_path) 
+    SetupUtility.extract_file(ikea_dir, zip_file_path) 
     os.remove(zip_file_path)
 
     subprocess.call("chmod -R a+rw *", shell=True, cwd=ikea_dir)

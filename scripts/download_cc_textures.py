@@ -16,7 +16,6 @@ if __name__ == "__main__":
 
     # set the download directory relative to this one
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    # cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures")
     cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures")
 
     if not os.path.exists(cc_texture_dir):
@@ -58,6 +57,6 @@ if __name__ == "__main__":
             os.makedirs(current_folder)
         current_file_path = os.path.join(current_folder, "{}.zip".format(asset))
         response = requests.get(link, headers=headers)
-        SetupUtility.upzip_from_response(current_folder, response)
+        SetupUtility.extract_from_response(current_folder, response)
 
     print("Done downloading textures, saved in {}".format(cc_texture_dir))

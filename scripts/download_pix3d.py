@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     # unzip the zip file
     print("Unzip the zip file.")
-    SetupUtility.unzip_file(pix3d_dir, zip_file_path) 
+    SetupUtility.extract_file(pix3d_dir, zip_file_path) 
 
     os.remove(zip_file_path)
     shutil.rmtree(os.path.join(pix3d_dir, "img"))

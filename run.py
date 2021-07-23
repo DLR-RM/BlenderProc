@@ -131,10 +131,10 @@ if custom_blender_path is None:
 
         if platform == "linux" or platform == "linux2":
             if version_info.major == 3:
-                SetupUtility.unzip_file(file_tmp, blender_install_path)
+                SetupUtility.extract_file(file_tmp, blender_install_path)
             else:
                 with contextlib.closing(lzma.LZMAFile(file_tmp)) as xz:
-                    SetupUtility.unzip_file(xz, blender_install_path)
+                    SetupUtility.extract_file(xz, blender_install_path)
         elif platform == "darwin":
             if not os.path.exists(blender_install_path):
                 os.makedirs(blender_install_path)
