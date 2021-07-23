@@ -126,8 +126,8 @@ class WriterUtility:
 
         :param item: The item. Type: blender object.
         :param attribute_name: The attribute name. Type: string.
-     :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
-     :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
+        :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
+        :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
 

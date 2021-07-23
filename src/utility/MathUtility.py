@@ -73,7 +73,7 @@ class MathUtility:
 
         :param matrix: The matrix to convert in form of a np.ndarray or mathutils.Matrix
         :param new_frame: An array containing three elements, describing each axis of the new coordinate frame based on the axes of the current frame. (Allowed values: "X", "Y", "Z", "-X", "-Y", "-Z")
-        :return:The converted matrix is in form of a np.ndarray
+        :return: The converted matrix is in form of a np.ndarray
         """
         tmat = MathUtility._build_coordinate_frame_changing_transformation_matrix(new_frame)
 

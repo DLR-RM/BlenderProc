@@ -200,7 +200,7 @@ class SetupUtility:
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
-        :param file_: file_ to extract
+        :param file: file to extract
         """
         try:
             with zipfile.ZipFile(file) as tar:

@@ -200,11 +200,10 @@ class Material(Struct):
             principled_bsdf.inputs[input_name].default_value = value
 
     def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.Node]:
-        """
-        Gets the default value or the connected node to an input socket of the principled shader node of the material.
+        """ Gets the default value or the connected node to an input socket of the principled shader node of the material.
 
         :param input_name: The name of the input socket of the principled shader node.
-        :return the connected node to the input socket or the default_value of the given input_name
+        :return: the connected node to the input socket or the default_value of the given input_name
         """
         # get the one node from type Principled BSDF
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
