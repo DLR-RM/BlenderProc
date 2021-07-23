@@ -2,14 +2,11 @@ import argparse
 import os
 from os.path import join
 import tarfile
-import zipfile
 import subprocess
 import shutil
 import signal
 import sys
 from sys import platform, version_info
-
-from src.utility.SetupUtility import SetupUtility
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -19,6 +16,7 @@ else:
 
 import uuid
 from src.utility.ConfigParser import ConfigParser
+from src.utility.SetupUtility import SetupUtility
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
@@ -134,12 +132,10 @@ if custom_blender_path is None:
 
         if platform == "linux" or platform == "linux2":
             if version_info.major == 3:
-                with tarfile.open(file_tmp) as tar:
-                    tar.extractall(blender_install_path)
+                SetupUtility.unzip_file(file_tmp, blender_install_path)
             else:
                 with contextlib.closing(lzma.LZMAFile(file_tmp)) as xz:
-                    with tarfile.open(fileobj=xz) as f:
-                        f.extractall(blender_install_path)
+                    SetupUtility.unzip_file(xz, blender_install_path)
         elif platform == "darwin":
             if not os.path.exists(blender_install_path):
                 os.makedirs(blender_install_path)
@@ -155,8 +151,7 @@ if custom_blender_path is None:
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
         elif platform == "win32":
-            with zipfile.ZipFile(file_tmp) as z:
-                z.extractall(blender_install_path)
+            SetupUtility.upzip_file(file_tmp, blender_install_path)
         # rename the blender folder to better fit our existing scheme
         for folder in os.listdir(blender_install_path):
             if os.path.isdir(os.path.join(blender_install_path, folder)) and folder.startswith("blender-" + major_version):
