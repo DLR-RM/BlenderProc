@@ -1,6 +1,11 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup(["scipy"])
+
 import os
 import numpy as np
+from scipy.ndimage import map_coordinates
 
+from src.main.GlobalStorage import GlobalStorage
 from src.main.Module import Module
 from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
@@ -73,7 +78,7 @@ class WriterInterface(Module):
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes), world_frame_change=self.destination_frame)
         Utility.register_output(self._determine_output_dir(), file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
             
-    def _apply_postprocessing(self, output_key, data, version):
+    def _apply_postprocessing(self, output_key, data: np.ndarray, version):
         """
         Applies all postprocessing modules registered for this output type.
 
@@ -82,13 +87,28 @@ class WriterInterface(Module):
         :param version: The version number original data.
         :return: The modified numpy data after doing the postprocessing
         """
+        # if lens distortion was used apply it now
+        if GlobalStorage.is_in_storage("_lens_distortion_is_used"):
+            content = GlobalStorage.get("_lens_distortion_is_used")
+            mapping_coords = content["mapping_coords"]
+            original_image_res = content["original_image_res"]
+            image_distorted = np.zeros((original_image_res[0], original_image_res[1], data.shape[2]))
+            used_dtpye = data.dtype
+            data = data.astype(np.float)
+            for i in range(data.shape[2]):
+                # TODO check the order and the mode, for non rgb data?
+                # The reference frame for coords is here as in DLR CalDe (the upper-left pixel center is at [0,0])
+                image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
+                                                                      order=2, mode='nearest'),
+                                                      image_distorted[:, :, i].shape)
+            data = image_distorted.astype(used_dtpye)
+
         if output_key in self.postprocessing_modules_per_output:
             for module in self.postprocessing_modules_per_output[output_key]:
                 data, new_key, new_version = module.run(data, output_key, version)
         else:
             new_key = output_key
             new_version = version
-
         return data, new_key, new_version
 
     def _load_and_postprocess(self, file_path, key, version = "1.0.0"):
