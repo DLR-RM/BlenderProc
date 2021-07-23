@@ -1,0 +1,565 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AMASS Dataset &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../basics/README.html">Basics</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../basics/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/camera_object_pose/README.html">camera_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../basics/semantic_segmentation/README.html">semantic_segmentation</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="../../advanced/README.html">Advanced</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../advanced/stereo_matching/README.html">stereo_matching</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1 current"><a class="reference external" href="../README.html">Datasets</a><ul>
+<li class="toctree-l2"><a class="reference external" href="#">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="../blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="../bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="../bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="../bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="../front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="../front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="../haven/README.html">haven</a></li>
+<li class="toctree-l2"><a class="reference external" href="../ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="../pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="../replica/README.html">replica</a></li>
+<li class="toctree-l2"><a class="reference external" href="../rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="../scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="../scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="../shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="../shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="../shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="../suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="../suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="../suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="../suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Modules</span></p>
+<li class="toctree-l1"><a class="reference external" href="../../../src.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.camera.CameraInterface.html#src.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.camera.CameraLoader.html#src.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.camera.CameraSampler.html#src.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.camera.Front3DCameraSampler.html#src.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.camera.ReplicaCameraSampler.html#src.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.camera.SuncgCameraSampler.html#src.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.composite.CameraObjectSampler.html#src.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.constructor.BasicEmptyInitializer.html#src.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.constructor.BasicMeshInitializer.html#src.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.constructor.RandomRoomConstructorModule.html#src.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.constructor.RockEssentialsGroundConstructor.html#src.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.lighting.LightInterface.html#src.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.lighting.LightLoader.html#src.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.lighting.LightSampler.html#src.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.lighting.SuncgLightingModule.html#src.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.lighting.SurfaceLightingModule.html#src.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.AMASSLoaderModule.html#src.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.BlendLoaderModule.html#src.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.BopLoaderModule.html#src.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.CCMaterialLoaderModule.html#src.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.Front3DLoaderModule.html#src.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.HavenEnvironmentLoaderModule.html#src.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.HavenMaterialLoaderModule.html#src.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.IKEALoaderModule.html#src.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.LoaderInterface.html#src.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.ObjectLoaderModule.html#src.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.Pix3DLoaderModule.html#src.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.ReplicaLoaderModule.html#src.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.RockEssentialsRockLoaderModule.html#src.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.SceneNetLoaderModule.html#src.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.ShapeNetLoaderModule.html#src.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.SuncgLoaderModule.html#src.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.TextureLoaderModule.html#src.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.loader.VisNormalImage.html#src.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.manipulators.EntityManipulator.html#src.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.manipulators.MaterialManipulator.html#src.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.manipulators.WorldManipulator.html#src.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.materials.RockEssentialsTextureSampler.html#src.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.CalibrationboardSampler.html#src.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.FloorExtractorModule.html#src.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.HideModule.html#src.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.IntrinsicsChecker.html#src.object.IntrinsicsChecker.IntrinsicsChecker">IntrinsicsChecker</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.ObjectPoseSamplerModule.html#src.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.ObjectReplacerModule.html#src.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.OnSurfaceSampler.html#src.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.object.PhysicsPositioningModule.html#src.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.postprocessing.Dist2Depth.html#src.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.postprocessing.NoiseRemoval.html#src.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.postprocessing.OilPaintFilter.html#src.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.postprocessing.TrimRedundantChannels.html#src.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.renderer.FlowRenderer.html#src.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.renderer.RendererInterface.html#src.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.renderer.RgbRenderer.html#src.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.renderer.SegMapRenderer.html#src.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.BopWriter.html#src.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.CameraStateWriter.html#src.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.CocoAnnotationsWriter.html#src.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.Hdf5Writer.html#src.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.LightStateWriter.html#src.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.ObjectStateWriter.html#src.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.ShapeNetWriter.html#src.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.StereoGlobalMatchingWriter.html#src.writer.StereoGlobalMatchingWriter.StereoGlobalMatchingWriter">StereoGlobalMatchingWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.writer.WriterInterface.html#src.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Provider</span></p>
+<li class="toctree-l1"><a class="reference external" href="../../../src.provider.getter.html">Getter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.getter.Attribute.html#src.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.getter.AttributeMerger.html#src.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.getter.Entity.html#src.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.getter.Material.html#src.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.getter.POI.html#src.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.getter.Texture.html#src.provider.getter.Texture.Texture">Texture</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.provider.sampler.html">Sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.Color.html#src.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.DiskModule.html#src.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.PartSphereModule.html#src.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.Path.html#src.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.ShellModule.html#src.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.SphereModule.html#src.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.Texture.html#src.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.Uniform3d.html#src.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.UniformSO3Module.html#src.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.UpperRegionSamplerModule.html#src.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.provider.sampler.Value.html#src.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Core</span></p>
+<li class="toctree-l1"><a class="reference external" href="../../../src.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.main.GlobalStorage.html#src.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.main.InitializerModule.html#src.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.main.Module.html#src.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.main.Pipeline.html#src.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.main.Provider.html#src.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="../../../src.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.BopWriterUtility.html#src.utility.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.CameraUtility.html#src.utility.CameraUtility.CameraUtility">CameraUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.CocoWriterUtility.html#src.utility.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.CollisionUtility.html#src.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Config.html#src.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.ConfigParser.html#src.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.ConfigParser.html#src.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.DefaultConfig.html#src.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.EntityUtility.html#src.utility.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.FlowRendererUtility.html#src.utility.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Initializer.html#src.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.ItemCollection.html#src.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.ItemWriter.html#src.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.LabelIdMapping.html#src.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.LightUtility.html#src.utility.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.MaterialLoaderUtility.html#src.utility.MaterialLoaderUtility.MaterialLoaderUtility">MaterialLoaderUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.MaterialUtility.html#src.utility.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.MathUtility.html#src.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.MeshObjectUtility.html#src.utility.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.PostProcessingUtility.html#src.utility.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.RendererUtility.html#src.utility.RendererUtility.RendererUtility">RendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.SegMapRendererUtility.html#src.utility.SegMapRendererUtility.SegMapRendererUtility">SegMapRendererUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.SetupUtility.html#src.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.StructUtility.html#src.utility.StructUtility.Struct">Struct</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Utility.html#src.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Utility.html#src.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Utility.html#src.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.Utility.html#src.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+<li class="toctree-l2"><a class="reference external" href="../../../src.utility.WriterUtility.html#src.utility.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+      <li>AMASS Dataset</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../../_sources/examples/datasets/amass_human_poses/README.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="amass-dataset">
+<h1>AMASS Dataset<a class="headerlink" href="#amass-dataset" title="Permalink to this headline">¶</a></h1>
+<p align="center">
+<img src="rendering.png" alt="Front readme image" width=400>
+</p><p>AMASS (Archive of Motion Capture as Surface Shapes) is a large database of human motion unifying different optical marker-based motion capture datasets by representing them within a common framework and parameterization. AMASS is readily useful for generating training data for deep learning.</p>
+<div class="section" id="get-the-dataset">
+<h2>Get The Dataset<a class="headerlink" href="#get-the-dataset" title="Permalink to this headline">¶</a></h2>
+<p>As you are required to agree to the Use Of Terms for this dataset, we can not provide a download script.</p>
+<p>However, we will give you a step by step explanation on how to get access.</p>
+<ol class="arabic simple">
+<li>Visit the following websites and sign up as user after you agree to the terms of use on all of them separately. The first corresponds to the dataset and the other two to the parametric model to generate the mesh.<ol class="arabic">
+<li><code class="docutils literal notranslate"><span class="pre">https://amass.is.tue.mpg.de/</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">https://mano.is.tue.mpg.de/</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">https://smpl.is.tue.mpg.de/</span></code></li>
+</ol>
+</li>
+<li>Wait till you receive the confirmation vie e-mail, once you confirm your account you can access the download sections.</li>
+<li>download the following files which represent the body models and extract them inside folder <code class="docutils literal notranslate"><span class="pre">resources/AMASS/body_models</span></code><ol class="arabic">
+<li>from <code class="docutils literal notranslate"><span class="pre">https://smpl.is.tue.mpg.de/downloads</span></code> download the following file <span class="raw-html-m2r"><img src="instructions_screenshots/dmpl_model.png" width=350></span></li>
+<li>from <code class="docutils literal notranslate"><span class="pre">https://mano.is.tue.mpg.de/downloads</span></code> download the following file <span class="raw-html-m2r"><img src="instructions_screenshots/smpl_model.png" width=350></span></li>
+</ol>
+</li>
+<li>Explore the collection of motion capture dataset that are supported by AMASS and choose the motion capture dataset and motion sequence that you want to generate a pose from. For now, we only provide support for CMU motion capture dataset <em>(we’re planning to support the rest of the datasets in the near future)</em>, so you have to choose a pose from the variety of poses that could be extracted from this dataset.<ol class="arabic">
+<li>For example, after exploring different motion sequences in CMU mocap dataset, we are now interested in generating a body pose, where a person kicks a ball. (You can explore all motion sequences categories for CMU dataset through the dataset website <code class="docutils literal notranslate"><span class="pre">http://mocap.cs.cmu.edu/search.php?subjectnumber=%&amp;motion=%</span></code>. Go to the website and select all motion tab to see different motions)</li>
+<li>From the different motion categories available there, we are interested in the “kick soccer ball” category (note it is listed as subject # 10, we need this number among other identifiers to identify the pose.)</li>
+</ol>
+</li>
+<li><dl class="first docutils">
+<dt>On the AMASS download page <code class="docutils literal notranslate"><span class="pre">https://amass.is.tue.mpg.de/dataset</span></code> many different motion capture dataset are listed, choose the one you are interested in to generate a pose from and download the body data. For example, we choose here the CMU motion capture dataset to download.</dt>
+<dd><span class="raw-html-m2r"><img src="instructions_screenshots/mocap_dataset_download.png"></span>
+Download the dataset and extract it under the <code class="docutils literal notranslate"><span class="pre">resources/AMASS</span></code> folder.</dd>
+</dl>
+</li>
+<li>In the end the structure of the <code class="docutils literal notranslate"><span class="pre">resource/AMASS</span></code> folder should be, this might mean you need to create some folders or move some data:</li>
+</ol>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>- resources
+    - AMASS
+        - body_models
+            - dmpls
+                - female
+                - LICENSE.txt
+                - male
+                - neutral
+            - smplh
+                - female
+                - LICENSE.txt
+                - info.txt
+                - male
+                - neutral
+        - CMU
+            - CMU
+                - <span class="m">01</span>
+                  ...
+                - <span class="m">144</span>
+        - taxonomy.json
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Execute in the BlenderProc main directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python run.py examples/datasets/amass_human_poses/config.yaml resources/AMASS examples/datasets/amass_human_poses/output
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/amass_human_poses/config.yaml</span></code>: path to the configuration file with pipeline configuration.</li>
+<li><code class="docutils literal notranslate"><span class="pre">esources/AMASS</span></code>: path to the AMASS Dataset folder in resources folder</li>
+<li><code class="docutils literal notranslate"><span class="pre">examples/datasets/amass_human_poses/output</span></code>: path to the output directory</li>
+</ul>
+</div>
+<div class="section" id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<p>In the output folder you will find multiple <code class="docutils literal notranslate"><span class="pre">.hdf5</span></code> files. These can be visualized with the script:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python scripts/visHdf5Files.py examples/datasets/amass_human_poses/output/*.hdf5
+</pre></div>
+</div>
+</div>
+<div class="section" id="steps">
+<h2>Steps<a class="headerlink" href="#steps" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>AMASSLoader first checks the taxonomy.json file for the currently supported datasets</li>
+<li>Loads the body parameters for the selected pose from dataset</li>
+<li>Loads the parametric body model from the downloaded body models</li>
+<li>Feed the the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose</li>
+<li>Adds cameras to the scene: <code class="docutils literal notranslate"><span class="pre">camera.CameraSampler</span></code></li>
+<li>Renders rgb, normals and distance: <code class="docutils literal notranslate"><span class="pre">renderer.RgbRenderer</span></code> module.</li>
+<li>Writes the output to .hdf5 containers: <code class="docutils literal notranslate"><span class="pre">writer.Hdf5Writer</span></code> module.</li>
+</ul>
+</div>
+<div class="section" id="config-file">
+<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="amassloader">
+<h3>AMASSLoader<a class="headerlink" href="#amassloader" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+  <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;loader.AMASSLoader&quot;</span><span class="p p-Indicator">,</span>
+  <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+    <span class="s">&quot;data_path&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;&lt;args:0&gt;&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;sub_dataset_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;CMU&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;body_model_gender&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;male&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;subject_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;10&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;sequence_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;1&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;frame_id&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;600&quot;</span><span class="p p-Indicator">,</span>
+  <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">sub_dataset_id</span></code> : one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset <a class="reference external" href="https://amass.is.tue.mpg.de/dataset">https://amass.is.tue.mpg.de/dataset</a> <strong>Note: only the CMU motion capture dataset is currently supported by the AMASSLoader module</strong></li>
+<li><code class="docutils literal notranslate"><span class="pre">body_model_gender</span></code> : select gender of the model that will represent the selected pose. Available options are: <code class="docutils literal notranslate"><span class="pre">[male,</span> <span class="pre">female,</span> <span class="pre">neutral]</span></code></li>
+<li><code class="docutils literal notranslate"><span class="pre">subject_id</span></code> : represents the category of the motion, which type of motion the pose will be extracted from. This refers to every motion capture dataset included in AMASS dataset to see the set of supported motion categories. For the CMU dataset, you can have a look on the different supported motion categories on their website <a class="reference external" href="http://mocap.cs.cmu.edu/search.php?subjectnumber=%&amp;motion=%">http://mocap.cs.cmu.edu/search.php?subjectnumber=%&amp;motion=%</a> and configure the number equivalent to the category id. <em>For this example, we are interested in the “kick soccer ball” category, so we chose the subject_id to be ``10``.</em></li>
+<li><code class="docutils literal notranslate"><span class="pre">sequence_id</span></code> : every category has more than one sequence of people performing the same motion using different scenarios. Hint: You can watch the videos on the original dataset website to select a a specific sequence or you can just leave the default value which is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">frame_id</span></code> : which frame in the sequence contains the represented pose. This parameter id dependents on the length of the sequence and the fps in which the motion is recorded. Usually you can obtain the length of the sequence and fps values from the dataset website or leave it blank and the loader will choose a random pose.</li>
+</ul>
+</div>
+<div class="section" id="camerasampler">
+<h3>CameraSampler<a class="headerlink" href="#camerasampler" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">{</span>
+    <span class="s">&quot;module&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;camera.CameraSampler&quot;</span><span class="p p-Indicator">,</span>
+    <span class="s">&quot;config&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+      <span class="s">&quot;cam_poses&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span>
+        <span class="p p-Indicator">{</span>
+          <span class="s">&quot;number_of_samples&quot;</span><span class="p p-Indicator">:</span> <span class="nv">5</span><span class="p p-Indicator">,</span>
+          <span class="s">&quot;location&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span><span class="s">&quot;sampler.Sphere&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;center&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">[</span><span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">,</span> <span class="nv">0</span><span class="p p-Indicator">],</span>
+            <span class="s">&quot;radius&quot;</span><span class="p p-Indicator">:</span> <span class="nv">3</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;mode&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;SURFACE&quot;</span>
+          <span class="p p-Indicator">},</span>
+          <span class="s">&quot;rotation&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+            <span class="s">&quot;format&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;look_at&quot;</span><span class="p p-Indicator">,</span>
+            <span class="s">&quot;value&quot;</span><span class="p p-Indicator">:</span> <span class="p p-Indicator">{</span>
+              <span class="s">&quot;provider&quot;</span><span class="p p-Indicator">:</span> <span class="s">&quot;getter.POI&quot;</span>
+            <span class="p p-Indicator">}</span>
+          <span class="p p-Indicator">}</span>
+        <span class="p p-Indicator">}</span>
+      <span class="p p-Indicator">]</span>
+    <span class="p p-Indicator">}</span>
+<span class="p p-Indicator">}</span>
+</pre></div>
+</div>
+<p>We sample here five random camera poses, where the location is on a sphere with a radius of 3 around the object.
+Each cameras rotation is such that it looks directly at the object and the camera faces upwards in Z direction.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

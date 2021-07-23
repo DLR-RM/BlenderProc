@@ -7,15 +7,15 @@ Submodules
 .. toctree::
 
    src.provider.sampler.Color
-   src.provider.sampler.Disk
-   src.provider.sampler.PartSphere
+   src.provider.sampler.DiskModule
+   src.provider.sampler.PartSphereModule
    src.provider.sampler.Path
-   src.provider.sampler.Shell
-   src.provider.sampler.Sphere
+   src.provider.sampler.ShellModule
+   src.provider.sampler.SphereModule
    src.provider.sampler.Texture
    src.provider.sampler.Uniform3d
-   src.provider.sampler.UniformSO3
-   src.provider.sampler.UpperRegionSampler
+   src.provider.sampler.UniformSO3Module
+   src.provider.sampler.UpperRegionSamplerModule
    src.provider.sampler.Value
 
 Module contents

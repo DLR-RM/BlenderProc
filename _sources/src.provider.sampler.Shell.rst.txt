@@ -1,7 +1,0 @@
-src\.provider\.sampler\.Shell module
-====================================
-
-.. automodule:: src.provider.sampler.Shell
-    :members:
-    :undoc-members:
-    :show-inheritance:

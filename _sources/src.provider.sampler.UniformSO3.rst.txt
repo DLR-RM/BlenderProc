@@ -1,7 +1,0 @@
-src\.provider\.sampler\.UniformSO3 module
-=========================================
-
-.. automodule:: src.provider.sampler.UniformSO3
-    :members:
-    :undoc-members:
-    :show-inheritance:

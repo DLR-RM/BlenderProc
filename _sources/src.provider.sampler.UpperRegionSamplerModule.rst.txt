@@ -1,0 +1,7 @@
+src\.provider\.sampler\.UpperRegionSamplerModule module
+=======================================================
+
+.. automodule:: src.provider.sampler.UpperRegionSamplerModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

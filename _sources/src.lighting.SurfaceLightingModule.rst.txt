@@ -1,0 +1,7 @@
+src\.lighting\.SurfaceLightingModule module
+===========================================
+
+.. automodule:: src.lighting.SurfaceLightingModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

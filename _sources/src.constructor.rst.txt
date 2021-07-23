@@ -8,7 +8,7 @@ Submodules
 
    src.constructor.BasicEmptyInitializer
    src.constructor.BasicMeshInitializer
-   src.constructor.RandomRoomConstructor
+   src.constructor.RandomRoomConstructorModule
    src.constructor.RockEssentialsGroundConstructor
 
 Module contents
