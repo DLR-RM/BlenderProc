@@ -2,7 +2,12 @@ import os
 import sys
 from sys import platform
 import subprocess
+import requests
 import importlib
+from io import BytesIO, StringIO
+import zipfile
+
+from requests.models import Response
 
 class SetupUtility:
 
@@ -173,3 +178,36 @@ class SetupUtility:
             installed_packages_name = [ele[2:] if ele.startswith("b'") else ele for ele in installed_packages_name]
             installed_packages_versions = [ele[:-1] if ele.endswith("'") else ele for ele in installed_packages_versions]
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
+
+    @staticmethod
+    def upzip_file(output_dir: str, file_: bytes = None) -> int:
+        """ Extract all members from the archive to output_dir
+
+        :param output_dir: the dir to zip file extract to
+        :param file_: file_ to extract
+        :return 1 if unzipped with no errors, else -1
+        """
+        try:
+            with zipfile.ZipFile(file_) as tar:
+                tar.extractall(str(output_dir))
+                return 1
+        except (IOError, zipfile.BadZipfile) as e:
+            print('Bad zip file given as input.  %s' % e)
+            return -1
+
+    @staticmethod
+    def upzip_from_response(output_dir: str, response: Response = None) -> int:
+        """ Extract all members from the archive to output_dir
+
+        :param output_dir: the dir to zip file extract to
+        :param response: the response to a requested url that contains a zip file
+        :return 1 if unzipped with no errors, else -1
+        """
+        f = BytesIO(response.content)
+        try:
+            with zipfile.ZipFile(f) as tar:
+                tar.extractall(str(output_dir))
+                return 1
+        except (IOError, zipfile.BadZipfile) as e:
+            print('Bad zip file given as input.  %s' % e)
+            return -1
