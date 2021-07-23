@@ -9,15 +9,15 @@
 # Version History
 
 ## Version 1.12.0 23th July 2021
-- switch to blender 2.93, with that textures are now stored on the GPU between frames increasing the speed drastically
-- moved a lot of modules to the API
+- switch to blender 2.93, with that textures are now stored on the GPU between different frames increasing the speed drastically
+- moved a lot of modules to the python API
   - all camera samplers
   - all writer classes
   - sampler and getters
   - surface lighting
   - random room constructor
-- regroup all examples to make them more easily accessible
 - all outer API functions work now with numpy arrays instead of mathutils classes
+- regroup all examples to make them more easily accessible
 - refactoring of the LabelIdMapping class
 - sampler.Path now has a `return_all` and `random_samples` option
 - add support for the new 3D front labels and script to find them more easily in the future
