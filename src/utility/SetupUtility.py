@@ -179,7 +179,7 @@ class SetupUtility:
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
 
     @staticmethod
-    def extract_file(output_dir: str, file: bytes = None) -> int:
+    def extract_file(output_dir: str, file: bytes = None):
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
@@ -193,7 +193,7 @@ class SetupUtility:
             raise e
 
     @staticmethod
-    def extract_from_response(output_dir: str, response: Response = None) -> int:
+    def extract_from_response(output_dir: str, response: Response = None):
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
