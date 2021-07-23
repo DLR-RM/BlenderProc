@@ -46,7 +46,7 @@ These examples introduce usage of advanced BlenderProc modules and/or of their c
 ### Utility Examples
 This example is not a demonstration, but rather a tool to be used when developing your own pipeline.
 
-* [calibration](calibration/README.md): Verifying given camera intrinsics.
+* [calibration](advanced/calibration/README.md): Verifying given camera intrinsics.
 
 ### Benchmark for 6D Object Pose Estimation (BOP)
 We provide example configs that interface with the BOP datasets.
@@ -72,7 +72,7 @@ We already support a lot of different datasets, check out the following examples
 * [haven_dataset](datasets/haven_dataset/README.md)
 * [ikea](datasets/ikea/README.md)
 * [pix3d](datasets/pix3d/README.md)
-* [AMASS](datasets/amass_human_poses/README.md)
+* [AMASS_human_poses](datasets/amass_human_poses/README.md)
 * [suncg_basic](datasets/suncg_basic/README.md)
 * [suncg_with_cam_sampling](datasets/suncg_with_cam_sampling/README.md)
 * [suncg_with_improved_mat](datasets/suncg_with_improved_mat/README.md)
