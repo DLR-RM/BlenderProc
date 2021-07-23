@@ -20,6 +20,7 @@ else:
 import uuid
 from src.utility.ConfigParser import ConfigParser
 
+
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
 parser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
@@ -192,6 +193,7 @@ if is_config:
     path_src_run = os.path.join(repo_root_directory, "src/run.py")
 else:
     path_src_run = args.file
+    SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)
 
 # Determine perfect temp dir
 if args.temp_dir is None:
