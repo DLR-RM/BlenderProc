@@ -2,9 +2,8 @@ import os
 import sys
 from sys import platform
 import subprocess
-import requests
 import importlib
-from io import BytesIO, StringIO
+from io import BytesIO
 import zipfile
 
 from requests.models import Response

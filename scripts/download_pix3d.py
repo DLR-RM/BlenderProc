@@ -5,7 +5,6 @@ if version_info.major == 2:
 
 import os
 from urllib.request import urlretrieve, build_opener, install_opener
-import subprocess
 import shutil
 
 from utils import ProgressBar

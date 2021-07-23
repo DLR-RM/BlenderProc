@@ -1,7 +1,6 @@
 import argparse
 import os
 from os.path import join
-import tarfile
 import subprocess
 import shutil
 import signal

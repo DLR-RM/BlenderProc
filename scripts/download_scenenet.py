@@ -1,6 +1,3 @@
-
-
-
 from sys import version_info, path
 if version_info.major == 2:
     raise Exception("This script only works with python3.x!")
