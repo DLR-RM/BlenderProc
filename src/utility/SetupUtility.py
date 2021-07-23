@@ -6,8 +6,6 @@ import importlib
 from io import BytesIO
 import zipfile
 
-from requests.models import Response
-
 class SetupUtility:
 
     # Remember already installed packages, so we do not have to call pip freeze multiple times
@@ -198,7 +196,7 @@ class SetupUtility:
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
 
     @staticmethod
-    def extract_file(output_dir: str, file: bytes = None):
+    def extract_file(output_dir, file):
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
@@ -212,7 +210,7 @@ class SetupUtility:
             raise e
 
     @staticmethod
-    def extract_from_response(output_dir: str, response: Response = None):
+    def extract_from_response(output_dir, response):
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
@@ -221,6 +219,7 @@ class SetupUtility:
         file = BytesIO(response.content)
         SetupUtility.extract_file(output_dir, file)
 
+    @staticmethod
     def check_if_setup_utilities_are_at_the_top(path_to_run_file):
         """
         Checks if the given python scripts has at the top an import to SetupUtility, if not an

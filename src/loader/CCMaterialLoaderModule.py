@@ -12,7 +12,7 @@ class CCMaterialLoaderModule(Module):
 
     All materials will have the custom property "is_cc_texture": True, which will make the selection later on easier.
 
-    See the example section on how to use this in combination with a dataset: examples/shapenet_with_cctextures.
+    See the example section on how to use this in combination with a dataset: examples/datasets/shapenet_with_cctextures.
 
     **Configuration**:
 

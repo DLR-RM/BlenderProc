@@ -32,7 +32,7 @@ class RandomRoomConstructorModule(Module):
 
     Example 1, in this first example a random room will be constructed it will have a floor area of 20 square meters.
     The room will then be filled with 15 randomly selected objects from the IKEA dataset, belonging to the categories
-    "bed" and "chair". Checkout the `examples/ikea` if you want to know more on that particular dataset.
+    "bed" and "chair". Checkout the `examples/datasets/ikea` if you want to know more on that particular dataset.
 
     .. code-block:: yaml
 
