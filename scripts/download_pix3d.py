@@ -9,6 +9,7 @@ import subprocess
 import shutil
 
 from utils import ProgressBar
+from src.utility.SetupUtility import SetupUtility
 
 
 if __name__ == "__main__":
@@ -32,8 +33,7 @@ if __name__ == "__main__":
 
     # unzip the zip file
     print("Unzip the zip file.")
-    cmd = "unzip {}".format(zip_file_path)
-    subprocess.call(cmd, shell=True, cwd=os.path.dirname(zip_file_path))
+    SetupUtility.unzip_file(pix3d_dir, zip_file_path) 
 
     os.remove(zip_file_path)
     shutil.rmtree(os.path.join(pix3d_dir, "img"))
