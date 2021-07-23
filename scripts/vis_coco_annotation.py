@@ -58,6 +58,7 @@ for idx, annotation in enumerate(annotations):
             draw_ov.bitmap((0, 0), item, fill=(rand_color[0], rand_color[1], rand_color[2], 128))
             im = Image.alpha_composite(im, overlay)
         else:
+            # go through all polygons and plot them
             for item in annotation['segmentation']:
                 poly = Image.new('RGBA', im.size)
                 pdraw = ImageDraw.Draw(poly)
