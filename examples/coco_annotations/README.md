@@ -9,11 +9,11 @@ The focus of this example is to introduce user to `writer.CocoAnnotationsWriter`
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/coco_annotations/config.yaml examples/coco_annotations/camera_positions examples/coco_annotations/scene.blend examples/coco_annotations/output
+python run.py examples/coco_annotations/config.yaml examples/resources/camera_positions examples/coco_annotations/scene.blend examples/coco_annotations/output
 ```
 
 * `examples/coco_annotations/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/coco_annotations/camera_positions`: text file with parameters of camera positions.
+* `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/coco_annotations/scene.blend`: path to the blend file with the basic scene.
 * `examples/coco_annotations/output`: path to the output directory.
 

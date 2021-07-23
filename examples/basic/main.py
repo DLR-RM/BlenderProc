@@ -15,8 +15,8 @@ from src.utility.PostProcessingUtility import PostProcessingUtility
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('camera', help="Path to the camera file, should be examples/basic/camera_positions")
-parser.add_argument('scene', help="Path to the scene.obj file, should be examples/basic/scene.obj")
+parser.add_argument('camera', help="Path to the camera file, should be examples/resources/camera_positions")
+parser.add_argument('scene', help="Path to the scene.obj file, should be examples/resources/scene.obj")
 parser.add_argument('output_dir', help="Path to where the final files, will be saved, could be examples/basic/output")
 args = parser.parse_args()
 

@@ -9,12 +9,12 @@ The focus of this example is introducing the `object.ObjectPoseSampler` which al
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/object_pose_sampling/config.yaml examples/object_pose_sampling/camera_positions examples/object_pose_sampling/scene.obj examples/object_pose_sampling/output
+python run.py examples/object_pose_sampling/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/object_pose_sampling/output
 ``` 
 
 * `examples/object_pose_sampling/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/object_pose_sampling/camera_positions`: text file with parameters of camera positions.
-* `examples/object_poses_sampling/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/camera_positions`: text file with parameters of camera positions.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/object_pose_sampling/output`: path to the output directory.
 
 ## Visualization

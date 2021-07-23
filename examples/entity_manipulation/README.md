@@ -11,11 +11,11 @@ In this example we demonstrate how to select entities in the scene using `getter
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/entity_manipulation/config.yaml examples/entity_manipulation/scene.obj examples/entity_manipulation/output
+python run.py examples/entity_manipulation/config.yaml examples/resources/scene.obj examples/entity_manipulation/output
 ```
 
 * `examples/entity_manipulation/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/entity_manipulation/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/entity_manipulation/output`: path to the output directory.
 
 ## Visualization

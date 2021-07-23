@@ -12,11 +12,11 @@ In this example we demonstrate how to switch materials.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/material_randomizer/config.yaml examples/material_randomizer/scene.obj examples/material_randomizer/output
+python run.py examples/material_randomizer/config.yaml examples/resources/scene.obj examples/material_randomizer/output
 ```
 
 * `examples/material_randomizer/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/material_randomizer/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/material_randomizer/output`: path to the output directory.
 
 ## Visualization

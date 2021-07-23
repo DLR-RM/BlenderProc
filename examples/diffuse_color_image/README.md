@@ -11,11 +11,11 @@ In this example we demonstrate how to render a diffuse color image
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/diffuse_color_image/config.yaml examples/diffuse_color_image/scene.obj examples/diffuse_color_image/output
+python run.py examples/diffuse_color_image/config.yaml examples/resources/scene.obj examples/diffuse_color_image/output
 ```
 
 * `examples/diffuse_color_image/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/diffuse_color_image/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/diffuse_color_image/output`: path to the output directory.
 
 ## Visualization

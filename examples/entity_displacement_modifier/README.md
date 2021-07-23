@@ -11,11 +11,11 @@ This is an advanced example, please make sure that you have read:
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/entity_displacement_modifier/config.yaml examples/entity_displacement_modifier/scene.obj examples/entity_displacement_modifier/output
+python run.py examples/entity_displacement_modifier/config.yaml examples/resources/scene.obj examples/entity_displacement_modifier/output
 ```
 
 * `examples/entity_displacement_modifier/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/entity_displacement_modifier/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/entity_displacement_modifier/output`: path to the output directory.
 
 ## Visualization

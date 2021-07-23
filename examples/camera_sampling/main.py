@@ -15,7 +15,7 @@ import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('scene', nargs='?', default="examples/camera_sampling/scene.obj", help="Path to the scene.obj file")
+parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", help="Path to the scene.obj file")
 parser.add_argument('output_dir', nargs='?', default="examples/camera_sampling/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 

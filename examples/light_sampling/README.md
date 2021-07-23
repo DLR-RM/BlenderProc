@@ -9,12 +9,12 @@ In this example we are demonstrating the sampling features in relation to light 
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/light_sampling/config.yaml examples/light_sampling/camera_positions examples/light_sampling/scene.obj examples/light_sampling/output
+python run.py examples/light_sampling/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/light_sampling/output
 ```
 
 * `examples/light_sampling/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/light_sampling/camera_positions`: text file with parameters of camera positions.
-* `examples/light_sampling/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/camera_positions`: text file with parameters of camera positions.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/light_sampling/output`: path to the output directory.
 
 ## Visualization

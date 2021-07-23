@@ -22,12 +22,12 @@ These effects are visible if either the camera or objects move between frames. T
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/motion_blur_rolling_shutter/config_motion_blur.yaml examples/motion_blur_rolling_shutter/camera_positions examples/motion_blur_rolling_shutter/scene.obj examples/motion_blur_rolling_shutter/output
+python run.py examples/motion_blur_rolling_shutter/config_motion_blur.yaml examples/motion_blur_rolling_shutter/camera_positions examples/resources/scene.obj examples/motion_blur_rolling_shutter/output
 ```
 
 * `examples/motion_blur_rolling_shutter/config_{motion_blur / rolling_shutter}.yaml`: path to the configuration file with pipeline configuration.
 * `examples/motion_blur_rolling_shutter/camera_positions`: text file with parameters of camera positions.
-* `examples/motion_blur_rolling_shutter/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/motion_blur_rolling_shutter/output`: path to the output directory.
 
 The configuration `config_motion_blur.yaml` creates pure motion blur, the configuration `config_rolling_shutter.yaml` a rolling shutter effect together with a small amount of motion blur.

@@ -14,11 +14,11 @@ In this example we are demonstrating the sampling features in relation to camera
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/camera_sampling/config.yaml examples/camera_sampling/scene.obj examples/camera_sampling/output
+python run.py examples/camera_sampling/config.yaml examples/resources/scene.obj examples/camera_sampling/output
 ```
 
 * `examples/camera_sampling/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/camera_sampling/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/camera_sampling/output`: path to the output directory.
 
 ## Visualization

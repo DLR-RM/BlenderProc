@@ -12,14 +12,14 @@ In this example we demonstrate the basic functionality of BlenderProc.
 Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically download blender, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/basic/config.yaml examples/basic/camera_positions examples/basic/scene.obj examples/basic/output
+python run.py examples/basic/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/basic/output
 ```
 
 * `examples/basic/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
-* `examples/basic/camera_positions`: text file with parameters of camera positions.
-* `examples/basic/scene.obj`: path to the object file with the basic scene.
+* `examples/resources/camera_positions`: text file with parameters of camera positions.
+* `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/basic/output`: path to the output directory.
 
 ## Visualization
@@ -93,7 +93,7 @@ It also initializes the GlobalStorage, which contains two parts:
 
 * This module imports an .obj file into the scene.
 * The path of the .obj file should be configured via the parameter `path`.
-* Here we are using the second argument given, in the upper command the output path is set to `examples/basic/scene.obj`.
+* Here we are using the second argument given, in the upper command the output path is set to `examples/resources/scene.obj`.
 
 #### LightLoader
 
@@ -131,7 +131,7 @@ It also initializes the GlobalStorage, which contains two parts:
 ```
 
 * This module imports the camera poses which defines from where the renderings should be taken.
-* The camera positions are defined in a file whose path is again given via the command line (`examples/basic/camera_positions` - contains 2 cam poses).
+* The camera positions are defined in a file whose path is again given via the command line (`examples/resources/camera_positions` - contains 2 cam poses).
 * The file uses the following format which is defined at `file_format`.
 
 ```

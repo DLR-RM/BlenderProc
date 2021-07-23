@@ -13,7 +13,7 @@ python run.py ...
 ``` 
 
 * `examples/basic/config.yaml`: explanation
-* `examples/basic/camera_positions`: explanation
+* `examples/resources/camera_positions`: explanation
 * ...
 
 ## Visualization

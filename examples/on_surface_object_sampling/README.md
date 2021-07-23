@@ -9,11 +9,11 @@ The focus of this example is the `OnSurfaceSampler` which allows pose sampling f
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/on_surface_object_sampling/config.yaml examples/on_surface_object_sampling/camera_positions examples/on_surface_object_sampling/scene.blend examples/on_surface_object_sampling/output
+python run.py examples/on_surface_object_sampling/config.yaml examples/resources/camera_positions examples/on_surface_object_sampling/scene.blend examples/on_surface_object_sampling/output
 ```
 
 * `examples/on_surface_object_sampling/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/on_surface_object_sampling/camera_positions`: text file with parameters of camera positions.
+* `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/on_surface_object_sampling/scene.blend`: path to the object file with the basic scene.
 * `examples/on_surface_object_sampling/output`: path to the output directory.
 
