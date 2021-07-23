@@ -25,8 +25,8 @@ class ShapeNetLoader:
 
         :param data_path: The path to the ShapeNetCore.v2 folder.
         :param used_synset_id: The synset id for example: '02691156', check the data_path folder for more ids.
-        :param used_source_id: object identifier of the a particular ShapeNet category, see inside any ShapeNet category for identifiers
-        :param move_object_origin: moves the origin of the object to the world origin, this does not change the `.location` of the object. Default: True
+        :param used_source_id: Object identifier of the a particular ShapeNet category, see inside any ShapeNet category for identifiers
+        :param move_object_origin: Moves the object center to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane, this does not change the `.location` of the object. Default: True
         :return: The list of loaded mesh objects.
         """
         data_path = Utility.resolve_path(data_path)

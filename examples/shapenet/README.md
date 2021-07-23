@@ -72,7 +72,7 @@ The same as in the basic example.
 * This module loads a ShapeNet Object, it only needs the path to the `ShapeNetCore.v2` folder, which is saved in `data_path`.
 * The `used_synset_id` = `02691156` is set to the id of an airplane, and the `used_source_id` = `10155655850468db78d106ce0a280f87` selects one particular object of that category.
 * The position will be in the center of the scene.
-* By default, the object origin will be moved to the world origin and on top of the X-Y plane which makes it easier to place them later on. This does not change the `.location` of the object. To disable this behaviour, set the `move_object_origin` flag to `False`.
+* By default, the object center will be moved to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane which makes it easier to place them later on. This does not change the `.location` of the object. To disable this behaviour, set the `move_object_origin` flag to `False`.
 
 
 ### CameraSampler
