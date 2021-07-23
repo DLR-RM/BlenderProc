@@ -15,8 +15,8 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")
-parser.add_argument('scene', nargs='?', default="examples/coco_annotations/scene.blend", help="Path to the scene.blend file")
-parser.add_argument('output_dir', nargs='?', default="examples/coco_annotations/output", help="Path to where the final files will be saved ")
+parser.add_argument('scene', nargs='?', default="examples/advanced/coco_annotations/scene.blend", help="Path to the scene.blend file")
+parser.add_argument('output_dir', nargs='?', default="examples/advanced/coco_annotations/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 Initializer.init()

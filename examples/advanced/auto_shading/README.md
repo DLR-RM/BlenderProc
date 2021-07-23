@@ -10,13 +10,13 @@ from left to right, FLAT, AUTO and SMOOTH shading.
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/auto_shading/config.yaml examples/auto_shading/camera_position examples/auto_shading/scene.blend examples/auto_shading/output
+python run.py examples/advanced/auto_shading/config.yaml examples/advanced/auto_shading/camera_position examples/advanced/auto_shading/scene.blend examples/advanced/auto_shading/output
 ``` 
 
-* `examples/auto_shading/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/auto_shading/camera_positions`: text file with parameters of camera positions.
-* `examples/auto_shading/scene.blend`: path to the blend file with the basic scene.
-* `examples/auto_shading/output`: path to the output directory.
+* `examples/advanced/auto_shading/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/auto_shading/camera_positions`: text file with parameters of camera positions.
+* `examples/advanced/auto_shading/scene.blend`: path to the blend file with the basic scene.
+* `examples/advanced/auto_shading/output`: path to the output directory.
 
 ## Visualization
 

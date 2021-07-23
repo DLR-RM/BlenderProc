@@ -9,7 +9,7 @@ Generate calibration images to verify that the way we set the camera intrinsics 
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/calibration/config.yaml
+python run.py examples/advanced/calibration/config.yaml
 ``` 
 
 ## Calibration
@@ -17,7 +17,7 @@ python run.py examples/calibration/config.yaml
 After rendering we can use the images to estimate the actual K matrix using opencv
 
 ```
-python examples/calibration/calibrate.py
+python examples/advanced/calibration/calibrate.py
 ```
 
 This should now output something like:

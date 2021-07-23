@@ -12,19 +12,19 @@ In this example we demonstrate how to switch materials.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/material_randomizer/config.yaml examples/resources/scene.obj examples/material_randomizer/output
+python run.py examples/advanced/material_randomizer/config.yaml examples/resources/scene.obj examples/advanced/material_randomizer/output
 ```
 
-* `examples/material_randomizer/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/material_randomizer/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
-* `examples/material_randomizer/output`: path to the output directory.
+* `examples/advanced/material_randomizer/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/material_randomizer/output/*.hdf5
+python scripts/visHdf5Files.py examples/advanced/material_randomizer/output/*.hdf5
 ```
 
 ## Steps

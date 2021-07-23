@@ -20,7 +20,7 @@ objp[0, :, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
 prev_img_shape = None
 
 # Extracting path of individual image stored in a given directory
-images = glob.glob('examples/calibration/output/*.png')
+images = glob.glob('examples/advanced/calibration/output/*.png')
 success = 0
 for fname in tqdm(images):
     img = cv2.imread(fname)

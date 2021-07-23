@@ -87,7 +87,7 @@ We provide a lot of [examples](examples/README.md) which explain all features in
 * [Physics positioning](examples/basics/physics_positioning/README.md): Enabling simple simulated physical interactions between objects in the scene.
 * [Semantic segmentation](examples/basics/semantic_segmentation/README.md): Generating semantic segmentation labels for a given scene.
 * [BOP Challenge](README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
-* [COCO annotations](examples/coco_annotations/README.md): Write COCO annotations to a .json file for selected objects in the scene.
+* [COCO annotations](examples/advanced/coco_annotations/README.md): Write COCO annotations to a .json file for selected objects in the scene.
 
 ... And much more, see our [examples](examples/README.md) for more details.
 

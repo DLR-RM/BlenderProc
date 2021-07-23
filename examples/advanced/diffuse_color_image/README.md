@@ -11,19 +11,19 @@ In this example we demonstrate how to render a diffuse color image
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/diffuse_color_image/config.yaml examples/resources/scene.obj examples/diffuse_color_image/output
+python run.py examples/advanced/diffuse_color_image/config.yaml examples/resources/scene.obj examples/advanced/diffuse_color_image/output
 ```
 
-* `examples/diffuse_color_image/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/diffuse_color_image/config.yaml`: path to the configuration file with pipeline configuration.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
-* `examples/diffuse_color_image/output`: path to the output directory.
+* `examples/advanced/diffuse_color_image/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/diffuse_color_image/output/0.hdf5
+python scripts/visHdf5Files.py examples/advanced/diffuse_color_image/output/0.hdf5
 ```
 
 ## Steps
@@ -49,7 +49,7 @@ python scripts/visHdf5Files.py examples/diffuse_color_image/output/0.hdf5
 
 * This module imports an .obj file into the scene.
 * The path of the .obj file should be configured via the parameter `path`.
-* Here we are using the first argument given, in the upper command the output path is set to `examples/diffuse_color_image/scene.obj`.
+* Here we are using the first argument given, in the upper command the output path is set to `examples/advanced/diffuse_color_image/scene.obj`.
 
 #### RgbRenderer
 

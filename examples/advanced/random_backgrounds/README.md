@@ -12,12 +12,12 @@ leads to inferior results compared to renderings of objects in actual 3D scenes.
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/random_backgrounds/config.yaml examples/random_backgrounds/object.ply examples/random_backgrounds/output
+python run.py examples/advanced/random_backgrounds/config.yaml examples/advanced/random_backgrounds/object.ply examples/advanced/random_backgrounds/output
 ``` 
 
-* `examples/random_backgrounds/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/random_backgrounds/object.ply`: path to the object file.
-* `examples/random_backgrounds/output`: path to the output directory.
+* `examples/advanced/random_backgrounds/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/random_backgrounds/object.ply`: path to the object file.
+* `examples/advanced/random_backgrounds/output`: path to the output directory.
 
 ## Visualization
 
@@ -241,7 +241,7 @@ To paste the rendered images onto random backgrounds, we make use of the `paste_
 in the `scripts` directory. To do so, execute:
 
 ```
-python scripts/paste_images_on_backgrounds.py --images examples/random_backgrounds/output/coco_data --backgrounds path/to/background/images --overwrite
+python scripts/paste_images_on_backgrounds.py --images examples/advanced/random_backgrounds/output/coco_data --backgrounds path/to/background/images --overwrite
 ```
 
 You need to provide a directory with random background images. A common choice are images from the VOC challenge or

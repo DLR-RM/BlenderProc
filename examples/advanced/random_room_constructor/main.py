@@ -24,7 +24,7 @@ from mathutils import Euler
 parser = argparse.ArgumentParser()
 parser.add_argument('ikea_path', nargs='?', default="resources/ikea", help="Path to the downloaded IKEA dataset, see the /scripts for the download script")
 parser.add_argument('cc_material_path', nargs='?', default="resources/cctextures", help="Path to CCTextures folder, see the /scripts for the download script.")
-parser.add_argument('output_dir', nargs='?', default="examples/random_room_constructor/output", help="Path to where the final files, will be saved")
+parser.add_argument('output_dir', nargs='?', default="examples/advanced/random_room_constructor/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
 Initializer.init()

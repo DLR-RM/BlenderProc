@@ -13,18 +13,18 @@ areas are consistent and close to the rendered depth images.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/stereo_matching/config.yaml <path to cam_pose file> <path to house.json> examples/stereo_matching/output
+python run.py examples/advanced/stereo_matching/config.yaml <path to cam_pose file> <path to house.json> examples/advanced/stereo_matching/output
 ```
 
-* `examples/stereo_matching/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/stereo_matching/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.
-* `examples/stereo_matching/output`: path to the output directory.
+* `examples/advanced/stereo_matching/output`: path to the output directory.
 
 ## Visualizaton
 Visualize the generated data:
 ```
-python scripts/visHdf5Files.py examples/stereo_matching/output/1.hdf5
+python scripts/visHdf5Files.py examples/advanced/stereo_matching/output/1.hdf5
 ```
 
 ## Steps

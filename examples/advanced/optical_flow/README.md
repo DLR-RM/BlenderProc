@@ -20,20 +20,20 @@ Flow is visible if either the camera or objects move between frames. Here, the c
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/optical_flow/config.yaml examples/optical_flow/camera_positions examples/resources/scene.obj examples/optical_flow/output
+python run.py examples/advanced/optical_flow/config.yaml examples/advanced/optical_flow/camera_positions examples/resources/scene.obj examples/advanced/optical_flow/output
 ```
 
-* `examples/optical_flow/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/optical_flow/camera_positions`: text file with parameters of camera positions.
+* `examples/advanced/optical_flow/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/optical_flow/camera_positions`: text file with parameters of camera positions.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
-* `examples/optical_flow/output`: path to the output directory.
+* `examples/advanced/optical_flow/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/optical_flow/output/1.hdf5
+python scripts/visHdf5Files.py examples/advanced/optical_flow/output/1.hdf5
 ```
 
 ## Steps
