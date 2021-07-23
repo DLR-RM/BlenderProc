@@ -4,29 +4,29 @@
 </p>
 
 
-The focus of this example is adding dust to a model with blender. For this example we are using the [haven dataset](../haven_dataset/README.md).
+The focus of this example is adding dust to a model with blender. For this example we are using the [haven dataset](../haven/README.md).
 
-Make sure that you have downloaded the haven dataset first, see the [haven example](../haven_dataset/README.md)
+Make sure that you have downloaded the haven dataset first, see the [haven example](../haven/README.md)
 
 ## Usage
 
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven_dataset/output
+python run.py examples/advanced/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven/output
 ``` 
 
 * `examples/advanced/dust/config.yaml`: path to the configuration file with pipeline configuration.
 * `resources/haven/models/ArmChair_01/ArmChair_01.blend`:  Path to the blend file, from the haven dataset, browse the model folder, for all possible options
 * `resources/haven`: The folder where the `hdri` folder can be found, to load an world environment
-* `examples/datasets/haven_dataset/output`: path to the output directory.
+* `examples/datasets/haven/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/haven_dataset/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/haven/output/*.hdf5
 ``` 
 
 ## Steps
