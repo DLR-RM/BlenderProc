@@ -14,7 +14,7 @@ for example in examples.rglob("**/README.md"):
 
     shutil.copy(str(example), str(output_example / "README.md"))
 
-shutil.copytree(examples.parent / "images", output.parent / "images", dirs_exist_ok=True)
+shutil.copytree(examples.parent / "images", output.parent / "images")
 shutil.copy(examples.parent / "README.md", output.parent)
 shutil.copy(examples.parent / "change_log.md", output.parent)
 shutil.copy(examples.parent / "CONTRIBUTING.md", output.parent)

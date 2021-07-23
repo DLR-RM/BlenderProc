@@ -52,32 +52,35 @@ def generate_collapsible_classlist(app, fromdocname, classes, container, caption
     container += toc
 
 def generate_examples_sidebar(app, fromdocname, container):
-    toc = nodes.bullet_list()
-
-    ref = nodes.reference('', '')
-    ref['refuri'] = app.builder.get_relative_uri(fromdocname, "examples/README")
-    ref.append(nodes.Text("Examples"))
-    module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
-    if fromdocname.startswith("examples/"):
-        module_item["classes"].append('current')
-    toc += module_item
-
-    subtree = nodes.bullet_list()
-    module_item += subtree
-
     examples = Path(__file__).absolute().parent.parent / "examples"
-    for example in sorted(examples.rglob("*/README.md"), key=lambda x: x.parent.name):
-        ref = nodes.reference('', '')
-        ref['refuri'] = app.builder.get_relative_uri(fromdocname, str(example).replace(str(examples), "examples").replace("README.md", "README"))
-        ref.append(nodes.Text(example.parent.name))
-        class_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l2"])
 
-        if fromdocname == ref['refuri'].replace(".html", ""):
-            class_item['classes'].append('current')
-        subtree += class_item
+    container += nodes.caption("Examples", '', *[nodes.Text("Examples")])
+    for example_groups in [examples / group for group in ["basics", "advanced", "datasets"]]:
+        if example_groups.is_dir():
+            toc = nodes.bullet_list()
 
+            ref = nodes.reference('', '')
+            ref['refuri'] = app.builder.get_relative_uri(fromdocname, "examples/" + example_groups.name + "/README")
+            ref.append(nodes.Text(example_groups.name.capitalize()))
+            module_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l1"])
+            if fromdocname.startswith("examples/" + example_groups.name):
+                module_item["classes"].append('current')
+            toc += module_item
 
-    container += toc
+            subtree = nodes.bullet_list()
+            module_item += subtree
+
+            for example in sorted(example_groups.rglob("*/README.md"), key=lambda x: x.parent.name):
+                ref = nodes.reference('', '')
+                ref['refuri'] = app.builder.get_relative_uri(fromdocname, str(example).replace(str(examples), "examples").replace("README.md", "README"))
+                ref.append(nodes.Text(example.parent.name))
+                class_item = nodes.list_item('', addnodes.compact_paragraph('', '', ref), classes=["toctree-l2"])
+
+                if fromdocname == ref['refuri'].replace(".html", ""):
+                    class_item['classes'].append('current')
+                subtree += class_item
+
+            container += toc
 
 def generate_sidebar(app, fromdocname):
     env = app.builder.env
