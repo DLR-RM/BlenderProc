@@ -1,5 +1,4 @@
-from src.utility.SetupUtility import SetupUtility
-from sys import version_info
+from sys import version_info, path
 
 if version_info.major == 2:
     raise Exception("This script only works with python3.x!")
@@ -11,6 +10,8 @@ import numpy as np
 import subprocess
 import shutil
 
+path.append(os.path.join(os.path.dirname(__file__), ".."))
+from src.utility.SetupUtility import SetupUtility
 
 def split_object_according_to_groups(file_path, folder):
     """
