@@ -50,7 +50,7 @@ class WriterUtility:
                                 raise('Could not find original or stereo paths: {}'.format(output_paths))
 
                         # For outputs like distance or depth, we automatically trim the last channel here
-                        if "auto_trim" in reg_out and reg_out["auto_trim"]:
+                        if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
                             output_file = PostProcessingUtility.trim_redundant_channels(output_file)
 
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)

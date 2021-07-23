@@ -267,7 +267,7 @@ class RendererUtility:
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
             "version": "2.0.0",
-            "auto_trim": True
+            "trim_redundant_channels": True
         })
 
     @staticmethod
@@ -304,7 +304,7 @@ class RendererUtility:
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
             "version": "2.0.0",
-            "auto_trim": True
+            "trim_redundant_channels": True
         })
 
     @staticmethod
