@@ -266,7 +266,8 @@ class RendererUtility:
         Utility.add_output_entry({
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
-            "version": "2.0.0"
+            "version": "2.0.0",
+            "auto_trim": True
         })
 
     @staticmethod
@@ -302,7 +303,8 @@ class RendererUtility:
         Utility.add_output_entry({
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
-            "version": "2.0.0"
+            "version": "2.0.0",
+            "auto_trim": True
         })
 
     @staticmethod

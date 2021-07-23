@@ -51,8 +51,5 @@ RendererUtility.set_samples(350)
 # render the whole pipeline
 data = RendererUtility.render()
 
-# post process the data and remove the redundant channels in the distance image
-data["distance"] = PostProcessingUtility.trim_redundant_channels(data["distance"])
-
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)
