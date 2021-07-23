@@ -15,13 +15,13 @@ Both are needed to use this dataset properly.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/scenenet/config.yaml <PATH_TO_SCENE_NET_OBJ_FILE> <PATH_TO_TEXTURE_FOLDER> examples/scenenet/output
+python run.py examples/datasets/scenenet/config.yaml <PATH_TO_SCENE_NET_OBJ_FILE> <PATH_TO_TEXTURE_FOLDER> examples/datasets/scenenet/output
 ``` 
 
-* `examples/scenenet/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/scenenet/config.yaml`: path to the configuration file with pipeline configuration.
 * `<PATH_TO_SCENE_NET_OBJ_FILE>`: path to the used scene net `.obj` file, download via this [script](../../scripts/download_scenenet.py)
 * `<PATH_TO_TEXTURE_FOLDER>`: path to the downloaded texture files, you can find them [here](http://tinyurl.com/zpc9ppb)
-* `examples/scenenet/output`: path to the output directory.
+* `examples/datasets/scenenet/output`: path to the output directory.
 
 Please remove the `1Office/3_hereisfree_not_labelled.obj` at it is not supported here, as the scene is in millimeters, and the objects are not correctly placed.
 
@@ -30,7 +30,7 @@ Please remove the `1Office/3_hereisfree_not_labelled.obj` at it is not supported
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/scenenet/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/scenenet/output/*.hdf5
 ``` 
 
 ## Steps

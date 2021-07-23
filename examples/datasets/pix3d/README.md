@@ -13,19 +13,19 @@ We provide a script to download the .obj files, please see the scripts [folder](
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/pix3d/config.yaml <PATH_TO_Pix3D> examples/pix3d/output
+python run.py examples/datasets/pix3d/config.yaml <PATH_TO_Pix3D> examples/datasets/pix3d/output
 ``` 
 
-* `examples/pix3d/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/pix3d/config.yaml`: path to the configuration file with pipeline configuration.
 * `<PATH_TO_Pix3D>`: path to the downloaded pix3d dataset, get it [here](http://pix3d.csail.mit.edu/) 
-* `examples/pix3d/output`: path to the output directory.
+* `examples/datasets/pix3d/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/pix3d/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/pix3d/output/*.hdf5
 ``` 
 
 ## Steps

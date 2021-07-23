@@ -7,12 +7,12 @@ This example introduces new tools for using replica dataset with BlenderProc.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/replica_dataset/config.yaml <path_to_the_replica_data_folder>  examples/replica_dataset/output
+python run.py examples/datasets/replica_dataset/config.yaml <path_to_the_replica_data_folder>  examples/datasets/replica_dataset/output
 ``` 
 
-* `examples/replica_dataset/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/replica_dataset/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path_to_the_replica_data_folder>`: Path to the replica dataset directory.
-* `examples/replica_dataset/output`: path to the output directory.
+* `examples/datasets/replica_dataset/output`: path to the output directory.
 
 ## Visualization
 

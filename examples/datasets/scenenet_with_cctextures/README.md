@@ -17,14 +17,14 @@ All three are needed to use this example properly.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/scenenet_with_cctextures/config.yaml <PATH_TO_SCENE_NET_OBJ_FILE> <PATH_TO_TEXTURE_FOLDER> resources/cctextures examples/scenenet_with_cctextures/output
+python run.py examples/datasets/scenenet_with_cctextures/config.yaml <PATH_TO_SCENE_NET_OBJ_FILE> <PATH_TO_TEXTURE_FOLDER> resources/cctextures examples/datasets/scenenet_with_cctextures/output
 ``` 
 
-* `examples/scenenet_with_cctextures/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/scenenet_with_cctextures/config.yaml`: path to the configuration file with pipeline configuration.
 * `<PATH_TO_SCENE_NET_OBJ_FILE>`: path to the used scene net `.obj` file, download via this [script](../../scripts/download_scenenet_with_cctextures.py)
 * `<PATH_TO_TEXTURE_FOLDER>`: path to the downloaded texture files, you can find them [here](http://tinyurl.com/zpc9ppb)
 * `resources/cctextures`:  path to the cctexture folder, downloaded via the script.
-* `examples/scenenet_with_cctextures/output`: path to the output directory.
+* `examples/datasets/scenenet_with_cctextures/output`: path to the output directory.
 
 
 ## Visualization
@@ -32,7 +32,7 @@ python run.py examples/scenenet_with_cctextures/config.yaml <PATH_TO_SCENE_NET_O
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/scenenet_with_cctextures/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/scenenet_with_cctextures/output/*.hdf5
 ``` 
 
 ## Steps

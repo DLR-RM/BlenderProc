@@ -12,13 +12,13 @@ Both groups of objects can be selected with the `getter.Entity`
 Execute in the Blender-Proc main directory:
 
 ```
-python run.py examples/suncg_with_object_replacer/config.yaml <path to house.json> <path to new objects> examples/suncg_with_object_replacer/output
+python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to house.json> <path to new objects> examples/datasets/suncg_with_object_replacer/output
 ```
 
-* `examples/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to house.json>`: path to the house.json file of the SUNCG scene you want to render.
 * `<path to new objects>`: path to the `objects_to_replace_with`.
-* `examples/suncg_with_object_replacer/output`: path to the output directory.
+* `examples/datasets/suncg_with_object_replacer/output`: path to the output directory.
 
 
 ## Visualization

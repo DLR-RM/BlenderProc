@@ -23,19 +23,19 @@ A script to download the .obj files is provided in the [scripts folder](../../sc
 Execute in the BlenderProc main directory:
 
 ```shell
-python run.py examples/ikea/config.yaml <PATH_TO_IKEA> examples/ikea/output
+python run.py examples/datasets/ikea/config.yaml <PATH_TO_IKEA> examples/datasets/ikea/output
 ``` 
 
-* `examples/ikea/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/ikea/config.yaml`: path to the configuration file with pipeline configuration.
 * `<PATH_TO_IKEA>`: path to the downloaded IKEA dataset, see the [scripts folder](../../scripts) for the download script. 
-* `examples/ikea/output`: path to the output directory.
+* `examples/datasets/ikea/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```shell
-python scripts/visHdf5Files.py examples/ikea/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/ikea/output/*.hdf5
 ``` 
 
 ## Steps

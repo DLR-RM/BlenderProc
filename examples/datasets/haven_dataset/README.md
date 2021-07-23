@@ -18,20 +18,20 @@ This will download all 3D models, all environment HDRs and also all textures the
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/haven_dataset/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/haven_dataset/output
+python run.py examples/datasets/haven_dataset/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven_dataset/output
 ``` 
 
-* `examples/haven_dataset/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/haven_dataset/config.yaml`: path to the configuration file with pipeline configuration.
 * `resources/haven/models/ArmChair_01/ArmChair_01.blend`:  Path to the blend file, from the haven dataset, browse the model folder, for all possible options
 * `resources/haven`: The folder where the `hdri` folder can be found, to load an world environment
-* `examples/haven_dataset/output`: path to the output directory.
+* `examples/datasets/haven_dataset/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/haven_dataset/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/haven_dataset/output/*.hdf5
 ``` 
 
 ## Steps

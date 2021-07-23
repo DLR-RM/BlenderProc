@@ -8,18 +8,18 @@ This example shows how to synthetically recreate BOP scenes.
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-In [examples/bop_scene_replication/config.yaml](config.yaml) set the `blender_install_path` where Blender is or should be installed.
+In [examples/datasets/bop_scene_replication/config.yaml](config.yaml) set the `blender_install_path` where Blender is or should be installed.
 
 Execute in the BlenderProc main directory: 
 
 ```
-python run.py examples/bop_scene_replication/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/bop_scene_replication/output
+python run.py examples/datasets/bop_scene_replication/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/datasets/bop_scene_replication/output
 ```
-* `examples/bop_scene_replication/config.yaml`: path to the pipeline configuration file.
+* `examples/datasets/bop_scene_replication/config.yaml`: path to the pipeline configuration file.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset, e.g. tless
 * `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
-* `examples/bop_scene_replication/output`: path to the output directory.
+* `examples/datasets/bop_scene_replication/output`: path to the output directory.
 
 ## Visualization
 

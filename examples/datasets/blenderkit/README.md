@@ -12,19 +12,19 @@ A script to download the .blend files is provided in the [scripts folder](../../
 Execute in the BlenderProc main directory:
 
 ```shell
-python run.py examples/blenderkit/config.yaml <PATH_TO_.BLEND_FILE> examples/blenderkit/output
+python run.py examples/datasets/blenderkit/config.yaml <PATH_TO_.BLEND_FILE> examples/datasets/blenderkit/output
 ``` 
 
-* `examples/blenderkit/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/blenderkit/config.yaml`: path to the configuration file with pipeline configuration.
 * `<PATH_TO_.BLEND_FILE>`: path to the downloaded .blend file, see the [scripts folder](../../scripts) for the download script. 
-* `examples/blenderkit/output`: path to the output directory.
+* `examples/datasets/blenderkit/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```shell
-python scripts/visHdf5Files.py examples/blenderkit/output/*.hdf5
+python scripts/visHdf5Files.py examples/datasets/blenderkit/output/*.hdf5
 ``` 
 
 ## Steps
