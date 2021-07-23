@@ -1,4 +1,4 @@
-# Basic Object Pose
+# Camera Object Pose Setting
 
 <p align="center">
 <img src="rendering_0.jpg" alt="Front readme image" width=375>
