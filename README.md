@@ -1,7 +1,7 @@
 # BlenderProc
 
 [![Documentation](https://img.shields.io/badge/documentation-passing-brightgreen.svg)](https://dlr-rm.github.io/BlenderProc/)
-[![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basic/basic_example.ipynb)
+[![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basics/basic/basic_example.ipynb)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 <p align="center">
@@ -97,7 +97,7 @@ To find a bug or to understand what the pipeline is doing, it is possible to run
 To do so, just add the `--debug` flag to your blender proc command.
 For example, to start the basic example in debug mode, run:
 ```
-python run.py examples/basic/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/basic/output --debug
+python run.py examples/basics/basic/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/basics/basic/output --debug
 ```
 
 Now the Blender UI opens up, the scripting tab is selected, the correct script is loaded and your config path and arguments are placed.

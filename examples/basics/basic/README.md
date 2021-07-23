@@ -12,22 +12,22 @@ In this example we demonstrate the basic functionality of BlenderProc.
 Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically download blender, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/basic/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/basic/output
+python run.py examples/basics/basic/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/basics/basic/output
 ```
 
-* `examples/basic/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/basic/config.yaml`: path to the configuration file with pipeline configuration.
 
 The three arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
 * `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
-* `examples/basic/output`: path to the output directory.
+* `examples/basics/basic/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/basic/output/0.hdf5
+python scripts/visHdf5Files.py examples/basics/basic/output/0.hdf5
 ```
 
 ## Steps
@@ -75,7 +75,7 @@ Every module has a name which specifies the python path to the corresponding cla
 
 * This module does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates camera).
 It also initializes the GlobalStorage, which contains two parts:
-* The first one is the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basic/output`.
+* The first one is the global config, were we are setting the `"ouput_dir"` to `"<args:2>"`, as we don't want to hardcode this path here, the `output_dir` is automatically replaced by the third argument given when running the pipeline. In the upper command the output path is set to `examples/basics/basic/output`.
 * These values are provided to all modules, but can be overwritten by the config in any module.
 * The second part of the GlobalStorage is a container, which can store information over the boundaries over single modules.
 * For more information on the GlobalStorage read the documentation in the class.

@@ -10,20 +10,20 @@ This is done via a physics simulation where the spheres are first placed randoml
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/physics_positioning/config.yaml examples/physics_positioning/active.obj examples/physics_positioning/passive.obj examples/physics_positioning/output
+python run.py examples/basics/physics_positioning/config.yaml examples/basics/physics_positioning/active.obj examples/basics/physics_positioning/passive.obj examples/basics/physics_positioning/output
 ```
 
-* `examples/physics_positioning/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.
-* `examples/physics_positioning/passive.obj`: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.
-* `examples/physics_positioning/output`: path to the output directory.
+* `examples/basics/physics_positioning/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/physics_positioning/active.obj`: path to the object file with active objects, i. e. objects which we want to participate in physics simulation.
+* `examples/basics/physics_positioning/passive.obj`: path to the object file with passive objects, i. e. objects which we do not want to participate in physics simulation, e.g. plane.
+* `examples/basics/physics_positioning/output`: path to the output directory.
 
 ## Visualization
 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/physics_positioning/output/0.hdf5
+python scripts/visHdf5Files.py examples/basics/physics_positioning/output/0.hdf5
 ```
 
 ## Steps
