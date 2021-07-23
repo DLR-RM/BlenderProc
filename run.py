@@ -78,6 +78,7 @@ if custom_blender_path is None:
         blender_path = os.path.join(blender_install_path, blender_version)
     elif platform == "darwin":
         blender_version += "-macos-x64"
+        blender_install_path = os.path.join(blender_install_path, blender_version)
         blender_path = os.path.join(blender_install_path, "Blender.app")
     elif platform == "win32":
         blender_version += "-windows-x64"
