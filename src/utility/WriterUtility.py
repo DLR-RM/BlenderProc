@@ -1,6 +1,7 @@
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
+from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
@@ -47,6 +48,11 @@ class WriterUtility:
                                 output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
                             except:
                                 raise('Could not find original or stereo paths: {}'.format(output_paths))
+
+                        # For outputs like distance or depth, we automatically trim the last channel here
+                        if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
+                            output_file = PostProcessingUtility.trim_redundant_channels(output_file)
+
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:
                     # per run outputs
