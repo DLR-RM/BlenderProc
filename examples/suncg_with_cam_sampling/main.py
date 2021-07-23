@@ -1,8 +1,8 @@
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
+from src.utility.CameraUtility import CameraUtility
+from src.utility.MathUtility import MathUtility
 from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MeshObjectUtility import MeshObject
