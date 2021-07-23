@@ -33,6 +33,9 @@ class ShapeNetLoaderModule(LoaderInterface):
         * - used_source_id
           - The identifier of the original model on the online repository from which it was collected to build the ShapeNet dataset.
           - string
+        * - move_object_origin
+          - Moves the object center to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane, this does not change the `.location` of the object. Default: True
+          - bool
     """
 
     def __init__(self, config):
@@ -45,6 +48,7 @@ class ShapeNetLoaderModule(LoaderInterface):
         loaded_obj = ShapeNetLoader.load(
             data_path=self.config.get_string("data_path"),
             used_synset_id=self.config.get_string("used_synset_id"),
-            used_source_id=self.config.get_string("used_source_id", "")
+            used_source_id=self.config.get_string("used_source_id", ""),
+            move_object_origin=self.config.get_bool("move_object_origin", True)
         )
         self._set_properties(loaded_obj)
