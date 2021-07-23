@@ -1,12 +1,13 @@
+from sys import path
 from sys import version_info
 if version_info.major == 2:
     raise Exception("This script only works with python3.x!")
 
 import os
 import csv
-import subprocess
 import requests
-
+path.append(os.path.join(os.path.dirname(__file__), ".."))
+from src.utility.SetupUtility import SetupUtility
 
 if __name__ == "__main__":
     # setting the default header, else the server does not allow the download
@@ -16,7 +17,8 @@ if __name__ == "__main__":
 
     # set the download directory relative to this one
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures")
+    # cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures")
+    cc_texture_dir = os.path.join("/home_local/elba_mh/ws/data/scene_former", "cctextures")
 
     if not os.path.exists(cc_texture_dir):
         os.makedirs(cc_texture_dir)
@@ -56,11 +58,7 @@ if __name__ == "__main__":
         if not os.path.exists(current_folder):
             os.makedirs(current_folder)
         current_file_path = os.path.join(current_folder, "{}.zip".format(asset))
-        request = requests.get(link, headers=headers)
-        with open(current_file_path, "wb") as file:
-            file.write(request.content)
-
-        subprocess.call(["unzip {} -d {}> /dev/null".format(current_file_path, current_folder)], shell=True)
-        os.remove(current_file_path)
+        response = requests.get(link, headers=headers)
+        SetupUtility.upzip_from_response(current_folder, response)
 
     print("Done downloading textures, saved in {}".format(cc_texture_dir))
