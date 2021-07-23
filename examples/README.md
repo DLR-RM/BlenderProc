@@ -6,7 +6,7 @@ Each folder contains an example, some of those require external datasets and/or 
 
 ## Contents
 
-* [Basic Examples](#core-examples)
+* [Basic Examples](#basic-examples)
 * [Advanced Examples](#advanced-examples)
 * [Utility Examples](#utility-examples)
 * [BOP Dataset](#benchmark-for-6d-object-pose-estimation-bop)
