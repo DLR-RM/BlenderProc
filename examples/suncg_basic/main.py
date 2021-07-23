@@ -1,10 +1,9 @@
-from src.utility.CameraUtility import CameraUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
-
+from src.utility.CameraUtility import CameraUtility
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
@@ -26,8 +25,8 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-LabelIdMapping.assign_mapping(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house)
+label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+objs = SuncgLoader.load(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
