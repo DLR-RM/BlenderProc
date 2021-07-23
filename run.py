@@ -1,5 +1,6 @@
 import argparse
 import os
+import tarfile
 from os.path import join
 import subprocess
 import shutil
@@ -133,10 +134,11 @@ if custom_blender_path is None:
 
         if platform == "linux" or platform == "linux2":
             if version_info.major == 3:
-                SetupUtility.extract_file(file_tmp, blender_install_path)
+                SetupUtility.extract_file(blender_install_path, file_tmp, "TAR")
             else:
                 with contextlib.closing(lzma.LZMAFile(file_tmp)) as xz:
-                    SetupUtility.extract_file(xz, blender_install_path)
+                    with tarfile.open(fileobj=xz) as f:
+                        f.extractall(blender_install_path)
         elif platform == "darwin":
             if not os.path.exists(blender_install_path):
                 os.makedirs(blender_install_path)
@@ -152,7 +154,7 @@ if custom_blender_path is None:
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
         elif platform == "win32":
-            SetupUtility.upzip_file(file_tmp, blender_install_path)
+            SetupUtility.extract_file(file_tmp, blender_install_path)
         # rename the blender folder to better fit our existing scheme
         for folder in os.listdir(blender_install_path):
             if os.path.isdir(os.path.join(blender_install_path, folder)) and folder.startswith("blender-" + major_version):

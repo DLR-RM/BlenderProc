@@ -1,5 +1,6 @@
 import os
 import sys
+import tarfile
 from sys import platform
 import subprocess
 import importlib
@@ -196,15 +197,23 @@ class SetupUtility:
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
 
     @staticmethod
-    def extract_file(output_dir, file):
-        """ Extract all members from the archive to output_dir
+    def extract_file(output_dir, file, mode="ZIP"):
+        """ Extract all members from the archive into output_dir.
 
-        :param output_dir: the dir to zip file extract to
-        :param file: file to extract
+        :param output_dir: The output directory that should contain the extracted files.
+        :param file: The path to the archive which should be extracted.
+        :param mode: The type of the given file, has to be in ["TAR", "ZIP"]
         """
         try:
-            with zipfile.ZipFile(file) as tar:
-                tar.extractall(str(output_dir))
+            if mode.lower() == "zip":
+                with zipfile.ZipFile(file) as tar:
+                    tar.extractall(str(output_dir))
+            elif mode.lower() == "tar":
+                with tarfile.open(file) as tar:
+                    tar.extractall(str(output_dir))
+            else:
+                raise Exception("No such mode: " + mode)
+
         except (IOError, zipfile.BadZipfile) as e:
             print('Bad zip file given as input.  %s' % e)
             raise e
