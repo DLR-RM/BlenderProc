@@ -49,7 +49,7 @@ python scripts/visHdf5Files.py examples/advanced/diffuse_color_image/output/0.hd
 
 * This module imports an .obj file into the scene.
 * The path of the .obj file should be configured via the parameter `path`.
-* Here we are using the first argument given, in the upper command the output path is set to `examples/advanced/diffuse_color_image/scene.obj`.
+* Here we are using the first argument given, in the upper command the output path is set to `examples/resources/scene.obj`.
 
 #### RgbRenderer
 
