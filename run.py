@@ -1,15 +1,11 @@
 import argparse
 import os
 from os.path import join
-import tarfile
-import zipfile
 import subprocess
 import shutil
 import signal
 import sys
 from sys import platform, version_info
-
-from src.utility.SetupUtility import SetupUtility
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -19,6 +15,7 @@ else:
 
 import uuid
 from src.utility.ConfigParser import ConfigParser
+from src.utility.SetupUtility import SetupUtility
 
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -81,6 +78,7 @@ if custom_blender_path is None:
         blender_path = os.path.join(blender_install_path, blender_version)
     elif platform == "darwin":
         blender_version += "-macos-x64"
+        blender_install_path = os.path.join(blender_install_path, blender_version)
         blender_path = os.path.join(blender_install_path, "Blender.app")
     elif platform == "win32":
         blender_version += "-windows-x64"
@@ -135,12 +133,10 @@ if custom_blender_path is None:
 
         if platform == "linux" or platform == "linux2":
             if version_info.major == 3:
-                with tarfile.open(file_tmp) as tar:
-                    tar.extractall(blender_install_path)
+                SetupUtility.extract_file(file_tmp, blender_install_path)
             else:
                 with contextlib.closing(lzma.LZMAFile(file_tmp)) as xz:
-                    with tarfile.open(fileobj=xz) as f:
-                        f.extractall(blender_install_path)
+                    SetupUtility.extract_file(xz, blender_install_path)
         elif platform == "darwin":
             if not os.path.exists(blender_install_path):
                 os.makedirs(blender_install_path)
@@ -156,8 +152,7 @@ if custom_blender_path is None:
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
         elif platform == "win32":
-            with zipfile.ZipFile(file_tmp) as z:
-                z.extractall(blender_install_path)
+            SetupUtility.upzip_file(file_tmp, blender_install_path)
         # rename the blender folder to better fit our existing scheme
         for folder in os.listdir(blender_install_path):
             if os.path.isdir(os.path.join(blender_install_path, folder)) and folder.startswith("blender-" + major_version):

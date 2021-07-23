@@ -1,4 +1,4 @@
-from sys import version_info
+from sys import version_info, path
 
 if version_info.major == 2:
     raise Exception("This script only works with python3.x!")
@@ -10,6 +10,8 @@ import numpy as np
 import subprocess
 import shutil
 
+path.append(os.path.join(os.path.dirname(__file__), ".."))
+from src.utility.SetupUtility import SetupUtility
 
 def split_object_according_to_groups(file_path, folder):
     """
@@ -80,11 +82,9 @@ if __name__ == "__main__":
 
     # unzip the zip file
     print("Unzipping the zip file...")
-    cmd = "unzip {} > /dev/null".format(zip_file_path)
-    subprocess.call(cmd, shell=True, cwd=os.path.dirname(zip_file_path))
-
-    os.remove(zip_file_path)
     ikea_dir = os.path.join(ikea_dir, "IKEA")
+    SetupUtility.extract_file(ikea_dir, zip_file_path) 
+    os.remove(zip_file_path)
 
     subprocess.call("chmod -R a+rw *", shell=True, cwd=ikea_dir)
 

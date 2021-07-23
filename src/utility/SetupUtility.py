@@ -3,6 +3,10 @@ import sys
 from sys import platform
 import subprocess
 import importlib
+from io import BytesIO
+import zipfile
+
+from requests.models import Response
 
 class SetupUtility:
 
@@ -194,6 +198,29 @@ class SetupUtility:
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
 
     @staticmethod
+    def extract_file(output_dir: str, file: bytes = None):
+        """ Extract all members from the archive to output_dir
+
+        :param output_dir: the dir to zip file extract to
+        :param file_: file_ to extract
+        """
+        try:
+            with zipfile.ZipFile(file) as tar:
+                tar.extractall(str(output_dir))
+        except (IOError, zipfile.BadZipfile) as e:
+            print('Bad zip file given as input.  %s' % e)
+            raise e
+
+    @staticmethod
+    def extract_from_response(output_dir: str, response: Response = None):
+        """ Extract all members from the archive to output_dir
+
+        :param output_dir: the dir to zip file extract to
+        :param response: the response to a requested url that contains a zip file
+        """
+        file = BytesIO(response.content)
+        SetupUtility.extract_file(output_dir, file)
+
     def check_if_setup_utilities_are_at_the_top(path_to_run_file):
         """
         Checks if the given python scripts has at the top an import to SetupUtility, if not an
