@@ -46,6 +46,7 @@ for i in range(5):
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
     CameraUtility.add_camera_pose(cam2world_matrix)
 
+# Add dust to all materials of the loaded object
 for material in obj.get_materials():
     Dust.add_to_material(material, strength=0.8, texture_scale=0.05)
 
