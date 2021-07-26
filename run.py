@@ -1,15 +1,12 @@
 import argparse
 import os
-from os.path import join
 import tarfile
-import zipfile
+from os.path import join
 import subprocess
 import shutil
 import signal
 import sys
 from sys import platform, version_info
-
-from src.utility.SetupUtility import SetupUtility
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -19,6 +16,8 @@ else:
 
 import uuid
 from src.utility.ConfigParser import ConfigParser
+from src.utility.SetupUtility import SetupUtility
+
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
@@ -80,6 +79,7 @@ if custom_blender_path is None:
         blender_path = os.path.join(blender_install_path, blender_version)
     elif platform == "darwin":
         blender_version += "-macos-x64"
+        blender_install_path = os.path.join(blender_install_path, blender_version)
         blender_path = os.path.join(blender_install_path, "Blender.app")
     elif platform == "win32":
         blender_version += "-windows-x64"
@@ -134,8 +134,7 @@ if custom_blender_path is None:
 
         if platform == "linux" or platform == "linux2":
             if version_info.major == 3:
-                with tarfile.open(file_tmp) as tar:
-                    tar.extractall(blender_install_path)
+                SetupUtility.extract_file(blender_install_path, file_tmp, "TAR")
             else:
                 with contextlib.closing(lzma.LZMAFile(file_tmp)) as xz:
                     with tarfile.open(fileobj=xz) as f:
@@ -155,8 +154,7 @@ if custom_blender_path is None:
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
         elif platform == "win32":
-            with zipfile.ZipFile(file_tmp) as z:
-                z.extractall(blender_install_path)
+            SetupUtility.extract_file(file_tmp, blender_install_path)
         # rename the blender folder to better fit our existing scheme
         for folder in os.listdir(blender_install_path):
             if os.path.isdir(os.path.join(blender_install_path, folder)) and folder.startswith("blender-" + major_version):
@@ -192,6 +190,7 @@ if is_config:
     path_src_run = os.path.join(repo_root_directory, "src/run.py")
 else:
     path_src_run = args.file
+    SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)
 
 # Determine perfect temp dir
 if args.temp_dir is None:

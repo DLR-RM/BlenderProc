@@ -1,6 +1,7 @@
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
+from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
@@ -47,6 +48,11 @@ class WriterUtility:
                                 output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
                             except:
                                 raise('Could not find original or stereo paths: {}'.format(output_paths))
+
+                        # For outputs like distance or depth, we automatically trim the last channel here
+                        if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
+                            output_file = PostProcessingUtility.trim_redundant_channels(output_file)
+
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:
                     # per run outputs
@@ -120,8 +126,8 @@ class WriterUtility:
 
         :param item: The item. Type: blender object.
         :param attribute_name: The attribute name. Type: string.
-     :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
-     :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
+        :param local_frame_change: Can be used to change the local coordinate frame of matrices. Default: ["X", "Y", "Z"]
+        :param world_frame_change: Can be used to change the world coordinate frame of points and matrices. Default: ["X", "Y", "Z"]
         :return: The attribute value.
         """
 
@@ -177,17 +183,17 @@ class WriterUtility:
         """
 
         if attribute_name == "fov_x":
-            return cam_ob.data.angle_x
+            return CameraUtility.get_fov()[0]
         elif attribute_name == "fov_y":
-            return cam_ob.data.angle_y
+            return CameraUtility.get_fov()[1]
         elif attribute_name == "shift_x":
             return cam_ob.data.shift_x
         elif attribute_name == "shift_y":
             return cam_ob.data.shift_y
         elif attribute_name == "half_fov_x":
-            return cam_ob.data.angle_x * 0.5
+            return CameraUtility.get_fov()[0] * 0.5
         elif attribute_name == "half_fov_y":
-            return cam_ob.data.angle_y * 0.5
+            return CameraUtility.get_fov()[1] * 0.5
         elif attribute_name == "cam_K":
             return [[x for x in c] for c in CameraUtility.get_intrinsics_as_K_matrix()]
         else:

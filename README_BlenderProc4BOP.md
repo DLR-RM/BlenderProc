@@ -32,11 +32,11 @@ The cameras are positioned to cover the distribution of the ground-truth object 
 
 ## Examples
 
-* [bop_challenge](examples/bop_challenge): Configuration files and information on how the official synthetic data for the BOP Challenge 2020 were created.
-* [bop_object_physics_positioning](examples/bop_object_physics_positioning): Drops BOP objects on a plane and randomizes materials.
-* [bop_object_on_surface_sampling](examples/bop_object_on_surface_sampling): Samples upright poses on a plane and randomizes materials.
-* [bop_scene_replication](examples/bop_scene_replication): Replicates test scenes (object poses, camera intrinsics and extrinsics) from the BOP datasets.
-* [bop_object_pose_sampling](examples/bop_object_pose_sampling): Loads BOP objects and samples the camera, light poses and object poses in a free space.
+* [bop_challenge](datasets/examples/datasets/bop_challenge): Configuration files and information on how the official synthetic data for the BOP Challenge 2020 were created.
+* [bop_object_physics_positioning](datasets/examples/datasets/bop_object_physics_positioning): Drops BOP objects on a plane and randomizes materials.
+* [bop_object_on_surface_sampling](datasets/examples/datasets/bop_object_on_surface_sampling): Samples upright poses on a plane and randomizes materials.
+* [bop_scene_replication](datasets/examples/datasets/bop_scene_replication): Replicates test scenes (object poses, camera intrinsics and extrinsics) from the BOP datasets.
+* [bop_object_pose_sampling](datasets/examples/datasets/bop_object_pose_sampling): Loads BOP objects and samples the camera, light poses and object poses in a free space.
 
 
 ## References

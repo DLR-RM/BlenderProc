@@ -9,7 +9,7 @@ from PIL import Image, ImageFont, ImageDraw
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--conf', dest='conf', default='coco_annotations.json', help='coco annotation json file')
 parser.add_argument('-i', '--image_index', dest='image_index', default=0, help='image over which to annotate, uses the rgb rendering', type=int)
-parser.add_argument('-b', '--base_path', dest='base_path', default='examples/coco_annotations/output/coco_data', help='path to folder with coco_annotation.json and images', type=str)
+parser.add_argument('-b', '--base_path', dest='base_path', default='examples/advanced/coco_annotations/output/coco_data', help='path to folder with coco_annotation.json and images', type=str)
 parser.add_argument('--save', '-s', action='store_true', help='saves visualization of coco annotations under base_path/coco_annotated_x.png ')
 
 args = parser.parse_args()
@@ -54,14 +54,17 @@ for idx, annotation in enumerate(annotations):
             item = Image.fromarray(item, mode='L')
             overlay = Image.new('RGBA', im.size)
             draw_ov = ImageDraw.Draw(overlay)
-            draw_ov.bitmap((0, 0), item, fill=(255, 0, 0, 128))
+            rand_color = np.random.randint(0,256,3)
+            draw_ov.bitmap((0, 0), item, fill=(rand_color[0], rand_color[1], rand_color[2], 128))
             im = Image.alpha_composite(im, overlay)
         else:
-            item = annotation["segmentation"][0]
-            poly = Image.new('RGBA', im.size)
-            pdraw = ImageDraw.Draw(poly)
-            pdraw.polygon(item, fill=(255, 255, 255, 127), outline=(255, 255, 255, 255))
-            im.paste(poly, mask=poly)
+            # go through all polygons and plot them
+            for item in annotation['segmentation']:
+                poly = Image.new('RGBA', im.size)
+                pdraw = ImageDraw.Draw(poly)
+                rand_color = np.random.randint(0,256,3)
+                pdraw.polygon(item, fill=(rand_color[0], rand_color[1], rand_color[2], 127), outline=(255, 255, 255, 255))
+                im.paste(poly, mask=poly)
 if save:
     im.save(os.path.join(base_path, 'coco_annotated_{}.png'.format(image_idx)), "PNG")
 im.show()

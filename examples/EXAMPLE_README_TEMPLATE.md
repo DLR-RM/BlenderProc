@@ -12,8 +12,8 @@ Execute in the Blender-Pipeline main directory:
 python run.py ...
 ``` 
 
-* `examples/basic/config.yaml`: explanation
-* `examples/basic/camera_positions`: explanation
+* `examples/advanced/YOUR_MODULE/config.yaml`: explanation
+* `examples/resources/camera_positions`: explanation
 * ...
 
 ## Visualization
