@@ -274,7 +274,7 @@ class Material(Struct):
 
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
         if used_connector not in principled_bsdf.inputs:
-            raise Exception(f"The {used_connector} not an input to Principled BSDF!")
+            raise Exception(f"The {used_connector} is not an input to Principled BSDF!")
 
         node_connected_to_the_connector = None
         for link in principled_bsdf.inputs[used_connector].links:
@@ -381,7 +381,7 @@ class Material(Struct):
         # Find socket that is connected with the specified input of the principled shader node.
         input_socket = self.get_principled_shader_value(input_name)
         if not isinstance(input_socket, bpy.types.NodeSocket):
-            raise Exception("The input " + input_name + " of the principled shader does not have any incoming connection.")
+            raise Exception(f"The input {input_name} of the principled shader does not have any incoming connection.")
 
         # Create multiplication node and connect with retrieved socket
         math_node = self.new_node('ShaderNodeMath')
