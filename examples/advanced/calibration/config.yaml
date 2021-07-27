@@ -1,4 +1,4 @@
-# Args: <cam_file> <obj_file> <output_dir>
+# Args: none
 {
   "version": 3,
   "setup": {
@@ -12,14 +12,14 @@
     "module": "main.Initializer",
     "config":{
       "global": {
-        "output_dir": "examples/calibration/output"
+        "output_dir": "examples/advanced/calibration/output"
       }
     }
   },
   {
     "module": "loader.ObjectLoader",
     "config": {
-      "path": "examples/calibration/chess.obj"
+      "path": "examples/advanced/calibration/chess.obj"
     }
   },
   {
