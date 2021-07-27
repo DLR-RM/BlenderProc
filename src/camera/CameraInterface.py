@@ -286,7 +286,7 @@ class CameraInterface(Module):
                 rotation_matrix = np.matmul(rotation_matrix, Euler((0.0, 0.0, inplane_rot)).to_matrix())
 
             cam2world_matrix = MathUtility.build_transformation_mat(position, rotation_matrix)
-        else: 
+        else:
             cam2world_matrix = np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32)
-            cam2world_matrix = MathUtility.change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.source_frame)
+            cam2world_matrix = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.source_frame)
         return cam2world_matrix
