@@ -610,7 +610,7 @@ class MaterialManipulator(Module):
         used_material = random.choice(used_materials)
 
         material.infuse_material(
-            material=used_material,
+            material=Material(used_material),
             mode=used_mode,
             mix_strength=mix_strength
         )

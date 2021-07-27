@@ -276,12 +276,12 @@ class Material(Struct):
         if used_connector not in principled_bsdf.inputs:
             raise Exception(f"The {used_connector} is not an input to Principled BSDF!")
 
-        node_connected_to_the_connector = None
+        node_socket_connected_to_the_connector = None
         for link in principled_bsdf.inputs[used_connector].links:
-            node_connected_to_the_connector = link.from_node
+            node_socket_connected_to_the_connector = link.from_socket
             # remove this connection
             self.links.remove(link)
-        if node_connected_to_the_connector is not None or used_mode == "set":
+        if node_socket_connected_to_the_connector is not None or used_mode == "set":
             texture_node = self.new_node("ShaderNodeTexImage")
             texture_node.image = texture.image
             # add texture coords to make the scaling of the dust texture possible
@@ -297,7 +297,7 @@ class Material(Struct):
                 invert_node.inputs["Fac"].default_value = 1.0
                 self.link(texture_node_output, invert_node.inputs["Color"])
                 texture_node_output = invert_node.outputs["Color"]
-            if node_connected_to_the_connector is not None and used_mode != "set":
+            if node_socket_connected_to_the_connector is not None and used_mode != "set":
                 mix_node = self.new_node("ShaderNodeMixRGB")
                 if used_mode in "mix_node":
                     mix_node.blend_type = "OVERLAY"
@@ -306,13 +306,12 @@ class Material(Struct):
                 mix_node.inputs["Fac"].default_value = strength
                 self.link(texture_node_output, mix_node.inputs["Color2"])
                 # hopefully 0 is the color node!
-                self.link(node_connected_to_the_connector.outputs[0], mix_node.inputs["Color1"])
+                self.link(node_socket_connected_to_the_connector, mix_node.inputs["Color1"])
                 self.link(mix_node.outputs["Color"], principled_bsdf.inputs[used_connector])
             elif used_mode == "set":
                 self.link(texture_node_output, principled_bsdf.inputs[used_connector])
 
-    @staticmethod
-    def infuse_material(material: "Material", mode: str = "mix", mix_strength: float = 0.5):
+    def infuse_material(self, material: "Material", mode: str = "mix", mix_strength: float = 0.5):
         """ Infuse a material inside of another material. The given material, will be adapted and the used material, will
         be added, depending on the mode either as add or as mix. This change is applied to all outputs of the material,
         this include the Surface (Color) and also the displacement and volume. For displacement mix means multiply.
@@ -330,17 +329,17 @@ class Material(Struct):
             raise Exception(f'This mode is unknown here: {used_mode}, only ["mix", "add"]!')
 
         # move the copied material inside of a group
-        group_node = material.new_node("ShaderNodeGroup")
+        group_node = self.new_node("ShaderNodeGroup")
         group = BlenderUtility.add_nodes_to_group(material.nodes,
                                                   f"{used_mode.title()}_{material.get_name()}")
         group_node.node_tree = group
         # get the current material output and put the used material in between the last node and the material output
-        material_output = material.get_the_one_node_with_type("OutputMaterial")
+        material_output = self.get_the_one_node_with_type("OutputMaterial")
         for mat_output_input in material_output.inputs:
             if len(mat_output_input.links) > 0:
                 if "Float" in mat_output_input.bl_idname or "Vector" in mat_output_input.bl_idname:
                     # For displacement
-                    infuse_node = material.new_node("ShaderNodeMixRGB")
+                    infuse_node = self.new_node("ShaderNodeMixRGB")
                     if used_mode == "mix":
                         # as there is no mix mode, we use multiply here, which is similar
                         infuse_node.blend_type = "MULTIPLY"
@@ -355,11 +354,11 @@ class Material(Struct):
                 else:
                     # for the normal surface output (Color)
                     if used_mode == "mix":
-                        infuse_node = material.new_node('ShaderNodeMixShader')
+                        infuse_node = self.new_node('ShaderNodeMixShader')
                         infuse_node.inputs[0].default_value = mix_strength
                         input_offset = 1
                     elif used_mode == "add":
-                        infuse_node = material.new_node('ShaderNodeMixShader')
+                        infuse_node = self.new_node('ShaderNodeMixShader')
                         input_offset = 0
                     else:
                         raise Exception(f"This mode is not supported here: {used_mode}!")
@@ -367,9 +366,9 @@ class Material(Struct):
 
                 # link the infuse node with the correct group node and the material output
                 for link in mat_output_input.links:
-                    material.link(link.from_socket, infuse_node.inputs[input_offset])
-                material.link(group_node.outputs[mat_output_input.name], infuse_node.inputs[input_offset + 1])
-                material.link(infuse_output, mat_output_input)
+                    self.link(link.from_socket, infuse_node.inputs[input_offset])
+                self.link(group_node.outputs[mat_output_input.name], infuse_node.inputs[input_offset + 1])
+                self.link(infuse_output, mat_output_input)
 
     def set_displacement_from_principled_shader_value(self, input_name: str, multiply_factor: float):
         """ Connects the node that is connected to the specified input of the principled shader node
