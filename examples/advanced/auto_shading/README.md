@@ -14,7 +14,7 @@ python run.py examples/advanced/auto_shading/config.yaml examples/advanced/auto_
 ``` 
 
 * `examples/advanced/auto_shading/config.yaml`: path to the configuration file with pipeline configuration.
-* `examples/advanced/auto_shading/camera_positions`: text file with parameters of camera positions.
+* `examples/advanced/auto_shading/camera_position`: text file with parameters of camera positions.
 * `examples/advanced/auto_shading/scene.blend`: path to the blend file with the basic scene.
 * `examples/advanced/auto_shading/output`: path to the output directory.
 

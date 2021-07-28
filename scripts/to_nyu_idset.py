@@ -1,6 +1,8 @@
+from sys import path
 import os
 
 import numpy as np
+path.append(os.path.join(os.path.dirname(__file__), ".."))
 from src.utility.LabelIdMapping import LabelIdMapping
 
 def switch_mapping(segmap, source_map, destination_map):

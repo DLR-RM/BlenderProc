@@ -4,10 +4,13 @@ from src.utility.lighting.SuncgLighting import SuncgLighting
 
 class SuncgLightingModule(Module):
     """ Adds emission shader to lamps, windows and ceilings.
+
     **Configuration**:
+
     .. list-table:: 
         :widths: 25 100 10
         :header-rows: 1
+
         * - Parameter
           - Description
           - Type

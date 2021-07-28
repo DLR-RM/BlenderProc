@@ -13,14 +13,14 @@ Execute in the BlenderProc main directory, if this is the first time BlenderProc
 downloaded blender, see the config-file if you want to change the installation path:
 
 ```
-python run.py examples/basic_object_pose/config.yaml examples/basic_object_pose/obj_000004.ply examples/basic_object_pose/output
+python run.py examples/basics/camera_object_pose/config.yaml examples/basics/camera_object_pose/obj_000004.ply examples/basics/camera_object_pose/output
 ```
 
-* `examples/basic_object_pose/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/basics/camera_object_pose/config.yaml`: path to the configuration file with pipeline configuration.
 
 The arguments afterwards are used to fill placeholders like `<args:0>` inside this config file.
-* `examples/basic_object_pose/obj_000004.ply`: path to the model file, here a basic object from the `hb` dataset.
-* `examples/basic_object_pose/output`: path to the output directory.
+* `examples/basics/camera_object_pose/obj_000004.ply`: path to the model file, here a basic object from the `hb` dataset.
+* `examples/basics/camera_object_pose/output`: path to the output directory.
 
 ## Steps
 

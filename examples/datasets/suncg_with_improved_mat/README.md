@@ -1,7 +1,7 @@
 # SUNCG scene with improved materials 
 
 <p align="center">
-<img src="../../readme.jpg" alt="Front readme image" width=430>
+<img src="../../../images/readme.jpg" alt="Front readme image" width=430>
 </p>
 
 In contrast to the SUNCG basic example, we improve the materials loaded by SUNCG.

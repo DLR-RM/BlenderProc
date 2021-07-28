@@ -8,6 +8,27 @@
 
 # Version History
 
+## Version 1.12.0 23th July 2021
+- switch to blender 2.93, with that textures are now stored on the GPU between different frames increasing the speed drastically
+- moved a lot of modules to the python API
+  - all camera samplers
+  - all writer classes
+  - sampler and getters
+  - surface lighting
+  - random room constructor
+- all outer API functions work now with numpy arrays instead of mathutils classes
+- regroup all examples to make them more easily accessible
+- refactoring of the LabelIdMapping class
+- sampler.Path now has a `return_all` and `random_samples` option
+- add support for the new 3D front labels and script to find them more easily in the future
+- AMASS now also supports `torch=1.8.1+cu111`, to better support modern GPUs
+- refactor download script for haven
+- added a flag to not center objects from the ShapeNet dataset
+- added a platform independent unzipping function to solve the problems on windows
+- add function to return the default_value or the connected node based on the input name of a BSDF shader node of a material
+- fix for MacOS, where the blender version was not used in prior installations, leading to the problem that users had to remove blender on their own
+- the writer now correctly writes the fov if asked
+
 ## Version 1.11.1 18th May 2021
 - fix a bug on mac os, where the blender python path has changed
 - fix a bug in the BlenderLoaderModule which caused that the setting of custom properties was not successful
