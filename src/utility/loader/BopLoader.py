@@ -1,3 +1,4 @@
+from src.utility.MathUtility import MathUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy", "matplotlib", "pytz"])
 
@@ -190,7 +191,7 @@ class BopLoader:
         print('-----------------------------')
         
         # transform from OpenCV to blender coords
-        cam_H_c2w = MathUtility.transform_matrix_to_blender_coord_frame(cam_H_c2w, source_frame)
+        cam_H_c2w = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
  
         return cam_H_c2w
 

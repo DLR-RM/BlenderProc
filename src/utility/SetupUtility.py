@@ -1,8 +1,11 @@
 import os
 import sys
+import tarfile
 from sys import platform
 import subprocess
 import importlib
+from io import BytesIO
+import zipfile
 
 class SetupUtility:
 
@@ -121,6 +124,9 @@ class SetupUtility:
             else:
                 package_name, package_version = package.lower(), None
 
+            if package_name == "opencv-python":
+                raise Exception("Please use opencv-contrib-python instead of opencv-python, as having both packages installed in the same environment can lead to complications.")
+
             # If the package is given via git, extract package name from url
             if package_name.startswith("git+"):
                 # Extract part after last slash
@@ -189,3 +195,63 @@ class SetupUtility:
             installed_packages_name = [ele[2:] if ele.startswith("b'") else ele for ele in installed_packages_name]
             installed_packages_versions = [ele[:-1] if ele.endswith("'") else ele for ele in installed_packages_versions]
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
+
+    @staticmethod
+    def extract_file(output_dir, file, mode="ZIP"):
+        """ Extract all members from the archive into output_dir.
+
+        :param output_dir: The output directory that should contain the extracted files.
+        :param file: The path to the archive which should be extracted.
+        :param mode: The type of the given file, has to be in ["TAR", "ZIP"]
+        """
+        try:
+            if mode.lower() == "zip":
+                with zipfile.ZipFile(file) as tar:
+                    tar.extractall(str(output_dir))
+            elif mode.lower() == "tar":
+                with tarfile.open(file) as tar:
+                    tar.extractall(str(output_dir))
+            else:
+                raise Exception("No such mode: " + mode)
+
+        except (IOError, zipfile.BadZipfile) as e:
+            print('Bad zip file given as input.  %s' % e)
+            raise e
+
+    @staticmethod
+    def extract_from_response(output_dir, response):
+        """ Extract all members from the archive to output_dir
+
+        :param output_dir: the dir to zip file extract to
+        :param response: the response to a requested url that contains a zip file
+        """
+        file = BytesIO(response.content)
+        SetupUtility.extract_file(output_dir, file)
+
+    @staticmethod
+    def check_if_setup_utilities_are_at_the_top(path_to_run_file):
+        """
+        Checks if the given python scripts has at the top an import to SetupUtility, if not an
+        exception is thrown. With an explanation that each python script has to start with SetupUtility.
+
+        :param path_to_run_file: path to the used python script
+        """
+        if os.path.exists(path_to_run_file):
+            with open(path_to_run_file, "r") as file:
+                text = file.read()
+                lines = [l.strip() for l in text.split("\n")]
+                lines = [l for l in lines if l and not l.startswith("#")]
+                for index, line in enumerate(lines):
+                    if "import" in line and "SetupUtility" in line:
+                        return
+                    elif "import" in line:
+                        code = "\n".join(lines[:index + 2])
+                        raise Exception('The given script "{}" does not have a SetupUtility call at the top! '
+                                        "Make sure that is the first thing you import and run! Before importing "
+                                        "anything else!\nYour code:\n#####################\n{}\n"
+                                        "####################\nReplaces this with:\nfrom src.utility.SetupUtility "
+                                        "import SetupUtility\nSetupUtility.setup([])".format(path_to_run_file, code))
+        else:
+            raise Exception("The given run script does not exist: {}".format(path_to_run_file))
+
+

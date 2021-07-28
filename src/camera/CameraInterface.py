@@ -262,13 +262,13 @@ class CameraInterface(Module):
         :return: The 4x4 cam to world transformation matrix.
         """
         if not config.has_param("cam2world_matrix"):
-            position = MathUtility.transform_point_to_blender_coord_frame(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
+            position = MathUtility.change_coordinate_frame_of_point(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
 
             # Rotation
             rotation_format = config.get_string("rotation/format", "euler")
             value = config.get_vector3d("rotation/value", [0, 0, 0])
             # Transform to blender coord frame
-            value = MathUtility.transform_point_to_blender_coord_frame(value, self.source_frame)
+            value = MathUtility.change_coordinate_frame_of_point(value, self.source_frame)
             if rotation_format == "euler":
                 # Rotation, specified as euler angles
                 rotation_matrix = Euler(value, 'XYZ').to_matrix()
@@ -288,5 +288,5 @@ class CameraInterface(Module):
             cam2world_matrix = MathUtility.build_transformation_mat(position, rotation_matrix)
         else: 
             cam2world_matrix = np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32)
-            cam2world_matrix = MathUtility.transform_matrix_to_blender_coord_frame(cam2world_matrix, self.source_frame)
+            cam2world_matrix = MathUtility.change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.source_frame)
         return cam2world_matrix

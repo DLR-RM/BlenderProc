@@ -135,7 +135,7 @@ class MaterialManipulator(Module):
         }
 
     Example 6: Adds a texture as an overlay over all materials, which are currently used. First the texture is loaded,
-    via the `TextureLoader` and then it is used in side of the `"cf_infuse_texture"`
+    via the `TextureLoader` and then it is used inside of the `"cf_infuse_texture"`
 
     .. code-block:: yaml
 
@@ -162,7 +162,7 @@ class MaterialManipulator(Module):
                },
               }
             },
-            "cf_infuse_material": {
+            "cf_infuse_texture": {
               "mode": "mix",
               "texture_scale": 1.0,
               "used_texture": {
@@ -195,7 +195,6 @@ class MaterialManipulator(Module):
            },
            "cf_infuse_material": {
             "mode": "mix",
-            "texture_scale": 1.0,
             "used_material": {
               "provider": "getter.Material",
               "check_empty": True,

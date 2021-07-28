@@ -15,7 +15,7 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 class ShapeNetLoader:
 
     @staticmethod
-    def load(data_path: str, used_synset_id: str, used_source_id: str = "") -> List[MeshObject]:
+    def load(data_path: str, used_synset_id: str, used_source_id: str = "", move_object_origin: bool = True) -> List[MeshObject]:
         """ This loads an object from ShapeNet based on the given synset_id, which specifies the category of objects to use.
 
         From these objects one is randomly sampled and loaded.
@@ -25,7 +25,8 @@ class ShapeNetLoader:
 
         :param data_path: The path to the ShapeNetCore.v2 folder.
         :param used_synset_id: The synset id for example: '02691156', check the data_path folder for more ids.
-        :param used_source_id: object identifier of the a particular ShapeNet category, see inside any ShapeNet category for identifiers
+        :param used_source_id: Object identifier of the a particular ShapeNet category, see inside any ShapeNet category for identifiers
+        :param move_object_origin: Moves the object center to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane, this does not change the `.location` of the object. Default: True
         :return: The list of loaded mesh objects.
         """
         data_path = Utility.resolve_path(data_path)
@@ -46,10 +47,12 @@ class ShapeNetLoader:
         for obj in loaded_obj:
             obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
 
-        # move the origin of the object to the world origin and on top of the X-Y plane
-        # makes it easier to place them later on, this does not change the `.location`
-        for obj in loaded_obj:
-            obj.move_origin_to_bottom_mean_point()
+        # check if the move_to_world_origin flag is set
+        if move_object_origin:
+            # move the origin of the object to the world origin and on top of the X-Y plane
+            # makes it easier to place them later on, this does not change the `.location`
+            for obj in loaded_obj:
+                obj.move_origin_to_bottom_mean_point()
         bpy.ops.object.select_all(action='DESELECT')
 
         return loaded_obj

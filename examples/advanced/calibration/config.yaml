@@ -1,0 +1,80 @@
+# Args: none
+{
+  "version": 3,
+  "setup": {
+    "blender_install_path": "/home_local/<env:USER>/blender/",
+    "pip": [
+      "h5py"
+    ]
+  },
+  "modules": [
+  {
+    "module": "main.Initializer",
+    "config":{
+      "global": {
+        "output_dir": "examples/advanced/calibration/output"
+      }
+    }
+  },
+  {
+    "module": "loader.ObjectLoader",
+    "config": {
+      "path": "examples/advanced/calibration/chess.obj"
+    }
+  },
+  {
+    "module": "lighting.LightLoader",
+    "config": {
+      "lights": [
+      {
+        "type": "POINT",
+        "location": [0, 0, 0],
+        "energy": 1000
+      }
+      ]
+    }
+  },
+  {
+    "module": "camera.CameraLoader",
+    "config": {
+      "cam_poses": [{
+        "location": [0,0,0],
+        "rotation_euler": [0,0,0]
+      }],
+      "intrinsics": {
+        "resolution_x": 640,
+        "resolution_y": 480,
+        "cam_K": [ 550.,   0., 519.5,
+                   0., 400., 339.5,
+                   0.,   0.,   1. ],
+      }
+    }
+  },
+  {
+    "module": "object.CalibrationboardSampler",
+    "config": {
+      "board_name": "Cube",
+      "rot_sampler": {
+        "provider": "sampler.Uniform3d",
+        "max": [-0.7,-0.7,-0.7],
+        "min": [0.7,0.7,0.7]
+      },
+      "corner_coords": [
+           [-0.429058, -0.286038, 0.004883],
+           [0.429058, -0.286038, 0.004883],
+           [0.429058, 0.429058, 0.004883],
+           [-0.429058, 0.429058, 0.004883]
+      ]
+    }
+  },
+  {
+    "module": "renderer.RgbRenderer",
+    "config": {
+      "output_key": "colors",
+      "samples": 1,
+      "output_is_temp": False,
+      "denoiser": "Blender"
+    }
+  },
+  ]
+}

@@ -102,9 +102,11 @@ class RendererUtility:
 
 
     @staticmethod
-    def set_light_bounces(diffuse_bounces: int, glossy_bounces: int, ao_bounces_render: int, max_bounces: int,
-                          transmission_bounces: int, transparent_max_bounces:int , volume_bounces: int):
-        """ Sets the number of light bounces that should be used by the raytracing renderer.
+    def set_light_bounces(diffuse_bounces: int = None, glossy_bounces: int = None, ao_bounces_render: int = None, max_bounces: int = None,
+                          transmission_bounces: int = None, transparent_max_bounces: int = None, volume_bounces: int = None):
+        """ 
+        Sets the number of light bounces that should be used by the raytracing renderer. 
+        Default values are defined in DefaultConfig.py
 
         :param diffuse_bounces: Maximum number of diffuse reflection bounces, bounded by total maximum.
         :param glossy_bounces: Maximum number of glossy reflection bounces, bounded by total maximum.
@@ -115,13 +117,20 @@ class RendererUtility:
         :param transparent_max_bounces: Maximum number of transparent bounces.
         :param volume_bounces: Maximum number of volumetric scattering events.
         """
-        bpy.context.scene.cycles.diffuse_bounces = diffuse_bounces
-        bpy.context.scene.cycles.glossy_bounces = glossy_bounces
-        bpy.context.scene.cycles.ao_bounces_render = ao_bounces_render
-        bpy.context.scene.cycles.max_bounces = max_bounces
-        bpy.context.scene.cycles.transmission_bounces = transmission_bounces
-        bpy.context.scene.cycles.transparent_max_bounces = transparent_max_bounces
-        bpy.context.scene.cycles.volume_bounces = volume_bounces
+        if diffuse_bounces is not None:
+            bpy.context.scene.cycles.diffuse_bounces = diffuse_bounces
+        if glossy_bounces is not None:
+            bpy.context.scene.cycles.glossy_bounces = glossy_bounces
+        if ao_bounces_render is not None:
+            bpy.context.scene.cycles.ao_bounces_render = ao_bounces_render
+        if max_bounces is not None:
+            bpy.context.scene.cycles.max_bounces = max_bounces
+        if transmission_bounces is not None:
+            bpy.context.scene.cycles.transmission_bounces = transmission_bounces
+        if transparent_max_bounces is not None:
+            bpy.context.scene.cycles.transparent_max_bounces = transparent_max_bounces
+        if volume_bounces is not None:
+            bpy.context.scene.cycles.volume_bounces = volume_bounces
 
 
     @staticmethod
@@ -257,7 +266,8 @@ class RendererUtility:
         Utility.add_output_entry({
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
-            "version": "2.0.0"
+            "version": "2.0.0",
+            "trim_redundant_channels": True
         })
 
     @staticmethod
@@ -293,7 +303,8 @@ class RendererUtility:
         Utility.add_output_entry({
             "key": output_key,
             "path": os.path.join(output_dir, file_prefix) + "%04d" + ".exr",
-            "version": "2.0.0"
+            "version": "2.0.0",
+            "trim_redundant_channels": True
         })
 
     @staticmethod

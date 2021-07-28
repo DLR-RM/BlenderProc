@@ -115,6 +115,7 @@ class Utility:
             return None
         return repo.head.object.hexsha
 
+
     @staticmethod
     def resolve_path(path):
         """ Returns an absolute path. If given path is relative, current working directory is put in front.
