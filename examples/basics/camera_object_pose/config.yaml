@@ -58,7 +58,7 @@
     {
       "module": "camera.CameraLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"], #OpenCV to Blender coordinates
+        "local_frame_change": ["X", "-Y", "-Z"], #OpenCV to Blender coordinates
         "cam_poses": [
             "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
         ], 

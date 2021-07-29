@@ -68,7 +68,7 @@ Indicate the desired output image resolution globally inside of the settings of 
   "config": {
     "path": "<args:0>",
     "file_format": "location rotation/value _ _ _ _ _ _",
-    "source_frame": ["X", "-Z", "Y"],
+    "world_frame_change": ["X", "-Z", "Y"],
     "default_cam_param": {
       "rotation": {
         "format": "forward_vec"
