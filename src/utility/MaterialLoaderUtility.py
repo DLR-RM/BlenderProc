@@ -363,6 +363,7 @@ class MaterialLoaderUtility(object):
 
         """
         obj_with_mats = [obj for obj in bpy.context.scene.objects if hasattr(obj.data, 'materials')]
+        visited_materials = set()
         # walk over all objects, which have materials
         for obj in obj_with_mats:
             for slot in obj.material_slots:
@@ -370,6 +371,10 @@ class MaterialLoaderUtility(object):
                 if material is None:
                     # this can happen if a material slot was created but no material was assigned
                     continue
+                if material.name in visited_materials:
+                    # skip a material if it has been used before
+                    continue
+                visited_materials.add(material.name)
                 texture_node = None
                 # check each node of the material
                 for node in material.node_tree.nodes:
@@ -406,7 +411,6 @@ class MaterialLoaderUtility(object):
                     else:
                         raise Exception("Could not find shader node, which is connected to the material output "
                                         "for: {}".format(slot.name))
-
     @staticmethod
     def add_alpha_texture_node(used_material, new_material):
         """
