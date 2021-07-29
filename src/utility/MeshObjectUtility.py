@@ -53,17 +53,17 @@ class MeshObject(Entity):
         :return:
         """
         if shape == "CUBE":
-            bpy.ops.mesh.primitive_cube_add(*kwargs)
+            bpy.ops.mesh.primitive_cube_add(**kwargs)
         elif shape == "CYLINDER":
-            bpy.ops.mesh.primitive_cylinder_add(*kwargs)
+            bpy.ops.mesh.primitive_cylinder_add(**kwargs)
         elif shape == "CONE":
-            bpy.ops.mesh.primitive_cone_add(*kwargs)
+            bpy.ops.mesh.primitive_cone_add(**kwargs)
         elif shape == "PLANE":
-            bpy.ops.mesh.primitive_plane_add(*kwargs)
+            bpy.ops.mesh.primitive_plane_add(**kwargs)
         elif shape == "SPHERE":
-            bpy.ops.mesh.primitive_uv_sphere_add(*kwargs)
+            bpy.ops.mesh.primitive_uv_sphere_add(**kwargs)
         elif shape == "MONKEY":
-            bpy.ops.mesh.primitive_monkey_add(*kwargs)
+            bpy.ops.mesh.primitive_monkey_add(**kwargs)
         else:
             raise Exception("No such shape: " + shape)
 
