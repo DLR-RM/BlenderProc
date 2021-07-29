@@ -36,6 +36,7 @@ K = np.array([
     [0, 0, 1]
 ])
 CameraUtility.set_intrinsics_from_K_matrix(K, 1280, 720)
+# Enable stereo mode and set baseline
 CameraUtility.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL", convergence_distance=0.00001)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
@@ -58,6 +59,7 @@ RendererUtility.toggle_stereo(True)
 # render the whole pipeline
 data = RendererUtility.render()
 
+# Apply stereo matching to each pair of images
 data["stereo-depth"], data["disparity"] = StereoGlobalMatching.match(data["colors"], disparity_filter=False)
 
 # write the data to a .hdf5 container
