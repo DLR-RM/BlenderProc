@@ -16,6 +16,13 @@ class Material(Struct):
         self.nodes = material.node_tree.nodes
         self.links = material.node_tree.links
 
+    def update_blender_ref(self, name):
+        """ Updates the contained blender reference using the given name of the instance.
+
+        :param name: The name of the instance which will be used to update its blender reference.
+        """
+        self.blender_obj = bpy.data.materials[name]
+
     @staticmethod
     def create(name: str) -> "Material":
         """ Creates a new empty material.

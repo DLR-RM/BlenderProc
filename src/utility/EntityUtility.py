@@ -14,6 +14,13 @@ class Entity(Struct):
     def __init__(self, object: bpy.types.Object):
         super().__init__(object)
 
+    def update_blender_ref(self, name: str):
+        """ Updates the contained blender reference using the given name of the instance.
+
+        :param name: The name of the instance which will be used to update its blender reference.
+        """
+        self.blender_obj = bpy.data.objects[name]
+
     @staticmethod
     def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
         """ Creates an empty entity.

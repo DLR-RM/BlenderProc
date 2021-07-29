@@ -1,15 +1,32 @@
-from typing import Union, Any, List
+from typing import Union, Any, List, Tuple
 import numpy as np
 
 import bpy
 from src.utility.Utility import Utility, KeyFrame
 from mathutils import Vector, Euler, Color, Matrix, Quaternion
-
+import weakref
 
 class Struct:
+    # Contains weak refs to all struct instances
+    __refs__ = []
 
     def __init__(self, object: bpy.types.Object):
         self.blender_obj = object
+        # Remember that this instance exists
+        Struct.__refs__.append(weakref.ref(self))
+
+    @staticmethod
+    def get_instances() -> List[Tuple[str, "Struct"]]:
+        """ Returns a list containing all existing struct instances.
+
+        :return: A list of tuples, each containing a struct and its name.
+        """
+        instances = []
+        for inst_ref in Struct.__refs__:
+            inst = inst_ref()
+            if inst is not None:
+                instances.append((inst.get_name(), inst))
+        return instances
 
     def set_name(self, name: str):
         """ Sets the name of the struct.

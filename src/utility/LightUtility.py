@@ -19,6 +19,13 @@ class Light(Entity):
         bpy.context.collection.objects.link(light_obj)
         super(Light, self).__init__(light_obj)
 
+    def update_blender_ref(self, name):
+        """ Updates the contained blender reference using the given name of the instance.
+
+        :param name: The name of the instance which will be used to update its blender reference.
+        """
+        self.blender_obj = bpy.data.lights[name]
+
     def set_energy(self, energy: float, frame: int = None):
         """ Sets the energy of the light.
 
