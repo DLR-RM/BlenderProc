@@ -17,9 +17,7 @@
       "module": "main.Initializer",
       "config": {
         "global": {
-          "output_dir": "<args:2>",
-          "resolution_x": 1280,
-          "resolution_y": 720
+          "output_dir": "<args:2>"
         }
       }
     },
@@ -55,16 +53,9 @@
       "config": {}
     },
     {
-      "module": "renderer.SegMapRenderer",
-      "config": {
-        "use_alpha": true
-      }
-    },
-    {
       "module": "renderer.RgbRenderer",
       "config": {
         "render_distance": true,
-        "render_normals": true,
         "stereo": true,
         "use_alpha": true,
       }
@@ -72,8 +63,7 @@
     {
       "module": "writer.StereoGlobalMatchingWriter",
       "config": {
-        "focal_length": 650.018,
-        "enable_disparity_filter": false
+        "disparity_filter": false
       }
     },
     {
