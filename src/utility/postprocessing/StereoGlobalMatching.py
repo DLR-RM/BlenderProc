@@ -10,7 +10,7 @@ from src.utility.CameraUtility import CameraUtility
 from src.utility.SGMUtility import fill_in_fast
 from src.utility.SGMUtility import resize
 
-class StereoGlobalMatchingWriter:
+class StereoGlobalMatching:
 
     @staticmethod
     def _sgm(left_color_image: np.ndarray, right_color_image: np.ndarray, baseline: float, depth_max: float, focal_length: float, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0, disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[np.ndarray, np.ndarray]:
@@ -124,7 +124,7 @@ class StereoGlobalMatchingWriter:
         depth_frames = []
         disparity_frames = []
         for frame, color_image in enumerate(color_images):
-            depth, disparity = StereoGlobalMatchingWriter._sgm(color_image[0], color_image[1], baseline, depth_max, focal_length, window_size, num_disparities, min_disparity, disparity_filter, depth_completion)
+            depth, disparity = StereoGlobalMatching._sgm(color_image[0], color_image[1], baseline, depth_max, focal_length, window_size, num_disparities, min_disparity, disparity_filter, depth_completion)
 
             depth_frames.append(depth)
             disparity_frames.append(disparity)

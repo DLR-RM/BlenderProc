@@ -1,7 +1,7 @@
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.writer.StereoGlobalMatchingWriter import StereoGlobalMatchingWriter
+from src.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
 from src.utility.CameraUtility import CameraUtility
@@ -58,7 +58,7 @@ RendererUtility.toggle_stereo(True)
 # render the whole pipeline
 data = RendererUtility.render()
 
-data["stereo-depth"], data["disparity"] = StereoGlobalMatchingWriter.match(data["colors"], disparity_filter=False)
+data["stereo-depth"], data["disparity"] = StereoGlobalMatching.match(data["colors"], disparity_filter=False)
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

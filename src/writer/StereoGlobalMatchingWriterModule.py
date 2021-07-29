@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-from src.utility.writer.StereoGlobalMatchingWriter import StereoGlobalMatchingWriter
+from src.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 
 SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
 
@@ -88,7 +88,7 @@ class StereoGlobalMatchingWriterModule(RendererInterface):
             imgR = load_image(path_r % frame)
             color_images.append(np.stack((imgL, imgR), 0))
 
-        depth, disparity = StereoGlobalMatchingWriter.match(
+        depth, disparity = StereoGlobalMatching.match(
             color_images=color_images,
             depth_max=depth_max,
             window_size=self.config.get_int("window_size", 7),
