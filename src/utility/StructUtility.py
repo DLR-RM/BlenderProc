@@ -12,7 +12,7 @@ class Struct:
 
     def __init__(self, object: bpy.types.Object):
         self.blender_obj = object
-        # Remember that this instance exists
+        # Remember that this instance exists (only use a weak reference here, s.t. it can still be removed by GC when all other references are gone)
         Struct.__refs__.append(weakref.ref(self))
 
     @staticmethod
@@ -23,10 +23,22 @@ class Struct:
         """
         instances = []
         for inst_ref in Struct.__refs__:
+            # Get an actual reference from the weak reference
             inst = inst_ref()
-            if inst is not None:
+            # Check if the instance is still existing and check that the referenced blender_obj inside is valid
+            if inst is not None and inst.is_valid():
+                # Collect instance and its name (its unique identifier)
                 instances.append((inst.get_name(), inst))
         return instances
+
+    def is_valid(self):
+        """ Check whether the contained blender reference is valid.
+
+        The reference might become invalid after an undo operation or when the referenced struct is deleted.
+
+        :return: True, if it is valid.
+        """
+        return str(self.blender_obj) != "<bpy_struct, Object invalid>"
 
     def set_name(self, name: str):
         """ Sets the name of the struct.

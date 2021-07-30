@@ -341,7 +341,7 @@ class Utility:
                 # The current state points to "after", now by calling undo we go back to "before"
                 bpy.ops.ed.undo()
                 # After applying undo, all references to blender objects are invalid.
-                # Therefore we now go over all instances and update their references using their name.
+                # Therefore we now go over all instances and update their references using their name as unique identifier.
                 for name, struct in self.struct_instances:
                     struct.update_blender_ref(name)
 
