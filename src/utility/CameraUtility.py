@@ -305,7 +305,7 @@ class CameraUtility:
         :return:
         """
         # save the original image resolution
-        original_image_resolution = (bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_x)
+        original_image_resolution = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
         # first we need to get the current K matrix
         camera_K_matrix = CameraUtility.get_intrinsics_as_K_matrix()
         fx, fy = camera_K_matrix[0][0], camera_K_matrix[1][1]
@@ -313,7 +313,7 @@ class CameraUtility:
 
         # get the current desired resolution
         # TODO check how the pixel aspect has to be factored in!
-        desired_dis_res = (bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_x)
+        desired_dis_res = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
         # Get row,column image coordinates for all pixels for row-wise image flattening
         # The center of the upper-left pixel has coordinates [0,0] both in DLR CalDe and python/scipy
         row = np.repeat(np.arange(0, desired_dis_res[0]), desired_dis_res[1])
@@ -367,27 +367,24 @@ class CameraUtility:
         max_und_row_needed = np.sign(np.max(v)) * np.ceil(np.abs(np.max(v)))
         columns_needed = max_und_column_needed - (min_und_column_needed - 1)
         rows_needed = max_und_row_needed - (min_und_row_needed - 1)
-        cx_new = cx - (min_und_column_needed - 1)
-        cy_new = cy - (min_und_row_needed - 1)
+        cx_new = cx - (min_und_column_needed - 1) + 1
+        cy_new = cy - (min_und_row_needed - 1) + 1
         # newly suggested resolution
-        new_image_resolution = np.array([rows_needed, columns_needed])
-        # newly suggested cx and cy
-        new_cx_and_cy = np.array([cx_new, cy_new])
+        new_image_resolution = np.array([columns_needed, rows_needed])
         # To avoid spline boundary approximations at the border pixels ('mode' in map_coordinates() )
         new_image_resolution += 2
-        new_cx_and_cy += 1
 
         # Adapt/shift the mapping function coordinates to the new_image_resolution resolution
         # (if we didn't, the mapping would only be valid for same resolution mapping)
         # (same resolution mapping yields undesired void image areas)
         # (this can in theory be performed in init_distortion() if we're positive about the resolution used)
-        mapping_coords[0, :] += new_cx_and_cy[1] - cy
-        mapping_coords[1, :] += new_cx_and_cy[0] - cx
+        mapping_coords[0, :] += cy_new - cy
+        mapping_coords[1, :] += cx_new - cx
 
         camera_changed_K_matrix = CameraUtility.get_intrinsics_as_K_matrix()
         # update cx and cy in the K matrix
-        camera_changed_K_matrix[0, 2] = new_cx_and_cy[0]
-        camera_changed_K_matrix[1, 2] = new_cx_and_cy[1]
+        camera_changed_K_matrix[0, 2] = cx_new
+        camera_changed_K_matrix[1, 2] = cy_new
 
         # reuse the values, which have been set before
         clip_start = bpy.context.scene.camera.data.clip_start
