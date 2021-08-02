@@ -8,12 +8,14 @@ import weakref
 
 class Struct:
     # Contains weak refs to all struct instances
-    __refs__ = []
+    # As it only uses weak references, instances can still be removed by GC when all other references are gone.
+    # If that happens, the instances' weak ref is also automatically removed from the set
+    __refs__ = weakref.WeakSet()
 
     def __init__(self, object: bpy.types.Object):
         self.blender_obj = object
-        # Remember that this instance exists (only use a weak reference here, s.t. it can still be removed by GC when all other references are gone)
-        Struct.__refs__.append(weakref.ref(self))
+        # Remember that this instance exists
+        Struct.__refs__.add(self)
 
     @staticmethod
     def get_instances() -> List[Tuple[str, "Struct"]]:
@@ -22,13 +24,12 @@ class Struct:
         :return: A list of tuples, each containing a struct and its name.
         """
         instances = []
-        for inst_ref in Struct.__refs__:
-            # Get an actual reference from the weak reference
-            inst = inst_ref()
-            # Check if the instance is still existing and check that the referenced blender_obj inside is valid
-            if inst is not None and inst.is_valid():
+        # Iterate over all still existing instances
+        for instance in Struct.__refs__:
+            # Check that the referenced blender_obj inside is valid
+            if instance.is_valid():
                 # Collect instance and its name (its unique identifier)
-                instances.append((inst.get_name(), inst))
+                instances.append((instance.get_name(), instance))
         return instances
 
     def is_valid(self):
