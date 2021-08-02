@@ -1,6 +1,3 @@
-from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
-
 import os
 from math import tan
 

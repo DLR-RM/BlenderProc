@@ -1,3 +1,5 @@
+from src.utility.SetupUtility import SetupUtility
+SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
 
 import cv2
 import numpy as np
