@@ -156,7 +156,7 @@ class LensDistortionUtility:
                                                                   image_distorted[:, :, i].shape)
 
                     if used_dtpye == np.uint8:
-                        image_distorted = np.clip(image_distorted, 0, 256)
+                        image_distorted = np.clip(image_distorted, 0, 255)
                     data = image_distorted.astype(used_dtpye)
                     if len(input_image.shape) == 2:
                         return data[:, :, 0]
