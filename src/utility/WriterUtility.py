@@ -1,10 +1,8 @@
-import os
-from typing import List, Dict, Union, Any, Set, Tuple
-
-from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
+import os
+from typing import List, Dict, Union, Any, Set, Tuple
 import numpy as np
 import csv
 import json
@@ -17,7 +15,7 @@ from src.utility.BlenderUtility import load_image
 from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 from src.utility.CameraUtility import CameraUtility
-
+from src.utility.PostProcessingUtility import PostProcessingUtility
 
 class WriterUtility:
 
