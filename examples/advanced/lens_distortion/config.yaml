@@ -88,9 +88,22 @@
       "module": "writer.Hdf5Writer",
       "config": {
         "postprocessing_modules": {
+          "colors": [
+            {
+              "module": "postprocessing.LensDistortion",
+            }
+          ],
           "distance": [
             {
               "module": "postprocessing.TrimRedundantChannels",
+            },
+            {
+              "module": "postprocessing.LensDistortion",
+            }
+          ],
+          "normals": [
+            {
+              "module": "postprocessing.LensDistortion",
             }
           ]
         }
