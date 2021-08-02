@@ -10,10 +10,11 @@ from scipy.ndimage import map_coordinates
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.CameraUtility import CameraUtility
 
+
 class LensDistortionUtility:
 
     @staticmethod
-    def set_lens_distortion(k1: float, k2: float, k3: float, p1: float, p2: float):
+    def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0):
         """
         TODO MISSING
         :param k1:
@@ -23,6 +24,9 @@ class LensDistortionUtility:
         :param p2:
         :return:
         """
+        if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
+            raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
+
         # save the original image resolution
         original_image_resolution = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
         # first we need to get the current K matrix
@@ -114,62 +118,61 @@ class LensDistortionUtility:
         GlobalStorage.set("_lens_distortion_is_used", {"mapping_coords": mapping_coords,
                                                        "original_image_res": original_image_resolution})
 
-
-
     @staticmethod
     def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
-            """
-            TODO
+        """
+        TODO
 
-            :param image: a list of images or an image, which will be distorted
-            :return: a list of images or an image which have been distorted
-            """
-            # if lens distortion was used apply it now
-            if GlobalStorage.is_in_storage("_lens_distortion_is_used"):
-                # extract the necessary params from the GlobalStorage
-                content = GlobalStorage.get("_lens_distortion_is_used")
-                mapping_coords = content["mapping_coords"]
-                original_image_res = content["original_image_res"]
+        :param image: a list of images or an image, which will be distorted
+        :return: a list of images or an image which have been distorted
+        """
+        # if lens distortion was used apply it now
+        if GlobalStorage.is_in_storage("_lens_distortion_is_used"):
+            # extract the necessary params from the GlobalStorage
+            content = GlobalStorage.get("_lens_distortion_is_used")
+            mapping_coords = content["mapping_coords"]
+            original_image_res = content["original_image_res"]
 
-                def _internal_apply(input_image: np.ndarray) -> np.ndarray:
-                    """
-                    Applies the distortion to the input image
-                    :param input_image: input image, which will be distorted
-                    :return: distorted input image
-                    """
-                    amount_of_output_channels = 1
+            def _internal_apply(input_image: np.ndarray) -> np.ndarray:
+                """
+                Applies the distortion to the input image
+                :param input_image: input image, which will be distorted
+                :return: distorted input image
+                """
+                amount_of_output_channels = 1
+                if len(input_image.shape) == 3:
+                    amount_of_output_channels = input_image.shape[2]
+                image_distorted = np.zeros((original_image_res[0], original_image_res[1], amount_of_output_channels))
+                used_dtpye = input_image.dtype
+                data = input_image.astype(np.float)
+                for i in range(image_distorted.shape[2]):
+                    # TODO check the order and the mode, for non rgb data?
+                    # The reference frame for coords is here as in DLR CalDe (the upper-left pixel center is at [0,0])
                     if len(input_image.shape) == 3:
-                        amount_of_output_channels = input_image.shape[2]
-                    image_distorted = np.zeros((original_image_res[0], original_image_res[1], amount_of_output_channels))
-                    used_dtpye = input_image.dtype
-                    data = input_image.astype(np.float)
-                    for i in range(image_distorted.shape[2]):
-                        # TODO check the order and the mode, for non rgb data?
-                        # The reference frame for coords is here as in DLR CalDe (the upper-left pixel center is at [0,0])
-                        if len(input_image.shape) == 3:
-                            image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
-                                                                                  order=2, mode='nearest'),
-                                                                  image_distorted[:, :, i].shape)
-                        else:
-                            image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords,
-                                                                                  order=2, mode='nearest'),
-                                                                  image_distorted[:, :, i].shape)
-
-                    if used_dtpye == np.uint8:
-                        image_distorted = np.clip(image_distorted, 0, 255)
-                    data = image_distorted.astype(used_dtpye)
-                    if len(input_image.shape) == 2:
-                        return data[:, :, 0]
+                        image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
+                                                                              order=2, mode='nearest'),
+                                                              image_distorted[:, :, i].shape)
                     else:
-                        return data
-                if isinstance(image, list):
-                    return [_internal_apply(img) for img in image]
-                elif isinstance(image, np.ndarray):
-                    return _internal_apply(image)
+                        image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords,
+                                                                              order=2, mode='nearest'),
+                                                              image_distorted[:, :, i].shape)
+
+                if used_dtpye == np.uint8:
+                    image_distorted = np.clip(image_distorted, 0, 255)
+                data = image_distorted.astype(used_dtpye)
+                if len(input_image.shape) == 2:
+                    return data[:, :, 0]
                 else:
-                    raise Exception(f"This type can not be worked with here: {type(image)}, only "
-                                    f"np.ndarray or list of np.ndarray are supported")
+                    return data
+
+            if isinstance(image, list):
+                return [_internal_apply(img) for img in image]
+            elif isinstance(image, np.ndarray):
+                return _internal_apply(image)
             else:
-                raise Exception("Applying of a lens distortion is only possible if prior to calling this method "
-                                "CameraUtility.set_lens_distortion(...) was called, this could have been done via the"
-                                "CameraInterface module, see lens_distortion.")
+                raise Exception(f"This type can not be worked with here: {type(image)}, only "
+                                f"np.ndarray or list of np.ndarray are supported")
+        else:
+            raise Exception("Applying of a lens distortion is only possible if prior to calling this method "
+                            "CameraUtility.set_lens_distortion(...) was called, this could have been done via the"
+                            "CameraInterface module, see lens_distortion.")
