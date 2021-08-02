@@ -1,9 +1,7 @@
 import bpy
 import numpy as np
 from mathutils import Matrix, Vector, Euler
-from typing import Union, Tuple
-
-from src.utility.LensDistortionUtility import LensDistortionUtility
+from typing import Union, Tuple, Optional
 
 
 class CameraUtility:
@@ -50,7 +48,9 @@ class CameraUtility:
         return np.array(rotation_matrix)
 
     @staticmethod
-    def set_intrinsics_from_blender_params(lens, image_width, image_height, clip_start=0.1, clip_end=1000, pixel_aspect_x=1, pixel_aspect_y=1, shift_x=0, shift_y=0, lens_unit="MILLIMETERS"):
+    def set_intrinsics_from_blender_params(lens: float, image_width: int, image_height: int,
+                                           clip_start: Optional[float]=0.1, clip_end: Optional[float]=1000,
+                                           pixel_aspect_x: Optional[float]=1, pixel_aspect_y: float=1, shift_x=0, shift_y=0, lens_unit="MILLIMETERS"):
         """ Sets the camera intrinsics using blenders represenation.
 
         :param lens: Either the focal length in millimeters or the FOV in radians, depending on the given lens_unit.
@@ -293,17 +293,3 @@ class CameraUtility:
         # distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number will
         # cause a vertical distortion.
         camera.dof.aperture_ratio = aperture_ratio
-
-    @staticmethod
-    def set_lens_distortion(k1: float, k2: float, k3: float, p1: float, p2: float):
-        """
-        TODO
-
-        :param k1:
-        :param k2:
-        :param k3:
-        :param p1:
-        :param p2:
-        :return:
-        """
-        LensDistortionUtility.set_lens_distortion(k1, k2, k3, p1, p2)

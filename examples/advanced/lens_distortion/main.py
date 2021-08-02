@@ -15,6 +15,7 @@ from src.utility.LightUtility import Light
 from src.utility.MathUtility import MathUtility
 from src.utility.MeshObjectUtility import MeshObject
 
+from src.utility.LensDistortionUtility import LensDistortionUtility
 from src.utility.RendererUtility import RendererUtility
 from src.utility.PostProcessingUtility import PostProcessingUtility
 
@@ -48,7 +49,7 @@ CameraUtility.set_intrinsics_from_K_matrix(cam_K, resolution_x, resolution_y, cl
 
 # apply the lens distortion, this only adds the necessary mapping to GlobalStorage, so that it can be later used
 # in the PostProcessing
-CameraUtility.set_lens_distortion(k1, k2, k3, p1, p2)
+LensDistortionUtility.set_lens_distortion(k1, k2, k3, p1, p2)
 
 # Find point of interest, all cam poses should look towards it
 poi = MeshObject.compute_poi(objs)

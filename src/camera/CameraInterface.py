@@ -5,6 +5,7 @@ from mathutils import Matrix, Vector, Euler
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.utility.CameraUtility import CameraUtility
+from src.utility.LensDistortionUtility import LensDistortionUtility
 from src.utility.MathUtility import MathUtility
 
 
@@ -261,7 +262,7 @@ class CameraInterface(Module):
             k1, k2, k3 = config.get_float("lens_distortion/k1"), config.get_float("lens_distortion/k2"), \
                          config.get_float("lens_distortion/k3")
             p1, p2 = config.get_float("lens_distortion/p1"), config.get_float("lens_distortion/p2")
-            CameraUtility.set_lens_distortion(k1, k2, k3, p1, p2)
+            LensDistortionUtility.set_lens_distortion(k1, k2, k3, p1, p2)
 
     def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.
