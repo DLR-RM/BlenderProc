@@ -2,7 +2,6 @@ import bpy
 import numpy as np
 from mathutils import Matrix, Vector, Euler
 
-from src.main.GlobalStorage import GlobalStorage
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.utility.CameraUtility import CameraUtility
@@ -256,118 +255,13 @@ class CameraInterface(Module):
             else:
                 raise RuntimeError("The depth_of_field dict must contain either a focal_object definition or "
                                    "a depth_of_field_dist")
+
         if config.has_param("lens_distortion"):
-
-            original_image_resolution = (bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_x)
             # get the used camera parameter intrinsics
-            k1, k2, k3 = config.get_float("lens_distortion/k1"), config.get_float(
-                "lens_distortion/k2"), config.get_float("lens_distortion/k3")
+            k1, k2, k3 = config.get_float("lens_distortion/k1"), config.get_float("lens_distortion/k2"), \
+                         config.get_float("lens_distortion/k3")
             p1, p2 = config.get_float("lens_distortion/p1"), config.get_float("lens_distortion/p2")
-            mapping_coords, new_image_resolution, new_cx_and_cy = self._set_calculation_lens_distortion(k1, k2, k3, p1, p2)
-
-            camera_K_matrix = CameraUtility.get_intrinsics_as_K_matrix()
-            # update cx and cy in the K matrix
-            camera_K_matrix[0, 2] = new_cx_and_cy[0]
-            camera_K_matrix[1, 2] = new_cx_and_cy[1]
-
-            # reuse the values, which have been set before
-            clip_start = bpy.context.scene.camera.data.clip_start
-            clip_end = bpy.context.scene.camera.data.clip_end
-
-            CameraUtility.set_intrinsics_from_K_matrix(camera_K_matrix, new_image_resolution[0], new_image_resolution[1], clip_start, clip_end)
-            GlobalStorage.set("_lens_distortion_is_used", {"mapping_coords": mapping_coords,
-                                                           "original_image_res": original_image_resolution})
-
-
-    def _set_calculation_lens_distortion(self, k1: float, k2: float, k3: float, p1: float, p2: float):
-        """
-        MISSING
-        :param k1:
-        :param k2:
-        :param k3:
-        :param p1:
-        :param p2:
-        :return:
-        """
-        # first we need to get the current K matrix
-        camera_K_matrix = CameraUtility.get_intrinsics_as_K_matrix()
-        fx, fy = camera_K_matrix[0][0], camera_K_matrix[1][1]
-        cx, cy = camera_K_matrix[0][2], camera_K_matrix[1][2]
-
-        # get the current desired resolution
-        # TODO check how the pixel aspect has to be factored in!
-        desired_dis_res = (bpy.context.scene.render.resolution_x, bpy.context.scene.render.resolution_x)
-        # Get row,column image coordinates for all pixels for row-wise image flattening
-        # The center of the upper-left pixel has coordinates [0,0] both in DLR CalDe and python/scipy
-        row = np.repeat(np.arange(0, desired_dis_res[0]), desired_dis_res[1])
-        column = np.tile(np.arange(0, desired_dis_res[1]), desired_dis_res[0])
-
-        # P_und is the undistorted pinhole projection at z==1 of all image pixels
-        P_und = np.linalg.inv(camera_K_matrix) @ np.vstack((column, row, np.ones(np.prod(desired_dis_res[:2]))))
-
-        # Init dist at undist
-        x = P_und[0, :]
-        y = P_und[1, :]
-        res = [1e3]
-        it = 0
-        factor = 1.0
-        while res[-1] > 0.2:
-            r2 = np.square(x) + np.square(y)
-            radial_part = (1 + k1 * r2 + k2 * r2 * r2 + k3 * r2 * r2 * r2)
-            x_ = x * radial_part + 2 * p2 * x * y + p1 * (r2 + 2 * np.square(x))
-            y_ = y * radial_part + 2 * p1 * x * y + p2 * (r2 + 2 * np.square(y))
-
-            error = np.max(np.hypot(fx * (x_ - P_und[0, :]), fy * (y_ - P_und[1, :])))
-            res.append(error)
-            it += 1
-
-            # Take action if the optimization stalls or gets unstable
-            # (distortion models are tricky if badly parameterized, especially in outer regions)
-            if (it > 1) and (res[-1] > res[-2] * .999):
-                factor *= .5
-                if it > 1e3:
-                    raise Exception(
-                        "The iterative distortion algorithm is unstable/stalled after 1000 iterations. STOP.")
-                if error > 1e9:
-                    raise Exception("The iterative distortion algorithm is unstable. STOP.")
-
-            # update undistorted projection
-            x = x - (x_ - P_und[0, :]) * factor
-            y = y - (y_ - P_und[1, :]) * factor
-
-        # u and v are now the pixel coordinates on the undistorted image that
-        # will distort into the row,column coordinates of the distorted image
-        u = (fx * x + cx)
-        v = (fy * y + cy)
-
-        # Stacking this way for the interpolation in the undistorted image array
-        coords = np.vstack([v, u])
-
-        # Find out the resolution needed at the original image to generate filled-in distorted images
-        min_und_column_needed = np.sign(np.min(u)) * np.ceil(np.abs(np.min(u)))
-        max_und_column_needed = np.sign(np.max(u)) * np.ceil(np.abs(np.max(u)))
-        min_und_row_needed = np.sign(np.min(v)) * np.ceil(np.abs(np.min(v)))
-        max_und_row_needed = np.sign(np.max(v)) * np.ceil(np.abs(np.max(v)))
-        columns_needed = max_und_column_needed - (min_und_column_needed - 1)
-        rows_needed = max_und_row_needed - (min_und_row_needed - 1)
-        cx_new = cx - (min_und_column_needed - 1)
-        cy_new = cy - (min_und_row_needed - 1)
-        # newly suggested resolution
-        suggested_und_res = np.array([rows_needed, columns_needed])
-        # newly suggested cx and cy
-        suggested_und_mp = np.array([cx_new, cy_new])
-        # To avoid spline boundary approximations at the border pixels ('mode' in map_coordinates() )
-        suggested_und_res += 2
-        suggested_und_mp += 1
-
-        # Adapt/shift the mapping function coordinates to the suggested_und_res resolution
-        # (if we didn't, the mapping would only be valid for same resolution mapping)
-        # (same resolution mapping yields undesired void image areas)
-        # (this can in theory be performed in init_distortion() if we're positive about the resolution used)
-        coords[0, :] += suggested_und_mp[1] - cy
-        coords[1, :] += suggested_und_mp[0] - cx
-
-        return coords, suggested_und_res, suggested_und_mp
+            CameraUtility.set_lens_distortion(k1, k2, k3, p1, p2)
 
     def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.
