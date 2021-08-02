@@ -82,7 +82,7 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
     {
       "module": "camera.CameraLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
+        "local_frame_change": ["X", "-Y", "-Z"],
         "cam_poses": [
             "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
         ], 
