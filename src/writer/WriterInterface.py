@@ -2,9 +2,7 @@
 import os
 import numpy as np
 
-from src.main.GlobalStorage import GlobalStorage
 from src.main.Module import Module
-from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
 from src.utility.WriterUtility import WriterUtility
 
@@ -75,7 +73,7 @@ class WriterInterface(Module):
         item_writer.write_items_to_file(path_prefix, items, self.config.get_list("attributes_to_write", default_attributes), world_frame_change=self.destination_frame)
         Utility.register_output(self._determine_output_dir(), file_prefix, self.config.get_string("output_key", default_output_key), ".npy", version)
             
-    def _apply_postprocessing(self, output_key, data: np.ndarray, version):
+    def _apply_postprocessing(self, output_key: str, data: np.ndarray, version: str):
         """
         Applies all postprocessing modules registered for this output type.
 
@@ -84,13 +82,13 @@ class WriterInterface(Module):
         :param version: The version number original data.
         :return: The modified numpy data after doing the postprocessing
         """
-
         if output_key in self.postprocessing_modules_per_output:
             for module in self.postprocessing_modules_per_output[output_key]:
                 data, new_key, new_version = module.run(data, output_key, version)
         else:
             new_key = output_key
             new_version = version
+
         return data, new_key, new_version
 
     def _load_and_postprocess(self, file_path, key, version = "1.0.0"):
