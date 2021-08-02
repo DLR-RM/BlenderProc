@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup(["scipy"])
+SetupUtility.setup_pip(["scipy"])
 
 from typing import Union, Callable, Any, List, Dict, Tuple
 
@@ -302,6 +302,8 @@ class PostProcessingUtility:
                                                                               order=2, mode='nearest'),
                                                               image_distorted[:, :, i].shape)
 
+                if used_dtpye == np.uint8:
+                    image_distorted = np.clip(image_distorted, 0, 256)
                 data = image_distorted.astype(used_dtpye)
                 if len(input_image.shape) == 2:
                     return data[:, :, 0]
