@@ -29,7 +29,7 @@ class UnitTestCheckLoader(unittest.TestCase):
         """ Tests if the default cc materials are loaded.
         """
         Initializer.init()
-        materials = CCMaterialLoader.load()
+        materials = CCMaterialLoader.load(used_assets=["metal", "wood", "fabric"])
 
         #By default, does textures are loaded by the upper function call
         list_of_some_textures = ["Metal001", "Fabric006", "Wood050"]
