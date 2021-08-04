@@ -31,7 +31,6 @@ class UnitTestCheckLoader(unittest.TestCase):
         Initializer.init()
         materials = CCMaterialLoader.load(used_assets=["metal", "wood", "fabric"])
 
-        #By default, does textures are loaded by the upper function call
         list_of_some_textures = ["Metal001", "Fabric006", "Wood050"]
 
         for material in materials:
