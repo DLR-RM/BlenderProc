@@ -1,7 +1,7 @@
 from src.utility.SetupUtility import SetupUtility
-from src.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
-
 SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
+
+from src.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 
 import os
 from math import tan
@@ -107,4 +107,3 @@ class StereoGlobalMatchingWriterModule(RendererInterface):
         Utility.register_output(self._determine_output_dir(), "stereo-depth_", "stereo-depth", ".npy", "1.0.0")
         if self.config.get_bool("output_disparity", False):
             Utility.register_output(self._determine_output_dir(), "disparity_", "disparity", ".npy", "1.0.0")
-
