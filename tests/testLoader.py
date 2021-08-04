@@ -29,20 +29,14 @@ class UnitTestCheckLoader(unittest.TestCase):
         """ Tests if the default cc materials are loaded.
         """
         Initializer.init()
-        objs = CCMaterialLoader.load()
+        materials = CCMaterialLoader.load()
 
         #By default, does textures are loaded by the upper function call
-        probably_useful_texture = ["paving stones", "tiles", "wood", "fabric", "bricks", "metal", "wood floor",
-                                   "ground", "rock", "concrete", "leather", "planks", "rocks", "gravel",
-                                   "asphalt", "painted metal", "painted plaster", "marble", "carpet",
-                                   "plastic", "roofing tiles", "bark", "metal plates", "wood siding",
-                                   "terrazzo", "plaster", "paint", "corrugated steel", "painted wood", "lava"
-                                   "cardboard", "clay", "diamond plate", "ice", "moss", "pipe", "candy",
-                                   "chipboard", "rope", "sponge", "tactile paving", "paper", "cork",
-                                   "wood chips"]
+        list_of_some_textures = ["Metal001", "Fabric006", "Wood050"]
 
-        for obj in objs:
-            probably_useful_texture.remove(obj.get_name())
+        for material in materials:
+            if material.get_name() in list_of_some_textures:
+                list_of_some_textures.remove(material.get_name())
 
         # If the list is not empty, not all object have been loaded
-        self.assertEqual(probably_useful_texture, [])
+        self.assertEqual(list_of_some_textures, [])
