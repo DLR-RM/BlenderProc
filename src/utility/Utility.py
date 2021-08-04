@@ -176,20 +176,6 @@ class Utility:
         return '#%02x%02x%02x' % tuple(rgb)
 
     @staticmethod
-    def get_idx(array,item):
-        """
-        Returns index of an element if it exists in the list
-
-        :param array: a list with values for which == operator works.
-        :param item: item to find the index of
-        :return: index of item, -1 otherwise
-        """
-        try:
-            return array.index(item)
-        except ValueError:
-            return -1
-
-    @staticmethod
     def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
         """ Replaces the node between source_socket and dest_socket with a new node.
 
