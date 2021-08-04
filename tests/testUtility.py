@@ -11,6 +11,8 @@ resource_folder = os.path.join(os.path.dirname(__file__), "..", "examples", "res
 class UnitTestCheckUtility(unittest.TestCase):
 
     def test_blender_reference_after_undo(self):
+        """ Test if the blender_data objects are still valid after an undo execution is done. 
+        """
         Initializer.init()
         objs = ObjectLoader.load(os.path.join(resource_folder, "scene.obj"))
 
