@@ -1,7 +1,10 @@
+import random
+
 import bpy
 
 from typing import List, Union
 
+from src.utility import BlenderUtility
 from src.utility.StructUtility import Struct
 from src.utility.Utility import Utility
 
@@ -22,6 +25,14 @@ class Material(Struct):
         :param name: The name of the instance which will be used to update its blender reference.
         """
         self.blender_obj = bpy.data.materials[name]
+
+    @staticmethod
+    def collect_all() -> List["Material"]:
+        """ Returns all existing materials.
+
+        :return: A list of all materials.
+        """
+        return Material.convert_to_materials(bpy.data.materials)
 
     @staticmethod
     def create(name: str) -> "Material":
@@ -206,11 +217,11 @@ class Material(Struct):
         else:
             principled_bsdf.inputs[input_name].default_value = value
 
-    def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.Node]:
-        """ Gets the default value or the connected node to an input socket of the principled shader node of the material.
+    def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.NodeSocket]:
+        """ Gets the default value or the connected node socket to an input socket of the principled shader node of the material.
 
         :param input_name: The name of the input socket of the principled shader node.
-        :return: the connected node to the input socket or the default_value of the given input_name
+        :return: the connected socket to the input socket or the default_value of the given input_name
         """
         # get the one node from type Principled BSDF
         principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
@@ -220,7 +231,7 @@ class Material(Struct):
             if principled_bsdf.inputs[input_name].links:
                 if len(principled_bsdf.inputs[input_name].links) == 1:
                     # return the connected node
-                    return principled_bsdf.inputs[input_name].links[0].from_node
+                    return principled_bsdf.inputs[input_name].links[0].from_socket
                 else:
                     raise Exception(f"The input socket has more than one input link: "
                                     f"{[link.from_node.name for link in principled_bsdf.inputs[input_name].links]}")
@@ -245,6 +256,148 @@ class Material(Struct):
                 self.links.remove(link)
                 break
         return node_connected_to_the_output, material_output
+
+    def infuse_texture(self, texture: bpy.types.Texture, mode: str = "overlay", connection: str = "Base Color", texture_scale :float = 0.05, strength: float = 0.5, invert_texture: bool = False):
+        """ Overlays the selected material with a texture, this can be either a color texture like for example dirt or
+        it can be a texture, which is used as an input to the Principled BSDF of the given material.
+
+        :param texture: A texture which should be infused in the material.
+        :param mode: The mode determines how the texture is used. There are three options: "overlay" in which the selected
+                     texture is overlayed over a preexisting one. If there is none, nothing happens. The second option: "mix"
+                     is similar to overlay, just that the textures are mixed there. The last option: "set" replaces any existing
+                     texture and is even added if there was none before.
+        :param connection: By default the "Base Color" input of the principled shader will be used. This can be changed to any valid
+                           input of a principled shader. Default: "Base Color". For available check the blender documentation.
+        :param texture_scale: The used texture can be scaled down or up by a factor, to make it match the preexisting UV mapping. Make
+                              sure that the object has a UV mapping beforehand.
+        :param strength: The strength determines how much the newly generated texture is going to be used.
+        :param invert_texture: It might be sometimes useful to invert the input texture, this can be done by setting this to True.
+        """
+        used_mode = mode.lower()
+        if used_mode not in ["overlay", "mix", "set"]:
+            raise Exception(f'This mode is unknown here: {used_mode}, only ["overlay", "mix", "set"]!')
+
+        used_connector = connection.title()
+
+        principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
+        if used_connector not in principled_bsdf.inputs:
+            raise Exception(f"The {used_connector} is not an input to Principled BSDF!")
+
+        node_socket_connected_to_the_connector = None
+        for link in principled_bsdf.inputs[used_connector].links:
+            node_socket_connected_to_the_connector = link.from_socket
+            # remove this connection
+            self.links.remove(link)
+        if node_socket_connected_to_the_connector is not None or used_mode == "set":
+            texture_node = self.new_node("ShaderNodeTexImage")
+            texture_node.image = texture.image
+            # add texture coords to make the scaling of the dust texture possible
+            texture_coords = self.new_node("ShaderNodeTexCoord")
+            mapping_node = self.new_node("ShaderNodeMapping")
+            mapping_node.vector_type = "TEXTURE"
+            mapping_node.inputs["Scale"].default_value = [texture_scale] * 3
+            self.link(texture_coords.outputs["UV"], mapping_node.inputs["Vector"])
+            self.link(mapping_node.outputs["Vector"], texture_node.inputs["Vector"])
+            texture_node_output = texture_node.outputs["Color"]
+            if invert_texture:
+                invert_node = self.new_node("ShaderNodeInvert")
+                invert_node.inputs["Fac"].default_value = 1.0
+                self.link(texture_node_output, invert_node.inputs["Color"])
+                texture_node_output = invert_node.outputs["Color"]
+            if node_socket_connected_to_the_connector is not None and used_mode != "set":
+                mix_node = self.new_node("ShaderNodeMixRGB")
+                if used_mode in "mix_node":
+                    mix_node.blend_type = "OVERLAY"
+                elif used_mode in "mix":
+                    mix_node.blend_type = "MIX"
+                mix_node.inputs["Fac"].default_value = strength
+                self.link(texture_node_output, mix_node.inputs["Color2"])
+                # hopefully 0 is the color node!
+                self.link(node_socket_connected_to_the_connector, mix_node.inputs["Color1"])
+                self.link(mix_node.outputs["Color"], principled_bsdf.inputs[used_connector])
+            elif used_mode == "set":
+                self.link(texture_node_output, principled_bsdf.inputs[used_connector])
+
+    def infuse_material(self, material: "Material", mode: str = "mix", mix_strength: float = 0.5):
+        """ Infuse a material inside of another material. The given material, will be adapted and the used material, will
+        be added, depending on the mode either as add or as mix. This change is applied to all outputs of the material,
+        this include the Surface (Color) and also the displacement and volume. For displacement mix means multiply.
+
+        :param material: Material to infuse.
+        :param mode: The mode determines how the two materials are mixed. There are two options "mix" in which the
+                     preexisting material is mixed with the selected one in "used_material" or "add" in which they are just
+                    added on top of each other. Available: ["mix", "add"]
+        :param mix_strength: In the "mix" mode a strength can be set to determine how much of each material is going to be used.
+                             A strength of 1.0 means that the new material is going to be used completely.
+        """
+        # determine the mode
+        used_mode = mode.lower()
+        if used_mode not in ["add", "mix"]:
+            raise Exception(f'This mode is unknown here: {used_mode}, only ["mix", "add"]!')
+
+        # move the copied material inside of a group
+        group_node = self.new_node("ShaderNodeGroup")
+        group = BlenderUtility.add_nodes_to_group(material.nodes,
+                                                  f"{used_mode.title()}_{material.get_name()}")
+        group_node.node_tree = group
+        # get the current material output and put the used material in between the last node and the material output
+        material_output = self.get_the_one_node_with_type("OutputMaterial")
+        for mat_output_input in material_output.inputs:
+            if len(mat_output_input.links) > 0:
+                if "Float" in mat_output_input.bl_idname or "Vector" in mat_output_input.bl_idname:
+                    # For displacement
+                    infuse_node = self.new_node("ShaderNodeMixRGB")
+                    if used_mode == "mix":
+                        # as there is no mix mode, we use multiply here, which is similar
+                        infuse_node.blend_type = "MULTIPLY"
+                        infuse_node.inputs["Fac"].default_value = mix_strength
+                        input_offset = 1
+                    elif used_mode == "add":
+                        infuse_node.blend_type = "ADD"
+                        input_offset = 0
+                    else:
+                        raise Exception(f"This mode is not supported here: {used_mode}!")
+                    infuse_output = infuse_node.outputs["Color"]
+                else:
+                    # for the normal surface output (Color)
+                    if used_mode == "mix":
+                        infuse_node = self.new_node('ShaderNodeMixShader')
+                        infuse_node.inputs[0].default_value = mix_strength
+                        input_offset = 1
+                    elif used_mode == "add":
+                        infuse_node = self.new_node('ShaderNodeMixShader')
+                        input_offset = 0
+                    else:
+                        raise Exception(f"This mode is not supported here: {used_mode}!")
+                    infuse_output = infuse_node.outputs["Shader"]
+
+                # link the infuse node with the correct group node and the material output
+                for link in mat_output_input.links:
+                    self.link(link.from_socket, infuse_node.inputs[input_offset])
+                self.link(group_node.outputs[mat_output_input.name], infuse_node.inputs[input_offset + 1])
+                self.link(infuse_output, mat_output_input)
+
+    def set_displacement_from_principled_shader_value(self, input_name: str, multiply_factor: float):
+        """ Connects the node that is connected to the specified input of the principled shader node
+        with the displacement output of the material.
+
+        :param input_name: The name of the input socket of the principled shader node.
+        :param multiply_factor: A factor by which the displacement should be multiplied.
+        """
+        # Find socket that is connected with the specified input of the principled shader node.
+        input_socket = self.get_principled_shader_value(input_name)
+        if not isinstance(input_socket, bpy.types.NodeSocket):
+            raise Exception(f"The input {input_name} of the principled shader does not have any incoming connection.")
+
+        # Create multiplication node and connect with retrieved socket
+        math_node = self.new_node('ShaderNodeMath')
+        math_node.operation = "MULTIPLY"
+        math_node.inputs[1].default_value = multiply_factor
+        self.link(input_socket, math_node.inputs[0])
+
+        # Connect multiplication node with displacement output
+        output = self.get_the_one_node_with_type("OutputMaterial")
+        self.link(math_node.outputs["Value"], output.inputs["Displacement"])
 
     def __setattr__(self, key, value):
         if key not in ["links", "nodes", "blender_obj"]:
