@@ -1,15 +1,45 @@
-from typing import Union, Any, List
+from typing import Union, Any, List, Tuple
 import numpy as np
 
 import bpy
 from src.utility.Utility import Utility, KeyFrame
 from mathutils import Vector, Euler, Color, Matrix, Quaternion
-
+import weakref
 
 class Struct:
+    # Contains weak refs to all struct instances
+    # As it only uses weak references, instances can still be removed by GC when all other references are gone.
+    # If that happens, the instances' weak ref is also automatically removed from the set
+    __refs__ = weakref.WeakSet()
 
     def __init__(self, object: bpy.types.Object):
         self.blender_obj = object
+        # Remember that this instance exists
+        Struct.__refs__.add(self)
+
+    @staticmethod
+    def get_instances() -> List[Tuple[str, "Struct"]]:
+        """ Returns a list containing all existing struct instances.
+
+        :return: A list of tuples, each containing a struct and its name.
+        """
+        instances = []
+        # Iterate over all still existing instances
+        for instance in Struct.__refs__:
+            # Check that the referenced blender_obj inside is valid
+            if instance.is_valid():
+                # Collect instance and its name (its unique identifier)
+                instances.append((instance.get_name(), instance))
+        return instances
+
+    def is_valid(self):
+        """ Check whether the contained blender reference is valid.
+
+        The reference might become invalid after an undo operation or when the referenced struct is deleted.
+
+        :return: True, if it is valid.
+        """
+        return str(self.blender_obj) != "<bpy_struct, Object invalid>"
 
     def set_name(self, name: str):
         """ Sets the name of the struct.

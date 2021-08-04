@@ -330,6 +330,9 @@ class Utility:
 
         def __enter__(self):
             if self._perform_undo_op:
+                from src.utility.StructUtility import Struct
+                # Collect all existing struct instances
+                self.struct_instances = Struct.get_instances()
                 bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
         def __exit__(self, type, value, traceback):
@@ -337,6 +340,10 @@ class Utility:
                 bpy.ops.ed.undo_push(message="after " + self.check_point_name)
                 # The current state points to "after", now by calling undo we go back to "before"
                 bpy.ops.ed.undo()
+                # After applying undo, all references to blender objects are invalid.
+                # Therefore we now go over all instances and update their references using their name as unique identifier.
+                for name, struct in self.struct_instances:
+                    struct.update_blender_ref(name)
 
     @staticmethod
     def build_provider(name, parameters):

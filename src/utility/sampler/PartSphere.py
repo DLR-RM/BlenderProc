@@ -35,8 +35,10 @@ class PartSphere:
         :return: A random point lying inside or on the surface of a solid sphere.
         """
         if part_sphere_dir_vector is None:
-            part_sphere_dir_vector = Vector([0, 0, 1])
-        part_sphere_dir_vector.normalize()
+            part_sphere_dir_vector = np.array([0, 0, 1], np.float32)
+        else:
+            part_sphere_dir_vector = np.array(part_sphere_dir_vector).astype(np.float32)
+        part_sphere_dir_vector /= np.linalg.norm(part_sphere_dir_vector)
 
         if dist_above_center >= radius:
             raise Exception("The dist_above_center value is bigger or as big as the radius!")
