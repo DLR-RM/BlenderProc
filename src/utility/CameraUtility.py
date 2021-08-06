@@ -3,6 +3,8 @@ import numpy as np
 from mathutils import Matrix, Vector, Euler
 from typing import Union, Tuple
 
+from src.utility.EntityUtility import Entity
+
 
 class CameraUtility:
 
@@ -250,7 +252,7 @@ class CameraUtility:
         return fov_x, fov_y
 
     @staticmethod
-    def add_depth_of_field(camera: bpy.types.Camera, focal_point_obj: bpy.types.Object, fstop_value: float,
+    def add_depth_of_field(focal_point_obj: Entity, fstop_value: float,
                            aperture_blades: int = 0, aperture_rotation: float = 0.0, aperture_ratio: float = 1.0,
                            focal_distance: float = -1.0):
         """
@@ -261,7 +263,6 @@ class CameraUtility:
         Check the documentation on
         https://docs.blender.org/manual/en/latest/render/cameras.html#depth-of-field
 
-        :param camera: The camera, which will get a depth of field added
         :param focal_point_obj: The used focal point, if the object moves the focal point will move with it
         :param fstop_value: A higher fstop value, will increase the sharpness of the scene
         :param aperture_blades: Amount of blades used in the camera
@@ -270,11 +271,14 @@ class CameraUtility:
                                vertical one.
         :param focal_distance: Sets the distance to the focal point when no focal_point_obj is given.
         """
-        # activate depth of field rendering for this cameraera
+        cam_ob = bpy.context.scene.camera
+        camera = cam_ob.data
+
+        # activate depth of field rendering for this camera
         camera.dof.use_dof = True
         if focal_point_obj is not None:
-            # set the focus point of the cameraera
-            camera.dof.focus_object = focal_point_obj
+            # set the focus point of the camera
+            camera.dof.focus_object = focal_point_obj.blender_obj
         elif focal_distance >= 0.0:
             camera.dof.focus_distance = focal_distance
         else:
