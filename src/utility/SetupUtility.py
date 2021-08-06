@@ -242,9 +242,9 @@ class SetupUtility:
                 lines = [l.strip() for l in text.split("\n")]
                 lines = [l for l in lines if l and not l.startswith("#")]
                 for index, line in enumerate(lines):
-                    if "import" in line and "SetupUtility" in line:
+                    if ".setup(" in line:
                         return
-                    elif "import" in line:
+                    elif "import" in line and ".SetupUtility" not in line:
                         code = "\n".join(lines[:index + 2])
                         raise Exception('The given script "{}" does not have a SetupUtility call at the top! '
                                         "Make sure that is the first thing you import and run! Before importing "
