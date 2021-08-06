@@ -3,7 +3,6 @@ from typing import Callable
 import bpy
 from src.utility.CollisionUtility import CollisionUtility
 from src.utility.MeshObjectUtility import MeshObject
-from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_bounds
 import numpy as np
 
 class OnSurfaceSampler:
@@ -56,7 +55,7 @@ class OnSurfaceSampler:
         obj.set_location(obj.get_location() - up_direction * (obj_height - surface_height))
 
     @staticmethod
-    def sample(objects_to_sample: [MeshObject], surface: MeshObject, sample_pose_func: Callable[[MeshObject], None], max_tries: int = 100, min_distance: float = 0.25, max_distance: float = 0.6, up_direction: np.ndarray = None):
+    def sample(objects_to_sample: [MeshObject], surface: MeshObject, sample_pose_func: Callable[[MeshObject], None], max_tries: int = 100, min_distance: float = 0.25, max_distance: float = 0.6, up_direction: np.ndarray = None) -> [MeshObject]:
         """ Samples objects poses on a surface.
 
         The objects are positioned slightly above the surface due to the non-axis aligned nature of used bounding boxes
@@ -72,6 +71,7 @@ class OnSurfaceSampler:
         :param min_distance: Minimum distance to the closest other object from objects_to_sample. Center to center.
         :param max_distance: Maximum distance to the closest other object from objects_to_sample. Center to center.
         :param up_direction: Normal vector of the side of surface the objects should be placed on.
+        :return: The list of placed objects.
         """
         if up_direction is None:
             up_direction = np.array([0., 0., 1.])
@@ -132,3 +132,4 @@ class OnSurfaceSampler:
                 obj.delete()
 
         bpy.context.view_layer.update()
+        return placed_objects
