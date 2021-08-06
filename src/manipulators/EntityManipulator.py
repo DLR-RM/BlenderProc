@@ -434,17 +434,13 @@ class EntityManipulator(Module):
         :param entity: An object to modify. Type: bpy.types.Object.
         :param value: Configuration data. Type: dict.
         """
-        bpy.context.view_layer.objects.active = entity
-        if not len(entity.data.vertices) > value["min_vertices_for_subdiv"]:
-            bpy.ops.object.modifier_add(type="SUBSURF")
-            modifier = entity.modifiers[-1]
-            modifier.render_levels = value["subdiv_level"]
-
-        bpy.ops.object.modifier_add(type="DISPLACE")
-        modifier = entity.modifiers[-1]
-        modifier.texture = value["texture"]
-        modifier.mid_level = value["mid_level"]
-        modifier.strength = value["strength"]
+        MeshObject(entity).add_displace_modifier(
+            texture=value["texture"],
+            mid_level=value["mid_level"],
+            strength=value["strength"],
+            min_vertices_for_subdiv=value["min_vertices_for_subdiv"],
+            subdiv_level=value["subdiv_level"]
+        )
 
     def _add_uv_mapping(self, entity, value):
         """ Adds a uv map to an object if uv map is missing.
@@ -452,24 +448,7 @@ class EntityManipulator(Module):
         :param entity: An object to modify. Type: bpy.types.Object.
         :param value: Configuration data. Type: dict.
         """
-        bpy.context.view_layer.objects.active = entity
-        if hasattr(entity, "data") and entity.data is not None and \
-                hasattr(entity.data, "uv_layers") and entity.data.uv_layers is not None:
-            if not BlenderUtility.check_if_uv_coordinates_are_set(entity) or value["forced_recalc_of_uv_maps"]:
-                bpy.ops.object.editmode_toggle()
-                if value["projection"] == "cube":
-                    bpy.ops.uv.cube_project()
-                elif value["projection"] == "cylinder":
-                    bpy.ops.uv.cylinder_project()
-                elif value["projection"] == "smart":
-                    bpy.ops.uv.smart_project()
-                elif value["projection"] == "sphere":
-                    bpy.ops.uv.sphere_project()
-                else:
-                    raise Exception("Unknown projection: '{}'. Please use 'cube', 'cylinder', 'smart' or 'sphere'."
-                                    .format(value["projection"]))
-
-                bpy.ops.object.editmode_toggle()
+        MeshObject(entity).add_uv_mapping(value["projection"], overwrite=value["forced_recalc_of_uv_maps"])
 
     def _randomize_materials(self, entity, value):
         """ Replaces each material of an entity with certain probability.
