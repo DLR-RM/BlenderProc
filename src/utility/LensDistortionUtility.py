@@ -12,17 +12,33 @@ from src.utility.CameraUtility import CameraUtility
 
 
 class LensDistortionUtility:
+    """
+    This utility class provides to functions to first set up the lens distortion used in this particular BlenderProc
+    run and then the application of said lens distortion values to a rendered image. Both functions have to be called
+    after each other to use the lens distortion correctly. The `set_lens_distortion` fct. has to be called before the
+    rendering takes place and the apply_lens_distortion has to be done to the rendered images.
+
+    For more information on lens distortion see: https://en.wikipedia.org/wiki/Distortion_(optics)
+    """
 
     @staticmethod
     def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0):
         """
-        TODO MISSING
-        :param k1:
-        :param k2:
-        :param k3:
-        :param p1:
-        :param p2:
-        :return:
+        This function sets the lens distortion parameters. It used the resolution of the camera based on the given
+        lens distortion values. It also changes the Cx and Cy value of the K matrix of the camera to adapt to the
+        bigger image resolution.
+
+        This function has to be used with the PostProcessing Module, else only the resolution is increased but the
+        image is not distorted.
+
+        This functions stores the "_lens_distortion_is_used" key in the GlobalStorage, which contains the information
+        on the mapping and the original image resolution.
+
+        :param k1: First radial distortion coefficient defined by the Brown-Conrady model
+        :param k2: Second radial distortion coefficient defined by the Brown-Conrady model
+        :param k3: Third radial distortion coefficient defined by the Brown-Conrady model
+        :param p1: First tangential distortion coefficient
+        :param p2: Second tangential distortion coefficient
         """
         if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
             raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
@@ -121,7 +137,10 @@ class LensDistortionUtility:
     @staticmethod
     def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
         """
-        TODO
+        This functions applies the lens distortion, which has be precalculated by set_lens_distortion(...).
+
+        Without calling this function the set_lens_distortion fct. only increases the image resolution and changes the
+        K matrix of the camera.
 
         :param image: a list of images or an image, which will be distorted
         :return: a list of images or an image which have been distorted
