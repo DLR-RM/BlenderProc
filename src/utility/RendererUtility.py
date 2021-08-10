@@ -421,15 +421,18 @@ class RendererUtility:
         })
 
     @staticmethod
-    def enable_diffuse_color_output(output_dir: str, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
+    def enable_diffuse_color_output(output_dir: str = None, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
         """ Enables writing diffuse color (albedo) images.
 
         Diffuse color images will be written in the form of .png files during the next rendering.
 
-        :param output_dir: The directory to write files to.
+        :param output_dir: The directory to write files to, if this is None the temporary directory is used.
         :param file_prefix: The prefix to use for writing the files.
         :param output_key: The key to use for registering the diffuse color output.
         """
+        if output_dir is None:
+            output_dir = Utility.get_temporary_directory()
+
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         tree = bpy.context.scene.node_tree
@@ -485,7 +488,7 @@ class RendererUtility:
         if output_dir is None:
             output_dir = Utility.get_temporary_directory()
         if load_keys is None:
-            load_keys = {'colors', 'distance', 'normals'}
+            load_keys = {'colors', 'distance', 'normals', 'diffuse'}
 
         if output_key is not None:
             Utility.add_output_entry({
