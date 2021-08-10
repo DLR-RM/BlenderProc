@@ -449,17 +449,31 @@ class MeshObject(Entity):
 
         return poi
 
-    def position_is_above_object(self, position: Union[Vector, np.ndarray]):
-        """ Make sure the given position is straight above the given object with no obstacles in between.
+    def position_is_above_object(self, position: Union[Vector, np.ndarray], down_direction: Union[Vector, np.ndarray] = None, check_no_objects_in_between=True):
+        """ Make sure the given position is straight above the given object.
+
+        If check_no_objects_in_between is True, this also checks that there are no other objects in between.
 
         :param position: The position to check.
+        :param down_direction: A vector specifying the direction straight down. If None is given, a vector into -Z direction is used.
+        :param check_no_objects_in_between: If True, it is also checked that no other objects are in between position and object.
         :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
         """
-        # Send a ray straight down and check if the first hit object is the query object
-        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
-                                                                 Vector(position),
-                                                                 Vector([0, 0, -1]))
-        return hit and hit_object == self.blender_obj
+        if down_direction is None:
+            down_direction = [0, 0, -1]
+
+        if check_no_objects_in_between:
+            # Send a ray straight down and check if the first hit object is the query object
+            hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
+                                                                     Vector(position),
+                                                                     Vector(down_direction))
+            return hit and hit_object == self.blender_obj
+        else:
+            # Compute world-to-local matrix, so we can bring position and down vector into the local coordinate system
+            world2local = Matrix(np.linalg.inv(self.get_local2world_mat()))
+            # Send raycast on object (this will ignore all other objects, so we only need to check whether the ray hit)
+            hit, _, _, _ = self.blender_obj.ray_cast(world2local @ Vector(position), world2local.to_3x3() @ Vector(down_direction))
+            return hit
 
     def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.

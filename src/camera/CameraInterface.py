@@ -5,6 +5,7 @@ from mathutils import Matrix, Vector, Euler
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.utility.CameraUtility import CameraUtility
+from src.utility.EntityUtility import Entity
 from src.utility.MathUtility import MathUtility
 
 
@@ -247,7 +248,7 @@ class CameraInterface(Module):
                 if len(focal_object) != 1:
                     raise RuntimeError(f"There has to be exactly one focal object, use 'random_samples: 1' or change "
                                        f"the selector. Found {len(focal_object)}.")
-                CameraUtility.add_depth_of_field(cam, focal_object[0], fstop_value, aperture_blades,
+                CameraUtility.add_depth_of_field(Entity(focal_object[0]), fstop_value, aperture_blades,
                                                  aperture_rotation, aperture_ratio)
             else:
                 raise RuntimeError("The depth_of_field dict must contain either a focal_object definition or "
