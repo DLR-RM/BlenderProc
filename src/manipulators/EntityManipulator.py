@@ -351,7 +351,7 @@ class EntityManipulator(Module):
                     
         bpy.context.view_layer.update()
 
-    def _get_the_set_params(self, params_conf):
+    def _get_the_set_params(self, params_conf: Config):
         """ Extracts actual values to set from a Config object.
 
         :param params_conf: Object with all user-defined data. Type: Config.
@@ -407,7 +407,7 @@ class EntityManipulator(Module):
 
         return params
 
-    def _add_modifier(self, entity, value):
+    def _add_modifier(self, entity: bpy.types.Object, value: dict):
         """ Adds modifier to a selected entity.
 
         :param entity: An entity to modify. Type: bpy.types.Object
@@ -420,7 +420,7 @@ class EntityManipulator(Module):
         else:
             raise Exception("Unknown modifier: {}.".format(value["name"]))
 
-    def _set_shading(self, entity, value):
+    def _set_shading(self, entity: bpy.types.Object, value: dict):
         """ Switches shading mode of the selected entity.
 
         :param entity: An entity to modify. Type: bpy.types.Object
@@ -428,7 +428,7 @@ class EntityManipulator(Module):
         """
         MeshObject(entity).set_shading_mode(value["shading_mode"], value["angle_value"])
 
-    def _add_displace(self, entity, value):
+    def _add_displace(self, entity: bpy.types.Object, value: dict):
         """ Adds a displace modifier with texture to an object.
 
         :param entity: An object to modify. Type: bpy.types.Object.
@@ -442,7 +442,7 @@ class EntityManipulator(Module):
             subdiv_level=value["subdiv_level"]
         )
 
-    def _add_uv_mapping(self, entity, value):
+    def _add_uv_mapping(self, entity: bpy.types.Object, value: dict):
         """ Adds a uv map to an object if uv map is missing.
 
         :param entity: An object to modify. Type: bpy.types.Object.
@@ -450,7 +450,7 @@ class EntityManipulator(Module):
         """
         MeshObject(entity).add_uv_mapping(value["projection"], overwrite=value["forced_recalc_of_uv_maps"])
 
-    def _randomize_materials(self, entity, value):
+    def _randomize_materials(self, entity: bpy.types.Object, value: dict):
         """ Replaces each material of an entity with certain probability.
 
         :param entity: An object to modify. Type: bpy.types.Object.
@@ -471,12 +471,12 @@ class EntityManipulator(Module):
                 if np.random.uniform(0, 1) <= value["randomization_level"]:
                     entity.data.materials.append(value["material_to_replace_with"])
 
-    def _unpack_params(self, param_config, instructions):
+    def _unpack_params(self, param_config: Config, instructions: dict):
         """ Unpacks the data from a config object following the instructions in the dict.
 
+        :param param_config: Structure that contains the unpacked data. Type: Config.
         :param instructions: Instruction for unpacking: keys, corresponding Config method to extract the value, \
                              default value, and a function to perform on the value after extraction. Type: dict.
-        :param param_config: Structure that contains the unpacked data. Type: Config.
         :return: Unpacked data. Type: dict.
         """
         # check what was defined by the user
