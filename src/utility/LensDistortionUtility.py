@@ -61,6 +61,28 @@ class LensDistortionUtility:
         # P_und is the undistorted pinhole projection at z==1 of all image pixels
         P_und = np.linalg.inv(camera_K_matrix) @ np.vstack((column, row, np.ones(np.prod(desired_dis_res[:2]))))
 
+    # P_und are then distorted by the lens, i.e. P_dis = dis(P_und)
+    # => Find mapping I_dis(row,column) -> I_und(float,float)
+    #
+    # We aim at finding the brightness for every discrete pixel of the
+    # generated distorted image. In the original undistorted image these
+    # are located at real coordinates to be calculated. After that we can
+    # interpolate on the original undistorted image.
+    # Since dis() cannot be inverted, we iterate (up to ~10 times
+    # depending on the AOV and the distortion):
+    # 1) assume P_und~=P_dis
+    # 2) distort()
+    # 3) estimate distance between dist(P_und) and P_dis
+    # 4) subtract this distance from the estimated P_und,
+    #    perhaps with a factor (>1 for accel, <1 for stability at unstable distortion regions)
+    # 5) repeat until P_dis ~ dist(P_und)
+    # This works because translations in _dis and _und are approx. equivariant
+    # and the mapping is (hopefully) injective (1:1).
+    #
+    # An alternative, non-iterative approach is P_dis(float,float)=dis(P_und(row,column))
+    # and then interpolate on an irregular grid of distorted points. This is faster
+    # when generating the mapping matrix but much slower in inference.
+    
         # Init dist at undist
         x = P_und[0, :]
         y = P_und[1, :]
@@ -99,24 +121,26 @@ class LensDistortionUtility:
         # Stacking this way for the interpolation in the undistorted image array
         mapping_coords = np.vstack([v, u])
 
-        # Find out the resolution needed at the original image to generate filled-in distorted images
+        # Find out the image resolution needed from Blender to generate filled-in distorted images of the desired resolution
         min_und_column_needed = np.sign(np.min(u)) * np.ceil(np.abs(np.min(u)))
         max_und_column_needed = np.sign(np.max(u)) * np.ceil(np.abs(np.max(u)))
         min_und_row_needed = np.sign(np.min(v)) * np.ceil(np.abs(np.min(v)))
         max_und_row_needed = np.sign(np.max(v)) * np.ceil(np.abs(np.max(v)))
         columns_needed = max_und_column_needed - (min_und_column_needed - 1)
         rows_needed = max_und_row_needed - (min_und_row_needed - 1)
-        cx_new = cx - (min_und_column_needed - 1) + 1
-        cy_new = cy - (min_und_row_needed - 1) + 1
-        # newly suggested resolution
-        new_image_resolution = np.array([columns_needed, rows_needed])
+        cx_new = cx - (min_und_column_needed - 1)
+        cy_new = cy - (min_und_row_needed - 1)
         # To avoid spline boundary approximations at the border pixels ('mode' in map_coordinates() )
-        new_image_resolution += 2
+        columns_needed += 2
+        rows_needed += 2
+        cx_new += 1
+        cy_new += 1
+        # suggested resolution for Blender image generation
+        new_image_resolution = np.array([columns_needed, rows_needed])
 
         # Adapt/shift the mapping function coordinates to the new_image_resolution resolution
         # (if we didn't, the mapping would only be valid for same resolution mapping)
         # (same resolution mapping yields undesired void image areas)
-        # (this can in theory be performed in init_distortion() if we're positive about the resolution used)
         mapping_coords[0, :] += cy_new - cy
         mapping_coords[1, :] += cx_new - cx
 
@@ -164,9 +188,10 @@ class LensDistortionUtility:
                 image_distorted = np.zeros((original_image_res[0], original_image_res[1], amount_of_output_channels))
                 used_dtpye = input_image.dtype
                 data = input_image.astype(np.float)
+                # Forward mapping in order to distort the undistorted image coordinates
+                # and reshape the arrays into the image shape grid.
+                # The reference frame for coords is as in DLR CalDe etc. (the upper-left pixel center is at [0,0])
                 for i in range(image_distorted.shape[2]):
-                    # TODO check the order and the mode, for non rgb data?
-                    # The reference frame for coords is here as in DLR CalDe (the upper-left pixel center is at [0,0])
                     if len(input_image.shape) == 3:
                         image_distorted[:, :, i] = np.reshape(map_coordinates(data[:, :, i], mapping_coords,
                                                                               order=2, mode='nearest'),
@@ -175,6 +200,9 @@ class LensDistortionUtility:
                         image_distorted[:, :, i] = np.reshape(map_coordinates(data, mapping_coords,
                                                                               order=2, mode='nearest'),
                                                               image_distorted[:, :, i].shape)
+                # Other options are:
+                # - map_coordinates() in all channels at the same time (turns out to be slower)
+                # - use torch.nn.functional.grid_sample() instead to do it on the GPU (even in batches)
 
                 if used_dtpye == np.uint8:
                     image_distorted = np.clip(image_distorted, 0, 255)
