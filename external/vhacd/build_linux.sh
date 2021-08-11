@@ -2,5 +2,5 @@
 
 cd "$(dirname "$0")"
 cd v-hacd/bin/
-cmake ../src/
+cmake ../src/ $1
 make -j 4
