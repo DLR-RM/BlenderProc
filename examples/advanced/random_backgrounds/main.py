@@ -1,5 +1,5 @@
 from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup(["matplotlib"])
+SetupUtility.setup([])
 
 from src.utility.CocoWriterUtility import CocoWriterUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
