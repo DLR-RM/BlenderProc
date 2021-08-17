@@ -35,37 +35,39 @@ class AMASSLoader:
 
 
     @staticmethod
-    def load(data_path: str, used_sub_dataset_id: str, temp_dir: str, used_body_model_gender: str = None, used_subject_id: str = "", used_sequence_id: int = -1, used_frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 10) -> List[MeshObject]:
+    def load(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 10) -> List[MeshObject]:
         """
         use the pose parameters to generate the mesh and loads it to the scene.
 
         :param data_path: The path to the AMASS Dataset folder in resources folder.
-        :param used_sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
+        :param sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
                                     Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
                                     'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
         :param temp_dir: A temp directory which is used for writing the temporary .obj file.
-        :param used_body_model_gender: The model gender, pose will represented using male, female or neutral body shape.
+        :param body_model_gender: The model gender, pose will represented using male, female or neutral body shape.
                                        Available:[male, female, neutral]. If None is selected a random one is choosen.
-        :param used_subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
+        :param subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
                                 If left empty a random subject id is picked.
-        :param used_sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent certain action.
+        :param sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent certain action.
                                  If set to -1 a random sequence id is selected.
-        :param used_frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
+        :param frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
         :param num_betas: Number of body parameters
         :param num_dmpls: Number of DMPL parameters
         :return: The list of loaded mesh objects.
         """
-        if used_body_model_gender is None:
-            used_body_model_gender = random.choice(["male", "female", "neutral"])
+        if body_model_gender is None:
+            body_model_gender = random.choice(["male", "female", "neutral"])
+        if temp_dir is None:
+            temp_dir = Utility.get_temporary_directory()
 
         # Get the currently supported mocap datasets by this loader
         taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
         supported_mocap_datasets = AMASSLoader._get_supported_mocap_datasets(taxonomy_file_path, data_path)
 
         # selected_obj = self._files_with_fitting_ids
-        pose_body, betas = AMASSLoader._get_pose_parameters(supported_mocap_datasets, num_betas, used_sub_dataset_id, used_subject_id, used_sequence_id, used_frame_id)
+        pose_body, betas = AMASSLoader._get_pose_parameters(supported_mocap_datasets, num_betas, sub_dataset_id, subject_id, sequence_id, frame_id)
         # load parametric Model
-        body_model, faces = AMASSLoader._load_parametric_body_model(data_path, used_body_model_gender, num_betas, num_dmpls)
+        body_model, faces = AMASSLoader._load_parametric_body_model(data_path, body_model_gender, num_betas, num_dmpls)
         # Generate Body representations using SMPL model
         body_repr = body_model(pose_body=pose_body, betas=betas)
         # Generate .obj file represents the selected pose
