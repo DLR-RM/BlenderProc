@@ -35,7 +35,7 @@ class AMASSLoader:
 
 
     @staticmethod
-    def load(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 10) -> List[MeshObject]:
+    def load(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 8) -> List[MeshObject]:
         """
         use the pose parameters to generate the mesh and loads it to the scene.
 
