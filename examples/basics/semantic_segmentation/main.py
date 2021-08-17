@@ -49,6 +49,7 @@ RendererUtility.enable_distance_output()
 # render the whole pipeline
 data = RendererUtility.render()
 
+# Render segmentation masks (per class and per instance)
 data.update(SegMapRendererUtility.render(map_by=["class", "instance", "name"]))
 
 # Convert distance to depth

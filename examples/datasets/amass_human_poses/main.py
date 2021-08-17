@@ -21,7 +21,7 @@ args = parser.parse_args()
 
 Initializer.init()
 
-# load the objects into the scene
+# Load the objects into the scene
 objs = AMASSLoader.load(
     args.amass_dir,
     sub_dataset_id="CMU",
@@ -30,7 +30,6 @@ objs = AMASSLoader.load(
     sequence_id=1,
     frame_id=600
 )
-parent_object = ObjectMerging.merge_object_list(objects=objs, merged_object_name="")
 
 # define a light and set its location and energy level
 light = Light()
@@ -42,7 +41,7 @@ light.set_energy(1000)
 poi = MeshObject.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
-    # Sample random camera location above objects
+    # Sample random camera location around the objects
     location = Sphere.sample([0, 0, 0], radius=3, mode="SURFACE")
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location)

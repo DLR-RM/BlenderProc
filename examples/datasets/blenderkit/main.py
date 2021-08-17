@@ -34,7 +34,7 @@ light.set_energy(1000)
 poi = MeshObject.compute_poi(Filter.all_with_type(objs, MeshObject))
 # Sample five camera poses
 for i in range(5):
-    # Sample random camera location above objects
+    # Sample random camera location around the objects
     location = PartSphere.sample([0, 0, 0], radius=2.5, part_sphere_dir_vector=[1, 0, 0], mode="SURFACE")
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location)
