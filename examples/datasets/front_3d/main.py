@@ -3,10 +3,7 @@ SetupUtility.setup([])
 
 import argparse
 import os
-
-import bpy
 import numpy as np
-from mathutils import Matrix, Euler
 
 from src.utility.Initializer import Initializer
 from src.utility.LabelIdMapping import LabelIdMapping
@@ -85,6 +82,8 @@ while tries < 10000 and poses < 10:
         poses += 1
     tries += 1
 
+# Also render normals
+RendererUtility.enable_normals_output()
 # set the sample amount to 350
 RendererUtility.set_samples(350)
 

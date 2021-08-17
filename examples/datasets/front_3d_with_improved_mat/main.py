@@ -1,18 +1,13 @@
-import random
-
 from src.utility.SetupUtility import SetupUtility
-from src.utility.filter.Filter import Filter
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-
 SetupUtility.setup([])
 
 import argparse
 import os
-
-import bpy
 import numpy as np
-from mathutils import Matrix, Euler
+import random
 
+from src.utility.filter.Filter import Filter
+from src.utility.loader.CCMaterialLoader import CCMaterialLoader
 from src.utility.Initializer import Initializer
 from src.utility.LabelIdMapping import LabelIdMapping
 from src.utility.loader.Front3DLoader import Front3DLoader
@@ -23,7 +18,6 @@ from src.utility.camera.CameraValidation import CameraValidation
 from src.utility.CameraUtility import CameraUtility
 from src.utility.WriterUtility import WriterUtility
 from src.utility.Utility import Utility
-
 from src.utility.RendererUtility import RendererUtility
 from src.utility.SegMapRendererUtility import SegMapRendererUtility
 
@@ -120,6 +114,8 @@ while tries < 10000 and poses < 10:
         poses += 1
     tries += 1
 
+# Also render normals
+RendererUtility.enable_normals_output()
 # set the sample amount to 350
 RendererUtility.set_samples(350)
 
