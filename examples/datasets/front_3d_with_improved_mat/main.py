@@ -1,4 +1,9 @@
+import random
+
 from src.utility.SetupUtility import SetupUtility
+from src.utility.filter.Filter import Filter
+from src.utility.loader.CCMaterialLoader import CCMaterialLoader
+
 SetupUtility.setup([])
 
 import argparse
@@ -26,7 +31,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
 parser.add_argument("future_folder", help="Path to the 3D Future Model folder.")
 parser.add_argument("front_3D_texture_path", help="Path to the 3D FRONT texture folder.")
-parser.add_argument("output_dir", help="Path to where the data should be saved")
+parser.add_argument('cc_material_path', nargs='?', default="resources/cctextures", help="Path to CCTextures folder, see the /scripts for the download script.")
+parser.add_argument("output_dir", nargs='?', default="examples/datasets/front_3d_with_improved_mat/output", help="Path to where the data should be saved")
 args = parser.parse_args()
 
 if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
@@ -48,6 +54,37 @@ loaded_objects = Front3DLoader.load(
     label_mapping=mapping
 )
 
+cc_materials = CCMaterialLoader.load(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
+
+floors = Filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
+for floor in floors:
+    # For each material of the object
+    for i in range(len(floor.get_materials())):
+        # In 50% of all cases
+        if np.random.uniform(0, 1) <= 0.95:
+            # Replace the material with a random one
+            floor.set_material(i, random.choice(cc_materials))
+
+
+baseboards_and_doors = Filter.by_attr(loaded_objects, "name", "Baseboard.*", regex=True) + Filter.by_attr(loaded_objects, "name", "Door.*", regex=True)
+wood_floor_materials = Filter.by_cp(cc_materials, "asset_name", "WoodFloor.*", regex=True)
+for obj in baseboards_and_doors:
+    # For each material of the object
+    for i in range(len(obj.get_materials())):
+        # Replace the material with a random one
+        obj.set_material(i, random.choice(wood_floor_materials))
+
+
+walls = Filter.by_attr(loaded_objects, "name", "Wall.*", regex=True)
+marble_materials = Filter.by_cp(cc_materials, "asset_name", "Marble.*", regex=True)
+for wall in walls:
+    # For each material of the object
+    for i in range(len(wall.get_materials())):
+        # In 50% of all cases
+        if np.random.uniform(0, 1) <= 0.1:
+            # Replace the material with a random one
+            wall.set_material(i, random.choice(marble_materials))
+
 # Init sampler for sampling locations inside the loaded front3D house
 point_sampler = Front3DPointInRoomSampler(loaded_objects)
 
@@ -57,13 +94,11 @@ bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in loaded_objects i
 poses = 0
 tries = 0
 
-
 def check_name(name):
     for category_name in ["chair", "sofa", "table", "bed"]:
         if category_name in name.lower():
             return True
     return False
-
 
 # filter some objects from the loaded objects, which are later used in calculating an interesting score
 special_objects = [obj.get_cp("category_id") for obj in loaded_objects if check_name(obj.get_name())]
