@@ -46,7 +46,6 @@ class ObjectPoseSampler:
 
                 # Put the top object in queue at the sampled point in space
                 sample_pose_func(obj)
-                bpy.context.view_layer.update()
                 # Remove bvh cache, as object has changed
                 if obj.get_name() in bvh_cache:
                     del bvh_cache[obj.get_name()]

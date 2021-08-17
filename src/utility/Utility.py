@@ -176,20 +176,6 @@ class Utility:
         return '#%02x%02x%02x' % tuple(rgb)
 
     @staticmethod
-    def get_idx(array,item):
-        """
-        Returns index of an element if it exists in the list
-
-        :param array: a list with values for which == operator works.
-        :param item: item to find the index of
-        :return: index of item, -1 otherwise
-        """
-        try:
-            return array.index(item)
-        except ValueError:
-            return -1
-
-    @staticmethod
     def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
         """ Replaces the node between source_socket and dest_socket with a new node.
 
@@ -330,6 +316,9 @@ class Utility:
 
         def __enter__(self):
             if self._perform_undo_op:
+                from src.utility.StructUtility import Struct
+                # Collect all existing struct instances
+                self.struct_instances = Struct.get_instances()
                 bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
         def __exit__(self, type, value, traceback):
@@ -337,6 +326,10 @@ class Utility:
                 bpy.ops.ed.undo_push(message="after " + self.check_point_name)
                 # The current state points to "after", now by calling undo we go back to "before"
                 bpy.ops.ed.undo()
+                # After applying undo, all references to blender objects are invalid.
+                # Therefore we now go over all instances and update their references using their name as unique identifier.
+                for name, struct in self.struct_instances:
+                    struct.update_blender_ref(name)
 
     @staticmethod
     def build_provider(name, parameters):

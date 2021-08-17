@@ -31,6 +31,8 @@ import shutil
 def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull_#", remove_doubles=True, apply_modifiers=True, apply_transforms="NONE", depth=20, concavity=0.0025, plane_downsampling=4, convexhull_downsampling=4, alpha=0.05, beta=0.05, gamma=0.00125, pca=False, mode="VOXEL", max_num_vertices_per_ch=32, min_volume_per_ch=0.0001, cache_dir=None):
     """ Uses V-HACD to decompose the given object.
 
+    You can turn of the usage of OpenCL by setting the environment variable NO_OPENCL to "1".
+
     :param ob: The blender object to decompose.
     :param temp_dir: The temp directory where to store the convex parts.
     :param resolution: maximum number of voxels generated during the voxelization stage
@@ -62,7 +64,10 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
         git.Git(vhacd_path).clone("git://github.com/kmammou/v-hacd.git")
 
         print("Building v-hacd")
-        os.system(os.path.join(vhacd_path, "build_linux.sh"))
+        if "NO_OPENCL" in os.environ and os.environ["NO_OPENCL"] == "1":
+            os.system(os.path.join(vhacd_path, "build_linux.sh") + " -DNO_OPENCL=ON")
+        else:
+            os.system(os.path.join(vhacd_path, "build_linux.sh") + " -DNO_OPENCL=OFF")
 
     off_filename = os.path.join(temp_dir, 'vhacd.off')
     outFileName = os.path.join(temp_dir, 'vhacd.wrl')

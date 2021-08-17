@@ -5,6 +5,7 @@ from mathutils import Matrix, Vector, Euler
 from src.main.Module import Module
 from src.utility.Config import Config
 from src.utility.CameraUtility import CameraUtility
+from src.utility.EntityUtility import Entity
 from src.utility.MathUtility import MathUtility
 
 
@@ -23,7 +24,7 @@ class CameraInterface(Module):
             "config": {
                 "path": "<args:0>",
                 "file_format": "location rotation/value _ _ _ _ _ _",
-                "source_frame": ["X", "-Z", "Y"],
+                "world_frame_change": ["X", "-Z", "Y"],
                 "default_cam_param": {
                     "rotation": {
                         "format": "forward_vec"
@@ -44,10 +45,17 @@ class CameraInterface(Module):
         * - Parameter
           - Description
           - Type
-        * - source_frame
-          - Can be used if the given positions and rotations are specified in frames different from the blender
-            frame. Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed
+        * - world_frame_change
+          - Can be used if the given camera poses are specified in frames different from the blender
+            frame. This parameter changes the world coordinate frame of points and matrices.
+            Has to be a list of three strings. Example: ['X', '-Z', 'Y']: Point (1,2,3) will be transformed
             to (1, -3, 2). Default: ["X", "Y", "Z"]. " Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
+          - list
+        * - local_frame_change
+          - Can be used if the given camera poses are specified in frames different from the blender
+            frame. This parameter changes the local coordinate frame of matrices. It is currently only
+            available when setting camera poses via the cam2world_matrix parameter.
+            Has to be a list of three strings. Default: ["X", "Y", "Z"]. " Available: ['X', 'Y', 'Z', '-X', '-Y', '-Z'].
           - list
         * - cam_poses
           - A list of dicts, where each dict specifies one cam pose. See the next table for details about specific
@@ -168,7 +176,11 @@ class CameraInterface(Module):
 
     def __init__(self, config):
         Module.__init__(self, config)
-        self.source_frame = self.config.get_list("source_frame", ["X", "Y", "Z"])
+        # Raise an exception if the deprecated source_frame parameter is used
+        if self.config.has_param("source_frame"):
+            raise Exception("The parameter `source_frame` parameter is not available anymore. Use `local_frame_change` instead, if you are setting camera poses via `cam2world_matrix`, or use `world_frame_change` instead, if you are setting camera poses via `location` and `rotation`.")
+        self.local_frame_change = self.config.get_list("local_frame_change", ["X", "Y", "Z"])
+        self.world_frame_change = self.config.get_list("world_frame_change", ["X", "Y", "Z"])
 
     def _set_cam_intrinsics(self, cam, config):
         """ Sets camera intrinsics from a source with following priority
@@ -236,7 +248,7 @@ class CameraInterface(Module):
                 if len(focal_object) != 1:
                     raise RuntimeError(f"There has to be exactly one focal object, use 'random_samples: 1' or change "
                                        f"the selector. Found {len(focal_object)}.")
-                CameraUtility.add_depth_of_field(cam, focal_object[0], fstop_value, aperture_blades,
+                CameraUtility.add_depth_of_field(Entity(focal_object[0]), fstop_value, aperture_blades,
                                                  aperture_rotation, aperture_ratio)
             else:
                 raise RuntimeError("The depth_of_field dict must contain either a focal_object definition or "
@@ -262,13 +274,18 @@ class CameraInterface(Module):
         :return: The 4x4 cam to world transformation matrix.
         """
         if not config.has_param("cam2world_matrix"):
-            position = MathUtility.change_coordinate_frame_of_point(config.get_vector3d("location", [0, 0, 0]), self.source_frame)
+            # Print warning if local_frame_change is used with other attributes than cam2world_matrix
+            if self.local_frame_change != ["X", "Y", "Z"]:
+                print("Warning: The local_frame_change parameter is at the moment only supported when setting the cam2world_matrix attribute.")
+                
+            position = MathUtility.change_coordinate_frame_of_point(config.get_vector3d("location", [0, 0, 0]), self.world_frame_change)
 
             # Rotation
             rotation_format = config.get_string("rotation/format", "euler")
             value = config.get_vector3d("rotation/value", [0, 0, 0])
             # Transform to blender coord frame
-            value = MathUtility.change_coordinate_frame_of_point(value, self.source_frame)
+            value = MathUtility.change_coordinate_frame_of_point(value, self.world_frame_change)
+            
             if rotation_format == "euler":
                 # Rotation, specified as euler angles
                 rotation_matrix = Euler(value, 'XYZ').to_matrix()
@@ -286,7 +303,8 @@ class CameraInterface(Module):
                 rotation_matrix = np.matmul(rotation_matrix, Euler((0.0, 0.0, inplane_rot)).to_matrix())
 
             cam2world_matrix = MathUtility.build_transformation_mat(position, rotation_matrix)
-        else: 
+        else:
             cam2world_matrix = np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32)
-            cam2world_matrix = MathUtility.change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.source_frame)
+            cam2world_matrix = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.local_frame_change)
+            cam2world_matrix = MathUtility.change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.world_frame_change)
         return cam2world_matrix

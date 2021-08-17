@@ -83,7 +83,8 @@ if custom_blender_path is None:
         blender_path = os.path.join(blender_install_path, "Blender.app")
     elif platform == "win32":
         blender_version += "-windows-x64"
-        blender_path = os.path.join(blender_install_path, blender_version)
+        blender_install_path = os.path.join(blender_install_path, blender_version)
+        blender_path = blender_install_path
     else:
         raise Exception("This system is not supported yet: {}".format(platform))
 
@@ -154,7 +155,7 @@ if custom_blender_path is None:
             subprocess.Popen(["rm {}".format(os.path.join(blender_install_path, blender_version + ".dmg"))], shell=True).wait()
             # add Blender.app path to it
         elif platform == "win32":
-            SetupUtility.extract_file(file_tmp, blender_install_path)
+            SetupUtility.extract_file(blender_install_path, file_tmp)
         # rename the blender folder to better fit our existing scheme
         for folder in os.listdir(blender_install_path):
             if os.path.isdir(os.path.join(blender_install_path, folder)) and folder.startswith("blender-" + major_version):

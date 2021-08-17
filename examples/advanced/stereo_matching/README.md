@@ -53,22 +53,12 @@ python scripts/visHdf5Files.py examples/advanced/stereo_matching/output/1.hdf5
 Make sure these python packages are included.
 
 ```yaml
-"global": {
-  "output_dir": "<args:2>",
-  "resolution_x": 1280,
-  "resolution_y": 720
-}
-```
-
-Indicate the desired output image resolution globally inside of the settings of the `"main.Initializer"`.
-
-```yaml
 {  
   "module": "camera.CameraLoader",
   "config": {
     "path": "<args:0>",
     "file_format": "location rotation/value _ _ _ _ _ _",
-    "source_frame": ["X", "-Z", "Y"],
+    "world_frame_change": ["X", "-Z", "Y"],
     "default_cam_param": {
       "rotation": {
         "format": "forward_vec"
@@ -110,7 +100,6 @@ We enable stereo rendering here. Also notice the order of the modules, where the
 {
   "module": "writer.StereoGlobalMatchingWriter",
   "config": {
-    "focal_length": 650.018,
     "disparity_filter": false
   }
 }
