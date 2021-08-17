@@ -95,6 +95,10 @@ class IKEALoader:
         """
         obj_dict = IKEALoader._generate_object_dict(data_dir)
 
+        # If obj_categories is given, make sure it is a list
+        if obj_categories is not None and not isinstance(obj_categories, list):
+            obj_categories = [obj_categories]
+
         if obj_categories is not None and obj_style is not None:
             object_lst = []
             for obj_category in obj_categories:
