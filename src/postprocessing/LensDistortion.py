@@ -7,10 +7,20 @@ class LensDistortion(Module):
 
             k1, k2, k3 and p1, p2
 
-        Here k_n is the radial distortion coefficient defined by the Brown-Conrady model and
-        p_n is the tangential distortion coefficient.
+        Here k_n are the radial distortion parameters (of 3rd, 5th, and 7th degree in radial distance) as defined by
+        the undistorted-to-distorted plumb bob lens distortion model, which is conform to the current DLR CalLab/OpenCV/
+        Bouguet/Kalibr implementations. The use of k_3 is discouraged unless the angular field of view is too high,
+        rendering it necessary, and the parameter allows for a distorted projection in the whole sensor size (which
+        isn't always given by features-driven camera calibration).
 
-        For more information on this see: https://en.wikipedia.org/wiki/Distortion_(optics)
+        p_n are the first and second decentering distortion parameters as proposed in (Conrady, 2019) and are comform
+        to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations. This parameters share one degree of freedom
+        (j1) with each other; as a consequence, either both parameters are given or none. The use of these parameters
+        is discouraged since either current cameras do not need them or their potential accuracy gain is negligible
+        w.r.t. image processing.
+
+        For more information see: https://en.wikipedia.org/wiki/Distortion_(optics)
+        Note that unlike in that wikipedia entry we're here using the undistorted-to-distorted formulation.
     """
 
     def __init__(self, config):

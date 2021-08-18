@@ -14,9 +14,9 @@ from src.utility.CameraUtility import CameraUtility
 class LensDistortionUtility:
     """
     This utility class provides to functions to first set up the lens distortion used in this particular BlenderProc
-    run and then the application of said lens distortion values to a rendered image. Both functions have to be called
-    after each other to use the lens distortion correctly. The `set_lens_distortion` fct. has to be called before the
-    rendering takes place and the apply_lens_distortion has to be done to the rendered images.
+    run and then to apply the said lens distortion parameters to an image rendered by Blender. Both functions must be
+    called after each other to use the lens distortion feature correctly. The `set_lens_distortion` fct. has to be
+    called before the rendering takes place and the `apply_lens_distortion` has to be applied to the rendered images.
 
     For more information on lens distortion see: https://en.wikipedia.org/wiki/Distortion_(optics)
     """
@@ -24,21 +24,25 @@ class LensDistortionUtility:
     @staticmethod
     def set_lens_distortion(k1: float, k2: float, k3: float = 0.0, p1: float = 0.0, p2: float = 0.0):
         """
-        This function sets the lens distortion parameters. It used the resolution of the camera based on the given
-        lens distortion values. It also changes the Cx and Cy value of the K matrix of the camera to adapt to the
-        bigger image resolution.
+        This function applies the lens distortion parameters to obtain an distorted-to-undistorted mapping for all
+        natural pixels coordinates of the goal distorted image into the real pixel coordinates of the undistorted
+        Blender image. Since such a mapping usually yields void image areas, this function suggests a different
+        (usually higher) image resolution for the generated Blender image. Eventually, the function
+        `apply_lens_distortion` will make us of this image to fill in the goal distorted image with valid color
+        values by interpolation. Note that when adapting the internal image resolution demanded from Blender, the
+        camera main point (cx,cy) of the K intrinsic matrix is (internally and temporarily) shifted.
 
-        This function has to be used with the PostProcessing Module, else only the resolution is increased but the
-        image is not distorted.
+        This function has to be used together with the PostProcessing Module, else only the resolution is increased
+        but the image(s) will not be distorted.
 
         This functions stores the "_lens_distortion_is_used" key in the GlobalStorage, which contains the information
         on the mapping and the original image resolution.
 
-        :param k1: First radial distortion coefficient defined by the Brown-Conrady model
-        :param k2: Second radial distortion coefficient defined by the Brown-Conrady model
-        :param k3: Third radial distortion coefficient defined by the Brown-Conrady model
-        :param p1: First tangential distortion coefficient
-        :param p2: Second tangential distortion coefficient
+        :param k1: First radial distortion parameter as defined by the undistorted-to-distorted plumb bob lens distortion model
+        :param k2: Second radial distortion parameter as defined by the undistorted-to-distorted plumb bob lens distortion model
+        :param k3: Third radial distortion parameter as defined by the undistorted-to-distorted plumb bob lens distortion model (discouraged)
+        :param p1: First decentering distortion parameter as proposed in (Conrady, 2019) (discouraged)
+        :param p2: Second decentering distortion parameter as proposed in (Conrady, 2019) (discouraged)
         """
         if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
             raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
@@ -161,13 +165,13 @@ class LensDistortionUtility:
     @staticmethod
     def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
         """
-        This functions applies the lens distortion, which has be precalculated by set_lens_distortion(...).
+        This functions applies the lens distortion mapping that has be precalculated by `set_lens_distortion`.
 
-        Without calling this function the set_lens_distortion fct. only increases the image resolution and changes the
-        K matrix of the camera.
+        Without calling this function the `set_lens_distortion` fct. only increases the image resolution and
+        changes the K matrix of the camera.
 
-        :param image: a list of images or an image, which will be distorted
-        :return: a list of images or an image which have been distorted
+        :param image: a list of images or an image to be distorted
+        :return: a list of images or an image that have been distorted, now in the desired resolution
         """
         # if lens distortion was used apply it now
         if GlobalStorage.is_in_storage("_lens_distortion_is_used"):

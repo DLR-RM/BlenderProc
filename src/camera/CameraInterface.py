@@ -148,7 +148,36 @@ class CameraInterface(Module):
           - Distance between the camera pair.
           - float
         * - lens_distortion/k1
-          -
+          - k1 is the first radial distortion parameter (of 3rd degree in radial distance) as defined by
+            the undistorted-to-distorted plumb bob lens distortion model, which is conform to the current
+            DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+          - float
+        * - lens_distortion/k2
+          - k2 is the second radial distortion parameter (of 5th degree in radial distance) as defined by
+            the undistorted-to-distorted plumb bob lens distortion model, which is conform to the current
+            DLR CalLab/OpenCV/Bouguet/Kalibr implementations.
+          - float
+        * - lens_distortion/k3
+          - k3 is the third radial distortion parameter (of 7th degree in radial distance) as defined by
+            the undistorted-to-distorted plumb bob lens distortion model, which is conform to the current
+            DLR CalLab/OpenCV/Bouguet/Kalibr implementations. The use of this parameter is discouraged
+            unless the angular field of view is too high, rendering it necessary, and the parameter
+            allows for a distorted projection in the whole sensor size (which isn't always given by
+            features-driven camera calibration).
+          - float
+        * - lens_distortion/p1
+          - p1 is the first decentering distortion parameter as proposed in (Conrady, 2019) and is
+            comform to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations. This parameter
+            shares one degree of freedom (j1) with p2; as a consequence, either both parameters are
+            given or none. The use of these parameters is discouraged since either current cameras do
+            not need them or their potential accuracy gain is negligible w.r.t. image processing.
+          - float
+        * - lens_distortion/p2
+          - p2 is the second decentering distortion parameter as proposed in (Conrady, 2019) and is
+            comform to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations. This parameter
+            shares one degree of freedom (j1) with p1; as a consequence, either both parameters are
+            given or none. The use of these parameters is discouraged since either current cameras do
+            not need them or their potential accuracy gain is negligible w.r.t. image processing.
           - float
         * - depth_of_field/focal_object
           - This object will be used as focal point, ideally a empty plane_axes is used here, see BasicEmptyInitializer.
