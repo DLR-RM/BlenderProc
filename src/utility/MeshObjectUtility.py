@@ -464,16 +464,33 @@ class MeshObject(Entity):
 
         if check_no_objects_in_between:
             # Send a ray straight down and check if the first hit object is the query object
-            hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
-                                                                     Vector(position),
-                                                                     Vector(down_direction))
-            return hit and hit_object == self.blender_obj
+            hit, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(position, down_direction)
+            return hit and hit_object == self
         else:
             # Compute world-to-local matrix, so we can bring position and down vector into the local coordinate system
             world2local = Matrix(np.linalg.inv(self.get_local2world_mat()))
             # Send raycast on object (this will ignore all other objects, so we only need to check whether the ray hit)
             hit, _, _, _ = self.blender_obj.ray_cast(world2local @ Vector(position), world2local.to_3x3() @ Vector(down_direction))
             return hit
+
+    @staticmethod
+    def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int, "MeshObject", np.ndarray]:
+        """ Cast a ray onto all geometry from the scene, in world space.
+
+       :param origin: Origin of the ray, in world space.
+       :param direction: Direction of the ray, in world space.
+       :param max_distance: Maximum distance.
+       :return: Whether the ray successfully hit any geometry
+                The hit location of this ray cast, float array of 3 items in [-inf, inf]
+                The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
+                The face index, -1 when original data isn’t available, int in [-inf, inf]
+                If any object has been hit, the MeshObject otherwise None.
+                Some 4x4 matrix.
+       """
+        hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, Vector(origin), Vector(direction), distance=max_distance)
+        if hit_object is not None:
+            hit_object = MeshObject(hit_object)
+        return hit, np.array(location), np.array(normal), index, hit_object, np.array(matrix)
 
     def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
@@ -487,7 +504,7 @@ class MeshObject(Entity):
                  The face index, -1 when original data isn’t available, int in [-inf, inf]
         """
         result, location, normal, index = self.blender_obj.ray_cast(Vector(origin), Vector(direction), max_distance)
-        return (result, np.array(location), np.array(normal), index)
+        return result, np.array(location), np.array(normal), index
 
     def add_uv_mapping(self, projection: str, overwrite: bool = False):
         """ Adds a UV mapping to the object based on the given projection type.
