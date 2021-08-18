@@ -35,7 +35,7 @@ class ObjectLoader:
                     return loaded_objects
             else:
                 # save all selected objects
-                previously_selected_objects = set(bpy.context.selected_objects)
+                previously_selected_objects = bpy.context.selected_objects
                 if filepath.endswith('.obj'):
                     # load an .obj file:
                     bpy.ops.import_scene.obj(filepath=filepath, **kwargs)
@@ -45,11 +45,10 @@ class ObjectLoader:
                     # add a default material to ply file
                     mat = bpy.data.materials.new(name="ply_material")
                     mat.use_nodes = True
-                    loaded_objects = list(set(bpy.context.selected_objects) - previously_selected_objects)
+                    loaded_objects = [obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects]
                     for obj in loaded_objects:
                         obj.data.materials.append(mat)
 
-                # return all currently selected objects
-                return MeshObject.convert_to_meshes(list(set(bpy.context.selected_objects) - previously_selected_objects))
+                return MeshObject.convert_to_meshes([obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects])
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))
