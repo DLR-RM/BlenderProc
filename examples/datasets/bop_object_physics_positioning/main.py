@@ -43,28 +43,53 @@ sampled_bop_objs = BopLoader.load(bop_dataset_path=os.path.join(args.bop_parent_
                                   sample_objects=True,
                                   num_of_objs_to_sample=10)
 
-
+# set shading and physics properties and randomize PBR materials
 for j, obj in enumerate(sampled_bop_objs):
     obj.enable_rigidbody(True, friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
-    obj.set_shading_mode('auto')    
-
-room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
-
+    obj.set_shading_mode('auto')
+        
+    mat = obj.get_materials()[0]
+    # mat.set_principled_shader_value("Metallic", np.random.uniform(0, 0.5))
+    if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
+        grey_col = np.random.uniform([0.3,0.9])
+        
+        # shader_node_attr = mat.get_the_one_node_with_type("ShaderNodeAttribute")
+        # mat.remove_node(shader_node_attr)
+        
+                        
+        mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
+    
+    mat.set_principled_shader_value("Metallic", np.random.uniform(0.0, 1.0))
+    mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
+    mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
+        
+        
+room_planes = [MeshObject.create_primitive('PLANE'),
+               MeshObject.create_primitive('PLANE', location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
+               MeshObject.create_primitive('PLANE', location=[0, 2, 2], rotation=[1.570796, 0, 0]),
+               MeshObject.create_primitive('PLANE', location=[2, 0, 2], rotation=[0, -1.570796, 0]),
+               MeshObject.create_primitive('PLANE', location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
 
 for plane in room_planes:
-    plane.enable_rigidbody(False, collision_shape='BOX') 
+    plane.enable_rigidbody(False, collision_shape='BOX')
+    plane.set_scale([2, 2, 1])
 
 # sample light color and strenght from ceiling
-light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
+light_plane = MeshObject.create_primitive('PLANE', location=[0, 0, 10])
+light_plane.set_scale([3, 3, 1])
 light_plane.set_name('light_plane')
 light_plane_material = Material.create('light_material')
 light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6), 
                                    emission_color=np.random.uniform([0.5, 0.5, 0.5, 1.0], [1.0, 1.0, 1.0, 1.0]))    
 light_plane.replace_materials(light_plane_material)
+
+# sample point light on shell
+light_point = Light()
+light_point.set_energy(200)
+light_point.set_color(np.random.uniform([0.5,0.5,0.5],[1,1,1]))
+location = Shell.sample(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
+                        elevation_min = 5, elevation_max = 89, uniform_elevation = True)
+light_point.set_location(location)
 
 # sample CC Texture and assign to room planes
 cc_textures = CCMaterialLoader.load(args.cc_textures_path)
@@ -78,6 +103,7 @@ for obj in sampled_bop_objs:
     obj.set_location(np.random.uniform(min, max))
     obj.set_rotation_euler(UniformSO3.sample())
     
+bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(sampled_bop_objs)
     
 # Physics Positioning
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
@@ -85,8 +111,6 @@ PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
                                                 check_object_interval=1,
                                                 substeps_per_frame = 20,
                                                 solver_iters=25)
-
-bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(sampled_bop_objs)
 
 tries, poses = 0, 0
 while poses < 10:
@@ -119,7 +143,7 @@ RendererUtility.set_samples(50)
 # render the whole pipeline
 data = RendererUtility.render()
 
-# Write data in bop format
+# # Write data in bop format
 BopWriterUtility.write(args.output_dir, 
                         depths = PostProcessingUtility.dist2depth(data["distance"]), 
                         colors = data["colors"], 

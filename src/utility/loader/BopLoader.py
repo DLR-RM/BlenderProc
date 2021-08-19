@@ -393,6 +393,6 @@ class BopLoader:
         attr_node = nodes.new(type='ShaderNodeAttribute')
         attr_node.attribute_name = 'Col'
 
-        principled_node = nodes.get("Principled BSDF")
+        principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
 
         links.new(attr_node.outputs['Color'], principled_node.inputs['Base Color'])
