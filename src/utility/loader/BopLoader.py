@@ -384,18 +384,3 @@ class BopLoader:
             cur_obj.data.materials.append(mat)
 
 
-    @staticmethod
-    def _link_col_node(mat: bpy.types.Material):
-        """ Links a color attribute node to a Principled BSDF node.
-
-        :param mat: The material to use.
-        """
-        nodes = mat.node_tree.nodes
-        links = mat.node_tree.links
-
-        attr_node = nodes.new(type='ShaderNodeAttribute')
-        attr_node.attribute_name = 'Col'
-
-        principled_node = nodes.get("Principled BSDF")
-
-        links.new(attr_node.outputs['Color'], principled_node.inputs['Base Color'])
