@@ -56,7 +56,6 @@ class PhysicsSimulation:
                 # Fix pose of object to the one it had at the end of the simulation
                 obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                 obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
-
         for obj in objects_with_physics:
             # Disable the rigidbody element of the object
             obj.disable_rigidbody()
@@ -177,7 +176,9 @@ class PhysicsSimulation:
         :return: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.
         """
         objects_poses = {}
-        for obj in get_all_blender_mesh_objects():
+        objects_with_physics = [obj for obj in get_all_blender_mesh_objects() if obj.rigid_body is not None]
+        
+        for obj in objects_with_physics:
             if obj.rigid_body.type == 'ACTIVE':
                 location = bpy.context.scene.objects[obj.name].matrix_world.translation.copy()
                 rotation = mathutils.Vector(bpy.context.scene.objects[obj.name].matrix_world.to_euler())
