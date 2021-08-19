@@ -15,6 +15,7 @@ from src.utility.CameraUtility import CameraUtility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
+from src.utility.MaterialUtility import MaterialUtility
 
 
 
@@ -312,14 +313,16 @@ class BopLoader:
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path
+        cur_obj["is_bop_object"] = True
+        cur_obj["bop_dataset_name"] = bop_dataset_name
+        
         if not has_external_texture:
             mat = BopLoader._load_materials(cur_obj, bop_dataset_name)
-            BopLoader._link_col_node(mat)
+            mat = MaterialUtility.Material(mat)
+            mat.map_vertex_color()
         elif texture_file_path != "":
             # ycbv objects contain normal image textures, which should be used instead of the vertex colors
             BopLoader._load_texture(cur_obj, texture_file_path, bop_dataset_name)
-        cur_obj["is_bop_object"] = True
-        cur_obj["bop_dataset_name"] = bop_dataset_name
         return MeshObject(cur_obj)
 
     @staticmethod
