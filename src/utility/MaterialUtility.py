@@ -227,6 +227,8 @@ class Material(Struct):
         elif isinstance(value, bpy.types.NodeSocket):
             self.link(value, principled_bsdf.inputs[input_name])
         else:
+            if input_name == 'Base Color' and principled_bsdf.inputs[input_name].links:
+                self.links.remove(principled_bsdf.inputs['Base Color'].links[0])
             principled_bsdf.inputs[input_name].default_value = value
             
     def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.NodeSocket]:
