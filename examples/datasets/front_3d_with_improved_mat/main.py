@@ -54,13 +54,13 @@ floors = Filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
 for floor in floors:
     # For each material of the object
     for i in range(len(floor.get_materials())):
-        # In 50% of all cases
+        # In 95% of all cases
         if np.random.uniform(0, 1) <= 0.95:
             # Replace the material with a random one
             floor.set_material(i, random.choice(cc_materials))
 
 
-baseboards_and_doors = Filter.by_attr(loaded_objects, "name", "Baseboard.*", regex=True) + Filter.by_attr(loaded_objects, "name", "Door.*", regex=True)
+baseboards_and_doors = Filter.by_attr(loaded_objects, "name", "Baseboard.*|Door.*", regex=True)
 wood_floor_materials = Filter.by_cp(cc_materials, "asset_name", "WoodFloor.*", regex=True)
 for obj in baseboards_and_doors:
     # For each material of the object
