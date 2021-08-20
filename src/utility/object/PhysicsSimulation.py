@@ -55,6 +55,7 @@ class PhysicsSimulation:
                     # Fix pose of object to the one it had at the end of the simulation
                     obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                     obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
+        MeshObject.disable_all_rigid_bodies()
 
     @staticmethod
     def simulate(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0, check_object_interval: float = 2.0, object_stopped_location_threshold: float = 0.01, object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10, solver_iters: int = 10) -> dict:
