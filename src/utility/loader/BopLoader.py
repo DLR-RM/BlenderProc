@@ -15,7 +15,7 @@ from src.utility.CameraUtility import CameraUtility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
-from src.utility.MaterialUtility import MaterialUtility
+from src.utility.MaterialUtility import Material
 
 
 
@@ -318,7 +318,7 @@ class BopLoader:
         
         if not has_external_texture:
             mat = BopLoader._load_materials(cur_obj, bop_dataset_name)
-            mat = MaterialUtility.Material(mat)
+            mat = Material(mat)
             mat.map_vertex_color()
         elif texture_file_path != "":
             # ycbv objects contain normal image textures, which should be used instead of the vertex colors
