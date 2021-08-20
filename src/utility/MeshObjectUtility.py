@@ -8,7 +8,9 @@ import numpy as np
 from mathutils import Vector, Matrix
 
 from src.utility.Utility import Utility
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.MaterialUtility import Material
+
 
 import bmesh
 import mathutils
@@ -76,6 +78,15 @@ class MeshObject(Entity):
         """
         return [MeshObject(obj) for obj in blender_objects]
 
+    @staticmethod
+    def get_all_mesh_objects() -> List["MeshObject"]:
+        """
+        Returns all mesh objects in scene
+        
+        :return: List of all MeshObjects
+        """
+        return MeshObject.convert_to_meshes(get_all_blender_mesh_objects())
+    
     def get_materials(self) -> List[Material]:
         """ Returns the materials used by the mesh.
 
@@ -306,9 +317,7 @@ class MeshObject(Entity):
     @staticmethod
     def disable_all_rigid_bodies():
         """ Disables the rigidbody element of all objects """
-        from src.utility.ProviderUtility import get_all_mesh_objects
-        
-        for obj in get_all_mesh_objects():
+        for obj in MeshObject.get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 obj.disable_rigidbody()
             
