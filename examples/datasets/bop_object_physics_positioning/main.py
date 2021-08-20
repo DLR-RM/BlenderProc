@@ -44,22 +44,22 @@ sampled_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_paren
                                   num_of_objs_to_sample = 10)
 
 # # load distractor bop objects
-# distractor_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
-#                                      model_type = 'cad',
-#                                      temp_dir = Utility.get_temporary_directory(),
-#                                      sys_paths = args.bop_toolkit_path,
-#                                      mm2m = True,
-#                                      sample_objects = True,
-#                                      num_of_objs_to_sample = 3)
-# distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
-#                                       temp_dir = Utility.get_temporary_directory(),
-#                                       sys_paths = args.bop_toolkit_path,
-#                                       mm2m = True,
-#                                       sample_objects = True,
-#                                       num_of_objs_to_sample = 3)
+distractor_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
+                                     model_type = 'cad',
+                                     temp_dir = Utility.get_temporary_directory(),
+                                     sys_paths = args.bop_toolkit_path,
+                                     mm2m = True,
+                                     sample_objects = True,
+                                     num_of_objs_to_sample = 3)
+distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
+                                      temp_dir = Utility.get_temporary_directory(),
+                                      sys_paths = args.bop_toolkit_path,
+                                      mm2m = True,
+                                      sample_objects = True,
+                                      num_of_objs_to_sample = 3)
 
 # set shading and physics properties and randomize PBR materials
-for j, obj in enumerate(sampled_bop_objs):# + distractor_bop_objs):
+for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
     obj.enable_rigidbody(True, friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
     obj.set_shading_mode('auto')
         
@@ -67,8 +67,8 @@ for j, obj in enumerate(sampled_bop_objs):# + distractor_bop_objs):
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
         grey_col = np.random.uniform(0.3, 0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
-    # mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
-    # mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
+    mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
+    mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
         
 # create room
 room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
@@ -102,7 +102,7 @@ for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
 # Sample objects and initialize poses
-for obj in sampled_bop_objs:# + distractor_bop_objs:
+for obj in sampled_bop_objs + distractor_bop_objs:
     min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
     max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
     obj.set_location(np.random.uniform(min, max))
