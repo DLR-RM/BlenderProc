@@ -51,7 +51,7 @@ replace_ratio = 1.0
 
 def relative_pose_sampler(obj):
     # Sample random rotation and apply it to the objects pose
-    obj.blender_obj.rotation_euler.rotate(Euler((0, 0, np.uniform(0.0, 6.283185307))))
+    obj.blender_obj.rotation_euler.rotate(Euler((0, 0, np.random.uniform(0.0, 6.283185307))))
 
 
 ObjectReplacer.replace_multiple(
@@ -62,6 +62,9 @@ ObjectReplacer.replace_multiple(
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler
 )
+
+# some of the objects won't be valid anymore
+objs = [obj for obj in objs if obj.is_valid()]
 
 # makes Suncg objects emit light
 SuncgLighting.light()
