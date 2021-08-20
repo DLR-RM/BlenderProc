@@ -66,8 +66,13 @@ class MeshObject(Entity):
             bpy.ops.mesh.primitive_monkey_add(**kwargs)
         else:
             raise Exception("No such shape: " + shape)
-
-        return MeshObject(bpy.context.object)
+        
+        primitive = MeshObject(bpy.context.object)
+        # Blender bug: Scale is ignored by default. #1060
+        if 'scale' in kwargs:
+            primitive.set_scale(kwargs['scale'])
+            
+        return primitive
 
     @staticmethod
     def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
@@ -267,12 +272,15 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, temp_dir, cache_dir="resources/decomposition_cache"):
+    def build_convex_decomposition_collision_shape(self, temp_dir: str = None, cache_dir: str = "resources/decomposition_cache"):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
         :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
         :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
         """
+        if temp_dir is None:
+            temp_dir = Utility.get_temporary_directory()
+
         # Decompose the object
         parts = convex_decomposition(self.blender_obj, temp_dir, cache_dir=Utility.resolve_path(cache_dir))
         parts = [MeshObject(p) for p in parts]
@@ -449,17 +457,48 @@ class MeshObject(Entity):
 
         return poi
 
-    def position_is_above_object(self, position: Union[Vector, np.ndarray]):
-        """ Make sure the given position is straight above the given object with no obstacles in between.
+    def position_is_above_object(self, position: Union[Vector, np.ndarray], down_direction: Union[Vector, np.ndarray] = None, check_no_objects_in_between=True):
+        """ Make sure the given position is straight above the given object.
+
+        If check_no_objects_in_between is True, this also checks that there are no other objects in between.
 
         :param position: The position to check.
+        :param down_direction: A vector specifying the direction straight down. If None is given, a vector into -Z direction is used.
+        :param check_no_objects_in_between: If True, it is also checked that no other objects are in between position and object.
         :return: True, if a ray sent into negative z-direction starting from the position hits the object first.
         """
-        # Send a ray straight down and check if the first hit object is the query object
-        hit, _, _, _, hit_object, _ = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
-                                                                 Vector(position),
-                                                                 Vector([0, 0, -1]))
-        return hit and hit_object == self.blender_obj
+        if down_direction is None:
+            down_direction = [0, 0, -1]
+
+        if check_no_objects_in_between:
+            # Send a ray straight down and check if the first hit object is the query object
+            hit, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(position, down_direction)
+            return hit and hit_object == self
+        else:
+            # Compute world-to-local matrix, so we can bring position and down vector into the local coordinate system
+            world2local = Matrix(np.linalg.inv(self.get_local2world_mat()))
+            # Send raycast on object (this will ignore all other objects, so we only need to check whether the ray hit)
+            hit, _, _, _ = self.blender_obj.ray_cast(world2local @ Vector(position), world2local.to_3x3() @ Vector(down_direction))
+            return hit
+
+    @staticmethod
+    def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int, "MeshObject", np.ndarray]:
+        """ Cast a ray onto all geometry from the scene, in world space.
+
+       :param origin: Origin of the ray, in world space.
+       :param direction: Direction of the ray, in world space.
+       :param max_distance: Maximum distance.
+       :return: Whether the ray successfully hit any geometry
+                The hit location of this ray cast, float array of 3 items in [-inf, inf]
+                The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
+                The face index, -1 when original data isn’t available, int in [-inf, inf]
+                If any object has been hit, the MeshObject otherwise None.
+                Some 4x4 matrix.
+       """
+        hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, Vector(origin), Vector(direction), distance=max_distance)
+        if hit_object is not None:
+            hit_object = MeshObject(hit_object)
+        return hit, np.array(location), np.array(normal), index, hit_object, np.array(matrix)
 
     def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
@@ -473,4 +512,65 @@ class MeshObject(Entity):
                  The face index, -1 when original data isn’t available, int in [-inf, inf]
         """
         result, location, normal, index = self.blender_obj.ray_cast(Vector(origin), Vector(direction), max_distance)
-        return (result, np.array(location), np.array(normal), index)
+        return result, np.array(location), np.array(normal), index
+
+    def add_uv_mapping(self, projection: str, overwrite: bool = False):
+        """ Adds a UV mapping to the object based on the given projection type.
+
+        :param projection: The kind of projection to use. Available: ["cube, "cylinder", "smart", "sphere"].
+        :param overwrite: If True, the uv mapping will be changed, even if the object already has an uv mapping.
+        """
+        if not self.has_uv_mapping() or overwrite:
+            self.edit_mode()
+            if projection == "cube":
+                bpy.ops.uv.cube_project()
+            elif projection == "cylinder":
+                bpy.ops.uv.cylinder_project()
+            elif projection == "smart":
+                bpy.ops.uv.smart_project()
+            elif projection == "sphere":
+                bpy.ops.uv.sphere_project()
+            else:
+                raise Exception("Unknown projection: '{}'. Please use 'cube', 'cylinder', 'smart' or 'sphere'." .format(projection))
+            self.object_mode()
+
+    def has_uv_mapping(self):
+        """ Returns whether the mesh object has a valid uv mapping. """
+        if len(self.blender_obj.data.uv_layers) > 1:
+            raise Exception("This only support objects which only have one uv layer.")
+        for layer in self.blender_obj.data.uv_layers:
+            max_val = np.max([list(uv_coords.uv) for uv_coords in layer.data])
+            return max_val > 1e-7
+        return False
+
+    def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1, min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2):
+        """ Adds a displace modifier with a texture to an object.
+
+        If the mesh has less than min_vertices_for_subdiv vertices, also a subdivision modifier is added.
+
+        :param texture: The texture that will be used to displace the vertices.
+        :param mid_level: Texture value that gives no displacement. Parameter of displace modifier.
+        :param strength: Amount to displace geometry. Parameter of displace modifier.
+        :param min_vertices_for_subdiv: Checks if a subdivision is necessary. If the vertices of a object are less than
+                                        'min_vertices_for_subdiv' a Subdivision modifier will be add to the object.
+        :param subdiv_level:  Numbers of Subdivisions to perform when rendering. Parameter of Subdivision modifier.
+        """
+        # Add a subdivision modifier, if the mesh has too less vertices.
+        if not len(self.get_mesh().vertices) > min_vertices_for_subdiv:
+            self.add_modifier("SUBSURF", render_levels=subdiv_level)
+
+        # Add the displacement modifier
+        self.add_modifier("DISPLACE", texture=texture, mid_level=mid_level, strength=strength)
+
+    def add_modifier(self, name: str, **kwargs):
+        """ Adds a new modifier to the object.
+
+        :param name: The name/type of the modifier to add.
+        :param kwargs: Additional attributes that should be set to the modifier.
+        """
+        # Create the new modifier
+        bpy.ops.object.modifier_add({"object": self.blender_obj}, type=name)
+        # Set the attributes
+        modifier = self.blender_obj.modifiers[-1]
+        for key, value in kwargs.items():
+            setattr(modifier, key, value)

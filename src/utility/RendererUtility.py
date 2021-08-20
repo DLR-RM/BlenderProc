@@ -421,15 +421,18 @@ class RendererUtility:
         })
 
     @staticmethod
-    def enable_diffuse_color_output(output_dir: str, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
+    def enable_diffuse_color_output(output_dir: str = None, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
         """ Enables writing diffuse color (albedo) images.
 
         Diffuse color images will be written in the form of .png files during the next rendering.
 
-        :param output_dir: The directory to write files to.
+        :param output_dir: The directory to write files to, if this is None the temporary directory is used.
         :param file_prefix: The prefix to use for writing the files.
         :param output_key: The key to use for registering the diffuse color output.
         """
+        if output_dir is None:
+            output_dir = Utility.get_temporary_directory()
+
         bpy.context.scene.render.use_compositing = True
         bpy.context.scene.use_nodes = True
         tree = bpy.context.scene.node_tree
@@ -469,7 +472,7 @@ class RendererUtility:
 
     @staticmethod
     def render(output_dir: Union[str, None] = None, file_prefix: str = "rgb_", output_key: str = "colors",
-               load_keys: Set = None, return_data: bool = True) -> Dict[str, List[np.ndarray]]:
+               load_keys: Set = None, return_data: bool = True, keys_with_alpha_channel: Set = None) -> Dict[str, List[np.ndarray]]:
         """ Render all frames.
 
         This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -485,7 +488,8 @@ class RendererUtility:
         if output_dir is None:
             output_dir = Utility.get_temporary_directory()
         if load_keys is None:
-            load_keys = {'colors', 'distance', 'normals'}
+            load_keys = {'colors', 'distance', 'normals', 'diffuse'}
+            keys_with_alpha_channel = {'colors'} if bpy.context.scene.render.film_transparent else None
 
         if output_key is not None:
             Utility.add_output_entry({
@@ -510,7 +514,7 @@ class RendererUtility:
             # Revert changes
             bpy.context.scene.frame_end += 1
         
-        return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
+        return WriterUtility.load_registered_outputs(load_keys, keys_with_alpha_channel) if return_data else {}
         
     @staticmethod
     def set_output_format(file_format: str, color_depth: int = 8, enable_transparency: bool = False,

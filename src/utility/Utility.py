@@ -14,8 +14,8 @@ import warnings
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
-from mathutils import Matrix, Vector
 import numpy as np
+import json
 
 class Utility:
     working_dir = ""
@@ -174,20 +174,6 @@ class Utility:
         :return: Hex string.
         """
         return '#%02x%02x%02x' % tuple(rgb)
-
-    @staticmethod
-    def get_idx(array,item):
-        """
-        Returns index of an element if it exists in the list
-
-        :param array: a list with values for which == operator works.
-        :param item: item to find the index of
-        :return: index of item, -1 otherwise
-        """
-        try:
-            return array.index(item)
-        except ValueError:
-            return -1
 
     @staticmethod
     def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
@@ -557,6 +543,14 @@ class Utility:
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
 
+    @staticmethod
+    def num_frames() -> int:
+        """ Returns the currently total number of registered frames.
+
+        :return: The number of frames.
+        """
+        return bpy.context.scene.frame_end
+
 
 # KeyFrameState should be thread-specific
 class KeyFrameState(threading.local):
@@ -595,3 +589,14 @@ class KeyFrame:
         :return: True, if there is at least one surrounding KeyFrame context manager
         """
         return KeyFrame.state.depth > 0
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """ A json encoder that is also capable of serializing numpy arrays """
+
+    def default(self, obj):
+        # If its a numpy array
+        if isinstance(obj, np.ndarray):
+            # Convert it to a list
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)

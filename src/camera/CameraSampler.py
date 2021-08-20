@@ -306,9 +306,8 @@ class CameraSampler(CameraInterface):
             return False
 
         if self._above_objects:
-            for obj in self._above_objects:
-                if obj.position_is_above_object(cam2world_matrix[:3,3]):
-                    return True
-            return False
+            _, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(cam2world_matrix[:3, 3], [0, 0, -1])
+            if hit_object not in self._above_objects:
+                return False
 
         return True

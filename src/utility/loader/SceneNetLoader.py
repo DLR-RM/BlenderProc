@@ -14,7 +14,7 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 class SceneNetLoader:
 
     @staticmethod
-    def load(file_path: str, texture_folder: str, label_mapping: LabelIdMapping, unknown_texture_folder: str = "unknown") -> List[MeshObject]:
+    def load(file_path: str, texture_folder: str, label_mapping: LabelIdMapping, unknown_texture_folder: str = None) -> List[MeshObject]:
         """ Loads all SceneNet objects at the given "file_path".
 
         The textures for each object are sampled based on the name of the object, if the name is not represented in the
@@ -31,6 +31,9 @@ class SceneNetLoader:
                                        exist if the dataset was just downloaded, it has to be created manually.
         :return: The list of loaded mesh objects.
         """
+        if unknown_texture_folder is None:
+            unknown_texture_folder = os.path.join(texture_folder, "unknown")
+
         # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
         loaded_objects = ObjectLoader.load(filepath=file_path, use_image_search=False)
         loaded_objects.sort(key=lambda ele: ele.get_name())

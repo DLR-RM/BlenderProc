@@ -15,7 +15,7 @@ from src.utility.loader.ObjectLoader import ObjectLoader
 class ShapeNetLoader:
 
     @staticmethod
-    def load(data_path: str, used_synset_id: str, used_source_id: str = "", move_object_origin: bool = True) -> List[MeshObject]:
+    def load(data_path: str, used_synset_id: str, used_source_id: str = "", move_object_origin: bool = True) -> MeshObject:
         """ This loads an object from ShapeNet based on the given synset_id, which specifies the category of objects to use.
 
         From these objects one is randomly sampled and loaded.
@@ -27,35 +27,37 @@ class ShapeNetLoader:
         :param used_synset_id: The synset id for example: '02691156', check the data_path folder for more ids.
         :param used_source_id: Object identifier of the a particular ShapeNet category, see inside any ShapeNet category for identifiers
         :param move_object_origin: Moves the object center to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane, this does not change the `.location` of the object. Default: True
-        :return: The list of loaded mesh objects.
+        :return: The loaded mesh object.
         """
         data_path = Utility.resolve_path(data_path)
         taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
 
         files_with_fitting_synset = ShapeNetLoader._get_files_with_synset(used_synset_id, used_source_id, taxonomy_file_path, data_path)
         selected_obj = random.choice(files_with_fitting_synset)
-        loaded_obj = ObjectLoader.load(selected_obj)
+        loaded_objects = ObjectLoader.load(selected_obj)
 
-        for obj in loaded_obj:
-            obj.set_cp("used_synset_id", used_synset_id)
-            obj.set_cp("used_source_id", pathlib.PurePath(selected_obj).parts[-3])
+        # In shapenet every .obj file only contains one object, make sure that is the case
+        if len(loaded_objects) != 1:
+            raise Exception("The ShapeNetLoader expects every .obj file to contain exactly one object, however the file " + selected_obj + " contained " + str(len(loaded_obj)) + " objects.")
+        obj = loaded_objects[0]
 
-        ShapeNetLoader._correct_materials(loaded_obj)
+        obj.set_cp("used_synset_id", used_synset_id)
+        obj.set_cp("used_source_id", pathlib.PurePath(selected_obj).parts[-3])
+
+        ShapeNetLoader._correct_materials(obj)
 
         # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
         # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
-        for obj in loaded_obj:
-            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
+        obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
 
         # check if the move_to_world_origin flag is set
         if move_object_origin:
             # move the origin of the object to the world origin and on top of the X-Y plane
             # makes it easier to place them later on, this does not change the `.location`
-            for obj in loaded_obj:
-                obj.move_origin_to_bottom_mean_point()
+            obj.move_origin_to_bottom_mean_point()
         bpy.ops.object.select_all(action='DESELECT')
 
-        return loaded_obj
+        return obj
 
     @staticmethod
     def _get_files_with_synset(used_synset_id: str, used_source_id: str, path_to_taxonomy_file: str, data_path: str) -> list:
@@ -75,13 +77,13 @@ class ShapeNetLoader:
                 id_path = os.path.join(data_path, parent_synset_id)
 
                 if not used_source_id:
-                    files.extend(glob.glob(os.path.join(id_path, "*", "models", "*.obj")))
+                    files.extend(glob.glob(os.path.join(id_path, "*", "models", "model_normalized.obj")))
                 else:
                     if not os.path.exists(os.path.join(id_path, used_source_id)):
                         raise Exception("The used_source_id {} is not correct".format(used_source_id))
 
-                        # Using both the used_synset_id and used_source_id
-                    files.extend(glob.glob(os.path.join(id_path, used_source_id, "models", "*.obj")))
+                    # Using both the used_synset_id and used_source_id
+                    files.append(os.path.join(id_path, used_source_id, "models", "model_normalized.obj"))
 
             # Sort files to make random choice deterministic for the case when used_source_id is not specified
             files.sort()
@@ -112,26 +114,25 @@ class ShapeNetLoader:
         raise Exception("The used_synset_id {} does not exists in the taxonomy file".format(synset_id))
 
     @staticmethod
-    def _correct_materials(objects: List[MeshObject]):
+    def _correct_materials(obj: MeshObject):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
-        :param objects: objects where the material maybe wrong
+        :param obj: object where the material maybe wrong
         """
-        for obj in objects:
-            for material in obj.get_materials():
-                texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
-                if texture_nodes and len(texture_nodes) > 1:
-                    principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
-                    # find the image texture node which is connect to alpha
-                    node_connected_to_the_alpha = None
-                    for node_links in principled_bsdf.inputs["Alpha"].links:
-                        if "ShaderNodeTexImage" in node_links.from_node.bl_idname:
-                            node_connected_to_the_alpha = node_links.from_node
-                    # if a node was found which is connected to the alpha node, add an invert between the two
-                    if node_connected_to_the_alpha is not None:
-                        invert_node = material.new_node("ShaderNodeInvert")
-                        invert_node.inputs["Fac"].default_value = 1.0
-                        material.insert_node_instead_existing_link(node_connected_to_the_alpha.outputs["Color"],
-                                                                  invert_node.inputs["Color"],
-                                                                  invert_node.outputs["Color"],
-                                                                  principled_bsdf.inputs["Alpha"])
+        for material in obj.get_materials():
+            texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
+            if texture_nodes and len(texture_nodes) > 1:
+                principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
+                # find the image texture node which is connect to alpha
+                node_connected_to_the_alpha = None
+                for node_links in principled_bsdf.inputs["Alpha"].links:
+                    if "ShaderNodeTexImage" in node_links.from_node.bl_idname:
+                        node_connected_to_the_alpha = node_links.from_node
+                # if a node was found which is connected to the alpha node, add an invert between the two
+                if node_connected_to_the_alpha is not None:
+                    invert_node = material.new_node("ShaderNodeInvert")
+                    invert_node.inputs["Fac"].default_value = 1.0
+                    material.insert_node_instead_existing_link(node_connected_to_the_alpha.outputs["Color"],
+                                                              invert_node.inputs["Color"],
+                                                              invert_node.outputs["Color"],
+                                                              principled_bsdf.inputs["Alpha"])

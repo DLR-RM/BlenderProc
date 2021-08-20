@@ -3,10 +3,7 @@ SetupUtility.setup([])
 
 import argparse
 import os
-
-import bpy
 import numpy as np
-from mathutils import Matrix, Euler
 
 from src.utility.Initializer import Initializer
 from src.utility.LabelIdMapping import LabelIdMapping
@@ -37,17 +34,15 @@ mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_fr
 mapping = LabelIdMapping.from_csv(mapping_file)
 
 # set the light bounces
-RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, ao_bounces_render=200, max_bounces=200,
-                                  transmission_bounces=200, transparent_max_bounces=200, volume_bounces=0)
+RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,
+                                  transmission_bounces=200, transparent_max_bounces=200)
 
 # load the front 3D objects
 loaded_objects = Front3DLoader.load(
     json_path=args.front,
     future_model_path=args.future_folder,
     front_3D_texture_path=args.front_3D_texture_path,
-    label_mapping=mapping,
-    ceiling_light_strength=0.8,
-    lamp_light_strength=0.8
+    label_mapping=mapping
 )
 
 # Init sampler for sampling locations inside the loaded front3D house
@@ -76,8 +71,8 @@ while tries < 10000 and poses < 10:
     height = np.random.uniform(1.4, 1.8)
     location = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
-    rotation = np.random.uniform([1.2217, 0, 0], [1.338, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, Euler(rotation).to_matrix())
+    rotation = np.random.uniform([1.2217, 0, 0], [1.338, 0, np.pi * 2])
+    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2.5 and 3.5
     # meters and make sure that no background is visible, finally make sure the view is interesting enough
@@ -87,12 +82,14 @@ while tries < 10000 and poses < 10:
         poses += 1
     tries += 1
 
+# Also render normals
+RendererUtility.enable_normals_output()
 # set the sample amount to 350
 RendererUtility.set_samples(350)
 
 # render the whole pipeline
 data = RendererUtility.render()
-data.update(SegMapRendererUtility.render(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class"))
+data.update(SegMapRendererUtility.render(map_by="class"))
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

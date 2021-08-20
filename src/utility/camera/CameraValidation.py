@@ -119,7 +119,7 @@ class CameraValidation:
         return True
 
     @staticmethod
-    def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_rays: int) -> [MeshObject]:
+    def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_rays: int = 10) -> [MeshObject]:
         """ Returns a set of objects visible from the given camera pose.
 
         Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
