@@ -62,7 +62,7 @@ ceilings = Filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
 SurfaceLighting.run(ceilings, emission_strength=2)
 
 # load the ShapeNet object into the scene
-shapenet_obj = ShapeNetLoader.load(args.shapenet_path, used_synset_id="02801938")[0]
+shapenet_obj = ShapeNetLoader.load(args.shapenet_path, used_synset_id="02801938")
 
 # Collect all beds
 beds = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
