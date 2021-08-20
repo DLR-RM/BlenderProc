@@ -1,4 +1,3 @@
-import os
 from typing import List, Union, Tuple
 
 import bpy
@@ -9,8 +8,9 @@ import numpy as np
 from mathutils import Vector, Matrix
 
 from src.utility.Utility import Utility
-
+from src.utility.BlenderUtility import get_all_blender_mesh_objects
 from src.utility.MaterialUtility import Material
+
 
 import bmesh
 import mathutils
@@ -83,6 +83,15 @@ class MeshObject(Entity):
         """
         return [MeshObject(obj) for obj in blender_objects]
 
+    @staticmethod
+    def get_all_mesh_objects() -> List["MeshObject"]:
+        """
+        Returns all mesh objects in scene
+        
+        :return: List of all MeshObjects
+        """
+        return MeshObject.convert_to_meshes(get_all_blender_mesh_objects())
+    
     def get_materials(self) -> List[Material]:
         """ Returns the materials used by the mesh.
 
@@ -313,10 +322,27 @@ class MeshObject(Entity):
         """
         return MeshObject(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
+    @staticmethod
+    def disable_all_rigid_bodies():
+        """ Disables the rigidbody element of all objects """
+        for obj in MeshObject.get_all_mesh_objects():
+            if obj.has_rigidbody_enabled():
+                obj.disable_rigidbody()
+            
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
-        bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
-
+        if self.has_rigidbody_enabled():
+            bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
+        else:
+            raise RuntimeError("MeshObject {} has no rigid_body component enabled".format(self.get_name()))
+            
+    def has_rigidbody_enabled(self) -> bool:
+        """ Checks whether object has rigidbody element enabled
+        
+        :return: True if object has rigidbody element enabled
+        """
+        return self.get_rigidbody() is not None
+        
     def get_rigidbody(self) -> bpy.types.RigidBodyObject:
         """ Returns the rigid body component
 

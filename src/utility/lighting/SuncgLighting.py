@@ -1,5 +1,4 @@
 from src.utility.Utility import Utility
-from src.utility.ProviderUtility import get_all_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.MaterialUtility import Material
 
@@ -120,7 +119,7 @@ class SuncgLighting:
         collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
         
         # Make some objects emit lights
-        for obj in get_all_mesh_objects():
+        for obj in MeshObject.get_all_mesh_objects():
             if obj.has_cp("modelId"):
                 obj_id = obj.get_cp("modelId")
 
