@@ -106,12 +106,12 @@ class AMASSLoaderModule(LoaderInterface):
         """
         loaded_obj = AMASSLoader.load(
             data_path=self._data_path,
-            used_sub_dataset_id=self._used_sub_dataset_id,
+            sub_dataset_id=self._used_sub_dataset_id,
             temp_dir=self._temp_dir,
-            used_body_model_gender=self._used_body_model_gender,
-            used_subject_id=self._used_subject_id,
-            used_sequence_id=self._used_sequence_id,
-            used_frame_id=self._used_frame_id,
+            body_model_gender=self._used_body_model_gender,
+            subject_id=self._used_subject_id,
+            sequence_id=self._used_sequence_id,
+            frame_id=self._used_frame_id,
             num_betas=self._num_betas,
             num_dmpls=self._num_dmpls
         )
