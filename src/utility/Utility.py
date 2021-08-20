@@ -14,8 +14,8 @@ import warnings
 
 from src.main.GlobalStorage import GlobalStorage
 from src.utility.Config import Config
-from mathutils import Matrix, Vector
 import numpy as np
+import json
 
 class Utility:
     working_dir = ""
@@ -543,6 +543,14 @@ class Utility:
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
 
+    @staticmethod
+    def num_frames() -> int:
+        """ Returns the currently total number of registered frames.
+
+        :return: The number of frames.
+        """
+        return bpy.context.scene.frame_end
+
 
 # KeyFrameState should be thread-specific
 class KeyFrameState(threading.local):
@@ -581,3 +589,14 @@ class KeyFrame:
         :return: True, if there is at least one surrounding KeyFrame context manager
         """
         return KeyFrame.state.depth > 0
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """ A json encoder that is also capable of serializing numpy arrays """
+
+    def default(self, obj):
+        # If its a numpy array
+        if isinstance(obj, np.ndarray):
+            # Convert it to a list
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
