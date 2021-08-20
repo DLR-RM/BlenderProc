@@ -61,7 +61,7 @@ while tries < 10000 and poses < 15:
 
 # Use vertex color of mesh as texture for all materials
 for mat in room.get_materials():
-    mat.map_vertex_color("Col")
+    mat.map_vertex_color("Col", active_shading=False)
 
 # Activate normal rendering
 RendererUtility.enable_normals_output()
