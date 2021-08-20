@@ -62,13 +62,27 @@ while tries < 10000 and poses < 5:
 
 # improve the materials, first use all materials and only filter the relevant materials out
 all_materials = Material.collect_all()
-all_improved_mats = Filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
+all_wood_materials = Filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
 
 # now change the used values
-for material in all_improved_mats:
+for material in all_wood_materials:
     material.set_principled_shader_value("Roughness", np.random.uniform(0.05, 0.5))
     material.set_principled_shader_value("Specular", np.random.uniform(0.5, 1.0))
     material.set_displacement_from_principled_shader_value("Base Color", np.random.uniform(0.001, 0.15))
+
+all_stone_materials = Filter.by_attr(all_materials, "name", "tile.*|brick.*|stone.*", regex=True)
+
+# now change the used values
+for material in all_stone_materials:
+    material.set_principled_shader_value("Roughness", np.random.uniform(0.0, 0.2))
+    material.set_principled_shader_value("Specular", np.random.uniform(0.9, 1.0))
+
+all_floor_materials = Filter.by_attr(all_materials, "name", "carpet.*|textile.*", regex=True)
+
+# now change the used values
+for material in all_floor_materials:
+    material.set_principled_shader_value("Roughness", np.random.uniform(0.5, 1.0))
+    material.set_principled_shader_value("Specular", np.random.uniform(0.1, 0.3))
 
 # set the light bounces
 RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
@@ -76,6 +90,9 @@ RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_b
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()
 RendererUtility.enable_distance_output()
+# set the amount of samples, which should be used for the color rendering
+RendererUtility.set_samples(350)
+
 MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
