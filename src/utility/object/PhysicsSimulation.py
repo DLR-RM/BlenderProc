@@ -81,7 +81,7 @@ class PhysicsSimulation:
         """
         # Shift the origin of all objects to their center of mass to make the simulation more realistic
         origin_shift = {}
-        for obj in get_all_mesh_objects():
+        for obj in MeshObject.get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 prev_origin = obj.get_origin()
                 new_origin = obj.set_origin(mode="CENTER_OF_VOLUME")
