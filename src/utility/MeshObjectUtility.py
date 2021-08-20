@@ -66,8 +66,13 @@ class MeshObject(Entity):
             bpy.ops.mesh.primitive_monkey_add(**kwargs)
         else:
             raise Exception("No such shape: " + shape)
-
-        return MeshObject(bpy.context.object)
+        
+        primitive = MeshObject(bpy.context.object)
+        # Blender bug: Scale is ignored by default. #1060
+        if 'scale' in kwargs:
+            primitive.set_scale(kwargs['scale'])
+            
+        return primitive
 
     @staticmethod
     def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
