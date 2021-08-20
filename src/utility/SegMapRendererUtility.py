@@ -233,6 +233,8 @@ class SegMapRendererUtility:
                             # iterate over all object ids
                             for object_id in object_ids:
                                 is_default_value = False
+                                # Convert np.uint8 to int, such that the save_in_csv_attributes dict can later be serialized
+                                object_id = int(object_id)
                                 # get the corresponding object via the id
                                 current_obj = objects[object_id]
                                 # if the current obj has a attribute with that name -> get it

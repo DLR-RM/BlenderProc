@@ -41,8 +41,6 @@ class IKEALoaderModule(LoaderInterface):
 
         if self.config.has_param("category"):
             self._obj_categories = self.config.get_raw_value("category", None)
-            if not isinstance(self._obj_categories, list):
-                self._obj_categories = [self._obj_categories]
         else:
             self._obj_categories = None
 

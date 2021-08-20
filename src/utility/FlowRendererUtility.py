@@ -59,7 +59,7 @@ class FlowRendererUtility:
             links.new(combine_bwd_flow.outputs['Image'], bwd_flow_output_file.inputs['Image'])
 
     @staticmethod
-    def render(output_dir: str, temp_dir: str, get_forward_flow: bool, get_backward_flow: bool,
+    def render(output_dir: str = None, temp_dir: str = None, get_forward_flow: bool = True, get_backward_flow: bool = True,
                blender_image_coordinate_style: bool = False, forward_flow_output_file_prefix: str = "forward_flow_",
                forward_flow_output_key: str = "forward_flow", backward_flow_output_file_prefix: str = "backward_flow_",
                backward_flow_output_key: str = "backward_flow", return_data: bool = True) -> Dict[str, List[np.ndarray]]:
@@ -80,6 +80,11 @@ class FlowRendererUtility:
         if get_forward_flow is False and get_backward_flow is False:
             raise Exception("Take the FlowRenderer Module out of the config if both forward and backward flow are set to False!")
 
+        if output_dir is None:
+            output_dir = Utility.get_temporary_directory()
+        if temp_dir is None:
+            temp_dir = Utility.get_temporary_directory()
+
         with Utility.UndoAfterExecution():
             RendererUtility.init()
             RendererUtility.set_samples(1)
@@ -92,7 +97,7 @@ class FlowRendererUtility:
             # only need to render once; both fwd and bwd flow will be saved
             temporary_fwd_flow_file_path = os.path.join(temp_dir, 'fwd_flow_')
             temporary_bwd_flow_file_path = os.path.join(temp_dir, 'bwd_flow_')
-            RendererUtility.render(temp_dir, "bwd_flow_", None)
+            RendererUtility.render(temp_dir, "bwd_flow_", None, load_keys=set())
 
             # After rendering: convert to optical flow or calculate hsv visualization, if desired
             for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
