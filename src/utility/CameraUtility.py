@@ -1,7 +1,7 @@
 import bpy
 import numpy as np
 from mathutils import Matrix, Vector, Euler
-from typing import Union, Tuple
+from typing import Union, Tuple, Optional
 
 from src.utility.EntityUtility import Entity
 from src.utility.Utility import KeyFrame
@@ -37,7 +37,7 @@ class CameraUtility:
         return frame
 
     @staticmethod
-    def get_camera_pose(frame: Union[int, None] = None) -> np.ndarray:
+    def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
         """ Returns the camera pose in the form of a 4x4 cam2world transformation matrx.
 
         :param frame: The frame number whose assigned camera pose should be returned. If None is give, the current frame is used.
@@ -306,4 +306,3 @@ class CameraUtility:
         # distortion, where a number below 1.0 will cause a horizontal distortion, and a higher number will
         # cause a vertical distortion.
         camera.dof.aperture_ratio = aperture_ratio
-
