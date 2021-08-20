@@ -325,7 +325,7 @@ class BopLoader:
         return MeshObject(cur_obj)
 
     @staticmethod
-    def _load_materials(cur_obj: bpy.types.Object, bop_dataset_name: str) -> bpy.types.Material:
+    def _load_materials(cur_obj: bpy.types.Object, bop_dataset_name: str) -> Material:
         """ Loads / defines materials, e.g. vertex colors.
         
         :param cur_obj: The object to use.
