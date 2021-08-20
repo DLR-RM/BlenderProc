@@ -335,7 +335,7 @@ class MeshObject(Entity):
         """
         return self.get_rigidbody() is not None
         
-    def get_rigidbody(self) -> bpy.types.RigidBodyObject:
+    def get_rigidbody(self) -> Optional[bpy.types.RigidBodyObject]:
         """ Returns the rigid body component
 
         :return: The rigid body component of the object.
