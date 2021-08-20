@@ -98,7 +98,7 @@ MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
 # render the whole pipeline
 data = RendererUtility.render()
 
-data.update(SegMapRendererUtility.render(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
+data.update(SegMapRendererUtility.render(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)
