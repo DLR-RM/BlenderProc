@@ -24,6 +24,9 @@ Initializer.init()
 
 # load the objects into the scene
 obj = ObjectLoader.load(args.object)[0]
+# Use vertex color for texturing
+for mat in obj.get_materials():
+    mat.map_vertex_color()
 # Set pose of object via local-to-world transformation matrix
 obj.set_local2world_mat(
     [[0.331458, -0.9415833, 0.05963787, -0.04474526765165741],
@@ -35,9 +38,6 @@ obj.set_local2world_mat(
 obj.set_scale([0.001, 0.001, 0.001])
 # Set category id which will be used in the BopWriter
 obj.set_cp("category_id", 1)
-# Use vertex color for texturing
-for mat in obj.get_materials():
-    mat.map_vertex_color("Col")
 
 # define a light and set its location and energy level
 light = Light()
@@ -73,5 +73,5 @@ data = RendererUtility.render()
 # Map distance to depth
 depth = PostProcessingUtility.dist2depth(data["distance"])
 
-# Write color and depth in bop format
+# Write object poses, color and depth in bop format
 BopWriterUtility.write(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)
