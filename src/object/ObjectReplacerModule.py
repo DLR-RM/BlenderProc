@@ -71,7 +71,7 @@ class ObjectReplacerModule(Module):
             objects_to_replace_with=MeshObject.convert_to_meshes(self.config.get_list("objects_to_replace_with", [])),
             ignore_collision_with=MeshObject.convert_to_meshes(self.config.get_list("ignore_collision_with", [])),
             replace_ratio=self.config.get_float("replace_ratio", 1),
-            copy_properties=self.config.get_float("copy_properties", 1),
+            copy_properties=self.config.get_bool("copy_properties", True),
             max_tries=self.config.get_int("max_tries", 100),
             relative_pose_sampler=relative_pose_sampler
         )
