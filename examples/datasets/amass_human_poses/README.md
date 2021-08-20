@@ -57,7 +57,7 @@ python run.py examples/datasets/amass_human_poses/config.yaml resources/AMASS ex
 ```
 
 * `examples/datasets/amass_human_poses/config.yaml`: path to the configuration file with pipeline configuration.
-* `esources/AMASS`: path to the AMASS Dataset folder in resources folder
+* `resources/AMASS`: path to the AMASS Dataset folder in resources folder
 * `examples/datasets/amass_human_poses/output`: path to the output directory
 
 ## Visualization

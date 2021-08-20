@@ -1,7 +1,7 @@
 import random
 
-import bpy
 from src.main.Provider import Provider
+from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
 
 
 class Texture(Provider):
@@ -78,19 +78,15 @@ class Texture(Provider):
 
         :return: Texture. Type: bpy.types.Texture
         """
-
-        possible_textures = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOISE", "STUCCI",
-                             "VORONOI", "WOOD"]
-
         # given textures
         given_textures = self.config.get_list("textures", [])
 
-        if len(given_textures) == 0:
-            texture_name = random.choice(possible_textures)
-        else:
+        if len(given_textures) > 0:
             texture_name = random.choice(given_textures).upper()
+        else:
+            texture_name = None
 
-        tex = bpy.data.textures.new("ct_{}".format(texture_name), texture_name)
+        tex = MaterialLoaderUtility.create_procedural_texture(texture_name)
 
         if texture_name == "VORONOI":
             #default values are the values blender uses as default for texture Voronoi

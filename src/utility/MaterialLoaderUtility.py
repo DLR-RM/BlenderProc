@@ -1,4 +1,5 @@
 import os
+import random
 from typing import Union
 
 import bpy
@@ -475,3 +476,24 @@ class MaterialLoaderUtility(object):
                         slot.material = MaterialLoaderUtility.add_alpha_texture_node(slot.material, new_mat)
                     else:
                         slot.material = new_mat
+
+    @staticmethod
+    def create_procedural_texture(pattern_name: str = None) -> bpy.types.Texture:
+        """ Creates a new procedural texture based on a specified pattern.
+
+        :param pattern_name: The name of the pattern. Available: ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOISE", "STUCCI", "VORONOI", "WOOD"]
+                             If None is given, a random pattern is used.
+        :return: The created texture
+        """
+        possible_patterns = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOISE", "STUCCI",
+                             "VORONOI", "WOOD"]
+
+        # If no pattern has been given, use a random one, otherwise check whether the given pattern is valid.
+        if pattern_name is None:
+            pattern_name = random.choice(possible_patterns)
+        else:
+            pattern_name = pattern_name.upper()
+            if pattern_name not in possible_patterns:
+                raise Exception("There is no such pattern: " + str(pattern_name) + ". Allowed patterns are: " + str(possible_patterns))
+
+        return bpy.data.textures.new("ct_{}".format(pattern_name), pattern_name)
