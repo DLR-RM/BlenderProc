@@ -321,7 +321,7 @@ class WriterUtility:
                     data = np.string_(json.dumps(data, cls=NumpyEncoder))
                 data = np.array(data)
             else:
-                raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray not a {type(data)}!")
+                raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray, list or dict not a {type(data)}!")
 
         if data.dtype.char == 'S':
             file.create_dataset(key, data=data, dtype=data.dtype)
