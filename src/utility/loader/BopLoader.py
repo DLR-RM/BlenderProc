@@ -318,7 +318,6 @@ class BopLoader:
         
         if not has_external_texture:
             mat = BopLoader._load_materials(cur_obj, bop_dataset_name)
-            mat = Material(mat)
             mat.map_vertex_color()
         elif texture_file_path != "":
             # ycbv objects contain normal image textures, which should be used instead of the vertex colors
@@ -349,7 +348,7 @@ class BopLoader:
             # no slots
             cur_obj.data.materials.append(mat)
 
-        return mat
+        return Material(mat)
 
     @staticmethod
     def _load_texture(cur_obj: bpy.types.Object, texture_file_path: str, bop_dataset_name: str):
