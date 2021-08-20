@@ -15,37 +15,39 @@ import h5py
 
 from src.utility.BlenderUtility import load_image
 from src.utility.MathUtility import MathUtility
-from src.utility.Utility import Utility
+from src.utility.Utility import Utility, NumpyEncoder
 from src.utility.CameraUtility import CameraUtility
 
 
 class WriterUtility:
 
     @staticmethod
-    def load_registered_outputs(keys: Set[str]) -> Dict[str, List[np.ndarray]]:
+    def load_registered_outputs(keys: Set[str], keys_with_alpha_channel: Set[str] = None) -> Dict[str, List[np.ndarray]]:
         """
         Loads registered outputs with specified keys
 
         :param keys: set of output_key types to load
+        :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
         :return: dict of lists of raw loaded outputs. Keys are e.g. 'distance', 'colors', 'normals', 'segmap'
         """
         output_data_dict = {}
         reg_outputs = Utility.get_registered_outputs()
         for reg_out in reg_outputs:
             if reg_out['key'] in keys:
+                key_has_alpha_channel = keys_with_alpha_channel is not None and reg_out['key'] in keys_with_alpha_channel
                 if '%' in reg_out['path']:
                     # per frame outputs
                     for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
                         output_path = Utility.resolve_path(reg_out['path'] % frame_id)
                         if os.path.exists(output_path):
-                            output_file = WriterUtility.load_output_file(output_path)
+                            output_file = WriterUtility.load_output_file(output_path, key_has_alpha_channel)
                         else:
                             try:
                                 # check for stereo files
                                 output_paths = WriterUtility._get_stereo_path_pair(output_path)
                                 # convert to a tensor of shape [2, img_x, img_y, channels]
                                 # output_file[0] is the left image and output_file[1] the right image
-                                output_file = np.array([WriterUtility.load_output_file(path) for path in output_paths])
+                                output_file = np.array([WriterUtility.load_output_file(path, key_has_alpha_channel) for path in output_paths])
                             except:
                                 raise('Could not find original or stereo paths: {}'.format(output_paths))
 
@@ -57,7 +59,7 @@ class WriterUtility:
                 else:
                     # per run outputs
                     output_path = Utility.resolve_path(reg_out['path'])
-                    output_file = WriterUtility.load_output_file(output_path)
+                    output_file = WriterUtility.load_output_file(output_path, key_has_alpha_channel)
                     output_data_dict[reg_out['key']] = output_file
 
         return output_data_dict
@@ -77,11 +79,11 @@ class WriterUtility:
         return path_l, path_r
 
     @staticmethod
-    def load_output_file(file_path: str, write_alpha_channel: bool = False, remove: bool = True) -> np.ndarray:
+    def load_output_file(file_path: str, load_alpha_channel: bool = False, remove: bool = True) -> np.ndarray:
         """ Tries to read in the file with the given path into a numpy array.
 
         :param file_path: The file path. Type: string.
-        :param write_alpha_channel: Whether to load the alpha channel as well. Type: bool. Default: False
+        :param load_alpha_channel: Whether to load the alpha channel as well. Type: bool. Default: False
         :param remove: Whether to delete file after loading.
         :return: Loaded data from the file as numpy array if possible.
         """
@@ -92,11 +94,11 @@ class WriterUtility:
 
         if file_ending in ["exr", "png", "jpg"]:
             # num_channels is 4 if transparent_background is true in config
-            output = load_image(file_path, num_channels=3 + (1 if write_alpha_channel else 0))
+            output = load_image(file_path, num_channels=3 + (1 if load_alpha_channel else 0))
         elif file_ending in ["npy", "npz"]:
-            output =  np.load(file_path)
+            output = np.load(file_path)
         elif file_ending in ["csv"]:
-            output =  WriterUtility._load_csv(file_path)
+            output = WriterUtility._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
@@ -236,7 +238,7 @@ class WriterUtility:
             return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, local_frame_change, world_frame_change)
 
     @staticmethod
-    def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[np.ndarray]],
+    def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
                      append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
         """
         Saves the information provided inside of the output_data_dict into a .hdf5 container
@@ -312,12 +314,14 @@ class WriterUtility:
         :param data: The data to store.
         """
         if not isinstance(data, np.ndarray) and not isinstance(data, np.bytes_):
-            if isinstance(data, list):
-                if len(data)>0 and isinstance(data[0], dict):
-                    data = np.string_(json.dumps(data))
+            if isinstance(data, list) or isinstance(data, dict):
+                # If the data contains one or multiple dicts that contain e.q. object states
+                if isinstance(data, dict) or len(data) > 0 and isinstance(data[0], dict):
+                    # Serialize them into json (automatically convert numpy arrays to lists)
+                    data = np.string_(json.dumps(data, cls=NumpyEncoder))
                 data = np.array(data)
             else:
-                raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray not a {type(data)}!")
+                raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray, list or dict not a {type(data)}!")
 
         if data.dtype.char == 'S':
             file.create_dataset(key, data=data, dtype=data.dtype)

@@ -267,12 +267,15 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, temp_dir, cache_dir="resources/decomposition_cache"):
+    def build_convex_decomposition_collision_shape(self, temp_dir: str = None, cache_dir: str = "resources/decomposition_cache"):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
         :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
         :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
         """
+        if temp_dir is None:
+            temp_dir = Utility.get_temporary_directory()
+
         # Decompose the object
         parts = convex_decomposition(self.blender_obj, temp_dir, cache_dir=Utility.resolve_path(cache_dir))
         parts = [MeshObject(p) for p in parts]
