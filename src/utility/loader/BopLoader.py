@@ -15,6 +15,7 @@ from src.utility.CameraUtility import CameraUtility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
 from src.utility.MathUtility import MathUtility
+from src.utility.MaterialUtility import Material
 
 
 
@@ -312,14 +313,16 @@ class BopLoader:
         cur_obj.scale = Vector((scale, scale, scale))
         cur_obj['category_id'] = obj_id
         cur_obj['model_path'] = model_path
+        cur_obj["is_bop_object"] = True
+        cur_obj["bop_dataset_name"] = bop_dataset_name
+        
         if not has_external_texture:
             mat = BopLoader._load_materials(cur_obj, bop_dataset_name)
-            BopLoader._link_col_node(mat)
+            mat = Material(mat)
+            mat.map_vertex_color()
         elif texture_file_path != "":
             # ycbv objects contain normal image textures, which should be used instead of the vertex colors
             BopLoader._load_texture(cur_obj, texture_file_path, bop_dataset_name)
-        cur_obj["is_bop_object"] = True
-        cur_obj["bop_dataset_name"] = bop_dataset_name
         return MeshObject(cur_obj)
 
     @staticmethod
@@ -381,18 +384,3 @@ class BopLoader:
             cur_obj.data.materials.append(mat)
 
 
-    @staticmethod
-    def _link_col_node(mat: bpy.types.Material):
-        """ Links a color attribute node to a Principled BSDF node.
-
-        :param mat: The material to use.
-        """
-        nodes = mat.node_tree.nodes
-        links = mat.node_tree.links
-
-        attr_node = nodes.new(type='ShaderNodeAttribute')
-        attr_node.attribute_name = 'Col'
-
-        principled_node = Utility.get_the_one_node_with_type(nodes, "BsdfPrincipled")
-
-        links.new(attr_node.outputs['Color'], principled_node.inputs['Base Color'])
