@@ -62,9 +62,7 @@ while tries < 10000 and poses < 5:
 
 # improve the materials, first use all materials and only filter the relevant materials out
 all_materials = Material.collect_all()
-all_improved_mats = Filter.by_attr(all_materials, "name", "wood.*", regex=True)
-all_improved_mats.extend(Filter.by_attr(all_materials, "name", "laminate.*", regex=True))
-all_improved_mats.extend(Filter.by_attr(all_materials, "name", "beam.*", regex=True))
+all_improved_mats = Filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
 
 # now change the used values
 for material in all_improved_mats:
