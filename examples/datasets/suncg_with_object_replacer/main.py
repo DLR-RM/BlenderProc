@@ -45,8 +45,6 @@ chair_obj = ObjectLoader.load(args.object_path)
 if len(chair_obj) != 1:
     raise Exception(f"There should only be one chair object not: {len(chair_obj)}")
 chair_obj = chair_obj[0]
-chair_obj.set_cp("replace", "chair")
-replace_ratio = 1.0
 
 
 def relative_pose_sampler(obj):
@@ -54,6 +52,7 @@ def relative_pose_sampler(obj):
     obj.blender_obj.rotation_euler.rotate(Euler((0, 0, np.random.uniform(0.0, 6.283185307))))
 
 
+replace_ratio = 1.0
 ObjectReplacer.replace_multiple(
     objects_to_be_replaced=Filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
