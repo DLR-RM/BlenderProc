@@ -257,7 +257,12 @@ class MaterialManipulator(Module):
             the displacement
           - float
         * - cf_change_to_vertex_color
-          - The name of the vertex color layer, used for changing the material to a vertex coloring mode.
+          - The name of the vertex color layer, used for changing the material to a vertex coloring mode. The object
+            is still able to reflect light and influence the light around it
+          - string
+        * - change_to_vertex_color_no_shading
+          - The name of the vertex color layer, used for changing the material to a vertex coloring mode. For this
+            no shading is used.
           - string
         * - cf_textures
           - Texture data as {texture_type (type of the image/map, i.e. color, roughness, reflection, etc.):
@@ -408,7 +413,9 @@ class MaterialManipulator(Module):
                 if key_copy == "color_link_to_displacement" and requested_cf:
                     MaterialManipulator._link_color_to_displacement_for_mat(material, value)
                 elif key_copy == "change_to_vertex_color" and requested_cf:
-                    MaterialManipulator._map_vertex_color(material, value)
+                    MaterialManipulator._map_vertex_color(material, value, active_shading=True)
+                elif key_copy == "change_to_vertex_color_no_shading" and requested_cf:
+                    MaterialManipulator._map_vertex_color(material, value, active_shading=False)
                 elif key_copy == "textures" and requested_cf:
                     loaded_textures = self._load_textures(value)
                     self._set_textures(loaded_textures, material)
@@ -536,13 +543,16 @@ class MaterialManipulator(Module):
         material.set_displacement_from_principled_shader_value("Base Color", multiply_factor)
 
     @staticmethod
-    def _map_vertex_color(material: Material, layer_name: str):
+    def _map_vertex_color(material: Material, layer_name: str, active_shading: bool = True):
         """ Replaces the material with a mapping of the vertex color to a background color node.
 
         :param material: Material to be modified.
         :param layer_name: Name of the vertex color layer.
+        :param active_shading: Whether to keep the principled bsdf shader. If True, the material properties influence light
+                               reflections such as specularity, roughness, etc. alter the object's appearance. Type: bool.
+
         """
-        material.map_vertex_color(layer_name)
+        material.map_vertex_color(layer_name, active_shading)
 
     def _switch_to_emission_shader(self, material: Material, value: dict):
         """ Adds the Emission shader to the target material, sets it's color and strength values, connects it to
