@@ -2,7 +2,7 @@ from src.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from src.utility.loader.Pix3DLoader import Pix3DLoader
-from src.utility.sampler.PartSphere import PartSphere
+from src.utility.sampler.Sphere import Sphere
 from src.utility.MathUtility import MathUtility
 from src.utility.CameraUtility import CameraUtility
 from src.utility.MeshObjectUtility import MeshObject
@@ -34,7 +34,7 @@ poi = MeshObject.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location around the object
-    location = PartSphere.sample([0, 0, 0], radius=2.5, part_sphere_dir_vector=[1, 0, 0], mode="SURFACE")
+    location = Sphere.sample([0, 0, 0], radius=2, mode="SURFACE")
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location)
     # Add homog cam pose based on location an rotation
