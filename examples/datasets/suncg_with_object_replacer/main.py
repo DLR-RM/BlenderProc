@@ -29,7 +29,7 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
 parser.add_argument('object_path', help='Path to the chair object which will be used to replace others.')
-parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_with_cam_sampling/output",
+parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_with_object_replacer/output",
                     help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
