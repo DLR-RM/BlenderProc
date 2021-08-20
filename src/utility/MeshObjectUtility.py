@@ -7,7 +7,7 @@ from src.utility.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector, Matrix
 
-from src.utility import ProviderUtility
+from src.utility.ProviderUtility import get_all_mesh_objects
 from src.utility.Utility import Utility
 from src.utility.MaterialUtility import Material
 
@@ -307,7 +307,7 @@ class MeshObject(Entity):
     @staticmethod
     def disable_all_rigid_bodies():
         """ Disables the rigidbody element of all objects """
-        for obj in ProviderUtility.get_all_mesh_objects():
+        for obj in get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 obj.disable_rigidbody()
             

@@ -5,7 +5,7 @@ import numpy as np
 from src.utility.BlenderUtility import get_all_blender_mesh_objects, get_bound_volume
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.Utility import Utility
-from src.utility.ProviderUtility import ProviderUtility
+from src.utility.ProviderUtility import get_all_mesh_objects
 
 
 class PhysicsSimulation:
@@ -42,7 +42,7 @@ class PhysicsSimulation:
             bpy.ops.ptcache.free_bake({"point_cache": bpy.context.scene.rigidbody_world.point_cache})
 
         # Fix the pose of all objects to their pose at the and of the simulation (also revert origin shift)
-        for obj in ProviderUtility.get_all_mesh_objects():
+        for obj in get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 # Skip objects that have parents with compound rigid body component
                 has_compound_parent = obj.get_parent() is not None and obj.get_parent().get_rigidbody() is not None and obj.get_parent().get_rigidbody().collision_shape == "COMPOUND"
@@ -83,7 +83,7 @@ class PhysicsSimulation:
         """
         # Shift the origin of all objects to their center of mass to make the simulation more realistic
         origin_shift = {}
-        for obj in ProviderUtility.get_all_mesh_objects():
+        for obj in get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 prev_origin = obj.get_origin()
                 new_origin = obj.set_origin(mode="CENTER_OF_VOLUME")
