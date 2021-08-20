@@ -51,12 +51,7 @@ for j, obj in enumerate(sampled_bop_objs):
     mat = obj.get_materials()[0]
     # mat.set_principled_shader_value("Metallic", np.random.uniform(0, 0.5))
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
-        grey_col = np.random.uniform([0.3,0.9])
-        
-        # shader_node_attr = mat.get_the_one_node_with_type("ShaderNodeAttribute")
-        # mat.remove_node(shader_node_attr)
-        
-                        
+        grey_col = np.random.uniform(0.3,0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
     
     mat.set_principled_shader_value("Metallic", np.random.uniform(0.0, 1.0))
