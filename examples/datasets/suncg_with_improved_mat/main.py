@@ -70,6 +70,9 @@ for material in all_improved_mats:
     material.set_principled_shader_value("Specular", np.random.uniform(0.5, 1.0))
     material.set_displacement_from_principled_shader_value("Base Color", np.random.uniform(0.001, 0.15))
 
+# set the light bounces
+RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
+
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()
 RendererUtility.enable_distance_output()
