@@ -15,7 +15,7 @@ import h5py
 
 from src.utility.BlenderUtility import load_image
 from src.utility.MathUtility import MathUtility
-from src.utility.Utility import Utility
+from src.utility.Utility import Utility, NumpyEncoder
 from src.utility.CameraUtility import CameraUtility
 
 
@@ -238,7 +238,7 @@ class WriterUtility:
             return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, local_frame_change, world_frame_change)
 
     @staticmethod
-    def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[np.ndarray]],
+    def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
                      append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
         """
         Saves the information provided inside of the output_data_dict into a .hdf5 container
@@ -314,9 +314,11 @@ class WriterUtility:
         :param data: The data to store.
         """
         if not isinstance(data, np.ndarray) and not isinstance(data, np.bytes_):
-            if isinstance(data, list):
-                if len(data)>0 and isinstance(data[0], dict):
-                    data = np.string_(json.dumps(data))
+            if isinstance(data, list) or isinstance(data, dict):
+                # If the data contains one or multiple dicts that contain e.q. object states
+                if isinstance(data, dict) or len(data) > 0 and isinstance(data[0], dict):
+                    # Serialize them into json (automatically convert numpy arrays to lists)
+                    data = np.string_(json.dumps(data, cls=NumpyEncoder))
                 data = np.array(data)
             else:
                 raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray not a {type(data)}!")
