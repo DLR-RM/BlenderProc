@@ -32,17 +32,6 @@
         },
     },
     {
-     "module": "manipulators.EntityManipulator",
-      "config": {
-        "selector": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "cp_replace": "chair"
-          }
-        }
-      }
-    },
-    {
       "module": "object.ObjectReplacer",
       "config": {
         "replace_ratio": 1,
