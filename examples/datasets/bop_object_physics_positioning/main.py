@@ -49,7 +49,6 @@ for j, obj in enumerate(sampled_bop_objs):
     obj.set_shading_mode('auto')
         
     mat = obj.get_materials()[0]
-    # mat.set_principled_shader_value("Metallic", np.random.uniform(0, 0.5))
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
         grey_col = np.random.uniform(0.3,0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
@@ -59,19 +58,17 @@ for j, obj in enumerate(sampled_bop_objs):
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
         
         
-room_planes = [MeshObject.create_primitive('PLANE'),
-               MeshObject.create_primitive('PLANE', location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', location=[0, 2, 2], rotation=[1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', location=[2, 0, 2], rotation=[0, -1.570796, 0]),
-               MeshObject.create_primitive('PLANE', location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
+room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
+               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
+               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
+               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
+               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
 
 for plane in room_planes:
     plane.enable_rigidbody(False, collision_shape='BOX')
-    plane.set_scale([2, 2, 1])
 
 # sample light color and strenght from ceiling
-light_plane = MeshObject.create_primitive('PLANE', location=[0, 0, 10])
-light_plane.set_scale([3, 3, 1])
+light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
 light_plane.set_name('light_plane')
 light_plane_material = Material.create('light_material')
 light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6), 
@@ -88,8 +85,9 @@ light_point.set_location(location)
 
 # sample CC Texture and assign to room planes
 cc_textures = CCMaterialLoader.load(args.cc_textures_path)
+random_cc_texture = np.random.choice(cc_textures)
 for plane in room_planes:
-    plane.replace_materials(np.random.choice(cc_textures))
+    plane.replace_materials(random_cc_texture)
 
 # Sample objects and initialize poses
 for obj in sampled_bop_objs:
