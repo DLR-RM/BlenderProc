@@ -36,34 +36,46 @@ args = parser.parse_args()
 Initializer.init()
 
 # load a random sample of bop objects into the scene
-sampled_bop_objs = BopLoader.load(bop_dataset_path=os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                                  temp_dir=Utility.get_temporary_directory(),
-                                  sys_paths=args.bop_toolkit_path,
-                                  mm2m=True,
-                                  sample_objects=True,
-                                  num_of_objs_to_sample=10)
+sampled_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
+                                  temp_dir = Utility.get_temporary_directory(),
+                                  sys_paths = args.bop_toolkit_path,
+                                  mm2m = True,
+                                  sample_objects = True,
+                                  num_of_objs_to_sample = 10)
+
+# # load distractor bop objects
+# distractor_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
+#                                      model_type = 'cad',
+#                                      temp_dir = Utility.get_temporary_directory(),
+#                                      sys_paths = args.bop_toolkit_path,
+#                                      mm2m = True,
+#                                      sample_objects = True,
+#                                      num_of_objs_to_sample = 3)
+# distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
+#                                       temp_dir = Utility.get_temporary_directory(),
+#                                       sys_paths = args.bop_toolkit_path,
+#                                       mm2m = True,
+#                                       sample_objects = True,
+#                                       num_of_objs_to_sample = 3)
 
 # set shading and physics properties and randomize PBR materials
-for j, obj in enumerate(sampled_bop_objs):
+for j, obj in enumerate(sampled_bop_objs):# + distractor_bop_objs):
     obj.enable_rigidbody(True, friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
     obj.set_shading_mode('auto')
         
     mat = obj.get_materials()[0]
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
-        grey_col = np.random.uniform(0.3,0.9)   
+        grey_col = np.random.uniform(0.3, 0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
-    
-    mat.set_principled_shader_value("Metallic", np.random.uniform(0.0, 1.0))
-    mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
-    mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
+    # mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
+    # mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
         
-        
+# create room
 room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
-
 for plane in room_planes:
     plane.enable_rigidbody(False, collision_shape='BOX')
 
@@ -90,7 +102,7 @@ for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
 # Sample objects and initialize poses
-for obj in sampled_bop_objs:
+for obj in sampled_bop_objs:# + distractor_bop_objs:
     min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
     max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
     obj.set_location(np.random.uniform(min, max))
@@ -107,16 +119,15 @@ PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
 
 tries, poses = 0, 0
 while poses < 10:
-    # Sample point
+    # Sample location
     location = Shell.sample(center = [0, 0, 0], 
                             radius_min = 0.61,
                             radius_max = 1.24,
                             elevation_min = 5,
                             elevation_max = 89,
                             uniform_elevation = True)
-    
-    poi = MeshObject.compute_poi(sampled_bop_objs)
-    
+    # Determine point of interest in scene as the object closest to the mean of a subset of objects
+    poi = MeshObject.compute_poi(np.random.choice(sampled_bop_objs, size=10))
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation
@@ -128,7 +139,6 @@ while poses < 10:
         CameraUtility.add_camera_pose(cam2world_matrix)
         poses += 1
 
-
 # activate distance rendering and set amount of samples for color rendering
 RendererUtility.enable_distance_output()
 RendererUtility.set_samples(50)
@@ -138,9 +148,9 @@ data = RendererUtility.render()
 
 # # Write data in bop format
 BopWriterUtility.write(args.output_dir, 
-                        depths = PostProcessingUtility.dist2depth(data["distance"]), 
-                        colors = data["colors"], 
-                        color_file_format="JPEG",
-                        dataset = args.bop_dataset_name,
-                        ignore_dist_thres=10)
+                       dataset = args.bop_dataset_name,
+                       depths = PostProcessingUtility.dist2depth(data["distance"]), 
+                       colors = data["colors"], 
+                       color_file_format = "JPEG",
+                       ignore_dist_thres = 10)
 
