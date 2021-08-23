@@ -76,7 +76,7 @@
             "name": "ply_material"
           }
         },
-        "cf_change_to_vertex_color": "Col"
+        "cf_change_to_vertex_color_no_shading": "Col"
       }
     },
     {
