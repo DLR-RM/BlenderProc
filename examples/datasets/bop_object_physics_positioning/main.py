@@ -1,10 +1,7 @@
 from src.utility.SetupUtility import SetupUtility
-
 SetupUtility.setup([])
 
-from src.utility.MaterialUtility import Material
 from src.utility.Initializer import Initializer
-from src.utility.MaterialUtility import Material
 from src.utility.BopWriterUtility import BopWriterUtility
 from src.utility.loader.BopLoader import BopLoader
 from src.utility.camera.CameraValidation import CameraValidation
@@ -14,7 +11,6 @@ from src.utility.LightUtility import Light
 from src.utility.object.PhysicsSimulation import PhysicsSimulation
 from src.utility.RendererUtility import RendererUtility
 from src.utility.MathUtility import MathUtility
-from src.utility.Utility import Utility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.MaterialUtility import Material
 from src.utility.loader.CCMaterialLoader import CCMaterialLoader
@@ -37,7 +33,6 @@ Initializer.init()
 
 # load a random sample of bop objects into the scene
 sampled_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
-                                  temp_dir = Utility.get_temporary_directory(),
                                   sys_paths = args.bop_toolkit_path,
                                   mm2m = True,
                                   sample_objects = True,
@@ -46,13 +41,11 @@ sampled_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_paren
 # load distractor bop objects
 distractor_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
                                      model_type = 'cad',
-                                     temp_dir = Utility.get_temporary_directory(),
                                      sys_paths = args.bop_toolkit_path,
                                      mm2m = True,
                                      sample_objects = True,
                                      num_of_objs_to_sample = 3)
 distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
-                                      temp_dir = Utility.get_temporary_directory(),
                                       sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
@@ -108,7 +101,6 @@ for obj in sampled_bop_objs + distractor_bop_objs:
     obj.set_location(np.random.uniform(min, max))
     obj.set_rotation_euler(UniformSO3.sample())
     
-    
 # Physics Positioning
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
                                                 max_simulation_time=10,
@@ -148,7 +140,7 @@ RendererUtility.set_samples(50)
 # render the whole pipeline
 data = RendererUtility.render()
 
-# # Write data in bop format
+# Write data in bop format
 BopWriterUtility.write(args.output_dir, 
                        dataset = args.bop_dataset_name,
                        depths = PostProcessingUtility.dist2depth(data["distance"]), 
