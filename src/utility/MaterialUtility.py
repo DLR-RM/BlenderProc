@@ -134,15 +134,15 @@ class Material(Struct):
         """
         self.links.remove(source_socket, dest_socket)
 
-    def map_vertex_color(self, layer_name: str = 'Col', keep_bsdf: bool = True):
+    def map_vertex_color(self, layer_name: str = 'Col', active_shading: bool = True):
         """ Maps existing vertex color to the base color of the principled bsdf node or a new background color node.
 
         :param layer_name: Name of the vertex color layer. Type: string.
-        :param keep_bsdf: Whether to keep the principled bsdf shader. If True, material properties influencing light 
-                          reflections such as specularity, roughness, etc. alter the object's appearance. Type: bool.
+        :param active_shading: Whether to keep the principled bsdf shader. If True, the material properties influence light
+                               reflections such as specularity, roughness, etc. alter the object's appearance. Type: bool.
         """
         
-        if keep_bsdf:
+        if active_shading:
             # create new shader node attribute          
             attr_node = self.nodes.new(type='ShaderNodeAttribute')
             attr_node.attribute_name = layer_name
