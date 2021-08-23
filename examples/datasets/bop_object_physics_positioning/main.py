@@ -43,7 +43,7 @@ sampled_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_paren
                                   sample_objects = True,
                                   num_of_objs_to_sample = 10)
 
-# # load distractor bop objects
+# load distractor bop objects
 distractor_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
                                      model_type = 'cad',
                                      temp_dir = Utility.get_temporary_directory(),
@@ -108,7 +108,6 @@ for obj in sampled_bop_objs + distractor_bop_objs:
     obj.set_location(np.random.uniform(min, max))
     obj.set_rotation_euler(UniformSO3.sample())
     
-bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(sampled_bop_objs)
     
 # Physics Positioning
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
@@ -117,7 +116,10 @@ PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
                                                 substeps_per_frame = 20,
                                                 solver_iters=25)
 
-tries, poses = 0, 0
+# BVH tree used for camera obstacle checks
+bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(sampled_bop_objs + distractor_bop_objs)
+
+poses = 0
 while poses < 10:
     # Sample location
     location = Shell.sample(center = [0, 0, 0], 
