@@ -148,7 +148,7 @@
           "provider": "getter.Entity",
           "check_empty": True,
           "conditions": {
-            "name": ".*lamp.*"
+            "name": ".*[l|L]amp.*"
           }
         },
         "emission_strength": 15.0,
@@ -162,7 +162,7 @@
           "provider": "getter.Entity",
           "check_empty": True,
           "conditions": {
-            "name": ".*ceiling.*"
+            "name": ".*[c|C]eiling.*"
           }
         },
         "emission_strength": 2.0,

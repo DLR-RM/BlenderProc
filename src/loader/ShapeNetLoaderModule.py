@@ -51,4 +51,4 @@ class ShapeNetLoaderModule(LoaderInterface):
             used_source_id=self.config.get_string("used_source_id", ""),
             move_object_origin=self.config.get_bool("move_object_origin", True)
         )
-        self._set_properties(loaded_obj)
+        self._set_properties([loaded_obj])

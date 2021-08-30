@@ -134,23 +134,35 @@ class Material(Struct):
         """
         self.links.remove(source_socket, dest_socket)
 
-    def map_vertex_color(self, layer_name: str):
-        """ Replaces the material with a mapping of the vertex color to a background color node.
+    def map_vertex_color(self, layer_name: str = 'Col', active_shading: bool = True):
+        """ Maps existing vertex color to the base color of the principled bsdf node or a new background color node.
 
         :param layer_name: Name of the vertex color layer. Type: string.
+        :param active_shading: Whether to keep the principled bsdf shader. If True, the material properties influence light
+                               reflections such as specularity, roughness, etc. alter the object's appearance. Type: bool.
         """
-        # create new vertex color shade node
-        vcol = self.nodes.new(type="ShaderNodeVertexColor")
-        vcol.layer_name = layer_name
-        node_connected_to_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(self.blender_obj)
-        self.nodes.remove(node_connected_to_output)
-        background_color_node = self.nodes.new(type="ShaderNodeBackground")
-        if 'Color' in background_color_node.inputs:
-            self.links.new(vcol.outputs['Color'], background_color_node.inputs['Color'])
-            self.links.new(background_color_node.outputs["Background"], material_output.inputs["Surface"])
+        
+        if active_shading:
+            # create new shader node attribute          
+            attr_node = self.nodes.new(type='ShaderNodeAttribute')
+            attr_node.attribute_name = layer_name
+            # connect it to base color of principled bsdf
+            principled_bsdf = self.get_the_one_node_with_type("BsdfPrincipled")
+            self.links.new(attr_node.outputs['Color'], principled_bsdf.inputs['Base Color'])
         else:
-            raise Exception("Material '{}' has no node connected to the output, "
-                            "which has as a 'Base Color' input.".format(self.blender_obj.name))
+            # create new vertex color shade node
+            vcol = self.nodes.new(type="ShaderNodeVertexColor")
+            vcol.layer_name = layer_name
+            node_connected_to_output, material_output = Utility.get_node_connected_to_the_output_and_unlink_it(self.blender_obj)
+            # remove principled bsdf
+            self.nodes.remove(node_connected_to_output)
+            background_color_node = self.nodes.new(type="ShaderNodeBackground")
+            if 'Color' in background_color_node.inputs:
+                self.links.new(vcol.outputs['Color'], background_color_node.inputs['Color'])
+                self.links.new(background_color_node.outputs["Background"], material_output.inputs["Surface"])
+            else:
+                raise Exception("Material '{}' has no node connected to the output, "
+                                "which has as a 'Base Color' input.".format(self.blender_obj.name))
 
     def make_emissive(self, emission_strength: float, replace: bool = False, keep_using_base_color: bool = True,
                       emission_color: list = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
@@ -216,7 +228,7 @@ class Material(Struct):
             self.link(value, principled_bsdf.inputs[input_name])
         else:
             principled_bsdf.inputs[input_name].default_value = value
-
+            
     def get_principled_shader_value(self, input_name: str) -> Union[float, bpy.types.NodeSocket]:
         """ Gets the default value or the connected node socket to an input socket of the principled shader node of the material.
 

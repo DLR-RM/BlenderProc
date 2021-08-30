@@ -57,7 +57,7 @@
         "compare_angle_degrees": 7.5,
         "compare_height": 0.15,
         "add_properties": {
-          "cp_category_id": 2
+          "cp_category_id": 22
         },
         "name_for_split_obj": "ceiling"
       }
@@ -92,7 +92,6 @@
     {
       "module": "camera.CameraSampler",
       "config": {
-        "min_var_diff_translation": 5.0,
         "cam_poses": [{
           "number_of_samples": 5,
           "proximity_checks": {
