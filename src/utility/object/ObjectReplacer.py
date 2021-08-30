@@ -6,8 +6,6 @@ import numpy as np
 
 from src.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
 from src.utility.MeshObjectUtility import MeshObject
-from src.utility.ProviderUtility import get_all_mesh_objects
-
 
 class ObjectReplacer:
     """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the
@@ -76,7 +74,7 @@ class ObjectReplacer:
             obj.hide()
 
         check_collision_with = []
-        for obj in get_all_mesh_objects():
+        for obj in MeshObject.get_all_mesh_objects():
             if obj not in ignore_collision_with:
                 check_collision_with.append(obj)
 
