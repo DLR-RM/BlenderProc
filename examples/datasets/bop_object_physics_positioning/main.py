@@ -56,7 +56,8 @@ distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_p
                                       sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
-                                      num_of_objs_to_sample = 3)
+                                      num_of_objs_to_sample = 3,
+                                      obj_instances_limit = 1)
 
 # set shading and physics properties and randomize PBR materials
 for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
