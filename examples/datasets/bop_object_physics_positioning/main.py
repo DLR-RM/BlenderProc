@@ -30,8 +30,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
 parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
 parser.add_argument('cc_textures_path', nargs='?', default="resources/cctextures", help="Path to downloaded cc textures")
+parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 Initializer.init()
@@ -57,7 +57,8 @@ distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_p
                                       sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
-                                      num_of_objs_to_sample = 3)
+                                      num_of_objs_to_sample = 3,
+                                      obj_instances_limit = 1)
 
 # set shading and physics properties and randomize PBR materials
 for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
@@ -66,7 +67,7 @@ for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
         
     mat = obj.get_materials()[0]
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
-        grey_col = np.random.uniform(0.3, 0.9)   
+        grey_col = np.random.uniform(0.1, 0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
     mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
@@ -160,4 +161,3 @@ BopWriterUtility.write(args.output_dir,
                        colors = data["colors"], 
                        color_file_format = "JPEG",
                        ignore_dist_thres = 10)
-
