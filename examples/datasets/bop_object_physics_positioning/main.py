@@ -78,7 +78,7 @@ room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
 for plane in room_planes:
-    plane.enable_rigidbody(False, collision_shape='BOX')
+    plane.enable_rigidbody(False, collision_shape='BOX', friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
 
 # sample light color and strenght from ceiling
 light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
