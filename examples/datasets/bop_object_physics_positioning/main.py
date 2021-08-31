@@ -12,6 +12,7 @@ from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.CameraUtility import CameraUtility
 from src.utility.LightUtility import Light
 from src.utility.object.PhysicsSimulation import PhysicsSimulation
+from src.utility.object.ObjectPoseSampler import ObjectPoseSampler
 from src.utility.RendererUtility import RendererUtility
 from src.utility.MathUtility import MathUtility
 from src.utility.Utility import Utility
@@ -101,14 +102,18 @@ random_cc_texture = np.random.choice(cc_textures)
 for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
-# Sample objects and initialize poses
-for obj in sampled_bop_objs + distractor_bop_objs:
+# Define a function that samples 6-DoF poses
+def sample_pose_func(obj: MeshObject):
     min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
     max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
     obj.set_location(np.random.uniform(min, max))
     obj.set_rotation_euler(UniformSO3.sample())
-    
-    
+
+# Sample object poses and check collisions 
+ObjectPoseSampler.sample(objects_to_sample = sampled_bop_objs + distractor_bop_objs, 
+                        sample_pose_func = sample_pose_func, 
+                        max_tries = 1000)
+        
 # Physics Positioning
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
                                                 max_simulation_time=10,
