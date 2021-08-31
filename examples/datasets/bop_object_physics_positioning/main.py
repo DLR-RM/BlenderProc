@@ -9,6 +9,7 @@ from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.CameraUtility import CameraUtility
 from src.utility.LightUtility import Light
 from src.utility.object.PhysicsSimulation import PhysicsSimulation
+from src.utility.object.ObjectPoseSampler import ObjectPoseSampler
 from src.utility.RendererUtility import RendererUtility
 from src.utility.MathUtility import MathUtility
 from src.utility.MeshObjectUtility import MeshObject
@@ -25,8 +26,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
 parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
 parser.add_argument('cc_textures_path', nargs='?', default="resources/cctextures", help="Path to downloaded cc textures")
+parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 Initializer.init()
@@ -49,7 +50,8 @@ distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_p
                                       sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
-                                      num_of_objs_to_sample = 3)
+                                      num_of_objs_to_sample = 3,
+                                      obj_instances_limit = 1)
 
 # set shading and physics properties and randomize PBR materials
 for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
@@ -58,7 +60,7 @@ for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
         
     mat = obj.get_materials()[0]
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
-        grey_col = np.random.uniform(0.3, 0.9)   
+        grey_col = np.random.uniform(0.1, 0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
     mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
@@ -70,7 +72,7 @@ room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
 for plane in room_planes:
-    plane.enable_rigidbody(False, collision_shape='BOX')
+    plane.enable_rigidbody(False, collision_shape='BOX', friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
 
 # sample light color and strenght from ceiling
 light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
@@ -94,13 +96,18 @@ random_cc_texture = np.random.choice(cc_textures)
 for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
-# Sample objects and initialize poses
-for obj in sampled_bop_objs + distractor_bop_objs:
+# Define a function that samples 6-DoF poses
+def sample_pose_func(obj: MeshObject):
     min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
     max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
     obj.set_location(np.random.uniform(min, max))
     obj.set_rotation_euler(UniformSO3.sample())
-    
+
+# Sample object poses and check collisions 
+ObjectPoseSampler.sample(objects_to_sample = sampled_bop_objs + distractor_bop_objs, 
+                        sample_pose_func = sample_pose_func, 
+                        max_tries = 1000)
+        
 # Physics Positioning
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
                                                 max_simulation_time=10,
@@ -147,4 +154,3 @@ BopWriterUtility.write(args.output_dir,
                        colors = data["colors"], 
                        color_file_format = "JPEG",
                        ignore_dist_thres = 10)
-
