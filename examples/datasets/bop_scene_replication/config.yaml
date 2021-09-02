@@ -53,12 +53,6 @@
       }
     },
     {
-      "module": "renderer.SegMapRenderer",
-      "config": {
-        "map_by": "instance"
-      }
-    },
-    {
       "module": "writer.BopWriter",
       "config": {
         "dataset": "<args:1>",
@@ -70,8 +64,5 @@
         }
       }
     },
-    {
-      "module": "writer.Hdf5Writer"
-    }
   ]
 }
