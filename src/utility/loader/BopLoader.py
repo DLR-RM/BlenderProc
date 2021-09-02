@@ -22,7 +22,7 @@ from src.utility.MaterialUtility import Material
 class BopLoader:
 
     @staticmethod
-    def load(bop_dataset_path: str, temp_dir: str, sys_paths: list, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[MeshObject]:
+    def load(bop_dataset_path: str, sys_paths: list,  temp_dir: str = None, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[MeshObject]:
         """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
 
         - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -30,8 +30,8 @@ class BopLoader:
         - Sets real camera intrinsics
 
         :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.
-        :param temp_dir: A temp directory which is used for writing the temporary .ply file.
         :param sys_paths: System paths to append.
+        :param temp_dir: A temp directory which is used for writing the temporary .ply file.
         :param model_type: Optionally, specify type of BOP model.  Available: [reconst, cad or eval].
         :param cam_type: Camera type. If not defined, dataset-specific default camera type is used.
         :param split: Optionally, test or val split depending on BOP dataset.
@@ -57,6 +57,9 @@ class BopLoader:
             if 'bop_toolkit' in sys_path:
                 sys.path.append(sys_path)
 
+        if temp_dir is None:
+            temp_dir = Utility.get_temporary_directory()
+        
         scale = 0.001 if mm2m else 1
         bop_dataset_name = os.path.basename(bop_dataset_path)
         has_external_texture = bop_dataset_name in ["ycbv", "ruapc"]

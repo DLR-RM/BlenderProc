@@ -8,15 +8,14 @@ from src.utility.camera.CameraValidation import CameraValidation
 from src.utility.PostProcessingUtility import PostProcessingUtility
 from src.utility.CameraUtility import CameraUtility
 from src.utility.LightUtility import Light
-from src.utility.object.PhysicsSimulation import PhysicsSimulation
-from src.utility.object.ObjectPoseSampler import ObjectPoseSampler
+from src.utility.object.OnSurfaceSampler import OnSurfaceSampler
 from src.utility.RendererUtility import RendererUtility
 from src.utility.MathUtility import MathUtility
 from src.utility.MeshObjectUtility import MeshObject
 from src.utility.MaterialUtility import Material
 from src.utility.loader.CCMaterialLoader import CCMaterialLoader
 from src.utility.sampler.Shell import Shell
-from src.utility.sampler.UniformSO3 import UniformSO3
+from src.utility.sampler.UpperRegionSampler import UpperRegionSampler
 
 import argparse
 import os
@@ -27,7 +26,7 @@ parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
 parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
 parser.add_argument('cc_textures_path', nargs='?', default="resources/cctextures", help="Path to downloaded cc textures")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
+parser.add_argument('output_dir', nargs='?', default="examples/bop_object_on_surface_sampling/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 Initializer.init()
@@ -50,17 +49,15 @@ distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_p
                                       sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
-                                      num_of_objs_to_sample = 3,
-                                      obj_instances_limit = 1)
+                                      num_of_objs_to_sample = 3)
 
 # set shading and physics properties and randomize PBR materials
 for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
-    obj.enable_rigidbody(True, friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
     obj.set_shading_mode('auto')
         
     mat = obj.get_materials()[0]
     if obj.get_cp("bop_dataset_name") in ['itodd', 'tless']:
-        grey_col = np.random.uniform(0.1, 0.9)   
+        grey_col = np.random.uniform(0.3, 0.9)   
         mat.set_principled_shader_value("Base Color", [grey_col, grey_col, grey_col, 1])        
     mat.set_principled_shader_value("Roughness", np.random.uniform(0, 1.0))
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
@@ -71,8 +68,6 @@ room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
                MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
-for plane in room_planes:
-    plane.enable_rigidbody(False, collision_shape='BOX', friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
 
 # sample light color and strenght from ceiling
 light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
@@ -85,7 +80,7 @@ light_plane.replace_materials(light_plane_material)
 # sample point light on shell
 light_point = Light()
 light_point.set_energy(200)
-light_point.set_color(np.random.uniform([0.5,0.5,0.5],[1,1,1]))
+light_point.set_color(np.random.uniform([0.5, 0.5, 0.5], [1, 1, 1]))
 location = Shell.sample(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
                         elevation_min = 5, elevation_max = 89, uniform_elevation = True)
 light_point.set_location(location)
@@ -96,27 +91,21 @@ random_cc_texture = np.random.choice(cc_textures)
 for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
-# Define a function that samples 6-DoF poses
-def sample_pose_func(obj: MeshObject):
-    min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
-    max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
-    obj.set_location(np.random.uniform(min, max))
-    obj.set_rotation_euler(UniformSO3.sample())
+# Define a function that samples the initial pose of a given object above the ground
+def sample_initial_pose(obj: MeshObject):
+    obj.set_location(UpperRegionSampler.sample(objects_to_sample_on=room_planes[0:1], 
+                                               min_height=1, max_height=4, face_sample_range=[0.4, 0.6]))
+    obj.set_rotation_euler(np.random.uniform([0, 0, 0], [0, 0, np.pi * 2]))
 
-# Sample object poses and check collisions 
-ObjectPoseSampler.sample(objects_to_sample = sampled_bop_objs + distractor_bop_objs, 
-                        sample_pose_func = sample_pose_func, 
-                        max_tries = 1000)
-        
-# Physics Positioning
-PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
-                                                max_simulation_time=10,
-                                                check_object_interval=1,
-                                                substeps_per_frame = 20,
-                                                solver_iters=25)
+# Sample objects on the given surface
+placed_objects = OnSurfaceSampler.sample(objects_to_sample=sampled_bop_objs + distractor_bop_objs,
+                                         surface=room_planes[0],
+                                         sample_pose_func=sample_initial_pose,
+                                         min_distance=0.01,
+                                         max_distance=0.2)
 
 # BVH tree used for camera obstacle checks
-bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(sampled_bop_objs + distractor_bop_objs)
+bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(placed_objects)
 
 poses = 0
 while poses < 10:
@@ -128,7 +117,7 @@ while poses < 10:
                             elevation_max = 89,
                             uniform_elevation = True)
     # Determine point of interest in scene as the object closest to the mean of a subset of objects
-    poi = MeshObject.compute_poi(np.random.choice(sampled_bop_objs, size=10))
+    poi = MeshObject.compute_poi(np.random.choice(placed_objects, size=10))
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation
