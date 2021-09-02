@@ -33,7 +33,7 @@ bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 
 for j, obj in enumerate(bop_objs):
     obj.set_shading_mode('auto')
         
-# sample point light on shell
+# Set light source
 light_point = Light()
 light_point.set_energy(1000)
 light_point.set_location([0, 0, -0.8])
