@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")
 parser.add_argument('bop_dataset_name', nargs='?', help="Main BOP dataset")
 parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
-parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
+parser.add_argument('output_dir', nargs='?', default="examples/bop_object_pose_sampling/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
 Initializer.init()
@@ -114,4 +114,3 @@ for _ in range(5):
                             colors = data["colors"],
                             color_file_format = "JPEG", 
                             append_to_existing_output = True)
-
