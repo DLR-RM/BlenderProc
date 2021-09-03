@@ -9,7 +9,7 @@ from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.types.LightUtility import Light
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import numpy as np
 import argparse

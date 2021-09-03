@@ -9,8 +9,8 @@ from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.RendererUtility import RendererUtility
-from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Shell import Shell

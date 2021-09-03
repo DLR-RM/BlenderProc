@@ -10,7 +10,7 @@ from blenderproc.python.DefaultConfig import DefaultConfig
 
 import addon_utils
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 
 class Initializer:

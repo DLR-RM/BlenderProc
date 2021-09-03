@@ -1,8 +1,6 @@
-import bpy
-
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.Utility import Utility
 
 

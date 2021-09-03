@@ -3,7 +3,7 @@ import bpy
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.Config import Config
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 
 class RendererInterface(Module):

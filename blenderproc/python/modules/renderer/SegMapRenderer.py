@@ -1,12 +1,5 @@
-import csv
-import os
-
-import bpy
-import numpy as np
-
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.BlenderUtility import load_image, get_all_blender_mesh_objects
-from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.Utility import Utility
 
 

@@ -8,7 +8,7 @@ import numpy as np
 
 from blenderproc.python.BlenderUtility import load_image, get_all_blender_mesh_objects
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.Utility import Utility
 
 

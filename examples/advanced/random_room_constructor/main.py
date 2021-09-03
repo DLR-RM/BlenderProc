@@ -13,7 +13,7 @@ from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse

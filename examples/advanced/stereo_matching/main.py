@@ -11,7 +11,7 @@ from blenderproc.python.loader.SuncgLoader import SuncgLoader
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os

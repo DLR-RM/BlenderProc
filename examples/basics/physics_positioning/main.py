@@ -8,7 +8,7 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.types.MeshObjectUtility import MeshObject

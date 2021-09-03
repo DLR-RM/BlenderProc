@@ -10,7 +10,7 @@ from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.MaterialUtility import Material

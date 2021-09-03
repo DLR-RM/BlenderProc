@@ -3,7 +3,7 @@ SetupUtility.setup([])
 
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.LabelIdMapping import LabelIdMapping
-from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
@@ -16,7 +16,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.SceneNetLoader import SceneNetLoader
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import random
 import os

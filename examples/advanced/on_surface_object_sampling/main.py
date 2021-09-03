@@ -16,7 +16,7 @@ from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")

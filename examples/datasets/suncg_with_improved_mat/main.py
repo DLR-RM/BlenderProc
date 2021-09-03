@@ -9,7 +9,7 @@ from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomS
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 from blenderproc.python.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation
@@ -19,7 +19,7 @@ from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 import numpy as np
 
 import argparse

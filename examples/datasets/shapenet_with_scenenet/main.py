@@ -17,7 +17,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.SceneNetLoader import SceneNetLoader
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import os
 import argparse

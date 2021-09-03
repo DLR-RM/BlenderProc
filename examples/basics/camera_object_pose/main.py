@@ -11,7 +11,7 @@ from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 

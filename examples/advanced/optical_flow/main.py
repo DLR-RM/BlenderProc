@@ -1,14 +1,14 @@
 from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.FlowRendererUtility import FlowRendererUtility
+from blenderproc.python.renderer.FlowRendererUtility import FlowRendererUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 

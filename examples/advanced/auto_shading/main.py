@@ -8,7 +8,7 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.loader.BlendLoader import BlendLoader
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 

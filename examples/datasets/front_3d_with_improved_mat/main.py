@@ -18,8 +18,8 @@ from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Utility import Utility
-from blenderproc.python.RendererUtility import RendererUtility
-from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")

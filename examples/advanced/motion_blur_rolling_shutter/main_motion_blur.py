@@ -10,7 +10,7 @@ from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/advanced/motion_blur_rolling_shutter/camera_positions", help="Path to the camera file")

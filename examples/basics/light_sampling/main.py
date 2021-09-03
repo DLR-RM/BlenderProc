@@ -11,7 +11,7 @@ from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/scene.obj", help="Path to the camera file")

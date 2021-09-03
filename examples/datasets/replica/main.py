@@ -16,7 +16,7 @@ from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Utility import Utility
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")

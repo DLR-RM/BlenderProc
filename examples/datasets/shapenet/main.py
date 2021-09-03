@@ -9,7 +9,7 @@ from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
-from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.sampler.Sphere import Sphere
 
 import argparse
