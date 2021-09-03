@@ -5,7 +5,7 @@ from blenderproc.python.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler

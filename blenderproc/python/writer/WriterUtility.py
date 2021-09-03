@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
-from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 

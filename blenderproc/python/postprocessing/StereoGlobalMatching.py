@@ -7,8 +7,8 @@ import cv2
 import numpy as np
 
 from blenderproc.python.CameraUtility import CameraUtility
-from blenderproc.python.SGMUtility import fill_in_fast
-from blenderproc.python.SGMUtility import resize
+from blenderproc.python.postprocessing.SGMUtility import fill_in_fast
+from blenderproc.python.postprocessing.SGMUtility import resize
 
 class StereoGlobalMatching:
 

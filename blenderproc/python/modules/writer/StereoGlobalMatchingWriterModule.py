@@ -4,17 +4,13 @@ SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
 from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 
 import os
-from math import tan
 
 import bpy
-import cv2
 import numpy as np
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.BlenderUtility import load_image
-from blenderproc.python.SGMUtility import fill_in_fast
-from blenderproc.python.SGMUtility import resize
 from blenderproc.python.Utility import Utility
 
 

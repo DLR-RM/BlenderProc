@@ -14,7 +14,7 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 
 from blenderproc.python.RendererUtility import RendererUtility
-from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np

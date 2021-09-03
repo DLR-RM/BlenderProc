@@ -12,7 +12,7 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 
 from blenderproc.python.RendererUtility import RendererUtility
-from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 
 parser = argparse.ArgumentParser()

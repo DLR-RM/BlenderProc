@@ -14,7 +14,7 @@ from mathutils import Matrix
 
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.Utility import Utility
-from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 class BopWriterUtility:

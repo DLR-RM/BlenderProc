@@ -1,12 +1,8 @@
 from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["scipy"])
 
-import cv2
-import numpy as np
-from scipy import stats
-
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 class OilPaintFilter(Module):
     """
