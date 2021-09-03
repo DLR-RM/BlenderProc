@@ -8,7 +8,6 @@ from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.MaterialUtility import Material
@@ -128,11 +127,11 @@ while poses < 10:
         poses += 1
 
 # activate distance rendering and set amount of samples for color rendering
-RendererUtility.enable_distance_output()
-RendererUtility.set_samples(50)
+bproc.renderer.enable_distance_output()
+bproc.renderer.set_samples(50)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Write data in bop format
 BopWriterUtility.write(args.output_dir, 

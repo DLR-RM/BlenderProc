@@ -5,7 +5,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -45,15 +44,15 @@ with open(args.camera, "r") as f:
         bproc.camera.add_camera_pose(matrix_world)
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(50)
+bproc.renderer.set_samples(50)
 
 # render the whole pipeline
-data = RendererUtility.render()
-seg_data = SegMapRendererUtility.render(map_by=["instance", "class", "name"])
+data = bproc.renderer.render()
+seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
 
 # Write data to coco file
 CocoWriterUtility.write(args.output_dir,

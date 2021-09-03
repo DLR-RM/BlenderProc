@@ -18,7 +18,6 @@ from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 import numpy as np
 
 import argparse
@@ -84,20 +83,20 @@ for material in all_floor_materials:
     material.set_principled_shader_value("Specular", np.random.uniform(0.1, 0.3))
 
 # set the light bounces
-RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
+bproc.renderer.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(350)
+bproc.renderer.set_samples(350)
 
 MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
-data.update(SegMapRendererUtility.render(map_by="class", use_alpha_channel=True))
+data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

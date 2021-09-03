@@ -8,7 +8,6 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 
@@ -41,13 +40,13 @@ for i in range(5):
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(350)
+bproc.renderer.set_samples(350)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

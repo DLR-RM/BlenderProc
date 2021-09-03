@@ -1,5 +1,5 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import render_segmap
 from blenderproc.python.utility.Utility import Utility
 
 
@@ -126,7 +126,7 @@ class SegMapRenderer(RendererInterface):
             self._configure_renderer(default_samples=1)
 
             if not self._avoid_output:
-                SegMapRendererUtility.render(
+                render_segmap(
                     self._determine_output_dir(),
                     self._temp_dir,
                     map_by,

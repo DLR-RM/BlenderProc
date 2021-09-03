@@ -7,7 +7,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -60,7 +59,7 @@ ground.enable_rigidbody(active=False, collision_shape="MESH")
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=4, max_simulation_time=20, check_object_interval=1)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

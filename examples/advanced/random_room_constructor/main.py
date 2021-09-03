@@ -13,7 +13,6 @@ from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse
@@ -61,12 +60,12 @@ while tries < 10000 and poses < 5:
     tries += 1
 
 # activate distance rendering
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(350)
-RendererUtility.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
+bproc.renderer.set_samples(350)
+bproc.renderer.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_bounces=200, transmission_bounces=200, transparent_max_bounces=200)
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # post process the data and remove the redundant channels in the distance image
 data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
