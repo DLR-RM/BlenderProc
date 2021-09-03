@@ -6,7 +6,7 @@ import math
 import bpy
 import numpy as np
 
-from blenderproc.python.main.GlobalStorage import GlobalStorage
+from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.WriterUtility import WriterUtility

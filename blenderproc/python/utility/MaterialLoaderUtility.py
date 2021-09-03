@@ -4,14 +4,14 @@ from typing import Union
 
 import bpy
 
-from blenderproc.python.provider.getter.Material import Material
+from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.Utility import Utility
 
 
 class MaterialLoaderUtility(object):
     """
     This is the base class for different MaterialLoaders. It is currently used by the
-    :class:`blenderproc.python.loader.HavenMaterialLoader` and the :class:`blenderproc.python.loader.CCMaterialLoader`.
+    :class:`blenderproc.python.modules.loader.HavenMaterialLoader` and the :class:`blenderproc.python.modules.loader.CCMaterialLoader`.
     """
 
     x_texture_node = -1500

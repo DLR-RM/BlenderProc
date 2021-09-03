@@ -4,7 +4,7 @@ from typing import Dict, List
 import bpy
 import numpy as np
 
-from blenderproc.python.renderer.RendererInterface import RendererInterface
+from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.RendererUtility import RendererUtility
 from blenderproc.python.utility.Utility import Utility

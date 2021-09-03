@@ -34,7 +34,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 # Setup general required pip packages e.q. pyyaml
 SetupUtility.setup_pip([])
 
-from blenderproc.python.main.Pipeline import Pipeline
+from blenderproc.python.modules.main.Pipeline import Pipeline
 from blenderproc.python.utility.Utility import Utility
 
 config_path = argv[0]

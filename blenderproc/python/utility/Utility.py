@@ -12,7 +12,7 @@ import importlib
 import git
 import warnings
 
-from blenderproc.python.main.GlobalStorage import GlobalStorage
+from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.Config import Config
 import numpy as np
 import json
@@ -81,7 +81,7 @@ class Utility:
                     for suffix in ["Module", ""]:
                         try:
                             # Try to load the module using the current suffix
-                            module = importlib.import_module("blenderproc.python." + module_config["module"] + suffix)
+                            module = importlib.import_module("blenderproc.python.modules." + module_config["module"] + suffix)
                         except ModuleNotFoundError:
                             # Try next suffix
                             continue
@@ -95,7 +95,7 @@ class Utility:
 
                     # Throw an error if no module/class with the specified name + any suffix has been found
                     if module_class is None:
-                        raise Exception("The module blenderproc.python." + module_config["module"] + " was not found!")
+                        raise Exception("The module blenderproc.python.modules." + module_config["module"] + " was not found!")
 
                     # Create module
                     modules.append(module_class(Config(config)))
@@ -345,7 +345,7 @@ class Utility:
         for suffix in ["Module", ""]:
             try:
                 # Import class from blenderproc.python.utility
-                module_class = getattr(importlib.import_module("blenderproc.python.provider." + name + suffix), name.split(".")[-1] + suffix)
+                module_class = getattr(importlib.import_module("blenderproc.python.modules.provider." + name + suffix), name.split(".")[-1] + suffix)
                 break
             except ModuleNotFoundError:
                 # Try next suffix
@@ -353,7 +353,7 @@ class Utility:
 
         # Throw an error if no module/class with the specified name + any suffix has been found
         if module_class is None:
-            raise Exception("The module blenderproc.python.provider." + name + " was not found!")
+            raise Exception("The module blenderproc.python.modules.provider." + name + " was not found!")
 
         # Build configuration
         config = Config(parameters)

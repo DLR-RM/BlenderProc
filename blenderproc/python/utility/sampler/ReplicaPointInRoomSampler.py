@@ -5,7 +5,7 @@ import numpy as np
 
 import bpy
 
-from blenderproc.python.camera.CameraSampler import CameraSampler
+from blenderproc.python.modules.camera.CameraSampler import CameraSampler
 from blenderproc.python.utility.CameraUtility import CameraUtility
 from blenderproc.python.utility.Config import Config
 from blenderproc.python.utility.MeshObjectUtility import MeshObject

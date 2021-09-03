@@ -8,7 +8,7 @@ import mathutils
 import numpy as np
 import random
 
-from blenderproc.python.provider.getter.Material import Material
+from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.utility.EntityUtility import Entity

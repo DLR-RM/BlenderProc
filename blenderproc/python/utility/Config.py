@@ -2,8 +2,8 @@ import mathutils
 import numpy as np
 
 import blenderproc.python.utility.Utility as Utility
-from blenderproc.python.main.Provider import Provider
-from blenderproc.python.main.GlobalStorage import GlobalStorage
+from blenderproc.python.modules.main.Provider import Provider
+from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 
 class Config:
     # Used in get_* functions to denote that no fallback value is specified

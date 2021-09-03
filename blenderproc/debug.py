@@ -25,7 +25,7 @@ for module in list(sys.modules.keys()):
     if module.startswith("blenderproc") or module.startswith("external"):
         del sys.modules[module]
 
-from blenderproc.python.main.Pipeline import Pipeline
+from blenderproc.python.modules.main.Pipeline import Pipeline
 
 # Replace placeholders manually or use --debug command line argument
 config_path = "###CONFIG_PATH###"

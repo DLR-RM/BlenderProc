@@ -1,7 +1,7 @@
 import bpy
 import mathutils
 
-from blenderproc.python.main.Module import Module
+from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.utility.MeshObjectUtility import MeshObject
