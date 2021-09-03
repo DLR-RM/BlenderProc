@@ -11,6 +11,7 @@ class SetupUtility:
 
     # Remember already installed packages, so we do not have to call pip freeze multiple times
     installed_packages = None
+    main_setup_called = False
 
     @staticmethod
     def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False, debug_args=None):
@@ -26,27 +27,30 @@ class SetupUtility:
         :param debug_args: Can be used to overwrite sys.argv in debug mode.
         """
         packages_path = SetupUtility.setup_pip(user_required_packages, blender_path, major_version, reinstall_packages)
-        sys.path.append(packages_path)
 
-        is_debug_mode = "--background" not in sys.argv
-        if is_debug_mode:
-            # Delete all loaded models inside src/, as they are cached inside blender
-            for module in list(sys.modules.keys()):
-                if module.startswith("blenderproc") and not module == "blenderproc.python.SetupUtility":
-                    del sys.modules[module]
-        
-        # Setup temporary directory
-        if is_debug_mode:
-            SetupUtility.setup_utility_paths("examples/debugging/temp")
-        else:
-            SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
-        
-        # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
-        if not is_debug_mode:
-            # Cut off blender specific arguments
-            sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
-        elif debug_args is not None:
-            sys.argv = ["debug"] + debug_args
+        if not SetupUtility.main_setup_called:
+            SetupUtility.main_setup_called = True
+            sys.path.append(packages_path)
+
+            is_debug_mode = "--background" not in sys.argv
+            if is_debug_mode:
+                # Delete all loaded models inside src/, as they are cached inside blender
+                for module in list(sys.modules.keys()):
+                    if module.startswith("blenderproc") and not module == "blenderproc.python.SetupUtility":
+                        del sys.modules[module]
+
+            # Setup temporary directory
+            if is_debug_mode:
+                SetupUtility.setup_utility_paths("examples/debugging/temp")
+            else:
+                SetupUtility.setup_utility_paths(sys.argv[sys.argv.index("--") + 2])
+
+            # Only prepare args in non-debug mode (In debug mode the arguments are already ready to use)
+            if not is_debug_mode:
+                # Cut off blender specific arguments
+                sys.argv = sys.argv[sys.argv.index("--") + 1:sys.argv.index("--") + 2] + sys.argv[sys.argv.index("--") + 3:]
+            elif debug_args is not None:
+                sys.argv = ["debug"] + debug_args
             
         return sys.argv
 
