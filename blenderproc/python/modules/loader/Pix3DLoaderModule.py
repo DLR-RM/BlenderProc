@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.Pix3DLoader import Pix3DLoader
+from blenderproc.python.loader.Pix3DLoader import load_pix3d
 
 
 class Pix3DLoaderModule(LoaderInterface):
@@ -38,5 +38,5 @@ class Pix3DLoaderModule(LoaderInterface):
         LoaderInterface.__init__(self, config)
 
     def run(self):
-        loaded_obj = Pix3DLoader.load(self.config.get_string("used_category"), self.config.get_string("data_path", "resources/pix3d"))
+        loaded_obj = load_pix3d(self.config.get_string("used_category"), self.config.get_string("data_path", "resources/pix3d"))
         self._set_properties(loaded_obj)

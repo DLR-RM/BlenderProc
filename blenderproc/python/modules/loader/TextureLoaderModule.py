@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.TextureLoader import TextureLoader
+from blenderproc.python.loader.TextureLoader import load_texture
 
 
 class TextureLoaderModule(LoaderInterface):
@@ -62,6 +62,6 @@ class TextureLoaderModule(LoaderInterface):
 
     def run(self):
         """ Loads images and creates image textures. """
-        textures = TextureLoader.load(self.config.get_string("path"), self.config.get_string("colorspace", "sRGB"))
+        textures = load_texture(self.config.get_string("path"), self.config.get_string("colorspace", "sRGB"))
 
         self._set_properties(textures)

@@ -4,7 +4,7 @@ from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.SuncgLoader import SuncgLoader
+from blenderproc.python.loader.SuncgLoader import load_suncg
 
 
 class SuncgLoaderModule(LoaderInterface):
@@ -43,5 +43,5 @@ class SuncgLoaderModule(LoaderInterface):
         # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
 
-        loaded_objects = SuncgLoader.load(self.house_path, label_mapping, self.suncg_dir)
+        loaded_objects = load_suncg(self.house_path, label_mapping, self.suncg_dir)
         self._set_properties(loaded_objects)
