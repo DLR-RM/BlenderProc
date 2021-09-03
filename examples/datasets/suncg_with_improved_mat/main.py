@@ -14,7 +14,6 @@ from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtil
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -37,7 +36,7 @@ label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resou
 objs = bproc.loader.load_suncg(args.house, label_mapping)
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = SuncgPointInRoomSampler(objs)

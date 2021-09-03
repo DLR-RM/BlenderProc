@@ -8,7 +8,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -49,7 +48,7 @@ with open(args.camera, "r") as f:
         CameraUtility.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # activate normal and distance rendering
 RendererUtility.enable_distance_output()

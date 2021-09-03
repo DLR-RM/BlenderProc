@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
+from blenderproc.python.lighting.SuncgLighting import light_suncg_scene
 
 
 class SuncgLightingModule(Module):
@@ -31,4 +31,4 @@ class SuncgLightingModule(Module):
         """
         Run this current module.
         """
-        SuncgLighting.light(self.config.get_float("lightbulb_emission_strength", 15), self.config.get_float("lampshade_emission_strength", 7), self.config.get_float("ceiling_emission_strength", 1.5))
+        light_suncg_scene(self.config.get_float("lightbulb_emission_strength", 15), self.config.get_float("lampshade_emission_strength", 7), self.config.get_float("ceiling_emission_strength", 1.5))
