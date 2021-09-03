@@ -6,7 +6,6 @@ from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
@@ -95,7 +94,7 @@ while tries < 10000 and poses < 5:
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
 
     # Check that obstacles are at least 0.5 meter away from the camera and that the ShapeNet object is visible
-    if shapenet_obj in CameraValidation.visible_objects(cam2world_matrix) and CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.5}, bvh_tree):
+    if shapenet_obj in bproc.camera.visible_objects(cam2world_matrix) and bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.5}, bvh_tree):
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1

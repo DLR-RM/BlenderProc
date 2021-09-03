@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
@@ -84,7 +83,7 @@ for _ in range(5):
         cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
         
         # Check that obstacles are at least 0.3 meter away from the camera and make sure the view interesting enough
-        if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):
+        if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):
             # Persist camera pose
             bproc.camera.add_camera_pose(cam2world_matrix, 
                                           frame = poses)

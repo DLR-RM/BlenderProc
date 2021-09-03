@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -69,7 +68,7 @@ while tries < 10000 and poses < 5:
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
 
     # Only add camera pose if object is still visible
-    if obj in CameraValidation.visible_objects(cam2world_matrix):
+    if obj in bproc.camera.visible_objects(cam2world_matrix):
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
