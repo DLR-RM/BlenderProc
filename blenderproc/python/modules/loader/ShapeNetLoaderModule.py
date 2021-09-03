@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
+from blenderproc.python.loader.ShapeNetLoader import load_shapenet
 
 
 class ShapeNetLoaderModule(LoaderInterface):
@@ -45,7 +45,7 @@ class ShapeNetLoaderModule(LoaderInterface):
         """
         Uses the loaded .obj files and picks one randomly and loads it
         """
-        loaded_obj = ShapeNetLoader.load(
+        loaded_obj = load_shapenet(
             data_path=self.config.get_string("data_path"),
             used_synset_id=self.config.get_string("used_synset_id"),
             used_source_id=self.config.get_string("used_source_id", ""),

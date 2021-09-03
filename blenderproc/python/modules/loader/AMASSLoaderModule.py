@@ -3,7 +3,7 @@ import random
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.AMASSLoader import AMASSLoader
+from blenderproc.python.loader.AMASSLoader import load_AMASS
 
 
 class AMASSLoaderModule(LoaderInterface):
@@ -104,7 +104,7 @@ class AMASSLoaderModule(LoaderInterface):
         """
         use the pose parameters to generate the mesh and loads it to the scene.
         """
-        loaded_obj = AMASSLoader.load(
+        loaded_obj = load_AMASS(
             data_path=self._data_path,
             sub_dataset_id=self._used_sub_dataset_id,
             temp_dir=self._temp_dir,

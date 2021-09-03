@@ -1,6 +1,6 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
 
 
 class ObjectLoaderModule(LoaderInterface):
@@ -32,7 +32,7 @@ class ObjectLoaderModule(LoaderInterface):
             raise Exception("Objectloader can not use path and paths in the same module!")
         if self.config.has_param('path'):
             file_path = Utility.resolve_path(self.config.get_string("path"))
-            loaded_objects = ObjectLoader.load(filepath=file_path)
+            loaded_objects = load_obj(filepath=file_path)
         elif self.config.has_param('paths'):
             file_paths = self.config.get_list('paths')
             loaded_objects = []
@@ -40,7 +40,7 @@ class ObjectLoaderModule(LoaderInterface):
             cache_objects = {}
             for file_path in file_paths:
                 resolved_file_path = Utility.resolve_path(file_path)
-                current_objects = ObjectLoader.load(filepath=resolved_file_path, cached_objects=cache_objects)
+                current_objects = load_obj(filepath=resolved_file_path, cached_objects=cache_objects)
                 loaded_objects.extend(current_objects)
         else:
             raise Exception("Loader module needs either a path or paths config value")

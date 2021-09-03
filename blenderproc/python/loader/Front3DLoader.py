@@ -13,9 +13,50 @@ from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import TextureLoader
 
+def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
+    """ Loads the 3D-Front scene specified by the given json file.
+
+    :param json_path: Path to the json file, where the house information is stored.
+    :param future_model_path: Path to the models used in the 3D-Front dataset.
+    :param front_3D_texture_path: Path to the 3D-FRONT-texture folder.
+    :param label_mapping: A dict which maps the names of the objects to ids.
+    :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
+    :param lamp_light_strength: Strength of the emission shader used in each lamp.
+    :return: The list of loaded mesh objects.
+    """
+    json_path = Utility.resolve_path(json_path)
+    future_model_path = Utility.resolve_path(future_model_path)
+    front_3D_texture_path = Utility.resolve_path(front_3D_texture_path)
+
+    if not os.path.exists(json_path):
+        raise Exception("The given path does not exists: {}".format(json_path))
+    if not json_path.endswith(".json"):
+        raise Exception("The given path does not point to a .json file: {}".format(json_path))
+    if not os.path.exists(future_model_path):
+        raise Exception("The 3D future model path does not exist: {}".format(future_model_path))
+
+    # load data from json file
+    with open(json_path, "r") as json_file:
+        data = json.load(json_file)
+
+    if "scene" not in data:
+        raise Exception("There is no scene data in this json file: {}".format(json_path))
+
+    created_objects = Front3DLoader._create_mesh_objects_from_file(data, front_3D_texture_path,
+                                                                   ceiling_light_strength, label_mapping, json_path)
+
+    all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping)
+
+    created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture)
+
+    # add an identifier to the obj
+    for obj in created_objects:
+        obj.set_cp("is_3d_front", True)
+
+    return created_objects
 
 class Front3DLoader:
     """ Loads the 3D-Front dataset.
@@ -30,49 +71,6 @@ class Front3DLoader:
 
     The Front3DLoader creates automatically lights in the scene, by adding emission shaders to the ceiling and lamps.
     """
-
-    @staticmethod
-    def load(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
-        """ Loads the 3D-Front scene specified by the given json file.
-
-        :param json_path: Path to the json file, where the house information is stored.
-        :param future_model_path: Path to the models used in the 3D-Front dataset.
-        :param front_3D_texture_path: Path to the 3D-FRONT-texture folder.
-        :param label_mapping: A dict which maps the names of the objects to ids.
-        :param ceiling_light_strength: Strength of the emission shader used in the ceiling.
-        :param lamp_light_strength: Strength of the emission shader used in each lamp.
-        :return: The list of loaded mesh objects.
-        """
-        json_path = Utility.resolve_path(json_path)
-        future_model_path = Utility.resolve_path(future_model_path)
-        front_3D_texture_path = Utility.resolve_path(front_3D_texture_path)
-
-        if not os.path.exists(json_path):
-            raise Exception("The given path does not exists: {}".format(json_path))
-        if not json_path.endswith(".json"):
-            raise Exception("The given path does not point to a .json file: {}".format(json_path))
-        if not os.path.exists(future_model_path):
-            raise Exception("The 3D future model path does not exist: {}".format(future_model_path))
-
-        # load data from json file
-        with open(json_path, "r") as json_file:
-            data = json.load(json_file)
-
-        if "scene" not in data:
-            raise Exception("There is no scene data in this json file: {}".format(json_path))
-
-        created_objects = Front3DLoader._create_mesh_objects_from_file(data, front_3D_texture_path,
-                                                                       ceiling_light_strength, label_mapping, json_path)
-
-        all_loaded_furniture = Front3DLoader._load_furniture_objs(data, future_model_path, lamp_light_strength, label_mapping)
-
-        created_objects += Front3DLoader._move_and_duplicate_furniture(data, all_loaded_furniture)
-
-        # add an identifier to the obj
-        for obj in created_objects:
-            obj.set_cp("is_3d_front", True)
-
-        return created_objects
 
     @staticmethod
     def _extract_hash_nr_for_texture(given_url: str, front_3D_texture_path: str) -> str:
@@ -318,7 +316,7 @@ class Front3DLoader:
             # we are unsure why this is -> we assume that not all objects have been made public
             if os.path.exists(obj_file) and not "7e101ef3-7722-4af8-90d5-7c562834fabd" in obj_file:
                 # load all objects from this .obj file
-                objs = ObjectLoader.load(filepath=obj_file)
+                objs = load_obj(filepath=obj_file)
                 # extract the name, which serves as category id
                 used_obj_name = ""
                 if "category" in ele:
@@ -416,5 +414,3 @@ class Front3DLoader:
                             # transform it into the blender coordinate system and then to an euler
                             new_obj.set_rotation_euler((blender_rot_mat @ rotation_mat).to_euler())
         return created_objects
-
-load_front3d = Front3DLoader.load
