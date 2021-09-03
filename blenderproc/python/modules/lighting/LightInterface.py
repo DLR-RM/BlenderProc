@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.ItemCollection import ItemCollection
+from blenderproc.python.modules.utility.ItemCollection import ItemCollection
 from blenderproc.python.types.LightUtility import Light
 
 

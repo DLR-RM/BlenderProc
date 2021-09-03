@@ -15,7 +15,7 @@ else:
     import contextlib
 
 import uuid
-from blenderproc.python.ConfigParser import ConfigParser
+from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
 

@@ -3,7 +3,7 @@ from math import radians
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 

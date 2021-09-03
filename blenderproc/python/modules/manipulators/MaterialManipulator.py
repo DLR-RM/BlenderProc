@@ -6,7 +6,7 @@ from typing import Any
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.materials.Dust import Dust
 

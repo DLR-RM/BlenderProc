@@ -7,7 +7,7 @@ import numpy as np
 import blenderproc.python.utility.BlenderUtility as BlenderUtility
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from mathutils import Matrix
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject

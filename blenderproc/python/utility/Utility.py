@@ -11,7 +11,7 @@ import git
 import warnings
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 import numpy as np
 import json
 

@@ -2,7 +2,7 @@ import addon_utils
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 

@@ -1,6 +1,6 @@
 import bpy
 
-from blenderproc.python.ItemWriter import ItemWriter
+from blenderproc.python.modules.utility.ItemWriter import ItemWriter
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 

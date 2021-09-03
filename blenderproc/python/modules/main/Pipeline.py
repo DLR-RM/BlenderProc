@@ -1,7 +1,7 @@
 
 import os
 
-from blenderproc.python.ConfigParser import ConfigParser
+from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage

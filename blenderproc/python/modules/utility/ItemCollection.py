@@ -1,4 +1,4 @@
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.utility.Utility import Utility
 import json
 from copy import deepcopy

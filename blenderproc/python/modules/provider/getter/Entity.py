@@ -5,7 +5,7 @@ import bpy
 import mathutils
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.types.EntityUtility import Entity as EntityUtility
 import numpy as np

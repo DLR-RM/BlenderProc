@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.Config import Config
+from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.loader.RockEssentialsRockLoader import RockEssentialsRockLoader
 
 
