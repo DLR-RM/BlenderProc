@@ -11,7 +11,7 @@ from blenderproc.python.utility.Utility import Utility
 class MaterialLoaderUtility(object):
     """
     This is the base class for different MaterialLoaders. It is currently used by the
-    :class:`blenderproc.loader.HavenMaterialLoader` and the :class:`blenderproc.loader.CCMaterialLoader`.
+    :class:`blenderproc.python.loader.HavenMaterialLoader` and the :class:`blenderproc.python.loader.CCMaterialLoader`.
     """
 
     x_texture_node = -1500

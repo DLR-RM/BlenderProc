@@ -32,7 +32,7 @@ class SetupUtility:
         if is_debug_mode:
             # Delete all loaded models inside src/, as they are cached inside blender
             for module in list(sys.modules.keys()):
-                if module.startswith("blenderproc") and not module == "blenderproc.utility.SetupUtility":
+                if module.startswith("blenderproc") and not module == "blenderproc.python.utility.SetupUtility":
                     del sys.modules[module]
         
         # Setup temporary directory

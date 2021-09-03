@@ -48,7 +48,7 @@ class GlobalStorage(object):
     @staticmethod
     def init_global(global_config):
         """
-        Inits the global config with the given config, global_config should be of type blenderproc.utility.Config
+        Inits the global config with the given config, global_config should be of type blenderproc.python.utility.Config
 
         Adds a key value pairs from add_to_global_config_at_init
 
