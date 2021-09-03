@@ -1,7 +1,7 @@
 import os
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
+from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
 
 
 class HavenEnvironmentLoaderModule(LoaderInterface):

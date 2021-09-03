@@ -1,21 +1,21 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.utility.BopWriterUtility import BopWriterUtility
-from blenderproc.python.utility.loader.BopLoader import BopLoader
-from blenderproc.python.utility.camera.CameraValidation import CameraValidation
-from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.LightUtility import Light
-from blenderproc.python.utility.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.python.utility.RendererUtility import RendererUtility
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.MaterialUtility import Material
-from blenderproc.python.utility.loader.CCMaterialLoader import CCMaterialLoader
-from blenderproc.python.utility.sampler.Shell import Shell
-from blenderproc.python.utility.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.Initializer import Initializer
+from blenderproc.python.BopWriterUtility import BopWriterUtility
+from blenderproc.python.loader.BopLoader import BopLoader
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.LightUtility import Light
+from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
+from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.sampler.Shell import Shell
+from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 
 import argparse
 import os

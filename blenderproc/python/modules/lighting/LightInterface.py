@@ -1,8 +1,8 @@
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.ItemCollection import ItemCollection
-from blenderproc.python.utility.LightUtility import Light
+from blenderproc.python.ItemCollection import ItemCollection
+from blenderproc.python.LightUtility import Light
 
 
 class LightInterface(Module):

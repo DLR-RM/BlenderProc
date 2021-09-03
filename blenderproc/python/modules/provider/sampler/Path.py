@@ -3,7 +3,7 @@ from glob import glob
 from random import choice
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.Utility import Utility
 
 
 class Path(Provider):

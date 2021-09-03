@@ -7,11 +7,11 @@ import bpy
 import mathutils
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility import BlenderUtility
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.MaterialUtility import Material
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.materials.Dust import Dust
+from blenderproc.python import BlenderUtility
+from blenderproc.python.Config import Config
+from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.Utility import Utility
+from blenderproc.python.materials.Dust import Dust
 
 
 class MaterialManipulator(Module):

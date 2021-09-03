@@ -1,7 +1,7 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.Config import Config
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 
 
 class SurfaceLightingModule(Module):

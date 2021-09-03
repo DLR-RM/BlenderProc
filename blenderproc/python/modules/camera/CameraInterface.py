@@ -3,10 +3,10 @@ import numpy as np
 from mathutils import Matrix, Vector, Euler
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.EntityUtility import Entity
-from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.Config import Config
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.EntityUtility import Entity
+from blenderproc.python.MathUtility import MathUtility
 
 
 class CameraInterface(Module):

@@ -1,8 +1,8 @@
 import mathutils
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.object.OnSurfaceSampler import OnSurfaceSampler
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 
 
 class OnSurfaceSamplerModule(Module):

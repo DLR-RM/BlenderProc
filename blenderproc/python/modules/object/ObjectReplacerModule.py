@@ -2,9 +2,9 @@ import bpy
 import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_blender_mesh_objects
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.object.ObjectReplacer import ObjectReplacer
+from blenderproc.python.BlenderUtility import check_intersection, check_bb_intersection, duplicate_objects, get_all_blender_mesh_objects
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.object.ObjectReplacer import ObjectReplacer
 from mathutils import Euler
 
 class ObjectReplacerModule(Module):

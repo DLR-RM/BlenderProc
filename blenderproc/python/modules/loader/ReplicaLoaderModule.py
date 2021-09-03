@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.loader.ReplicaLoader import ReplicaLoader
+from blenderproc.python.loader.ReplicaLoader import ReplicaLoader
 
 
 class ReplicaLoaderModule(LoaderInterface):

@@ -5,8 +5,8 @@ from random import choice
 import bpy
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.Config import Config
+from blenderproc.python.Utility import Utility
 
 
 class RockEssentialsTextureSampler(LoaderInterface):

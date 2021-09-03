@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.sampler.Disk import Disk
+from blenderproc.python.sampler.Disk import Disk
 
 
 class DiskModule(Provider):

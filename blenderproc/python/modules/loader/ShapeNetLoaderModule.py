@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.loader.ShapeNetLoader import ShapeNetLoader
+from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 
 
 class ShapeNetLoaderModule(LoaderInterface):

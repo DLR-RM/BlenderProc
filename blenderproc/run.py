@@ -30,12 +30,12 @@ if "--batch-process" in argv:
 argv = argv[argv.index("--") + 1:]
 working_dir = os.path.dirname(os.path.abspath(__file__))
 
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 # Setup general required pip packages e.q. pyyaml
 SetupUtility.setup_pip([])
 
 from blenderproc.python.modules.main.Pipeline import Pipeline
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.Utility import Utility
 
 config_path = argv[0]
 temp_dir = argv[1]

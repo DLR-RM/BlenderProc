@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.sampler.UniformSO3 import UniformSO3
+from blenderproc.python.sampler.UniformSO3 import UniformSO3
 
 
 class UniformSO3Module(Provider):

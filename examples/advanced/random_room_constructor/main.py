@@ -1,20 +1,20 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.camera.CameraValidation import CameraValidation
-from blenderproc.python.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.python.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
-from blenderproc.python.utility.lighting.SurfaceLighting import SurfaceLighting
-from blenderproc.python.utility.loader.CCMaterialLoader import CCMaterialLoader
-from blenderproc.python.utility.loader.IKEALoader import IKEALoader
-from blenderproc.python.utility.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
+from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.loader.IKEALoader import IKEALoader
+from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.Initializer import Initializer
 
-from blenderproc.python.utility.RendererUtility import RendererUtility
-from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np

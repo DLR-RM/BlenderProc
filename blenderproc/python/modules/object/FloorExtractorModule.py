@@ -3,9 +3,9 @@ from math import radians
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.object.FloorExtractor import FloorExtractor
+from blenderproc.python.Config import Config
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.object.FloorExtractor import FloorExtractor
 
 
 class FloorExtractorModule(Module):

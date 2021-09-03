@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 
 class TrimRedundantChannels(Module):
     """ Removes redundant channels, where the input has more than one channels that share exactly the same value """

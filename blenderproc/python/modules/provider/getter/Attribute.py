@@ -2,7 +2,7 @@ import mathutils
 import numpy as np
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.BlenderUtility import get_bounds
+from blenderproc.python.BlenderUtility import get_bounds
 
 
 class Attribute(Provider):

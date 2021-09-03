@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.loader.TextureLoader import TextureLoader
+from blenderproc.python.loader.TextureLoader import TextureLoader
 
 
 class TextureLoaderModule(LoaderInterface):

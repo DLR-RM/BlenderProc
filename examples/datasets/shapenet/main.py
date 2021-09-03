@@ -1,16 +1,16 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.utility.loader.ShapeNetLoader import ShapeNetLoader
-from blenderproc.python.utility.LightUtility import Light
-from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
-from blenderproc.python.utility.RendererUtility import RendererUtility
-from blenderproc.python.utility.sampler.Sphere import Sphere
+from blenderproc.python.Utility import Utility
+from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.Initializer import Initializer
+from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
+from blenderproc.python.LightUtility import Light
+from blenderproc.python.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.sampler.Sphere import Sphere
 
 import argparse
 

@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.Utility import Utility
+from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 
 
 class CCMaterialLoaderModule(Module):

@@ -1,8 +1,8 @@
 import bpy
 
 from blenderproc.python.modules.camera.CameraInterface import CameraInterface
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.ItemCollection import ItemCollection
+from blenderproc.python.Config import Config
+from blenderproc.python.ItemCollection import ItemCollection
 
 
 class CameraLoader(CameraInterface):

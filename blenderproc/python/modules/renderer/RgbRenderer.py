@@ -1,9 +1,9 @@
 import bpy
 
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.utility.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.utility.RendererUtility import RendererUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.RendererUtility import RendererUtility
+from blenderproc.python.Utility import Utility
 
 
 class RgbRenderer(RendererInterface):

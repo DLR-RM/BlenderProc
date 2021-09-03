@@ -2,7 +2,7 @@ import os
 
 import bpy
 
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.Utility import Utility
 
 
 class Module:

@@ -1,8 +1,8 @@
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.Config import Config
+from blenderproc.python.Utility import Utility
 
 
 class HideModule(Module):

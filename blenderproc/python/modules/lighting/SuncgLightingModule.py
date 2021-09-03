@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.lighting.SuncgLighting import SuncgLighting
+from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
 
 class SuncgLightingModule(Module):

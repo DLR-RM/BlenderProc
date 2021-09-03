@@ -6,12 +6,12 @@ import bpy
 from mathutils import Matrix
 
 from blenderproc.python.modules.camera.CameraInterface import CameraInterface
-from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.ItemCollection import ItemCollection
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.camera.CameraValidation import CameraValidation
+from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.Config import Config
+from blenderproc.python.ItemCollection import ItemCollection
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.camera.CameraValidation import CameraValidation
 
 class CameraSampler(CameraInterface):
     """

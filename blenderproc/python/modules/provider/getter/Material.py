@@ -5,8 +5,8 @@ from random import sample
 import mathutils
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.BlenderUtility import get_all_materials
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.BlenderUtility import get_all_materials
+from blenderproc.python.Utility import Utility
 
 
 class Material(Provider):

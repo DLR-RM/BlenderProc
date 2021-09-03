@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.loader.Pix3DLoader import Pix3DLoader
+from blenderproc.python.loader.Pix3DLoader import Pix3DLoader
 
 
 class Pix3DLoaderModule(LoaderInterface):

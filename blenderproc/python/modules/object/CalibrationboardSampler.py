@@ -1,13 +1,13 @@
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
+from blenderproc.python.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
 import numpy as np
 from mathutils import Vector, Matrix
 import bpy_extras
 import random
 
-from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.CameraUtility import CameraUtility
 
 
 class CalibrationboardSampler(Module):

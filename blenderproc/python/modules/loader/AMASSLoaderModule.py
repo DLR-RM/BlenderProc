@@ -2,8 +2,8 @@ import os
 import random
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.loader.AMASSLoader import AMASSLoader
+from blenderproc.python.Utility import Utility
+from blenderproc.python.loader.AMASSLoader import AMASSLoader
 
 
 class AMASSLoaderModule(LoaderInterface):

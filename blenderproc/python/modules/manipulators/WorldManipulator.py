@@ -1,7 +1,7 @@
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
 
 
 class WorldManipulator(Module):

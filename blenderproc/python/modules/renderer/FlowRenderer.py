@@ -1,6 +1,6 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.utility.FlowRendererUtility import FlowRendererUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.FlowRendererUtility import FlowRendererUtility
+from blenderproc.python.Utility import Utility
 
 
 class FlowRenderer(RendererInterface):

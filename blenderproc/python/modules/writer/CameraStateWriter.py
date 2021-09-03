@@ -1,8 +1,8 @@
 import bpy
 
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.ItemWriter import ItemWriter
-from blenderproc.python.utility.WriterUtility import WriterUtility
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.ItemWriter import ItemWriter
+from blenderproc.python.WriterUtility import WriterUtility
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 
 

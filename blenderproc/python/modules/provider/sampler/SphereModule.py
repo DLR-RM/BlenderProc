@@ -1,7 +1,7 @@
 import numpy as np
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.sampler.Sphere import Sphere
+from blenderproc.python.sampler.Sphere import Sphere
 
 
 class SphereModule(Provider):

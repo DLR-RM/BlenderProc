@@ -4,14 +4,14 @@ from random import choice
 import bpy
 import numpy as np
 
-import blenderproc.python.utility.BlenderUtility as BlenderUtility
+import blenderproc.python.BlenderUtility as BlenderUtility
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material
-from blenderproc.python.utility.Config import Config
+from blenderproc.python.Config import Config
 from mathutils import Matrix
 
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
+from blenderproc.python.MeshObjectUtility import MeshObject
 
 
 class EntityManipulator(Module):

@@ -1,8 +1,8 @@
 import os
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.loader.IKEALoader import IKEALoader
+from blenderproc.python.Utility import Utility
+from blenderproc.python.loader.IKEALoader import IKEALoader
 
 
 class IKEALoaderModule(LoaderInterface):

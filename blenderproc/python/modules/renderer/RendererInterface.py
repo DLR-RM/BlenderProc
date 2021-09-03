@@ -2,8 +2,8 @@ import addon_utils
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.RendererUtility import RendererUtility
+from blenderproc.python.Config import Config
+from blenderproc.python.RendererUtility import RendererUtility
 
 
 class RendererInterface(Module):

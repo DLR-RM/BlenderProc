@@ -1,6 +1,6 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.loader.RockEssentialsRockLoader import RockEssentialsRockLoader
+from blenderproc.python.Config import Config
+from blenderproc.python.loader.RockEssentialsRockLoader import RockEssentialsRockLoader
 
 
 class RockEssentialsRockLoaderModule(LoaderInterface):

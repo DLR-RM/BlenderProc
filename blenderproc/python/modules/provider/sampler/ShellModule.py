@@ -1,7 +1,7 @@
 import numpy as np
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.sampler.Shell import Shell
+from blenderproc.python.sampler.Shell import Shell
 
 
 class ShellModule(Provider):

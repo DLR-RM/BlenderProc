@@ -1,7 +1,7 @@
 import bpy
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.Config import Config
+from blenderproc.python.Config import Config
 
 
 class BasicMeshInitializer(Module):

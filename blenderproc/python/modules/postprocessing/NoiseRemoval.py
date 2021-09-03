@@ -1,7 +1,7 @@
 import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 
 
 class NoiseRemoval(Module):

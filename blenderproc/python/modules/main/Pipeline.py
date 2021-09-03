@@ -1,9 +1,9 @@
 
 import os
 
-from blenderproc.python.utility.ConfigParser import ConfigParser
-from blenderproc.python.utility.SetupUtility import SetupUtility
-from blenderproc.python.utility.Utility import Utility, Config
+from blenderproc.python.ConfigParser import ConfigParser
+from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.Utility import Utility, Config
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 
 class Pipeline:

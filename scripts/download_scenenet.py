@@ -5,7 +5,7 @@ if version_info.major == 2:
 import os
 from urllib.request import urlretrieve, build_opener, install_opener
 path.append(os.path.join(os.path.dirname(__file__), ".."))
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 
 if __name__ == "__main__":
     # setting the default header, else the server does not allow the download

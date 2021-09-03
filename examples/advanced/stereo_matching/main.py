@@ -1,17 +1,17 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.utility.CameraUtility import CameraUtility
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.utility.loader.SuncgLoader import SuncgLoader
-from blenderproc.python.utility.lighting.SuncgLighting import SuncgLighting
-from blenderproc.python.utility.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.utility.RendererUtility import RendererUtility
+from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
+from blenderproc.python.Utility import Utility
+from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.loader.SuncgLoader import SuncgLoader
+from blenderproc.python.lighting.SuncgLighting import SuncgLighting
+from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.Initializer import Initializer
+from blenderproc.python.RendererUtility import RendererUtility
 
 import argparse
 import os

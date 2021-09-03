@@ -4,10 +4,10 @@ import bpy
 import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.EntityUtility import Entity
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.StructUtility import Struct
-from blenderproc.python.utility.object.ObjectMerging import ObjectMerging
+from blenderproc.python.EntityUtility import Entity
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.StructUtility import Struct
+from blenderproc.python.object.ObjectMerging import ObjectMerging
 
 class LoaderInterface(Module):
     """

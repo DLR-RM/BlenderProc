@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.utility.loader.HavenMaterialLoader import HavenMaterialLoader
+from blenderproc.python.loader.HavenMaterialLoader import HavenMaterialLoader
 
 
 class HavenMaterialLoaderModule(Module):

@@ -3,10 +3,10 @@ import os
 import bpy
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.MaterialUtility import Material
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.Config import Config
+from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.Utility import Utility
 
 
 class RockEssentialsGroundConstructor(LoaderInterface):

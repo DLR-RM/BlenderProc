@@ -11,7 +11,7 @@ import subprocess
 import shutil
 
 path.append(os.path.join(os.path.dirname(__file__), ".."))
-from blenderproc.python.utility.SetupUtility import SetupUtility
+from blenderproc.python.SetupUtility import SetupUtility
 
 def split_object_according_to_groups(file_path, folder):
     """

@@ -9,13 +9,13 @@ import random
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material as MaterialProvider
-from blenderproc.python.utility.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
-from blenderproc.python.utility.CollisionUtility import CollisionUtility
-from blenderproc.python.utility.MaterialUtility import Material
-from blenderproc.python.utility.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility, Config
-from blenderproc.python.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
-from blenderproc.python.utility.object.FloorExtractor import FloorExtractor
+from blenderproc.python.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
+from blenderproc.python.CollisionUtility import CollisionUtility
+from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.Utility import Utility, Config
+from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
+from blenderproc.python.object.FloorExtractor import FloorExtractor
 
 
 class RandomRoomConstructorModule(Module):

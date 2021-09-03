@@ -2,7 +2,7 @@ import mathutils
 
 from blenderproc.python.modules.main.Provider import Provider
 
-from blenderproc.python.utility.sampler.PartSphere import PartSphere
+from blenderproc.python.sampler.PartSphere import PartSphere
 
 
 class PartSphereModule(Provider):

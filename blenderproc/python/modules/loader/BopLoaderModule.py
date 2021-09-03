@@ -7,9 +7,9 @@ import numpy as np
 
 from blenderproc.python.modules.camera.CameraInterface import CameraInterface
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.Config import Config
-from blenderproc.python.utility.loader.BopLoader import BopLoader
+from blenderproc.python.Utility import Utility
+from blenderproc.python.Config import Config
+from blenderproc.python.loader.BopLoader import BopLoader
 
 
 class BopLoaderModule(LoaderInterface):
