@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -43,7 +42,7 @@ for obj in objs:
     obj.add_uv_mapping("cylinder")
 
     # Create a random procedural texture
-    texture = MaterialLoaderUtility.create_procedural_texture()
+    texture = bproc.material.create_procedural_texture()
     # Displace the vertices of the object based on that random texture
     obj.add_displace_modifier(
         texture=texture,

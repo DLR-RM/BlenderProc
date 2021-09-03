@@ -6,7 +6,6 @@ from blenderproc.python.utility import BlenderUtility
 from blenderproc.python.types.StructUtility import Struct
 from blenderproc.python.utility.Utility import Utility
 
-
 class Material(Struct):
 
     def __init__(self, material: bpy.types.Material):
@@ -23,34 +22,6 @@ class Material(Struct):
         :param name: The name of the instance which will be used to update its blender reference.
         """
         self.blender_obj = bpy.data.materials[name]
-
-    @staticmethod
-    def collect_all() -> List["Material"]:
-        """ Returns all existing materials.
-
-        :return: A list of all materials.
-        """
-        return Material.convert_to_materials(bpy.data.materials)
-
-    @staticmethod
-    def create(name: str) -> "Material":
-        """ Creates a new empty material.
-
-        :param name: The name of the new material.
-        :return: The new material.
-        """
-        new_mat = bpy.data.materials.new(name=name)
-        new_mat.use_nodes = True
-        return Material(new_mat)
-
-    @staticmethod
-    def convert_to_materials(blender_materials: list) -> List["Material"]:
-        """ Converts the given list of blender materials to materials
-
-        :param blender_materials: List of materials.
-        :return: The list of materials.
-        """
-        return [(None if obj is None else Material(obj)) for obj in blender_materials]
 
     def get_users(self) -> int:
         """ Returns the number of users of the material.

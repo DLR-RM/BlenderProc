@@ -3,7 +3,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from pathlib import Path
-from blenderproc.python.types.MaterialUtility import Material
+
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -42,7 +42,7 @@ CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 
 CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Find all materials
-materials = Material.collect_all()
+materials = bproc.materials.collect_all()()
 
 # Find the material of the ground object
 ground_material = Filter.one_by_attr(materials, "name", "Material.001")

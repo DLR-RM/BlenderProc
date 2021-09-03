@@ -10,6 +10,7 @@ from mathutils import Vector, Matrix
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
+from blenderproc.python.material import MaterialLoaderUtility
 
 
 import bmesh
@@ -97,7 +98,7 @@ class MeshObject(Entity):
 
         :return: A list of materials.
         """
-        return Material.convert_to_materials(self.blender_obj.data.materials)
+        return MaterialLoaderUtility.convert_to_materials(self.blender_obj.data.materials)
 
     def has_materials(self):
         return len(self.blender_obj.data.materials) > 0

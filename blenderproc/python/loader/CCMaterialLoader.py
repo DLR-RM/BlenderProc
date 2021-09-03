@@ -3,7 +3,7 @@ from typing import List
 
 import bpy
 
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import Utility
 

@@ -8,7 +8,7 @@ import mathutils
 import numpy as np
 from urllib.request import urlretrieve
 
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -180,7 +180,7 @@ class Front3DLoader:
                         obj.add_material(mat)
                     else:
                         # Create a new material
-                        mat = Material.create(name=used_obj_name + "_material")
+                        mat = MaterialLoaderUtility.create(name=used_obj_name + "_material")
                         principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
                         if used_mat["color"]:
                             principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
@@ -215,7 +215,7 @@ class Front3DLoader:
                         mat = used_materials_based_on_color[used_hash]
                     else:
                         # Create a new material
-                        mat = Material.create(name=used_obj_name + "_material")
+                        mat = MaterialLoaderUtility.create(name=used_obj_name + "_material")
                         # create a principled node and set the default color
                         principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
                         principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0

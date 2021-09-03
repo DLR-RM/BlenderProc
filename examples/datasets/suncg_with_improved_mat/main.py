@@ -4,12 +4,11 @@ SetupUtility.setup([])
 
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.types.MaterialUtility import Material
+
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 from blenderproc.python.utility.Utility import Utility
@@ -61,7 +60,7 @@ while tries < 10000 and poses < 5:
     tries += 1
 
 # improve the materials, first use all materials and only filter the relevant materials out
-all_materials = Material.collect_all()
+all_materials = bproc.materials.collect_all()()
 all_wood_materials = Filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
 
 # now change the used values
@@ -93,7 +92,7 @@ RendererUtility.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
 RendererUtility.set_samples(350)
 
-MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
+bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
 data = RendererUtility.render()

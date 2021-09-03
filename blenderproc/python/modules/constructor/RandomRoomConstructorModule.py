@@ -3,6 +3,7 @@ import bpy
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material as MaterialProvider
 from blenderproc.python.types.MaterialUtility import Material
+from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility, Config
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
@@ -135,7 +136,7 @@ class RandomRoomConstructorModule(Module):
         # only select non see through materials
         config = {"conditions": {"cp_is_cc_texture": True, "cf_principled_bsdf_Alpha_eq": 1.0}}
         material_getter = MaterialProvider(Config(config))
-        all_cc_materials = Material.convert_to_materials(material_getter.run())
+        all_cc_materials = MaterialLoaderUtility.convert_to_materials(material_getter.run())
 
         RandomRoomConstructor.construct(
             used_floor_area=self.used_floor_area,
