@@ -7,7 +7,37 @@ import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
+
+
+def load_pix3d(used_category: str, data_path: str = 'resources/pix3d') -> List[MeshObject]:
+    """ Loads one random Pix3D object from the given category.
+
+    :param used_category: The category to use for example: 'bed', check the data_path/model folder for more categories.
+                          Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool', 'wardrobe']
+    :param data_path: The path to the Pix3D folder.
+    :return: The list of loaded mesh objects.
+    """
+    data_path = Utility.resolve_path(data_path)
+    files_with_fitting_category = Pix3DLoader.get_files_with_category(used_category, data_path)
+
+    selected_obj = random.choice(files_with_fitting_category)
+    loaded_obj = load_obj(selected_obj)
+
+    Pix3DLoader._correct_materials(loaded_obj)
+
+    # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+    # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+    for obj in loaded_obj:
+        obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
+
+    # move the origin of the object to the world origin and on top of the X-Y plane
+    # makes it easier to place them later on, this does not change the `.location`
+    for obj in loaded_obj:
+        obj.move_origin_to_bottom_mean_point()
+    bpy.ops.object.select_all(action='DESELECT')
+
+    return loaded_obj
 
 
 class Pix3DLoader:
@@ -56,36 +86,6 @@ class Pix3DLoader:
             raise Exception("The annotation file could not be found: {}".format(path_to_annotation_file))
 
     @staticmethod
-    def load(used_category: str, data_path: str = 'resources/pix3d') -> List[MeshObject]:
-        """ Loads one random Pix3D object from the given category.
-
-        :param used_category: The category to use for example: 'bed', check the data_path/model folder for more categories.
-                              Available: ['bed', 'bookcase', 'chair', 'desk', 'misc', 'sofa', 'table', 'tool', 'wardrobe']
-        :param data_path: The path to the Pix3D folder.
-        :return: The list of loaded mesh objects.
-        """
-        data_path = Utility.resolve_path(data_path)
-        files_with_fitting_category = Pix3DLoader.get_files_with_category(used_category, data_path)
-
-        selected_obj = random.choice(files_with_fitting_category)
-        loaded_obj = ObjectLoader.load(selected_obj)
-
-        Pix3DLoader._correct_materials(loaded_obj)
-
-        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
-        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
-        for obj in loaded_obj:
-            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
-
-        # move the origin of the object to the world origin and on top of the X-Y plane
-        # makes it easier to place them later on, this does not change the `.location`
-        for obj in loaded_obj:
-            obj.move_origin_to_bottom_mean_point()
-        bpy.ops.object.select_all(action='DESELECT')
-
-        return loaded_obj
-
-    @staticmethod
     def _correct_materials(objects: List[MeshObject]):
         """ If the used material contains an alpha texture, the alpha texture has to be flipped to be correct
 
@@ -110,5 +110,3 @@ class Pix3DLoader:
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
-
-load_pix3d = Pix3DLoader.load

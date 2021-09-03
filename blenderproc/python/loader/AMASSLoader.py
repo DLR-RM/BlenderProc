@@ -10,12 +10,10 @@ from typing import List, Tuple
 import bpy
 import mathutils
 import numpy as np
-#import torch
-#from human_body_prior.body_model.body_model import BodyModel
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
 
 
 def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 8) -> List[MeshObject]:
@@ -59,7 +57,7 @@ def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_m
     # Generate .obj file represents the selected pose
     generated_obj = AMASSLoader._write_body_mesh_to_obj_file(body_repr, faces, temp_dir)
 
-    loaded_obj = ObjectLoader.load(generated_obj)
+    loaded_obj = load_obj(generated_obj)
 
     AMASSLoader._correct_materials(loaded_obj)
 
@@ -107,6 +105,7 @@ class AMASSLoader:
         :param used_frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
         :return: tuple of arrays contains the parameters. Type: tuple
         """
+        import torch
         # check if the sub_dataset is supported
         if used_sub_dataset_id in supported_mocap_datasets:
             # get path from dictionary
@@ -180,6 +179,9 @@ class AMASSLoader:
 
         :return:  parametric model. Type: tuple.
         """
+        import torch
+        from human_body_prior.body_model.body_model import BodyModel
+
         bm_path = os.path.join(data_path, 'body_models', 'smplh', used_body_model_gender, 'model.npz')  # body model
         dmpl_path = os.path.join(data_path, 'body_models', 'dmpls', used_body_model_gender, 'model.npz')  # deformation model
         if not os.path.exists(bm_path) or not os.path.exists(dmpl_path):
