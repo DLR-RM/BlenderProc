@@ -6,8 +6,8 @@ import mathutils
 import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.BlenderUtility import add_object_only_with_direction_vectors
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.BlenderUtility import add_object_only_with_direction_vectors
+from blenderproc.python.utility.Utility import Utility
 
 
 class VisNormalImage(Module):

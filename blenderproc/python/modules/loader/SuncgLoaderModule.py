@@ -3,7 +3,7 @@ import os
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.LabelIdMapping import LabelIdMapping
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.SuncgLoader import SuncgLoader
 
 

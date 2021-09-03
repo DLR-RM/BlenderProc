@@ -4,7 +4,7 @@ from mathutils import Matrix, Vector, Euler
 from typing import Union, Tuple, Optional
 
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.Utility import KeyFrame
+from blenderproc.python.utility.Utility import KeyFrame
 
 
 class CameraUtility:

@@ -1,12 +1,10 @@
-import random
-
 import bpy
 
 from typing import List, Union
 
-from blenderproc.python import BlenderUtility
-from blenderproc.python.StructUtility import Struct
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility import BlenderUtility
+from blenderproc.python.types.StructUtility import Struct
+from blenderproc.python.utility.Utility import Utility
 
 
 class Material(Struct):

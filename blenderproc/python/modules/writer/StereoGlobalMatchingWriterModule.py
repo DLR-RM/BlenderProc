@@ -1,4 +1,4 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
 
 from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
@@ -10,8 +10,8 @@ import numpy as np
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.BlenderUtility import load_image
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.BlenderUtility import load_image
+from blenderproc.python.utility.Utility import Utility
 
 
 class StereoGlobalMatchingWriterModule(RendererInterface):

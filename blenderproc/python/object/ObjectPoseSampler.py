@@ -1,4 +1,4 @@
-from blenderproc.python.CollisionUtility import CollisionUtility
+from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from typing import Callable, List
 

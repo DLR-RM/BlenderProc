@@ -7,7 +7,7 @@ import bpy
 import mathutils
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class FloorExtractor:
@@ -105,7 +105,7 @@ class FloorExtractor:
                     obj.update_from_bmesh(bm)
                     bpy.ops.mesh.separate(type='SELECTED')
             else:
-                from blenderproc.python.SetupUtility import SetupUtility
+                from blenderproc.python.utility.SetupUtility import SetupUtility
                 SetupUtility.setup_pip(["scikit-learn"])
                 from sklearn.cluster import MeanShift
 

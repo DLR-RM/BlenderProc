@@ -3,8 +3,8 @@ import unittest
 import os.path
 
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
-from blenderproc.python.Utility import Utility
-from blenderproc.python.Initializer import Initializer
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.tests.SilentMode import SilentMode
 from blenderproc.python.tests.TestsPathManager import test_path_manager
 

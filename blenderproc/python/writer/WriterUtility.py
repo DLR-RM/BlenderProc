@@ -2,7 +2,7 @@ import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
 import numpy as np
@@ -13,9 +13,9 @@ import bpy
 import mathutils
 import h5py
 
-from blenderproc.python.BlenderUtility import load_image
-from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.Utility import Utility, NumpyEncoder
+from blenderproc.python.utility.BlenderUtility import load_image
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.Utility import Utility, NumpyEncoder
 from blenderproc.python.camera.CameraUtility import CameraUtility
 
 

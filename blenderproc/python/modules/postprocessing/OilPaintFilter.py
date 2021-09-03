@@ -1,4 +1,4 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["scipy"])
 
 from blenderproc.python.modules.main.Module import Module

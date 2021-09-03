@@ -1,7 +1,7 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class RgbRenderer(RendererInterface):

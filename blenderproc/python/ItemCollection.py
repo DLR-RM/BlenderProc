@@ -1,5 +1,5 @@
 from blenderproc.python.Config import Config
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 import json
 from copy import deepcopy
 

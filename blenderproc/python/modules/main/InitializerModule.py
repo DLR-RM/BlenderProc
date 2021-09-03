@@ -1,7 +1,7 @@
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.Config import Config
-from blenderproc.python.Initializer import Initializer
+from blenderproc.python.utility.Initializer import Initializer
 
 
 class InitializerModule(Module):

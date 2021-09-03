@@ -3,8 +3,6 @@ from mathutils import Vector, Euler, Color, Matrix, Quaternion
 import bpy
 import json
 
-from blenderproc.python.MathUtility import MathUtility
-
 
 class ItemWriter:
 

@@ -1,7 +1,7 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.Initializer import Initializer
+from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.camera.CameraValidation import CameraValidation
@@ -10,7 +10,7 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader

@@ -5,7 +5,7 @@ from typing import List
 
 import bpy
 
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class TextureLoader:

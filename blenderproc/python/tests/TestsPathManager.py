@@ -1,6 +1,6 @@
 import os
 from os.path import dirname, abspath, join, exists
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class TestsPathManager(object):

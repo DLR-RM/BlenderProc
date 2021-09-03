@@ -1,14 +1,4 @@
-import os
-import sys
-from random import choice
-
-import bpy
-import numpy as np
-
-from blenderproc.python.modules.camera.CameraInterface import CameraInterface
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.Utility import Utility
-from blenderproc.python.Config import Config
 from blenderproc.python.loader.BopLoader import BopLoader
 
 

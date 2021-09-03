@@ -1,4 +1,4 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 SetupUtility.setup_pip(["h5py"])
@@ -11,7 +11,7 @@ import numpy as np
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class Hdf5Writer(WriterInterface):

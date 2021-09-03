@@ -4,7 +4,7 @@ from random import choice
 import bpy
 import numpy as np
 
-import blenderproc.python.BlenderUtility as BlenderUtility
+import blenderproc.python.utility.BlenderUtility as BlenderUtility
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.Config import Config

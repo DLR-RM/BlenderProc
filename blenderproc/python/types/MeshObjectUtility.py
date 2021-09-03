@@ -7,8 +7,8 @@ from blenderproc.python.types.EntityUtility import Entity
 import numpy as np
 from mathutils import Vector, Matrix
 
-from blenderproc.python.Utility import Utility
-from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
 
 

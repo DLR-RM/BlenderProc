@@ -1,8 +1,8 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
@@ -11,7 +11,7 @@ from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.Initializer import Initializer
+from blenderproc.python.utility.Initializer import Initializer
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility

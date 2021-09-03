@@ -1,7 +1,7 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.StructUtility import Struct
+from blenderproc.python.types.StructUtility import Struct
 from blenderproc.python.object.ObjectMerging import ObjectMerging
 
 class LoaderInterface(Module):

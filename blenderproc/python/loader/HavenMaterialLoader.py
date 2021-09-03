@@ -5,7 +5,7 @@ import addon_utils
 import bpy
 
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class HavenMaterialLoader:

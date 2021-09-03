@@ -1,11 +1,11 @@
-from typing import Union, Any
+from typing import Union
 import numpy as np
 
 import bpy
 
-from blenderproc.python.StructUtility import Struct
-from blenderproc.python.Utility import Utility, KeyFrame
-from mathutils import Vector, Euler, Color, Matrix
+from blenderproc.python.types.StructUtility import Struct
+from blenderproc.python.utility.Utility import Utility, KeyFrame
+from mathutils import Vector, Euler, Matrix
 
 from typing import List
 

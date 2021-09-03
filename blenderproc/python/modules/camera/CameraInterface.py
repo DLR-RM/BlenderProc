@@ -6,7 +6,7 @@ from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.Config import Config
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import MathUtility
 
 
 class CameraInterface(Module):

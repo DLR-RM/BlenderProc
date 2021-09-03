@@ -1,4 +1,4 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy", "matplotlib", "pytz"])
 
 import os
@@ -12,8 +12,8 @@ from mathutils import Matrix, Vector
 
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
-from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MaterialUtility import Material
 
 

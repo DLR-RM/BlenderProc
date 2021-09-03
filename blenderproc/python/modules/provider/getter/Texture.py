@@ -5,7 +5,7 @@ from random import sample
 import mathutils
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.BlenderUtility import get_all_textures
+from blenderproc.python.utility.BlenderUtility import get_all_textures
 
 
 class Texture(Provider):

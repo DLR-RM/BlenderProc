@@ -1,8 +1,8 @@
-from typing import Union, Any, List, Tuple
+from typing import Any, List, Tuple
 import numpy as np
 
 import bpy
-from blenderproc.python.Utility import Utility, KeyFrame
+from blenderproc.python.utility.Utility import Utility, KeyFrame
 from mathutils import Vector, Euler, Color, Matrix, Quaternion
 import weakref
 

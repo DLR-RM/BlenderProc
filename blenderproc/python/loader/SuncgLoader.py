@@ -9,10 +9,10 @@ from mathutils import Matrix
 
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from typing import Tuple
 

@@ -1,20 +1,20 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 import os
 import numpy as np
 
-from blenderproc.python.Initializer import Initializer
+from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.loader.Front3DLoader import Front3DLoader
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility

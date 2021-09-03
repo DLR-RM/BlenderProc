@@ -1,8 +1,6 @@
 import os
-import math
 import csv
 import threading
-import uuid
 from typing import List, Dict, Any, Tuple
 
 import bpy
@@ -316,7 +314,7 @@ class Utility:
 
         def __enter__(self):
             if self._perform_undo_op:
-                from blenderproc.python.StructUtility import Struct
+                from blenderproc.python.types.StructUtility import Struct
                 # Collect all existing struct instances
                 self.struct_instances = Struct.get_instances()
                 bpy.ops.ed.undo_push(message="before " + self.check_point_name)

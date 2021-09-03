@@ -12,7 +12,7 @@ from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.loader.TextureLoader import TextureLoader
 

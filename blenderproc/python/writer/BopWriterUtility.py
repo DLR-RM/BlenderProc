@@ -1,4 +1,4 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["opencv-contrib-python", "pypng==0.0.20"])
 
 import json
@@ -12,8 +12,8 @@ import cv2
 import bpy
 from mathutils import Matrix
 
-from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 

@@ -1,4 +1,4 @@
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["scikit-image", "opencv-contrib-python"])
 
 import datetime
@@ -13,7 +13,7 @@ from typing import List
 import cv2
 import bpy
 
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 
 class CocoWriterUtility:

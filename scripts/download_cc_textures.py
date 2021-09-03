@@ -6,7 +6,7 @@ import os
 import csv
 import requests
 path.append(os.path.join(os.path.dirname(__file__), ".."))
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 
 if __name__ == "__main__":
     # setting the default header, else the server does not allow the download

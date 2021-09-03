@@ -6,7 +6,7 @@ from typing import List
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 
 

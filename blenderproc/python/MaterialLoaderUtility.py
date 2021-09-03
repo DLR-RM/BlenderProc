@@ -5,7 +5,7 @@ from typing import Union
 import bpy
 
 from blenderproc.python.modules.provider.getter.Material import Material
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 class MaterialLoaderUtility(object):

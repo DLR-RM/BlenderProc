@@ -4,7 +4,7 @@ from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.Config import Config
 from blenderproc.python.LabelIdMapping import LabelIdMapping
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.Front3DLoader import Front3DLoader
 
 

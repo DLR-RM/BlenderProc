@@ -4,7 +4,7 @@ from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material as MaterialProvider
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility, Config
+from blenderproc.python.utility.Utility import Utility, Config
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 
 

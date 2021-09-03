@@ -2,7 +2,7 @@ from typing import Any, Type
 import numpy as np
 import re
 
-from blenderproc.python.StructUtility import Struct
+from blenderproc.python.types.StructUtility import Struct
 
 class Filter:
     @staticmethod

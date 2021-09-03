@@ -4,7 +4,7 @@ from typing import Callable
 import bpy
 import numpy as np
 
-from blenderproc.python.BlenderUtility import check_intersection, check_bb_intersection
+from blenderproc.python.utility.BlenderUtility import check_intersection, check_bb_intersection
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 class ObjectReplacer:

@@ -2,9 +2,9 @@ import bpy
 import mathutils
 import numpy as np
 
-from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 class PhysicsSimulation:
 

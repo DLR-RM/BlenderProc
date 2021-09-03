@@ -1,4 +1,4 @@
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.MaterialUtility import Material
 

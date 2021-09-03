@@ -6,7 +6,7 @@ import multiprocessing
 
 import bpy
 from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.DefaultConfig import DefaultConfig
+from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
 import addon_utils
 

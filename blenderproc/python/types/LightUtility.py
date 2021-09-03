@@ -3,7 +3,7 @@ from typing import Union
 import bpy
 
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.Utility import Utility, KeyFrame
+from blenderproc.python.utility.Utility import Utility, KeyFrame
 from mathutils import Color
 
 

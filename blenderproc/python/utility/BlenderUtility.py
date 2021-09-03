@@ -1,5 +1,5 @@
 from collections import defaultdict
-from blenderproc.python.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["imageio"])
 
 import bpy
@@ -11,7 +11,7 @@ import numpy as np
 import imageio
 from typing import Union
 
-from blenderproc.python.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 
 
 def local_to_world(cords, world):
