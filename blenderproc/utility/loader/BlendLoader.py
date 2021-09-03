@@ -95,7 +95,7 @@ class BlendLoader:
                         # If a camera was imported
                         if obj.type == 'CAMERA':
                             # Make it the active camera in the scene
-                            #bpy.context.scene.camera = obj
+                            bpy.context.scene.camera = obj
 
                             # Find the maximum frame number of its key frames
                             max_keyframe = -1
