@@ -416,3 +416,5 @@ class Front3DLoader:
                             # transform it into the blender coordinate system and then to an euler
                             new_obj.set_rotation_euler((blender_rot_mat @ rotation_mat).to_euler())
         return created_objects
+
+load_front3d = Front3DLoader.load

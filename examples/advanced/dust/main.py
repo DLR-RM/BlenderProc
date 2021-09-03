@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
 from blenderproc.python.materials.Dust import Dust
 from blenderproc.python.sampler.PartSphere import PartSphere
@@ -26,7 +26,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-obj = BlendLoader.load(args.model)[0]
+obj = bproc.loader.load_blend(args.model)[0]
 
 HavenEnvironmentLoader.set_random_world_background_hdr_img(args.hdri_path)
 

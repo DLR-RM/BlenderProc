@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -6,7 +7,6 @@ import argparse
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -24,7 +24,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-objs = BlendLoader.load(args.scene)
+objs = bproc.loader.load_blend(args.scene)
 
 # define a light and set its location and energy level
 light = Light()

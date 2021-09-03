@@ -24,3 +24,5 @@ class ReplicaLoader:
                 obj.set_shading_mode("SMOOTH")
 
         return loaded_objects
+
+load_replica = ReplicaLoader.load

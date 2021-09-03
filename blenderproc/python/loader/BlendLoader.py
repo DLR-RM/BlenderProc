@@ -139,3 +139,5 @@ class BlendLoader:
                         getattr(bpy.data, collection_name).remove(orphan)
                         # Make sure to run the loop again, so we can detect newly created orphans
                         purge_orphans = True
+
+load_blend = BlendLoader.load

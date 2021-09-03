@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -28,10 +29,10 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load materials and objects that can be placed into the room
-materials = CCMaterialLoader.load(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
+materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
 interior_objects = []
 for i in range(15):
-    interior_objects.extend(IKEALoader.load(args.ikea_path, ["bed", "chair", "desk", "bookshelf"]))
+    interior_objects.extend(bproc.loader.load_ikea(args.ikea_path, ["bed", "chair", "desk", "bookshelf"]))
 
 # Construct random room and fill with interior_objects
 objects = RandomRoomConstructor.construct(25, interior_objects, materials, amount_of_extrusions=5)

@@ -1,9 +1,9 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
-from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -14,7 +14,6 @@ from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
 
@@ -33,20 +32,20 @@ args = parser.parse_args()
 Initializer.init()
 
 # load a random sample of bop objects into the scene
-sampled_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
+sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                                   sys_paths = args.bop_toolkit_path,
                                   mm2m = True,
                                   sample_objects = True,
                                   num_of_objs_to_sample = 10)
 
 # load distractor bop objects
-distractor_bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
+distractor_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'tless'),
                                      model_type = 'cad',
                                      sys_paths = args.bop_toolkit_path,
                                      mm2m = True,
                                      sample_objects = True,
                                      num_of_objs_to_sample = 3)
-distractor_bop_objs += BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
+distractor_bop_objs += bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, 'lm'),
                                       sys_paths = args.bop_toolkit_path,
                                       mm2m = True,
                                       sample_objects = True,
@@ -91,7 +90,7 @@ location = Shell.sample(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
 light_point.set_location(location)
 
 # sample CC Texture and assign to room planes
-cc_textures = CCMaterialLoader.load(args.cc_textures_path)
+cc_textures = bproc.loader.load_ccmaterials(args.cc_textures_path)
 random_cc_texture = np.random.choice(cc_textures)
 for plane in room_planes:
     plane.replace_materials(random_cc_texture)
