@@ -34,7 +34,7 @@ If our modules lack some specific functionality, you always can modify it, or cr
 A module is a class executing one step in the pipeline. Here is the basic structure of such a module:
 
 ```python
-from blenderproc.main.Module import Module
+from blenderproc.python.main.Module import Module
 
 class CameraLoader(Module):
 

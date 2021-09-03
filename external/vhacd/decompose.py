@@ -21,7 +21,7 @@ from sys import platform
 
 import git
 
-from blenderproc.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility
 import bpy
 from mathutils import Matrix
 import bmesh

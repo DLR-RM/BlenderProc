@@ -1,19 +1,19 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.utility.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.utility.sampler.Shell import Shell
-from blenderproc.utility.WriterUtility import WriterUtility
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.loader.BlendLoader import BlendLoader
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.LightUtility import Light
-from blenderproc.utility.MathUtility import MathUtility
+from blenderproc.python.utility.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.utility.sampler.Shell import Shell
+from blenderproc.python.utility.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.loader.BlendLoader import BlendLoader
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.LightUtility import Light
+from blenderproc.python.utility.MathUtility import MathUtility
 
-from blenderproc.utility.RendererUtility import RendererUtility
-from blenderproc.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
 
 
 parser = argparse.ArgumentParser()

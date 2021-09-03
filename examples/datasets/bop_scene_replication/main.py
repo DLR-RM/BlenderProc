@@ -1,13 +1,13 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.BopWriterUtility import BopWriterUtility
-from blenderproc.utility.loader.BopLoader import BopLoader
-from blenderproc.utility.PostProcessingUtility import PostProcessingUtility
-from blenderproc.utility.LightUtility import Light
-from blenderproc.utility.RendererUtility import RendererUtility
-from blenderproc.utility.sampler.Shell import Shell
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.BopWriterUtility import BopWriterUtility
+from blenderproc.python.utility.loader.BopLoader import BopLoader
+from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.utility.LightUtility import Light
+from blenderproc.python.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.sampler.Shell import Shell
 
 import argparse
 import os

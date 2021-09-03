@@ -1,22 +1,22 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 import numpy as np
 
-from blenderproc.utility.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.utility.WriterUtility import WriterUtility
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.loader.BlendLoader import BlendLoader
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.LightUtility import Light
-from blenderproc.utility.MathUtility import MathUtility
-from blenderproc.utility.MeshObjectUtility import MeshObject
-from blenderproc.utility.filter.Filter import Filter
-from blenderproc.utility.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.utility.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.utility.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.utility.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.loader.BlendLoader import BlendLoader
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.LightUtility import Light
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.filter.Filter import Filter
+from blenderproc.python.utility.object.OnSurfaceSampler import OnSurfaceSampler
+from blenderproc.python.utility.sampler.UpperRegionSampler import UpperRegionSampler
 
-from blenderproc.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")

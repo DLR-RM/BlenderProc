@@ -2,11 +2,11 @@
 import unittest
 import os.path
 
-from blenderproc.utility.loader.ObjectLoader import ObjectLoader
-from blenderproc.utility.Utility import Utility
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.tests.SilentMode import SilentMode
-from blenderproc.utility.tests.TestsPathManager import test_path_manager
+from blenderproc.python.utility.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.tests.SilentMode import SilentMode
+from blenderproc.python.utility.tests.TestsPathManager import test_path_manager
 
 class UnitTestCheckUtility(unittest.TestCase):
 

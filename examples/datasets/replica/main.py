@@ -1,22 +1,22 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 import os
 import numpy as np
 
-from blenderproc.utility.filter.Filter import Filter
-from blenderproc.utility.object.FloorExtractor import FloorExtractor
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.loader.ReplicaLoader import ReplicaLoader
-from blenderproc.utility.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
-from blenderproc.utility.MeshObjectUtility import MeshObject
-from blenderproc.utility.MathUtility import MathUtility
-from blenderproc.utility.camera.CameraValidation import CameraValidation
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.WriterUtility import WriterUtility
-from blenderproc.utility.Utility import Utility
-from blenderproc.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.filter.Filter import Filter
+from blenderproc.python.utility.object.FloorExtractor import FloorExtractor
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.loader.ReplicaLoader import ReplicaLoader
+from blenderproc.python.utility.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
+from blenderproc.python.utility.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.camera.CameraValidation import CameraValidation
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.WriterUtility import WriterUtility
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")

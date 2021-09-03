@@ -1,20 +1,20 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.MathUtility import MathUtility
-from blenderproc.utility.MeshObjectUtility import MeshObject
-from blenderproc.utility.camera.CameraValidation import CameraValidation
-from blenderproc.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
-from blenderproc.utility.lighting.SurfaceLighting import SurfaceLighting
-from blenderproc.utility.loader.CCMaterialLoader import CCMaterialLoader
-from blenderproc.utility.loader.IKEALoader import IKEALoader
-from blenderproc.utility.WriterUtility import WriterUtility
-from blenderproc.utility.Initializer import Initializer
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.camera.CameraValidation import CameraValidation
+from blenderproc.python.utility.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
+from blenderproc.python.utility.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.utility.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.utility.loader.IKEALoader import IKEALoader
+from blenderproc.python.utility.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
 
-from blenderproc.utility.RendererUtility import RendererUtility
-from blenderproc.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np

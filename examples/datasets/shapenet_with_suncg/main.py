@@ -1,21 +1,21 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.utility.MeshObjectUtility import MeshObject
-from blenderproc.utility.filter.Filter import Filter
-from blenderproc.utility.Utility import Utility
-from blenderproc.utility.MathUtility import MathUtility
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.utility.loader.SuncgLoader import SuncgLoader
-from blenderproc.utility.loader.ShapeNetLoader import ShapeNetLoader
-from blenderproc.utility.lighting.SuncgLighting import SuncgLighting
-from blenderproc.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.utility.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.utility.sampler.PartSphere import PartSphere
-from blenderproc.utility.WriterUtility import WriterUtility
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.filter.Filter import Filter
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.loader.SuncgLoader import SuncgLoader
+from blenderproc.python.utility.loader.ShapeNetLoader import ShapeNetLoader
+from blenderproc.python.utility.lighting.SuncgLighting import SuncgLighting
+from blenderproc.python.utility.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.utility.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.utility.sampler.PartSphere import PartSphere
+from blenderproc.python.utility.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.RendererUtility import RendererUtility
 
 import argparse
 import os

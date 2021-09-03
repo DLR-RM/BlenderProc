@@ -1,22 +1,22 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.BopWriterUtility import BopWriterUtility
-from blenderproc.utility.loader.BopLoader import BopLoader
-from blenderproc.utility.camera.CameraValidation import CameraValidation
-from blenderproc.utility.PostProcessingUtility import PostProcessingUtility
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.LightUtility import Light
-from blenderproc.utility.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.utility.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.utility.RendererUtility import RendererUtility
-from blenderproc.utility.MathUtility import MathUtility
-from blenderproc.utility.MeshObjectUtility import MeshObject
-from blenderproc.utility.MaterialUtility import Material
-from blenderproc.utility.loader.CCMaterialLoader import CCMaterialLoader
-from blenderproc.utility.sampler.Shell import Shell
-from blenderproc.utility.sampler.UniformSO3 import UniformSO3
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.BopWriterUtility import BopWriterUtility
+from blenderproc.python.utility.loader.BopLoader import BopLoader
+from blenderproc.python.utility.camera.CameraValidation import CameraValidation
+from blenderproc.python.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.LightUtility import Light
+from blenderproc.python.utility.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.utility.object.ObjectPoseSampler import ObjectPoseSampler
+from blenderproc.python.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.MaterialUtility import Material
+from blenderproc.python.utility.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.utility.sampler.Shell import Shell
+from blenderproc.python.utility.sampler.UniformSO3 import UniformSO3
 
 import argparse
 import os

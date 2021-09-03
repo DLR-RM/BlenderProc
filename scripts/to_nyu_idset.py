@@ -3,7 +3,7 @@ import os
 
 import numpy as np
 path.append(os.path.join(os.path.dirname(__file__), ".."))
-from blenderproc.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 
 def switch_mapping(segmap, source_map, destination_map):
 	# This assumes label names in different mappings are the same.

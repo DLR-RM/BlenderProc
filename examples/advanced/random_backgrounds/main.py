@@ -1,16 +1,16 @@
-from blenderproc.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.utility.CocoWriterUtility import CocoWriterUtility
-from blenderproc.utility.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.utility.camera.CameraValidation import CameraValidation
-from blenderproc.utility.sampler.Shell import Shell
-from blenderproc.utility.MathUtility import MathUtility
-from blenderproc.utility.CameraUtility import CameraUtility
-from blenderproc.utility.Initializer import Initializer
-from blenderproc.utility.loader.ObjectLoader import ObjectLoader
-from blenderproc.utility.LightUtility import Light
-from blenderproc.utility.RendererUtility import RendererUtility
+from blenderproc.python.utility.CocoWriterUtility import CocoWriterUtility
+from blenderproc.python.utility.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.utility.camera.CameraValidation import CameraValidation
+from blenderproc.python.utility.sampler.Shell import Shell
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.CameraUtility import CameraUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.utility.LightUtility import Light
+from blenderproc.python.utility.RendererUtility import RendererUtility
 
 import numpy as np
 import argparse
