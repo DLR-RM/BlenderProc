@@ -2,9 +2,9 @@ from typing import Union
 
 import bpy
 
-from blenderproc.python.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.Utility import Utility, KeyFrame
-from mathutils import Vector, Euler, Color
+from mathutils import Color
 
 
 class Light(Entity):

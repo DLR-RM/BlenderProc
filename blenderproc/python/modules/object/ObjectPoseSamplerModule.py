@@ -1,9 +1,6 @@
-import bpy
-import mathutils
-
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 

@@ -12,7 +12,7 @@ from blenderproc.python.Initializer import Initializer
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.loader.Front3DLoader import Front3DLoader
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.CameraUtility import CameraUtility

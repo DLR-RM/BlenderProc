@@ -1,17 +1,9 @@
 import ast
-import os
 import random
 import numpy as np
 
-import bpy
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
-from blenderproc.python.modules.camera.CameraSampler import CameraSampler
-from blenderproc.python.CameraUtility import CameraUtility
-from blenderproc.python.Config import Config
-from blenderproc.python.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility
-from blenderproc.python.camera.CameraValidation import CameraValidation
-from mathutils import Vector
 
 class ReplicaPointInRoomSampler:
 

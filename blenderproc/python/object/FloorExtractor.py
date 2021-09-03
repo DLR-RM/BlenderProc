@@ -1,6 +1,4 @@
-import os
-import warnings
-from math import radians, fabs, acos
+from math import fabs, acos
 from typing import Union, List
 import numpy as np
 
@@ -8,7 +6,7 @@ import bmesh
 import bpy
 import mathutils
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 
 
@@ -109,7 +107,7 @@ class FloorExtractor:
             else:
                 from blenderproc.python.SetupUtility import SetupUtility
                 SetupUtility.setup_pip(["scikit-learn"])
-                from sklearn.cluster import MeanShift, estimate_bandwidth
+                from sklearn.cluster import MeanShift
 
                 # no height list was provided, try to estimate them on its own
 

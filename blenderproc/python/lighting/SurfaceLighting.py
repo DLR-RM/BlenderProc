@@ -1,4 +1,4 @@
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class SurfaceLighting:

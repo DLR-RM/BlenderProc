@@ -1,13 +1,12 @@
-import os
 import re
 from typing import List, Union
 
 import bpy
 
 from blenderproc.python.BlenderUtility import collect_all_orphan_datablocks
-from blenderproc.python.EntityUtility import Entity
-from blenderproc.python.LightUtility import Light
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.LightUtility import Light
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 
 

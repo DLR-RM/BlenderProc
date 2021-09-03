@@ -4,7 +4,7 @@ SetupUtility.setup([])
 from blenderproc.python.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.CameraUtility import CameraUtility
-from blenderproc.python.LightUtility import Light
+from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.loader.BlendLoader import BlendLoader

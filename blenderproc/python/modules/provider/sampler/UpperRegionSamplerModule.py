@@ -1,6 +1,6 @@
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 
 

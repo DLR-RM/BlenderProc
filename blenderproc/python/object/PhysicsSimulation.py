@@ -3,7 +3,7 @@ import mathutils
 import numpy as np
 
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 
 class PhysicsSimulation:

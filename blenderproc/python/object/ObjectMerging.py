@@ -1,7 +1,4 @@
-import bpy
-
-from blenderproc.python.EntityUtility import Entity
-from typing import Union
+from blenderproc.python.types.EntityUtility import Entity
 
 
 class ObjectMerging:

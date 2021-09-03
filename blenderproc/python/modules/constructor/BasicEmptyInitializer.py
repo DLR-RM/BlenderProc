@@ -1,8 +1,6 @@
-import bpy
-
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.Config import Config
-from blenderproc.python.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import Entity
 
 
 class BasicEmptyInitializer(Module):

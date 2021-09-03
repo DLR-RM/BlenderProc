@@ -1,21 +1,11 @@
-import warnings
-import math
-
 import bpy
-import bmesh
-import mathutils
-import numpy as np
-import random
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material as MaterialProvider
-from blenderproc.python.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
-from blenderproc.python.CollisionUtility import CollisionUtility
-from blenderproc.python.MaterialUtility import Material
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MaterialUtility import Material
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility, Config
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
-from blenderproc.python.object.FloorExtractor import FloorExtractor
 
 
 class RandomRoomConstructorModule(Module):

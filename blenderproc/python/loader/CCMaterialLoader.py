@@ -4,7 +4,7 @@ from typing import List
 import bpy
 
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.Utility import Utility
 
 class CCMaterialLoader:

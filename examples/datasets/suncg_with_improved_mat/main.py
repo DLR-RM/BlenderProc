@@ -3,11 +3,11 @@ SetupUtility.setup([])
 
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from blenderproc.python.LabelIdMapping import LabelIdMapping
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
 

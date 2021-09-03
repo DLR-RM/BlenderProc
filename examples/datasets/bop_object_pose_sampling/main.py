@@ -8,11 +8,11 @@ from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.CameraUtility import CameraUtility
-from blenderproc.python.LightUtility import Light
+from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.RendererUtility import RendererUtility
 from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler

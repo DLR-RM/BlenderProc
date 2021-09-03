@@ -1,7 +1,7 @@
 import os
 
 from blenderproc.python.modules.camera.CameraSampler import CameraSampler
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 import bpy

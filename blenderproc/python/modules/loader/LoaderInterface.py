@@ -1,11 +1,6 @@
-from typing import Union
-
-import bpy
-import numpy as np
-
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.EntityUtility import Entity
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.StructUtility import Struct
 from blenderproc.python.object.ObjectMerging import ObjectMerging
 

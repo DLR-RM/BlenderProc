@@ -10,7 +10,7 @@ from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ReplicaLoader import ReplicaLoader
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.CameraUtility import CameraUtility

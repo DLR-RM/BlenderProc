@@ -1,5 +1,4 @@
 import json
-import re
 from random import sample
 
 import bpy
@@ -8,7 +7,7 @@ import mathutils
 from blenderproc.python.modules.main.Provider import Provider
 from blenderproc.python.Config import Config
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.EntityUtility import Entity as EntityUtility
+from blenderproc.python.types.EntityUtility import Entity as EntityUtility
 import numpy as np
 class Entity(Provider):
     """

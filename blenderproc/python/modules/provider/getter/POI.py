@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Provider import Provider
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 class POI(Provider):
     """

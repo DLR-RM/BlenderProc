@@ -7,11 +7,11 @@ from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
-from blenderproc.python.LightUtility import Light
+from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.RendererUtility import RendererUtility
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
 import numpy as np

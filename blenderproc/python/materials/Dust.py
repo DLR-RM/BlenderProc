@@ -1,7 +1,7 @@
 import warnings
 from typing import List
 
-from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.types.MaterialUtility import Material
 import bpy
 import random
 

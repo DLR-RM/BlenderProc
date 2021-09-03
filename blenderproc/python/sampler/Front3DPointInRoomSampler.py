@@ -2,7 +2,7 @@ import random
 
 import numpy as np
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class Front3DPointInRoomSampler:

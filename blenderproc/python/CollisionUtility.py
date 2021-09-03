@@ -4,7 +4,7 @@ from mathutils import Vector, Euler, Matrix
 from typing import Union
 import bpy
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class CollisionUtility:

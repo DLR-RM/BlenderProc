@@ -2,9 +2,7 @@ import random
 from typing import Tuple, List
 import numpy as np
 
-from mathutils import Vector
-
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class SuncgPointInRoomSampler:

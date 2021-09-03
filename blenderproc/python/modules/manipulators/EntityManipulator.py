@@ -5,13 +5,12 @@ import bpy
 import numpy as np
 
 import blenderproc.python.BlenderUtility as BlenderUtility
-from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.Config import Config
 from mathutils import Matrix
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class EntityManipulator(Module):

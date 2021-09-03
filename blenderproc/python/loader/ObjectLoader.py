@@ -1,10 +1,9 @@
 import os
-import os
 from typing import List
 
 import bpy
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class ObjectLoader:

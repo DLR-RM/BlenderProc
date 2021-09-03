@@ -1,7 +1,7 @@
 from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.Utility import Utility
 from blenderproc.python.MathUtility import MathUtility

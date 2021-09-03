@@ -14,7 +14,7 @@ import numpy as np
 import torch
 from human_body_prior.body_model.body_model import BodyModel
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 

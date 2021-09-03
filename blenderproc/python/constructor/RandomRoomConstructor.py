@@ -9,11 +9,10 @@ import numpy as np
 import random
 
 from blenderproc.python.modules.provider.getter.Material import Material
-from blenderproc.python.BlenderUtility import get_bound_volume, check_bb_intersection_on_values
+from blenderproc.python.BlenderUtility import check_bb_intersection_on_values
 from blenderproc.python.CollisionUtility import CollisionUtility
-from blenderproc.python.EntityUtility import Entity
-from blenderproc.python.MeshObjectUtility import MeshObject
-from blenderproc.python.Utility import Utility, Config
+from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 
 

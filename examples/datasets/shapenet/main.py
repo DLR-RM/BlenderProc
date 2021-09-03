@@ -7,7 +7,7 @@ from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
-from blenderproc.python.LightUtility import Light
+from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.RendererUtility import RendererUtility
 from blenderproc.python.sampler.Sphere import Sphere

@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.loader.BlendLoader import BlendLoader
 
 class BlendLoaderModule(LoaderInterface):

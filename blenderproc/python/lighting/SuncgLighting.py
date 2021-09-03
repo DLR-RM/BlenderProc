@@ -1,6 +1,6 @@
 from blenderproc.python.Utility import Utility
-from blenderproc.python.MeshObjectUtility import MeshObject
-from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MaterialUtility import Material
 
 class SuncgLighting:
 

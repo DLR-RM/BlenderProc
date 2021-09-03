@@ -4,13 +4,13 @@ SetupUtility.setup([])
 from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.CameraUtility import CameraUtility
-from blenderproc.python.LightUtility import Light
+from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.RendererUtility import RendererUtility
 

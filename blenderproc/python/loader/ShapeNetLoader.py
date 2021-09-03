@@ -3,11 +3,10 @@ import json
 import os
 import pathlib
 import random
-from typing import List
 
 import bpy
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 

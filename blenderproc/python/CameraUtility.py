@@ -3,7 +3,7 @@ import numpy as np
 from mathutils import Matrix, Vector, Euler
 from typing import Union, Tuple, Optional
 
-from blenderproc.python.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.Utility import KeyFrame
 
 

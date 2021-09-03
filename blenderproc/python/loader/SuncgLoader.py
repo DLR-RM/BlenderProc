@@ -8,10 +8,10 @@ import bpy
 from mathutils import Matrix
 
 from blenderproc.python.LabelIdMapping import LabelIdMapping
-from blenderproc.python.MaterialUtility import Material
+from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.EntityUtility import Entity
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from typing import Tuple

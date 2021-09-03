@@ -4,13 +4,10 @@ import warnings
 from typing import Any
 
 import bpy
-import mathutils
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python import BlenderUtility
 from blenderproc.python.Config import Config
-from blenderproc.python.MaterialUtility import Material
-from blenderproc.python.Utility import Utility
+from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.materials.Dust import Dust
 
 

@@ -2,7 +2,7 @@ from typing import Callable
 
 import bpy
 from blenderproc.python.CollisionUtility import CollisionUtility
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 import numpy as np
 
 class OnSurfaceSampler:

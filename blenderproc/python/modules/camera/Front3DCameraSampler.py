@@ -1,6 +1,5 @@
 from blenderproc.python.modules.camera.CameraSampler import CameraSampler
-from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 
 

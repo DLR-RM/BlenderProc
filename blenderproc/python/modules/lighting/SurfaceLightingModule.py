@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.Config import Config
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 
 

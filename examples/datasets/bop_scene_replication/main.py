@@ -5,13 +5,11 @@ from blenderproc.python.Initializer import Initializer
 from blenderproc.python.BopWriterUtility import BopWriterUtility
 from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.PostProcessingUtility import PostProcessingUtility
-from blenderproc.python.LightUtility import Light
+from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.RendererUtility import RendererUtility
-from blenderproc.python.sampler.Shell import Shell
 
 import argparse
 import os
-import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")

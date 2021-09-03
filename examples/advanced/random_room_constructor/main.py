@@ -3,7 +3,7 @@ SetupUtility.setup([])
 
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
@@ -18,8 +18,6 @@ from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np
-from mathutils import Euler
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('ikea_path', nargs='?', default="resources/ikea", help="Path to the downloaded IKEA dataset, see the /scripts for the download script")

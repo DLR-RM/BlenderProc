@@ -4,8 +4,8 @@ from typing import Callable
 import bpy
 import numpy as np
 
-from blenderproc.python.BlenderUtility import check_intersection, check_bb_intersection, get_all_blender_mesh_objects
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.BlenderUtility import check_intersection, check_bb_intersection
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 class ObjectReplacer:
     """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the

@@ -5,7 +5,7 @@ import numpy as np
 from typing import List, Union
 from mathutils import Vector
 
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 class UpperRegionSampler:
 

@@ -1,16 +1,15 @@
 import sys
-from typing import Union, List
+from typing import List
 import numpy as np
 
 import bpy
-from mathutils import Matrix
 
 from blenderproc.python.modules.camera.CameraInterface import CameraInterface
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.Config import Config
 from blenderproc.python.ItemCollection import ItemCollection
-from blenderproc.python.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
 
 class CameraSampler(CameraInterface):
