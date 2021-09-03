@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.Shell import Shell
@@ -86,7 +85,7 @@ data = RendererUtility.render()
 seg_data = SegMapRendererUtility.render(map_by=["instance", "class", "name"], default_values={"class": 0, "name": "none"})
 
 # Write data to coco file
-CocoWriterUtility.write(args.output_dir,
+bproc.writer.write_coco_annotations(args.output_dir,
                         instance_segmaps=seg_data["instance_segmaps"],
                         instance_attribute_maps=seg_data["instance_attribute_maps"],
                         colors=data["colors"],

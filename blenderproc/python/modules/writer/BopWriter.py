@@ -1,5 +1,5 @@
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
+from blenderproc.python.writer.BopWriterUtility import write_bop
 
 class BopWriter(WriterInterface):
     """ Saves the synthesized dataset in the BOP format. The dataset is split
@@ -66,7 +66,7 @@ class BopWriter(WriterInterface):
         if self._avoid_output:
             print("Avoid output is on, no output produced!")
         else:
-            BopWriterUtility.write(output_dir = self._determine_output_dir(False), 
+            write_bop(output_dir = self._determine_output_dir(False),
                                 dataset = self._dataset, 
                                 append_to_existing_output = self._append_to_existing_output, 
                                 depth_scale = self._depth_scale, 

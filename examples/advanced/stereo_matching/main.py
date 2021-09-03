@@ -63,4 +63,4 @@ data = RendererUtility.render()
 data["stereo-depth"], data["disparity"] = StereoGlobalMatching.match(data["colors"], disparity_filter=False)
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -44,8 +43,8 @@ RendererUtility.set_samples(50)
 data = RendererUtility.render()
 
 # Write data to bop format
-BopWriterUtility.write(args.output_dir, 
-                       dataset = args.bop_dataset_name,
-                       depths = PostProcessingUtility.dist2depth(data["distance"]),
-                       colors = data["colors"], 
-                       save_world2cam = False) # world coords are arbitrary in most real BOP datasets
+bproc.writer.write_bop(args.output_dir,
+                       dataset=args.bop_dataset_name,
+                       depths=PostProcessingUtility.dist2depth(data["distance"]),
+                       colors=data["colors"],
+                       save_world2cam=False) # world coords are arbitrary in most real BOP datasets

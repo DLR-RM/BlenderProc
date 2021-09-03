@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -147,7 +146,7 @@ RendererUtility.set_samples(50)
 data = RendererUtility.render()
 
 # Write data in bop format
-BopWriterUtility.write(args.output_dir, 
+bproc.writer.write_bop(args.output_dir,
                        dataset = args.bop_dataset_name,
                        depths = PostProcessingUtility.dist2depth(data["distance"]), 
                        colors = data["colors"], 

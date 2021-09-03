@@ -8,7 +8,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 
 import argparse
@@ -57,7 +56,7 @@ data = RendererUtility.render()
 seg_data = SegMapRendererUtility.render(map_by=["instance", "class", "name"])
 
 # Write data to coco file
-CocoWriterUtility.write(args.output_dir,
+bproc.writer.write_coco_annotations(args.output_dir,
                         instance_segmaps=seg_data["instance_segmaps"],
                         instance_attribute_maps=seg_data["instance_attribute_maps"],
                         colors=data["colors"],
