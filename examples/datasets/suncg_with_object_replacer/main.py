@@ -11,7 +11,6 @@ from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtil
 
 from blenderproc.python.object.ObjectReplacer import ObjectReplacer
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
@@ -82,8 +81,8 @@ while tries < 10000 and poses < 5:
     cam2world_matrix = MathUtility.build_transformation_mat(location, euler_rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
-    if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0},
-                                                       bvh_tree) and CameraValidation.scene_coverage_score(
+    if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0},
+                                                       bvh_tree) and bproc.camera.scene_coverage_score(
             cam2world_matrix) > 0.4:
         bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
