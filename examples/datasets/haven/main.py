@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -23,7 +23,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load the object into the scene
-objs = BlendLoader.load(args.blend_path)
+objs = bproc.loader.load_blend(args.blend_path)
 
 # Set a random hdri from the given haven directory as background
 HavenEnvironmentLoader.set_random_world_background_hdr_img(args.haven_path)

@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -7,7 +8,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.loader.SuncgLoader import SuncgLoader
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -26,7 +26,7 @@ Initializer.init()
 
 # load the objects into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house, label_mapping=label_mapping)
+objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")

@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -7,8 +8,6 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.loader.SuncgLoader import SuncgLoader
-from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
@@ -30,7 +29,7 @@ Initializer.init()
 
 # load suncg house into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-suncg_objs = SuncgLoader.load(args.house, label_mapping=label_mapping)
+suncg_objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # Find all bed objects, to sample the shapenet objects on
 bed_objs = Filter.by_cp(suncg_objs, "category_id", label_mapping.id_from_label("bed"))
@@ -39,7 +38,7 @@ bed_objs = Filter.by_cp(suncg_objs, "category_id", label_mapping.id_from_label("
 SuncgLighting.light()
 
 # load selected shapenet object
-shapenet_obj = ShapeNetLoader.load(args.shape_net, used_synset_id="02801938")
+shapenet_obj = bproc.loader.load_shapenet(args.shape_net, used_synset_id="02801938")
 
 # Sample a point above any bed
 sample_point = UpperRegionSampler.sample(

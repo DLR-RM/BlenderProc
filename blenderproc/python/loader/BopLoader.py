@@ -384,4 +384,4 @@ class BopLoader:
             # no slots
             cur_obj.data.materials.append(mat)
 
-
+load_bop = BopLoader.load

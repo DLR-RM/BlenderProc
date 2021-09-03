@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -11,7 +12,6 @@ from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtil
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.loader.SuncgLoader import SuncgLoader
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -32,7 +32,7 @@ Initializer.init()
 
 # load the objects into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house, label_mapping)
+objs = bproc.loader.load_suncg(args.house, label_mapping)
 
 # makes Suncg objects emit light
 SuncgLighting.light()

@@ -110,3 +110,5 @@ class Pix3DLoader:
                                                                   invert_node.inputs["Color"],
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
+
+load_pix3d = Pix3DLoader.load

@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -7,7 +8,6 @@ import numpy as np
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -27,7 +27,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-objs = BlendLoader.load(args.scene)
+objs = bproc.loader.load_blend(args.scene)
 
 # Retrieve surface and spheres from the list objects
 surface = Filter.one_by_attr(objs, "name", "Cube")

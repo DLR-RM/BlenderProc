@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -6,7 +7,6 @@ import numpy as np
 
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -23,7 +23,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-obj = ObjectLoader.load(args.object)[0]
+obj = bproc.loader.load_obj(args.object)[0]
 # Use vertex color for texturing
 for mat in obj.get_materials():
     mat.map_vertex_color()

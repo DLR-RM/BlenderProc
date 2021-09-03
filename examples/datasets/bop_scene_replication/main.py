@@ -1,9 +1,9 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
-from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -21,7 +21,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load specified bop objects into the scene
-bop_objs = BopLoader.load(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
+bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
                           sys_paths = args.bop_toolkit_path,
                           mm2m = True,
                           scene_id = 1,
