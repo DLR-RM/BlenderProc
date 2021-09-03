@@ -4,7 +4,7 @@ SetupUtility.setup([])
 
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.BlendLoader import BlendLoader
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility

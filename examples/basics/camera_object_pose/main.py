@@ -7,7 +7,7 @@ import numpy as np
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.MathUtility import MathUtility
 

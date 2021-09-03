@@ -4,7 +4,7 @@ SetupUtility.setup([])
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer

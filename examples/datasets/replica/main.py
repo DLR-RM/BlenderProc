@@ -13,7 +13,7 @@ from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInR
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Utility import Utility
 from blenderproc.python.renderer.RendererUtility import RendererUtility

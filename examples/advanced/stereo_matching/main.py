@@ -4,7 +4,7 @@ SetupUtility.setup([])
 from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 from blenderproc.python.Utility import Utility
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.loader.SuncgLoader import SuncgLoader

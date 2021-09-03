@@ -16,7 +16,7 @@ import h5py
 from blenderproc.python.BlenderUtility import load_image
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.Utility import Utility, NumpyEncoder
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 
 
 class WriterUtility:

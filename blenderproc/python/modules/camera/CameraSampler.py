@@ -6,7 +6,7 @@ import bpy
 
 from blenderproc.python.modules.camera.CameraInterface import CameraInterface
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.Config import Config
 from blenderproc.python.ItemCollection import ItemCollection
 from blenderproc.python.types.MeshObjectUtility import MeshObject

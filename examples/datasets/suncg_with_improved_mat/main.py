@@ -1,7 +1,7 @@
 from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.filter.Filter import Filter

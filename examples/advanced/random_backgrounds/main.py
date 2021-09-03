@@ -6,7 +6,7 @@ from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtil
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.MathUtility import MathUtility
-from blenderproc.python.CameraUtility import CameraUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.types.LightUtility import Light
