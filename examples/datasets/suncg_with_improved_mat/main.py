@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.filter.Filter import Filter
@@ -56,7 +55,7 @@ while tries < 10000 and poses < 5:
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 
