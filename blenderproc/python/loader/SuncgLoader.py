@@ -419,3 +419,5 @@ class SuncgLoader:
                 object_coarse_grained_label_map[row["model_id"]] = row["coarse_grained_class"]
 
         return object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map
+
+load_suncg = SuncgLoader.load

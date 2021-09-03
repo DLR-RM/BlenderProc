@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -8,7 +9,6 @@ from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
@@ -24,7 +24,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-obj = ObjectLoader.load(args.scene)[0]
+obj = bproc.loader.load_obj(args.scene)[0]
 
 # Randomly perturbate the material of the object
 mat = obj.get_materials()[0]

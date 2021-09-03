@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.Pix3DLoader import Pix3DLoader
 from blenderproc.python.sampler.Sphere import Sphere
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -21,7 +21,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load Pix3D objects from type table into the scene
-objs = Pix3DLoader.load(data_path=args.pix_path, used_category="bed")
+objs = bproc.loader.load_pix3d(data_path=args.pix_path, used_category="bed")
 
 # define a light and set its location and energy level
 light = Light()

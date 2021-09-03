@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -6,7 +7,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
@@ -25,8 +25,8 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load active and passive objects into the scene
-spheres = ObjectLoader.load(args.spheres_obj)
-ground = ObjectLoader.load(args.ground_obj)[0]
+spheres = bproc.loader.load_obj(args.spheres_obj)
+ground = bproc.loader.load_obj(args.ground_obj)[0]
 
 # Create a SUN light and set its properties
 light = Light()

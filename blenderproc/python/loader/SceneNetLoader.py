@@ -141,3 +141,5 @@ class SceneNetLoader:
                 obj.set_name("floor")
             elif obj.get_cp("category_id") == label_mapping.id_from_label("ceiling"):
                 obj.set_name("ceiling")
+
+load_scenenet = SceneNetLoader.load

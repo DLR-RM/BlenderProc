@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -7,7 +8,6 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -22,7 +22,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-objs = ObjectLoader.load(args.scene)
+objs = bproc.loader.load_obj(args.scene)
 
 # Define a light
 light = Light()

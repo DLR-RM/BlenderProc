@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -8,7 +9,6 @@ import numpy as np
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ReplicaLoader import ReplicaLoader
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -30,7 +30,7 @@ height_list_values = Utility.resolve_path(os.path.join('resources', 'replica', '
 Initializer.init()
 
 # Load the replica dataset
-objs = ReplicaLoader.load(args.replica_data_folder, data_set_name, use_smooth_shading=True)
+objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)
 # Extract the floor from the loaded room
 floor = FloorExtractor.extract(objs, new_name_for_object="floor")[0]
 room = Filter.one_by_attr(objs, "name", "mesh")

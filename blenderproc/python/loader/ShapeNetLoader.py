@@ -135,3 +135,5 @@ class ShapeNetLoader:
                                                               invert_node.inputs["Color"],
                                                               invert_node.outputs["Color"],
                                                               principled_bsdf.inputs["Alpha"])
+
+load_shapenet = ShapeNetLoader.load

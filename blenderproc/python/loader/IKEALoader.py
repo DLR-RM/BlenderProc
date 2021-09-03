@@ -188,3 +188,4 @@ class IKEALoader:
         bpy.ops.object.select_all(action='DESELECT')
         return loaded_obj
 
+load_ikea = IKEALoader.load

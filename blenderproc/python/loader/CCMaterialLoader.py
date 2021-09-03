@@ -162,3 +162,5 @@ class CCMaterialLoader:
         collection_of_texture_nodes = [node for node in collection_of_texture_nodes if node is not None]
 
         MaterialLoaderUtility.connect_uv_maps(nodes, links, collection_of_texture_nodes)
+
+load_ccmaterials = CCMaterialLoader.load

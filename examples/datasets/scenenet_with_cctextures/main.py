@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.utility.Utility import Utility
@@ -15,7 +15,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.SceneNetLoader import SceneNetLoader
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import random
@@ -34,10 +33,10 @@ Initializer.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SceneNetLoader.load(args.scene_net_obj_path, args.scene_texture_path, label_mapping)
+objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_texture_path, label_mapping)
 
 # Load all recommended cc materials, however don't load their textures yet
-cc_materials = CCMaterialLoader.load(args.cc_material_path, preload=True)
+cc_materials = bproc.loader.load_ccmaterials(args.cc_material_path, preload=True)
 
 # Go through all objects
 for obj in objs:
@@ -49,7 +48,7 @@ for obj in objs:
             obj.set_material(i, random.choice(cc_materials))
 
 # Now load all textures of the materials that were assigned to at least one object
-CCMaterialLoader.load(args.cc_material_path, fill_used_empty_materials=True)
+bproc.loader.load_ccmaterials(args.cc_material_path, fill_used_empty_materials=True)
 
 # In some scenes floors, walls and ceilings are one object that needs to be split first
 # Collect all walls

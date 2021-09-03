@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.AMASSLoader import AMASSLoader
 from blenderproc.python.sampler.Sphere import Sphere
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -22,7 +22,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load the objects into the scene
-objs = AMASSLoader.load(
+objs = bproc.loader.load_AMASS(
     args.amass_dir,
     sub_dataset_id="CMU",
     body_model_gender="male",

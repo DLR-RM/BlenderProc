@@ -51,3 +51,6 @@ class ObjectLoader:
                 return MeshObject.convert_to_meshes([obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects])
         else:
             raise Exception("The given filepath does not exist: {}".format(filepath))
+
+
+load_obj = ObjectLoader.load

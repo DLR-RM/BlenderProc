@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -7,7 +8,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
@@ -21,7 +21,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-objs = BlendLoader.load(args.scene)
+objs = bproc.loader.load_blend(args.scene)
 
 # Change specular and roughness factor of all objects, so the shading will be better visible
 for obj in objs:

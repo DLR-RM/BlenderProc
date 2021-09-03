@@ -78,3 +78,5 @@ class TextureLoader:
                               "same image again (for example, in a different or in the same colorspace), use the copy "
                               "of the file.".format(image_path))
         return textures
+
+load_texture = TextureLoader.load

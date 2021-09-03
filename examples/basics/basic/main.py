@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -5,12 +6,11 @@ import argparse
 
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
-
 from blenderproc.python.renderer.RendererUtility import RendererUtility
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file, should be examples/resources/camera_positions")
@@ -21,7 +21,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-objs = ObjectLoader.load(args.scene)
+objs = bproc.loader.load_obj(args.scene)
 
 # define a light and set its location and energy level
 light = Light()
