@@ -13,7 +13,6 @@ from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInR
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -39,7 +38,7 @@ room = Filter.one_by_attr(objs, "name", "mesh")
 point_sampler = ReplicaPointInRoomSampler(room, floor, height_list_values)
 
 # define the camera intrinsics
-CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
+bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
 
 # Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects([room, floor])
@@ -55,7 +54,7 @@ while tries < 10000 and poses < 15:
 
     # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2 and 4 meters
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0, "avg": {"min": 2.0, "max": 4.0}}, bvh_tree):
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 

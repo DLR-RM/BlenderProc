@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
@@ -57,7 +56,7 @@ while tries < 10000 and poses < 5:
             CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4 and \
             floor.position_is_above_object(location):
         # Persist camera pose
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 

@@ -14,7 +14,6 @@ from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInR
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -109,7 +108,7 @@ while tries < 10000 and poses < 10:
     # meters and make sure that no background is visible, finally make sure the view is interesting enough
     if CameraValidation.scene_coverage_score(cam2world_matrix, special_objects, special_objects_weight=10.0) > 0.8 \
             and CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, proximity_checks, bvh_tree):
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 
