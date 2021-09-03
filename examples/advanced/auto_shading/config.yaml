@@ -19,13 +19,6 @@
       "path": "<args:1>"
     }
   },
-    {
-      "module": "loader.BlendLoader",
-      "config": {
-        "path": "<args:1>"
-        "obj_types": ['mesh', 'empty', 'camera']
-      }
-    },
   {
     "module": "manipulators.MaterialManipulator",
     "config": {
@@ -74,6 +67,18 @@
         "energy": 1000
       }
       ]
+    }
+  },
+  {
+    "module": "camera.CameraLoader",
+    "config": {
+      "path": "<args:0>",
+      "file_format": "location rotation/value",
+      "intrinsics": {
+        "fov": 1,
+        "resolution_x": 800,
+        "resolution_y": 600
+      }
     }
   },
   {
