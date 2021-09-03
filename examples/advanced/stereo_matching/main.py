@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -60,7 +59,7 @@ RendererUtility.toggle_stereo(True)
 data = RendererUtility.render()
 
 # Apply stereo matching to each pair of images
-data["stereo-depth"], data["disparity"] = StereoGlobalMatching.match(data["colors"], disparity_filter=False)
+data["stereo-depth"], data["disparity"] = bproc.postprocessing.stereo_global_matching(data["colors"], disparity_filter=False)
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

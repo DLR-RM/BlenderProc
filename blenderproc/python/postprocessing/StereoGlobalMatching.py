@@ -10,6 +10,49 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.postprocessing.SGMUtility import fill_in_fast
 from blenderproc.python.postprocessing.SGMUtility import resize
 
+
+def stereo_global_matching(color_images: List[np.ndarray], depth_max: float = None, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0, disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+    """ Does the stereo global matching in the following steps:
+    1. Collect camera object and its state,
+    2. For each frame, load left and right images and call the `sgm()` methode.
+    3. Write the results to a numpy file.
+
+    :param color_images: A list of stereo images, where each entry has the shape [2, height, width, 3].
+    :param depth_max: The maximum depth value for clipping the resulting depth values. If None, distance_start + distance_range that were configured for distance rendering are used.
+    :param window_size: Semi-global matching kernel size. Should be an odd number.
+    :param num_disparities: Semi-global matching number of disparities. Should be > 0 and divisible by 16.
+    :param min_disparity: Semi-global matching minimum disparity.
+    :param disparity_filter: Applies post-processing of the generated disparity map using WLS filter.
+    :param depth_completion: Applies basic depth completion using image processing techniques.
+    :return: Returns the computed depth and disparity images for all given frames.
+    """
+    # Collect camera and camera object
+    cam_ob = bpy.context.scene.camera
+    cam = cam_ob.data
+
+    baseline = cam.stereo.interocular_distance
+    if not baseline:
+        raise Exception("Stereo parameters are not set. Make sure to enable RGB stereo rendering before this module.")
+
+    if depth_max is None:
+        depth_max = bpy.context.scene.world.mist_settings.start + bpy.context.scene.world.mist_settings.depth
+
+    baseline = cam.stereo.interocular_distance
+    if not baseline:
+        raise Exception("Stereo parameters are not set. Make sure to enable RGB stereo rendering before this module.")
+
+    focal_length = CameraUtility.get_intrinsics_as_K_matrix()[0, 0]
+
+    depth_frames = []
+    disparity_frames = []
+    for frame, color_image in enumerate(color_images):
+        depth, disparity = StereoGlobalMatching._sgm(color_image[0], color_image[1], baseline, depth_max, focal_length, window_size, num_disparities, min_disparity, disparity_filter, depth_completion)
+
+        depth_frames.append(depth)
+        disparity_frames.append(disparity)
+
+    return depth_frames, disparity_frames
+
 class StereoGlobalMatching:
 
     @staticmethod
@@ -88,45 +131,3 @@ class StereoGlobalMatching:
 
         return depth, disparity_to_be_written
 
-    @staticmethod
-    def match(color_images: List[np.ndarray], depth_max: float = None, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0, disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[List[np.ndarray], List[np.ndarray]]:
-        """ Does the stereo global matching in the following steps:
-        1. Collect camera object and its state,
-        2. For each frame, load left and right images and call the `sgm()` methode.
-        3. Write the results to a numpy file.
-
-        :param color_images: A list of stereo images, where each entry has the shape [2, height, width, 3].
-        :param depth_max: The maximum depth value for clipping the resulting depth values. If None, distance_start + distance_range that were configured for distance rendering are used.
-        :param window_size: Semi-global matching kernel size. Should be an odd number.
-        :param num_disparities: Semi-global matching number of disparities. Should be > 0 and divisible by 16.
-        :param min_disparity: Semi-global matching minimum disparity.
-        :param disparity_filter: Applies post-processing of the generated disparity map using WLS filter.
-        :param depth_completion: Applies basic depth completion using image processing techniques.
-        :return: Returns the computed depth and disparity images for all given frames.
-        """
-        # Collect camera and camera object
-        cam_ob = bpy.context.scene.camera
-        cam = cam_ob.data
-
-        baseline = cam.stereo.interocular_distance
-        if not baseline:
-            raise Exception("Stereo parameters are not set. Make sure to enable RGB stereo rendering before this module.")
-
-        if depth_max is None:
-            depth_max = bpy.context.scene.world.mist_settings.start + bpy.context.scene.world.mist_settings.depth
-
-        baseline = cam.stereo.interocular_distance
-        if not baseline:
-            raise Exception("Stereo parameters are not set. Make sure to enable RGB stereo rendering before this module.")
-
-        focal_length = CameraUtility.get_intrinsics_as_K_matrix()[0, 0]
-
-        depth_frames = []
-        disparity_frames = []
-        for frame, color_image in enumerate(color_images):
-            depth, disparity = StereoGlobalMatching._sgm(color_image[0], color_image[1], baseline, depth_max, focal_length, window_size, num_disparities, min_disparity, disparity_filter, depth_completion)
-
-            depth_frames.append(depth)
-            disparity_frames.append(disparity)
-
-        return depth_frames, disparity_frames

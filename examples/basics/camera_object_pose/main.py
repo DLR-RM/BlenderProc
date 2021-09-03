@@ -12,7 +12,6 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 
 parser = argparse.ArgumentParser()
@@ -71,7 +70,7 @@ RendererUtility.set_samples(100)
 data = RendererUtility.render()
 
 # Map distance to depth
-depth = PostProcessingUtility.dist2depth(data["distance"])
+depth = bproc.postprocessing.dist2depth(data["distance"])
 
 # Write object poses, color and depth in bop format
 BopWriterUtility.write(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)

@@ -15,7 +15,6 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np
@@ -70,7 +69,7 @@ RendererUtility.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_b
 data = RendererUtility.render()
 
 # post process the data and remove the redundant channels in the distance image
-data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
+data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
 del data["distance"]
 
 # write the data to a .hdf5 container

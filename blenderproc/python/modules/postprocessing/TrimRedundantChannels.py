@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 
 class TrimRedundantChannels(Module):
     """ Removes redundant channels, where the input has more than one channels that share exactly the same value """
@@ -11,4 +11,4 @@ class TrimRedundantChannels(Module):
         :param image: The image data.
         :return: The trimmed image data.
         """
-        return PostProcessingUtility.trim_redundant_channels(image), key, version
+        return trim_redundant_channels(image), key, version

@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
@@ -53,7 +53,7 @@ class WriterUtility:
 
                         # For outputs like distance or depth, we automatically trim the last channel here
                         if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
-                            output_file = PostProcessingUtility.trim_redundant_channels(output_file)
+                            output_file = trim_redundant_channels(output_file)
 
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:

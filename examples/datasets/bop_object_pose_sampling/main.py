@@ -6,7 +6,6 @@ from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -100,7 +99,7 @@ for _ in range(5):
     # Write data to bop format
     BopWriterUtility.write(args.output_dir, 
                            dataset = args.bop_dataset_name,
-                           depths = PostProcessingUtility.dist2depth(data["distance"]),
+                           depths = bproc.postprocessing.dist2depth(data["distance"]),
                            depth_scale = 1.0, 
                            colors = data["colors"], 
                            color_file_format = "JPEG", 
