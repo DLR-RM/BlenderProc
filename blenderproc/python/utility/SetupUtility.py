@@ -249,7 +249,7 @@ class SetupUtility:
                         raise Exception('The given script "{}" does not have a SetupUtility call at the top! '
                                         "Make sure that is the first thing you import and run! Before importing "
                                         "anything else!\nYour code:\n#####################\n{}\n"
-                                        "####################\nReplaces this with:\nfrom blenderproc.python.SetupUtility "
+                                        "####################\nReplaces this with:\nfrom blenderproc.python.utility.SetupUtility import SetupUtility "
                                         "import SetupUtility\nSetupUtility.setup([])".format(path_to_run_file, code))
         else:
             raise Exception("The given run script does not exist: {}".format(path_to_run_file))

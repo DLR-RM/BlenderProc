@@ -1,7 +1,7 @@
 import mathutils
 import numpy as np
 
-import blenderproc.python as Utility
+import blenderproc.python.utility.Utility as Utility
 from blenderproc.python.modules.main.Provider import Provider
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 
