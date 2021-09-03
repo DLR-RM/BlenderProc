@@ -5,7 +5,7 @@ from typing import List
 
 import bpy
 
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 

@@ -6,7 +6,7 @@ import os
 import numpy as np
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.loader.Front3DLoader import Front3DLoader
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject

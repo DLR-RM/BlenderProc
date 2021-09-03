@@ -7,7 +7,7 @@ from typing import List
 import bpy
 from mathutils import Matrix
 
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.EntityUtility import Entity

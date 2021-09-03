@@ -4,9 +4,9 @@ SetupUtility.setup([])
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 from blenderproc.python.object.ObjectReplacer import ObjectReplacer

@@ -2,7 +2,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation

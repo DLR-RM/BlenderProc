@@ -1,7 +1,7 @@
 import random
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 
 
 class Texture(Provider):

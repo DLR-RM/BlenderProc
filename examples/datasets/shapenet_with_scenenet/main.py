@@ -4,7 +4,7 @@ SetupUtility.setup([])
 from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter

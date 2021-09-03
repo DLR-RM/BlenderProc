@@ -4,7 +4,7 @@ import os
 import addon_utils
 import bpy
 
-from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
 
 

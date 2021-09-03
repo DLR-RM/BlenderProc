@@ -1,7 +1,7 @@
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader

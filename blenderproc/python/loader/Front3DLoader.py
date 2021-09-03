@@ -8,8 +8,8 @@ import mathutils
 import numpy as np
 from urllib.request import urlretrieve
 
-from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility

@@ -14,7 +14,7 @@ import cv2
 import bpy
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.LabelIdMapping import LabelIdMapping
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 
 class CocoWriterUtility:
 

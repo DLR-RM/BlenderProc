@@ -5,8 +5,8 @@ from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalM
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.LabelIdMapping import LabelIdMapping
-from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.loader.SuncgLoader import SuncgLoader
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
