@@ -8,8 +8,112 @@ from typing import Union, List
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
 
+def load_ikea(data_dir: str = 'resources/IKEA', obj_categories: Union[list, str] = None, obj_style: str = None) -> List[MeshObject]:
+    """ Loads ikea objects based on selected type and style.
+
+    If there are multiple options it picks one randomly or if style or type is None it picks one randomly.
+
+    :param data_dir: The directory with all the IKEA models.
+    :param obj_categories: The category to use for example: 'bookcase'. This can also be a list of elements. Available: ['bed', 'bookcase', 'chair', 'desk', 'sofa', 'table', 'wardrobe']
+    :param obj_style: The IKEA style to use for example: 'hemnes'. See data_dir for other options.
+    :return: The list of loaded mesh objects.
+    """
+    obj_dict = IKEALoader._generate_object_dict(data_dir)
+
+    # If obj_categories is given, make sure it is a list
+    if obj_categories is not None and not isinstance(obj_categories, list):
+        obj_categories = [obj_categories]
+
+    if obj_categories is not None and obj_style is not None:
+        object_lst = []
+        for obj_category in obj_categories:
+            object_lst.extend([obj[0] for (key, obj) in obj_dict.items() \
+                               if obj_style in key.lower() and obj_category in key])
+        if not object_lst:
+            selected_obj = random.choice(obj_dict.get(random.choice(list(obj_dict.keys()))))
+            warnings.warn("Could not find object of type: {}, and style: {}. Selecting random object...".format(
+                obj_categories, obj_style), category=Warning)
+        else:
+            # Multiple objects with same type and style are possible: select randomly from list.
+            selected_obj = random.choice(object_lst)
+    elif obj_categories is not None:
+        object_lst = []
+        for obj_category in obj_categories:
+            object_lst.extend(IKEALoader._get_object_by_type(obj_category, obj_dict))
+        selected_obj = random.choice(object_lst)
+    elif obj_style is not None:
+        object_lst = IKEALoader._get_object_by_style(obj_style, obj_dict)
+        selected_obj = random.choice(object_lst)
+    else:
+        random_key = random.choice(list(obj_dict.keys()))
+        # One key can have multiple object files as value: select randomly from list.
+        selected_obj = random.choice(obj_dict.get(random_key))
+
+    print("Selected object: ", os.path.basename(selected_obj))
+    loaded_obj = load_obj(selected_obj)
+
+    # extract the name from the path:
+    selected_dir_name = os.path.dirname(selected_obj)
+    selected_name = ""
+    if os.path.basename(selected_dir_name).startswith("IKEA_"):
+        selected_name = os.path.basename(selected_dir_name)
+    else:
+        selected_dir_name = os.path.dirname(selected_dir_name)
+        if os.path.basename(selected_dir_name).startswith("IKEA_"):
+            selected_name = os.path.basename(selected_dir_name)
+    if selected_name:
+        for obj in loaded_obj:
+            obj.set_name(selected_name)
+
+    # extract the file unit from the .obj file to convert every object to meters
+    file_unit = ""
+    with open(selected_obj, "r") as file:
+        first_lines = [next(file) for x in range(5)]
+        for line in first_lines:
+            if "File units" in line:
+                file_unit = line.strip().split(" ")[-1]
+                if file_unit not in ["inches", "meters", "centimeters", "millimeters"]:
+                    raise Exception("The file unit type could not be found, check the selected "
+                                    "file: {}".format(selected_obj))
+                break
+
+    for obj in loaded_obj:
+        # convert all objects to meters
+        if file_unit == "inches":
+            scale = 0.0254
+        elif file_unit == "centimeters":
+            scale = 0.01
+        elif file_unit == "millimeters":
+            scale = 0.001
+        elif file_unit == "meters":
+            scale = 1.0
+        else:
+            raise Exception("The file unit type: {} is not defined".format(file_unit))
+        if scale != 1.0:
+            # move all object centers to the world origin and set the bounding box correctly
+            bpy.ops.object.select_all(action='DESELECT')
+            obj.select()
+            bpy.context.view_layer.objects.active = obj.blender_obj
+            # scale object down
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.transform.resize(value=(scale, scale, scale))
+            bpy.ops.object.mode_set(mode='OBJECT')
+            bpy.context.view_layer.update()
+            bpy.ops.object.select_all(action='DESELECT')
+
+    # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+    # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+    for obj in loaded_obj:
+        obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
+
+    # move the origin of the object to the world origin and on top of the X-Y plane
+    # makes it easier to place them later on, this does not change the `.location`
+    for obj in loaded_obj:
+        obj.move_origin_to_bottom_mean_point()
+    bpy.ops.object.select_all(action='DESELECT')
+    return loaded_obj
 
 class IKEALoader:
     """
@@ -81,111 +185,3 @@ class IKEALoader:
         if not object_lst:
             warnings.warn("There were no objects found matching the style: {}.".format(obj_style), category=Warning)
         return object_lst
-
-    @staticmethod
-    def load(data_dir: str = 'resources/IKEA', obj_categories: Union[list, str] = None, obj_style: str = None) -> List[MeshObject]:
-        """ Loads ikea objects based on selected type and style.
-
-        If there are multiple options it picks one randomly or if style or type is None it picks one randomly.
-
-        :param data_dir: The directory with all the IKEA models.
-        :param obj_categories: The category to use for example: 'bookcase'. This can also be a list of elements. Available: ['bed', 'bookcase', 'chair', 'desk', 'sofa', 'table', 'wardrobe']
-        :param obj_style: The IKEA style to use for example: 'hemnes'. See data_dir for other options.
-        :return: The list of loaded mesh objects.
-        """
-        obj_dict = IKEALoader._generate_object_dict(data_dir)
-
-        # If obj_categories is given, make sure it is a list
-        if obj_categories is not None and not isinstance(obj_categories, list):
-            obj_categories = [obj_categories]
-
-        if obj_categories is not None and obj_style is not None:
-            object_lst = []
-            for obj_category in obj_categories:
-                object_lst.extend([obj[0] for (key, obj) in obj_dict.items() \
-                                  if obj_style in key.lower() and obj_category in key])
-            if not object_lst:
-                selected_obj = random.choice(obj_dict.get(random.choice(list(obj_dict.keys()))))
-                warnings.warn("Could not find object of type: {}, and style: {}. Selecting random object...".format(
-                    obj_categories, obj_style), category=Warning)
-            else:
-                # Multiple objects with same type and style are possible: select randomly from list.
-                selected_obj = random.choice(object_lst)
-        elif obj_categories is not None:
-            object_lst = []
-            for obj_category in obj_categories:
-                object_lst.extend(IKEALoader._get_object_by_type(obj_category, obj_dict))
-            selected_obj = random.choice(object_lst)
-        elif obj_style is not None:
-            object_lst = IKEALoader._get_object_by_style(obj_style, obj_dict)
-            selected_obj = random.choice(object_lst)
-        else:
-            random_key = random.choice(list(obj_dict.keys()))
-            # One key can have multiple object files as value: select randomly from list.
-            selected_obj = random.choice(obj_dict.get(random_key))
-
-        print("Selected object: ", os.path.basename(selected_obj))
-        loaded_obj = ObjectLoader.load(selected_obj)
-
-        # extract the name from the path:
-        selected_dir_name = os.path.dirname(selected_obj)
-        selected_name = ""
-        if os.path.basename(selected_dir_name).startswith("IKEA_"):
-            selected_name = os.path.basename(selected_dir_name)
-        else:
-            selected_dir_name = os.path.dirname(selected_dir_name)
-            if os.path.basename(selected_dir_name).startswith("IKEA_"):
-                selected_name = os.path.basename(selected_dir_name)
-        if selected_name:
-            for obj in loaded_obj:
-                obj.set_name(selected_name)
-
-        # extract the file unit from the .obj file to convert every object to meters
-        file_unit = ""
-        with open(selected_obj, "r") as file:
-            first_lines = [next(file) for x in range(5)]
-            for line in first_lines:
-                if "File units" in line:
-                    file_unit = line.strip().split(" ")[-1]
-                    if file_unit not in ["inches", "meters", "centimeters", "millimeters"]:
-                        raise Exception("The file unit type could not be found, check the selected "
-                                        "file: {}".format(selected_obj))
-                    break
-
-        for obj in loaded_obj:
-            # convert all objects to meters
-            if file_unit == "inches":
-                scale = 0.0254
-            elif file_unit == "centimeters":
-                scale = 0.01
-            elif file_unit == "millimeters":
-                scale = 0.001
-            elif file_unit == "meters":
-                scale = 1.0
-            else:
-                raise Exception("The file unit type: {} is not defined".format(file_unit))
-            if scale != 1.0:
-                # move all object centers to the world origin and set the bounding box correctly
-                bpy.ops.object.select_all(action='DESELECT')
-                obj.select()
-                bpy.context.view_layer.objects.active = obj.blender_obj
-                # scale object down
-                bpy.ops.object.mode_set(mode='EDIT')
-                bpy.ops.transform.resize(value=(scale, scale, scale))
-                bpy.ops.object.mode_set(mode='OBJECT')
-                bpy.context.view_layer.update()
-                bpy.ops.object.select_all(action='DESELECT')
-
-        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
-        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
-        for obj in loaded_obj:
-            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
-
-        # move the origin of the object to the world origin and on top of the X-Y plane
-        # makes it easier to place them later on, this does not change the `.location`
-        for obj in loaded_obj:
-            obj.move_origin_to_bottom_mean_point()
-        bpy.ops.object.select_all(action='DESELECT')
-        return loaded_obj
-
-load_ikea = IKEALoader.load

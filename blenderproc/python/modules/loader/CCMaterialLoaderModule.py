@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.loader.CCMaterialLoader import load_ccmaterials
 
 
 class CCMaterialLoaderModule(Module):
@@ -54,7 +54,7 @@ class CCMaterialLoaderModule(Module):
         if self.config.get_bool("use_all_materials", False) and self.config.has_param("used_assets"):
             raise Exception("It is impossible to use all materials and selected a certain list of assets!")
 
-        CCMaterialLoader.load(
+        load_ccmaterials(
             folder_path=Utility.resolve_path(self.config.get_string("folder_path", "resources/cctextures")),
             used_assets=self.config.get_list("used_assets", []),
             preload=self.config.get_bool("preload", False),

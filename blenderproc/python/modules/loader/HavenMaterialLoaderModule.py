@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.loader.HavenMaterialLoader import HavenMaterialLoader
+from blenderproc.python.loader.HavenMaterialLoader import load_haven_mat
 
 
 class HavenMaterialLoaderModule(Module):
@@ -71,7 +71,7 @@ class HavenMaterialLoaderModule(Module):
         Load the materials
         """
 
-        HavenMaterialLoader.load(
+        load_haven_mat(
             folder_path=self.config.get_string("folder_path", "resources/haven"),
             used_assets=self.config.get_list("used_assets", []),
             add_cp=self.config.get_raw_dict("add_custom_properties", {}),
