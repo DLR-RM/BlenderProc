@@ -8,7 +8,7 @@ from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.RendererUtility import RendererUtility
 from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.CocoWriterUtility import CocoWriterUtility
+from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.MathUtility import MathUtility
 
 import argparse

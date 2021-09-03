@@ -4,7 +4,7 @@ SetupUtility.setup([])
 import argparse
 
 from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.CameraUtility import CameraUtility

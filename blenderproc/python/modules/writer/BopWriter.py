@@ -1,5 +1,5 @@
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.BopWriterUtility import BopWriterUtility
+from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 
 class BopWriter(WriterInterface):
     """ Saves the synthesized dataset in the BOP format. The dataset is split

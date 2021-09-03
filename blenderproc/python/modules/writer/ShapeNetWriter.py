@@ -1,8 +1,6 @@
-import bpy
-
 from blenderproc.python.ItemWriter import ItemWriter
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
 
 class ShapeNetWriter(WriterInterface):

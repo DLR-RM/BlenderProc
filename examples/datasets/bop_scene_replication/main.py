@@ -2,7 +2,7 @@ from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.Initializer import Initializer
-from blenderproc.python.BopWriterUtility import BopWriterUtility
+from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light

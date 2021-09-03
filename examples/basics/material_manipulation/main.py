@@ -4,7 +4,7 @@ SetupUtility.setup([])
 from pathlib import Path
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.CameraUtility import CameraUtility

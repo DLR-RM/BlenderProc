@@ -4,11 +4,10 @@ from typing import Dict, List
 import bpy
 import numpy as np
 
-from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
 from blenderproc.python.BlenderUtility import load_image
 from blenderproc.python.RendererUtility import RendererUtility
 from blenderproc.python.Utility import Utility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 
 
 class FlowRendererUtility:

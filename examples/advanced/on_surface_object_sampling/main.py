@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.CameraUtility import CameraUtility

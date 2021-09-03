@@ -1,7 +1,7 @@
 from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.CocoWriterUtility import CocoWriterUtility
+from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.Shell import Shell

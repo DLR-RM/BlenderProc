@@ -17,7 +17,7 @@ from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 
 from blenderproc.python.RendererUtility import RendererUtility

@@ -2,9 +2,8 @@ import os
 import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.MathUtility import MathUtility
 from blenderproc.python.Utility import Utility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 
 class WriterInterface(Module):
     """

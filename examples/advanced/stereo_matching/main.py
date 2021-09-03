@@ -9,7 +9,7 @@ from blenderproc.python.LabelIdMapping import LabelIdMapping
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.loader.SuncgLoader import SuncgLoader
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.RendererUtility import RendererUtility
 

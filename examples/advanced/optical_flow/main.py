@@ -2,7 +2,7 @@ from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.FlowRendererUtility import FlowRendererUtility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light

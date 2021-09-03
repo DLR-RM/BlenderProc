@@ -10,7 +10,7 @@ from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConst
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.loader.IKEALoader import IKEALoader
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 
 from blenderproc.python.RendererUtility import RendererUtility

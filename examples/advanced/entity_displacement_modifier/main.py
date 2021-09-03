@@ -2,7 +2,7 @@ from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.CameraUtility import CameraUtility

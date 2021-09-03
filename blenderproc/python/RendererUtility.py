@@ -9,7 +9,7 @@ import numpy as np
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.Utility import Utility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 
 class RendererUtility:
 

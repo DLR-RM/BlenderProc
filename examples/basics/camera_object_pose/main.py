@@ -4,7 +4,7 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.BopWriterUtility import BopWriterUtility
+from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.Initializer import Initializer
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 from blenderproc.python.CameraUtility import CameraUtility

@@ -15,7 +15,7 @@ from mathutils import Matrix
 from blenderproc.python.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.Utility import Utility
 from blenderproc.python.PostProcessingUtility import PostProcessingUtility
-from blenderproc.python.WriterUtility import WriterUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
 
 class BopWriterUtility:
     """ Saves the synthesized dataset in the BOP format. The dataset is split

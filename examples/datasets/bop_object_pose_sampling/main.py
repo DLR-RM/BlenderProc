@@ -2,8 +2,8 @@ from blenderproc.python.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.Initializer import Initializer
-from blenderproc.python.BopWriterUtility import BopWriterUtility
-from blenderproc.python.CocoWriterUtility import CocoWriterUtility
+from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
+from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.loader.BopLoader import BopLoader
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.PostProcessingUtility import PostProcessingUtility

@@ -1,7 +1,5 @@
-import os
-
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
-from blenderproc.python.CocoWriterUtility import CocoWriterUtility
+from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 
 class CocoAnnotationsWriter(WriterInterface):
