@@ -1,22 +1,22 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.SegMapRendererUtility import SegMapRendererUtility
-from src.utility.Utility import Utility
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.filter.Filter import Filter
-from src.utility.lighting.SurfaceLighting import SurfaceLighting
-from src.utility.object.FloorExtractor import FloorExtractor
-from src.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from src.utility.MathUtility import MathUtility
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.loader.SceneNetLoader import SceneNetLoader
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.filter.Filter import Filter
+from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.object.FloorExtractor import FloorExtractor
+from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.loader.SceneNetLoader import SceneNetLoader
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import random
 import os

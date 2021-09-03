@@ -253,7 +253,7 @@ if __name__ == "__main__":
 
     exempt_files = ["Utility.py"]
 
-    all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "src"))
+    all_py_files = find_all_py_files(os.path.join(os.path.abspath(os.path.dirname(__file__)), "..", "blenderproc"))
     for py_file in all_py_files:
         base_name = os.path.basename(py_file)
         if args.src and args.src not in py_file:

@@ -1,23 +1,23 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 import os
 import numpy as np
 
-from src.utility.Initializer import Initializer
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.loader.Front3DLoader import Front3DLoader
-from src.utility.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.MathUtility import MathUtility
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.CameraUtility import CameraUtility
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Utility import Utility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.loader.Front3DLoader import Front3DLoader
+from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Utility import Utility
 
-from src.utility.RendererUtility import RendererUtility
-from src.utility.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")

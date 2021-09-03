@@ -1,26 +1,26 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
-from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
-from src.utility.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
-from src.utility.object.ObjectReplacer import ObjectReplacer
-from src.utility.Utility import Utility
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.loader.SuncgLoader import SuncgLoader
-from src.utility.loader.ObjectLoader import ObjectLoader
-from src.utility.filter.Filter import Filter
-from src.utility.lighting.SuncgLighting import SuncgLighting
+from blenderproc.python.object.ObjectReplacer import ObjectReplacer
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.loader.SuncgLoader import SuncgLoader
+from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.filter.Filter import Filter
+from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
 
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 import numpy as np
 from mathutils import Euler
 import argparse

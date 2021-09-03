@@ -1,17 +1,15 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.Initializer import Initializer
-from src.utility.BopWriterUtility import BopWriterUtility
-from src.utility.loader.BopLoader import BopLoader
-from src.utility.PostProcessingUtility import PostProcessingUtility
-from src.utility.LightUtility import Light
-from src.utility.RendererUtility import RendererUtility
-from src.utility.sampler.Shell import Shell
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
+from blenderproc.python.loader.BopLoader import BopLoader
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.types.LightUtility import Light
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
-import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('bop_parent_path', nargs='?', help="Path to the bop datasets parent directory")

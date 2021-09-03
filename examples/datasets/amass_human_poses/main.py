@@ -1,16 +1,16 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.loader.AMASSLoader import AMASSLoader
-from src.utility.sampler.Sphere import Sphere
-from src.utility.MathUtility import MathUtility
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.LightUtility import Light
+from blenderproc.python.loader.AMASSLoader import AMASSLoader
+from blenderproc.python.sampler.Sphere import Sphere
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.types.LightUtility import Light
 
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 

@@ -1,22 +1,22 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 import numpy as np
 
-from src.utility.object.PhysicsSimulation import PhysicsSimulation
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.loader.BlendLoader import BlendLoader
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LightUtility import Light
-from src.utility.MathUtility import MathUtility
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.filter.Filter import Filter
-from src.utility.object.OnSurfaceSampler import OnSurfaceSampler
-from src.utility.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.loader.BlendLoader import BlendLoader
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.types.LightUtility import Light
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.filter.Filter import Filter
+from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
+from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")

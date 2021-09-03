@@ -1,25 +1,23 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from src.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
-from src.utility.lighting.SurfaceLighting import SurfaceLighting
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-from src.utility.loader.IKEALoader import IKEALoader
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
+from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.loader.IKEALoader import IKEALoader
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
 
-from src.utility.RendererUtility import RendererUtility
-from src.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.renderer.RendererUtility import RendererUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np
-from mathutils import Euler
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('ikea_path', nargs='?', default="resources/ikea", help="Path to the downloaded IKEA dataset, see the /scripts for the download script")

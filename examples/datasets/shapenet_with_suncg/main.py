@@ -1,21 +1,21 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.filter.Filter import Filter
-from src.utility.Utility import Utility
-from src.utility.MathUtility import MathUtility
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.loader.SuncgLoader import SuncgLoader
-from src.utility.loader.ShapeNetLoader import ShapeNetLoader
-from src.utility.lighting.SuncgLighting import SuncgLighting
-from src.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from src.utility.object.PhysicsSimulation import PhysicsSimulation
-from src.utility.sampler.PartSphere import PartSphere
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.filter.Filter import Filter
+from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.python.loader.SuncgLoader import SuncgLoader
+from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
+from blenderproc.python.lighting.SuncgLighting import SuncgLighting
+from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.sampler.PartSphere import PartSphere
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os

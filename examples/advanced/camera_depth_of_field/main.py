@@ -1,19 +1,18 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.EntityUtility import Entity
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.sampler.PartSphere import PartSphere
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LightUtility import Light
-from src.utility.MathUtility import MathUtility
-from src.utility.loader.ObjectLoader import ObjectLoader
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.sampler.PartSphere import PartSphere
+from blenderproc.python.writer.WriterUtility import WriterUtility
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.types.LightUtility import Light
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
-import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", help="Path to the scene.obj file")

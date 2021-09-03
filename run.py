@@ -15,8 +15,8 @@ else:
     import contextlib
 
 import uuid
-from src.utility.ConfigParser import ConfigParser
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.modules.utility.ConfigParser import ConfigParser
+from blenderproc.python.utility.SetupUtility import SetupUtility
 
 
 parser = argparse.ArgumentParser(add_help=False)
@@ -188,7 +188,7 @@ else:
 
 repo_root_directory = os.path.dirname(os.path.realpath(__file__))
 if is_config:
-    path_src_run = os.path.join(repo_root_directory, "src/run.py")
+    path_src_run = os.path.join(repo_root_directory, "blenderproc/run.py")
 else:
     path_src_run = args.file
     SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)
@@ -212,7 +212,7 @@ if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
 if args.debug:
-    p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", "src/debug_startup.py", "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+    p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", "blenderproc/debug_startup.py", "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
 else:
     if not args.batch_process:
         p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args,

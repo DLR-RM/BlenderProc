@@ -1,22 +1,22 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.Initializer import Initializer
-from src.utility.BopWriterUtility import BopWriterUtility
-from src.utility.loader.BopLoader import BopLoader
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.PostProcessingUtility import PostProcessingUtility
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LightUtility import Light
-from src.utility.object.PhysicsSimulation import PhysicsSimulation
-from src.utility.object.ObjectPoseSampler import ObjectPoseSampler
-from src.utility.RendererUtility import RendererUtility
-from src.utility.MathUtility import MathUtility
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.MaterialUtility import Material
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-from src.utility.sampler.Shell import Shell
-from src.utility.sampler.UniformSO3 import UniformSO3
+from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
+from blenderproc.python.loader.BopLoader import BopLoader
+from blenderproc.python.camera.CameraValidation import CameraValidation
+from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.types.LightUtility import Light
+from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
+from blenderproc.python.renderer.RendererUtility import RendererUtility
+from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MaterialUtility import Material
+from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.python.sampler.Shell import Shell
+from blenderproc.python.sampler.UniformSO3 import UniformSO3
 
 import argparse
 import os
