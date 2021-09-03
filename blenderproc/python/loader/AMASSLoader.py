@@ -1,5 +1,4 @@
 from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"])
 
 import glob
 import json
@@ -11,13 +10,75 @@ from typing import List, Tuple
 import bpy
 import mathutils
 import numpy as np
-import torch
-from human_body_prior.body_model.body_model import BodyModel
+#import torch
+#from human_body_prior.body_model.body_model import BodyModel
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import ObjectLoader
 
+
+def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 8) -> List[MeshObject]:
+    """
+    use the pose parameters to generate the mesh and loads it to the scene.
+
+    :param data_path: The path to the AMASS Dataset folder in resources folder.
+    :param sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
+                                Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
+                                'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
+    :param temp_dir: A temp directory which is used for writing the temporary .obj file.
+    :param body_model_gender: The model gender, pose will represented using male, female or neutral body shape.
+                                   Available:[male, female, neutral]. If None is selected a random one is choosen.
+    :param subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
+                            If left empty a random subject id is picked.
+    :param sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent certain action.
+                             If set to -1 a random sequence id is selected.
+    :param frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
+    :param num_betas: Number of body parameters
+    :param num_dmpls: Number of DMPL parameters
+    :return: The list of loaded mesh objects.
+    """
+    if body_model_gender is None:
+        body_model_gender = random.choice(["male", "female", "neutral"])
+    if temp_dir is None:
+        temp_dir = Utility.get_temporary_directory()
+
+    # Install required additonal packages
+    SetupUtility.setup_pip(["git+https://github.com/abahnasy/smplx", "git+https://github.com/abahnasy/human_body_prior"])
+
+    # Get the currently supported mocap datasets by this loader
+    taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
+    supported_mocap_datasets = AMASSLoader._get_supported_mocap_datasets(taxonomy_file_path, data_path)
+
+    # selected_obj = self._files_with_fitting_ids
+    pose_body, betas = AMASSLoader._get_pose_parameters(supported_mocap_datasets, num_betas, sub_dataset_id, subject_id, sequence_id, frame_id)
+    # load parametric Model
+    body_model, faces = AMASSLoader._load_parametric_body_model(data_path, body_model_gender, num_betas, num_dmpls)
+    # Generate Body representations using SMPL model
+    body_repr = body_model(pose_body=pose_body, betas=betas)
+    # Generate .obj file represents the selected pose
+    generated_obj = AMASSLoader._write_body_mesh_to_obj_file(body_repr, faces, temp_dir)
+
+    loaded_obj = ObjectLoader.load(generated_obj)
+
+    AMASSLoader._correct_materials(loaded_obj)
+
+    # set the shading mode explicitly to smooth
+    for obj in loaded_obj:
+        obj.set_shading_mode("SMOOTH")
+
+    # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
+    # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
+    for obj in loaded_obj:
+        obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
+
+    # move the origin of the object to the world origin and on top of the X-Y plane
+    # makes it easier to place them later on, this does not change the `.location`
+    for obj in loaded_obj:
+        obj.move_origin_to_bottom_mean_point()
+    bpy.ops.object.select_all(action='DESELECT')
+
+    return loaded_obj
 
 class AMASSLoader:
     """
@@ -35,67 +96,7 @@ class AMASSLoader:
 
 
     @staticmethod
-    def load(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 8) -> List[MeshObject]:
-        """
-        use the pose parameters to generate the mesh and loads it to the scene.
-
-        :param data_path: The path to the AMASS Dataset folder in resources folder.
-        :param sub_dataset_id: Identifier for the sub dataset, the dataset which the human pose object should be extracted from.
-                                    Available: ['CMU', 'Transitions_mocap', 'MPI_Limits', 'SSM_synced', 'TotalCapture',
-                                    'Eyes_Japan_Dataset', 'MPI_mosh', 'MPI_HDM05', 'HumanEva', 'ACCAD', 'EKUT', 'SFU', 'KIT', 'H36M', 'TCD_handMocap', 'BML']
-        :param temp_dir: A temp directory which is used for writing the temporary .obj file.
-        :param body_model_gender: The model gender, pose will represented using male, female or neutral body shape.
-                                       Available:[male, female, neutral]. If None is selected a random one is choosen.
-        :param subject_id: Type of motion from which the pose should be extracted, this is dataset dependent parameter.
-                                If left empty a random subject id is picked.
-        :param sequence_id: Sequence id in the dataset, sequences are the motion recorded to represent certain action.
-                                 If set to -1 a random sequence id is selected.
-        :param frame_id: Frame id in a selected motion sequence. If none is selected a random one is picked
-        :param num_betas: Number of body parameters
-        :param num_dmpls: Number of DMPL parameters
-        :return: The list of loaded mesh objects.
-        """
-        if body_model_gender is None:
-            body_model_gender = random.choice(["male", "female", "neutral"])
-        if temp_dir is None:
-            temp_dir = Utility.get_temporary_directory()
-
-        # Get the currently supported mocap datasets by this loader
-        taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
-        supported_mocap_datasets = AMASSLoader._get_supported_mocap_datasets(taxonomy_file_path, data_path)
-
-        # selected_obj = self._files_with_fitting_ids
-        pose_body, betas = AMASSLoader._get_pose_parameters(supported_mocap_datasets, num_betas, sub_dataset_id, subject_id, sequence_id, frame_id)
-        # load parametric Model
-        body_model, faces = AMASSLoader._load_parametric_body_model(data_path, body_model_gender, num_betas, num_dmpls)
-        # Generate Body representations using SMPL model
-        body_repr = body_model(pose_body=pose_body, betas=betas)
-        # Generate .obj file represents the selected pose
-        generated_obj = AMASSLoader._write_body_mesh_to_obj_file(body_repr, faces, temp_dir)
-
-        loaded_obj = ObjectLoader.load(generated_obj)
-
-        AMASSLoader._correct_materials(loaded_obj)
-
-        # set the shading mode explicitly to smooth
-        for obj in loaded_obj:
-            obj.set_shading_mode("SMOOTH")
-
-        # removes the x axis rotation found in all ShapeNet objects, this is caused by importing .obj files
-        # the object has the same pose as before, just that the rotation_euler is now [0, 0, 0]
-        for obj in loaded_obj:
-            obj.persist_transformation_into_mesh(location=False, rotation=True, scale=False)
-
-        # move the origin of the object to the world origin and on top of the X-Y plane
-        # makes it easier to place them later on, this does not change the `.location`
-        for obj in loaded_obj:
-            obj.move_origin_to_bottom_mean_point()
-        bpy.ops.object.select_all(action='DESELECT')
-
-        return loaded_obj
-
-    @staticmethod
-    def _get_pose_parameters(supported_mocap_datasets: dict, num_betas: int, used_sub_dataset_id: str, used_subject_id: str, used_sequence_id: int, used_frame_id: int) -> Tuple[torch.Tensor, torch.Tensor]:
+    def _get_pose_parameters(supported_mocap_datasets: dict, num_betas: int, used_sub_dataset_id: str, used_subject_id: str, used_sequence_id: int, used_frame_id: int) -> Tuple["torch.Tensor", "torch.Tensor"]:
         """ Extract pose and shape parameters corresponding to the requested pose from the database to be processed by the parametric model
 
         :param supported_mocap_datasets: A dict which maps sub dataset names to their paths.
@@ -174,7 +175,7 @@ class AMASSLoader:
                 "supported datasets: {}".format([key for key, value in supported_mocap_datasets.items()]))
 
     @staticmethod
-    def _load_parametric_body_model(data_path: str, used_body_model_gender: str, num_betas: int, num_dmpls: int) -> Tuple[BodyModel, np.array]:
+    def _load_parametric_body_model(data_path: str, used_body_model_gender: str, num_betas: int, num_dmpls: int) -> Tuple["BodyModel", np.array]:
         """ loads the parametric model that is used to generate the mesh object
 
         :return:  parametric model. Type: tuple.
@@ -213,7 +214,7 @@ class AMASSLoader:
 
 
     @staticmethod
-    def _write_body_mesh_to_obj_file(body_represenstation: torch.Tensor, faces: np.array, temp_dir: str) -> str:
+    def _write_body_mesh_to_obj_file(body_represenstation: "torch.Tensor", faces: np.array, temp_dir: str) -> str:
         """ write the generated pose as obj file on the desk.
 
         :param body_represenstation: parameters generated from the BodyModel model which represent the obj pose and shape. Type: torch.Tensor
@@ -270,4 +271,3 @@ class AMASSLoader:
                                                                   invert_node.outputs["Color"],
                                                                   principled_bsdf.inputs["Alpha"])
 
-load_AMASS = AMASSLoader.load
