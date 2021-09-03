@@ -1,6 +1,6 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.loader.BlendLoader import load_blender
+from blenderproc.python.loader.BlendLoader import load_blend
 
 class BlendLoaderModule(LoaderInterface):
     """
@@ -65,14 +65,14 @@ class BlendLoaderModule(LoaderInterface):
             paths = self.config.get_list("paths")
             newly_loaded_objects = []
             for path in paths:
-                newly_loaded_objects.extend(load_blender(
+                newly_loaded_objects.extend(load_blend(
                     path=path,
                     obj_types=self.config.get_raw_value("obj_types", ['mesh', 'empty']),
                     name_regrex=self.config.get_string("entities", None),
                     data_blocks=self.config.get_raw_value("datablocks", "objects")
                 ))
         elif self.config.has_param("path"):
-            newly_loaded_objects = load_blender(
+            newly_loaded_objects = load_blend(
                 path=self.config.get_string("path"),
                 obj_types=self.config.get_raw_value("obj_types", ['mesh', 'empty']),
                 name_regrex=self.config.get_string("entities", None),
