@@ -7,45 +7,45 @@ import bpy
 
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
+
+
+def load_scenenet(file_path: str, texture_folder: str, label_mapping: LabelIdMapping, unknown_texture_folder: str = None) -> List[MeshObject]:
+    """ Loads all SceneNet objects at the given "file_path".
+
+    The textures for each object are sampled based on the name of the object, if the name is not represented in the
+    texture folder the unknown folder is used. This folder does not exists, after downloading the texture dataset.
+    Make sure to create and put some textures, you want to use for these instances there.
+
+    All objects get "category_id" set based on the data in the "resources/id_mappings/nyu_idset.csv"
+
+    Each object will have the custom property "is_scene_net_obj".
+
+    :param file_path: The path to the .obj file from SceneNet.
+    :param texture_folder: The path to the texture folder used to sample the textures.
+    :param unknown_texture_folder: The path to the textures, which are used if the the texture type is unknown. The default path does not
+                                   exist if the dataset was just downloaded, it has to be created manually.
+    :return: The list of loaded mesh objects.
+    """
+    if unknown_texture_folder is None:
+        unknown_texture_folder = os.path.join(texture_folder, "unknown")
+
+    # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
+    loaded_objects = load_obj(filepath=file_path, use_image_search=False)
+    loaded_objects.sort(key=lambda ele: ele.get_name())
+    # sample materials for each object
+    SceneNetLoader._random_sample_materials_for_each_obj(loaded_objects, texture_folder, unknown_texture_folder)
+
+    # set the category ids for each object
+    SceneNetLoader._set_category_ids(loaded_objects, label_mapping)
+
+    for obj in loaded_objects:
+        obj.set_cp("is_scene_net_obj", True)
+
+    return loaded_objects
 
 
 class SceneNetLoader:
-
-    @staticmethod
-    def load(file_path: str, texture_folder: str, label_mapping: LabelIdMapping, unknown_texture_folder: str = None) -> List[MeshObject]:
-        """ Loads all SceneNet objects at the given "file_path".
-
-        The textures for each object are sampled based on the name of the object, if the name is not represented in the
-        texture folder the unknown folder is used. This folder does not exists, after downloading the texture dataset.
-        Make sure to create and put some textures, you want to use for these instances there.
-
-        All objects get "category_id" set based on the data in the "resources/id_mappings/nyu_idset.csv"
-
-        Each object will have the custom property "is_scene_net_obj".
-
-        :param file_path: The path to the .obj file from SceneNet.
-        :param texture_folder: The path to the texture folder used to sample the textures.
-        :param unknown_texture_folder: The path to the textures, which are used if the the texture type is unknown. The default path does not
-                                       exist if the dataset was just downloaded, it has to be created manually.
-        :return: The list of loaded mesh objects.
-        """
-        if unknown_texture_folder is None:
-            unknown_texture_folder = os.path.join(texture_folder, "unknown")
-
-        # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
-        loaded_objects = ObjectLoader.load(filepath=file_path, use_image_search=False)
-        loaded_objects.sort(key=lambda ele: ele.get_name())
-        # sample materials for each object
-        SceneNetLoader._random_sample_materials_for_each_obj(loaded_objects, texture_folder, unknown_texture_folder)
-
-        # set the category ids for each object
-        SceneNetLoader._set_category_ids(loaded_objects, label_mapping)
-
-        for obj in loaded_objects:
-            obj.set_cp("is_scene_net_obj", True)
-
-        return loaded_objects
 
     @staticmethod
     def _random_sample_materials_for_each_obj(loaded_objects: List[MeshObject], texture_folder: str, unknown_texture_folder: str):
@@ -141,5 +141,3 @@ class SceneNetLoader:
                 obj.set_name("floor")
             elif obj.get_cp("category_id") == label_mapping.id_from_label("ceiling"):
                 obj.set_name("ceiling")
-
-load_scenenet = SceneNetLoader.load

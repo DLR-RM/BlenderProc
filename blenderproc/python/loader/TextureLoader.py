@@ -7,31 +7,30 @@ import bpy
 
 from blenderproc.python.utility.Utility import Utility
 
+def load_texture(path: str, colorspace: str = "sRGB") -> List[bpy.types.Texture]:
+    """ Loads images and creates image textures.
+
+    Depending on the form of the provided path:
+    1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an
+    image is provided.
+    2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
+    folder with images is provided.
+
+    NOTE: Same image file can be loaded once to avoid unnecessary overhead. If you really need the same image in
+    different colorspaces, then have a copy per desired colorspace and load them in different instances of this Loader.
+
+    :param path: The path to the folder with assets/to the asset.
+    :param colorspace: Colorspace type to assign to loaded assets. Available: ['Filmic Log', 'Linear', 'Linear ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ'].
+    :return: The list of created textures.
+    """
+    path = Utility.resolve_path(path)
+    image_paths = TextureLoader._resolve_paths(path)
+    textures = TextureLoader._load_and_create(image_paths, colorspace)
+
+    return textures
+
 
 class TextureLoader:
-
-    @staticmethod
-    def load(path: str, colorspace: str = "sRGB") -> List[bpy.types.Texture]:
-        """ Loads images and creates image textures.
-
-        Depending on the form of the provided path:
-        1. Loads an image, creates an image texture, and assigns the loaded image to the texture, when a path to an
-        image is provided.
-        2. Loads images and for each creates a texture, and assing an image to this texture, if a path to a
-        folder with images is provided.
-
-        NOTE: Same image file can be loaded once to avoid unnecessary overhead. If you really need the same image in
-        different colorspaces, then have a copy per desired colorspace and load them in different instances of this Loader.
-
-        :param path: The path to the folder with assets/to the asset.
-        :param colorspace: Colorspace type to assign to loaded assets. Available: ['Filmic Log', 'Linear', 'Linear ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ'].
-        :return: The list of created textures.
-        """
-        path = Utility.resolve_path(path)
-        image_paths = TextureLoader._resolve_paths(path)
-        textures = TextureLoader._load_and_create(image_paths, colorspace)
-
-        return textures
 
     @staticmethod
     def _resolve_paths(path: str) -> list:
@@ -78,5 +77,3 @@ class TextureLoader:
                               "same image again (for example, in a different or in the same colorspace), use the copy "
                               "of the file.".format(image_path))
         return textures
-
-load_texture = TextureLoader.load

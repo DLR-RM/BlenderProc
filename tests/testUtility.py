@@ -2,7 +2,7 @@
 import unittest
 import os.path
 
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.tests.SilentMode import SilentMode
@@ -15,7 +15,7 @@ class UnitTestCheckUtility(unittest.TestCase):
         """
         with SilentMode():
             Initializer.init()
-            objs = ObjectLoader.load(os.path.join(test_path_manager.example_resources, "scene.obj"))
+            objs = load_obj(os.path.join(test_path_manager.example_resources, "scene.obj"))
 
             for obj in objs:
                 obj.set_cp("test", 0)

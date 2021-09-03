@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.BopLoader import BopLoader
+from blenderproc.python.loader.BopLoader import load_bop
 
 
 class BopLoaderModule(LoaderInterface):
@@ -80,7 +80,7 @@ class BopLoaderModule(LoaderInterface):
             num_of_objs_to_sample = None
             obj_instances_limit = -1
 
-        loaded_objects = BopLoader.load(
+        loaded_objects = load_bop(
             bop_dataset_path=self.config.get_string("bop_dataset_path"),
             temp_dir=self._temp_dir,
             sys_paths=self.config.get_list("sys_paths"),

@@ -5,7 +5,7 @@ from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.Front3DLoader import Front3DLoader
+from blenderproc.python.loader.Front3DLoader import load_front3d
 
 
 class Front3DLoaderModule(LoaderInterface):
@@ -65,7 +65,7 @@ class Front3DLoaderModule(LoaderInterface):
         # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
 
-        loaded_objects = Front3DLoader.load(
+        loaded_objects = load_front3d(
             json_path=self.config.get_string("json_path"),
             future_model_path=self.config.get_string("3D_future_model_path"),
             front_3D_texture_path=self.config.get_string("3D_front_texture_path"),
