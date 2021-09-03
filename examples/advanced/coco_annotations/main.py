@@ -1,15 +1,15 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.utility.SetupUtility import SetupUtility
 
 SetupUtility.setup([])
 
-from src.utility.Initializer import Initializer
-from src.utility.loader.BlendLoader import BlendLoader
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LightUtility import Light
-from src.utility.RendererUtility import RendererUtility
-from src.utility.SegMapRendererUtility import SegMapRendererUtility
-from src.utility.CocoWriterUtility import CocoWriterUtility
-from src.utility.MathUtility import MathUtility
+from blenderproc.utility.Initializer import Initializer
+from blenderproc.utility.loader.BlendLoader import BlendLoader
+from blenderproc.utility.CameraUtility import CameraUtility
+from blenderproc.utility.LightUtility import Light
+from blenderproc.utility.RendererUtility import RendererUtility
+from blenderproc.utility.SegMapRendererUtility import SegMapRendererUtility
+from blenderproc.utility.CocoWriterUtility import CocoWriterUtility
+from blenderproc.utility.MathUtility import MathUtility
 
 import argparse
 

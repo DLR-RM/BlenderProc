@@ -1,4 +1,4 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import os

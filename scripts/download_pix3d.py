@@ -9,7 +9,7 @@ import shutil
 
 from utils import ProgressBar
 path.append(os.path.join(os.path.dirname(__file__), ".."))
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.utility.SetupUtility import SetupUtility
 
 
 if __name__ == "__main__":

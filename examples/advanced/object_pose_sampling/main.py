@@ -1,18 +1,18 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 import argparse
 
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.object.ObjectPoseSampler import ObjectPoseSampler
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.loader.ObjectLoader import ObjectLoader
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LightUtility import Light
-from src.utility.MathUtility import MathUtility
+from blenderproc.utility.MeshObjectUtility import MeshObject
+from blenderproc.utility.object.ObjectPoseSampler import ObjectPoseSampler
+from blenderproc.utility.WriterUtility import WriterUtility
+from blenderproc.utility.Initializer import Initializer
+from blenderproc.utility.loader.ObjectLoader import ObjectLoader
+from blenderproc.utility.CameraUtility import CameraUtility
+from blenderproc.utility.LightUtility import Light
+from blenderproc.utility.MathUtility import MathUtility
 
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.utility.RendererUtility import RendererUtility
 import numpy as np
 
 parser = argparse.ArgumentParser()

@@ -1,17 +1,17 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
-from src.utility.Utility import Utility
-from src.utility.MathUtility import MathUtility
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
-from src.utility.loader.SuncgLoader import SuncgLoader
-from src.utility.lighting.SuncgLighting import SuncgLighting
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.RendererUtility import RendererUtility
+from blenderproc.utility.postprocessing.StereoGlobalMatching import StereoGlobalMatching
+from blenderproc.utility.Utility import Utility
+from blenderproc.utility.MathUtility import MathUtility
+from blenderproc.utility.CameraUtility import CameraUtility
+from blenderproc.utility.LabelIdMapping import LabelIdMapping
+from blenderproc.utility.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.utility.loader.SuncgLoader import SuncgLoader
+from blenderproc.utility.lighting.SuncgLighting import SuncgLighting
+from blenderproc.utility.WriterUtility import WriterUtility
+from blenderproc.utility.Initializer import Initializer
+from blenderproc.utility.RendererUtility import RendererUtility
 
 import argparse
 import os

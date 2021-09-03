@@ -1,20 +1,20 @@
-from src.utility.SetupUtility import SetupUtility
+from blenderproc.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.sampler.UpperRegionSampler import UpperRegionSampler
-from src.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
-from src.utility.lighting.SurfaceLighting import SurfaceLighting
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-from src.utility.loader.IKEALoader import IKEALoader
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
+from blenderproc.utility.CameraUtility import CameraUtility
+from blenderproc.utility.MathUtility import MathUtility
+from blenderproc.utility.MeshObjectUtility import MeshObject
+from blenderproc.utility.camera.CameraValidation import CameraValidation
+from blenderproc.utility.sampler.UpperRegionSampler import UpperRegionSampler
+from blenderproc.utility.constructor.RandomRoomConstructor import RandomRoomConstructor
+from blenderproc.utility.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.utility.loader.CCMaterialLoader import CCMaterialLoader
+from blenderproc.utility.loader.IKEALoader import IKEALoader
+from blenderproc.utility.WriterUtility import WriterUtility
+from blenderproc.utility.Initializer import Initializer
 
-from src.utility.RendererUtility import RendererUtility
-from src.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.utility.RendererUtility import RendererUtility
+from blenderproc.utility.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np
