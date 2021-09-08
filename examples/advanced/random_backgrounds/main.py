@@ -6,7 +6,6 @@ from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.Shell import Shell
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
@@ -68,7 +67,7 @@ while tries < 10000 and poses < 5:
     lookat_point = obj.get_location() + np.random.uniform([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
     rotation_matrix = CameraUtility.rotation_from_forward_vec(lookat_point - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 
     # Only add camera pose if object is still visible
     if obj in CameraValidation.visible_objects(cam2world_matrix):

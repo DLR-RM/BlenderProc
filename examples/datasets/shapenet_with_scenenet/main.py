@@ -11,7 +11,6 @@ from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -94,7 +93,7 @@ while tries < 10000 and poses < 5:
     location = PartSphere.sample(shapenet_obj.get_location(), radius=2, dist_above_center=0.5, mode="SURFACE")
     # Compute rotation based on vector going from location towards ShapeNet object
     rotation_matrix = CameraUtility.rotation_from_forward_vec(shapenet_obj.get_location() - location)
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 
     # Check that obstacles are at least 0.5 meter away from the camera and that the ShapeNet object is visible
     if shapenet_obj in CameraValidation.visible_objects(cam2world_matrix) and CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.5}, bvh_tree):

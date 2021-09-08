@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
@@ -43,9 +42,9 @@ CameraUtility.set_stereo_parameters(interocular_distance=0.05, convergence_mode=
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
-        position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
-        rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
-        matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
+        position = bproc.math.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
+        rotation = bproc.math.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
+        matrix_world = bproc.math.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
         CameraUtility.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light

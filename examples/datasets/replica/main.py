@@ -11,7 +11,6 @@ from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -51,7 +50,7 @@ while tries < 10000 and poses < 15:
     location = point_sampler.sample(height=1.55)
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.373401334, 0, 0], [1.373401334, 0, 2 * np.pi])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2 and 4 meters
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0, "avg": {"min": 2.0, "max": 4.0}}, bvh_tree):

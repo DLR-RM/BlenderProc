@@ -7,7 +7,6 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
@@ -37,7 +36,7 @@ with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
         position, euler_rotation = line[:3], line[3:6]
-        matrix_world = MathUtility.build_transformation_mat(position, euler_rotation)
+        matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
         CameraUtility.add_camera_pose(matrix_world)
 
 # render the whole pipeline

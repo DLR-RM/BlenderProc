@@ -10,7 +10,6 @@ from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -77,7 +76,7 @@ while tries < 10000 and poses < 5:
 
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 2 * np.pi])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that there is no obstacle in front of the camera closer than 1m
     if not CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree):

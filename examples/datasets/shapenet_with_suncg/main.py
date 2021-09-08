@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
@@ -66,7 +65,7 @@ for i in range(5):
     # compute rotation based on vector going from the camera location towards shapenet object
     rotation_matrix = CameraUtility.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     CameraUtility.add_camera_pose(cam2world_matrix)
 
 # set the number of samples to render for each object

@@ -11,7 +11,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
@@ -83,7 +82,7 @@ for _ in range(5):
         # Compute rotation based on vector going from location towards poi
         rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
         # Add homog cam pose based on location an rotation
-        cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+        cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
         
         # Check that obstacles are at least 0.3 meter away from the camera and make sure the view interesting enough
         if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):

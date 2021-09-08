@@ -10,7 +10,6 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
@@ -53,7 +52,7 @@ light.set_color([1, 1, 1])
 light.set_energy(1)
 
 # Set the camera pose to be in front of the bin
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -2.13, 3.22], [0.64, 0, 0]))
+CameraUtility.add_camera_pose(bproc.math.build_transformation_mat([0, -2.13, 3.22], [0.64, 0, 0]))
 
 # Make the bin object passively participate in the physics simulation
 bin_obj.enable_rigidbody(active=False, collision_shape="COMPOUND")

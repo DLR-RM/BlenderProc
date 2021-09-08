@@ -14,7 +14,7 @@ import mathutils
 import h5py
 
 from blenderproc.python.utility.BlenderUtility import load_image
-from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix
 from blenderproc.python.utility.Utility import Utility, NumpyEncoder
 from blenderproc.python.camera.CameraUtility import CameraUtility
 
@@ -145,23 +145,23 @@ class WriterUtility:
         if attribute_name == "name":
             return item.name
         elif attribute_name == "location":
-            return MathUtility.change_coordinate_frame_of_point(item.location, world_frame_change)
+            return change_coordinate_frame_of_point(item.location, world_frame_change)
         elif attribute_name == "rotation_euler":
-            return MathUtility.change_coordinate_frame_of_point(item.rotation_euler, world_frame_change)
+            return change_coordinate_frame_of_point(item.rotation_euler, world_frame_change)
         elif attribute_name == "rotation_forward_vec":
             # Calc forward vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             forward = rot_mat @ mathutils.Vector([0, 0, -1])
-            return MathUtility.change_coordinate_frame_of_point(forward, world_frame_change)
+            return change_coordinate_frame_of_point(forward, world_frame_change)
         elif attribute_name == "rotation_up_vec":
             # Calc up vector from rotation matrix
             rot_mat = item.rotation_euler.to_matrix()
             up = rot_mat @ mathutils.Vector([0, 1, 0])
-            return MathUtility.change_coordinate_frame_of_point(up, world_frame_change)
+            return change_coordinate_frame_of_point(up, world_frame_change)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = MathUtility.change_source_coordinate_frame_of_transformation_matrix(item.matrix_world, local_frame_change)
-            matrix_world = MathUtility.change_target_coordinate_frame_of_transformation_matrix(matrix_world, world_frame_change)
+            matrix_world = change_source_coordinate_frame_of_transformation_matrix(item.matrix_world, local_frame_change)
+            matrix_world = change_target_coordinate_frame_of_transformation_matrix(matrix_world, world_frame_change)
             return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
             custom_property_name = attribute_name[len("customprop_"):]

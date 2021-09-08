@@ -7,7 +7,6 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import random
@@ -34,8 +33,8 @@ light.set_energy(1000)
 CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 
 # Add two camera poses
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
+CameraUtility.add_camera_pose(bproc.math.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))
+CameraUtility.add_camera_pose(bproc.math.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Add displacement to all objects
 for obj in objs:

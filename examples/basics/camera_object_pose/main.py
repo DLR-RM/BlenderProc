@@ -9,7 +9,6 @@ from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
@@ -59,7 +58,7 @@ cam2world = np.array([
     [0, 0, 0, 1]
 ])
 # Change coordinate frame of transformation matrix from OpenCV to Blender coordinates
-cam2world = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
+cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
 CameraUtility.add_camera_pose(cam2world)
 
 # activate normal and distance rendering

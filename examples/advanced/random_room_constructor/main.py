@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
@@ -50,7 +49,7 @@ while tries < 10000 and poses < 5:
     location = UpperRegionSampler.sample(floor, min_height=1.5, max_height=1.8)
     # Sample rotation
     rotation = np.random.uniform([1.0, 0, 0], [1.4217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.2}, bvh_tree) and \

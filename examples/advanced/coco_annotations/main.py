@@ -9,7 +9,6 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
-from blenderproc.python.utility.MathUtility import MathUtility
 
 import argparse
 
@@ -42,7 +41,7 @@ with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
         position, euler_rotation = line[:3], line[3:6]
-        matrix_world = MathUtility.build_transformation_mat(position, euler_rotation)
+        matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
         CameraUtility.add_camera_pose(matrix_world)
 
 # activate normal and distance rendering

@@ -13,7 +13,7 @@ from mathutils import Matrix, Vector
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
 from blenderproc.python.types.MaterialUtility import Material
 
 def load_bop(bop_dataset_path: str, sys_paths: Union[List[str], str], temp_dir: str = None, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[MeshObject]:
@@ -195,7 +195,7 @@ class BopLoader:
         print('-----------------------------')
         
         # transform from OpenCV to blender coords
-        cam_H_c2w = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
+        cam_H_c2w = change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
  
         return cam_H_c2w
 

@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -37,7 +36,7 @@ light.set_energy(1)
 light.set_color([1, 0.978, 0.407])
 
 # Add a camera pose via location + euler angles
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -47.93, 16.59], [1.3, 0, 0]))
+CameraUtility.add_camera_pose(bproc.math.build_transformation_mat([0, -47.93, 16.59], [1.3, 0, 0]))
 
 # Define a function that samples the pose of a given sphere
 def sample_pose(obj: MeshObject):
