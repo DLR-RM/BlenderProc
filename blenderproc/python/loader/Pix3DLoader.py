@@ -6,7 +6,7 @@ from typing import List
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 
 
@@ -18,7 +18,7 @@ def load_pix3d(used_category: str, data_path: str = 'resources/pix3d') -> List[M
     :param data_path: The path to the Pix3D folder.
     :return: The list of loaded mesh objects.
     """
-    data_path = Utility.resolve_path(data_path)
+    data_path = resolve_path(data_path)
     files_with_fitting_category = Pix3DLoader.get_files_with_category(used_category, data_path)
 
     selected_obj = random.choice(files_with_fitting_category)

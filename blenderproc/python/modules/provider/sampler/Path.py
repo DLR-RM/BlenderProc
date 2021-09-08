@@ -3,7 +3,7 @@ from glob import glob
 from random import choice
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 
 class Path(Provider):
@@ -48,7 +48,7 @@ class Path(Provider):
         :return: A path to object. Type: string.
         """
         # get path to folder
-        path = Utility.resolve_path(self.config.get_string("path"))
+        path = resolve_path(self.config.get_string("path"))
 
         # get list of paths
         paths = glob(path)

@@ -15,7 +15,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
@@ -25,7 +24,7 @@ args = parser.parse_args()
 
 # Define which dataset should be loaded and the path to the file containing possible height values.
 data_set_name = "office_1"
-height_list_values = Utility.resolve_path(os.path.join('resources', 'replica', 'height_levels', data_set_name, 'height_list_values.txt'))
+height_list_values = bproc.utility.resolve_path(os.path.join('resources', 'replica', 'height_levels', data_set_name, 'height_list_values.txt'))
 
 Initializer.init()
 

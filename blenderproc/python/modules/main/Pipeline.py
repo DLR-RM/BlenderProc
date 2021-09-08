@@ -3,7 +3,7 @@ import os
 
 from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 
 class Pipeline:
@@ -22,7 +22,7 @@ class Pipeline:
         Utility.working_dir = working_dir
 
         config_parser = ConfigParser(silent=True)
-        config = config_parser.parse(Utility.resolve_path(config_path), args)
+        config = config_parser.parse(resolve_path(config_path), args)
 
         # Setup pip packages specified in config
         SetupUtility.setup_pip(config["setup"]["pip"] if "pip" in config["setup"] else [])
@@ -30,7 +30,7 @@ class Pipeline:
         if avoid_output:
             GlobalStorage.add_to_config_before_init("avoid_output", True)
 
-        Utility.temp_dir = Utility.resolve_path(temp_dir)
+        Utility.temp_dir = resolve_path(temp_dir)
         os.makedirs(Utility.temp_dir, exist_ok=True)
 
         self.modules = Utility.initialize_modules(config["modules"])

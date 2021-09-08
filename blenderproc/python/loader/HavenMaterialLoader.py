@@ -5,7 +5,7 @@ import addon_utils
 import bpy
 
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
     """ Loads all specified haven textures from the given directory.
@@ -20,7 +20,7 @@ def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [],
     # makes the integration of complex materials easier
     addon_utils.enable("node_wrangler")
 
-    folder_path = Utility.resolve_path(folder_path)
+    folder_path = resolve_path(folder_path)
 
     if preload and fill_used_empty_materials:
         raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")

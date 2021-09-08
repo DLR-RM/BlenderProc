@@ -15,7 +15,7 @@ import h5py
 
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.utility.Utility import Utility, NumpyEncoder
+from blenderproc.python.utility.Utility import Utility, NumpyEncoder, resolve_path
 from blenderproc.python.camera.CameraUtility import CameraUtility
 
 
@@ -38,7 +38,7 @@ class WriterUtility:
                 if '%' in reg_out['path']:
                     # per frame outputs
                     for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-                        output_path = Utility.resolve_path(reg_out['path'] % frame_id)
+                        output_path = resolve_path(reg_out['path'] % frame_id)
                         if os.path.exists(output_path):
                             output_file = WriterUtility.load_output_file(output_path, key_has_alpha_channel)
                         else:
@@ -58,7 +58,7 @@ class WriterUtility:
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:
                     # per run outputs
-                    output_path = Utility.resolve_path(reg_out['path'])
+                    output_path = resolve_path(reg_out['path'])
                     output_file = WriterUtility.load_output_file(output_path, key_has_alpha_channel)
                     output_data_dict[reg_out['key']] = output_file
 

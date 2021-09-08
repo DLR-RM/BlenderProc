@@ -7,14 +7,12 @@ import os
 import numpy as np
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Utility import Utility
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
@@ -30,8 +28,8 @@ if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
     raise Exception("One of the two folders does not exist!")
 
 Initializer.init()
-mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
-mapping = LabelIdMapping.from_csv(mapping_file)
+mapping_file = bproc.utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
+mapping = bproc.utility.LabelIdMapping.from_csv(mapping_file)
 
 # set the light bounces
 RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,

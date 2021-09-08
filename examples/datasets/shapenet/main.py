@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -59,11 +58,11 @@ shapenet_state = {
     "used_source_id": shapenet_obj.get_cp("used_source_id")
 }
 # Add to the main data dict (its the same for all frames here)
-data["shapenet_state"] = [shapenet_state] * Utility.num_frames()
+data["shapenet_state"] = [shapenet_state] * bproc.utility.num_frames()
 
 # Collect state of the camera at all frames
 cam_states = []
-for frame in range(Utility.num_frames()):
+for frame in range(bproc.utility.num_frames()):
     cam_states.append({
         "cam2world": CameraUtility.get_camera_pose(frame),
         "cam_K": CameraUtility.get_intrinsics_as_K_matrix()

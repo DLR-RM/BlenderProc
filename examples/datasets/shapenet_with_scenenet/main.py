@@ -4,8 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
@@ -31,7 +29,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
-label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 room_objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_texture_path, label_mapping)
 
 # In some scenes floors, walls and ceilings are one object that needs to be split first

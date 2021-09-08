@@ -5,7 +5,7 @@ import bpy
 
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 
 def load_ccmaterials(folder_path: str = "resources/cctextures", used_assets: list = None, preload: bool = False,
          fill_used_empty_materials: bool = False, add_custom_properties: dict = None,
@@ -29,7 +29,7 @@ def load_ccmaterials(folder_path: str = "resources/cctextures", used_assets: lis
             and have to be filled before rendering (by calling this function again, no need to save the prior
             returned list)
     """
-    folder_path = Utility.resolve_path(folder_path)
+    folder_path = resolve_path(folder_path)
     # this selected textures are probably useful for random selection
     probably_useful_texture = ["paving stones", "tiles", "wood", "fabric", "bricks", "metal", "wood floor",
                                "ground", "rock", "concrete", "leather", "planks", "rocks", "gravel",

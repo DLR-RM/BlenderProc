@@ -1,6 +1,6 @@
 import os
 from os.path import dirname, abspath, join, exists
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 
 class TestsPathManager(object):
@@ -35,7 +35,7 @@ class TestsPathManager(object):
         setattr(self, param_name, abspath(join(self._main_folder, default_path)))
         if not exists(getattr(self, param_name)):
             if environment_key in os.environ:
-                setattr(self, param_name, Utility.resolve_path(os.environ[environment_key]))
+                setattr(self, param_name, resolve_path(os.environ[environment_key]))
             if not exists(getattr(self, param_name)):
                 raise Exception(f"The env variable: \"{environment_key}\" is empty or does not exist and the default "
                                 f"path does also not exist: {default_path}")

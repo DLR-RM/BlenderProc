@@ -3,10 +3,8 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -26,7 +24,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
