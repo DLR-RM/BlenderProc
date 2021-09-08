@@ -6,7 +6,6 @@ from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
@@ -17,7 +16,7 @@ parser.add_argument('ikea_path', help="Path to the downloaded IKEA dataset, see 
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/ikea/output", help="Path to the output directory")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load IKEA objects from type table into the scene
 objs = bproc.loader.load_ikea(args.ikea_path, obj_categories="table")

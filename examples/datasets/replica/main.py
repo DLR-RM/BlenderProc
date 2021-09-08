@@ -8,7 +8,6 @@ import numpy as np
 
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
@@ -26,7 +25,7 @@ args = parser.parse_args()
 data_set_name = "office_1"
 height_list_values = Utility.resolve_path(os.path.join('resources', 'replica', 'height_levels', data_set_name, 'height_list_values.txt'))
 
-Initializer.init()
+bproc.init()
 
 # Load the replica dataset
 objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)

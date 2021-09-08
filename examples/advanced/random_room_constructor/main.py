@@ -11,7 +11,6 @@ from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
@@ -25,7 +24,7 @@ parser.add_argument('cc_material_path', nargs='?', default="resources/cctextures
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/random_room_constructor/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load materials and objects that can be placed into the room
 materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])

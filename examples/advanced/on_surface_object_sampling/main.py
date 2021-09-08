@@ -7,7 +7,6 @@ import numpy as np
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -23,7 +22,7 @@ parser.add_argument('scene', nargs='?', default="examples/advanced/on_surface_ob
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/on_surface_object_sampling/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 objs = bproc.loader.load_blend(args.scene)

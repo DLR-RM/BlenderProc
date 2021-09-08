@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -18,7 +17,7 @@ parser.add_argument('scene', nargs='?', default="examples/advanced/coco_annotati
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/coco_annotations/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 objs = bproc.loader.load_blend(args.scene)

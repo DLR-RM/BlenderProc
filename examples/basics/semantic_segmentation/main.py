@@ -6,7 +6,6 @@ import argparse
 
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 
@@ -20,7 +19,7 @@ parser.add_argument('scene', nargs='?', default="examples/basics/semantic_segmen
 parser.add_argument('output_dir', nargs='?', default="examples/basics/semantic_segmentation/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 objs = bproc.loader.load_blend(args.scene)

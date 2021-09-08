@@ -7,7 +7,6 @@ from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
@@ -19,7 +18,7 @@ parser.add_argument('haven_path', nargs='?', default="resources/haven", help="Th
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/haven/output", help="Path to where the final files will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load the object into the scene
 objs = bproc.loader.load_blend(args.blend_path)

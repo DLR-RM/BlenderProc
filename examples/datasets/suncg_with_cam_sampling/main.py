@@ -14,7 +14,6 @@ from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 import numpy as np
@@ -27,7 +26,7 @@ parser.add_argument('house', help="Path to the house.json file of the SUNCG scen
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_with_cam_sampling/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))

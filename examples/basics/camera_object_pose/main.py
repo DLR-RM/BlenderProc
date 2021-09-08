@@ -6,7 +6,6 @@ import argparse
 import numpy as np
 
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 
@@ -19,7 +18,7 @@ parser.add_argument('object', nargs='?', default="examples/basics/camera_object_
 parser.add_argument('output_dir', nargs='?', default="examples/basics/camera_object_pose/output", help="Path to where the final files will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 obj = bproc.loader.load_obj(args.object)[0]

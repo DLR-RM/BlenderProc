@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
@@ -28,7 +27,7 @@ parser.add_argument('cc_textures_path', nargs='?', default="resources/cctextures
 parser.add_argument('output_dir', nargs='?', default="examples/bop_object_physics_positioning/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load a random sample of bop objects into the scene
 sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),

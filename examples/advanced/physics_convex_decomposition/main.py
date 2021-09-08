@@ -7,7 +7,6 @@ from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -21,7 +20,7 @@ parser.add_argument('shapenet_path', help="Path to the downloaded shape net core
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/physics_convex_decomposition/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load a bin object that gonna catch the ShapeNet objects
 bin_obj = bproc.loader.load_obj(args.bin_object)[0]

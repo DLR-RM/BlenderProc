@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
@@ -27,7 +26,7 @@ parser.add_argument('bop_toolkit_path', nargs='?', help="Path to bop toolkit")
 parser.add_argument('output_dir', nargs='?', default="examples/bop_object_pose_sampling/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load specified bop objects into the scene
 bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),

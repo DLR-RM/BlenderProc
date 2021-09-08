@@ -13,86 +13,99 @@ import addon_utils
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 
-class Initializer:
+def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", compute_device_type: str = None, use_experimental_features: bool = False, clean_up_scene: bool = True):
+    """ Initializes basic blender settings, the world and the camera.
 
-    @staticmethod
-    def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", compute_device_type: str = None, use_experimental_features: bool = False, clean_up_scene: bool = True):
-        """ Initializes basic blender settings, the world and the camera.
+    Also cleans up the whole scene at first.
 
-        Also cleans up the whole scene at first.
+    :param horizon_color: The color to use for the world background.
+    :param compute_device: The compute device to use for the Cycles Render Engine i.e. CPU or GPU. (default: ``GPU``).
+    :param compute_device_type: The compute device type to use for the Cycles Render Engine i.e. OPTIX or CUDA. Only necessary to specify, if compute device is GPU. If None is given, the available device type is used (OPTIX is preferred).
+    :param use_experimental_features: Set to True, if you want to use the Experimental features of the Cycles Render Engine i.e Adaptive subdivision. (default: ``False``).
+    :param clean_up_scene: Set to False, if you want to keep all scene data.
+    """
+    if clean_up_scene:
+        cleanup()
 
-        :param horizon_color: The color to use for the world background.
-        :param compute_device: The compute device to use for the Cycles Render Engine i.e. CPU or GPU. (default: ``GPU``).
-        :param compute_device_type: The compute device type to use for the Cycles Render Engine i.e. OPTIX or CUDA. Only necessary to specify, if compute device is GPU. If None is given, the available device type is used (OPTIX is preferred).
-        :param use_experimental_features: Set to True, if you want to use the Experimental features of the Cycles Render Engine i.e Adaptive subdivision. (default: ``False``).
-        :param clean_up_scene: Set to False, if you want to keep all scene data.
-        """
-        if clean_up_scene:
-            Initializer.cleanup()
+    # Set language if necessary
+    if bpy.context.preferences.view.language != "en_US":
+        print("Setting blender language settings to english during this run")
+        bpy.context.preferences.view.language = "en_US"
 
-        # Set language if necessary
-        if bpy.context.preferences.view.language != "en_US":
-            print("Setting blender language settings to english during this run")
-            bpy.context.preferences.view.language = "en_US"
+    prefs = bpy.context.preferences.addons['cycles'].preferences
+    # Use cycles
+    bpy.context.scene.render.engine = 'CYCLES'
 
-        prefs = bpy.context.preferences.addons['cycles'].preferences
-        # Use cycles
-        bpy.context.scene.render.engine = 'CYCLES'
-
-        if platform == "darwin" or compute_device == "CPU":
-            # if there is no gpu support (mac os) or if cpu is specified as compute device, then use the cpu with maximum power
-            bpy.context.scene.cycles.device = "CPU"
-            bpy.context.scene.render.threads = multiprocessing.cpu_count()
-        else:
-            bpy.context.scene.cycles.device = "GPU"
-            preferences = bpy.context.preferences.addons['cycles'].preferences
-            for device_type in preferences.get_device_types(bpy.context):
-                preferences.get_devices_for_type(device_type[0])
-            for gpu_type in ["OPTIX", "CUDA"]:
-                found = False
-                for device in preferences.devices:
-                    if device.type == gpu_type and (compute_device_type is None or compute_device_type == gpu_type):
-                        bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
-                        print('Device {} of type {} found and used.'.format(device.name, device.type))
-                        found = True
-                        break
-                if found:
+    if platform == "darwin" or compute_device == "CPU":
+        # if there is no gpu support (mac os) or if cpu is specified as compute device, then use the cpu with maximum power
+        bpy.context.scene.cycles.device = "CPU"
+        bpy.context.scene.render.threads = multiprocessing.cpu_count()
+    else:
+        bpy.context.scene.cycles.device = "GPU"
+        preferences = bpy.context.preferences.addons['cycles'].preferences
+        for device_type in preferences.get_device_types(bpy.context):
+            preferences.get_devices_for_type(device_type[0])
+        for gpu_type in ["OPTIX", "CUDA"]:
+            found = False
+            for device in preferences.devices:
+                if device.type == gpu_type and (compute_device_type is None or compute_device_type == gpu_type):
+                    bpy.context.preferences.addons['cycles'].preferences.compute_device_type = gpu_type
+                    print('Device {} of type {} found and used.'.format(device.name, device.type))
+                    found = True
                     break
-            # make sure that all visible GPUs are used
-            for group in prefs.get_devices():
-                for d in group:
-                    d.use = True
+            if found:
+                break
+        # make sure that all visible GPUs are used
+        for group in prefs.get_devices():
+            for d in group:
+                d.use = True
 
-        # Set the Experimental features on/off
-        if use_experimental_features:
-            bpy.context.scene.cycles.feature_set = 'EXPERIMENTAL'
+    # Set the Experimental features on/off
+    if use_experimental_features:
+        bpy.context.scene.cycles.feature_set = 'EXPERIMENTAL'
 
-        # setting the frame end, will be changed by the camera loader modules
-        bpy.context.scene.frame_end = 0
+    # setting the frame end, will be changed by the camera loader modules
+    bpy.context.scene.frame_end = 0
 
-        # Sets background color
-        world = bpy.data.worlds['World']
-        world.use_nodes = True
-        world.node_tree.nodes["Background"].inputs[0].default_value[:3] = horizon_color
-        world["category_id"] = 0
+    # Sets background color
+    world = bpy.data.worlds['World']
+    world.use_nodes = True
+    world.node_tree.nodes["Background"].inputs[0].default_value[:3] = horizon_color
+    world["category_id"] = 0
 
-        # Create the camera
-        cam = bpy.data.cameras.new("Camera")
-        cam_ob = bpy.data.objects.new("Camera", cam)
-        bpy.context.scene.collection.objects.link(cam_ob)
-        bpy.context.scene.camera = cam_ob
+    # Create the camera
+    cam = bpy.data.cameras.new("Camera")
+    cam_ob = bpy.data.objects.new("Camera", cam)
+    bpy.context.scene.collection.objects.link(cam_ob)
+    bpy.context.scene.camera = cam_ob
 
-        Initializer.set_default_parameters()
+    Initializer.set_default_parameters()
 
-        random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
-        if random_seed:
-            print("Got random seed: {}".format(random_seed))
-            try:
-                random_seed = int(random_seed)
-            except ValueError as e:
-                raise e
-            random.seed(random_seed)
-            np_random.seed(random_seed)
+    random_seed = 15  # os.getenv("BLENDER_PROC_RANDOM_SEED")
+    if random_seed:
+        print("Got random seed: {}".format(random_seed))
+        try:
+            random_seed = int(random_seed)
+        except ValueError as e:
+            raise e
+        random.seed(random_seed)
+        np_random.seed(random_seed)
+
+def cleanup():
+    """ Resets the scene to its clean state, but keeping the UI as it is """
+    # Switch to right context
+    if bpy.context.object is not None and bpy.context.object.mode != "OBJECT":
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+    # Clean up
+    Initializer._remove_all_data()
+    Initializer._remove_custom_properties()
+
+    # Create new world
+    new_world = bpy.data.worlds.new("World")
+    bpy.context.scene.world = new_world
+
+class Initializer:
 
     @staticmethod
     def set_default_parameters():
@@ -123,20 +136,6 @@ class Initializer:
                                           DefaultConfig.volume_bounces)
 
 
-    @staticmethod
-    def cleanup():
-        """ Resets the scene to its clean state, but keeping the UI as it is """
-        # Switch to right context
-        if bpy.context.object is not None and bpy.context.object.mode != "OBJECT":
-            bpy.ops.object.mode_set(mode='OBJECT')
-
-        # Clean up
-        Initializer._remove_all_data()
-        Initializer._remove_custom_properties()
-
-        # Create new world
-        new_world = bpy.data.worlds.new("World")
-        bpy.context.scene.world = new_world
 
     @staticmethod
     def _remove_all_data():

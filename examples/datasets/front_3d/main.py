@@ -6,7 +6,6 @@ import argparse
 import os
 import numpy as np
 
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -28,7 +27,7 @@ args = parser.parse_args()
 if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
     raise Exception("One of the two folders does not exist!")
 
-Initializer.init()
+bproc.init()
 mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
 mapping = LabelIdMapping.from_csv(mapping_file)
 

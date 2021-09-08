@@ -7,7 +7,6 @@ from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtil
 from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
@@ -20,7 +19,7 @@ parser.add_argument('scene', nargs='?', default="examples/advanced/random_backgr
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/random_backgrounds/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 obj = bproc.loader.load_obj(args.scene)[0]

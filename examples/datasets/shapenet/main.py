@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -18,7 +17,7 @@ parser.add_argument('shapenet_path', help="Path to the downloaded shape net core
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/shapenet/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02691156", used_source_id="10155655850468db78d106ce0a280f87")

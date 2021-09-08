@@ -14,7 +14,6 @@ from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import os
@@ -27,7 +26,7 @@ parser.add_argument('shapenet_path', help="Path to the downloaded shape net core
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/shapenet_with_scenenet/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
