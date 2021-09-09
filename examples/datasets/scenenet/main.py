@@ -9,7 +9,6 @@ from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -69,7 +68,7 @@ tries = 0
 while tries < 10000 and poses < 5:
     tries += 1
     # Sample point above the floor in height of [1.5m, 1.8m]
-    location = UpperRegionSampler.sample(floors, min_height=1.5, max_height=1.8)
+    location = bproc.sampler.upper_region(floors, min_height=1.5, max_height=1.8)
     # Check that there is no object between the sampled point and the floor
     _, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(location, [0, 0, -1])
     if hit_object not in floors:

@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -36,7 +35,7 @@ for synset_id, source_id in [("02801938", "d9fb327b0e19a9ddc735651f0fb19093"), (
 def sample_pose(obj: MeshObject):
     # Sample the location above the bin
     obj.set_location(np.random.uniform([-0.5, -0.5, 2], [0.5, 0.5, 5]))
-    obj.set_rotation_euler(UniformSO3.sample())
+    obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample the poses of all ShapeNet objects, while making sure that no objects collide with each other.
 ObjectPoseSampler.sample(

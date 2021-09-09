@@ -6,7 +6,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
@@ -47,7 +46,7 @@ poses = 0
 tries = 0
 while tries < 10000 and poses < 5:
     # Sample point
-    location = UpperRegionSampler.sample(floor, min_height=1.5, max_height=1.8)
+    location = bproc.sampler.upper_region(floor, min_height=1.5, max_height=1.8)
     # Sample rotation
     rotation = np.random.uniform([1.0, 0, 0], [1.4217, 0, 6.283185307])
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)

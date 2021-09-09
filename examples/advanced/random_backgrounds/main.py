@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -37,7 +36,7 @@ mat.set_principled_shader_value("Metallic", random.uniform(0, 1))
 light = Light()
 light.set_type("POINT")
 # Sample its location around the object
-light.set_location(Shell.sample(
+light.set_location(bproc.sampler.shell(
     center=obj.get_location(),
     radius_min=1,
     radius_max=5,
@@ -56,7 +55,7 @@ poses = 0
 tries = 0
 while tries < 10000 and poses < 5:
     # Sample random camera location around the object
-    location = Shell.sample(
+    location = bproc.sampler.shell(
         center=obj.get_location(),
         radius_min=1,
         radius_max=4,

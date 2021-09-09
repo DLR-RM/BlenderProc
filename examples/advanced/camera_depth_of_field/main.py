@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -44,7 +43,7 @@ poi = MeshObject.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects
-    location = PartSphere.sample(center=[0, 0, 0], radius=7, mode="SURFACE", dist_above_center=1.0)
+    location = bproc.sampler.part_sphere(center=[0, 0, 0], radius=7, mode="SURFACE", dist_above_center=1.0)
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location)
     # Add homog cam pose based on location an rotation

@@ -13,8 +13,6 @@ from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.sampler.Shell import Shell
-from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 import argparse
@@ -44,14 +42,14 @@ for j, obj in enumerate(bop_objs):
 # sample point light on shell
 light_point = Light()
 light_point.set_energy(500)
-location = Shell.sample(center = [0, 0, -0.8], radius_min = 1, radius_max = 4,
+location = bproc.sampler.shell(center = [0, 0, -0.8], radius_min = 1, radius_max = 4,
                         elevation_min = 40, elevation_max = 89, uniform_elevation = True)
 light_point.set_location(location)
 
 # Define a function that samples 6-DoF poses
 def sample_pose_func(obj: MeshObject):
     obj.set_location(np.random.uniform([-0.2, -0.2, -0.2],[0.2, 0.2, 0.2]))
-    obj.set_rotation_euler(UniformSO3.sample())
+    obj.set_rotation_euler(bproc.sampler.uniformSO3())
     
 # activate distance rendering and set amount of samples for color rendering
 RendererUtility.enable_distance_output()
@@ -72,7 +70,7 @@ for _ in range(5):
     # Render two camera poses
     while poses < 2:
         # Sample location
-        location = Shell.sample(center = [0, 0, 0], 
+        location = bproc.sampler.shell(center = [0, 0, 0],
                                 radius_min = 1,
                                 radius_max = 1.2,
                                 elevation_min = 1,

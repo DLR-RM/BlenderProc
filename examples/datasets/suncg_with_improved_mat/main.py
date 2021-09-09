@@ -6,7 +6,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
@@ -40,7 +39,7 @@ objs = bproc.loader.load_suncg(args.house, label_mapping)
 SuncgLighting.light()
 
 # Init sampler for sampling locations inside the loaded suncg house
-point_sampler = SuncgPointInRoomSampler(objs)
+point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
 

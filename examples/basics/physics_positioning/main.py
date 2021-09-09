@@ -10,7 +10,6 @@ from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
@@ -42,7 +41,7 @@ CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -47.93, 1
 # Define a function that samples the pose of a given sphere
 def sample_pose(obj: MeshObject):
     obj.set_location(np.random.uniform([-5, -5, 8], [5, 5, 12]))
-    obj.set_rotation_euler(UniformSO3.sample())
+    obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample the poses of all spheres above the ground without any collisions in-between
 ObjectPoseSampler.sample(

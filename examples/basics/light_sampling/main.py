@@ -5,7 +5,6 @@ SetupUtility.setup([])
 import argparse
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -28,7 +27,7 @@ objs = bproc.loader.load_obj(args.scene)
 light = Light()
 light.set_type("POINT")
 # Sample its location in a shell around the point [1, 2, 3]
-light.set_location(Shell.sample(
+light.set_location(bproc.sampler.shell(
     center=[1, 2, 3],
     radius_min=4,
     radius_max=7,

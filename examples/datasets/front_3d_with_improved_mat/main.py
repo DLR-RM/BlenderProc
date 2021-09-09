@@ -10,7 +10,6 @@ import random
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraValidation import CameraValidation
@@ -79,7 +78,7 @@ for wall in walls:
             wall.set_material(i, random.choice(marble_materials))
 
 # Init sampler for sampling locations inside the loaded front3D house
-point_sampler = Front3DPointInRoomSampler(loaded_objects)
+point_sampler = bproc.sampler.Front3DPointInRoomSampler(loaded_objects)
 
 # Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, MeshObject)])
