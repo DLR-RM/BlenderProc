@@ -7,10 +7,7 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 import os
 import numpy as np
@@ -22,7 +19,7 @@ parser.add_argument('scene_texture_path', help="Path to the downloaded texture f
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/scenenet/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
@@ -72,7 +69,7 @@ while tries < 10000 and poses < 5:
 
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 2 * np.pi])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that there is no obstacle in front of the camera closer than 1m
     if not bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree):

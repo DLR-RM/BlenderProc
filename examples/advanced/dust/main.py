@@ -5,9 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
 from blenderproc.python.sampler.PartSphere import PartSphere
 
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 
 
@@ -20,7 +17,7 @@ parser.add_argument('hdri_path', nargs='?', default="resources/haven", help="The
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/haven/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 obj = bproc.loader.load_blend(args.model)[0]
@@ -40,7 +37,7 @@ for i in range(5):
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(obj.get_location() - location)
     # Add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # Add dust to all materials of the loaded object

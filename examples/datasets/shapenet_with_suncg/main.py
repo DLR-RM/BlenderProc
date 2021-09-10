@@ -5,13 +5,10 @@ SetupUtility.setup([])
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 import argparse
 import os
@@ -22,7 +19,7 @@ parser.add_argument('house', help="Path to the house.json file of the SUNCG scen
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/shapenet_with_suncg/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load suncg house into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
@@ -63,7 +60,7 @@ for i in range(5):
     # compute rotation based on vector going from the camera location towards shapenet object
     rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # set the number of samples to render for each object

@@ -13,7 +13,7 @@ from mathutils import Matrix, Vector
 import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import change_source_coordinate_frame_of_transformation_matrix
 from blenderproc.python.types.MaterialUtility import Material
 
 
@@ -196,7 +196,7 @@ class BopLoader:
         print('-----------------------------')
         
         # transform from OpenCV to blender coords
-        cam_H_c2w = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
+        cam_H_c2w = change_source_coordinate_frame_of_transformation_matrix(cam_H_c2w, source_frame)
  
         return cam_H_c2w
 

@@ -5,9 +5,7 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 
 parser = argparse.ArgumentParser()
@@ -15,7 +13,7 @@ parser.add_argument('object', nargs='?', default="examples/basics/camera_object_
 parser.add_argument('output_dir', nargs='?', default="examples/basics/camera_object_pose/output", help="Path to where the final files will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 obj = bproc.loader.load_obj(args.object)[0]
@@ -54,7 +52,7 @@ cam2world = np.array([
     [0, 0, 0, 1]
 ])
 # Change coordinate frame of transformation matrix from OpenCV to Blender coordinates
-cam2world = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
+cam2world = bproc.math.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
 bproc.camera.add_camera_pose(cam2world)
 
 # activate normal and distance rendering

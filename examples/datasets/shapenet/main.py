@@ -3,9 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.sampler.Sphere import Sphere
 
@@ -16,7 +13,7 @@ parser.add_argument('shapenet_path', help="Path to the downloaded shape net core
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/shapenet/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02691156", used_source_id="10155655850468db78d106ce0a280f87")
@@ -34,7 +31,7 @@ for i in range(5):
     # Compute rotation based on vector going from location towards the location of the ShapeNet object
     rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # Add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # activate normal and distance rendering

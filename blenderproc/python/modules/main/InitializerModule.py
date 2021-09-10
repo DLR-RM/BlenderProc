@@ -1,7 +1,7 @@
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.utility.Initializer import Initializer
+from blenderproc.python.utility.Initializer import init, cleanup
 
 
 class InitializerModule(Module):
@@ -37,7 +37,7 @@ class InitializerModule(Module):
         Module.__init__(self, config)
 
         # Clean up example scene or scene created by last run when debugging pipeline inside blender
-        Initializer.cleanup()
+        cleanup()
 
         # setting up the GlobalStorage
         global_config = Config(self.config.get_raw_dict("global", {}))
@@ -51,4 +51,4 @@ class InitializerModule(Module):
         compute_device = self.config.get_string("compute_device", "GPU")
         compute_device_type = self.config.get_string("compute_device_type", None)
         use_experimental_features = self.config.get_bool("use_experimental_features", False)
-        Initializer.init(horizon_color, compute_device, compute_device_type, use_experimental_features, clean_up_scene=False)
+        init(horizon_color, compute_device, compute_device_type, use_experimental_features, clean_up_scene=False)

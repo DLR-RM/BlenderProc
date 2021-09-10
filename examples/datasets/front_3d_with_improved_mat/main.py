@@ -8,12 +8,9 @@ import numpy as np
 import random
 
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
 
 parser = argparse.ArgumentParser()
@@ -27,7 +24,7 @@ args = parser.parse_args()
 if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
     raise Exception("One of the two folders does not exist!")
 
-Initializer.init()
+bproc.init()
 mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
 mapping = LabelIdMapping.from_csv(mapping_file)
 
@@ -99,7 +96,7 @@ while tries < 10000 and poses < 10:
     location = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.338, 0, np.pi * 2])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2.5 and 3.5
     # meters and make sure that no background is visible, finally make sure the view is interesting enough

@@ -6,7 +6,7 @@ import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix, build_transformation_mat
 
 
 class CameraInterface(Module):
@@ -278,13 +278,13 @@ class CameraInterface(Module):
             if self.local_frame_change != ["X", "Y", "Z"]:
                 print("Warning: The local_frame_change parameter is at the moment only supported when setting the cam2world_matrix attribute.")
                 
-            position = MathUtility.change_coordinate_frame_of_point(config.get_vector3d("location", [0, 0, 0]), self.world_frame_change)
+            position = change_coordinate_frame_of_point(config.get_vector3d("location", [0, 0, 0]), self.world_frame_change)
 
             # Rotation
             rotation_format = config.get_string("rotation/format", "euler")
             value = config.get_vector3d("rotation/value", [0, 0, 0])
             # Transform to blender coord frame
-            value = MathUtility.change_coordinate_frame_of_point(value, self.world_frame_change)
+            value = change_coordinate_frame_of_point(value, self.world_frame_change)
             
             if rotation_format == "euler":
                 # Rotation, specified as euler angles
@@ -302,9 +302,9 @@ class CameraInterface(Module):
                 inplane_rot = config.get_float("rotation/inplane_rot", 0.0)
                 rotation_matrix = np.matmul(rotation_matrix, Euler((0.0, 0.0, inplane_rot)).to_matrix())
 
-            cam2world_matrix = MathUtility.build_transformation_mat(position, rotation_matrix)
+            cam2world_matrix = build_transformation_mat(position, rotation_matrix)
         else:
             cam2world_matrix = np.array(config.get_list("cam2world_matrix")).reshape(4, 4).astype(np.float32)
-            cam2world_matrix = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.local_frame_change)
-            cam2world_matrix = MathUtility.change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.world_frame_change)
+            cam2world_matrix = change_source_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.local_frame_change)
+            cam2world_matrix = change_target_coordinate_frame_of_transformation_matrix(cam2world_matrix, self.world_frame_change)
         return cam2world_matrix
