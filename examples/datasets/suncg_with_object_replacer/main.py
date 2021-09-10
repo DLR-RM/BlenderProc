@@ -7,7 +7,6 @@ from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomS
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 from blenderproc.python.object.ObjectReplacer import ObjectReplacer
 from blenderproc.python.utility.Utility import Utility

@@ -14,7 +14,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
 
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
