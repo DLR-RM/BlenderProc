@@ -123,7 +123,7 @@ class MeshObject(Entity):
 
         :param name: The name of the new material.
         """
-        new_mat = Material.create(name)
+        new_mat = MaterialLoaderUtility.create(name)
         self.add_material(new_mat)
         return new_mat
 
