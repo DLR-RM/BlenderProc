@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.sampler.Disk import Disk
+from blenderproc.python.sampler.Disk import disk
 
 
 class DiskModule(Provider):
@@ -80,7 +80,7 @@ class DiskModule(Provider):
         start_angle = self.config.get_float("start_angle", 0)
         end_angle = self.config.get_float("end_angle", 180)
 
-        return Disk.sample(
+        return disk(
             center=center,
             radius=radius,
             rotation=euler_angles,

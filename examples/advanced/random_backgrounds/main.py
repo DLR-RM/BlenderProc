@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.types.LightUtility import Light
 
 import numpy as np
@@ -30,7 +29,7 @@ mat.set_principled_shader_value("Metallic", random.uniform(0, 1))
 light = Light()
 light.set_type("POINT")
 # Sample its location around the object
-light.set_location(Shell.sample(
+light.set_location(bproc.sampler.shell(
     center=obj.get_location(),
     radius_min=1,
     radius_max=5,
@@ -49,7 +48,7 @@ poses = 0
 tries = 0
 while tries < 10000 and poses < 5:
     # Sample random camera location around the object
-    location = Shell.sample(
+    location = bproc.sampler.shell(
         center=obj.get_location(),
         radius_min=1,
         radius_max=4,

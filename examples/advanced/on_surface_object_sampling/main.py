@@ -10,7 +10,6 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 
 
 parser = argparse.ArgumentParser()
@@ -31,7 +30,7 @@ spheres = Filter.by_attr(objs, "name", ".*phere.*", regex=True)
 # Define a function that samples the pose of a given object
 def sample_pose(obj: MeshObject):
     # Sample the spheres location above the surface
-    obj.set_location(UpperRegionSampler.sample(
+    obj.set_location(bproc.sampler.upper_region(
         objects_to_sample_on=[surface],
         min_height=1,
         max_height=4,

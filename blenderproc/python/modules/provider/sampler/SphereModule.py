@@ -1,7 +1,7 @@
 import numpy as np
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.sampler.Sphere import Sphere
+from blenderproc.python.sampler.Sphere import sphere
 
 
 class SphereModule(Provider):
@@ -57,5 +57,5 @@ class SphereModule(Provider):
         # Mode of operation.
         mode = self.config.get_string("mode")
 
-        return Sphere.sample(center, radius, mode)
+        return sphere(center, radius, mode)
 
