@@ -8,10 +8,8 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import numpy as np
@@ -53,7 +51,7 @@ light.set_color([1, 1, 1])
 light.set_energy(1)
 
 # Set the camera pose to be in front of the bin
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -2.13, 3.22], [0.64, 0, 0]))
+bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([0, -2.13, 3.22], [0.64, 0, 0]))
 
 # Make the bin object passively participate in the physics simulation
 bin_obj.enable_rigidbody(active=False, collision_shape="COMPOUND")
@@ -75,7 +73,7 @@ PhysicsSimulation.simulate_and_fix_final_poses(
 )
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

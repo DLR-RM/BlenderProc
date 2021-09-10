@@ -3,7 +3,7 @@ import bpy
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.renderer.RendererUtility import RendererUtility
+import blenderproc.python.renderer.RendererUtility as RendererUtility
 
 
 class RendererInterface(Module):
@@ -143,7 +143,7 @@ class RendererInterface(Module):
         :param use_denoiser: If true, a denoiser is used, only use this on color information
         :param default_denoiser: Either "Intel" or "Blender", "Intel" performs much better in most cases
         """
-        RendererUtility.init()
+        RendererUtility._render_init()
         RendererUtility.set_samples(self.config.get_int("samples", default_samples))
 
         if self.config.has_param("use_adaptive_sampling"):

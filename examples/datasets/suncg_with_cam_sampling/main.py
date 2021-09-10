@@ -2,22 +2,16 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
-
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 import numpy as np
 
 import argparse
@@ -35,7 +29,7 @@ label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resou
 objs = bproc.loader.load_suncg(args.house, label_mapping)
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = SuncgPointInRoomSampler(objs)
@@ -53,20 +47,20 @@ while tries < 10000 and poses < 5:
     cam2world_matrix = MathUtility.build_transformation_mat(location, euler_rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
-    if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4:
-        CameraUtility.add_camera_pose(cam2world_matrix)
+    if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and bproc.camera.scene_coverage_score(cam2world_matrix) > 0.4:
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
-data.update(SegMapRendererUtility.render(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
+data.update(bproc.renderer.render_segmap(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

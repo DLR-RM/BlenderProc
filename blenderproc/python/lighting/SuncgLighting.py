@@ -2,6 +2,35 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.MaterialUtility import Material
 
+def light_suncg_scene(lightbulb_emission_strength: float = 15, lampshade_emission_strength: float = 7, ceiling_emission_strength: float = 1.5):
+    """ Makes the lamps, windows and ceilings object emit light.
+
+    :param lightbulb_emission_strength: The emission strength that should be used for light bulbs. Default: 15
+    :param lampshade_emission_strength: The emission strength that should be used for lamp shades. Default: 7
+    :param ceiling_emission_strength: The emission strength that should be used for the ceiling. Default: 1.5
+    """
+    # Read in the materials for lights and windows
+    lights, windows = Utility.read_suncg_lights_windows_materials()
+
+    collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
+
+    # Make some objects emit lights
+    for obj in MeshObject.get_all_mesh_objects():
+        if obj.has_cp("modelId"):
+            obj_id = obj.get_cp("modelId")
+
+            # In the case of the lamp
+            if obj_id in lights:
+                SuncgLighting._make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength, lampshade_emission_strength)
+
+            # Make the windows emit light
+            if obj_id in windows:
+                SuncgLighting._make_window_emissive(obj, collection_of_mats)
+
+            # Also make ceilings slightly emit light
+            if obj.get_name().startswith("Ceiling#"):
+                SuncgLighting._make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)
+
 class SuncgLighting:
 
     @staticmethod
@@ -104,33 +133,3 @@ class SuncgLighting:
             if not m.get_nodes_with_type("Emission") and m.get_nodes_with_type("BsdfPrincipled"):
                 m.make_emissive(emission_strength=ceiling_emission_strength, emission_color=(1, 1, 1, 1), keep_using_base_color=False)
                 collection_of_mats["ceiling"][mat_name] = m
-    
-    @staticmethod
-    def light(lightbulb_emission_strength :float=15, lampshade_emission_strength :float=7, ceiling_emission_strength: float=1.5):
-        """ Makes the lamps, windows and ceilings object emit light.
-
-        :param lightbulb_emission_strength: The emission strength that should be used for light bulbs. Default: 15
-        :param lampshade_emission_strength: The emission strength that should be used for lamp shades. Default: 7
-        :param ceiling_emission_strength: The emission strength that should be used for the ceiling. Default: 1.5
-        """
-        # Read in the materials for lights and windows
-        lights, windows = Utility.read_suncg_lights_windows_materials()
-        
-        collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
-        
-        # Make some objects emit lights
-        for obj in MeshObject.get_all_mesh_objects():
-            if obj.has_cp("modelId"):
-                obj_id = obj.get_cp("modelId")
-
-                # In the case of the lamp
-                if obj_id in lights:
-                    SuncgLighting._make_lamp_emissive(obj, lights[obj_id], collection_of_mats, lightbulb_emission_strength, lampshade_emission_strength)
-
-                # Make the windows emit light
-                if obj_id in windows:
-                    SuncgLighting._make_window_emissive(obj, collection_of_mats)
-
-                # Also make ceilings slightly emit light
-                if obj.get_name().startswith("Ceiling#"):
-                    SuncgLighting._make_ceiling_emissive(obj, collection_of_mats, ceiling_emission_strength)

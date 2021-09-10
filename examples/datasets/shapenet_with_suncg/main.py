@@ -6,15 +6,12 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
@@ -35,7 +32,7 @@ suncg_objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 bed_objs = Filter.by_cp(suncg_objs, "category_id", label_mapping.id_from_label("bed"))
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # load selected shapenet object
 shapenet_obj = bproc.loader.load_shapenet(args.shape_net, used_synset_id="02801938")
@@ -64,20 +61,20 @@ for i in range(5):
     # sample random camera location around the shapenet object
     location = PartSphere.sample(center=shapenet_obj.get_location(), mode="SURFACE", radius=2, dist_above_center=0.5)
     # compute rotation based on vector going from the camera location towards shapenet object
-    rotation_matrix = CameraUtility.rotation_from_forward_vec(shapenet_obj.get_location() - location)
+    rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # add homog cam pose based on location an rotation
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
-    CameraUtility.add_camera_pose(cam2world_matrix)
+    bproc.camera.add_camera_pose(cam2world_matrix)
 
 # set the number of samples to render for each object
-RendererUtility.set_samples(150)
+bproc.renderer.set_samples(150)
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)

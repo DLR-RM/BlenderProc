@@ -16,7 +16,7 @@ import h5py
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.Utility import Utility, NumpyEncoder
-from blenderproc.python.camera.CameraUtility import CameraUtility
+import blenderproc.python.camera.CameraUtility as CameraUtility
 
 def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
                  append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
