@@ -1,0 +1,2 @@
+from blenderproc.python.lighting.SuncgLighting import light_suncg_scene
+from blenderproc.python.lighting.SurfaceLighting import light_surface

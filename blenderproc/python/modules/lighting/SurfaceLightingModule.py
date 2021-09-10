@@ -1,7 +1,7 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.lighting.SurfaceLighting import light_surface
 
 
 class SurfaceLightingModule(Module):
@@ -49,7 +49,7 @@ class SurfaceLightingModule(Module):
         # get all objects which material should be changed
         objects = MeshObject.convert_to_meshes(self.config.get_list("selector"))
 
-        SurfaceLighting.run(
+        light_surface(
             objects,
             emission_strength=self.emission_strength,
             keep_using_base_color=self.keep_using_base_color,

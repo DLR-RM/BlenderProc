@@ -6,7 +6,7 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
-from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
+from blenderproc.python.lighting.SurfaceLighting import light_surface
 from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -35,7 +35,7 @@ for i in range(15):
 objects = RandomRoomConstructor.construct(25, interior_objects, materials, amount_of_extrusions=5)
 
 # Bring light into the room
-SurfaceLighting.run([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
+light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
 
 # Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects(objects)
