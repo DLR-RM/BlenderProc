@@ -14,6 +14,7 @@ import h5py
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.Utility import resolve_path, Utility, NumpyEncoder
+from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix
 import blenderproc.python.camera.CameraUtility as CameraUtility
 
 def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
