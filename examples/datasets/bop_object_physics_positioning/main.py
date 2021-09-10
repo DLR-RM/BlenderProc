@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -75,7 +74,7 @@ light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6),
 light_plane.replace_materials(light_plane_material)
 
 # sample point light on shell
-light_point = Light()
+light_point = bproc.types.Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5,0.5,0.5],[1,1,1]))
 location = Shell.sample(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,

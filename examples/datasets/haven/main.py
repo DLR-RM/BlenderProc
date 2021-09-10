@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.LightUtility import Light
 
 import argparse
 
@@ -24,7 +23,7 @@ objs = bproc.loader.load_blend(args.blend_path)
 HavenEnvironmentLoader.set_random_world_background_hdr_img(args.haven_path)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

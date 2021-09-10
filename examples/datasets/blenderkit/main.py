@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.filter.Filter import Filter
 
 import argparse
@@ -20,7 +19,7 @@ bproc.init()
 objs = bproc.loader.load_blend(args.scene)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

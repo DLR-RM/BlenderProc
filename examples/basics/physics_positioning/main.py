@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -24,7 +23,7 @@ spheres = bproc.loader.load_obj(args.spheres_obj)
 ground = bproc.loader.load_obj(args.ground_obj)[0]
 
 # Create a SUN light and set its properties
-light = Light()
+light = bproc.types.Light()
 light.set_type("SUN")
 light.set_location([0, 0, 0])
 light.set_rotation_euler([-0.063, 0.6177, -0.1985])

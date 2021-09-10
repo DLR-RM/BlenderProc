@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.sampler.Shell import Shell
-from blenderproc.python.types.LightUtility import Light
 
 import numpy as np
 import argparse
@@ -27,7 +26,7 @@ mat.set_principled_shader_value("Base Color", np.random.uniform([0, 0, 0, 1], [1
 mat.set_principled_shader_value("Metallic", random.uniform(0, 1))
 
 # Create a new light
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 # Sample its location around the object
 light.set_location(Shell.sample(

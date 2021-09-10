@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.sampler.Sphere import Sphere
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.LightUtility import Light
 
 
 import argparse
@@ -27,7 +26,7 @@ objs = bproc.loader.load_AMASS(
 )
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

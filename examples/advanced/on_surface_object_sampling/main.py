@@ -6,7 +6,6 @@ import argparse
 import numpy as np
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
@@ -51,7 +50,7 @@ surface.enable_rigidbody(False)
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

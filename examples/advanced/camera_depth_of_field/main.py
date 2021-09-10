@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.PartSphere import PartSphere
-from blenderproc.python.types.LightUtility import Light
 
 import argparse
 
@@ -24,7 +23,7 @@ focus_point = Entity.create_empty("Camera Focus Point")
 focus_point.set_location([0.5, -1.5, 3])
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

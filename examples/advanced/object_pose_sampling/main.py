@@ -6,7 +6,6 @@ import argparse
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.types.LightUtility import Light
 
 import numpy as np
 
@@ -22,7 +21,7 @@ bproc.init()
 objs = bproc.loader.load_obj(args.scene)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
