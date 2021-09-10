@@ -5,11 +5,7 @@ SetupUtility.setup([])
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
-from blenderproc.python.camera.CameraValidation import CameraValidation
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Shell import Shell
@@ -53,8 +49,8 @@ def sample_pose_func(obj: MeshObject):
     obj.set_rotation_euler(UniformSO3.sample())
     
 # activate distance rendering and set amount of samples for color rendering
-RendererUtility.enable_distance_output()
-RendererUtility.set_samples(50)
+bproc.renderer.enable_distance_output()
+bproc.renderer.set_samples(50)
 
 # Render five different scenes
 for _ in range(5):
@@ -80,20 +76,20 @@ for _ in range(5):
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
         poi = MeshObject.compute_poi(bop_objs)
         # Compute rotation based on vector going from location towards poi
-        rotation_matrix = CameraUtility.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
+        rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
         # Add homog cam pose based on location an rotation
         cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
         
         # Check that obstacles are at least 0.3 meter away from the camera and make sure the view interesting enough
-        if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):
+        if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):
             # Persist camera pose
-            CameraUtility.add_camera_pose(cam2world_matrix, 
+            bproc.camera.add_camera_pose(cam2world_matrix, 
                                           frame = poses)
             poses += 1
 
     # render the cameras of the current scene
-    data = RendererUtility.render()
-    seg_data = SegMapRendererUtility.render(map_by = ["instance", "class", "cp_bop_dataset_name"], 
+    data = bproc.renderer.render()
+    seg_data = bproc.renderer.render_segmap(map_by = ["instance", "class", "cp_bop_dataset_name"], 
                                             default_values = {"class": 0, "cp_bop_dataset_name": None})
     
     # Write data to bop format

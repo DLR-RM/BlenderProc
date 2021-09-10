@@ -6,7 +6,7 @@ import bpy
 import cv2
 import numpy as np
 
-from blenderproc.python.camera.CameraUtility import CameraUtility
+import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.postprocessing.SGMUtility import fill_in_fast
 from blenderproc.python.postprocessing.SGMUtility import resize
 

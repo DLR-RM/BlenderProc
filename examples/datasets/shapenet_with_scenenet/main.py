@@ -6,17 +6,13 @@ from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import os
 import argparse
@@ -55,10 +51,10 @@ room_objs += new_ceilings
 
 # Make all lamp objects emit light
 lamps = Filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
-SurfaceLighting.run(lamps, emission_strength=15, keep_using_base_color=True)
+bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
 ceilings = Filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
-SurfaceLighting.run(ceilings, emission_strength=2)
+bproc.lighting.light_surface(ceilings, emission_strength=2)
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")
@@ -93,23 +89,23 @@ while tries < 10000 and poses < 5:
     # Sample on sphere around ShapeNet object
     location = PartSphere.sample(shapenet_obj.get_location(), radius=2, dist_above_center=0.5, mode="SURFACE")
     # Compute rotation based on vector going from location towards ShapeNet object
-    rotation_matrix = CameraUtility.rotation_from_forward_vec(shapenet_obj.get_location() - location)
+    rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
 
     # Check that obstacles are at least 0.5 meter away from the camera and that the ShapeNet object is visible
-    if shapenet_obj in CameraValidation.visible_objects(cam2world_matrix) and CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.5}, bvh_tree):
-        CameraUtility.add_camera_pose(cam2world_matrix)
+    if shapenet_obj in bproc.camera.visible_objects(cam2world_matrix) and bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.5}, bvh_tree):
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(150)
+bproc.renderer.set_samples(150)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

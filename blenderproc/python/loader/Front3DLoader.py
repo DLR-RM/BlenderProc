@@ -8,13 +8,13 @@ import mathutils
 import numpy as np
 from urllib.request import urlretrieve
 
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import load_obj
-from blenderproc.python.loader.TextureLoader import TextureLoader
+from blenderproc.python.loader.TextureLoader import load_texture
 
 def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
     """ Loads the 3D-Front scene specified by the given json file.
@@ -109,7 +109,7 @@ class Front3DLoader:
         if hash_folder_path in saved_image_dict:
             ret_used_image = saved_image_dict[hash_folder_path]
         else:
-            textures = TextureLoader.load(hash_folder_path)
+            textures = load_texture(hash_folder_path)
             if len(textures) != 1:
                 raise Exception(f"There is not just one texture: {len(textures)}")
             ret_used_image = textures[0].image
@@ -180,7 +180,7 @@ class Front3DLoader:
                         obj.add_material(mat)
                     else:
                         # Create a new material
-                        mat = Material.create(name=used_obj_name + "_material")
+                        mat = MaterialLoaderUtility.create(name=used_obj_name + "_material")
                         principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
                         if used_mat["color"]:
                             principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0
@@ -215,7 +215,7 @@ class Front3DLoader:
                         mat = used_materials_based_on_color[used_hash]
                     else:
                         # Create a new material
-                        mat = Material.create(name=used_obj_name + "_material")
+                        mat = MaterialLoaderUtility.create(name=used_obj_name + "_material")
                         # create a principled node and set the default color
                         principled_node = mat.get_the_one_node_with_type("BsdfPrincipled")
                         principled_node.inputs["Base Color"].default_value = mathutils.Vector(used_mat["color"]) / 255.0

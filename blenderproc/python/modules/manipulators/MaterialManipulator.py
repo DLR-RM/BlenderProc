@@ -8,7 +8,8 @@ import bpy
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.materials.Dust import Dust
+from blenderproc.python.material import MaterialLoaderUtility
+from blenderproc.python.material import Dust
 
 
 class MaterialManipulator(Module):
@@ -376,7 +377,7 @@ class MaterialManipulator(Module):
         sel_conf = Config(sel_objs)
         # invoke a Getter, get a list of entities to manipulate
         materials = sel_conf.get_list("selector")
-        materials = Material.convert_to_materials(materials)
+        materials = MaterialLoaderUtility.convert_to_materials(materials)
 
         op_mode = self.config.get_string("mode", "once_for_each")
 
@@ -639,7 +640,7 @@ class MaterialManipulator(Module):
         # if no texture is used, a random noise texture is generated
         texture_nodes = config.get_list("used_dust_texture", None)
 
-        Dust.add_to_material(
+        Dust.add_dust(
             material=material,
             strength=strength,
             texture_nodes=texture_nodes,

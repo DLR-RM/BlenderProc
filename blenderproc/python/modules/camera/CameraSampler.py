@@ -6,11 +6,11 @@ import bpy
 
 from blenderproc.python.modules.camera.CameraInterface import CameraInterface
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.camera.CameraUtility import CameraUtility
+import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.modules.utility.ItemCollection import ItemCollection
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.camera.CameraValidation import CameraValidation
+import blenderproc.python.camera.CameraValidation as CameraValidation
 
 class CameraSampler(CameraInterface):
     """
