@@ -2,7 +2,7 @@ import mathutils
 
 from blenderproc.python.modules.main.Provider import Provider
 
-from blenderproc.python.sampler.PartSphere import PartSphere
+from blenderproc.python.sampler.PartSphere import part_sphere
 
 
 class PartSphereModule(Provider):
@@ -69,7 +69,7 @@ class PartSphereModule(Provider):
         dist_above_center = self.config.get_float("distance_above_center", 0.0)
         part_sphere_dir_vector = self.config.get_vector3d("part_sphere_vector", [0, 0, 1])
 
-        return PartSphere.sample(
+        return part_sphere(
             center=center,
             radius=radius,
             mode=mode,

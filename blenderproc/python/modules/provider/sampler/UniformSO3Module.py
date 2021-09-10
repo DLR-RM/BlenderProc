@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.sampler.UniformSO3 import UniformSO3
+from blenderproc.python.sampler.UniformSO3 import uniformSO3
 
 
 class UniformSO3Module(Provider):
@@ -37,4 +37,4 @@ class UniformSO3Module(Provider):
         around_y = self.config.get_bool('around_y', True)
         around_z = self.config.get_bool('around_z', True)
 
-        return UniformSO3.sample(around_x, around_y, around_z)
+        return uniformSO3(around_x, around_y, around_z)

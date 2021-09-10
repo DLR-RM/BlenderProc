@@ -6,9 +6,6 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
-from blenderproc.python.sampler.Shell import Shell
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-
 import argparse
 import os
 import numpy as np
@@ -73,7 +70,7 @@ light_plane.replace_materials(light_plane_material)
 light_point = Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5, 0.5, 0.5], [1, 1, 1]))
-location = Shell.sample(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
+location = bproc.sampler.shell(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
                         elevation_min = 5, elevation_max = 89, uniform_elevation = True)
 light_point.set_location(location)
 
@@ -85,7 +82,7 @@ for plane in room_planes:
 
 # Define a function that samples the initial pose of a given object above the ground
 def sample_initial_pose(obj: MeshObject):
-    obj.set_location(UpperRegionSampler.sample(objects_to_sample_on=room_planes[0:1], 
+    obj.set_location(bproc.sampler.upper_region(objects_to_sample_on=room_planes[0:1],
                                                min_height=1, max_height=4, face_sample_range=[0.4, 0.6]))
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [0, 0, np.pi * 2]))
 
@@ -102,7 +99,7 @@ bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(placed_objects)
 poses = 0
 while poses < 10:
     # Sample location
-    location = Shell.sample(center = [0, 0, 0], 
+    location = bproc.sampler.shell(center = [0, 0, 0],
                             radius_min = 0.61,
                             radius_max = 1.24,
                             elevation_min = 5,
