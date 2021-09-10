@@ -43,7 +43,7 @@ for obj in objs:
     obj.add_uv_mapping("cylinder")
 
     # Create a random procedural texture
-    texture = MaterialLoaderUtility.create_procedural_texture()
+    texture = MaterialLoaderUtility.create_procedural_texture('CLOUDS')
     # Displace the vertices of the object based on that random texture
     obj.add_displace_modifier(
         texture=texture,
