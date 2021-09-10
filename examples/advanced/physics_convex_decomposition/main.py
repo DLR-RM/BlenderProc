@@ -5,10 +5,7 @@ SetupUtility.setup([])
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 import argparse
 import numpy as np
@@ -19,7 +16,7 @@ parser.add_argument('shapenet_path', help="Path to the downloaded shape net core
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/physics_convex_decomposition/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load a bin object that gonna catch the ShapeNet objects
 bin_obj = bproc.loader.load_obj(args.bin_object)[0]
@@ -50,7 +47,7 @@ light.set_color([1, 1, 1])
 light.set_energy(1)
 
 # Set the camera pose to be in front of the bin
-bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([0, -2.13, 3.22], [0.64, 0, 0]))
+bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -2.13, 3.22], [0.64, 0, 0]))
 
 # Make the bin object passively participate in the physics simulation
 bin_obj.enable_rigidbody(active=False, collision_shape="COMPOUND")

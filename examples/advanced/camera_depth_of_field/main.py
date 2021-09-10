@@ -4,10 +4,7 @@ SetupUtility.setup([])
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 import argparse
 
@@ -16,7 +13,7 @@ parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", 
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/camera_depth_of_field/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 objs = bproc.loader.load_obj(args.scene)
@@ -45,7 +42,7 @@ for i in range(5):
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location)
     # Add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     bproc.camera.add_camera_pose(cam2world_matrix)
 
 # activate normal and distance rendering

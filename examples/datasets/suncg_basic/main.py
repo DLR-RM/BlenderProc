@@ -3,10 +3,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 import argparse
 import os
@@ -17,7 +14,7 @@ parser.add_argument('house', help="Path to the house.json file of the SUNCG scen
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_basic/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
@@ -30,9 +27,9 @@ bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.33
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
-        position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
-        rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
-        matrix_world = MathUtility.build_transformation_mat(position, bproc.camera.rotation_from_forward_vec(rotation))
+        position = bproc.math.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
+        rotation = bproc.math.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
+        matrix_world = bproc.math.build_transformation_mat(position, bproc.camera.rotation_from_forward_vec(rotation))
         bproc.camera.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light

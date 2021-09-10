@@ -2,15 +2,11 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.MathUtility import MathUtility
-
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 import numpy as np
 
@@ -22,7 +18,7 @@ parser.add_argument('house', help="Path to the house.json file of the SUNCG scen
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_with_improved_mat/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
@@ -44,7 +40,7 @@ while tries < 10000 and poses < 5:
     location, _ = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
     euler_rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, euler_rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, euler_rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and bproc.camera.scene_coverage_score(cam2world_matrix) > 0.4:

@@ -2,10 +2,8 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
@@ -20,7 +18,7 @@ parser.add_argument('cc_textures_path', nargs='?', default="resources/cctextures
 parser.add_argument('output_dir', nargs='?', default="examples/bop_object_on_surface_sampling/output", help="Path to where the final files will be saved ")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load a random sample of bop objects into the scene
 sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
@@ -112,7 +110,7 @@ while poses < 10:
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
     
     # Check that obstacles are at least 0.3 meter away from the camera and make sure the view interesting enough
     if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.3}, bop_bvh_tree):

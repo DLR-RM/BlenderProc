@@ -2,12 +2,9 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 from blenderproc.python.lighting.SurfaceLighting import light_surface
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 
 import argparse
 import numpy as np
@@ -18,7 +15,7 @@ parser.add_argument('cc_material_path', nargs='?', default="resources/cctextures
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/random_room_constructor/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load materials and objects that can be placed into the room
 materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
@@ -42,7 +39,7 @@ while tries < 10000 and poses < 5:
     location = bproc.sampler.upper_region(floor, min_height=1.5, max_height=1.8)
     # Sample rotation
     rotation = np.random.uniform([1.0, 0, 0], [1.4217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
     if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.2}, bvh_tree) and \
