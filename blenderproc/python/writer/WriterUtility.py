@@ -1,18 +1,17 @@
-import os
-from typing import List, Dict, Union, Any, Set, Tuple
-
-from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
-import numpy as np
+import os
+from typing import List, Dict, Union, Any, Set, Tuple
+
 import csv
 import json
-
+import numpy as np
 import bpy
 import mathutils
 import h5py
 
+from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.Utility import resolve_path
@@ -85,7 +84,6 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
             blender_proc_version = Utility.get_current_version()
             if blender_proc_version:
                 WriterUtility._write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
->>>>>>> develop
 
 
 class WriterUtility:
