@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-
 import argparse
 import os
 
@@ -20,7 +18,7 @@ label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path
 suncg_objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # Find all bed objects, to sample the shapenet objects on
-bed_objs = Filter.by_cp(suncg_objs, "category_id", label_mapping.id_from_label("bed"))
+bed_objs = bproc.filter.by_cp(suncg_objs, "category_id", label_mapping.id_from_label("bed"))
 
 # makes Suncg objects emit light
 bproc.lighting.light_suncg_scene()
@@ -41,7 +39,7 @@ shapenet_obj.add_modifier(name="SOLIDIFY", thickness=0.001)
 
 # enable rigid body component of the objects which makes them participate in physics simulations
 shapenet_obj.enable_rigidbody(active=True, mass_factor=2000, collision_margin=0.0001)
-for obj in Filter.all_with_type(suncg_objs, bproc.types.MeshObject):
+for obj in bproc.filter.all_with_type(suncg_objs, bproc.types.MeshObject):
     obj.enable_rigidbody(active=False, mass_factor=2000, collision_margin=0.0001)
 
 # Run the physics simulation

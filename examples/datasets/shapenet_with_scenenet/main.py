@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-
 import os
 import argparse
 
@@ -22,7 +20,7 @@ room_objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_textu
 
 # In some scenes floors, walls and ceilings are one object that needs to be split first
 # Collect all walls
-walls = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("wall"))
+walls = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("wall"))
 # Extract floors from the objects
 new_floors = bproc.object.extract_floor(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
 # Set category id of all new floors
@@ -40,17 +38,17 @@ for ceiling in new_ceilings:
 room_objs += new_ceilings
 
 # Make all lamp objects emit light
-lamps = Filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
+lamps = bproc.filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
 bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
-ceilings = Filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
+ceilings = bproc.filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
 bproc.lighting.light_surface(ceilings, emission_strength=2)
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")
 
 # Collect all beds
-beds = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
+beds = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
 # Sample the location of the ShapeNet object above a random bed
 shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3))
 

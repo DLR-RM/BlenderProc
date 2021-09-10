@@ -3,6 +3,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.filter.Filter import Filter
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
 
@@ -23,7 +24,8 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # Find point of interest, all cam poses should look towards it
-poi = bproc.object.compute_poi(Filter.all_with_type(objs, bproc.types.MeshObject))
+poi = bproc.object.compute_poi(bproc.filter.all_with_type(objs, bproc.types.MeshObject))
+
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location around the objects

@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -24,12 +22,12 @@ for obj in objs:
         mat.set_principled_shader_value("Roughness", 0.3)
 
 # Find the object with name "Sphere"
-sphere = Filter.one_by_attr(objs, "name", "Sphere")
+sphere = bproc.filter.one_by_attr(objs, "name", "Sphere")
 # Set it to AUTO shading, so all angles greater than 45 degrees will be shaded flat.
 sphere.set_shading_mode("auto", 45)
 
 # Find the object with name "Sphere.001"
-other_sphere = Filter.one_by_attr(objs, "name", "Sphere.001")
+other_sphere = bproc.filter.one_by_attr(objs, "name", "Sphere.001")
 # Set it to smooth shading, so all angles will be shaded flat.
 other_sphere.set_shading_mode("smooth")
 

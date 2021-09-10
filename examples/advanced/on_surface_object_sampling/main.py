@@ -5,8 +5,6 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.filter.Filter import Filter
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")
@@ -20,8 +18,8 @@ bproc.init()
 objs = bproc.loader.load_blend(args.scene)
 
 # Retrieve surface and spheres from the list objects
-surface = Filter.one_by_attr(objs, "name", "Cube")
-spheres = Filter.by_attr(objs, "name", ".*phere.*", regex=True)
+surface = bproc.filter.one_by_attr(objs, "name", "Cube")
+spheres = bproc.filter.by_attr(objs, "name", ".*phere.*", regex=True)
 
 # Define a function that samples the pose of a given object
 def sample_pose(obj: bproc.types.MeshObject):

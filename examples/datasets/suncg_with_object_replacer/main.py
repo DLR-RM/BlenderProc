@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-
 import numpy as np
 from mathutils import Euler
 import argparse
@@ -37,9 +35,9 @@ def relative_pose_sampler(obj):
 
 replace_ratio = 1.0
 bproc.object.replace_objects(
-    objects_to_be_replaced=Filter.by_cp(objs, "coarse_grained_class", "chair"),
+    objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
-    ignore_collision_with=Filter.by_cp(objs, "type", "Floor"),
+    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
     replace_ratio=replace_ratio,
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler
