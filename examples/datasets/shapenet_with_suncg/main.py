@@ -6,9 +6,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.sampler.PartSphere import PartSphere
 
 import argparse
 import os
@@ -35,7 +33,7 @@ bproc.lighting.light_suncg_scene()
 shapenet_obj = bproc.loader.load_shapenet(args.shape_net, used_synset_id="02801938")
 
 # Sample a point above any bed
-sample_point = UpperRegionSampler.sample(
+sample_point = bproc.sampler.upper_region(
     objects_to_sample_on=bed_objs,
     min_height=0.75,
 )
@@ -56,7 +54,7 @@ PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=0.5, max_simu
 # sample five camera poses
 for i in range(5):
     # sample random camera location around the shapenet object
-    location = PartSphere.sample(center=shapenet_obj.get_location(), mode="SURFACE", radius=2, dist_above_center=0.5)
+    location = bproc.sampler.part_sphere(center=shapenet_obj.get_location(), mode="SURFACE", radius=2, dist_above_center=0.5)
     # compute rotation based on vector going from the camera location towards shapenet object
     rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # add homog cam pose based on location an rotation

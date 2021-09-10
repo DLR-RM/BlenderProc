@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.sampler.Sphere import Sphere
 
 import argparse
 
@@ -27,7 +26,7 @@ light.set_energy(1000)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location around the object
-    location = Sphere.sample([0, 0, 0], radius=2, mode="SURFACE")
+    location = bproc.sampler.sphere([0, 0, 0], radius=2, mode="SURFACE")
     # Compute rotation based on vector going from location towards the location of the ShapeNet object
     rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # Add homog cam pose based on location an rotation

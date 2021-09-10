@@ -3,12 +3,10 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import os
@@ -59,7 +57,7 @@ shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02
 # Collect all beds
 beds = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
 # Sample the location of the ShapeNet object above a random bed
-shapenet_obj.set_location(UpperRegionSampler.sample(beds, min_height=0.3))
+shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3))
 
 # Make sure the ShapeNet object has a minimum thickness (this will increase the stability of the simulator)
 shapenet_obj.add_modifier("SOLIDIFY", thickness=0.0025)
@@ -84,7 +82,7 @@ poses = 0
 tries = 0
 while tries < 10000 and poses < 5:
     # Sample on sphere around ShapeNet object
-    location = PartSphere.sample(shapenet_obj.get_location(), radius=2, dist_above_center=0.5, mode="SURFACE")
+    location = bproc.sampler.part_sphere(shapenet_obj.get_location(), radius=2, dist_above_center=0.5, mode="SURFACE")
     # Compute rotation based on vector going from location towards ShapeNet object
     rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)

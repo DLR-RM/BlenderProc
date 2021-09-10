@@ -8,7 +8,6 @@ import numpy as np
 
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
 
@@ -30,7 +29,7 @@ floor = FloorExtractor.extract(objs, new_name_for_object="floor")[0]
 room = Filter.one_by_attr(objs, "name", "mesh")
 
 # Init sampler for sampling locations inside the loaded replica room
-point_sampler = ReplicaPointInRoomSampler(room, floor, height_list_values)
+point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list_values)
 
 # define the camera intrinsics
 bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
