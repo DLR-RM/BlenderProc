@@ -12,7 +12,7 @@ from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 from typing import Tuple
 
@@ -37,7 +37,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = 
     # there are only two types of materials, textures and diffuse
     SuncgLoader._collection_of_loaded_mats = {"texture": {}, "diffuse": {}}
 
-    with open(Utility.resolve_path(house_path), "r") as f:
+    with open(resolve_path(house_path), "r") as f:
         config = json.load(f)
 
     object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(os.path.join('resources', 'suncg', 'Better_labeling_for_NYU.csv'))
@@ -387,7 +387,7 @@ class SuncgLoader:
 
         if "texture" in adjustments:
             image_path = os.path.join(SuncgLoader._suncg_dir, "texture", adjustments["texture"])
-            image_path = Utility.resolve_path(image_path)
+            image_path = resolve_path(image_path)
 
             if os.path.exists(image_path + ".png"):
                 image_path += ".png"
@@ -411,7 +411,7 @@ class SuncgLoader:
         object_fine_grained_label_map = {}
         object_coarse_grained_label_map = {}
         
-        with open(Utility.resolve_path(path), 'r') as csvfile:      
+        with open(resolve_path(path), 'r') as csvfile:
             reader = csv.DictReader(csvfile)        
             for row in reader:      
                 object_label_map[row["model_id"]] = row["nyuv2_40class"]

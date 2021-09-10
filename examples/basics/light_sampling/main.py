@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.types.LightUtility import Light
 
 parser = argparse.ArgumentParser()
@@ -53,7 +52,7 @@ for obj in objs:
         "local2world": obj.get_local2world_mat()
     })
 # Add states (they are the same for all frames here)
-data["object_states"] = [object_states] * Utility.num_frames()
+data["object_states"] = [object_states] * bproc.utility.num_frames()
 
 # Collect state of the one light
 light_state = {
@@ -62,11 +61,11 @@ light_state = {
     "energy": light.get_energy()
 }
 # Add states (its the same for all frames here)
-data["light_states"] = [light_state] * Utility.num_frames()
+data["light_states"] = [light_state] * bproc.utility.num_frames()
 
 # Collect state of the camera at all frames
 cam_states = []
-for frame in range(Utility.num_frames()):
+for frame in range(bproc.utility.num_frames()):
     cam_states.append({
         "cam2world": bproc.camera.get_camera_pose(frame),
         "cam_K": bproc.camera.get_intrinsics_as_K_matrix()

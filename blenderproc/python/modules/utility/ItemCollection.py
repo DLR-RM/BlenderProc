@@ -1,5 +1,5 @@
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 import json
 from copy import deepcopy
 
@@ -131,7 +131,7 @@ class ItemCollection:
         """
         arguments = []
         if path != "":
-            with open(Utility.resolve_path(path)) as f:
+            with open(resolve_path(path)) as f:
                 lines = f.readlines()
                 # remove all empty lines
                 lines = [line for line in lines if len(line.strip()) > 3]

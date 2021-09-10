@@ -1,6 +1,6 @@
 import os
 
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 
 
 class Module:
@@ -50,7 +50,7 @@ class Module:
         """
         These operations are called during all modules inits
         """
-        self._output_dir = Utility.resolve_path(self.config.get_string("output_dir", ""))
+        self._output_dir = resolve_path(self.config.get_string("output_dir", ""))
         os.makedirs(self._output_dir, exist_ok=True)
 
         self._temp_dir = Utility.get_temporary_directory()

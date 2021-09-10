@@ -35,7 +35,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip([])
 
 from blenderproc.python.modules.main.Pipeline import Pipeline
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 config_path = argv[0]
 temp_dir = argv[1]
@@ -44,7 +44,7 @@ if batch_index_file == None:
     pipeline = Pipeline(config_path, argv[2:], working_dir, temp_dir)
     pipeline.run()
 else:
-    with open(Utility.resolve_path(batch_index_file), "r") as f:
+    with open(resolve_path(batch_index_file), "r") as f:
         lines = f.readlines()
 
         for line in lines:
