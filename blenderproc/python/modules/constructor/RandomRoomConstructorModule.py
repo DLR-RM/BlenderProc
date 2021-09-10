@@ -2,11 +2,10 @@ import bpy
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.provider.getter.Material import Material as MaterialProvider
-from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility, Config
-from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
+from blenderproc.python.constructor.RandomRoomConstructor import construct_random_room
 
 
 class RandomRoomConstructorModule(Module):
@@ -138,7 +137,7 @@ class RandomRoomConstructorModule(Module):
         material_getter = MaterialProvider(Config(config))
         all_cc_materials = MaterialLoaderUtility.convert_to_materials(material_getter.run())
 
-        RandomRoomConstructor.construct(
+        construct_random_room(
             used_floor_area=self.used_floor_area,
             interior_objects=MeshObject.convert_to_meshes(loaded_objects),
             materials=all_cc_materials,
