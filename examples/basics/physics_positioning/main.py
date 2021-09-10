@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.sampler.UniformSO3 import UniformSO3
 
 import argparse
 import numpy as np
@@ -35,7 +34,7 @@ bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -47.93, 16.
 # Define a function that samples the pose of a given sphere
 def sample_pose(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-5, -5, 8], [5, 5, 12]))
-    obj.set_rotation_euler(UniformSO3.sample())
+    obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample the poses of all spheres above the ground without any collisions in-between
 ObjectPoseSampler.sample(

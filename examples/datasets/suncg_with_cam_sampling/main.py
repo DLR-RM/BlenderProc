@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 
 from blenderproc.python.utility.Utility import Utility
@@ -27,7 +26,7 @@ objs = bproc.loader.load_suncg(args.house, label_mapping)
 bproc.lighting.light_suncg_scene()
 
 # Init sampler for sampling locations inside the loaded suncg house
-point_sampler = SuncgPointInRoomSampler(objs)
+point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
 bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, bproc.types.MeshObject)])
 

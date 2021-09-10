@@ -1,7 +1,12 @@
 
 from blenderproc.python.modules.main.Provider import Provider
+<<<<<<< HEAD
 from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
+=======
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.sampler.UpperRegionSampler import upper_region
+>>>>>>> develop
 
 
 class UpperRegionSamplerModule(Provider):
@@ -95,7 +100,7 @@ class UpperRegionSamplerModule(Provider):
         # face normal is used
         use_upper_dir = self.config.get_bool("use_upper_dir", True)
 
-        return UpperRegionSampler.sample(
+        return upper_region(
             objects_to_sample_on=objects,
             face_sample_range=face_sample_range,
             min_height=min_height,

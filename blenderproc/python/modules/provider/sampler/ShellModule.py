@@ -1,7 +1,7 @@
 import numpy as np
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.sampler.Shell import Shell
+from blenderproc.python.sampler.Shell import shell
 
 
 class ShellModule(Provider):
@@ -72,7 +72,7 @@ class ShellModule(Provider):
         elevation_max = self.config.get_float("elevation_max")
         uniform_elevation = self.config.get_bool("uniform_elevation", False)
 
-        return Shell.sample(
+        return shell(
             center=center,
             radius_min=radius_min,
             radius_max=radius_max,

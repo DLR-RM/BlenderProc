@@ -5,9 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
-from blenderproc.python.sampler.Shell import Shell
-from blenderproc.python.sampler.UniformSO3 import UniformSO3
-
 import argparse
 import os
 import numpy as np
@@ -76,7 +73,7 @@ light_plane.replace_materials(light_plane_material)
 light_point = bproc.types.Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5,0.5,0.5],[1,1,1]))
-location = Shell.sample(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
+location = bproc.sampler.shell(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
                         elevation_min = 5, elevation_max = 89, uniform_elevation = True)
 light_point.set_location(location)
 
@@ -91,7 +88,7 @@ def sample_pose_func(obj: bproc.types.MeshObject):
     min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
     max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
     obj.set_location(np.random.uniform(min, max))
-    obj.set_rotation_euler(UniformSO3.sample())
+    obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample object poses and check collisions 
 ObjectPoseSampler.sample(objects_to_sample = sampled_bop_objs + distractor_bop_objs, 
@@ -111,7 +108,7 @@ bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(sampled_bop_objs + dis
 poses = 0
 while poses < 10:
     # Sample location
-    location = Shell.sample(center = [0, 0, 0], 
+    location = bproc.sampler.shell(center = [0, 0, 0],
                             radius_min = 0.61,
                             radius_max = 1.24,
                             elevation_min = 5,

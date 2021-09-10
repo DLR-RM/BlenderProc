@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.sampler.PartSphere import PartSphere
 
 import argparse
 
@@ -36,7 +35,7 @@ poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects
-    location = PartSphere.sample(center=[0, 0, 0], radius=7, mode="SURFACE", dist_above_center=1.0)
+    location = bproc.sampler.part_sphere(center=[0, 0, 0], radius=7, mode="SURFACE", dist_above_center=1.0)
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location)
     # Add homog cam pose based on location an rotation

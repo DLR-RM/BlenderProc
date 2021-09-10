@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
-from blenderproc.python.sampler.PartSphere import PartSphere
 
 
 
@@ -32,7 +31,7 @@ light.set_energy(1000)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects
-    location = PartSphere.sample(center=np.array([0, 0, 0]), mode="SURFACE", radius=3, part_sphere_dir_vector=np.array([1, 0, 0]), dist_above_center=0.5)
+    location = bproc.sampler.part_sphere(center=np.array([0, 0, 0]), mode="SURFACE", radius=3, part_sphere_dir_vector=np.array([1, 0, 0]), dist_above_center=0.5)
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(obj.get_location() - location)
     # Add homog cam pose based on location an rotation
