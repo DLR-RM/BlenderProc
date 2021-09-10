@@ -3,7 +3,7 @@ import mathutils
 import numpy as np
 
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import disable_all_rigid_bodies, get_all_mesh_objects
 from blenderproc.python.utility.Utility import Utility
 
 class PhysicsSimulation:
@@ -40,7 +40,7 @@ class PhysicsSimulation:
             bpy.ops.ptcache.free_bake({"point_cache": bpy.context.scene.rigidbody_world.point_cache})
 
         # Fix the pose of all objects to their pose at the and of the simulation (also revert origin shift)
-        for obj in MeshObject.get_all_mesh_objects():
+        for obj in get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 # Skip objects that have parents with compound rigid body component
                 has_compound_parent = obj.get_parent() is not None and obj.get_parent().get_rigidbody() is not None and obj.get_parent().get_rigidbody().collision_shape == "COMPOUND"
@@ -55,7 +55,7 @@ class PhysicsSimulation:
                     # Fix pose of object to the one it had at the end of the simulation
                     obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                     obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
-        MeshObject.disable_all_rigid_bodies()
+        disable_all_rigid_bodies()
 
     @staticmethod
     def simulate(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0, check_object_interval: float = 2.0, object_stopped_location_threshold: float = 0.01, object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10, solver_iters: int = 10) -> dict:
@@ -82,7 +82,7 @@ class PhysicsSimulation:
         """
         # Shift the origin of all objects to their center of mass to make the simulation more realistic
         origin_shift = {}
-        for obj in MeshObject.get_all_mesh_objects():
+        for obj in get_all_mesh_objects():
             if obj.has_rigidbody_enabled():
                 prev_origin = obj.get_origin()
                 new_origin = obj.set_origin(mode="CENTER_OF_VOLUME")

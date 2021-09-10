@@ -79,7 +79,7 @@ PhysicsSimulation.simulate_and_fix_final_poses(
 )
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects(room_objs)
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(room_objs)
 poses = 0
 tries = 0
 while tries < 10000 and poses < 5:

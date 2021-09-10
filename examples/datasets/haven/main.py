@@ -30,7 +30,7 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # Find point of interest, all cam poses should look towards it
-poi = MeshObject.compute_poi(objs)
+poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location around the object

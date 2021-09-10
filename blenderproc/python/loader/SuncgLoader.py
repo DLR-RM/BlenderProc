@@ -11,7 +11,7 @@ from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import load_obj
 from typing import Tuple
@@ -227,7 +227,7 @@ class SuncgLoader:
         :param parent: The parent object to which the ground should be linked
         :return: The list of loaded mesh objects.
         """
-        box = MeshObject.create_primitive("CUBE")
+        box = create_primitive("CUBE")
         box.set_name("Box#" + node["id"])
         # Scale the cube to the required dimensions
         box.set_local2world_mat(Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) @ Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) @ Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0)))

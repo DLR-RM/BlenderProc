@@ -57,7 +57,7 @@ for _ in range(5):
                             max_tries = 1000)
 
     # BVH tree used for camera obstacle checks
-    bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(bop_objs)
+    bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(bop_objs)
 
     poses = 0
     # Render two camera poses
@@ -70,7 +70,7 @@ for _ in range(5):
                                 elevation_max = 89,
                                 uniform_elevation = True)
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
-        poi = MeshObject.compute_poi(bop_objs)
+        poi = bproc.object.compute_poi(bop_objs)
         # Compute rotation based on vector going from location towards poi
         rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
         # Add homog cam pose based on location an rotation

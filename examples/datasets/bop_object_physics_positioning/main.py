@@ -58,16 +58,16 @@ for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
         
 # create room
-room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
+room_planes = [bproc.object.create_primitive('PLANE', scale=[2, 2, 1]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
 for plane in room_planes:
     plane.enable_rigidbody(False, collision_shape='BOX', friction = 100.0, linear_damping = 0.99, angular_damping = 0.99)
 
 # sample light color and strenght from ceiling
-light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
+light_plane = bproc.object.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
 light_plane.set_name('light_plane')
 light_plane_material = bproc.material.create('light_material')
 light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6), 
@@ -108,7 +108,7 @@ PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
                                                 solver_iters=25)
 
 # BVH tree used for camera obstacle checks
-bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(sampled_bop_objs + distractor_bop_objs)
+bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(sampled_bop_objs + distractor_bop_objs)
 
 poses = 0
 while poses < 10:
@@ -120,7 +120,7 @@ while poses < 10:
                             elevation_max = 89,
                             uniform_elevation = True)
     # Determine point of interest in scene as the object closest to the mean of a subset of objects
-    poi = MeshObject.compute_poi(np.random.choice(sampled_bop_objs, size=10))
+    poi = bproc.object.compute_poi(np.random.choice(sampled_bop_objs, size=10))
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation

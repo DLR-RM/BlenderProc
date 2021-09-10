@@ -11,7 +11,7 @@ from urllib.request import urlretrieve
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, create_with_empty_mesh
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import load_texture
@@ -155,7 +155,7 @@ class Front3DLoader:
                 warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            obj = MeshObject.create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
+            obj = create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
             created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id

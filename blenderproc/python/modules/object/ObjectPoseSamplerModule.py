@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 
@@ -80,8 +80,8 @@ class ObjectPoseSamplerModule(Module):
             obj.set_rotation_euler(self.config.get_vector3d("rot_sampler"))
 
         ObjectPoseSampler.sample(
-            objects_to_sample=MeshObject.convert_to_meshes(objects_to_sample),
+            objects_to_sample=convert_to_meshes(objects_to_sample),
             sample_pose_func=sample_pose,
-            objects_to_check_collisions=MeshObject.convert_to_meshes(objects_to_check_collisions),
+            objects_to_check_collisions=convert_to_meshes(objects_to_check_collisions),
             max_tries=max_tries
         )

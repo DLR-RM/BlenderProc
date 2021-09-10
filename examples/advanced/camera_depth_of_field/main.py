@@ -35,7 +35,7 @@ bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 bproc.camera.add_depth_of_field(focus_point, fstop_value=0.25)
 
 # Find point of interest, all cam poses should look towards it
-poi = MeshObject.compute_poi(objs)
+poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects

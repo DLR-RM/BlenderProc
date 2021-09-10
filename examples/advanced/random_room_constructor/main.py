@@ -31,7 +31,7 @@ objects = RandomRoomConstructor.construct(25, interior_objects, materials, amoun
 light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects(objects)
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(objects)
 floor = [obj for obj in objects if obj.get_name() == "Floor"][0]
 poses = 0
 tries = 0
