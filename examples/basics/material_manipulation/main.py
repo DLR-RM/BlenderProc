@@ -4,8 +4,6 @@ SetupUtility.setup([])
 
 from pathlib import Path
 
-from blenderproc.python.types.LightUtility import Light
-
 import random
 import argparse
 import bpy
@@ -23,7 +21,7 @@ bproc.init()
 objs = bproc.loader.load_obj(args.scene)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

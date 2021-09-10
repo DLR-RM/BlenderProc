@@ -9,7 +9,8 @@ from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objec
 import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.modules.utility.ItemCollection import ItemCollection
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes, create_bvh_tree_multi_objects, \
+    scene_ray_cast
 import blenderproc.python.camera.CameraValidation as CameraValidation
 
 class CameraSampler(CameraInterface):
@@ -200,8 +201,8 @@ class CameraSampler(CameraInterface):
         self.interest_score_step = config.get_float("interest_score_step", 0.1)
         self.special_objects = config.get_list("special_objects", [])
         self.special_objects_weight = config.get_float("special_objects_weight", 2)
-        self._above_objects = MeshObject.convert_to_meshes(config.get_list("check_if_pose_above_object_list", []))
-        self.check_visible_objects = MeshObject.convert_to_meshes(config.get_list("check_if_objects_visible", []))
+        self._above_objects = convert_to_meshes(config.get_list("check_if_pose_above_object_list", []))
+        self.check_visible_objects = convert_to_meshes(config.get_list("check_if_objects_visible", []))
 
         # Set camera intrinsics
         self._set_cam_intrinsics(cam, Config(self.config.get_raw_dict("intrinsics", {})))
@@ -209,7 +210,7 @@ class CameraSampler(CameraInterface):
         if self.proximity_checks:
             # needs to build an bvh tree
             mesh_objects = [MeshObject(obj) for obj in get_all_blender_mesh_objects() if obj not in self.excluded_objects_in_proximity_check]
-            self.bvh_tree = MeshObject.create_bvh_tree_multi_objects(mesh_objects)
+            self.bvh_tree = create_bvh_tree_multi_objects(mesh_objects)
 
         if self.interest_score_step <= 0.0:
             raise Exception("Must have an interest score step size bigger than 0")
@@ -305,7 +306,7 @@ class CameraSampler(CameraInterface):
             return False
 
         if self._above_objects:
-            _, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(cam2world_matrix[:3, 3], [0, 0, -1])
+            _, _, _, _, hit_object, _ = scene_ray_cast(cam2world_matrix[:3, 3], [0, 0, -1])
             if hit_object not in self._above_objects:
                 return False
 

@@ -3,9 +3,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
 import numpy as np
@@ -23,7 +21,7 @@ spheres = bproc.loader.load_obj(args.spheres_obj)
 ground = bproc.loader.load_obj(args.ground_obj)[0]
 
 # Create a SUN light and set its properties
-light = Light()
+light = bproc.types.Light()
 light.set_type("SUN")
 light.set_location([0, 0, 0])
 light.set_rotation_euler([-0.063, 0.6177, -0.1985])
@@ -34,7 +32,7 @@ light.set_color([1, 0.978, 0.407])
 bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -47.93, 16.59], [1.3, 0, 0]))
 
 # Define a function that samples the pose of a given sphere
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-5, -5, 8], [5, 5, 12]))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
 

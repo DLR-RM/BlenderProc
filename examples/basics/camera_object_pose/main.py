@@ -5,7 +5,6 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.types.LightUtility import Light
 
 
 parser = argparse.ArgumentParser()
@@ -33,7 +32,7 @@ obj.set_scale([0.001, 0.001, 0.001])
 obj.set_cp("category_id", 1)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

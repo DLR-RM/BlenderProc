@@ -1,7 +1,7 @@
 import bpy
 
 from blenderproc.python.modules.camera.CameraSampler import CameraSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from mathutils import Matrix
 
@@ -20,7 +20,7 @@ class SuncgCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
 
     def run(self):
-        self.point_sampler = SuncgPointInRoomSampler(MeshObject.convert_to_meshes(bpy.context.scene.objects))
+        self.point_sampler = SuncgPointInRoomSampler(convert_to_meshes(bpy.context.scene.objects))
         super().run()
 
     def _sample_pose(self, config):

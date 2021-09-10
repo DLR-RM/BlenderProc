@@ -7,8 +7,6 @@ import os
 import numpy as np
 import random
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
 parser.add_argument("future_folder", help="Path to the 3D Future Model folder.")
@@ -71,7 +69,7 @@ for wall in walls:
 point_sampler = bproc.sampler.Front3DPointInRoomSampler(loaded_objects)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0

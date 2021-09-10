@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import os
 import numpy as np
@@ -48,7 +47,7 @@ ceilings = bproc.filter.by_attr(objs, "name", ".*[c|C]eiling.*", regex=True)
 bproc.lighting.light_surface(ceilings, emission_strength=2)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects(objs)
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(objs)
 
 # Find all floors in the scene, so we can sample locations above them
 floors = bproc.filter.by_cp(objs, "category_id", label_mapping.id_from_label("floor"))
@@ -59,7 +58,7 @@ while tries < 10000 and poses < 5:
     # Sample point above the floor in height of [1.5m, 1.8m]
     location = bproc.sampler.upper_region(floors, min_height=1.5, max_height=1.8)
     # Check that there is no object between the sampled point and the floor
-    _, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(location, [0, 0, -1])
+    _, _, _, _, hit_object, _ = bproc.object.scene_ray_cast(location, [0, 0, -1])
     if hit_object not in floors:
         continue
 

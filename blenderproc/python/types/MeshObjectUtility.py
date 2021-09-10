@@ -1,98 +1,24 @@
 from typing import List, Union, Tuple, Optional
 
 import bpy
-
-from external.vhacd.decompose import convex_decomposition
-from blenderproc.python.types.EntityUtility import Entity
 import numpy as np
+import bmesh
+import mathutils
 from mathutils import Vector, Matrix
+from external.vhacd.decompose import convex_decomposition
 
+from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.material import MaterialLoaderUtility
 
 
-import bmesh
-import mathutils
-
 class MeshObject(Entity):
 
-    def __init__(self, object: bpy.types.Object):
-        super().__init__(object)
+    def __init__(self, bpy_object: bpy.types.Object):
+        super().__init__(bpy_object)
 
-    @staticmethod
-    def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
-        """ Creates a new Mesh object using the given blender mesh.
-
-        :param blender_mesh: The blender mesh.
-        :param object_name: The name of the new object. If None is given, the name of the given mesh is used.
-        :return: The new Mesh object.
-        """
-        # link this mesh inside of a new object
-        obj = bpy.data.objects.new(blender_mesh.name if object_name is None else object_name, blender_mesh)
-        # link the object in the collection
-        bpy.context.collection.objects.link(obj)
-        return MeshObject(obj)
-
-    @staticmethod
-    def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
-        """ Creates an object with an empty mesh.
-        :param object_name: The name of the new object.
-        :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
-        :return: The new Mesh object.
-        """
-        if mesh_name is None:
-            mesh_name = object_name
-        return MeshObject.create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
-
-    @staticmethod
-    def create_primitive(shape: str, **kwargs) -> "MeshObject":
-        """ Creates a new primitive mesh object.
-
-        :param shape: The name of the primitive to create. Available: ["CUBE"]
-        :return:
-        """
-        if shape == "CUBE":
-            bpy.ops.mesh.primitive_cube_add(**kwargs)
-        elif shape == "CYLINDER":
-            bpy.ops.mesh.primitive_cylinder_add(**kwargs)
-        elif shape == "CONE":
-            bpy.ops.mesh.primitive_cone_add(**kwargs)
-        elif shape == "PLANE":
-            bpy.ops.mesh.primitive_plane_add(**kwargs)
-        elif shape == "SPHERE":
-            bpy.ops.mesh.primitive_uv_sphere_add(**kwargs)
-        elif shape == "MONKEY":
-            bpy.ops.mesh.primitive_monkey_add(**kwargs)
-        else:
-            raise Exception("No such shape: " + shape)
-        
-        primitive = MeshObject(bpy.context.object)
-        # Blender bug: Scale is ignored by default. #1060
-        if 'scale' in kwargs:
-            primitive.set_scale(kwargs['scale'])
-            
-        return primitive
-
-    @staticmethod
-    def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
-        """ Converts the given list of blender objects to mesh objects
-
-        :param blender_objects: List of blender objects.
-        :return: The list of meshes.
-        """
-        return [MeshObject(obj) for obj in blender_objects]
-
-    @staticmethod
-    def get_all_mesh_objects() -> List["MeshObject"]:
-        """
-        Returns all mesh objects in scene
-        
-        :return: List of all MeshObjects
-        """
-        return MeshObject.convert_to_meshes(get_all_blender_mesh_objects())
-    
     def get_materials(self) -> List[Material]:
         """ Returns the materials used by the mesh.
 
@@ -215,7 +141,8 @@ class MeshObject(Entity):
         :param rotation: Determines whether the object's rotation should be persisted.
         :param scale: Determines whether the object's scale should be persisted.
         """
-        bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location, rotation=rotation, scale=scale)
+        bpy.ops.object.transform_apply({"selected_editable_objects": [self.blender_obj]}, location=location,
+                                       rotation=rotation, scale=scale)
 
     def get_origin(self) -> np.ndarray:
         """ Returns the origin of the object.
@@ -251,7 +178,9 @@ class MeshObject(Entity):
 
         return self.get_origin()
 
-    def enable_rigidbody(self, active: bool, collision_shape: str = 'CONVEX_HULL', collision_margin: float = 0.001, collision_mesh_source: str = "FINAL", mass: float = None, mass_factor: float = 1, friction: float = 0.5, angular_damping: float = 0.1, linear_damping: float = 0.04):
+    def enable_rigidbody(self, active: bool, collision_shape: str = 'CONVEX_HULL', collision_margin: float = 0.001,
+                         collision_mesh_source: str = "FINAL", mass: float = None, mass_factor: float = 1,
+                         friction: float = 0.5, angular_damping: float = 0.1, linear_damping: float = 0.04):
         """ Enables the rigidbody component of the object which makes it participate in physics simulations.
 
         :param active: If True, the object actively participates in the simulation and its key frames are ignored. If False, the object still follows its keyframes and only acts as an obstacle, but is not influenced by the simulation.
@@ -282,7 +211,8 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, temp_dir: str = None, cache_dir: str = "resources/decomposition_cache"):
+    def build_convex_decomposition_collision_shape(self, temp_dir: str = None,
+                                                   cache_dir: str = "resources/decomposition_cache"):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
         :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
@@ -323,27 +253,20 @@ class MeshObject(Entity):
         """
         return MeshObject(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
-    @staticmethod
-    def disable_all_rigid_bodies():
-        """ Disables the rigidbody element of all objects """
-        for obj in MeshObject.get_all_mesh_objects():
-            if obj.has_rigidbody_enabled():
-                obj.disable_rigidbody()
-            
     def disable_rigidbody(self):
         """ Disables the rigidbody element of the object """
         if self.has_rigidbody_enabled():
             bpy.ops.rigidbody.object_remove({'object': self.blender_obj})
         else:
             raise RuntimeError("MeshObject {} has no rigid_body component enabled".format(self.get_name()))
-            
+
     def has_rigidbody_enabled(self) -> bool:
         """ Checks whether object has rigidbody element enabled
         
         :return: True if object has rigidbody element enabled
         """
         return self.get_rigidbody() is not None
-        
+
     def get_rigidbody(self) -> Optional[bpy.types.RigidBodyObject]:
         """ Returns the rigid body component
 
@@ -435,56 +358,8 @@ class MeshObject(Entity):
         bm.free()
         return bvh_tree
 
-    @staticmethod
-    def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils.bvhtree.BVHTree:
-        """ Creates a bvh tree which contains multiple mesh objects.
-
-        Such a tree is later used for fast raycasting.
-
-        :param mesh_objects: The list of mesh objects that should be put into the BVH tree.
-        :return: The built BVH tree.
-        """
-        # Create bmesh which will contain the meshes of all objects
-        bm = bmesh.new()
-        # Go through all mesh objects
-        for obj in mesh_objects:
-            # Add object mesh to bmesh (the newly added vertices will be automatically selected)
-            bm.from_mesh(obj.get_mesh())
-            # Apply world matrix to all selected vertices
-            bm.transform(Matrix(obj.get_local2world_mat()), filter={"SELECT"})
-            # Deselect all vertices
-            for v in bm.verts:
-                v.select = False
-
-        # Create tree from bmesh
-        bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
-        bm.free()
-        return bvh_tree
-
-    @staticmethod
-    def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
-        """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
-        that is the closest one to the mean location of the bboxes of the selected objects.
-
-        :param objects: The list of mesh objects that should be considered.
-        :return: Point of interest in the scene.
-        """
-        # Init matrix for all points of all bounding boxes
-        mean_bb_points = []
-
-        for obj in objects:
-            # Get bounding box corners
-            bb_points = obj.get_bound_box()
-            # Compute mean coords of bounding box
-            mean_bb_points.append(np.mean(bb_points, axis=0))
-        # Query point - mean of means
-        mean_bb_point = np.mean(mean_bb_points, axis=0)
-        # Closest point (from means) to query point (mean of means)
-        poi = mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis=1))]
-
-        return poi
-
-    def position_is_above_object(self, position: Union[Vector, np.ndarray], down_direction: Union[Vector, np.ndarray] = None, check_no_objects_in_between=True):
+    def position_is_above_object(self, position: Union[Vector, np.ndarray],
+                                 down_direction: Union[Vector, np.ndarray] = None, check_no_objects_in_between=True):
         """ Make sure the given position is straight above the given object.
 
         If check_no_objects_in_between is True, this also checks that there are no other objects in between.
@@ -499,35 +374,18 @@ class MeshObject(Entity):
 
         if check_no_objects_in_between:
             # Send a ray straight down and check if the first hit object is the query object
-            hit, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(position, down_direction)
+            hit, _, _, _, hit_object, _ = scene_ray_cast(position, down_direction)
             return hit and hit_object == self
         else:
             # Compute world-to-local matrix, so we can bring position and down vector into the local coordinate system
             world2local = Matrix(np.linalg.inv(self.get_local2world_mat()))
             # Send raycast on object (this will ignore all other objects, so we only need to check whether the ray hit)
-            hit, _, _, _ = self.blender_obj.ray_cast(world2local @ Vector(position), world2local.to_3x3() @ Vector(down_direction))
+            hit, _, _, _ = self.blender_obj.ray_cast(world2local @ Vector(position),
+                                                     world2local.to_3x3() @ Vector(down_direction))
             return hit
 
-    @staticmethod
-    def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int, "MeshObject", np.ndarray]:
-        """ Cast a ray onto all geometry from the scene, in world space.
-
-       :param origin: Origin of the ray, in world space.
-       :param direction: Direction of the ray, in world space.
-       :param max_distance: Maximum distance.
-       :return: Whether the ray successfully hit any geometry
-                The hit location of this ray cast, float array of 3 items in [-inf, inf]
-                The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
-                The face index, -1 when original data isn’t available, int in [-inf, inf]
-                If any object has been hit, the MeshObject otherwise None.
-                Some 4x4 matrix.
-       """
-        hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph, Vector(origin), Vector(direction), distance=max_distance)
-        if hit_object is not None:
-            hit_object = MeshObject(hit_object)
-        return hit, np.array(location), np.array(normal), index, hit_object, np.array(matrix)
-
-    def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray], max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
+    def ray_cast(self, origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
+                 max_distance: float = 1.70141e+38) -> Tuple[bool, np.ndarray, np.ndarray, int]:
         """ Cast a ray onto evaluated geometry, in object space.
 
         :param origin: Origin of the ray, in object space.
@@ -558,7 +416,8 @@ class MeshObject(Entity):
             elif projection == "sphere":
                 bpy.ops.uv.sphere_project()
             else:
-                raise Exception("Unknown projection: '{}'. Please use 'cube', 'cylinder', 'smart' or 'sphere'." .format(projection))
+                raise Exception(
+                    "Unknown projection: '{}'. Please use 'cube', 'cylinder', 'smart' or 'sphere'.".format(projection))
             self.object_mode()
 
     def has_uv_mapping(self):
@@ -570,7 +429,8 @@ class MeshObject(Entity):
             return max_val > 1e-7
         return False
 
-    def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1, min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2):
+    def add_displace_modifier(self, texture: bpy.types.Texture, mid_level: float = 0.5, strength: float = 0.1,
+                              min_vertices_for_subdiv: int = 10000, subdiv_level: int = 2):
         """ Adds a displace modifier with a texture to an object.
 
         If the mesh has less than min_vertices_for_subdiv vertices, also a subdivision modifier is added.
@@ -601,3 +461,154 @@ class MeshObject(Entity):
         modifier = self.blender_obj.modifiers[-1]
         for key, value in kwargs.items():
             setattr(modifier, key, value)
+
+
+def create_from_blender_mesh(blender_mesh: bpy.types.Mesh, object_name: str = None) -> "MeshObject":
+    """ Creates a new Mesh object using the given blender mesh.
+
+    :param blender_mesh: The blender mesh.
+    :param object_name: The name of the new object. If None is given, the name of the given mesh is used.
+    :return: The new Mesh object.
+    """
+    # link this mesh inside of a new object
+    obj = bpy.data.objects.new(blender_mesh.name if object_name is None else object_name, blender_mesh)
+    # link the object in the collection
+    bpy.context.collection.objects.link(obj)
+    return MeshObject(obj)
+
+
+def create_with_empty_mesh(object_name: str, mesh_name: str = None) -> "MeshObject":
+    """ Creates an object with an empty mesh.
+    :param object_name: The name of the new object.
+    :param mesh_name: The name of the contained blender mesh. If None is given, the object name is used.
+    :return: The new Mesh object.
+    """
+    if mesh_name is None:
+        mesh_name = object_name
+    return create_from_blender_mesh(bpy.data.meshes.new(mesh_name), object_name)
+
+
+def create_primitive(shape: str, **kwargs) -> "MeshObject":
+    """ Creates a new primitive mesh object.
+
+    :param shape: The name of the primitive to create. Available: ["CUBE"]
+    :return:
+    """
+    if shape == "CUBE":
+        bpy.ops.mesh.primitive_cube_add(**kwargs)
+    elif shape == "CYLINDER":
+        bpy.ops.mesh.primitive_cylinder_add(**kwargs)
+    elif shape == "CONE":
+        bpy.ops.mesh.primitive_cone_add(**kwargs)
+    elif shape == "PLANE":
+        bpy.ops.mesh.primitive_plane_add(**kwargs)
+    elif shape == "SPHERE":
+        bpy.ops.mesh.primitive_uv_sphere_add(**kwargs)
+    elif shape == "MONKEY":
+        bpy.ops.mesh.primitive_monkey_add(**kwargs)
+    else:
+        raise Exception("No such shape: " + shape)
+
+    primitive = MeshObject(bpy.context.object)
+    # Blender bug: Scale is ignored by default. #1060
+    if 'scale' in kwargs:
+        primitive.set_scale(kwargs['scale'])
+
+    return primitive
+
+
+def convert_to_meshes(blender_objects: list) -> List["MeshObject"]:
+    """ Converts the given list of blender objects to mesh objects
+
+    :param blender_objects: List of blender objects.
+    :return: The list of meshes.
+    """
+    return [MeshObject(obj) for obj in blender_objects]
+
+
+def get_all_mesh_objects() -> List["MeshObject"]:
+    """
+    Returns all mesh objects in scene
+
+    :return: List of all MeshObjects
+    """
+    return convert_to_meshes(get_all_blender_mesh_objects())
+
+
+def disable_all_rigid_bodies():
+    """ Disables the rigidbody element of all objects """
+    for obj in get_all_mesh_objects():
+        if obj.has_rigidbody_enabled():
+            obj.disable_rigidbody()
+
+
+def create_bvh_tree_multi_objects(mesh_objects: List["MeshObject"]) -> mathutils.bvhtree.BVHTree:
+    """ Creates a bvh tree which contains multiple mesh objects.
+
+    Such a tree is later used for fast raycasting.
+
+    :param mesh_objects: The list of mesh objects that should be put into the BVH tree.
+    :return: The built BVH tree.
+    """
+    # Create bmesh which will contain the meshes of all objects
+    bm = bmesh.new()
+    # Go through all mesh objects
+    for obj in mesh_objects:
+        # Add object mesh to bmesh (the newly added vertices will be automatically selected)
+        bm.from_mesh(obj.get_mesh())
+        # Apply world matrix to all selected vertices
+        bm.transform(Matrix(obj.get_local2world_mat()), filter={"SELECT"})
+        # Deselect all vertices
+        for v in bm.verts:
+            v.select = False
+
+    # Create tree from bmesh
+    bvh_tree = mathutils.bvhtree.BVHTree.FromBMesh(bm)
+    bm.free()
+    return bvh_tree
+
+
+def compute_poi(objects: List["MeshObject"]) -> np.ndarray:
+    """ Computes a point of interest in the scene. Point is defined as a location of the one of the selected objects
+    that is the closest one to the mean location of the bboxes of the selected objects.
+
+    :param objects: The list of mesh objects that should be considered.
+    :return: Point of interest in the scene.
+    """
+    # Init matrix for all points of all bounding boxes
+    mean_bb_points = []
+
+    for obj in objects:
+        # Get bounding box corners
+        bb_points = obj.get_bound_box()
+        # Compute mean coords of bounding box
+        mean_bb_points.append(np.mean(bb_points, axis=0))
+    # Query point - mean of means
+    mean_bb_point = np.mean(mean_bb_points, axis=0)
+    # Closest point (from means) to query point (mean of means)
+    poi = mean_bb_points[np.argmin(np.linalg.norm(mean_bb_points - mean_bb_point, axis=1))]
+
+    return poi
+
+
+def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vector, list, np.ndarray],
+                   max_distance: float = 1.70141e+38) -> Tuple[
+    bool, np.ndarray, np.ndarray, int, "MeshObject", np.ndarray]:
+    """ Cast a ray onto all geometry from the scene, in world space.
+
+   :param origin: Origin of the ray, in world space.
+   :param direction: Direction of the ray, in world space.
+   :param max_distance: Maximum distance.
+   :return: Whether the ray successfully hit any geometry
+            The hit location of this ray cast, float array of 3 items in [-inf, inf]
+            The face normal at the ray cast hit location, float array of 3 items in [-inf, inf]
+            The face index, -1 when original data isn’t available, int in [-inf, inf]
+            If any object has been hit, the MeshObject otherwise None.
+            Some 4x4 matrix.
+   """
+    hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
+                                                                                  Vector(origin), Vector(direction),
+                                                                                  distance=max_distance)
+    if hit_object is not None:
+        hit_object = MeshObject(hit_object)
+    return hit, np.array(location), np.array(normal), index, hit_object, np.array(matrix)

@@ -1,5 +1,5 @@
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
 
 def light_suncg_scene(lightbulb_emission_strength: float = 15, lampshade_emission_strength: float = 7, ceiling_emission_strength: float = 1.5):
@@ -15,7 +15,7 @@ def light_suncg_scene(lightbulb_emission_strength: float = 15, lampshade_emissio
     collection_of_mats = {"lamp": {}, "window": {}, "ceiling": {}}
 
     # Make some objects emit lights
-    for obj in MeshObject.get_all_mesh_objects():
+    for obj in get_all_mesh_objects():
         if obj.has_cp("modelId"):
             obj_id = obj.get_cp("modelId")
 

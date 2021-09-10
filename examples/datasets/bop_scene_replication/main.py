@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.LightUtility import Light
 
 import argparse
 import os
@@ -28,7 +27,7 @@ for j, obj in enumerate(bop_objs):
     obj.set_shading_mode('auto')
         
 # Set light source
-light_point = Light()
+light_point = bproc.types.Light()
 light_point.set_energy(1000)
 light_point.set_location([0, 0, -0.8])
 

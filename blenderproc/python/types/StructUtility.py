@@ -12,25 +12,10 @@ class Struct:
     # If that happens, the instances' weak ref is also automatically removed from the set
     __refs__ = weakref.WeakSet()
 
-    def __init__(self, object: bpy.types.Object):
-        self.blender_obj = object
+    def __init__(self, bpy_object: bpy.types.Object):
+        self.blender_obj = bpy_object
         # Remember that this instance exists
         Struct.__refs__.add(self)
-
-    @staticmethod
-    def get_instances() -> List[Tuple[str, "Struct"]]:
-        """ Returns a list containing all existing struct instances.
-
-        :return: A list of tuples, each containing a struct and its name.
-        """
-        instances = []
-        # Iterate over all still existing instances
-        for instance in Struct.__refs__:
-            # Check that the referenced blender_obj inside is valid
-            if instance.is_valid():
-                # Collect instance and its name (its unique identifier)
-                instances.append((instance.get_name(), instance))
-        return instances
 
     def is_valid(self):
         """ Check whether the contained blender reference is valid.
@@ -128,3 +113,4 @@ class Struct:
             raise Exception("The API class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
         else:
             object.__setattr__(self, key, value)
+

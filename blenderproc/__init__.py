@@ -15,5 +15,6 @@ if sys.executable.endswith("python3.9"):
     from . import lighting
     from . import camera
     from . import renderer
+    from . import object
+    from . import types
     from . import filter
-

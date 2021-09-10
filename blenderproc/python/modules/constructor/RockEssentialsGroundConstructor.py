@@ -5,7 +5,7 @@ import bpy
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 
 
 class RockEssentialsGroundConstructor(LoaderInterface):
@@ -113,7 +113,7 @@ class RockEssentialsGroundConstructor(LoaderInterface):
         tile_name = ground_config.get_string("tile_name", "RE_ground_plane")
 
         # create new plane, set its size
-        plane_obj = MeshObject.create_primitive("PLANE")
+        plane_obj = create_primitive("PLANE")
         plane_obj.set_name(tile_name)
         plane_obj.set_scale(plane_scale)
 

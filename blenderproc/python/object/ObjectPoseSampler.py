@@ -1,5 +1,5 @@
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
 from typing import Callable, List
 
 
@@ -16,7 +16,7 @@ class ObjectPoseSampler:
         """
         # After this many tries we give up on current object and continue with the rest
         if objects_to_check_collisions is None:
-            objects_to_check_collisions = MeshObject.get_all_mesh_objects()
+            objects_to_check_collisions = get_all_mesh_objects()
 
         # Among objects_to_sample only check collisions against already placed objects
         cur_objects_to_check_collisions = list(set(objects_to_check_collisions) - set(objects_to_sample))

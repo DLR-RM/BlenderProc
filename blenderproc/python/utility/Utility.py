@@ -9,11 +9,13 @@ import inspect
 import importlib
 import git
 import warnings
+import numpy as np
+import json
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
-import numpy as np
-import json
+from blenderproc.python.types.StructUtilityFunctions import get_instances
+
 
 
 def resolve_path(path):
@@ -324,7 +326,7 @@ class Utility:
             if self._perform_undo_op:
                 from blenderproc.python.types.StructUtility import Struct
                 # Collect all existing struct instances
-                self.struct_instances = Struct.get_instances()
+                self.struct_instances = get_instances()
                 bpy.ops.ed.undo_push(message="before " + self.check_point_name)
 
         def __exit__(self, type, value, traceback):

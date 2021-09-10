@@ -7,7 +7,6 @@ import os
 import numpy as np
 
 from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")
@@ -33,7 +32,7 @@ point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list
 bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([room, floor])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([room, floor])
 
 poses = 0
 tries = 0
