@@ -30,7 +30,7 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
     with Utility.UndoAfterExecution():
         # Run simulation and remember poses before and after
         obj_poses_before_sim = PhysicsSimulation._get_pose()
-        origin_shifts = PhysicsSimulation.simulate(min_simulation_time, max_simulation_time, check_object_interval, object_stopped_location_threshold, object_stopped_rotation_threshold, substeps_per_frame, solver_iters)
+        origin_shifts = simulate_physics(min_simulation_time, max_simulation_time, check_object_interval, object_stopped_location_threshold, object_stopped_rotation_threshold, substeps_per_frame, solver_iters)
         obj_poses_after_sim = PhysicsSimulation._get_pose()
 
         # Make sure to remove the simulation cache as we are only interested in the final poses
