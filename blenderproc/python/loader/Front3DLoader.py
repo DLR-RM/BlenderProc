@@ -10,11 +10,11 @@ from urllib.request import urlretrieve
 
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, create_with_empty_mesh
 from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import load_texture
+
 
 def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
     """ Loads the 3D-Front scene specified by the given json file.
@@ -155,7 +155,7 @@ class Front3DLoader:
                 warnings.warn(f"Material is not defined for {used_obj_name} in this file: {json_path}")
                 continue
             # create a new mesh
-            obj = MeshObject.create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
+            obj = create_with_empty_mesh(used_obj_name, used_obj_name + "_mesh")
             created_objects.append(obj)
 
             # set two custom properties, first that it is a 3D_future object and second the category_id

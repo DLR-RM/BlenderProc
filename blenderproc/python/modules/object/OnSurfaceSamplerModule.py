@@ -1,7 +1,7 @@
 import mathutils
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 
 
@@ -62,7 +62,7 @@ class OnSurfaceSamplerModule(Module):
         min_distance = self.config.get_float("min_distance", 0.25)
         max_distance = self.config.get_float("max_distance", 0.6)
         max_tries = self.config.get_int("max_iterations", 100)
-        objects = MeshObject.convert_to_meshes(self.config.get_list("objects_to_sample"))
+        objects = convert_to_meshes(self.config.get_list("objects_to_sample"))
         surface = self.config.get_list("surface")
         if len(surface) > 1:
             raise Exception("This module operates with only one `surface` object while more than one was returned by "

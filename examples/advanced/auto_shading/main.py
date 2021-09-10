@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.LightUtility import Light
-
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -34,7 +32,7 @@ other_sphere = bproc.filter.one_by_attr(objs, "name", "Sphere.001")
 other_sphere.set_shading_mode("smooth")
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([3, -8, 5])
 light.set_energy(1000)

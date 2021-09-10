@@ -10,8 +10,8 @@ from mathutils import Matrix
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point
-from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import create_empty
+from blenderproc.python.types.MeshObjectUtility import create_primitive, MeshObject
 from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 from typing import Tuple
@@ -47,7 +47,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = 
 
     for level in config["levels"]:
         # Build empty level object which acts as a parent for all rooms on the level
-        level_obj = Entity.create_empty("Level#" + level["id"])
+        level_obj = create_empty("Level#" + level["id"])
         level_obj.set_cp("type", "Level")
         if "bbox" in level:
             level_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(level["bbox"]))
@@ -140,7 +140,7 @@ class SuncgLoader:
         :return: The list of loaded mesh objects.
         """
         # Build empty room object which acts as a parent for all objects inside
-        room_obj = Entity.create_empty("Room#" + node["id"])
+        room_obj = create_empty("Room#" + node["id"])
         room_obj.set_cp("type", "Room")
         room_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(node["bbox"]))
         room_obj.set_cp("roomTypes", node["roomTypes"])
@@ -227,7 +227,7 @@ class SuncgLoader:
         :param parent: The parent object to which the ground should be linked
         :return: The list of loaded mesh objects.
         """
-        box = MeshObject.create_primitive("CUBE")
+        box = create_primitive("CUBE")
         box.set_name("Box#" + node["id"])
         # Scale the cube to the required dimensions
         box.set_local2world_mat(Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) @ Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) @ Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0)))

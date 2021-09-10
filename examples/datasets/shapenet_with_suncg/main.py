@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 
 import argparse
@@ -42,7 +41,7 @@ shapenet_obj.add_modifier(name="SOLIDIFY", thickness=0.001)
 
 # enable rigid body component of the objects which makes them participate in physics simulations
 shapenet_obj.enable_rigidbody(active=True, mass_factor=2000, collision_margin=0.0001)
-for obj in bproc.filter.all_with_type(suncg_objs, MeshObject):
+for obj in bproc.filter.all_with_type(suncg_objs, bproc.types.MeshObject):
     obj.enable_rigidbody(active=False, mass_factor=2000, collision_margin=0.0001)
 
 # Run the physics simulation

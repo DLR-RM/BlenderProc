@@ -11,8 +11,8 @@ import random
 from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.BlenderUtility import check_bb_intersection_on_values
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
-from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import Entity, delete_multiple
+from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 
 
@@ -184,7 +184,7 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
     # calculate the squared room length for the base room
     squared_room_length = np.sqrt(used_floor_areas[0])
     # create a new plane and rename it to Wall
-    wall_obj = MeshObject.create_primitive("PLANE")
+    wall_obj = create_primitive("PLANE")
     wall_obj.set_name("Wall")
 
     # calculate the side length of the base room, for that the `fac_from_square_room` is used

@@ -3,8 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.LightUtility import Light
 
 import argparse
 
@@ -23,13 +21,13 @@ objs = bproc.loader.load_blend(args.blend_path)
 HavenEnvironmentLoader.set_random_world_background_hdr_img(args.haven_path)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # Find point of interest, all cam poses should look towards it
-poi = MeshObject.compute_poi(objs)
+poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location around the object

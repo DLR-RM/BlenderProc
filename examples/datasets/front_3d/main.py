@@ -7,7 +7,6 @@ import os
 import numpy as np
 
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
 
 
@@ -41,7 +40,7 @@ loaded_objects = bproc.loader.load_front3d(
 point_sampler = bproc.sampler.Front3DPointInRoomSampler(loaded_objects)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0

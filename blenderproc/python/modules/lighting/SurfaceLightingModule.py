@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 from blenderproc.python.lighting.SurfaceLighting import light_surface
 
 
@@ -47,7 +47,7 @@ class SurfaceLightingModule(Module):
         Run this current module.
         """
         # get all objects which material should be changed
-        objects = MeshObject.convert_to_meshes(self.config.get_list("selector"))
+        objects = convert_to_meshes(self.config.get_list("selector"))
 
         light_surface(
             objects,

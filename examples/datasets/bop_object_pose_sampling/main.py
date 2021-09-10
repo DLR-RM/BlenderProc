@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 import argparse
@@ -31,14 +29,14 @@ for j, obj in enumerate(bop_objs):
     obj.set_shading_mode('auto')
         
 # sample point light on shell
-light_point = Light()
+light_point = bproc.types.Light()
 light_point.set_energy(500)
 location = bproc.sampler.shell(center = [0, 0, -0.8], radius_min = 1, radius_max = 4,
                         elevation_min = 40, elevation_max = 89, uniform_elevation = True)
 light_point.set_location(location)
 
 # Define a function that samples 6-DoF poses
-def sample_pose_func(obj: MeshObject):
+def sample_pose_func(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-0.2, -0.2, -0.2],[0.2, 0.2, 0.2]))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
     
@@ -55,7 +53,7 @@ for _ in range(5):
                             max_tries = 1000)
 
     # BVH tree used for camera obstacle checks
-    bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(bop_objs)
+    bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(bop_objs)
 
     poses = 0
     # Render two camera poses
@@ -68,7 +66,7 @@ for _ in range(5):
                                 elevation_max = 89,
                                 uniform_elevation = True)
         # Determine point of interest in scene as the object closest to the mean of a subset of objects
-        poi = MeshObject.compute_poi(bop_objs)
+        poi = bproc.object.compute_poi(bop_objs)
         # Compute rotation based on vector going from location towards poi
         rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
         # Add homog cam pose based on location an rotation
