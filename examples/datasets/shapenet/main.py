@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
@@ -35,10 +34,10 @@ for i in range(5):
     # Sample random camera location around the object
     location = Sphere.sample([0, 0, 0], radius=2, mode="SURFACE")
     # Compute rotation based on vector going from location towards the location of the ShapeNet object
-    rotation_matrix = CameraUtility.rotation_from_forward_vec(shapenet_obj.get_location() - location)
+    rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
     # Add homog cam pose based on location an rotation
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
-    CameraUtility.add_camera_pose(cam2world_matrix)
+    bproc.camera.add_camera_pose(cam2world_matrix)
 
 # activate normal and distance rendering
 RendererUtility.enable_normals_output()
@@ -65,8 +64,8 @@ data["shapenet_state"] = [shapenet_state] * Utility.num_frames()
 cam_states = []
 for frame in range(Utility.num_frames()):
     cam_states.append({
-        "cam2world": CameraUtility.get_camera_pose(frame),
-        "cam_K": CameraUtility.get_intrinsics_as_K_matrix()
+        "cam2world": bproc.camera.get_camera_pose(frame),
+        "cam_K": bproc.camera.get_intrinsics_as_K_matrix()
     })
 # Adds states to the data dict
 data["cam_states"] = cam_states

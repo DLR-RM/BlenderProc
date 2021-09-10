@@ -2,10 +2,8 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
@@ -53,11 +51,11 @@ while tries < 10000 and poses < 5:
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
-    if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.2}, bvh_tree) and \
-            CameraValidation.scene_coverage_score(cam2world_matrix) > 0.4 and \
+    if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.2}, bvh_tree) and \
+            bproc.camera.scene_coverage_score(cam2world_matrix) > 0.4 and \
             floor.position_is_above_object(location):
         # Persist camera pose
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 

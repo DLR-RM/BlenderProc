@@ -5,13 +5,11 @@ SetupUtility.setup([])
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.camera.CameraValidation import CameraValidation
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -80,15 +78,15 @@ while tries < 10000 and poses < 5:
     cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
 
     # Check that there is no obstacle in front of the camera closer than 1m
-    if not CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree):
+    if not bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree):
         continue
 
     # Check that the interesting score is not too low
-    if CameraValidation.scene_coverage_score(cam2world_matrix) < 0.1:
+    if bproc.camera.scene_coverage_score(cam2world_matrix) < 0.1:
         continue
 
     # If all checks were passed, add the camera pose
-    CameraUtility.add_camera_pose(cam2world_matrix)
+    bproc.camera.add_camera_pose(cam2world_matrix)
     poses += 1
 
 # activate normal and distance rendering

@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
@@ -29,7 +28,7 @@ label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resou
 objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
-CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
+bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
@@ -37,8 +36,8 @@ with open(args.camera, "r") as f:
         line = [float(x) for x in line.split()]
         position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
         rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
-        matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
-        CameraUtility.add_camera_pose(matrix_world)
+        matrix_world = MathUtility.build_transformation_mat(position, bproc.camera.rotation_from_forward_vec(rotation))
+        bproc.camera.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
 SuncgLighting.light()
