@@ -5,12 +5,6 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")
@@ -24,11 +18,11 @@ bproc.init()
 objs = bproc.loader.load_blend(args.scene)
 
 # Retrieve surface and spheres from the list objects
-surface = Filter.one_by_attr(objs, "name", "Cube")
-spheres = Filter.by_attr(objs, "name", ".*phere.*", regex=True)
+surface = bproc.filter.one_by_attr(objs, "name", "Cube")
+spheres = bproc.filter.by_attr(objs, "name", ".*phere.*", regex=True)
 
 # Define a function that samples the pose of a given object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     # Sample the spheres location above the surface
     obj.set_location(bproc.sampler.upper_region(
         objects_to_sample_on=[surface],
@@ -39,7 +33,7 @@ def sample_pose(obj: MeshObject):
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
 
 # Sample the spheres on the surface
-spheres = OnSurfaceSampler.sample(spheres, surface, sample_pose, min_distance=0.1, max_distance=10)
+spheres = bproc.object.sample_poses_on_surface(spheres, surface, sample_pose, min_distance=0.1, max_distance=10)
 
 # Enable physics for spheres (active) and the surface (passive)
 for sphere in spheres:
@@ -47,10 +41,10 @@ for sphere in spheres:
 surface.enable_rigidbody(False)
 
 # Run the physics simulation
-PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
+bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

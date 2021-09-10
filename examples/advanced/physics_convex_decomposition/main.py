@@ -2,11 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.types.LightUtility import Light
-
 import argparse
 import numpy as np
 
@@ -27,19 +22,19 @@ for synset_id, source_id in [("02801938", "d9fb327b0e19a9ddc735651f0fb19093"), (
     shapenet_objs.append(bproc.loader.load_shapenet(args.shapenet_path, synset_id, source_id))
 
 # Define a function that samples the pose of a given ShapeNet object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     # Sample the location above the bin
     obj.set_location(np.random.uniform([-0.5, -0.5, 2], [0.5, 0.5, 5]))
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample the poses of all ShapeNet objects, while making sure that no objects collide with each other.
-ObjectPoseSampler.sample(
+bproc.object.sample_poses(
     shapenet_objs,
     sample_pose_func=sample_pose
 )
 
 # Define a sun light
-light = Light()
+light = bproc.types.Light()
 light.set_type("SUN")
 light.set_location([0, 0, 0])
 light.set_rotation_euler([-0.063, 0.6177, -0.1985])
@@ -62,7 +57,7 @@ for shapenet_obj in shapenet_objs:
     shapenet_obj.build_convex_decomposition_collision_shape()
 
 # Run the physics simulation for at most 20 seconds
-PhysicsSimulation.simulate_and_fix_final_poses(
+bproc.object.simulate_physics_and_fix_final_poses(
     min_simulation_time=4,
     max_simulation_time=20,
     check_object_interval=1

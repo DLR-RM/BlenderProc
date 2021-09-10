@@ -2,10 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 import random
 import os
 import numpy as np
@@ -41,9 +37,9 @@ bproc.loader.load_ccmaterials(args.cc_material_path, fill_used_empty_materials=T
 
 # In some scenes floors, walls and ceilings are one object that needs to be split first
 # Collect all walls
-walls = Filter.by_cp(objs, "category_id", label_mapping.id_from_label("wall"))
+walls = bproc.filter.by_cp(objs, "category_id", label_mapping.id_from_label("wall"))
 # Extract floors from the objects
-new_floors = FloorExtractor.extract(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
+new_floors = bproc.object.extract_floor(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
 # Set category id of all new floors
 for floor in new_floors:
     floor.set_cp("category_id", label_mapping.id_from_label("floor"))
@@ -51,7 +47,7 @@ for floor in new_floors:
 objs += new_floors
 
 # Extract ceilings from the objects
-new_ceilings = FloorExtractor.extract(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
+new_ceilings = bproc.object.extract_floor(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
 # Set category id of all new ceiling
 for ceiling in new_ceilings:
     ceiling.set_cp("category_id", label_mapping.id_from_label("ceiling"))
@@ -59,17 +55,17 @@ for ceiling in new_ceilings:
 objs += new_ceilings
 
 # Make all lamp objects emit light
-lamps = Filter.by_attr(objs, "name", ".*[l|L]amp.*", regex=True)
+lamps = bproc.filter.by_attr(objs, "name", ".*[l|L]amp.*", regex=True)
 bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
-ceilings = Filter.by_attr(objs, "name", ".*[c|C]eiling.*", regex=True)
+ceilings = bproc.filter.by_attr(objs, "name", ".*[c|C]eiling.*", regex=True)
 bproc.lighting.light_surface(ceilings, emission_strength=2)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects(objs)
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(objs)
 
 # Find all floors in the scene, so we can sample locations above them
-floors = Filter.by_cp(objs, "category_id", label_mapping.id_from_label("floor"))
+floors = bproc.filter.by_cp(objs, "category_id", label_mapping.id_from_label("floor"))
 poses = 0
 tries = 0
 while tries < 10000 and poses < 5:
@@ -77,7 +73,7 @@ while tries < 10000 and poses < 5:
     # Sample point above the floor in height of [1.5m, 1.8m]
     location = bproc.sampler.upper_region(floors, min_height=1.5, max_height=1.8)
     # Check that there is no object between the sampled point and the floor
-    _, _, _, _, hit_object, _ = MeshObject.scene_ray_cast(location, [0, 0, -1])
+    _, _, _, _, hit_object, _ = bproc.object.scene_ray_cast(location, [0, 0, -1])
     if hit_object not in floors:
         continue
 

@@ -2,10 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 import argparse
 import os
 import numpy as np
@@ -52,14 +48,14 @@ for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
         
 # create room
-room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
-               MeshObject.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
+room_planes = [bproc.object.create_primitive('PLANE', scale=[2, 2, 1]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[0, -2, 2], rotation=[-1.570796, 0, 0]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[0, 2, 2], rotation=[1.570796, 0, 0]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[2, 0, 2], rotation=[0, -1.570796, 0]),
+               bproc.object.create_primitive('PLANE', scale=[2, 2, 1], location=[-2, 0, 2], rotation=[0, 1.570796, 0])]
 
 # sample light color and strenght from ceiling
-light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
+light_plane = bproc.object.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
 light_plane.set_name('light_plane')
 light_plane_material = bproc.material.create('light_material')
 light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6), 
@@ -67,7 +63,7 @@ light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6),
 light_plane.replace_materials(light_plane_material)
 
 # sample point light on shell
-light_point = Light()
+light_point = bproc.types.Light()
 light_point.set_energy(200)
 light_point.set_color(np.random.uniform([0.5, 0.5, 0.5], [1, 1, 1]))
 location = bproc.sampler.shell(center = [0, 0, 0], radius_min = 1, radius_max = 1.5,
@@ -81,20 +77,20 @@ for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
 # Define a function that samples the initial pose of a given object above the ground
-def sample_initial_pose(obj: MeshObject):
+def sample_initial_pose(obj: bproc.types.MeshObject):
     obj.set_location(bproc.sampler.upper_region(objects_to_sample_on=room_planes[0:1],
-                                               min_height=1, max_height=4, face_sample_range=[0.4, 0.6]))
+                                                min_height=1, max_height=4, face_sample_range=[0.4, 0.6]))
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [0, 0, np.pi * 2]))
 
 # Sample objects on the given surface
-placed_objects = OnSurfaceSampler.sample(objects_to_sample=sampled_bop_objs + distractor_bop_objs,
+placed_objects = bproc.object.sample_poses_on_surface(objects_to_sample=sampled_bop_objs + distractor_bop_objs,
                                          surface=room_planes[0],
                                          sample_pose_func=sample_initial_pose,
                                          min_distance=0.01,
                                          max_distance=0.2)
 
 # BVH tree used for camera obstacle checks
-bop_bvh_tree = MeshObject.create_bvh_tree_multi_objects(placed_objects)
+bop_bvh_tree = bproc.object.create_bvh_tree_multi_objects(placed_objects)
 
 poses = 0
 while poses < 10:
@@ -106,7 +102,7 @@ while poses < 10:
                             elevation_max = 89,
                             uniform_elevation = True)
     # Determine point of interest in scene as the object closest to the mean of a subset of objects
-    poi = MeshObject.compute_poi(np.random.choice(placed_objects, size=10))
+    poi = bproc.object.compute_poi(np.random.choice(placed_objects, size=10))
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation

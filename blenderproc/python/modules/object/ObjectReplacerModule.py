@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.object.ObjectReplacer import ObjectReplacer
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
+from blenderproc.python.object.ObjectReplacer import replace_objects
 from mathutils import Euler
 
 class ObjectReplacerModule(Module):
@@ -62,10 +62,10 @@ class ObjectReplacerModule(Module):
         else:
             relative_pose_sampler = None
 
-        ObjectReplacer.replace_multiple(
-            objects_to_be_replaced=MeshObject.convert_to_meshes(self.config.get_list("objects_to_be_replaced", [])),
-            objects_to_replace_with=MeshObject.convert_to_meshes(self.config.get_list("objects_to_replace_with", [])),
-            ignore_collision_with=MeshObject.convert_to_meshes(self.config.get_list("ignore_collision_with", [])),
+        replace_objects(
+            objects_to_be_replaced=convert_to_meshes(self.config.get_list("objects_to_be_replaced", [])),
+            objects_to_replace_with=convert_to_meshes(self.config.get_list("objects_to_replace_with", [])),
+            ignore_collision_with=convert_to_meshes(self.config.get_list("ignore_collision_with", [])),
             replace_ratio=self.config.get_float("replace_ratio", 1),
             copy_properties=self.config.get_bool("copy_properties", True),
             max_tries=self.config.get_int("max_tries", 100),

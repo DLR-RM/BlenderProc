@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.LightUtility import Light
-
-
 import numpy as np
 import argparse
 
@@ -23,7 +20,7 @@ haven_hdri_path = bproc.loader.get_random_world_background_hdr_img_path_from_hav
 bproc.world.set_world_background_hdr_img(haven_hdri_path)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

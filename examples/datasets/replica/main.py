@@ -6,10 +6,6 @@ import argparse
 import os
 import numpy as np
 
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")
 parser.add_argument("output_dir", help="Path to where the data should be saved")
@@ -24,8 +20,8 @@ bproc.init()
 # Load the replica dataset
 objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)
 # Extract the floor from the loaded room
-floor = FloorExtractor.extract(objs, new_name_for_object="floor")[0]
-room = Filter.one_by_attr(objs, "name", "mesh")
+floor = bproc.object.extract_floor(objs, new_name_for_object="floor")[0]
+room = bproc.filter.one_by_attr(objs, "name", "mesh")
 
 # Init sampler for sampling locations inside the loaded replica room
 point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list_values)
@@ -34,7 +30,7 @@ point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list
 bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([room, floor])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([room, floor])
 
 poses = 0
 tries = 0

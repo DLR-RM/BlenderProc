@@ -5,7 +5,7 @@ from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.object.FloorExtractor import FloorExtractor
+from blenderproc.python.object.FloorExtractor import extract_floor
 
 
 class FloorExtractorModule(Module):
@@ -130,7 +130,7 @@ class FloorExtractorModule(Module):
                 continue
             mesh_objects.append(MeshObject(obj))
 
-        floors = FloorExtractor.extract(
+        floors = extract_floor(
             mesh_objects=mesh_objects,
             compare_angle_degrees=radians(self.config.get_float('compare_angle_degrees', 7.5)),
             compare_height=self.config.get_float('compare_height', 0.15),

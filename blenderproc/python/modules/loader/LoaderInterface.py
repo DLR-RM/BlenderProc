@@ -2,7 +2,7 @@ from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.types.StructUtility import Struct
-from blenderproc.python.object.ObjectMerging import ObjectMerging
+from blenderproc.python.object.ObjectMerging import merge_objects
 
 class LoaderInterface(Module):
     """
@@ -54,10 +54,10 @@ class LoaderInterface(Module):
         :param objects: A list of objects which should receive the custom properties.
         """
 
-        merge_objects = self.config.get_bool("cf_merge_objects", False)
-        if merge_objects:
+        should_merge_objects = self.config.get_bool("cf_merge_objects", False)
+        if should_merge_objects:
             merged_object_name = self.config.get_string("cf_merged_object_name", "merged_object")
-            parent_object = ObjectMerging.merge_object_list(objects=objects, merged_object_name=merged_object_name)
+            parent_object = merge_objects(objects=objects, merged_object_name=merged_object_name)
             objects.append(parent_object)
 
         properties = self.config.get_raw_dict("add_properties", {})

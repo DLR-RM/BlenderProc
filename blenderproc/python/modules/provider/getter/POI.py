@@ -1,6 +1,7 @@
 from blenderproc.python.modules.main.Provider import Provider
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes, compute_poi
+
 
 class POI(Provider):
     """
@@ -53,8 +54,8 @@ class POI(Provider):
         :return: Point of interest in the scene. Type: mathutils.Vector.
         """
         # For every selected object in the scene
-        selected_objects = MeshObject.convert_to_meshes(self.config.get_list("selector", get_all_blender_mesh_objects()))
+        selected_objects = convert_to_meshes(self.config.get_list("selector", get_all_blender_mesh_objects()))
         if len(selected_objects) == 0:
             raise Exception("No objects were selected!")
 
-        return MeshObject.compute_poi(selected_objects)
+        return compute_poi(selected_objects)

@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 import numpy as np
 
 import argparse
@@ -27,7 +24,7 @@ bproc.lighting.light_suncg_scene()
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0
@@ -47,7 +44,7 @@ while tries < 10000 and poses < 5:
 
 # improve the materials, first use all materials and only filter the relevant materials out
 all_materials = bproc.material.collect_all()
-all_wood_materials = Filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
+all_wood_materials = bproc.filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
 
 # now change the used values
 for material in all_wood_materials:
@@ -55,14 +52,14 @@ for material in all_wood_materials:
     material.set_principled_shader_value("Specular", np.random.uniform(0.5, 1.0))
     material.set_displacement_from_principled_shader_value("Base Color", np.random.uniform(0.001, 0.15))
 
-all_stone_materials = Filter.by_attr(all_materials, "name", "tile.*|brick.*|stone.*", regex=True)
+all_stone_materials = bproc.filter.by_attr(all_materials, "name", "tile.*|brick.*|stone.*", regex=True)
 
 # now change the used values
 for material in all_stone_materials:
     material.set_principled_shader_value("Roughness", np.random.uniform(0.0, 0.2))
     material.set_principled_shader_value("Specular", np.random.uniform(0.9, 1.0))
 
-all_floor_materials = Filter.by_attr(all_materials, "name", "carpet.*|textile.*", regex=True)
+all_floor_materials = bproc.filter.by_attr(all_materials, "name", "carpet.*|textile.*", regex=True)
 
 # now change the used values
 for material in all_floor_materials:

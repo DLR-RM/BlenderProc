@@ -1,6 +1,6 @@
 from blenderproc.python.modules.camera.CameraSampler import CameraSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
+from blenderproc.python.types.MeshObjectUtility import get_all_mesh_objects
 
 
 class Front3DCameraSampler(CameraSampler):
@@ -35,7 +35,8 @@ class Front3DCameraSampler(CameraSampler):
         CameraSampler.__init__(self, config)
 
     def run(self):
-        self.point_sampler = Front3DPointInRoomSampler(MeshObject.get_all_mesh_objects())
+        front_3d_objs = [obj for obj in get_all_mesh_objects() if obj.has_cp("is_3d_front") and obj.get_cp("is_3d_front")]
+        self.point_sampler = Front3DPointInRoomSampler(front_3d_objs)
         super().run()
 
     def _sample_pose(self, config):

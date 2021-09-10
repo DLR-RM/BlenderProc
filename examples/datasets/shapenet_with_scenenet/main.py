@@ -2,11 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.FloorExtractor import FloorExtractor
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 import os
 import argparse
 
@@ -25,9 +20,9 @@ room_objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_textu
 
 # In some scenes floors, walls and ceilings are one object that needs to be split first
 # Collect all walls
-walls = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("wall"))
+walls = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("wall"))
 # Extract floors from the objects
-new_floors = FloorExtractor.extract(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
+new_floors = bproc.object.extract_floor(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
 # Set category id of all new floors
 for floor in new_floors:
     floor.set_cp("category_id", label_mapping.id_from_label("floor"))
@@ -35,7 +30,7 @@ for floor in new_floors:
 room_objs += new_floors
 
 # Extract ceilings from the objects
-new_ceilings = FloorExtractor.extract(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
+new_ceilings = bproc.object.extract_floor(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
 # Set category id of all new ceiling
 for ceiling in new_ceilings:
     ceiling.set_cp("category_id", label_mapping.id_from_label("ceiling"))
@@ -43,17 +38,17 @@ for ceiling in new_ceilings:
 room_objs += new_ceilings
 
 # Make all lamp objects emit light
-lamps = Filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
+lamps = bproc.filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
 bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
-ceilings = Filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
+ceilings = bproc.filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
 bproc.lighting.light_surface(ceilings, emission_strength=2)
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")
 
 # Collect all beds
-beds = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
+beds = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))
 # Sample the location of the ShapeNet object above a random bed
 shapenet_obj.set_location(bproc.sampler.upper_region(beds, min_height=0.3))
 
@@ -66,7 +61,7 @@ for obj in room_objs:
     obj.enable_rigidbody(False, mass_factor=2000, collision_margin=0.00001, collision_shape="MESH")
 
 # Run the simulation to let the ShapeNet object fall onto the bed
-PhysicsSimulation.simulate_and_fix_final_poses(
+bproc.object.simulate_physics_and_fix_final_poses(
     solver_iters=30,
     substeps_per_frame=40,
     min_simulation_time=0.5,
@@ -75,7 +70,7 @@ PhysicsSimulation.simulate_and_fix_final_poses(
 )
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects(room_objs)
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(room_objs)
 poses = 0
 tries = 0
 while tries < 10000 and poses < 5:

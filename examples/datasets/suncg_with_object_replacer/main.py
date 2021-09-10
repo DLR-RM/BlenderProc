@@ -2,11 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
-from blenderproc.python.object.ObjectReplacer import ObjectReplacer
-from blenderproc.python.filter.Filter import Filter
-
 import numpy as np
 from mathutils import Euler
 import argparse
@@ -39,10 +34,10 @@ def relative_pose_sampler(obj):
 
 
 replace_ratio = 1.0
-ObjectReplacer.replace_multiple(
-    objects_to_be_replaced=Filter.by_cp(objs, "coarse_grained_class", "chair"),
+bproc.object.replace_objects(
+    objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
-    ignore_collision_with=Filter.by_cp(objs, "type", "Floor"),
+    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
     replace_ratio=replace_ratio,
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler
@@ -57,7 +52,7 @@ bproc.lighting.light_suncg_scene()
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0

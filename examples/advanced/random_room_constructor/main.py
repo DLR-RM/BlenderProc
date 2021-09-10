@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
-from blenderproc.python.lighting.SurfaceLighting import light_surface
 
 import argparse
 import numpy as np
@@ -24,13 +21,14 @@ for i in range(15):
     interior_objects.extend(bproc.loader.load_ikea(args.ikea_path, ["bed", "chair", "desk", "bookshelf"]))
 
 # Construct random room and fill with interior_objects
-objects = RandomRoomConstructor.construct(25, interior_objects, materials, amount_of_extrusions=5)
+objects = bproc.constructor.construct_random_room(used_floor_area=25, interior_objects=interior_objects,
+                                                  materials=materials, amount_of_extrusions=5)
 
 # Bring light into the room
-light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
+bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects(objects)
+bvh_tree = bproc.object.create_bvh_tree_multi_objects(objects)
 floor = [obj for obj in objects if obj.get_name() == "Floor"][0]
 poses = 0
 tries = 0

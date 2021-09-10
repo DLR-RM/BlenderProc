@@ -4,10 +4,6 @@ SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.types.LightUtility import Light
-
 import numpy as np
 
 parser = argparse.ArgumentParser()
@@ -22,7 +18,7 @@ bproc.init()
 objs = bproc.loader.load_obj(args.scene)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
@@ -39,12 +35,12 @@ with open(args.camera, "r") as f:
         bproc.camera.add_camera_pose(matrix_world)
 
 # Define a function that samples the pose of a given object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-5, -5, -5], [5, 5, 5]))
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
 
 # Sample the poses of all objects, while making sure that no objects collide with each other.
-ObjectPoseSampler.sample(
+bproc.object.sample_poses(
     objs,
     sample_pose_func=sample_pose,
     objects_to_check_collisions=objs

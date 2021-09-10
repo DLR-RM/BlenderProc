@@ -4,8 +4,6 @@ SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.python.types.LightUtility import Light
-
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/scene.obj", help="Path to the camera file")
 parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", help="Path to the scene.obj file")
@@ -18,7 +16,7 @@ bproc.init()
 objs = bproc.loader.load_obj(args.scene)
 
 # Define a light
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 # Sample its location in a shell around the point [1, 2, 3]
 light.set_location(bproc.sampler.shell(

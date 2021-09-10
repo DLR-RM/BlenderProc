@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.LightUtility import Light
 
 import argparse
 
@@ -19,11 +16,11 @@ bproc.init()
 objs = bproc.loader.load_obj(args.scene)
 
 # Create an empty object which will represent the cameras focus point
-focus_point = Entity.create_empty("Camera Focus Point")
+focus_point = bproc.object.create_empty("Camera Focus Point")
 focus_point.set_location([0.5, -1.5, 3])
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
@@ -34,7 +31,7 @@ bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 bproc.camera.add_depth_of_field(focus_point, fstop_value=0.25)
 
 # Find point of interest, all cam poses should look towards it
-poi = MeshObject.compute_poi(objs)
+poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects

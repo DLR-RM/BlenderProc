@@ -265,7 +265,7 @@ def add_depth_of_field(focal_point_obj: Entity, fstop_value: float,
                        focal_distance: float = -1.0):
     """
     Adds depth of field to the given camera, the focal point will be set by the focal_point_obj, ideally an empty
-    instance is used for this see `MeshObject.create_empty()` on how to init one of those. A higher fstop value
+    instance is used for this see `bproc.object.create_empty()` on how to init one of those. A higher fstop value
     makes the resulting image look sharper, while a low value decreases the sharpness.
 
     Check the documentation on

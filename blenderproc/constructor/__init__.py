@@ -1,0 +1,3 @@
+
+
+from blenderproc.python.constructor.RandomRoomConstructor import construct_random_room
