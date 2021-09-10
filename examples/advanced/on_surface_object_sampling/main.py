@@ -6,8 +6,6 @@ import argparse
 import numpy as np
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 
@@ -28,7 +26,7 @@ surface = Filter.one_by_attr(objs, "name", "Cube")
 spheres = Filter.by_attr(objs, "name", ".*phere.*", regex=True)
 
 # Define a function that samples the pose of a given object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     # Sample the spheres location above the surface
     obj.set_location(bproc.sampler.upper_region(
         objects_to_sample_on=[surface],
@@ -50,7 +48,7 @@ surface.enable_rigidbody(False)
 PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)

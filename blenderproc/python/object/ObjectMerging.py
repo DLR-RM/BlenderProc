@@ -1,4 +1,4 @@
-from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import Entity, create_empty
 
 
 class ObjectMerging:
@@ -14,7 +14,7 @@ class ObjectMerging:
         print('name', merged_object_name)
 
         # create new empty object which acts as parent, and link it to the collection
-        parent_obj = Entity.create_empty(merged_object_name)
+        parent_obj = create_empty(merged_object_name)
 
         # select all relevant objects
         for obj in objects:

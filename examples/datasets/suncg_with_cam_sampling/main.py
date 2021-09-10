@@ -2,12 +2,10 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
-import numpy as np
-
 import argparse
 import os
+
+import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
@@ -26,7 +24,7 @@ bproc.lighting.light_suncg_scene()
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0

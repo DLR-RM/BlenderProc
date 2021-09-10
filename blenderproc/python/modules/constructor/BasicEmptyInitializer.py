@@ -1,6 +1,6 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import create_empty
 
 
 class BasicEmptyInitializer(Module):
@@ -83,7 +83,7 @@ class BasicEmptyInitializer(Module):
             obj_name = empty_conf.get_string("name")
             obj_type = empty_conf.get_string("type", "plain_axes")
 
-            entity = Entity.create_empty(obj_name, obj_type)
+            entity = create_empty(obj_name, obj_type)
             entity.set_location(empty_conf.get_vector3d("location", [0, 0, 0]))
             entity.set_rotation_euler(empty_conf.get_vector3d("rotation", [0, 0, 0]))
             entity.set_scale(empty_conf.get_vector3d("scale", [1, 1, 1]))

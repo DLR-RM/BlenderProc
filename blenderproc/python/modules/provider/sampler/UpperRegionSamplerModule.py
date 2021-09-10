@@ -1,6 +1,6 @@
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import convert_to_meshes
 from blenderproc.python.sampler.UpperRegionSampler import upper_region
 
 
@@ -72,7 +72,7 @@ class UpperRegionSamplerModule(Provider):
         """
 
         # invoke a Getter, get a list of objects to manipulate
-        objects = MeshObject.convert_to_meshes(self.config.get_list("to_sample_on"))
+        objects = convert_to_meshes(self.config.get_list("to_sample_on"))
         if len(objects) == 0:
             raise Exception("The used selector returns an empty list, check the self.config value: \"to_sample_on\"")
 

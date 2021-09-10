@@ -7,7 +7,7 @@ import mathutils
 from blenderproc.python.modules.main.Provider import Provider
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.types.EntityUtility import Entity as EntityUtility
+from blenderproc.python.types.EntityUtility import Entity as EntityUtility, convert_to_entities
 import numpy as np
 class Entity(Provider):
     """
@@ -217,7 +217,7 @@ class Entity(Provider):
         if not isinstance(conditions, list):
             conditions = [conditions]
 
-        all_objects = EntityUtility.convert_to_entities(bpy.context.scene.objects)
+        all_objects = convert_to_entities(bpy.context.scene.objects)
         filtered_objects = []
         # each single condition is treated as and condition
         for and_condition in conditions:
