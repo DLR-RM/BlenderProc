@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -82,7 +81,7 @@ data = bproc.renderer.render()
 seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"], default_values={"class": 0, "name": "none"})
 
 # Write data to coco file
-CocoWriterUtility.write(args.output_dir,
+bproc.writer.write_coco_annotations(args.output_dir,
                         instance_segmaps=seg_data["instance_segmaps"],
                         instance_attribute_maps=seg_data["instance_attribute_maps"],
                         colors=data["colors"],

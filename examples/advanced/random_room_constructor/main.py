@@ -71,4 +71,4 @@ data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
 del data["distance"]
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)
