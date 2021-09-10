@@ -90,46 +90,49 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
     return WriterUtility.load_registered_outputs(load_keys) if return_data else {}
 
 
-def _output_vector_field(forward_flow: bool, backward_flow: bool, output_dir: str):
-    """ Configures compositor to output speed vectors.
+class FlowRendererUtility():
 
-    :param forward_flow: Whether to render forward optical flow.
-    :param backward_flow: Whether to render backward optical flow.
-    :param output_dir: The directory to write images to.
-    """
+    @staticmethod
+    def _output_vector_field(forward_flow: bool, backward_flow: bool, output_dir: str):
+        """ Configures compositor to output speed vectors.
 
-    # Flow settings (is called "vector" in blender)
-    bpy.context.scene.render.use_compositing = True
-    bpy.context.scene.use_nodes = True
-    bpy.context.scene.view_layers["View Layer"].use_pass_vector = True
+        :param forward_flow: Whether to render forward optical flow.
+        :param backward_flow: Whether to render backward optical flow.
+        :param output_dir: The directory to write images to.
+        """
 
-    # Adapt compositor to output vector field
-    tree = bpy.context.scene.node_tree
-    links = tree.links
+        # Flow settings (is called "vector" in blender)
+        bpy.context.scene.render.use_compositing = True
+        bpy.context.scene.use_nodes = True
+        bpy.context.scene.view_layers["View Layer"].use_pass_vector = True
 
-    # Use existing render layer
-    render_layer_node = tree.nodes.get('Render Layers')
+        # Adapt compositor to output vector field
+        tree = bpy.context.scene.node_tree
+        links = tree.links
 
-    separate_rgba = tree.nodes.new('CompositorNodeSepRGBA')
-    links.new(render_layer_node.outputs['Vector'], separate_rgba.inputs['Image'])
+        # Use existing render layer
+        render_layer_node = tree.nodes.get('Render Layers')
 
-    if forward_flow:
-        combine_fwd_flow = tree.nodes.new('CompositorNodeCombRGBA')
-        links.new(separate_rgba.outputs['B'], combine_fwd_flow.inputs['R'])
-        links.new(separate_rgba.outputs['A'], combine_fwd_flow.inputs['G'])
-        fwd_flow_output_file = tree.nodes.new('CompositorNodeOutputFile')
-        fwd_flow_output_file.base_path = output_dir
-        fwd_flow_output_file.format.file_format = "OPEN_EXR"
-        fwd_flow_output_file.file_slots.values()[0].path = "fwd_flow_"
-        links.new(combine_fwd_flow.outputs['Image'], fwd_flow_output_file.inputs['Image'])
+        separate_rgba = tree.nodes.new('CompositorNodeSepRGBA')
+        links.new(render_layer_node.outputs['Vector'], separate_rgba.inputs['Image'])
 
-    if backward_flow:
-        # actually need to split - otherwise the A channel of the image is getting weird, no idea why
-        combine_bwd_flow = tree.nodes.new('CompositorNodeCombRGBA')
-        links.new(separate_rgba.outputs['R'], combine_bwd_flow.inputs['R'])
-        links.new(separate_rgba.outputs['G'], combine_bwd_flow.inputs['G'])
-        bwd_flow_output_file = tree.nodes.new('CompositorNodeOutputFile')
-        bwd_flow_output_file.base_path = output_dir
-        bwd_flow_output_file.format.file_format = "OPEN_EXR"
-        bwd_flow_output_file.file_slots.values()[0].path = "bwd_flow_"
-        links.new(combine_bwd_flow.outputs['Image'], bwd_flow_output_file.inputs['Image'])
+        if forward_flow:
+            combine_fwd_flow = tree.nodes.new('CompositorNodeCombRGBA')
+            links.new(separate_rgba.outputs['B'], combine_fwd_flow.inputs['R'])
+            links.new(separate_rgba.outputs['A'], combine_fwd_flow.inputs['G'])
+            fwd_flow_output_file = tree.nodes.new('CompositorNodeOutputFile')
+            fwd_flow_output_file.base_path = output_dir
+            fwd_flow_output_file.format.file_format = "OPEN_EXR"
+            fwd_flow_output_file.file_slots.values()[0].path = "fwd_flow_"
+            links.new(combine_fwd_flow.outputs['Image'], fwd_flow_output_file.inputs['Image'])
+
+        if backward_flow:
+            # actually need to split - otherwise the A channel of the image is getting weird, no idea why
+            combine_bwd_flow = tree.nodes.new('CompositorNodeCombRGBA')
+            links.new(separate_rgba.outputs['R'], combine_bwd_flow.inputs['R'])
+            links.new(separate_rgba.outputs['G'], combine_bwd_flow.inputs['G'])
+            bwd_flow_output_file = tree.nodes.new('CompositorNodeOutputFile')
+            bwd_flow_output_file.base_path = output_dir
+            bwd_flow_output_file.format.file_format = "OPEN_EXR"
+            bwd_flow_output_file.file_slots.values()[0].path = "bwd_flow_"
+            links.new(combine_bwd_flow.outputs['Image'], bwd_flow_output_file.inputs['Image'])
