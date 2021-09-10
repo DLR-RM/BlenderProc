@@ -2,7 +2,7 @@ import os
 
 from blenderproc.python.modules.camera.CameraSampler import CameraSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 import bpy
 
@@ -49,7 +49,7 @@ class ReplicaCameraSampler(CameraSampler):
             file_path = self.config.get_string('height_list_path')
         else:
             folder_path = os.path.join('resources', 'replica', 'height_levels', self.config.get_string('data_set_name'))
-            file_path = Utility.resolve_path(os.path.join(folder_path, 'height_list_values.txt'))
+            file_path = resolve_path(os.path.join(folder_path, 'height_list_values.txt'))
 
         if 'mesh' in bpy.data.objects:
             mesh = MeshObject(bpy.data.objects['mesh'])

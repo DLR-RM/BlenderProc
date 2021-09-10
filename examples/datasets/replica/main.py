@@ -9,7 +9,6 @@ import numpy as np
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")
@@ -18,7 +17,7 @@ args = parser.parse_args()
 
 # Define which dataset should be loaded and the path to the file containing possible height values.
 data_set_name = "office_1"
-height_list_values = Utility.resolve_path(os.path.join('resources', 'replica', 'height_levels', data_set_name, 'height_list_values.txt'))
+height_list_values = bproc.utility.resolve_path(os.path.join('resources', 'replica', 'height_levels', data_set_name, 'height_list_values.txt'))
 
 bproc.init()
 

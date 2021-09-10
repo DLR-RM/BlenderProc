@@ -3,10 +3,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-
-from blenderproc.python.utility.Utility import Utility
 
 import numpy as np
 
@@ -21,7 +18,7 @@ args = parser.parse_args()
 bproc.init()
 
 # load the objects into the scene
-label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 objs = bproc.loader.load_suncg(args.house, label_mapping)
 
 # makes Suncg objects emit light

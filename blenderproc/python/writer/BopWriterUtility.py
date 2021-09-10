@@ -13,7 +13,7 @@ import bpy
 from mathutils import Matrix
 
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
@@ -361,7 +361,7 @@ class BopWriterUtility:
                 dist_output = Utility.find_registered_output_by_key("distance")
                 if dist_output is None:
                     raise Exception("Distance image has not been rendered.")
-                distance = WriterUtility.load_output_file(Utility.resolve_path(dist_output['path'] % frame_id), remove=False)
+                distance = WriterUtility.load_output_file(resolve_path(dist_output['path'] % frame_id), remove=False)
                 depth = dist2depth(distance)
 
             # Scale the depth to retain a higher precision (the depth is saved

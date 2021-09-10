@@ -15,6 +15,30 @@ from blenderproc.python.modules.utility.Config import Config
 import numpy as np
 import json
 
+
+def resolve_path(path):
+    """ Returns an absolute path. If given path is relative, current working directory is put in front.
+
+    :param path: The path to resolve.
+    :return: The absolute path.
+    """
+    path = path.strip()
+
+    if path.startswith("/"):
+        return path
+    elif path.startswith("~"):
+        return path.replace("~", os.getenv("HOME"))
+    else:
+        return os.path.join(os.path.dirname(Utility.working_dir), path)
+
+def num_frames() -> int:
+    """ Returns the currently total number of registered frames.
+
+    :return: The number of frames.
+    """
+    return bpy.context.scene.frame_end - bpy.context.scene.frame_start
+
+
 class Utility:
     working_dir = ""
     temp_dir = ""
@@ -113,22 +137,6 @@ class Utility:
             return None
         return repo.head.object.hexsha
 
-
-    @staticmethod
-    def resolve_path(path):
-        """ Returns an absolute path. If given path is relative, current working directory is put in front.
-
-        :param path: The path to resolve.
-        :return: The absolute path.
-        """
-        path = path.strip()
-
-        if path.startswith("/"):
-            return path
-        elif path.startswith("~"):
-            return path.replace("~", os.getenv("HOME"))
-        else:
-            return os.path.join(os.path.dirname(Utility.working_dir), path)
 
     @staticmethod
     def get_temporary_directory():
@@ -254,7 +262,7 @@ class Utility:
         # Read in lights
         lights = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(Utility.resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
+        with open(resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -278,7 +286,7 @@ class Utility:
 
         # Read in windows
         windows = []
-        with open(Utility.resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
+        with open(resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":
@@ -540,15 +548,6 @@ class Utility:
         # If no frame is given and no KeyFrame context manager surrounds us => do nothing
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
-
-    @staticmethod
-    def num_frames() -> int:
-        """ Returns the currently total number of registered frames.
-
-        :return: The number of frames.
-        """
-        return bpy.context.scene.frame_end
-
 
 # KeyFrameState should be thread-specific
 class KeyFrameState(threading.local):

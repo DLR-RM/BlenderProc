@@ -7,7 +7,7 @@ import bpy
 import mathutils
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 
 class FloorExtractor:
@@ -65,7 +65,7 @@ class FloorExtractor:
 
         height_list = []
         if height_list_path is not None:
-            height_file_path = Utility.resolve_path(height_list_path)
+            height_file_path = resolve_path(height_list_path)
             with open(height_file_path) as file:
                 import ast
                 height_list = [float(val) for val in ast.literal_eval(file.read())]

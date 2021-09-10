@@ -3,7 +3,7 @@ import os
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.SceneNetLoader import load_scenenet
 
 
@@ -44,14 +44,14 @@ class SceneNetLoaderModule(LoaderInterface):
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
 
-        self._file_path = Utility.resolve_path(self.config.get_string("file_path"))
+        self._file_path = resolve_path(self.config.get_string("file_path"))
 
-        self._texture_folder = Utility.resolve_path(self.config.get_string("texture_folder"))
+        self._texture_folder = resolve_path(self.config.get_string("texture_folder"))
 
         # the default unknown texture folder is not included inside of the scenenet texture folder
         default_unknown_texture_folder = os.path.join(self._texture_folder, "unknown")
         # the textures in this folder are used, if the object has no available texture
-        self._unknown_texture_folder = Utility.resolve_path(self.config.get_string("unknown_texture_folder",
+        self._unknown_texture_folder = resolve_path(self.config.get_string("unknown_texture_folder",
                                                             default_unknown_texture_folder))
 
 
@@ -60,7 +60,7 @@ class SceneNetLoaderModule(LoaderInterface):
         """
         Run the module, loads all the objects and set the properties correctly (including the category_id)
         """
-        label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        label_mapping = LabelIdMapping.from_csv(resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
         # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
         # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!

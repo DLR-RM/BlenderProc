@@ -4,8 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 
 import argparse
@@ -20,7 +18,7 @@ args = parser.parse_args()
 bproc.init()
 
 # load suncg house into the scene
-label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 suncg_objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # Find all bed objects, to sample the shapenet objects on

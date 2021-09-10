@@ -7,7 +7,7 @@ import numpy as np
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.utility.BlenderUtility import add_object_only_with_direction_vectors
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 
 class VisNormalImage(Module):
@@ -47,7 +47,7 @@ class VisNormalImage(Module):
         max_distance = self.config.get_float("max_distance", 24)
         normal_len = self.config.get_float("normal_length", 0.1)
 
-        path_to_hdf5 = Utility.resolve_path(self.config.get_string("path_to_hdf5"))
+        path_to_hdf5 = resolve_path(self.config.get_string("path_to_hdf5"))
         data = {}
         with h5py.File(path_to_hdf5, "r") as file:
             for key in file.keys():
