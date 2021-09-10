@@ -11,7 +11,7 @@ import random
 from blenderproc.python.modules.provider.getter.Material import Material
 from blenderproc.python.utility.BlenderUtility import check_bb_intersection_on_values
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
-from blenderproc.python.types.EntityUtility import Entity
+from blenderproc.python.types.EntityUtility import Entity, delete_multiple
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 
@@ -486,7 +486,7 @@ class RandomRoomConstructor:
         # Add the loaded objects, which couldn't be placed
         list_of_deleted_objects.extend([obj for obj in interior_objects if obj not in placed_objects])
         # Delete them all
-        Entity.delete_multiple(list_of_deleted_objects)
+        delete_multiple(list_of_deleted_objects)
 
         if floor_obj is not None:
             placed_objects.append(floor_obj)

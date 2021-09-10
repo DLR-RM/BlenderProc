@@ -9,10 +9,11 @@ from mathutils import Vector, Euler, Matrix
 
 from typing import List
 
+
 class Entity(Struct):
 
-    def __init__(self, object: bpy.types.Object):
-        super().__init__(object)
+    def __init__(self, bpy_object: bpy.types.Object):
+        super().__init__(bpy_object)
 
     def update_blender_ref(self, name: str):
         """ Updates the contained blender reference using the given name of the instance.
@@ -20,33 +21,6 @@ class Entity(Struct):
         :param name: The name of the instance which will be used to update its blender reference.
         """
         self.blender_obj = bpy.data.objects[name]
-
-    @staticmethod
-    def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
-        """ Creates an empty entity.
-
-        :param entity_name: The name of the new entity.
-        :param empty_type: Type of the newly created empty entity. Available: ["plain_axes", "arrows", "single_arrow", \
-                           "circle", "cube", "sphere", "cone"]
-        :return: The new Mesh entity.
-        """
-        if empty_type.lower() in ["plain_axes", "arrows", "single_arrow", "circle", "cube", "sphere", "cone"]:
-            bpy.ops.object.empty_add(type=empty_type.upper(), align="WORLD")
-        else:
-            raise RuntimeError(f'Unknown basic empty type "{empty_type}"! Available types: "plain_axes".')
-
-        new_entity = Entity(bpy.context.object)
-        new_entity.set_name(entity_name)
-        return new_entity
-
-    @staticmethod
-    def convert_to_entities(blender_objects: list) -> List["Entity"]:
-        """ Converts the given list of blender objects to entities
-
-        :param blender_objects: List of blender objects.
-        :return: The list of entities.
-        """
-        return [Entity(obj) for obj in blender_objects]
 
     def set_location(self, location: Union[list, Vector, np.ndarray], frame: int = None):
         """ Sets the location of the entity in 3D world coordinates.
@@ -150,14 +124,6 @@ class Entity(Struct):
         """ Deletes the entity """
         bpy.ops.object.delete({"selected_objects": [self.blender_obj]})
 
-    @staticmethod
-    def delete_multiple(entities: ["Entity"]):
-        """ Deletes multiple entities at once
-
-        :param entities: A list of entities that should be deleted
-        """
-        bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})
-
     def is_empty(self) -> bool:
         """ Returns whether the entity is from type "EMPTY".
 
@@ -167,7 +133,8 @@ class Entity(Struct):
 
     def __setattr__(self, key, value):
         if key != "blender_obj":
-            raise Exception("The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
+            raise Exception(
+                "The entity class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
         else:
             object.__setattr__(self, key, value)
 
@@ -178,3 +145,38 @@ class Entity(Struct):
 
     def __hash__(self):
         return hash(self.blender_obj)
+
+
+def create_empty(entity_name: str, empty_type: str = "plain_axes") -> "Entity":
+    """ Creates an empty entity.
+
+    :param entity_name: The name of the new entity.
+    :param empty_type: Type of the newly created empty entity. Available: ["plain_axes", "arrows", "single_arrow", \
+                       "circle", "cube", "sphere", "cone"]
+    :return: The new Mesh entity.
+    """
+    if empty_type.lower() in ["plain_axes", "arrows", "single_arrow", "circle", "cube", "sphere", "cone"]:
+        bpy.ops.object.empty_add(type=empty_type.upper(), align="WORLD")
+    else:
+        raise RuntimeError(f'Unknown basic empty type "{empty_type}"! Available types: "plain_axes".')
+
+    new_entity = Entity(bpy.context.object)
+    new_entity.set_name(entity_name)
+    return new_entity
+
+
+def convert_to_entities(blender_objects: list) -> List["Entity"]:
+    """ Converts the given list of blender objects to entities
+
+    :param blender_objects: List of blender objects.
+    :return: The list of entities.
+    """
+    return [Entity(obj) for obj in blender_objects]
+
+
+def delete_multiple(entities: ["Entity"]):
+    """ Deletes multiple entities at once
+
+    :param entities: A list of entities that should be deleted
+    """
+    bpy.ops.object.delete({"selected_objects": [e.blender_obj for e in entities]})

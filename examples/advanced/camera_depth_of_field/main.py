@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.PartSphere import PartSphere
 
 import argparse
@@ -19,7 +17,7 @@ bproc.init()
 objs = bproc.loader.load_obj(args.scene)
 
 # Create an empty object which will represent the cameras focus point
-focus_point = Entity.create_empty("Camera Focus Point")
+focus_point = bproc.object.create_empty("Camera Focus Point")
 focus_point.set_location([0.5, -1.5, 3])
 
 # define a light and set its location and energy level
