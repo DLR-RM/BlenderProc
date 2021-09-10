@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.types.MeshObjectUtility import MeshObject
-
 import argparse
 
 parser = argparse.ArgumentParser()
