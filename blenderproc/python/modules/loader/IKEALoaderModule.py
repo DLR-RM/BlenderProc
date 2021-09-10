@@ -1,7 +1,7 @@
 import os
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.IKEALoader import load_ikea
 
 
@@ -37,7 +37,7 @@ class IKEALoaderModule(LoaderInterface):
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
 
-        self._data_dir = Utility.resolve_path(self.config.get_string("data_dir", os.path.join("resources", "IKEA")))
+        self._data_dir = resolve_path(self.config.get_string("data_dir", os.path.join("resources", "IKEA")))
 
         if self.config.has_param("category"):
             self._obj_categories = self.config.get_raw_value("category", None)

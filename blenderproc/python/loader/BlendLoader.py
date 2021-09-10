@@ -7,7 +7,7 @@ from blenderproc.python.utility.BlenderUtility import collect_all_orphan_datablo
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 def load_blend(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_regrex: str = None, data_blocks: Union[list, str] = "objects") -> List[MeshObject]:
     """
@@ -24,7 +24,7 @@ def load_blend(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_
     :return: The list of loaded mesh objects.
     """
     # get a path to a .blend file
-    path = Utility.resolve_path(path)
+    path = resolve_path(path)
     data_blocks = BlendLoader._validate_and_standardizes_configured_list(data_blocks, BlendLoader.valid_datablocks, "data block")
     obj_types = BlendLoader._validate_and_standardizes_configured_list(obj_types, BlendLoader.valid_object_types, "object type")
 

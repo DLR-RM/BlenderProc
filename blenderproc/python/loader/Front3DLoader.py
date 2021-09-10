@@ -11,8 +11,13 @@ from urllib.request import urlretrieve
 from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
+<<<<<<< HEAD
 from blenderproc.python.types.MeshObjectUtility import MeshObject, create_with_empty_mesh
 from blenderproc.python.utility.Utility import Utility
+=======
+from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.utility.Utility import resolve_path
+>>>>>>> develop
 from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import load_texture
 
@@ -27,9 +32,9 @@ def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: 
     :param lamp_light_strength: Strength of the emission shader used in each lamp.
     :return: The list of loaded mesh objects.
     """
-    json_path = Utility.resolve_path(json_path)
-    future_model_path = Utility.resolve_path(future_model_path)
-    front_3D_texture_path = Utility.resolve_path(front_3D_texture_path)
+    json_path = resolve_path(json_path)
+    future_model_path = resolve_path(future_model_path)
+    front_3D_texture_path = resolve_path(front_3D_texture_path)
 
     if not os.path.exists(json_path):
         raise Exception("The given path does not exists: {}".format(json_path))

@@ -5,7 +5,7 @@ from typing import List
 
 import bpy
 
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 
 def load_texture(path: str, colorspace: str = "sRGB") -> List[bpy.types.Texture]:
     """ Loads images and creates image textures.
@@ -23,7 +23,7 @@ def load_texture(path: str, colorspace: str = "sRGB") -> List[bpy.types.Texture]
     :param colorspace: Colorspace type to assign to loaded assets. Available: ['Filmic Log', 'Linear', 'Linear ACES', 'Non-Color', 'Raw', 'sRGB', 'XYZ'].
     :return: The list of created textures.
     """
-    path = Utility.resolve_path(path)
+    path = resolve_path(path)
     image_paths = TextureLoader._resolve_paths(path)
     textures = TextureLoader._load_and_create(image_paths, colorspace)
 

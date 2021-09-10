@@ -60,9 +60,9 @@ class SetupUtility:
 
         :param temp_dir: Path to temporary directory where Blender saves output. Default is shared memory.
         """
-        from blenderproc.python.utility.Utility import Utility
+        from blenderproc.python.utility.Utility import Utility, resolve_path
         
-        Utility.temp_dir = Utility.resolve_path(temp_dir)
+        Utility.temp_dir = resolve_path(temp_dir)
         Utility.working_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
         os.makedirs(Utility.temp_dir, exist_ok=True)
     

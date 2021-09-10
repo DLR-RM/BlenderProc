@@ -7,7 +7,7 @@ import random
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.ObjectLoader import load_obj
 
 
@@ -25,7 +25,7 @@ def load_shapenet(data_path: str, used_synset_id: str, used_source_id: str = "",
     :param move_object_origin: Moves the object center to the bottom of the bounding box in Z direction and also in the middle of the X and Y plane, this does not change the `.location` of the object. Default: True
     :return: The loaded mesh object.
     """
-    data_path = Utility.resolve_path(data_path)
+    data_path = resolve_path(data_path)
     taxonomy_file_path = os.path.join(data_path, "taxonomy.json")
 
     files_with_fitting_synset = ShapeNetLoader._get_files_with_synset(used_synset_id, used_source_id, taxonomy_file_path, data_path)

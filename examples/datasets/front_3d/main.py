@@ -21,8 +21,8 @@ if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
     raise Exception("One of the two folders does not exist!")
 
 bproc.init()
-mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
-mapping = LabelIdMapping.from_csv(mapping_file)
+mapping_file = bproc.utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
+mapping = bproc.utility.LabelIdMapping.from_csv(mapping_file)
 
 # set the light bounces
 bproc.renderer.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,

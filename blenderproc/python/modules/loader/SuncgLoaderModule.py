@@ -3,7 +3,7 @@ import os
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import Utility
+from blenderproc.python.utility.Utility import resolve_path
 from blenderproc.python.loader.SuncgLoader import load_suncg
 
 
@@ -34,12 +34,12 @@ class SuncgLoaderModule(LoaderInterface):
 
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
-        self.house_path = Utility.resolve_path(self.config.get_string("path"))
+        self.house_path = resolve_path(self.config.get_string("path"))
         suncg_folder_path = os.path.join(os.path.dirname(self.house_path), "../..")
         self.suncg_dir = self.config.get_string("suncg_path", suncg_folder_path)
 
     def run(self):
-        label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        label_mapping = LabelIdMapping.from_csv(resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
         # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
 

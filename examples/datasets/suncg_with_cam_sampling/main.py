@@ -2,14 +2,10 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-
-from blenderproc.python.utility.Utility import Utility
-
-import numpy as np
-
 import argparse
 import os
+
+import numpy as np
 
 parser = argparse.ArgumentParser()
 parser.add_argument('house', help="Path to the house.json file of the SUNCG scene to load")
@@ -19,7 +15,7 @@ args = parser.parse_args()
 bproc.init()
 
 # load the objects into the scene
-label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
 objs = bproc.loader.load_suncg(args.house, label_mapping)
 
 # makes Suncg objects emit light
@@ -54,7 +50,7 @@ bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 # render the whole pipeline
 data = bproc.renderer.render()
 
-data.update(bproc.renderer.render_segmap(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
+data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 bproc.writer.write_hdf5(args.output_dir, data)
