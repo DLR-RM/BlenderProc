@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 from blenderproc.python.lighting.SurfaceLighting import light_surface

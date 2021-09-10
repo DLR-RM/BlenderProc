@@ -7,7 +7,6 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import os
 import numpy as np

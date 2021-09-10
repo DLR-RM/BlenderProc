@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
@@ -88,7 +87,7 @@ for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
 # Define a function that samples 6-DoF poses
-def sample_pose_func(obj: MeshObject):
+def sample_pose_func(obj: bproc.types.MeshObject):
     min = np.random.uniform([-0.3, -0.3, 0.0], [-0.2, -0.2, 0.0])
     max = np.random.uniform([0.2, 0.2, 0.4], [0.3, 0.3, 0.6])
     obj.set_location(np.random.uniform(min, max))

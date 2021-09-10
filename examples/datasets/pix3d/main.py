@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.sampler.Sphere import Sphere
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
 

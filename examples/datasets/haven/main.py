@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
 from blenderproc.python.sampler.PartSphere import PartSphere
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 import argparse
 

@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 import argparse
@@ -27,7 +26,7 @@ for synset_id, source_id in [("02801938", "d9fb327b0e19a9ddc735651f0fb19093"), (
     shapenet_objs.append(bproc.loader.load_shapenet(args.shapenet_path, synset_id, source_id))
 
 # Define a function that samples the pose of a given ShapeNet object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     # Sample the location above the bin
     obj.set_location(np.random.uniform([-0.5, -0.5, 2], [0.5, 0.5, 5]))
     obj.set_rotation_euler(UniformSO3.sample())

@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UniformSO3 import UniformSO3
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
@@ -39,7 +38,7 @@ location = Shell.sample(center = [0, 0, -0.8], radius_min = 1, radius_max = 4,
 light_point.set_location(location)
 
 # Define a function that samples 6-DoF poses
-def sample_pose_func(obj: MeshObject):
+def sample_pose_func(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-0.2, -0.2, -0.2],[0.2, 0.2, 0.2]))
     obj.set_rotation_euler(UniformSO3.sample())
     

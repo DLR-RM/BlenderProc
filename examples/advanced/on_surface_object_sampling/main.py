@@ -6,7 +6,6 @@ import argparse
 import numpy as np
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
@@ -28,7 +27,7 @@ surface = Filter.one_by_attr(objs, "name", "Cube")
 spheres = Filter.by_attr(objs, "name", ".*phere.*", regex=True)
 
 # Define a function that samples the pose of a given object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     # Sample the spheres location above the surface
     obj.set_location(UpperRegionSampler.sample(
         objects_to_sample_on=[surface],

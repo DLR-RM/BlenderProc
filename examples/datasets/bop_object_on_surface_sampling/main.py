@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
@@ -83,7 +82,7 @@ for plane in room_planes:
     plane.replace_materials(random_cc_texture)
 
 # Define a function that samples the initial pose of a given object above the ground
-def sample_initial_pose(obj: MeshObject):
+def sample_initial_pose(obj: bproc.types.MeshObject):
     obj.set_location(UpperRegionSampler.sample(objects_to_sample_on=room_planes[0:1], 
                                                min_height=1, max_height=4, face_sample_range=[0.4, 0.6]))
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [0, 0, np.pi * 2]))

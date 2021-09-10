@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 import numpy as np
@@ -38,7 +37,7 @@ with open(args.camera, "r") as f:
         bproc.camera.add_camera_pose(matrix_world)
 
 # Define a function that samples the pose of a given object
-def sample_pose(obj: MeshObject):
+def sample_pose(obj: bproc.types.MeshObject):
     obj.set_location(np.random.uniform([-5, -5, -5], [5, 5, 5]))
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
 
