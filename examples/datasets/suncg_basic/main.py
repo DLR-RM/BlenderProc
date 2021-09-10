@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 
@@ -37,7 +36,7 @@ with open(args.camera, "r") as f:
         bproc.camera.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()

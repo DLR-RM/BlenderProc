@@ -10,7 +10,6 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectReplacer import ObjectReplacer
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
@@ -60,7 +59,7 @@ ObjectReplacer.replace_multiple(
 objs = [obj for obj in objs if obj.is_valid()]
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # Init sampler for sampling locations inside the loaded suncg house
 point_sampler = SuncgPointInRoomSampler(objs)

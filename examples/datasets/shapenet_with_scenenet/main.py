@@ -7,7 +7,6 @@ from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.lighting.SurfaceLighting import SurfaceLighting
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -52,10 +51,10 @@ room_objs += new_ceilings
 
 # Make all lamp objects emit light
 lamps = Filter.by_attr(room_objs, "name", ".*[l|L]amp.*", regex=True)
-SurfaceLighting.run(lamps, emission_strength=15, keep_using_base_color=True)
+bproc.lighting.light_surface(lamps, emission_strength=15, keep_using_base_color=True)
 # Also let all ceiling objects emit a bit of light, so the whole room gets more bright
 ceilings = Filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
-SurfaceLighting.run(ceilings, emission_strength=2)
+bproc.lighting.light_surface(ceilings, emission_strength=2)
 
 # load the ShapeNet object into the scene
 shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")

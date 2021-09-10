@@ -7,7 +7,6 @@ from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
@@ -33,7 +32,7 @@ suncg_objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 bed_objs = Filter.by_cp(suncg_objs, "category_id", label_mapping.id_from_label("bed"))
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # load selected shapenet object
 shapenet_obj = bproc.loader.load_shapenet(args.shape_net, used_synset_id="02801938")
