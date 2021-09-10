@@ -41,7 +41,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
         temp_dir = Utility.get_temporary_directory()
 
     with Utility.UndoAfterExecution():
-        RendererUtility.init()
+        RendererUtility._render_init()
         RendererUtility.set_samples(1)
         RendererUtility.set_adaptive_sampling(0)
         RendererUtility.set_denoiser(None)

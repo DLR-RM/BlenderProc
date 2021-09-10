@@ -46,7 +46,7 @@ def render_segmap(output_dir: Union[str, None] = None, temp_dir: Union[str, None
         default_values = {"class": 0}
 
     with Utility.UndoAfterExecution():
-        RendererUtility.init()
+        RendererUtility._render_init()
         RendererUtility.set_samples(1)
         RendererUtility.set_adaptive_sampling(0)
         RendererUtility.set_denoiser(None)
