@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 
 import argparse
 import os
@@ -48,7 +47,7 @@ bproc.renderer.set_samples(50)
 for _ in range(5):
     
     # Sample object poses and check collisions 
-    ObjectPoseSampler.sample(objects_to_sample = bop_objs, 
+    bproc.object.sample_poses(objects_to_sample = bop_objs,
                             sample_pose_func = sample_pose_func, 
                             max_tries = 1000)
 

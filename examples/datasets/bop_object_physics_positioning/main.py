@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-
 import argparse
 import os
 import numpy as np
@@ -91,12 +88,12 @@ def sample_pose_func(obj: bproc.types.MeshObject):
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample object poses and check collisions 
-ObjectPoseSampler.sample(objects_to_sample = sampled_bop_objs + distractor_bop_objs, 
+bproc.object.sample_poses(objects_to_sample = sampled_bop_objs + distractor_bop_objs,
                         sample_pose_func = sample_pose_func, 
                         max_tries = 1000)
         
 # Physics Positioning
-PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=3,
+bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=3,
                                                 max_simulation_time=10,
                                                 check_object_interval=1,
                                                 substeps_per_frame = 20,

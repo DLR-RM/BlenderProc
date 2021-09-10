@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.object.FloorExtractor import FloorExtractor
-
 import os
 import argparse
 
@@ -25,7 +22,7 @@ room_objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_textu
 # Collect all walls
 walls = bproc.filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("wall"))
 # Extract floors from the objects
-new_floors = FloorExtractor.extract(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
+new_floors = bproc.object.extract_floor(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
 # Set category id of all new floors
 for floor in new_floors:
     floor.set_cp("category_id", label_mapping.id_from_label("floor"))
@@ -33,7 +30,7 @@ for floor in new_floors:
 room_objs += new_floors
 
 # Extract ceilings from the objects
-new_ceilings = FloorExtractor.extract(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
+new_ceilings = bproc.object.extract_floor(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
 # Set category id of all new ceiling
 for ceiling in new_ceilings:
     ceiling.set_cp("category_id", label_mapping.id_from_label("ceiling"))
@@ -64,7 +61,7 @@ for obj in room_objs:
     obj.enable_rigidbody(False, mass_factor=2000, collision_margin=0.00001, collision_shape="MESH")
 
 # Run the simulation to let the ShapeNet object fall onto the bed
-PhysicsSimulation.simulate_and_fix_final_poses(
+bproc.object.simulate_physics_and_fix_final_poses(
     solver_iters=30,
     substeps_per_frame=40,
     min_simulation_time=0.5,

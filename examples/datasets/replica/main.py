@@ -6,8 +6,6 @@ import argparse
 import os
 import numpy as np
 
-from blenderproc.python.object.FloorExtractor import FloorExtractor
-
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")
 parser.add_argument("output_dir", help="Path to where the data should be saved")
@@ -22,7 +20,7 @@ bproc.init()
 # Load the replica dataset
 objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)
 # Extract the floor from the loaded room
-floor = FloorExtractor.extract(objs, new_name_for_object="floor")[0]
+floor = bproc.object.extract_floor(objs, new_name_for_object="floor")[0]
 room = bproc.filter.one_by_attr(objs, "name", "mesh")
 
 # Init sampler for sampling locations inside the loaded replica room

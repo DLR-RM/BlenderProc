@@ -4,8 +4,6 @@ SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-
 import numpy as np
 
 parser = argparse.ArgumentParser()
@@ -42,7 +40,7 @@ def sample_pose(obj: bproc.types.MeshObject):
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
 
 # Sample the poses of all objects, while making sure that no objects collide with each other.
-ObjectPoseSampler.sample(
+bproc.object.sample_poses(
     objs,
     sample_pose_func=sample_pose,
     objects_to_check_collisions=objs

@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-
 import argparse
 import numpy as np
 
@@ -37,7 +34,7 @@ def sample_pose(obj: bproc.types.MeshObject):
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample the poses of all spheres above the ground without any collisions in-between
-ObjectPoseSampler.sample(
+bproc.object.sample_poses(
     spheres,
     sample_pose_func=sample_pose
 )
@@ -50,7 +47,7 @@ for obj in spheres:
 ground.enable_rigidbody(active=False, collision_shape="MESH")
 
 # Run the simulation and fix the poses of the spheres at the end
-PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=4, max_simulation_time=20, check_object_interval=1)
+bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=4, max_simulation_time=20, check_object_interval=1)
 
 # render the whole pipeline
 data = bproc.renderer.render()

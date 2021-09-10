@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.FloorExtractor import FloorExtractor
-
 import random
 import os
 import numpy as np
@@ -41,7 +39,7 @@ bproc.loader.load_ccmaterials(args.cc_material_path, fill_used_empty_materials=T
 # Collect all walls
 walls = bproc.filter.by_cp(objs, "category_id", label_mapping.id_from_label("wall"))
 # Extract floors from the objects
-new_floors = FloorExtractor.extract(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
+new_floors = bproc.object.extract_floor(walls, new_name_for_object="floor", should_skip_if_object_is_already_there=True)
 # Set category id of all new floors
 for floor in new_floors:
     floor.set_cp("category_id", label_mapping.id_from_label("floor"))
@@ -49,7 +47,7 @@ for floor in new_floors:
 objs += new_floors
 
 # Extract ceilings from the objects
-new_ceilings = FloorExtractor.extract(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
+new_ceilings = bproc.object.extract_floor(walls, new_name_for_object="ceiling", up_vector_upwards=False, should_skip_if_object_is_already_there=True)
 # Set category id of all new ceiling
 for ceiling in new_ceilings:
     ceiling.set_cp("category_id", label_mapping.id_from_label("ceiling"))

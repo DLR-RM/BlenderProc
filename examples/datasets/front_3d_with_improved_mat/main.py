@@ -7,6 +7,7 @@ import os
 import numpy as np
 import random
 
+
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
 parser.add_argument("future_folder", help="Path to the 3D Future Model folder.")

@@ -2,9 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-
 import argparse
 import numpy as np
 
@@ -31,7 +28,7 @@ def sample_pose(obj: bproc.types.MeshObject):
     obj.set_rotation_euler(bproc.sampler.uniformSO3())
 
 # Sample the poses of all ShapeNet objects, while making sure that no objects collide with each other.
-ObjectPoseSampler.sample(
+bproc.object.sample_poses(
     shapenet_objs,
     sample_pose_func=sample_pose
 )
@@ -60,7 +57,7 @@ for shapenet_obj in shapenet_objs:
     shapenet_obj.build_convex_decomposition_collision_shape()
 
 # Run the physics simulation for at most 20 seconds
-PhysicsSimulation.simulate_and_fix_final_poses(
+bproc.object.simulate_physics_and_fix_final_poses(
     min_simulation_time=4,
     max_simulation_time=20,
     check_object_interval=1
