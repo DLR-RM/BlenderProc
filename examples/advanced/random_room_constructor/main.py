@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.lighting.SurfaceLighting import light_surface
 
 import argparse
 import numpy as np
@@ -27,7 +26,7 @@ objects = bproc.constructor.construct_random_room(used_floor_area=25, interior_o
                                                   materials=materials, amount_of_extrusions=5)
 
 # Bring light into the room
-light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
+bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
 
 # Init bvh tree containing all mesh objects
 bvh_tree = MeshObject.create_bvh_tree_multi_objects(objects)
