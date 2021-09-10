@@ -10,6 +10,7 @@ from mathutils import Vector, Matrix
 from blenderproc.python.utility.Utility import Utility, resolve_path
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MaterialUtility import Material
+from blenderproc.python.material import MaterialLoaderUtility
 
 
 import bmesh
@@ -97,7 +98,7 @@ class MeshObject(Entity):
 
         :return: A list of materials.
         """
-        return Material.convert_to_materials(self.blender_obj.data.materials)
+        return MaterialLoaderUtility.convert_to_materials(self.blender_obj.data.materials)
 
     def has_materials(self):
         return len(self.blender_obj.data.materials) > 0
@@ -122,7 +123,7 @@ class MeshObject(Entity):
 
         :param name: The name of the new material.
         """
-        new_mat = Material.create(name)
+        new_mat = MaterialLoaderUtility.create(name)
         self.add_material(new_mat)
         return new_mat
 

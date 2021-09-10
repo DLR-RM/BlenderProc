@@ -14,8 +14,68 @@ from mathutils import Matrix
 
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.Utility import Utility, resolve_path
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import WriterUtility
+
+def write_bop(output_dir: str, depths: List[np.ndarray] = [], colors: List[np.ndarray] = [], color_file_format: str = "PNG",
+          dataset: str = "", append_to_existing_output: bool = True, depth_scale: float = 1.0, jpg_quality: int = 95,
+          save_world2cam: bool = True, ignore_dist_thres: float = 100., m2mm: bool = True, frames_per_chunk: int = 1000):
+    """Write the BOP data
+
+    :param output_dir: Path to the output directory.
+    :param depths: List of depth images in m to save
+    :param colors: List of color images to save
+    :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
+    :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
+    :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.
+    :param append_to_existing_output: If true, the new frames will be appended to the existing ones.
+    :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy
+        and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.
+    :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json
+    :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.
+    :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
+        is needed if BopLoader option mm2m is used.
+    :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)
+    """
+
+    # Output paths.
+    dataset_dir = os.path.join(output_dir, 'bop_data', dataset)
+    chunks_dir = os.path.join(dataset_dir, 'train_pbr')
+    camera_path = os.path.join(dataset_dir, 'camera.json')
+
+    # Create the output directory structure.
+    if not os.path.exists(dataset_dir):
+        os.makedirs(dataset_dir)
+        os.makedirs(chunks_dir)
+    elif not append_to_existing_output:
+        raise Exception("The output folder already exists: {}.".format(dataset_dir))
+
+    all_mesh_objects = get_all_blender_mesh_objects()
+
+    # Select objects from the specified dataset.
+    if dataset:
+        dataset_objects = []
+        for obj in all_mesh_objects:
+            if "bop_dataset_name" in obj:
+                if obj["bop_dataset_name"] == dataset:
+                    dataset_objects.append(obj)
+    else:
+        dataset_objects = all_mesh_objects
+
+    # Check if there is any object from the specified dataset.
+    if not dataset_objects:
+        raise Exception("The scene does not contain any object from the "
+                        "specified dataset: {}. Either remove the dataset parameter "
+                        "or assign custom property 'bop_dataset_name' to selected objects".format(dataset))
+
+    # Save the data.
+    BopWriterUtility._write_camera(camera_path, depth_scale=depth_scale)
+    BopWriterUtility._write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors,
+                                   color_file_format=color_file_format, frames_per_chunk=frames_per_chunk,
+                                   m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam,
+                                   depth_scale=depth_scale, jpg_quality=jpg_quality)
+
+
 
 class BopWriterUtility:
     """ Saves the synthesized dataset in the BOP format. The dataset is split
@@ -101,65 +161,6 @@ class BopWriterUtility:
             w_depth.write(f, np.reshape(im_uint16, (-1, im.shape[1])))
 
 
-    @staticmethod
-    def write(output_dir:str, depths:List[np.ndarray] = [], colors:List[np.ndarray] = [], color_file_format:str="PNG", 
-              dataset:str="", append_to_existing_output:bool=True, depth_scale:float=1.0, jpg_quality:int=95,
-              save_world2cam:bool=True, ignore_dist_thres:float=100., m2mm:bool=True, frames_per_chunk:int=1000):
-        """Write the BOP data
-
-        :param output_dir: Path to the output directory.
-        :param depths: List of depth images in m to save
-        :param colors: List of color images to save
-        :param color_file_format: File type to save color images. Available: "PNG", "JPEG"
-        :param jpg_quality: If color_file_format is "JPEG", save with the given quality.
-        :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.
-        :param append_to_existing_output: If true, the new frames will be appended to the existing ones.
-        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy 
-            and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.
-        :param save_world2cam: If true, camera to world transformations "cam_R_w2c", "cam_t_w2c" are saved in scene_camera.json
-        :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.
-        :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This
-            is needed if BopLoader option mm2m is used.
-        :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP) 
-        """
-        
-        # Output paths.
-        dataset_dir = os.path.join(output_dir, 'bop_data', dataset)
-        chunks_dir = os.path.join(dataset_dir, 'train_pbr')
-        camera_path = os.path.join(dataset_dir, 'camera.json')
-
-        # Create the output directory structure.
-        if not os.path.exists(dataset_dir):
-            os.makedirs(dataset_dir)
-            os.makedirs(chunks_dir)
-        elif not append_to_existing_output:
-            raise Exception("The output folder already exists: {}.".format(dataset_dir))
-        
-        all_mesh_objects = get_all_blender_mesh_objects()
-	
-        # Select objects from the specified dataset.
-        if dataset:
-            dataset_objects = []
-            for obj in all_mesh_objects:
-                if "bop_dataset_name" in obj:
-                    if obj["bop_dataset_name"] == dataset:
-                        dataset_objects.append(obj)
-        else:
-            dataset_objects = all_mesh_objects
-
-        # Check if there is any object from the specified dataset.
-        if not dataset_objects:
-            raise Exception("The scene does not contain any object from the "
-                            "specified dataset: {}. Either remove the dataset parameter "
-                            "or assign custom property 'bop_dataset_name' to selected objects".format(dataset))
-        
-        # Save the data.
-        BopWriterUtility._write_camera(camera_path, depth_scale=depth_scale)
-        BopWriterUtility._write_frames(chunks_dir, dataset_objects=dataset_objects, depths=depths, colors=colors, 
-                                       color_file_format=color_file_format, frames_per_chunk=frames_per_chunk, 
-                                       m2mm=m2mm, ignore_dist_thres=ignore_dist_thres, save_world2cam=save_world2cam, 
-                                       depth_scale=depth_scale, jpg_quality=jpg_quality)
-    
     @staticmethod
     def _write_camera(camera_path: str, depth_scale:float=1.0):
         """ Writes camera.json into dataset_dir.
@@ -361,7 +362,7 @@ class BopWriterUtility:
                 if dist_output is None:
                     raise Exception("Distance image has not been rendered.")
                 distance = WriterUtility.load_output_file(resolve_path(dist_output['path'] % frame_id), remove=False)
-                depth = PostProcessingUtility.dist2depth(distance)
+                depth = dist2depth(distance)
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).

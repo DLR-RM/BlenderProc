@@ -2,7 +2,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["scipy"])
 
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import oil_paint_filter
 
 class OilPaintFilter(Module):
     """
@@ -40,7 +40,7 @@ class OilPaintFilter(Module):
         edges_only = self.config.get_bool("edges_only", True)
         rgb = self.config.get_bool("rgb", False)
 
-        filtered_img = PostProcessingUtility.oil_paint_filter(image, filter_size, edges_only, rgb)
+        filtered_img = oil_paint_filter(image, filter_size, edges_only, rgb)
 
         return filtered_img, key, version
 

@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["h5py"])
 
@@ -15,8 +15,77 @@ import h5py
 
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.utility.Utility import Utility, NumpyEncoder, resolve_path
-from blenderproc.python.camera.CameraUtility import CameraUtility
+from blenderproc.python.utility.Utility import resolve_path
+from blenderproc.python.utility.Utility import Utility, NumpyEncoder
+import blenderproc.python.camera.CameraUtility as CameraUtility
+
+def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
+                 append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
+    """
+    Saves the information provided inside of the output_data_dict into a .hdf5 container
+
+    :param output_dir_path: The folder path in which the .hdf5 containers will be generated
+    :param output_data_dict: The container, which keeps the different images, which should be saved to disc.
+                             Each key will be saved as its own key in the .hdf5 container.
+    :param append_to_existing_output: If this is True, the output_dir_path folder will be scanned for pre-existing
+                                      .hdf5 containers and the numbering of the newly added containers, will start
+                                      right where the last run left off.
+    :param stereo_separate_keys: If this is True and the rendering was done in stereo mode, than the stereo images
+                                 won't be saved in one tensor [2, img_x, img_y, channels], where the img[0] is the
+                                 left image and img[1] the right. They will be saved in separate keys: for example
+                                 for colors in colors_0 and colors_1.
+    """
+
+    if not os.path.exists(output_dir_path):
+        os.makedirs(output_dir_path)
+
+    amount_of_frames = 0
+    for data_block in output_data_dict.values():
+        if isinstance(data_block, list):
+            amount_of_frames = max([amount_of_frames, len(data_block)])
+
+    # if append to existing output is turned on the existing folder is searched for the highest occurring
+    # index, which is then used as starting point for this run
+    if append_to_existing_output:
+        frame_offset = 0
+        # Look for hdf5 file with highest index
+        for path in os.listdir(output_dir_path):
+            if path.endswith(".hdf5"):
+                index = path[:-len(".hdf5")]
+                if index.isdigit():
+                    frame_offset = max(frame_offset, int(index) + 1)
+    else:
+        frame_offset = 0
+
+    if amount_of_frames != bpy.context.scene.frame_end - bpy.context.scene.frame_start:
+        raise Exception("The amount of images stored in the output_data_dict does not correspond with the amount"
+                        "of images specified by frame_start to frame_end.")
+
+    for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
+        # for each frame a new .hdf5 file is generated
+        hdf5_path = os.path.join(output_dir_path, str(frame + frame_offset) + ".hdf5")
+        with h5py.File(hdf5_path, "w") as file:
+            # Go through all the output types
+            print(f"Merging data for frame {frame} into {hdf5_path}")
+
+            for key, data_block in output_data_dict.items():
+                if frame < len(data_block):
+                    # get the current data block for the current frame
+                    used_data_block = data_block[frame]
+                    if stereo_separate_keys and (bpy.context.scene.render.use_multiview or
+                                                 used_data_block.shape[0] == 2):
+                        # stereo mode was activated
+                        WriterUtility._write_to_hdf_file(file, key + "_0", data_block[frame][0])
+                        WriterUtility._write_to_hdf_file(file, key + "_1", data_block[frame][1])
+                    else:
+                        WriterUtility._write_to_hdf_file(file, key, data_block[frame])
+                else:
+                    raise Exception(f"There are more frames {frame} then there are blocks of information "
+                                    f" {len(data_block)} in the given list for key {key}.")
+            blender_proc_version = Utility.get_current_version()
+            if blender_proc_version:
+                WriterUtility._write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
+>>>>>>> develop
 
 
 class WriterUtility:
@@ -53,7 +122,7 @@ class WriterUtility:
 
                         # For outputs like distance or depth, we automatically trim the last channel here
                         if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
-                            output_file = PostProcessingUtility.trim_redundant_channels(output_file)
+                            output_file = trim_redundant_channels(output_file)
 
                         output_data_dict.setdefault(reg_out['key'], []).append(output_file)
                 else:
@@ -236,74 +305,6 @@ class WriterUtility:
             return shapenet_obj.get("used_source_id", "")
         else:
             return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, local_frame_change, world_frame_change)
-
-    @staticmethod
-    def save_to_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
-                     append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
-        """
-        Saves the information provided inside of the output_data_dict into a .hdf5 container
-
-        :param output_dir_path: The folder path in which the .hdf5 containers will be generated
-        :param output_data_dict: The container, which keeps the different images, which should be saved to disc.
-                                 Each key will be saved as its own key in the .hdf5 container.
-        :param append_to_existing_output: If this is True, the output_dir_path folder will be scanned for pre-existing
-                                          .hdf5 containers and the numbering of the newly added containers, will start
-                                          right where the last run left off.
-        :param stereo_separate_keys: If this is True and the rendering was done in stereo mode, than the stereo images
-                                     won't be saved in one tensor [2, img_x, img_y, channels], where the img[0] is the
-                                     left image and img[1] the right. They will be saved in separate keys: for example
-                                     for colors in colors_0 and colors_1.
-        """
-
-        if not os.path.exists(output_dir_path):
-            os.makedirs(output_dir_path)
-
-        amount_of_frames = 0
-        for data_block in output_data_dict.values():
-            if isinstance(data_block, list):
-                amount_of_frames = max([amount_of_frames, len(data_block)])
-
-        # if append to existing output is turned on the existing folder is searched for the highest occurring
-        # index, which is then used as starting point for this run
-        if append_to_existing_output:
-            frame_offset = 0
-            # Look for hdf5 file with highest index
-            for path in os.listdir(output_dir_path):
-                if path.endswith(".hdf5"):
-                    index = path[:-len(".hdf5")]
-                    if index.isdigit():
-                        frame_offset = max(frame_offset, int(index) + 1)
-        else:
-            frame_offset = 0
-
-        if amount_of_frames != bpy.context.scene.frame_end - bpy.context.scene.frame_start:
-            raise Exception("The amount of images stored in the output_data_dict does not correspond with the amount"
-                            "of images specified by frame_start to frame_end.")
-
-        for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
-            # for each frame a new .hdf5 file is generated
-            hdf5_path = os.path.join(output_dir_path, str(frame + frame_offset) + ".hdf5")
-            with h5py.File(hdf5_path, "w") as file:
-                # Go through all the output types
-                print(f"Merging data for frame {frame} into {hdf5_path}")
-
-                for key, data_block in output_data_dict.items():
-                    if frame < len(data_block):
-                        # get the current data block for the current frame
-                        used_data_block = data_block[frame]
-                        if stereo_separate_keys and (bpy.context.scene.render.use_multiview or
-                                                     used_data_block.shape[0] == 2):
-                            # stereo mode was activated
-                            WriterUtility._write_to_hdf_file(file, key + "_0", data_block[frame][0])
-                            WriterUtility._write_to_hdf_file(file, key + "_1", data_block[frame][1])
-                        else:
-                            WriterUtility._write_to_hdf_file(file, key, data_block[frame])
-                    else:
-                        raise Exception(f"There are more frames {frame} then there are blocks of information "
-                                        f" {len(data_block)} in the given list for key {key}.")
-                blender_proc_version = Utility.get_current_version()
-                if blender_proc_version:
-                    WriterUtility._write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
 
     @staticmethod
     def _write_to_hdf_file(file, key: str, data: np.ndarray, compression: str = "gzip"):

@@ -3,13 +3,8 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
-from blenderproc.python.lighting.SuncgLighting import SuncgLighting
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
@@ -27,7 +22,7 @@ label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path
 objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
-CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
+bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
@@ -35,21 +30,21 @@ with open(args.camera, "r") as f:
         line = [float(x) for x in line.split()]
         position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
         rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
-        matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
-        CameraUtility.add_camera_pose(matrix_world)
+        matrix_world = MathUtility.build_transformation_mat(position, bproc.camera.rotation_from_forward_vec(rotation))
+        bproc.camera.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
-MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
+bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
-data.update(SegMapRendererUtility.render(map_by="class", use_alpha_channel=True))
+data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

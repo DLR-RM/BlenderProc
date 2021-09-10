@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import remove_segmap_noise
 
 
 class NoiseRemoval(Module):
@@ -18,4 +18,4 @@ class NoiseRemoval(Module):
         :param version: Version of the original data.
         :return: The cleaned image data, key to use when writing and version numer.
         """
-        return PostProcessingUtility.remove_segmap_noise(image), key, version
+        return remove_segmap_noise(image), key, version
