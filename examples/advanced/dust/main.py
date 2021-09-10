@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
-from blenderproc.python.materials.Dust import Dust
 from blenderproc.python.sampler.PartSphere import PartSphere
 
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -46,7 +45,7 @@ for i in range(5):
 
 # Add dust to all materials of the loaded object
 for material in obj.get_materials():
-    Dust.add_to_material(material, strength=0.8, texture_scale=0.05)
+    bproc.material.add_dust(material, strength=0.8, texture_scale=0.05)
 
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()
