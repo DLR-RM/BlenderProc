@@ -7,8 +7,6 @@ import argparse
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/camera_positions", help="Path to the camera file")
@@ -47,8 +45,8 @@ data = bproc.renderer.render()
 data.update(bproc.renderer.render_segmap(map_by=["class", "instance", "name"]))
 
 # Convert distance to depth
-data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
+data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
 del data["distance"]
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

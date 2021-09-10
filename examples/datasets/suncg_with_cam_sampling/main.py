@@ -60,4 +60,4 @@ data = bproc.renderer.render()
 data.update(bproc.renderer.render_segmap(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

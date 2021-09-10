@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.sampler.Sphere import Sphere
 
 import argparse
@@ -46,7 +45,7 @@ bproc.renderer.set_samples(350)
 data = bproc.renderer.render()
 
 # Convert distance to depth data
-data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
+data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
 del data["distance"]
 
 # Collect the metadata of the shapenet object
@@ -68,4 +67,4 @@ for frame in range(Utility.num_frames()):
 data["cam_states"] = cam_states
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

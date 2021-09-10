@@ -49,4 +49,4 @@ bproc.renderer.set_samples(350)
 data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

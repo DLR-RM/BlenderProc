@@ -4,7 +4,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 
 import argparse
 
@@ -52,7 +51,7 @@ data = bproc.renderer.render()
 seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
 
 # Write data to coco file
-CocoWriterUtility.write(args.output_dir,
+bproc.writer.write_coco_annotations(args.output_dir,
                         instance_segmaps=seg_data["instance_segmaps"],
                         instance_attribute_maps=seg_data["instance_attribute_maps"],
                         colors=data["colors"],

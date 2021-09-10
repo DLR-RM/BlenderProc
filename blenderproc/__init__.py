@@ -7,6 +7,8 @@ if sys.executable.endswith("python3.9"):
     from . import loader
     from . import math
     from .python.utility.Initializer import init
+    from . import postprocessing
+    from . import writer
     from . import material
     from . import lighting
     from . import camera
