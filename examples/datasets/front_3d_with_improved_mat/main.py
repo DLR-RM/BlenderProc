@@ -15,8 +15,6 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
@@ -34,7 +32,7 @@ mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_fr
 mapping = LabelIdMapping.from_csv(mapping_file)
 
 # set the light bounces
-RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,
+bproc.renderer.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,
                                   transmission_bounces=200, transparent_max_bounces=200)
 
 # load the front 3D objects
@@ -112,13 +110,13 @@ while tries < 10000 and poses < 10:
     tries += 1
 
 # Also render normals
-RendererUtility.enable_normals_output()
+bproc.renderer.enable_normals_output()
 # set the sample amount to 350
-RendererUtility.set_samples(350)
+bproc.renderer.set_samples(350)
 
 # render the whole pipeline
-data = RendererUtility.render()
-data.update(SegMapRendererUtility.render(map_by="class"))
+data = bproc.renderer.render()
+data.update(bproc.renderer.render_segmap(map_by="class"))
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

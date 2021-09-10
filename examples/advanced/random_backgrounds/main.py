@@ -3,12 +3,10 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import numpy as np
 import argparse
@@ -75,13 +73,13 @@ while tries < 10000 and poses < 5:
     tries += 1
 
 # Enable transparency so the background becomes transparent
-RendererUtility.set_output_format("PNG", enable_transparency=True)
+bproc.renderer.set_output_format("PNG", enable_transparency=True)
 
 # Render RGB images
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Render segmentation images
-seg_data = SegMapRendererUtility.render(map_by=["instance", "class", "name"], default_values={"class": 0, "name": "none"})
+seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"], default_values={"class": 0, "name": "none"})
 
 # Write data to coco file
 CocoWriterUtility.write(args.output_dir,

@@ -10,7 +10,6 @@ from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUti
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
@@ -51,12 +50,12 @@ with open(args.camera, "r") as f:
 SuncgLighting.light()
 
 # activate normal and distance rendering
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_distance_output()
 MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
-RendererUtility.toggle_stereo(True)
+bproc.renderer.toggle_stereo(True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Apply stereo matching to each pair of images
 data["stereo-depth"], data["disparity"] = StereoGlobalMatching.match(data["colors"], disparity_filter=False)

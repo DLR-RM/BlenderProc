@@ -11,7 +11,6 @@ from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 import numpy as np
 
 parser = argparse.ArgumentParser()
@@ -55,12 +54,12 @@ ObjectPoseSampler.sample(
 )
 
 # activate normal rendering
-RendererUtility.enable_normals_output()
+bproc.renderer.enable_normals_output()
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(50)
+bproc.renderer.set_samples(50)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

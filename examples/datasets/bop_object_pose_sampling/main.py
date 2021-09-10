@@ -7,8 +7,6 @@ from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.Shell import Shell
@@ -52,8 +50,8 @@ def sample_pose_func(obj: MeshObject):
     obj.set_rotation_euler(UniformSO3.sample())
     
 # activate distance rendering and set amount of samples for color rendering
-RendererUtility.enable_distance_output()
-RendererUtility.set_samples(50)
+bproc.renderer.enable_distance_output()
+bproc.renderer.set_samples(50)
 
 # Render five different scenes
 for _ in range(5):
@@ -91,8 +89,8 @@ for _ in range(5):
             poses += 1
 
     # render the cameras of the current scene
-    data = RendererUtility.render()
-    seg_data = SegMapRendererUtility.render(map_by = ["instance", "class", "cp_bop_dataset_name"], 
+    data = bproc.renderer.render()
+    seg_data = bproc.renderer.render_segmap(map_by = ["instance", "class", "cp_bop_dataset_name"], 
                                             default_values = {"class": 0, "cp_bop_dataset_name": None})
     
     # Write data to bop format

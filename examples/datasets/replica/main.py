@@ -14,7 +14,6 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("replica_data_folder", help="Path to the replica dataset directory.")
@@ -62,10 +61,10 @@ for mat in room.get_materials():
     mat.map_vertex_color("Col", active_shading=False)
 
 # Activate normal rendering
-RendererUtility.enable_normals_output()
+bproc.renderer.enable_normals_output()
 
 # Render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)
