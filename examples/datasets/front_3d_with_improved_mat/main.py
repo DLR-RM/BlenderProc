@@ -7,11 +7,6 @@ import os
 import numpy as np
 import random
 
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import Utility
-
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
 parser.add_argument("future_folder", help="Path to the 3D Future Model folder.")
@@ -41,7 +36,7 @@ loaded_objects = bproc.loader.load_front3d(
 
 cc_materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
 
-floors = Filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
+floors = bproc.filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
 for floor in floors:
     # For each material of the object
     for i in range(len(floor.get_materials())):
@@ -51,8 +46,8 @@ for floor in floors:
             floor.set_material(i, random.choice(cc_materials))
 
 
-baseboards_and_doors = Filter.by_attr(loaded_objects, "name", "Baseboard.*|Door.*", regex=True)
-wood_floor_materials = Filter.by_cp(cc_materials, "asset_name", "WoodFloor.*", regex=True)
+baseboards_and_doors = bproc.filter.by_attr(loaded_objects, "name", "Baseboard.*|Door.*", regex=True)
+wood_floor_materials = bproc.filter.by_cp(cc_materials, "asset_name", "WoodFloor.*", regex=True)
 for obj in baseboards_and_doors:
     # For each material of the object
     for i in range(len(obj.get_materials())):
@@ -60,8 +55,8 @@ for obj in baseboards_and_doors:
         obj.set_material(i, random.choice(wood_floor_materials))
 
 
-walls = Filter.by_attr(loaded_objects, "name", "Wall.*", regex=True)
-marble_materials = Filter.by_cp(cc_materials, "asset_name", "Marble.*", regex=True)
+walls = bproc.filter.by_attr(loaded_objects, "name", "Wall.*", regex=True)
+marble_materials = bproc.filter.by_cp(cc_materials, "asset_name", "Marble.*", regex=True)
 for wall in walls:
     # For each material of the object
     for i in range(len(wall.get_materials())):

@@ -4,8 +4,6 @@ SetupUtility.setup([])
 
 from pathlib import Path
 
-from blenderproc.python.filter.Filter import Filter
-
 import random
 import argparse
 import bpy
@@ -39,7 +37,7 @@ bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([1.9488, -6.520
 materials = bproc.material.collect_all()
 
 # Find the material of the ground object
-ground_material = Filter.one_by_attr(materials, "name", "Material.001")
+ground_material = bproc.filter.one_by_attr(materials, "name", "Material.001")
 # Set its displacement based on its base color texture
 ground_material.set_displacement_from_principled_shader_value("Base Color", multiply_factor=1.5)
 

@@ -6,9 +6,11 @@ import mathutils
 
 from blenderproc.python.modules.main.Provider import Provider
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.types.EntityUtility import Entity as EntityUtility, convert_to_entities
+from blenderproc.python.types.EntityUtility import convert_to_entities
+import blenderproc.python.filter.Filter as Filter
 import numpy as np
+
+
 class Entity(Provider):
     """
     Returns a list of objects that comply with defined conditions.
