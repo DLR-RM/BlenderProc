@@ -7,7 +7,6 @@ import numpy as np
 
 from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 
@@ -46,7 +45,7 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # Set intrinsics via K matrix
-CameraUtility.set_intrinsics_from_K_matrix(
+bproc.camera.set_intrinsics_from_K_matrix(
     [[537.4799, 0.0, 318.8965],
      [0.0, 536.1447, 238.3781],
      [0.0, 0.0, 1.0]], 640, 480
@@ -60,7 +59,7 @@ cam2world = np.array([
 ])
 # Change coordinate frame of transformation matrix from OpenCV to Blender coordinates
 cam2world = MathUtility.change_source_coordinate_frame_of_transformation_matrix(cam2world, ["X", "-Y", "-Z"])
-CameraUtility.add_camera_pose(cam2world)
+bproc.camera.add_camera_pose(cam2world)
 
 # activate normal and distance rendering
 RendererUtility.enable_distance_output()
