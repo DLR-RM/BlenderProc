@@ -3,8 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
-from blenderproc.python.writer.CocoWriterUtility import CocoWriterUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -93,7 +91,7 @@ for _ in range(5):
                                             default_values = {"class": 0, "cp_bop_dataset_name": None})
     
     # Write data to bop format
-    BopWriterUtility.write(args.output_dir, 
+    bproc.writer.write_bop(args.output_dir,
                            dataset = args.bop_dataset_name,
                            depths = bproc.postprocessing.dist2depth(data["distance"]),
                            depth_scale = 1.0, 
@@ -102,7 +100,7 @@ for _ in range(5):
                            append_to_existing_output = True)
 
     # Write data to coco format
-    CocoWriterUtility.write(args.output_dir,
+    bproc.writer.write_coco_annotations(args.output_dir,
                             supercategory = args.bop_dataset_name,
                             instance_segmaps = seg_data["instance_segmaps"],
                             instance_attribute_maps = seg_data["instance_attribute_maps"],

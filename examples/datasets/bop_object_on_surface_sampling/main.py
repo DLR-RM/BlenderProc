@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -132,7 +131,7 @@ bproc.renderer.set_samples(50)
 data = bproc.renderer.render()
 
 # Write data in bop format
-BopWriterUtility.write(args.output_dir, 
+bproc.writer.write_bop(args.output_dir,
                        dataset = args.bop_dataset_name,
                        depths = bproc.postprocessing.dist2depth(data["distance"]),
                        colors = data["colors"], 

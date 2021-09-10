@@ -5,7 +5,6 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -70,4 +69,4 @@ data = bproc.renderer.render()
 depth = bproc.postprocessing.dist2depth(data["distance"])
 
 # Write object poses, color and depth in bop format
-BopWriterUtility.write(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)
+bproc.writer.write_bop(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)
