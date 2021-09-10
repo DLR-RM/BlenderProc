@@ -36,7 +36,7 @@ def num_frames() -> int:
 
     :return: The number of frames.
     """
-    return bpy.context.scene.frame_end
+    return bpy.context.scene.frame_end - bpy.context.scene.frame_start
 
 
 class Utility:
