@@ -8,7 +8,6 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 from blenderproc.python.object.ObjectReplacer import ObjectReplacer
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.filter.Filter import Filter
 
 import numpy as np
 from mathutils import Euler
@@ -43,9 +42,9 @@ def relative_pose_sampler(obj):
 
 replace_ratio = 1.0
 ObjectReplacer.replace_multiple(
-    objects_to_be_replaced=Filter.by_cp(objs, "coarse_grained_class", "chair"),
+    objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
-    ignore_collision_with=Filter.by_cp(objs, "type", "Floor"),
+    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
     replace_ratio=replace_ratio,
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler

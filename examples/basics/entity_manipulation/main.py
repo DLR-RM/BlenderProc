@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.types.LightUtility import Light
 
 
@@ -33,7 +32,7 @@ bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -13.741, 4.
 bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Find object with name Suzanne
-suzanne = Filter.one_by_attr(objs, "name", "Suzanne")
+suzanne = bproc.filter.one_by_attr(objs, "name", "Suzanne")
 # Set its location and rotation
 suzanne.set_location(np.random.uniform([0, 1, 2], [1, 2, 3]))
 suzanne.set_rotation_euler([1, 1, 0])
