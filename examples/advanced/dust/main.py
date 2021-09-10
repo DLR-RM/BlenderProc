@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
-
 from blenderproc.python.types.LightUtility import Light
 
 
@@ -21,7 +19,8 @@ bproc.init()
 # load the objects into the scene
 obj = bproc.loader.load_blend(args.model)[0]
 
-HavenEnvironmentLoader.set_random_world_background_hdr_img(args.hdri_path)
+haven_hdri_path = bproc.loader.get_random_world_background_hdr_img_path_from_haven(args.hdri_path)
+bproc.world.set_world_background_hdr_img(haven_hdri_path)
 
 # define a light and set its location and energy level
 light = Light()

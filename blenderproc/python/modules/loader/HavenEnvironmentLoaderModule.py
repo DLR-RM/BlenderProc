@@ -1,7 +1,7 @@
 import os
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
+from blenderproc.python.loader.HavenEnvironmentLoader import set_world_background_hdr_img, get_random_world_background_hdr_img_path_from_haven
 
 
 class HavenEnvironmentLoaderModule(LoaderInterface):
@@ -27,6 +27,6 @@ class HavenEnvironmentLoaderModule(LoaderInterface):
         LoaderInterface.__init__(self, config)
 
     def run(self):
-        HavenEnvironmentLoader.set_random_world_background_hdr_img(
-            self.config.get_string("data_path", os.path.join("resources", "haven"))
-        )
+        haven_hdri_path = get_random_world_background_hdr_img_path_from_haven(
+            self.config.get_string("data_path", os.path.join("resources", "haven")))
+        set_world_background_hdr_img(haven_hdri_path)
