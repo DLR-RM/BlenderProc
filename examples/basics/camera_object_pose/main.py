@@ -9,8 +9,6 @@ from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('object', nargs='?', default="examples/basics/camera_object_pose/obj_000004.ply", help="Path to the model file")
@@ -68,7 +66,7 @@ bproc.renderer.set_samples(100)
 data = bproc.renderer.render()
 
 # Map distance to depth
-depth = PostProcessingUtility.dist2depth(data["distance"])
+depth = bproc.postprocessing.dist2depth(data["distance"])
 
 # Write object poses, color and depth in bop format
 bproc.writer.write_bop(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)

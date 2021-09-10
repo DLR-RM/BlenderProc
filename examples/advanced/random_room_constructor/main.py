@@ -7,12 +7,8 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 from blenderproc.python.lighting.SurfaceLighting import light_surface
-from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
-from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 import numpy as np
@@ -67,7 +63,7 @@ bproc.renderer.set_light_bounces(max_bounces=200, diffuse_bounces=200, glossy_bo
 data = bproc.renderer.render()
 
 # post process the data and remove the redundant channels in the distance image
-data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
+data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
 del data["distance"]
 
 # write the data to a .hdf5 container

@@ -5,6 +5,7 @@ if sys.executable.endswith("python3.9"):
     from .python.utility.SetupUtility import SetupUtility
     SetupUtility.setup([])
     from . import loader
+    from . import postprocessing
     from . import writer
     from . import material
     from . import lighting

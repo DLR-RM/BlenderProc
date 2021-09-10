@@ -1,7 +1,7 @@
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
 
-from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
+from blenderproc.python.postprocessing.StereoGlobalMatching import stereo_global_matching
 
 import os
 
@@ -84,7 +84,7 @@ class StereoGlobalMatchingWriterModule(RendererInterface):
             imgR = load_image(path_r % frame)
             color_images.append(np.stack((imgL, imgR), 0))
 
-        depth, disparity = StereoGlobalMatching.match(
+        depth, disparity = stereo_global_matching(
             color_images=color_images,
             depth_max=depth_max,
             window_size=self.config.get_int("window_size", 7),

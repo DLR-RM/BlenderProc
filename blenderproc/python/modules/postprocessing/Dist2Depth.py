@@ -1,5 +1,5 @@
 from blenderproc.python.modules.main.Module import Module
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 
 
 class Dist2Depth(Module):
@@ -28,7 +28,7 @@ class Dist2Depth(Module):
         :param version: Version of the produced distance data.
         :return: The depth data, an appropriate key and version.
         """
-        depth = PostProcessingUtility.dist2depth(dist)
+        depth = dist2depth(dist)
         output_key = self.config.get_string("depth_output_key", "depth")
         version = "1.0.0"
         return depth, output_key, version
