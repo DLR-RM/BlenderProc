@@ -40,7 +40,7 @@ bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 4
 bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Find all materials
-materials = bproc.materials.collect_all()()
+materials = bproc.materials.collect_all()
 
 # Find the material of the ground object
 ground_material = Filter.one_by_attr(materials, "name", "Material.001")
