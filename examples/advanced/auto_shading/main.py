@@ -7,7 +7,6 @@ from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 
@@ -56,7 +55,7 @@ with open(args.camera, "r") as f:
         bproc.camera.add_camera_pose(matrix_world)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

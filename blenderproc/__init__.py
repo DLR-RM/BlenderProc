@@ -7,3 +7,4 @@ if sys.executable.endswith("python3.9"):
     from . import loader
     from . import lighting
     from . import camera
+    from . import renderer

@@ -7,7 +7,6 @@ from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 
@@ -40,10 +39,10 @@ with open(args.camera, "r") as f:
         bproc.camera.add_camera_pose(matrix_world)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Render the optical flow (forward and backward) for all frames
-data.update(FlowRendererUtility.render(get_backward_flow=True, get_forward_flow=True, blender_image_coordinate_style=False))
+data.update(bproc.renderer.render_optical_flow(get_backward_flow=True, get_forward_flow=True, blender_image_coordinate_style=False))
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)

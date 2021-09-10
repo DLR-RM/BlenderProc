@@ -6,10 +6,8 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
-from blenderproc.python.renderer.SegMapRendererUtility import SegMapRendererUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
@@ -42,14 +40,14 @@ with open(args.camera, "r") as f:
 bproc.lighting.light_suncg_scene()
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
-data.update(SegMapRendererUtility.render(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
+data.update(bproc.renderer.render_segmap(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
 WriterUtility.save_to_hdf5(args.output_dir, data)
