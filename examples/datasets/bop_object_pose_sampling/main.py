@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -92,7 +91,7 @@ for _ in range(5):
     # Write data to bop format
     bproc.writer.write_bop(args.output_dir,
                            dataset = args.bop_dataset_name,
-                           depths = PostProcessingUtility.dist2depth(data["distance"]),
+                           depths = bproc.postprocessing.dist2depth(data["distance"]),
                            depth_scale = 1.0, 
                            colors = data["colors"], 
                            color_file_format = "JPEG", 

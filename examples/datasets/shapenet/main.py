@@ -7,7 +7,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 
 import argparse
 
@@ -47,7 +46,7 @@ bproc.renderer.set_samples(350)
 data = bproc.renderer.render()
 
 # Convert distance to depth data
-data["depth"] = PostProcessingUtility.dist2depth(data["distance"])
+data["depth"] = bproc.postprocessing.dist2depth(data["distance"])
 del data["distance"]
 
 # Collect the metadata of the shapenet object

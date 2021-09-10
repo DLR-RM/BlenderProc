@@ -14,7 +14,7 @@ from mathutils import Matrix
 
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.postprocessing.PostProcessingUtility import dist2depth
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 def write_bop(output_dir: str, depths: List[np.ndarray] = [], colors: List[np.ndarray] = [], color_file_format: str = "PNG",
@@ -362,7 +362,7 @@ class BopWriterUtility:
                 if dist_output is None:
                     raise Exception("Distance image has not been rendered.")
                 distance = WriterUtility.load_output_file(Utility.resolve_path(dist_output['path'] % frame_id), remove=False)
-                depth = PostProcessingUtility.dist2depth(distance)
+                depth = dist2depth(distance)
 
             # Scale the depth to retain a higher precision (the depth is saved
             # as a 16-bit PNG image with range 0-65535).
