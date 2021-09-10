@@ -4,7 +4,7 @@ SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy", "matplotlib", 
 import os
 import sys
 from random import choice
-from typing import List
+from typing import List, Union
 
 import bpy
 import numpy as np
@@ -21,7 +21,7 @@ from blenderproc.python.types.MaterialUtility import Material
 class BopLoader:
 
     @staticmethod
-    def load(bop_dataset_path: str, sys_paths: list,  temp_dir: str = None, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[MeshObject]:
+    def load(bop_dataset_path: str, sys_paths: Union[List[str], str],  temp_dir: str = None, model_type: str = "", cam_type: str = "", split: str = "test", scene_id: int = -1, obj_ids: list = [], sample_objects: bool = False, num_of_objs_to_sample: int = None, obj_instances_limit: int = -1, move_origin_to_x_y_plane: bool = False, source_frame: list = ["X", "-Y", "-Z"], mm2m: bool = False) -> List[MeshObject]:
         """ Loads the 3D models of any BOP dataset and allows replicating BOP scenes
 
         - Interfaces with the bob_toolkit, allows loading of train, val and test splits
@@ -29,7 +29,7 @@ class BopLoader:
         - Sets real camera intrinsics
 
         :param bop_dataset_path: Full path to a specific bop dataset e.g. /home/user/bop/tless.
-        :param sys_paths: System paths to append.
+        :param sys_paths: System paths to append, can also be just the path to append
         :param temp_dir: A temp directory which is used for writing the temporary .ply file.
         :param model_type: Optionally, specify type of BOP model.  Available: [reconst, cad or eval].
         :param cam_type: Camera type. If not defined, dataset-specific default camera type is used.
@@ -51,10 +51,16 @@ class BopLoader:
         :param mm2m: Specify whether to convert poses and models to meters.
         :return: The list of loaded mesh objects.
         """
-
-        for sys_path in sys_paths:
-            if 'bop_toolkit' in sys_path:
-                sys.path.append(sys_path)
+        
+        if isinstance(sys_paths, list):
+            for sys_path in sys_paths:
+                if 'bop_toolkit' in sys_path:
+                    sys.path.append(sys_path)
+        elif isinstance(sys_paths, str):
+            if 'bop_toolkit' in sys_paths:
+                sys.path.append(sys_paths)
+        else:
+            raise Exception(f"The given sys_paths has to wrong type: {sys_paths}")
 
         if temp_dir is None:
             temp_dir = Utility.get_temporary_directory()
