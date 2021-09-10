@@ -8,7 +8,6 @@ import numpy as np
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 
 
@@ -24,8 +23,8 @@ bproc.init()
 objs = bproc.loader.load_blend(args.scene)
 
 # Retrieve surface and spheres from the list objects
-surface = Filter.one_by_attr(objs, "name", "Cube")
-spheres = Filter.by_attr(objs, "name", ".*phere.*", regex=True)
+surface = bproc.filter.one_by_attr(objs, "name", "Cube")
+spheres = bproc.filter.by_attr(objs, "name", ".*phere.*", regex=True)
 
 # Define a function that samples the pose of a given object
 def sample_pose(obj: MeshObject):
