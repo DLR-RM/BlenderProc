@@ -7,9 +7,7 @@ from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.utility.Initializer import Initializer
 
 import os
 import argparse
@@ -21,7 +19,7 @@ parser.add_argument('shapenet_path', help="Path to the downloaded shape net core
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/shapenet_with_scenenet/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
 label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
@@ -87,7 +85,7 @@ while tries < 10000 and poses < 5:
     location = PartSphere.sample(shapenet_obj.get_location(), radius=2, dist_above_center=0.5, mode="SURFACE")
     # Compute rotation based on vector going from location towards ShapeNet object
     rotation_matrix = bproc.camera.rotation_from_forward_vec(shapenet_obj.get_location() - location)
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 
     # Check that obstacles are at least 0.5 meter away from the camera and that the ShapeNet object is visible
     if shapenet_obj in bproc.camera.visible_objects(cam2world_matrix) and bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 0.5}, bvh_tree):

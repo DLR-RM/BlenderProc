@@ -2,10 +2,7 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.filter.Filter import Filter
 
 import argparse
@@ -16,7 +13,7 @@ parser.add_argument('scene', nargs='?', default="examples/advanced/auto_shading/
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/auto_shading/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 objs = bproc.loader.load_blend(args.scene)
@@ -51,7 +48,7 @@ with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
         position, euler_rotation = line[:3], line[3:6]
-        matrix_world = MathUtility.build_transformation_mat(position, euler_rotation)
+        matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
         bproc.camera.add_camera_pose(matrix_world)
 
 # render the whole pipeline

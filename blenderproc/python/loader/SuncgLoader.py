@@ -9,7 +9,7 @@ from mathutils import Matrix
 
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
-from blenderproc.python.utility.MathUtility import MathUtility
+from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility, resolve_path
@@ -213,8 +213,8 @@ class SuncgLoader:
         :return: The corrected bbox.
         """
         return {
-            "min": MathUtility.change_coordinate_frame_of_point(bbox["min"], ["X", "-Z", "Y"]),
-            "max": MathUtility.change_coordinate_frame_of_point(bbox["max"], ["X", "-Z", "Y"])
+            "min": change_coordinate_frame_of_point(bbox["min"], ["X", "-Z", "Y"]),
+            "max": change_coordinate_frame_of_point(bbox["max"], ["X", "-Z", "Y"])
         }
 
     @staticmethod

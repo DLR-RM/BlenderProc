@@ -2,11 +2,7 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-
-from blenderproc.python.writer.WriterUtility import WriterUtility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 import random
 import argparse
@@ -17,7 +13,7 @@ parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", 
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/material_randomizer/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
 objs = bproc.loader.load_obj(args.scene)
@@ -32,8 +28,8 @@ light.set_energy(1000)
 bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 
 # Add two camera poses
-bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))
-bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
+bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))
+bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Collect all materials
 materials = bproc.material.collect_all()
