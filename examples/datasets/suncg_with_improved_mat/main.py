@@ -56,7 +56,7 @@ while tries < 10000 and poses < 5:
     tries += 1
 
 # improve the materials, first use all materials and only filter the relevant materials out
-all_materials = bproc.materials.collect_all()
+all_materials = bproc.material.collect_all()
 all_wood_materials = Filter.by_attr(all_materials, "name", "wood.*|laminate.*|beam.*", regex=True)
 
 # now change the used values
