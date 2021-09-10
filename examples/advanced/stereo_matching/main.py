@@ -5,12 +5,10 @@ SetupUtility.setup([])
 from blenderproc.python.postprocessing.StereoGlobalMatching import StereoGlobalMatching
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.lighting.SuncgLighting import SuncgLighting
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
@@ -34,9 +32,9 @@ K = np.array([
     [0, 650.018, 355.984],
     [0, 0, 1]
 ])
-CameraUtility.set_intrinsics_from_K_matrix(K, 1280, 720)
+bproc.camera.set_intrinsics_from_K_matrix(K, 1280, 720)
 # Enable stereo mode and set baseline
-CameraUtility.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL", convergence_distance=0.00001)
+bproc.camera.set_stereo_parameters(interocular_distance=0.05, convergence_mode="PARALLEL", convergence_distance=0.00001)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
@@ -44,19 +42,19 @@ with open(args.camera, "r") as f:
         line = [float(x) for x in line.split()]
         position = MathUtility.change_coordinate_frame_of_point(line[:3], ["X", "-Z", "Y"])
         rotation = MathUtility.change_coordinate_frame_of_point(line[3:6], ["X", "-Z", "Y"])
-        matrix_world = MathUtility.build_transformation_mat(position, CameraUtility.rotation_from_forward_vec(rotation))
-        CameraUtility.add_camera_pose(matrix_world)
+        matrix_world = MathUtility.build_transformation_mat(position, bproc.camera.rotation_from_forward_vec(rotation))
+        bproc.camera.add_camera_pose(matrix_world)
 
 # makes Suncg objects emit light
 SuncgLighting.light()
 
 # activate normal and distance rendering
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_distance_output()
 bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
-RendererUtility.toggle_stereo(True)
+bproc.renderer.toggle_stereo(True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Apply stereo matching to each pair of images
 data["stereo-depth"], data["disparity"] = StereoGlobalMatching.match(data["colors"], disparity_filter=False)
