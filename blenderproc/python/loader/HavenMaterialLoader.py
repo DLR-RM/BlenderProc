@@ -4,7 +4,7 @@ import os
 import addon_utils
 import bpy
 
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
 
 def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):

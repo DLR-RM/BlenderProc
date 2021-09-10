@@ -2,9 +2,9 @@ import bpy
 import numpy as np
 from mathutils import Euler
 
+import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix, build_transformation_mat
 

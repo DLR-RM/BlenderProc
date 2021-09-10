@@ -1,5 +1,5 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.renderer.FlowRendererUtility import FlowRendererUtility
+from blenderproc.python.renderer.FlowRendererUtility import render_optical_flow
 from blenderproc.python.utility.Utility import Utility
 
 
@@ -49,7 +49,7 @@ class FlowRenderer(RendererInterface):
             self._configure_renderer(default_samples=1)
 
             if not self._avoid_output:
-                FlowRendererUtility.render(
+                render_optical_flow(
                     self._determine_output_dir(),
                     self._temp_dir,
                     self.config.get_bool('forward_flow', False),

@@ -5,12 +5,12 @@ from sys import platform
 import multiprocessing
 
 import bpy
-from blenderproc.python.camera.CameraUtility import CameraUtility
+import blenderproc.python.camera.CameraUtility as CameraUtility
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
 import addon_utils
 
-from blenderproc.python.renderer.RendererUtility import RendererUtility
+import blenderproc.python.renderer.RendererUtility as RendererUtility
 
 
 def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", compute_device_type: str = None, use_experimental_features: bool = False, clean_up_scene: bool = True):
@@ -115,7 +115,7 @@ class Initializer:
         CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
 
         # Init renderer
-        RendererUtility.init()
+        RendererUtility._render_init()
         RendererUtility.set_samples(DefaultConfig.samples)
         addon_utils.enable("render_auto_tile_size")
         RendererUtility.toggle_auto_tile_size(True)
