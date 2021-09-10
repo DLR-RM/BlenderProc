@@ -8,7 +8,6 @@ from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.writer.WriterUtility import WriterUtility
 
 import numpy as np
 

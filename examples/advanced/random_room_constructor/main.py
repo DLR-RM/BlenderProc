@@ -6,7 +6,6 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.constructor.RandomRoomConstructor import RandomRoomConstructor
 from blenderproc.python.lighting.SurfaceLighting import light_surface
-from blenderproc.python.writer.WriterUtility import WriterUtility
 
 import argparse
 import numpy as np

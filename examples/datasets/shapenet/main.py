@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.sampler.Sphere import Sphere
 

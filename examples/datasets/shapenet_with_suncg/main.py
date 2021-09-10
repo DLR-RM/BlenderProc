@@ -9,7 +9,6 @@ from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
-from blenderproc.python.writer.WriterUtility import WriterUtility
 
 import argparse
 import os

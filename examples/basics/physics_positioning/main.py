@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
 from blenderproc.python.sampler.UniformSO3 import UniformSO3

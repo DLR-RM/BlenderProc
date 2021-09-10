@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.sampler.Sphere import Sphere
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 
 import argparse

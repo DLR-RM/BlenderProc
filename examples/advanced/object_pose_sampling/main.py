@@ -6,7 +6,6 @@ import argparse
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.object.ObjectPoseSampler import ObjectPoseSampler
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 
 import numpy as np

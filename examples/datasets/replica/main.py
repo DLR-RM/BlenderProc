@@ -10,7 +10,6 @@ from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.ReplicaPointInRoomSampler import ReplicaPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
 
 parser = argparse.ArgumentParser()

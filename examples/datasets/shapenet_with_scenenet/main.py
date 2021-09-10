@@ -10,7 +10,6 @@ from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
 
 import os
 import argparse

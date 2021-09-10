@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.writer.WriterUtility import WriterUtility
 
 import argparse
 import os

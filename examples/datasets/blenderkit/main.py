@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.filter.Filter import Filter
 

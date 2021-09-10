@@ -10,8 +10,6 @@ from blenderproc.python.object.ObjectReplacer import ObjectReplacer
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.filter.Filter import Filter
 
-from blenderproc.python.writer.WriterUtility import WriterUtility
-
 import numpy as np
 from mathutils import Euler
 import argparse

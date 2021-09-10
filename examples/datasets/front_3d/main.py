@@ -9,7 +9,6 @@ import numpy as np
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Utility import Utility
 
 

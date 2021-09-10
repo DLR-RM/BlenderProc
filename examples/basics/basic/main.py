@@ -4,7 +4,6 @@ SetupUtility.setup([])
 
 import argparse
 
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 
 

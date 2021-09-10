@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 
 

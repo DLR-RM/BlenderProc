@@ -5,9 +5,7 @@ SetupUtility.setup([])
 from pathlib import Path
 
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 import random
 import argparse

@@ -6,7 +6,6 @@ import argparse
 import numpy as np
 
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.filter.Filter import Filter

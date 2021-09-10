@@ -6,9 +6,7 @@ import argparse
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.sampler.Shell import Shell
-from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.utility.MathUtility import MathUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/scene.obj", help="Path to the camera file")
