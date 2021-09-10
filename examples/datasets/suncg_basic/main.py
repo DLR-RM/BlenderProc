@@ -5,7 +5,6 @@ SetupUtility.setup([])
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 
@@ -42,7 +41,7 @@ bproc.lighting.light_suncg_scene()
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_distance_output()
-MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
+bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
 data = bproc.renderer.render()

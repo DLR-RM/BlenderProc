@@ -8,7 +8,7 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.types.MaterialUtility import Material
+
 from blenderproc.python.sampler.Shell import Shell
 from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
 
@@ -67,7 +67,7 @@ room_planes = [MeshObject.create_primitive('PLANE', scale=[2, 2, 1]),
 # sample light color and strenght from ceiling
 light_plane = MeshObject.create_primitive('PLANE', scale=[3, 3, 1], location=[0, 0, 10])
 light_plane.set_name('light_plane')
-light_plane_material = Material.create('light_material')
+light_plane_material = bproc.material.create('light_material')
 light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6), 
                                    emission_color=np.random.uniform([0.5, 0.5, 0.5, 1.0], [1.0, 1.0, 1.0, 1.0]))    
 light_plane.replace_materials(light_plane_material)

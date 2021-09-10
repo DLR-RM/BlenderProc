@@ -1,5 +1,5 @@
 from blenderproc.python.modules.renderer.RendererInterface import RendererInterface
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
+from blenderproc.python.material import MaterialLoaderUtility
 import blenderproc.python.renderer.RendererUtility as RendererUtility
 from blenderproc.python.utility.Utility import Utility
 

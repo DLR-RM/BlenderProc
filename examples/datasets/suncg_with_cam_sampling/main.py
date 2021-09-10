@@ -6,7 +6,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.writer.WriterUtility import WriterUtility
@@ -55,7 +54,7 @@ while tries < 10000 and poses < 5:
 # activate normal and distance rendering
 bproc.renderer.enable_normals_output()
 bproc.renderer.enable_distance_output()
-MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
+bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
 data = bproc.renderer.render()

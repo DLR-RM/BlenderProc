@@ -2,7 +2,7 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.types.MaterialUtility import Material
+
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.types.LightUtility import Light
@@ -36,7 +36,7 @@ bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 4
 bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Collect all materials
-materials = Material.collect_all()
+materials = bproc.material.collect_all()
 
 # Go through all objects
 for obj in objs:
