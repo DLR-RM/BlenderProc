@@ -4,7 +4,7 @@ from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.SceneNetLoader import SceneNetLoader
+from blenderproc.python.loader.SceneNetLoader import load_scenenet
 
 
 class SceneNetLoaderModule(LoaderInterface):
@@ -64,7 +64,7 @@ class SceneNetLoaderModule(LoaderInterface):
         # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
         # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!
-        loaded_objects = SceneNetLoader.load(
+        loaded_objects = load_scenenet(
             file_path=self._file_path,
             texture_folder=self._texture_folder,
             label_mapping=label_mapping,

@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.IKEALoader import IKEALoader
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
@@ -21,7 +21,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # Load IKEA objects from type table into the scene
-objs = IKEALoader.load(args.ikea_path, obj_categories="table")
+objs = bproc.loader.load_ikea(args.ikea_path, obj_categories="table")
 
 # define a light and set its location and energy level
 light = Light()

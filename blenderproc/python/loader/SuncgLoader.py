@@ -13,103 +13,103 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.ObjectLoader import ObjectLoader
+from blenderproc.python.loader.ObjectLoader import load_obj
 from typing import Tuple
 
-class SuncgLoader:
 
-    @staticmethod
-    def load(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = None) -> List[MeshObject]:
-        """ Loads a house.json file into blender.
+def load_suncg(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = None) -> List[MeshObject]:
+    """ Loads a house.json file into blender.
 
-        - Loads all objects files specified in the house.json file.
-        - Orders them hierarchically (level -> room -> object)
-        - Writes metadata into the custom properties of each object
+    - Loads all objects files specified in the house.json file.
+    - Orders them hierarchically (level -> room -> object)
+    - Writes metadata into the custom properties of each object
 
-        :param house_path: The path to the house.json file which should be loaded.
-        :param suncg_dir: The path to the suncg root directory which should be used for loading objects, rooms, textures etc.
-        :return: The list of loaded mesh objects.
-        """
-        # If not suncg root directory has been given, determine it via the given house directory.
-        if suncg_dir is None:
-            suncg_dir = os.path.join(os.path.dirname(house_path), "../..")
+    :param house_path: The path to the house.json file which should be loaded.
+    :param suncg_dir: The path to the suncg root directory which should be used for loading objects, rooms, textures etc.
+    :return: The list of loaded mesh objects.
+    """
+    # If not suncg root directory has been given, determine it via the given house directory.
+    if suncg_dir is None:
+        suncg_dir = os.path.join(os.path.dirname(house_path), "../..")
 
-        SuncgLoader._suncg_dir = suncg_dir
-        SuncgLoader._collection_of_loaded_objs = {}
-        # there are only two types of materials, textures and diffuse
-        SuncgLoader._collection_of_loaded_mats = {"texture": {}, "diffuse": {}}
+    SuncgLoader._suncg_dir = suncg_dir
+    SuncgLoader._collection_of_loaded_objs = {}
+    # there are only two types of materials, textures and diffuse
+    SuncgLoader._collection_of_loaded_mats = {"texture": {}, "diffuse": {}}
 
-        with open(Utility.resolve_path(house_path), "r") as f:
-            config = json.load(f)
+    with open(Utility.resolve_path(house_path), "r") as f:
+        config = json.load(f)
 
-        object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(os.path.join('resources', 'suncg', 'Better_labeling_for_NYU.csv'))
+    object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(os.path.join('resources', 'suncg', 'Better_labeling_for_NYU.csv'))
 
-        house_id = config["id"]
-        loaded_objects = []
+    house_id = config["id"]
+    loaded_objects = []
 
-        for level in config["levels"]:
-            # Build empty level object which acts as a parent for all rooms on the level
-            level_obj = Entity.create_empty("Level#" + level["id"])
-            level_obj.set_cp("type", "Level")
-            if "bbox" in level:
-                level_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(level["bbox"]))
+    for level in config["levels"]:
+        # Build empty level object which acts as a parent for all rooms on the level
+        level_obj = Entity.create_empty("Level#" + level["id"])
+        level_obj.set_cp("type", "Level")
+        if "bbox" in level:
+            level_obj.set_cp("bbox", SuncgLoader._correct_bbox_frame(level["bbox"]))
+        else:
+            print("Warning: The level with id " + level["id"] + " is missing the bounding box attribute in the given house.json file!")
+        loaded_objects.append(level_obj)
+
+        room_per_object = {}
+
+        for node in level["nodes"]:
+            # Skip invalid nodes (This is the same behavior as in the SUNCG Toolbox)
+            if "valid" in node and node["valid"] == 0:
+                continue
+
+            # Metadata is directly stored in the objects custom data
+            metadata = {
+                "type": node["type"],
+                "is_suncg": True
+            }
+
+            if "modelId" in node:
+                metadata["modelId"] = node["modelId"]
+
+                if node["modelId"] in object_fine_grained_label_map:
+                    metadata["fine_grained_class"] = object_fine_grained_label_map[node["modelId"]]
+                    metadata["coarse_grained_class"] = object_coarse_grained_label_map[node["modelId"]]
+                    metadata["category_id"] = label_mapping.id_from_label(object_label_map[node["modelId"]])
+
+            if "bbox" in node:
+                metadata["bbox"] = SuncgLoader._correct_bbox_frame(node["bbox"])
+
+            if "transform" in node:
+                transform = Matrix([node["transform"][i * 4:(i + 1) * 4] for i in range(4)])
+                # Transpose, as given transform matrix was col-wise, but blender expects row-wise
+                transform.transpose()
             else:
-                print("Warning: The level with id " + level["id"] + " is missing the bounding box attribute in the given house.json file!")
-            loaded_objects.append(level_obj)
+                transform = None
 
-            room_per_object = {}
+            if "materials" in node:
+                material_adjustments = node["materials"]
+            else:
+                material_adjustments = []
 
-            for node in level["nodes"]:
-                # Skip invalid nodes (This is the same behavior as in the SUNCG Toolbox)
-                if "valid" in node and node["valid"] == 0:
-                    continue
+            # Lookup if the object belongs to a room
+            object_id = int(node["id"].split("_")[-1])
+            if object_id in room_per_object:
+                parent = room_per_object[object_id]
+            else:
+                parent = level_obj
 
-                # Metadata is directly stored in the objects custom data
-                metadata = {
-                    "type": node["type"],
-                    "is_suncg": True
-                }
+            if node["type"] == "Room":
+                loaded_objects += SuncgLoader._load_room(node, metadata, material_adjustments, transform, house_id, level_obj, room_per_object, label_mapping)
+            elif node["type"] == "Ground":
+                loaded_objects += SuncgLoader._load_ground(node, metadata, material_adjustments, transform, house_id, parent, label_mapping)
+            elif node["type"] == "Object":
+                loaded_objects += SuncgLoader._load_object(node, metadata, material_adjustments, transform, parent)
+            elif node["type"] == "Box":
+                loaded_objects += SuncgLoader._load_box(node, material_adjustments, transform, parent, label_mapping)
+    SuncgLoader._rename_materials()
+    return loaded_objects
 
-                if "modelId" in node:
-                    metadata["modelId"] = node["modelId"]
-
-                    if node["modelId"] in object_fine_grained_label_map:
-                        metadata["fine_grained_class"] = object_fine_grained_label_map[node["modelId"]]
-                        metadata["coarse_grained_class"] = object_coarse_grained_label_map[node["modelId"]]
-                        metadata["category_id"] = label_mapping.id_from_label(object_label_map[node["modelId"]])
-
-                if "bbox" in node:
-                    metadata["bbox"] = SuncgLoader._correct_bbox_frame(node["bbox"])
-
-                if "transform" in node:
-                    transform = Matrix([node["transform"][i*4:(i+1)*4] for i in range(4)])
-                    # Transpose, as given transform matrix was col-wise, but blender expects row-wise
-                    transform.transpose()
-                else:
-                    transform = None
-
-                if "materials" in node:
-                    material_adjustments = node["materials"]
-                else:
-                    material_adjustments = []
-
-                # Lookup if the object belongs to a room
-                object_id = int(node["id"].split("_")[-1])
-                if object_id in room_per_object:
-                    parent = room_per_object[object_id]
-                else:
-                    parent = level_obj
-
-                if node["type"] == "Room":
-                    loaded_objects += SuncgLoader._load_room(node, metadata, material_adjustments, transform, house_id, level_obj, room_per_object, label_mapping)
-                elif node["type"] == "Ground":
-                    loaded_objects += SuncgLoader._load_ground(node, metadata, material_adjustments, transform, house_id, parent, label_mapping)
-                elif node["type"] == "Object":
-                    loaded_objects += SuncgLoader._load_object(node, metadata, material_adjustments, transform, parent)
-                elif node["type"] == "Box":
-                    loaded_objects += SuncgLoader._load_box(node, material_adjustments, transform, parent, label_mapping)
-        SuncgLoader._rename_materials()
-        return loaded_objects
+class SuncgLoader:
 
     @staticmethod
     def _rename_materials():
@@ -265,7 +265,7 @@ class SuncgLoader:
             return []
         else:
             object_already_loaded = path in SuncgLoader._collection_of_loaded_objs
-            loaded_objects = ObjectLoader.load(filepath=path, cached_objects=SuncgLoader._collection_of_loaded_objs)
+            loaded_objects = load_obj(filepath=path, cached_objects=SuncgLoader._collection_of_loaded_objs)
             if object_already_loaded:
                 print("Duplicate object: {}".format(path))
                 for object in loaded_objects:

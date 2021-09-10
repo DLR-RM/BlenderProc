@@ -2,7 +2,7 @@ import os
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.loader.IKEALoader import IKEALoader
+from blenderproc.python.loader.IKEALoader import load_ikea
 
 
 class IKEALoaderModule(LoaderInterface):
@@ -47,7 +47,7 @@ class IKEALoaderModule(LoaderInterface):
         self._obj_style = self.config.get_raw_value("style", None)
 
     def run(self):
-        loaded_obj = IKEALoader.load(data_dir=self._data_dir, obj_categories=self._obj_categories, obj_style=self._obj_style)
+        loaded_obj = load_ikea(data_dir=self._data_dir, obj_categories=self._obj_categories, obj_style=self._obj_style)
         self._set_properties(loaded_obj)
 
 

@@ -7,6 +7,79 @@ import bpy
 from blenderproc.python.materials.MaterialLoaderUtility import MaterialLoaderUtility
 from blenderproc.python.utility.Utility import Utility
 
+def load_haven_mat(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
+    """ Loads all specified haven textures from the given directory.
+
+    :param folder_path: The path to the downloaded haven.
+    :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely, only the
+                        beginning the name starts with. By default all assets will be loaded, specified by an empty list.
+    :param preload: If set true, only the material names are loaded and not the complete material.
+    :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
+    :param add_cp: A dictionary of materials and the respective properties.
+    """
+    # makes the integration of complex materials easier
+    addon_utils.enable("node_wrangler")
+
+    folder_path = Utility.resolve_path(folder_path)
+
+    if preload and fill_used_empty_materials:
+        raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
+    if os.path.exists(folder_path) and os.path.isdir(folder_path):
+        for asset in os.listdir(folder_path):
+            if used_assets:
+                skip_this_one = True
+                for used_asset in used_assets:
+                    if asset.startswith(used_asset):
+                        skip_this_one = False
+                        break
+                if skip_this_one:
+                    continue
+            current_path = os.path.join(folder_path, asset)
+            if os.path.isdir(current_path):
+                # find the current base_image_path by search for _diff_, this make it independent of the used res
+                all_paths = glob.glob(os.path.join(current_path, "*.jpg"))
+                base_image_path = ""
+                for path in all_paths:
+                    if "_diff_" in path:
+                        base_image_path = path
+                        break
+                if not os.path.exists(base_image_path):
+                    continue
+
+                # if the material was already created it only has to be searched
+                if fill_used_empty_materials:
+                    new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, add_cp)
+                else:
+                    new_mat = MaterialLoaderUtility.create_new_cc_material(asset, add_cp)
+                if preload:
+                    # if preload then the material is only created but not filled
+                    continue
+                elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
+                    # now only the materials, which have been used should be filled
+                    continue
+
+                # construct all image paths
+                # the images path contain the words named in this list, but some of them are differently
+                # capitalized, e.g. Nor, NOR, NoR, ...
+                used_elements = ["ao", "spec", "rough", "nor", "disp", "bump", "alpha"]
+                final_paths = {}
+                for ele in used_elements:
+                    new_path = base_image_path.replace("diff", ele).lower()
+                    found_path = ""
+                    for path in all_paths:
+                        if path.lower() == new_path:
+                            found_path = path
+                            break
+                    final_paths[ele] = found_path
+
+                # create material based on these image paths
+                HavenMaterialLoader.create_material(new_mat, base_image_path, final_paths["ao"],
+                                                    final_paths["spec"], final_paths["rough"],
+                                                    final_paths["alpha"], final_paths["nor"],
+                                                    final_paths["disp"], final_paths["bump"])
+    else:
+        raise Exception("The folder path does not exist: {}".format(folder_path))
+
 
 class HavenMaterialLoader:
     """
@@ -18,80 +91,6 @@ class HavenMaterialLoader:
     There is a preload option, in which you only load empty materials, without any loaded textures, these are than
     later filled, when an object really uses them. This saves on loading times.
     """
-
-    @staticmethod
-    def load(folder_path: str = "resources/haven", used_assets: list = [], preload: bool = False, fill_used_empty_materials: bool = False, add_cp: dict = {}):
-        """ Loads all specified haven textures from the given directory.
-
-        :param folder_path: The path to the downloaded haven.
-        :param used_assets: A list of all asset names, you want to use. The asset-name must not be typed in completely, only the
-                            beginning the name starts with. By default all assets will be loaded, specified by an empty list.
-        :param preload: If set true, only the material names are loaded and not the complete material.
-        :param fill_used_empty_materials: If set true, the preloaded materials, which are used are now loaded completely.
-        :param add_cp: A dictionary of materials and the respective properties.
-        """
-        # makes the integration of complex materials easier
-        addon_utils.enable("node_wrangler")
-
-        folder_path = Utility.resolve_path(folder_path)
-
-        if preload and fill_used_empty_materials:
-            raise Exception("Preload and fill used empty materials can not be done at the same time, check config!")
-        if os.path.exists(folder_path) and os.path.isdir(folder_path):
-            for asset in os.listdir(folder_path):
-                if used_assets:
-                    skip_this_one = True
-                    for used_asset in used_assets:
-                        if asset.startswith(used_asset):
-                            skip_this_one = False
-                            break
-                    if skip_this_one:
-                        continue
-                current_path = os.path.join(folder_path, asset)
-                if os.path.isdir(current_path):
-                    # find the current base_image_path by search for _diff_, this make it independent of the used res
-                    all_paths = glob.glob(os.path.join(current_path, "*.jpg"))
-                    base_image_path = ""
-                    for path in all_paths:
-                        if "_diff_" in path:
-                            base_image_path = path
-                            break
-                    if not os.path.exists(base_image_path):
-                        continue
-
-                    # if the material was already created it only has to be searched
-                    if fill_used_empty_materials:
-                        new_mat = MaterialLoaderUtility.find_cc_material_by_name(asset, add_cp)
-                    else:
-                        new_mat = MaterialLoaderUtility.create_new_cc_material(asset, add_cp)
-                    if preload:
-                        # if preload then the material is only created but not filled
-                        continue
-                    elif fill_used_empty_materials and not MaterialLoaderUtility.is_material_used(new_mat):
-                        # now only the materials, which have been used should be filled
-                        continue
-
-                    # construct all image paths
-                    # the images path contain the words named in this list, but some of them are differently
-                    # capitalized, e.g. Nor, NOR, NoR, ...
-                    used_elements = ["ao", "spec", "rough", "nor", "disp", "bump", "alpha"]
-                    final_paths = {}
-                    for ele in used_elements:
-                        new_path = base_image_path.replace("diff", ele).lower()
-                        found_path = ""
-                        for path in all_paths:
-                            if path.lower() == new_path:
-                                found_path = path
-                                break
-                        final_paths[ele] = found_path
-
-                    # create material based on these image paths
-                    HavenMaterialLoader.create_material(new_mat, base_image_path, final_paths["ao"],
-                                                        final_paths["spec"], final_paths["rough"],
-                                                        final_paths["alpha"], final_paths["nor"],
-                                                        final_paths["disp"], final_paths["bump"])
-        else:
-            raise Exception("The folder path does not exist: {}".format(folder_path))
 
     @staticmethod
     def create_material(new_mat: bpy.types.Material, base_image_path: str, ambient_occlusion_image_path: str, specular_image_path: str,

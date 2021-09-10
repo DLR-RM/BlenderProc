@@ -1,7 +1,7 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.sampler.PartSphere import PartSphere
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
@@ -16,7 +16,6 @@ from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.SceneNetLoader import SceneNetLoader
 from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import os
@@ -33,7 +32,7 @@ Initializer.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
 label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-room_objs = SceneNetLoader.load(args.scene_net_obj_path, args.scene_texture_path, label_mapping)
+room_objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_texture_path, label_mapping)
 
 # In some scenes floors, walls and ceilings are one object that needs to be split first
 # Collect all walls
@@ -62,7 +61,7 @@ ceilings = Filter.by_attr(room_objs, "name", ".*[c|C]eiling.*", regex=True)
 SurfaceLighting.run(ceilings, emission_strength=2)
 
 # load the ShapeNet object into the scene
-shapenet_obj = ShapeNetLoader.load(args.shapenet_path, used_synset_id="02801938")
+shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02801938")
 
 # Collect all beds
 beds = Filter.by_cp(room_objs, "category_id", label_mapping.id_from_label("bed"))

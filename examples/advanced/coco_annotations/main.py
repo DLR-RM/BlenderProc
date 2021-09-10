@@ -1,9 +1,9 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.BlendLoader import BlendLoader
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -22,7 +22,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the objects into the scene
-objs = BlendLoader.load(args.scene)
+objs = bproc.loader.load_blend(args.scene)
 
 # Set some category ids for loaded objects
 for j, obj in enumerate(objs):

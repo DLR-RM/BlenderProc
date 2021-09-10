@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -6,7 +7,6 @@ from blenderproc.python.utility.MathUtility import MathUtility
 from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.loader.ShapeNetLoader import ShapeNetLoader
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.renderer.RendererUtility import RendererUtility
@@ -22,7 +22,7 @@ args = parser.parse_args()
 Initializer.init()
 
 # load the ShapeNet object into the scene
-shapenet_obj = ShapeNetLoader.load(args.shapenet_path, used_synset_id="02691156", used_source_id="10155655850468db78d106ce0a280f87")
+shapenet_obj = bproc.loader.load_shapenet(args.shapenet_path, used_synset_id="02691156", used_source_id="10155655850468db78d106ce0a280f87")
 
 # define a light and set its location and energy level
 light = Light()

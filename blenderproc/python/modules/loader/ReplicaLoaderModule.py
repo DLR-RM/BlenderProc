@@ -1,5 +1,5 @@
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.loader.ReplicaLoader import ReplicaLoader
+from blenderproc.python.loader.ReplicaLoader import load_replica
 
 
 class ReplicaLoaderModule(LoaderInterface):
@@ -30,7 +30,7 @@ class ReplicaLoaderModule(LoaderInterface):
         LoaderInterface.__init__(self, config)
 
     def run(self):
-        loaded_objects = ReplicaLoader.load(
+        loaded_objects = load_replica(
             data_path=self.config.get_string('data_path'),
             data_set_name=self.config.get_string('data_set_name'),
             use_smooth_shading=self.config.get_bool('use_smooth_shading', False)

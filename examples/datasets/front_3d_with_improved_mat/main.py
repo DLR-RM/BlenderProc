@@ -1,3 +1,4 @@
+import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
@@ -7,10 +8,8 @@ import numpy as np
 import random
 
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.loader.CCMaterialLoader import CCMaterialLoader
 from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.loader.Front3DLoader import Front3DLoader
 from blenderproc.python.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.MathUtility import MathUtility
@@ -41,14 +40,14 @@ RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_b
                                   transmission_bounces=200, transparent_max_bounces=200)
 
 # load the front 3D objects
-loaded_objects = Front3DLoader.load(
+loaded_objects = bproc.loader.load_front3d(
     json_path=args.front,
     future_model_path=args.future_folder,
     front_3D_texture_path=args.front_3D_texture_path,
     label_mapping=mapping
 )
 
-cc_materials = CCMaterialLoader.load(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
+cc_materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
 
 floors = Filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
 for floor in floors:
