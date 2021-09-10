@@ -2,7 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.filter.Filter import Filter
 
 import os
@@ -64,7 +63,7 @@ for obj in room_objs:
     obj.enable_rigidbody(False, mass_factor=2000, collision_margin=0.00001, collision_shape="MESH")
 
 # Run the simulation to let the ShapeNet object fall onto the bed
-PhysicsSimulation.simulate_and_fix_final_poses(
+bproc.object.simulate_physics_and_fix_final_poses(
     solver_iters=30,
     substeps_per_frame=40,
     min_simulation_time=0.5,

@@ -5,9 +5,7 @@ SetupUtility.setup([])
 import argparse
 import numpy as np
 
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
 
 
 parser = argparse.ArgumentParser()
@@ -37,7 +35,7 @@ def sample_pose(obj: bproc.types.MeshObject):
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
 
 # Sample the spheres on the surface
-spheres = OnSurfaceSampler.sample(spheres, surface, sample_pose, min_distance=0.1, max_distance=10)
+spheres = bproc.object.sample_poses_on_surface(spheres, surface, sample_pose, min_distance=0.1, max_distance=10)
 
 # Enable physics for spheres (active) and the surface (passive)
 for sphere in spheres:
@@ -45,7 +43,7 @@ for sphere in spheres:
 surface.enable_rigidbody(False)
 
 # Run the physics simulation
-PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
+bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
 
 # define a light and set its location and energy level
 light = bproc.types.Light()

@@ -2,7 +2,7 @@ import mathutils
 
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
-from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
+from blenderproc.python.object.OnSurfaceSampler import sample_poses_on_surface
 
 
 class OnSurfaceSamplerModule(Module):
@@ -77,7 +77,7 @@ class OnSurfaceSamplerModule(Module):
             obj.set_rotation_euler(self.config.get_vector3d("rot_sampler"))
 
         # Sample objects on the given surface
-        OnSurfaceSampler.sample(
+        sample_poses_on_surface(
             objects_to_sample=objects,
             surface=surface,
             sample_pose_func=sample_pose,

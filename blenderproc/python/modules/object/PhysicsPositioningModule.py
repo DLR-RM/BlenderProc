@@ -1,7 +1,7 @@
 from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
 from blenderproc.python.types.MeshObjectUtility import MeshObject
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
+from blenderproc.python.object.PhysicsSimulation import simulate_physics_and_fix_final_poses
 
 
 class PhysicsPositioningModule(Module):
@@ -107,7 +107,7 @@ class PhysicsPositioningModule(Module):
     def run(self):
         """ Performs physics simulation in the scene. """
         self._add_rigidbody()
-        PhysicsSimulation.simulate_and_fix_final_poses(
+        simulate_physics_and_fix_final_poses(
             min_simulation_time=self.config.get_float("min_simulation_time", 4.0),
             max_simulation_time=self.config.get_float("max_simulation_time", 40.0),
             check_object_interval=self.config.get_float("check_object_interval", 2.0),

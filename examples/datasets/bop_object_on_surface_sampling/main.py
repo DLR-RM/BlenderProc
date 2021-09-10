@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.object.OnSurfaceSampler import OnSurfaceSampler
-
 import argparse
 import os
 import numpy as np
@@ -85,7 +83,7 @@ def sample_initial_pose(obj: bproc.types.MeshObject):
     obj.set_rotation_euler(np.random.uniform([0, 0, 0], [0, 0, np.pi * 2]))
 
 # Sample objects on the given surface
-placed_objects = OnSurfaceSampler.sample(objects_to_sample=sampled_bop_objs + distractor_bop_objs,
+placed_objects = bproc.object.sample_poses_on_surface(objects_to_sample=sampled_bop_objs + distractor_bop_objs,
                                          surface=room_planes[0],
                                          sample_pose_func=sample_initial_pose,
                                          min_distance=0.01,

@@ -3,7 +3,6 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.PhysicsSimulation import PhysicsSimulation
 
 import argparse
 import os
@@ -46,7 +45,7 @@ for obj in Filter.all_with_type(suncg_objs, bproc.types.MeshObject):
     obj.enable_rigidbody(active=False, mass_factor=2000, collision_margin=0.0001)
 
 # Run the physics simulation
-PhysicsSimulation.simulate_and_fix_final_poses(min_simulation_time=0.5, max_simulation_time=4, check_object_interval=0.25)
+bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=0.5, max_simulation_time=4, check_object_interval=0.25)
 
 # sample five camera poses
 for i in range(5):
