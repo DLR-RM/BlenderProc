@@ -29,7 +29,7 @@ def construct_random_room(used_floor_area: float, interior_objects: [MeshObject]
     placed_objects = []
 
     # construct a random room
-    floor_obj, wall_obj, ceiling_obj = construct_random_room(used_floor_area, amount_of_extrusions,
+    floor_obj, wall_obj, ceiling_obj = _construct_random_room(used_floor_area, amount_of_extrusions,
                                                              fac_from_square_room, corridor_width,
                                                              wall_height, amount_of_floor_cuts,
                                                              only_use_big_edges, create_ceiling)
