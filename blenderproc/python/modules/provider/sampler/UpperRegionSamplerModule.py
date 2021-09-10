@@ -1,12 +1,7 @@
 
 from blenderproc.python.modules.main.Provider import Provider
-<<<<<<< HEAD
-from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
-from blenderproc.python.sampler.UpperRegionSampler import UpperRegionSampler
-=======
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.MeshObjectUtility import convert_to_meshes
 from blenderproc.python.sampler.UpperRegionSampler import upper_region
->>>>>>> develop
 
 
 class UpperRegionSamplerModule(Provider):

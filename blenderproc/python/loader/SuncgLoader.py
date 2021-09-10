@@ -10,15 +10,9 @@ from mathutils import Matrix
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point
-<<<<<<< HEAD
-from blenderproc.python.types.EntityUtility import Entity, create_empty
-from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primitive
-from blenderproc.python.utility.Utility import Utility
-=======
-from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.types.MeshObjectUtility import MeshObject
+from blenderproc.python.types.EntityUtility import create_empty
+from blenderproc.python.types.MeshObjectUtility import create_primitive, MeshObject
 from blenderproc.python.utility.Utility import Utility, resolve_path
->>>>>>> develop
 from blenderproc.python.loader.ObjectLoader import load_obj
 from typing import Tuple
 

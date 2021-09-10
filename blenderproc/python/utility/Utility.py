@@ -14,7 +14,7 @@ import json
 
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
-from blenderproc.python.types.StructUtility import get_instances
+from blenderproc.python.types.StructUtilityFunctions import get_instances
 
 
 
