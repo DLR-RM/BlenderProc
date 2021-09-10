@@ -3,10 +3,8 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.writer.BopWriterUtility import BopWriterUtility
 from blenderproc.python.postprocessing.PostProcessingUtility import PostProcessingUtility
 from blenderproc.python.types.LightUtility import Light
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import argparse
 import os
@@ -37,15 +35,15 @@ light_point.set_energy(1000)
 light_point.set_location([0, 0, -0.8])
 
 # activate distance rendering and set amount of samples for color rendering
-RendererUtility.enable_distance_output()
-RendererUtility.set_samples(50)
+bproc.renderer.enable_distance_output()
+bproc.renderer.set_samples(50)
 
 # render the cameras of the current scene
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Write data to bop format
-BopWriterUtility.write(args.output_dir, 
-                       dataset = args.bop_dataset_name,
-                       depths = PostProcessingUtility.dist2depth(data["distance"]),
-                       colors = data["colors"], 
-                       save_world2cam = False) # world coords are arbitrary in most real BOP datasets
+bproc.writer.write_bop(args.output_dir,
+                       dataset=args.bop_dataset_name,
+                       depths=PostProcessingUtility.dist2depth(data["distance"]),
+                       colors=data["colors"],
+                       save_world2cam=False) # world coords are arbitrary in most real BOP datasets

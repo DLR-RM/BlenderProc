@@ -3,14 +3,12 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
 from pathlib import Path
-from blenderproc.python.types.MaterialUtility import Material
+
 from blenderproc.python.filter.Filter import Filter
 from blenderproc.python.writer.WriterUtility import WriterUtility
 from blenderproc.python.utility.Initializer import Initializer
-from blenderproc.python.camera.CameraUtility import CameraUtility
 from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.utility.MathUtility import MathUtility
-from blenderproc.python.renderer.RendererUtility import RendererUtility
 
 import random
 import argparse
@@ -35,14 +33,14 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # define the camera intrinsics
-CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
+bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 
 # Add two camera poses
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))
-CameraUtility.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
+bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))
+bproc.camera.add_camera_pose(MathUtility.build_transformation_mat([1.9488, -6.5202, 0.23291], [1.84, 0, 0.5]))
 
 # Find all materials
-materials = Material.collect_all()
+materials = bproc.material.collect_all()
 
 # Find the material of the ground object
 ground_material = Filter.one_by_attr(materials, "name", "Material.001")
@@ -58,10 +56,10 @@ for mat in materials:
     mat.set_principled_shader_value("Base Color", image)
 
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(350)
+bproc.renderer.set_samples(350)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)
