@@ -9,6 +9,134 @@ import mathutils
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import resolve_path
 
+def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float = 7.5, compare_height: float = 0.15, up_vector_upwards: bool = True, height_list_path: str = None,
+            new_name_for_object: str = "Floor", should_skip_if_object_is_already_there: bool = False) -> List[MeshObject]:
+    """ Extracts floors in the following steps:
+    1. Searchs for the specified object.
+    2. Splits the surfaces which point upwards at a specified level away.
+
+    :param mesh_objects: Objects to where all polygons will be extracted.
+    :param compare_angle_degrees: Maximum difference between the up vector and the current polygon normal in degrees.
+    :param compare_height: Maximum difference in Z direction between the polygons median point and the specified height of the room.
+    :param up_vector_upwards: If this is True the `up_vec` points upwards -> [0, 0, 1] if not it points downwards: [0, 0, -1] in world coordinates. This vector is used for the `compare_angle_degrees` option.
+    :param height_list_path: Path to a file with height values. If none is provided, a ceiling and floor is automatically detected. \
+                             This might fail. The height_list_values can be specified in a list like fashion in the file: [0.0, 2.0]. \
+                             These values are in the same size the dataset is in, which is usually meters. The content must always be \
+                             a list, e.g. [0.0].
+    :param new_name_for_object: Name for the newly created object, which faces fulfill the given parameters.
+    :param should_skip_if_object_is_already_there: If this is true no extraction will be done, if an object is there, which has the same name as
+                                                   name_for_split_obj, which would be used for the newly created object.
+    :return: The extracted floor objects.
+    """
+    # set the up_vector
+    up_vec = mathutils.Vector([0, 0, 1])
+    if not up_vector_upwards:
+        up_vec *= -1.0
+
+    height_list = []
+    if height_list_path is not None:
+        height_file_path = resolve_path(height_list_path)
+        with open(height_file_path) as file:
+            import ast
+            height_list = [float(val) for val in ast.literal_eval(file.read())]
+
+    object_names = [obj.name for obj in bpy.context.scene.objects if obj.type == "MESH"]
+
+    def clean_up_name(name: str):
+        """
+        Clean up the given name from Floor1 to floor
+
+        :param name: given name
+        :return: str: cleaned up name
+        """
+        name = ''.join([i for i in name if not i.isdigit()])  # remove digits
+        name = name.lower().replace(".", "").strip()  # remove dots and whitespace
+        return name
+
+    object_names = [clean_up_name(name) for name in object_names]
+    if should_skip_if_object_is_already_there and new_name_for_object.lower() in object_names:
+        # if should_skip is True and if there is an object, which name is the same as the one for the newly
+        # split object, than the execution is skipped
+        return []
+
+    newly_created_objects = []
+    for obj in mesh_objects:
+        obj.edit_mode()
+        bm = obj.mesh_as_bmesh()
+        bpy.ops.mesh.select_all(action='DESELECT')
+
+        if height_list:
+            counter = 0
+            for height_val in height_list:
+                counter = FloorExtractor.select_at_height_value(bm, height_val, compare_height, up_vec,
+                                                                compare_angle_degrees, obj.get_local2world_mat())
+
+            if counter:
+                obj.update_from_bmesh(bm)
+                bpy.ops.mesh.separate(type='SELECTED')
+        else:
+            from blenderproc.python.utility.SetupUtility import SetupUtility
+            SetupUtility.setup_pip(["scikit-learn"])
+            from sklearn.cluster import MeanShift
+
+            # no height list was provided, try to estimate them on its own
+
+            # first get a list of all height values of the median points, which are inside of the defined
+            # compare angle range
+            list_of_median_poses = [FloorExtractor._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in bm.faces if
+                                    FloorExtractor._check_face_angle(f, obj.get_local2world_mat(), up_vec, compare_angle_degrees)]
+            if not list_of_median_poses:
+                print("Object with name: {} is skipped no faces were relevant, try with "
+                      "flipped up_vec".format(obj.get_name()))
+                list_of_median_poses = [FloorExtractor._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in
+                                        bm.faces if FloorExtractor._check_face_angle(f, obj.get_local2world_mat(),
+                                                                                     -up_vec, compare_angle_degrees)]
+                if not list_of_median_poses:
+                    print("Still no success for: {} skip object.".format(obj.get_name()))
+                    bpy.ops.object.mode_set(mode='OBJECT')
+                    bpy.ops.object.select_all(action='DESELECT')
+                    continue
+
+                successful_up_vec = -up_vec
+            else:
+                successful_up_vec = up_vec
+
+            list_of_median_poses = np.reshape(list_of_median_poses, (-1, 1))
+            if np.var(list_of_median_poses) < 1e-4:
+                # All faces are already correct
+                height_value = np.mean(list_of_median_poses)
+            else:
+                ms = MeanShift(bandwidth=0.2, bin_seeding=True)
+                ms.fit(list_of_median_poses)
+
+                # if the up vector is negative the maximum value is searched
+                if up_vector_upwards:
+                    height_value = np.min(ms.cluster_centers_)
+                else:
+                    height_value = np.max(ms.cluster_centers_)
+
+            counter = FloorExtractor.select_at_height_value(bm, height_value, compare_height, successful_up_vec,
+                                                            compare_angle_degrees, obj.get_local2world_mat())
+
+            if counter:
+                obj.update_from_bmesh(bm)
+                bpy.ops.mesh.separate(type='SELECTED')
+            selected_objects = bpy.context.selected_objects
+            if selected_objects:
+                if len(selected_objects) == 2:
+                    selected_objects = [o for o in selected_objects
+                                        if o != bpy.context.view_layer.objects.active]
+                    selected_objects[0].name = new_name_for_object
+                    newly_created_objects.append(MeshObject(selected_objects[0]))
+                else:
+                    raise Exception("There is more than one selection after splitting, this should not happen!")
+            else:
+                raise Exception("No floor object was constructed!")
+
+        obj.object_mode()
+
+    return newly_created_objects
+
 
 class FloorExtractor:
 
@@ -37,135 +165,6 @@ class FloorExtractor:
         print("Selected {} polygons as floor".format(counter))
         return counter
 
-
-    @staticmethod
-    def extract(mesh_objects: List[MeshObject], compare_angle_degrees: float = 7.5, compare_height: float = 0.15, up_vector_upwards: bool = True, height_list_path: str = None, 
-                new_name_for_object: str = "Floor", should_skip_if_object_is_already_there: bool = False) -> List[MeshObject]:
-        """ Extracts floors in the following steps:
-        1. Searchs for the specified object.
-        2. Splits the surfaces which point upwards at a specified level away.
-
-        :param mesh_objects: Objects to where all polygons will be extracted.
-        :param compare_angle_degrees: Maximum difference between the up vector and the current polygon normal in degrees.
-        :param compare_height: Maximum difference in Z direction between the polygons median point and the specified height of the room.
-        :param up_vector_upwards: If this is True the `up_vec` points upwards -> [0, 0, 1] if not it points downwards: [0, 0, -1] in world coordinates. This vector is used for the `compare_angle_degrees` option.
-        :param height_list_path: Path to a file with height values. If none is provided, a ceiling and floor is automatically detected. \
-                                 This might fail. The height_list_values can be specified in a list like fashion in the file: [0.0, 2.0]. \
-                                 These values are in the same size the dataset is in, which is usually meters. The content must always be \
-                                 a list, e.g. [0.0].
-        :param new_name_for_object: Name for the newly created object, which faces fulfill the given parameters.
-        :param should_skip_if_object_is_already_there: If this is true no extraction will be done, if an object is there, which has the same name as
-                                                       name_for_split_obj, which would be used for the newly created object.
-        :return: The extracted floor objects.
-        """
-        # set the up_vector
-        up_vec = mathutils.Vector([0, 0, 1])
-        if not up_vector_upwards:
-            up_vec *= -1.0
-
-        height_list = []
-        if height_list_path is not None:
-            height_file_path = resolve_path(height_list_path)
-            with open(height_file_path) as file:
-                import ast
-                height_list = [float(val) for val in ast.literal_eval(file.read())]
-
-        object_names = [obj.name for obj in bpy.context.scene.objects if obj.type == "MESH"]
-
-        def clean_up_name(name: str):
-            """
-            Clean up the given name from Floor1 to floor
-
-            :param name: given name
-            :return: str: cleaned up name
-            """
-            name = ''.join([i for i in name if not i.isdigit()])  # remove digits
-            name = name.lower().replace(".", "").strip()  # remove dots and whitespace
-            return name
-
-        object_names = [clean_up_name(name) for name in object_names]
-        if should_skip_if_object_is_already_there and new_name_for_object.lower() in object_names:
-            # if should_skip is True and if there is an object, which name is the same as the one for the newly
-            # split object, than the execution is skipped
-            return []
-
-        newly_created_objects = []
-        for obj in mesh_objects:
-            obj.edit_mode()
-            bm = obj.mesh_as_bmesh()
-            bpy.ops.mesh.select_all(action='DESELECT')
-
-            if height_list:
-                counter = 0
-                for height_val in height_list:
-                    counter = FloorExtractor.select_at_height_value(bm, height_val, compare_height, up_vec,
-                                                                   compare_angle_degrees, obj.get_local2world_mat())
-
-                if counter:
-                    obj.update_from_bmesh(bm)
-                    bpy.ops.mesh.separate(type='SELECTED')
-            else:
-                from blenderproc.python.utility.SetupUtility import SetupUtility
-                SetupUtility.setup_pip(["scikit-learn"])
-                from sklearn.cluster import MeanShift
-
-                # no height list was provided, try to estimate them on its own
-
-                # first get a list of all height values of the median points, which are inside of the defined
-                # compare angle range
-                list_of_median_poses = [FloorExtractor._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in bm.faces if
-                                        FloorExtractor._check_face_angle(f, obj.get_local2world_mat(), up_vec, compare_angle_degrees)]
-                if not list_of_median_poses:
-                    print("Object with name: {} is skipped no faces were relevant, try with "
-                          "flipped up_vec".format(obj.get_name()))
-                    list_of_median_poses = [FloorExtractor._get_median_face_pose(f, obj.get_local2world_mat())[2] for f in
-                                            bm.faces if FloorExtractor._check_face_angle(f, obj.get_local2world_mat(),
-                                                                                         -up_vec, compare_angle_degrees)]
-                    if not list_of_median_poses:
-                        print("Still no success for: {} skip object.".format(obj.get_name()))
-                        bpy.ops.object.mode_set(mode='OBJECT')
-                        bpy.ops.object.select_all(action='DESELECT')
-                        continue
-
-                    successful_up_vec = -up_vec
-                else:
-                    successful_up_vec = up_vec
-
-                list_of_median_poses = np.reshape(list_of_median_poses, (-1, 1))
-                if np.var(list_of_median_poses) < 1e-4:
-                    # All faces are already correct
-                    height_value = np.mean(list_of_median_poses)
-                else:
-                    ms = MeanShift(bandwidth=0.2, bin_seeding=True)
-                    ms.fit(list_of_median_poses)
-
-                    # if the up vector is negative the maximum value is searched
-                    if up_vector_upwards:
-                        height_value = np.min(ms.cluster_centers_)
-                    else:
-                        height_value = np.max(ms.cluster_centers_)
-
-                counter = FloorExtractor.select_at_height_value(bm, height_value, compare_height, successful_up_vec,
-                                                               compare_angle_degrees, obj.get_local2world_mat())
-
-                if counter:
-                    obj.update_from_bmesh(bm)
-                    bpy.ops.mesh.separate(type='SELECTED')
-                selected_objects = bpy.context.selected_objects
-                if selected_objects:
-                    if len(selected_objects) == 2:
-                        selected_objects = [o for o in selected_objects
-                                            if o != bpy.context.view_layer.objects.active]
-                        selected_objects[0].name = new_name_for_object
-                        newly_created_objects.append(MeshObject(selected_objects[0]))
-                    else:
-                        raise Exception("There is more than one selection after splitting, this should not happen!")
-                else:
-                    raise Exception("No floor object was constructed!")
-
-            obj.object_mode()
-
-        return newly_created_objects
 
     @staticmethod
     def _get_median_face_pose(face: bmesh.types.BMFace, matrix_world: Union[mathutils.Matrix, np.ndarray]):

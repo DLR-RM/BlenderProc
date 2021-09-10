@@ -7,7 +7,6 @@ import os
 import numpy as np
 
 from blenderproc.python.filter.Filter import Filter
-from blenderproc.python.object.FloorExtractor import FloorExtractor
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 parser = argparse.ArgumentParser()
@@ -24,7 +23,7 @@ bproc.init()
 # Load the replica dataset
 objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name, use_smooth_shading=True)
 # Extract the floor from the loaded room
-floor = FloorExtractor.extract(objs, new_name_for_object="floor")[0]
+floor = bproc.object.extract_floor(objs, new_name_for_object="floor")[0]
 room = Filter.one_by_attr(objs, "name", "mesh")
 
 # Init sampler for sampling locations inside the loaded replica room
