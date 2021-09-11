@@ -16,7 +16,7 @@ bproc.init()
 objs = bproc.loader.load_blend(args.blend_path)
 
 # Set a random hdri from the given haven directory as background
-haven_hdri_path = bproc.loader.get_random_world_background_hdr_img_path_from_haven(args.hdri_path)
+haven_hdri_path = bproc.loader.get_random_world_background_hdr_img_path_from_haven(args.haven_path)
 bproc.world.set_world_background_hdr_img(haven_hdri_path)
 
 # define a light and set its location and energy level
