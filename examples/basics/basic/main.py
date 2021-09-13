@@ -1,7 +1,6 @@
+import blenderproc
+import imageio
 import blenderproc as bproc
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
 import argparse
 
 

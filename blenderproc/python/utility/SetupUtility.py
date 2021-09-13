@@ -246,15 +246,15 @@ class SetupUtility:
                 lines = [l.strip() for l in text.split("\n")]
                 lines = [l for l in lines if l and not l.startswith("#")]
                 for index, line in enumerate(lines):
-                    if ".setup(" in line:
+                    if "import blenderproc" in line or "from blenderproc" in line:
                         return
-                    elif "import" in line and ".SetupUtility" not in line and "import blenderproc as " not in line:
+                    else:
                         code = "\n".join(lines[:index + 2])
-                        raise Exception('The given script "{}" does not have a SetupUtility call at the top! '
+                        raise Exception('The given script "{}" does not have a blenderproc import at the top! '
                                         "Make sure that is the first thing you import and run! Before importing "
                                         "anything else!\nYour code:\n#####################\n{}\n"
-                                        "####################\nReplaces this with:\nfrom blenderproc.python.utility.SetupUtility import SetupUtility "
-                                        "import SetupUtility\nSetupUtility.setup([])".format(path_to_run_file, code))
+                                        "####################\nReplaces this with:\n"
+                                        "import blenderproc as bproc".format(path_to_run_file, code))
         else:
             raise Exception("The given run script does not exist: {}".format(path_to_run_file))
 
