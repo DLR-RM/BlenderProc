@@ -4,7 +4,7 @@ from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import resolve_path
+from blenderproc.python.utility.Utility import resolve_path, Utility, resolve_resource
 from blenderproc.python.loader.Front3DLoader import load_front3d
 
 
@@ -56,7 +56,7 @@ class Front3DLoaderModule(LoaderInterface):
     def __init__(self, config: Config):
         LoaderInterface.__init__(self, config)
 
-        self.mapping_file = resolve_path(self.config.get_string("mapping_file", os.path.join("resources", "front_3D", "3D_front_mapping.csv")))
+        self.mapping_file = resolve_path(self.config.get_string("mapping_file", resolve_resource("front_3D", "3D_front_mapping.csv")))
         if not os.path.exists(self.mapping_file):
             raise Exception("The mapping file could not be found: {}".format(self.mapping_file))
 

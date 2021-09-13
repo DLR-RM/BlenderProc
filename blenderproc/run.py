@@ -22,32 +22,16 @@ sys.path.append(packages_path)
 
 # Read args
 argv = sys.argv
-batch_index_file = None
-
-if "--batch-process" in argv:
-    batch_index_file = argv[argv.index("--batch-process") + 1]
-
 argv = argv[argv.index("--") + 1:]
-working_dir = os.path.dirname(os.path.abspath(__file__))
 
 from blenderproc.python.utility.SetupUtility import SetupUtility
 # Setup general required pip packages e.q. pyyaml
 SetupUtility.setup_pip([])
 
 from blenderproc.python.modules.main.Pipeline import Pipeline
-from blenderproc.python.utility.Utility import resolve_path
 
 config_path = argv[0]
 temp_dir = argv[1]
 
-if batch_index_file == None:
-    pipeline = Pipeline(config_path, argv[2:], working_dir, temp_dir)
-    pipeline.run()
-else:
-    with open(resolve_path(batch_index_file), "r") as f:
-        lines = f.readlines()
-
-        for line in lines:
-            args = line.split(" ")
-            pipeline = Pipeline(config_path, args, working_dir, temp_dir)
-            pipeline.run()
+pipeline = Pipeline(config_path, argv[2:], temp_dir)
+pipeline.run()

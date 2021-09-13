@@ -1,5 +1,3 @@
-import blenderproc
-import imageio
 import blenderproc as bproc
 import argparse
 
