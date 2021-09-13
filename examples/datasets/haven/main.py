@@ -2,8 +2,6 @@ import blenderproc as bproc
 from blenderproc.python.utility.SetupUtility import SetupUtility
 SetupUtility.setup([])
 
-from blenderproc.python.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
-
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -18,7 +16,8 @@ bproc.init()
 objs = bproc.loader.load_blend(args.blend_path)
 
 # Set a random hdri from the given haven directory as background
-HavenEnvironmentLoader.set_random_world_background_hdr_img(args.haven_path)
+haven_hdri_path = bproc.loader.get_random_world_background_hdr_img_path_from_haven(args.haven_path)
+bproc.world.set_world_background_hdr_img(haven_hdri_path)
 
 # define a light and set its location and energy level
 light = bproc.types.Light()

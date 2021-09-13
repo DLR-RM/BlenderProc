@@ -12,3 +12,4 @@ from blenderproc.python.loader.SceneNetLoader import load_scenenet
 from blenderproc.python.loader.ShapeNetLoader import load_shapenet
 from blenderproc.python.loader.SuncgLoader import load_suncg
 from blenderproc.python.loader.TextureLoader import load_texture
+from blenderproc.python.loader.HavenEnvironmentLoader import get_random_world_background_hdr_img_path_from_haven

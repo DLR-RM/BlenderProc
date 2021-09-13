@@ -6,9 +6,6 @@ import argparse
 import os
 import numpy as np
 
-from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import Utility
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
