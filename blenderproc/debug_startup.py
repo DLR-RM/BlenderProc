@@ -29,6 +29,71 @@ else:
     # Just load python script into blender text object
     text = bpy.data.texts.load(argv[0])
 
+import bpy
+from bl_ui.space_text import TEXT_MT_editor_menus
+
+class RunBlenderProcOperator(bpy.types.Operator):
+    bl_idname = "wm.run_blenderproc"
+    bl_label = "Do something"
+    bl_description = "This operator does something"
+    bl_options = {"REGISTER"}
+
+    def execute(self, context):
+        # Delete all loaded models inside src/, as they are cached inside blender
+        for module in list(sys.modules.keys()):
+            if module.startswith("blenderproc") and module not in ["blenderproc.python.utility.SetupUtility"]:
+                del sys.modules[module]
+
+        # Run the script
+        bpy.ops.text.run_script()
+        return {"FINISHED"}
+
+bpy.utils.register_class(RunBlenderProcOperator)
+
+
+def draw(self, context):
+    layout = self.layout
+
+    st = context.space_data
+    text = st.text
+    is_syntax_highlight_supported = st.is_syntax_highlight_supported()
+    layout.template_header()
+
+    TEXT_MT_editor_menus.draw_collapsible(context, layout)
+
+    if text and text.is_modified:
+        row = layout.row(align=True)
+        row.alert = True
+        row.operator("text.resolve_conflict", text="", icon='HELP')
+
+    layout.separator_spacer()
+
+    row = layout.row(align=True)
+    row.template_ID(st, "text", new="text.new",
+                    unlink="text.unlink", open="text.open")
+
+    if text:
+        is_osl = text.name.endswith((".osl", ".osl"))
+        if is_osl:
+            row.operator("node.shader_script_update",
+                         text="", icon='FILE_REFRESH')
+        else:
+            row = layout.row()
+            row.active = is_syntax_highlight_supported
+            row.operator("wm.run_blenderproc", text="Run BlenderProc")
+
+    layout.separator_spacer()
+
+    row = layout.row(align=True)
+    row.prop(st, "show_line_numbers", text="")
+    row.prop(st, "show_word_wrap", text="")
+
+    syntax = row.row(align=True)
+    syntax.active = is_syntax_highlight_supported
+    syntax.prop(st, "show_syntax_highlight", text="")
+
+bpy.types.TEXT_HT_header.draw = draw
+
 # Put text into scripting tool
 for area in bpy.data.workspaces["Scripting"].screens[0].areas.values():
     if area.type == 'TEXT_EDITOR':
