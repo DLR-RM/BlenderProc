@@ -1,7 +1,7 @@
-import sys
+import os
 
-# Only import if we are in the blender environment (TODO find a better solution)
-if sys.executable.endswith("python3.9"):
+# Only import if we are in the blender environment, this environment variable is set by the run.py script
+if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     from .python.utility.SetupUtility import SetupUtility
     SetupUtility.setup([])
     from . import loader

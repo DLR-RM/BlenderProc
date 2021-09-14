@@ -211,15 +211,19 @@ print("Using temporary directory: " + temp_dir)
 if not os.path.exists(temp_dir):
     os.makedirs(temp_dir)
 
+used_environment = dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1")
+# this is done to enable the import of blenderproc inside of the blender internal python environment
+used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
+
 if args.debug:
-    p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", "blenderproc/debug_startup.py", "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+    p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", "blenderproc/debug_startup.py", "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=used_environment, cwd=repo_root_directory)
 else:
     if not args.batch_process:
         p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args,
-                             env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+                             env=used_environment, cwd=repo_root_directory)
     else:  # Pass the index file path containing placeholder args for all input combinations (cam, house, output path)
         p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--",  args.file, temp_dir, "--batch-process", args.batch_process],
-                             env=dict(os.environ, PYTHONPATH=os.getcwd(), PYTHONNOUSERSITE="1"), cwd=repo_root_directory)
+                             env=used_environment, cwd=repo_root_directory)
 
 
 def clean_temp_dir():
