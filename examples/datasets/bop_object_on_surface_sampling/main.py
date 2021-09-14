@@ -122,7 +122,7 @@ bproc.renderer.set_samples(50)
 data = bproc.renderer.render()
 
 # Write data in bop format
-bproc.writer.write_bop(args.output_dir,
+bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
                        dataset = args.bop_dataset_name,
                        depths = bproc.postprocessing.dist2depth(data["distance"]),
                        colors = data["colors"], 
