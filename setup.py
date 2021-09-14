@@ -7,4 +7,6 @@ setup(name='blenderproc',
       packages=['blenderproc'],
       entry_points={
             'console_scripts': ['blenderproc=blenderproc.command_line:cli'],
-      })
+      },
+      install_requires=["setuptools", "pyyaml"]
+      )

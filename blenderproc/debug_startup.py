@@ -1,6 +1,7 @@
 import bpy
 import sys
 from pathlib import Path
+from bl_ui.space_text import TEXT_MT_editor_menus
 
 # Extract given arguments
 argv = sys.argv[sys.argv.index("--") + 1:]
@@ -29,13 +30,12 @@ else:
     # Just load python script into blender text object
     text = bpy.data.texts.load(argv[0])
 
-import bpy
-from bl_ui.space_text import TEXT_MT_editor_menus
 
+# Declare operator that runs the blender proc script
 class RunBlenderProcOperator(bpy.types.Operator):
     bl_idname = "wm.run_blenderproc"
-    bl_label = "Do something"
-    bl_description = "This operator does something"
+    bl_label = "Run BlenderProc"
+    bl_description = "This operator runs the loaded BlenderProc script and also makes sure to unload all modules before starting."
     bl_options = {"REGISTER"}
 
     def execute(self, context):
@@ -50,7 +50,8 @@ class RunBlenderProcOperator(bpy.types.Operator):
 
 bpy.utils.register_class(RunBlenderProcOperator)
 
-
+# Declare function for drawing the header toolbar of the scripting area
+# Mostly copied from blenders script: scripts/startup/bl_ui/space_text.py
 def draw(self, context):
     layout = self.layout
 
@@ -80,6 +81,7 @@ def draw(self, context):
         else:
             row = layout.row()
             row.active = is_syntax_highlight_supported
+            # The following line has changed compared to the orignal code, it starts our operator instead of text.run_script
             row.operator("wm.run_blenderproc", text="Run BlenderProc")
 
     layout.separator_spacer()
@@ -92,6 +94,7 @@ def draw(self, context):
     syntax.active = is_syntax_highlight_supported
     syntax.prop(st, "show_syntax_highlight", text="")
 
+# Set our draw function as the default draw function for text area headers
 bpy.types.TEXT_HT_header.draw = draw
 
 # Put text into scripting tool

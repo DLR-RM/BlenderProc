@@ -22,6 +22,14 @@ class InstallUtility:
 
     @staticmethod
     def determine_blender_install_path(is_config, args):
+        """ Determines the path of the blender installation
+
+        :param is_config: Whether a yaml config file was given instead of a python script.
+        :param args: The given command line arguments.
+        :return:
+               - The path to an already existing blender installation that should be used, otherwise None
+               - The path to where blender should be installed.
+        """
         if is_config:
             config_parser = ConfigParser()
             config = config_parser.parse(args.file, args.args, False)  # Don't parse placeholder args in batch mode.
@@ -39,7 +47,13 @@ class InstallUtility:
     
     @staticmethod
     def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender):
+        """ Make sure blender is installed.
 
+        :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
+        :param blender_install_path: The path to where blender should be installed.
+        :param reinstall_blender: If True, blender will be forced to reinstall.
+        :return: The path to the blender binary.
+        """
         # If blender should be downloaded automatically
         if custom_blender_path is None:
             # Determine path where blender should be installed

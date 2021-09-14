@@ -18,7 +18,7 @@ from blenderproc.python.types.StructUtilityFunctions import get_instances
 
 
 
-def resolve_path(path):
+def resolve_path(path: str) -> str:
     """ Returns an absolute path. If given path is relative, current working directory is put in front.
 
     :param path: The path to resolve.
@@ -33,7 +33,12 @@ def resolve_path(path):
     else:
         return os.path.join(os.getcwd(), path)
 
-def resolve_resource(relative_resource_path):
+def resolve_resource(relative_resource_path: str) -> str:
+    """ Returns an absolute path to the given BlenderProc resource.
+
+    :param relative_resource_path: The relative path inside the BlenderProc resource folder.
+    :return: The absolute path.
+    """
     return resolve_path(os.path.join(Utility.blenderproc_root, "resources", relative_resource_path))
 
 def num_frames() -> int:

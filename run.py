@@ -17,11 +17,14 @@ args = parser.parse_args()
 if args.file is None:
     print(parser.format_help())
     exit(0)
+
+# Change from old to new CLI format
 if args.debug:
     sys.argv.insert(1, "debug")
     sys.argv.remove("--debug")
 else:
     sys.argv.insert(1, "run")
 
+# Run the actual CLI, this is just a fallback script
 import blenderproc.command_line
 

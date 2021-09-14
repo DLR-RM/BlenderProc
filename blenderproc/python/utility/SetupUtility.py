@@ -255,6 +255,15 @@ class SetupUtility:
 
     @staticmethod
     def determine_temp_dir(given_temp_dir):
+        """ Finds and creates a temporary directory.
+
+        On linux the temp dir is per default placed in /dev/shm or /tmp.
+        The name of the created temp dir contains a uuid, so multiple BlenderProc processes
+        can run on one system.
+
+        :param given_temp_dir: A directory inside which the temp dir should be created
+        :return: The path to the created temp dir.
+        """
         # Determine perfect temp dir
         if given_temp_dir is None:
             if sys.platform != "win32":

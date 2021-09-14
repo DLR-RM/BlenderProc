@@ -13,9 +13,11 @@ from blenderproc.python.utility.InstallUtility import InstallUtility
 parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers(dest='mode')
 
+# Setup different modes
 parser_run = subparsers.add_parser('run')
 parser_debug = subparsers.add_parser('debug')
 
+# Setup all common arguments of run and debug mode
 for subparser in [parser_run, parser_debug]:
     subparser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
     subparser.add_argument('args', metavar='arguments', nargs='*', help='Additional arguments which are used to replace placeholders inside the configuration. <args:i> is hereby replaced by the i-th argument.')
@@ -29,34 +31,38 @@ for subparser in [parser_run, parser_debug]:
 args = parser.parse_args()
 
 if args.mode in ["run", "debug"]:
+    # Make sure a file is given
     if args.file is None:
         print(parser.format_help())
         exit(0)
 
-    # If a config is given we can extract some information out of it
+    # Check whether its a python a script or a yaml config
     is_config = not args.file.endswith(".py")
 
+    # Install blender, if not already done
     custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(is_config, args)
-
     blender_run_path = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
 
+    # Setup script path that should be executed
     if is_config:
         path_src_run = os.path.join(repo_root_directory, "blenderproc/run.py")
     else:
         path_src_run = args.file
         SetupUtility.check_if_setup_utilities_are_at_the_top(path_src_run)
 
+    # Setup temp dir
     temp_dir = SetupUtility.determine_temp_dir(args.temp_dir)
 
+    # Setup env vars
     used_environment = dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1")
     # this is done to enable the import of blenderproc inside of the blender internal python environment
     used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
 
+    # Run either in debug or in normal mode
     if args.mode == "debug":
         p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=used_environment)
     else:
         p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args, env=used_environment)
-
 
     def clean_temp_dir():
         # If temp dir should not be kept and temp dir still exists => remove it
