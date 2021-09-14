@@ -39,7 +39,7 @@ def write_bop(output_dir: str, depths: List[np.ndarray] = [], colors: List[np.nd
     """
 
     # Output paths.
-    dataset_dir = os.path.join(output_dir, 'bop_data', dataset)
+    dataset_dir = os.path.join(output_dir, dataset)
     chunks_dir = os.path.join(dataset_dir, 'train_pbr')
     camera_path = os.path.join(dataset_dir, 'camera.json')
 
