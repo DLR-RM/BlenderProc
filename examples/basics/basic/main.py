@@ -1,9 +1,5 @@
-import blenderproc
-import imageio
 import blenderproc as bproc
 import argparse
-
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file, should be examples/resources/camera_positions")
