@@ -1,10 +1,5 @@
 import blenderproc as bproc
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
 import argparse
-
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', help="Path to the camera file, should be examples/resources/camera_positions")

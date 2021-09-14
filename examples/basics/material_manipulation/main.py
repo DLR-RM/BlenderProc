@@ -1,9 +1,5 @@
 import blenderproc as bproc
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
 from pathlib import Path
-
 import random
 import argparse
 import bpy

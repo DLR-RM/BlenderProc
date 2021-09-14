@@ -1,7 +1,4 @@
 import blenderproc as bproc
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
 import os
 import numpy as np
 import argparse
