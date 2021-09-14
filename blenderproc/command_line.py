@@ -10,12 +10,12 @@ import subprocess
 from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.utility.InstallUtility import InstallUtility
 
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(description="BlenderProc: A procedural Blender pipeline for photorealistic training image generation.")
 subparsers = parser.add_subparsers(dest='mode')
 
 # Setup different modes
-parser_run = subparsers.add_parser('run')
-parser_debug = subparsers.add_parser('debug')
+parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
+parser_debug = subparsers.add_parser('debug', help="Runs the BlenderProc pipeline in debug mode. This will open the Blender UI, so the 3D scene created by the pipeline can be visually inspected.")
 
 # Setup all common arguments of run and debug mode
 for subparser in [parser_run, parser_debug]:
