@@ -48,10 +48,14 @@ if args.mode in ["run", "debug"]:
 
     temp_dir = SetupUtility.determine_temp_dir(args.temp_dir)
 
+    used_environment = dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1")
+    # this is done to enable the import of blenderproc inside of the blender internal python environment
+    used_environment["INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT"] = "1"
+
     if args.mode == "debug":
-        p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1"))
+        p = subprocess.Popen([blender_run_path, "--python-use-system-env", "--python-exit-code", "0", "--python", os.path.join(repo_root_directory, "blenderproc/debug_startup.py"), "--", path_src_run if not is_config else args.file, temp_dir] + args.args, env=used_environment)
     else:
-        p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args, env=dict(os.environ, PYTHONPATH=repo_root_directory, PYTHONNOUSERSITE="1"))
+        p = subprocess.Popen([blender_run_path, "--background", "--python-use-system-env", "--python-exit-code", "2", "--python", path_src_run, "--", args.file, temp_dir] + args.args, env=used_environment)
 
 
     def clean_temp_dir():
