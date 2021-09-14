@@ -245,8 +245,8 @@ class SetupUtility:
                     else:
                         code = "\n".join(lines[:index + 2])
                         raise Exception('The given script "{}" does not have a blenderproc import at the top! '
-                                        "Make sure that is the first thing you import and run! Before importing "
-                                        "anything else!\nYour code:\n#####################\n{}\n"
+                                        "Make sure that is the first thing you import, as otherwise the import of third-party packages installed in the blender environment will fail.\n"
+                                        "Your code:\n#####################\n{}\n"
                                         "####################\nReplaces this with:\n"
                                         "import blenderproc as bproc".format(path_to_run_file, code))
         else:
