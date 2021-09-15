@@ -64,7 +64,7 @@ for idx, annotation in enumerate(annotations):
             rle_seg = annotation["segmentation"]
             # item = mask.decode(mask.frPyObjects(rle_seg, im.size[1], im.size[0])).astype(np.uint8) * 255
             item = rle_to_binary_mask(rle_seg).astype(np.uint8) * 255
-            item = Image.fromarray(item)
+            item = Image.fromarray(item, mode='L')
             overlay = Image.new('RGBA', im.size)
             draw_ov = ImageDraw.Draw(overlay)
             rand_color = np.random.randint(0,256,3)
