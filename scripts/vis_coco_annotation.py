@@ -62,7 +62,6 @@ for idx, annotation in enumerate(annotations):
         if isinstance(annotation["segmentation"], dict):
             im.putalpha(255)
             rle_seg = annotation["segmentation"]
-            # item = mask.decode(mask.frPyObjects(rle_seg, im.size[1], im.size[0])).astype(np.uint8) * 255
             item = rle_to_binary_mask(rle_seg).astype(np.uint8) * 255
             item = Image.fromarray(item, mode='L')
             overlay = Image.new('RGBA', im.size)
