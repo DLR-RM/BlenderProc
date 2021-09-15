@@ -2,6 +2,7 @@ import blenderproc as bproc
 import numpy as np
 import argparse
 import random
+import os
 
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', nargs='?', default="examples/advanced/random_backgrounds/object.ply", help="Path to the object file.")
@@ -73,7 +74,7 @@ data = bproc.renderer.render()
 seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"], default_values={"class": 0, "name": "none"})
 
 # Write data to coco file
-bproc.writer.write_coco_annotations(args.output_dir,
+bproc.writer.write_coco_annotations(os.path.join(args.output_dir, 'coco_data'),
                         instance_segmaps=seg_data["instance_segmaps"],
                         instance_attribute_maps=seg_data["instance_attribute_maps"],
                         colors=data["colors"],

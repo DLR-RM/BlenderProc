@@ -2,6 +2,8 @@ from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.writer.CocoWriterUtility import write_coco_annotations
 from blenderproc.python.modules.writer.WriterInterface import WriterInterface
 
+import os
+
 class CocoAnnotationsWriter(WriterInterface):
     """ Writes Coco Annotations in to a file.
 
@@ -67,7 +69,7 @@ class CocoAnnotationsWriter(WriterInterface):
         else:
             label_mapping = None
 
-        write_coco_annotations(self._determine_output_dir(False),
+        write_coco_annotations(os.path.join(self._determine_output_dir(False), 'coco_data'),
                                 mask_encoding_format=self.mask_encoding_format,
                                 supercategory=self._supercategory,
                                 append_to_existing_output=self._append_to_existing_output,

@@ -12,6 +12,7 @@ from skimage import measure
 from typing import List
 import cv2
 import bpy
+from typing import List
 
 from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
@@ -49,7 +50,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
     """
 
     # Create output directory
-    os.makedirs(os.path.join(output_dir, 'coco_data'), exist_ok=True)
+    os.makedirs(os.path.join(output_dir, 'images'), exist_ok=True)
 
     if not instance_segmaps:
         # Find path pattern of segmentation images
@@ -72,7 +73,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
             raise Exception("There is no output registered with key {}. Are you sure you ran the SegMapRenderer module "
                             "with 'map_by' set to 'instance' before?".format(segcolormap_output_key))
 
-    coco_annotations_path = os.path.join(output_dir, "coco_data/coco_annotations.json")
+    coco_annotations_path = os.path.join(output_dir, "coco_annotations.json")
     # Calculate image numbering offset, if append_to_existing_output is activated and coco data exists
     if append_to_existing_output and os.path.exists(coco_annotations_path):
         with open(coco_annotations_path, 'r') as fp:
@@ -115,11 +116,11 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
             color_bgr[..., :3] = color_bgr[..., :3][..., ::-1]
 
             if color_file_format == 'PNG':
-                target_base_path = 'coco_data/rgb_{:04d}.png'.format(frame + image_offset)
+                target_base_path = 'images/{:06d}.png'.format(frame + image_offset)
                 target_path = os.path.join(output_dir, target_base_path)
                 cv2.imwrite(target_path, color_bgr)
             elif color_file_format == 'JPEG':
-                target_base_path = 'coco_data/rgb_{:04d}.jpg'.format(frame + image_offset)
+                target_base_path = 'images/{:06d}.jpg'.format(frame + image_offset)
                 target_path = os.path.join(output_dir, target_base_path)
                 cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
             else:
@@ -127,7 +128,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
 
         else:
             source_path = rgb_output["path"] % frame
-            target_base_path = os.path.join('coco_data', os.path.basename(rgb_output["path"] % (frame + image_offset)))
+            target_base_path = os.path.join('images', os.path.basename(rgb_output["path"] % (frame + image_offset)))
             target_path = os.path.join(output_dir, target_base_path)
             shutil.copyfile(source_path, target_path)
 
@@ -148,6 +149,39 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
     with open(coco_annotations_path, 'w') as fp:
         json.dump(coco_output, fp)
 
+def binary_mask_to_rle(binary_mask: np.ndarray) -> List:
+    """Converts a binary mask to COCOs run-length encoding (RLE) format. Instead of outputting 
+    a mask image, you give a list of start pixels and how many pixels after each of those
+    starts are included in the mask.
+    :param binary_mask: a 2D binary numpy array where '1's represent the object
+    :return: Mask in RLE format
+    """
+    rle = {'counts': [], 'size': list(binary_mask.shape)}
+    counts = rle.get('counts')
+    for i, (value, elements) in enumerate(groupby(binary_mask.ravel(order='F'))):
+        if i == 0 and value == 1:
+            counts.append(0)
+        counts.append(len(list(elements)))
+    return rle
+
+def rle_to_binary_mask(rle: List) -> np.ndarray:
+    """Converts a COCOs run-length encoding (RLE) to binary mask.
+    :param rle: Mask in RLE format
+    :return: a 2D binary numpy array where '1's represent the object
+    """
+    binary_array = np.zeros(np.prod(rle.get('size')), dtype=np.bool)
+    counts = rle.get('counts')
+    
+    start = 0
+    for i in range(len(counts)-1):
+        start += counts[i] 
+        end = start + counts[i+1] 
+        binary_array[start:end] = (i + 1) % 2
+    
+    binary_mask = binary_array.reshape(*rle.get('size'), order='F')
+
+    return binary_mask
+
 class CocoWriterUtility:
 
     @staticmethod
@@ -157,7 +191,7 @@ class CocoWriterUtility:
 
         :param inst_segmaps: List of instance segmentation maps
         :param inst_attribute_maps: per-frame mappings with idx, class and optionally supercategory/bop_dataset_name
-        :param image_paths: A list of paths which points to the rendered segmentation maps.
+        :param image_paths: A list of paths which points to the rendered images.
         :param supercategory: name of the dataset/supercategory to filter for, e.g. a specific BOP dataset
         :param mask_encoding_format: Encoding format of the binary mask. Type: string.
         :param existing_coco_annotations: If given, the new coco annotations will be appended to the given coco annotations dict.
@@ -233,7 +267,7 @@ class CocoWriterUtility:
                     # Calc object mask
                     binary_inst_mask = np.where(inst_segmap == inst, 1, 0)
                     # Add coco info for object in this image
-                    annotation = CocoWriterUtility.create_annotation_info(len(annotations),
+                    annotation = CocoWriterUtility.create_annotation_info(len(annotations) + 1,
                                                                     image_id,
                                                                     instance_2_category_map[inst],
                                                                     binary_inst_mask,
@@ -329,7 +363,7 @@ class CocoWriterUtility:
         bounding_box = CocoWriterUtility.bbox_from_binary_mask(binary_mask)
 
         if mask_encoding_format == 'rle':
-            segmentation = CocoWriterUtility.binary_mask_to_rle(binary_mask)
+            segmentation = binary_mask_to_rle(binary_mask)
         elif mask_encoding_format == 'polygon':
             segmentation = CocoWriterUtility.binary_mask_to_polygon(binary_mask, tolerance)
             if not segmentation:
@@ -421,13 +455,3 @@ class CocoWriterUtility:
 
         return polygons
 
-    @staticmethod
-    def binary_mask_to_rle(binary_mask):
-        rle = {'counts': [], 'size': list(binary_mask.shape)}
-        counts = rle.get('counts')
-        for i, (value, elements) in enumerate(groupby(binary_mask.ravel(order='F'))):
-            if i == 0 and value == 1:
-                counts.append(0)
-            counts.append(len(list(elements)))
-
-        return rle
