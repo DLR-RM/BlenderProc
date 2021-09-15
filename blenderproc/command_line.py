@@ -11,7 +11,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.utility.InstallUtility import InstallUtility
 
 parser = argparse.ArgumentParser(description="BlenderProc: A procedural Blender pipeline for photorealistic training image generation.")
-subparsers = parser.add_subparsers(dest='mode')
+subparsers = parser.add_subparsers(dest='mode', help="Select a BlenderProc command to run:")
 
 # Setup different modes
 parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
