@@ -1,6 +1,6 @@
 import argparse
 import sys
-
+from blenderproc.command_line import cli
 
 parser = argparse.ArgumentParser(add_help=False)
 parser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
@@ -26,5 +26,5 @@ else:
     sys.argv.insert(1, "run")
 
 # Run the actual CLI, this is just a fallback script
-import blenderproc.command_line
+cli()
 
