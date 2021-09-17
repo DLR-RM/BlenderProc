@@ -167,7 +167,7 @@ class Utility:
         return destination
 
     @staticmethod
-    def hex_to_rgba(hex_value: str) -> List[float, float, float]:
+    def hex_to_rgba(hex_value: str) -> List[float]:
         """ Converts the given hex string to rgba color values.
 
         :param hex_value: The hex string, describing rgb.

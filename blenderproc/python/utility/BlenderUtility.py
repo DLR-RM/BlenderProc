@@ -9,7 +9,7 @@ from mathutils import Vector
 
 import numpy as np
 import imageio
-from typing import Union, List, Tuple, Callable, Optional, Dict
+from typing import Union, List, Tuple, Callable, Optional, Dict, Any
 
 from blenderproc.python.utility.Utility import Utility
 

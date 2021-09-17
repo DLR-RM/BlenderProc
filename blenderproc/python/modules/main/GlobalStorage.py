@@ -1,7 +1,5 @@
 from typing import Any, Dict, Optional
 
-from blenderproc.python.modules.utility.Config import Config
-
 
 class GlobalStorage(object):
     """
@@ -42,14 +40,14 @@ class GlobalStorage(object):
     _storage_dict: Dict[str, Any] = {}
 
     # defines all variables which are stored globally and are set by the config
-    _global_config: Optional[Config] = None
+    _global_config: Optional["Config"] = None
 
     # internal variables defined before the global config exists, will be copied into the global config on init
     # and then deleted, should not be used after init of the GlobalStorage
     _add_to_global_config_at_init: Dict[str, Any] = {}
 
     @staticmethod
-    def init_global(global_config: Config):
+    def init_global(global_config: "Config"):
         """
         Inits the global config with the given config, global_config should be of type blenderproc.python.Config
 
@@ -156,7 +154,7 @@ class GlobalStorage(object):
             return False
 
     @staticmethod
-    def get_global_config() -> Config:
+    def get_global_config() -> "Config":
         """
         Returns the global config, this function should be used with care!
 
