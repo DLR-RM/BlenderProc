@@ -48,8 +48,8 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
         if obj.has_rigidbody_enabled():
             # Skip objects that have parents with compound rigid body component
             has_compound_parent = obj.get_parent() is not None and isinstance(obj.get_parent(), MeshObject) \
-                                  and MeshObject(obj.get_parent()).get_rigidbody() is not None \
-                                  and MeshObject(obj.get_parent()).get_rigidbody().collision_shape == "COMPOUND"
+                                  and obj.get_parent().get_rigidbody() is not None \
+                                  and obj.get_parent().get_rigidbody().collision_shape == "COMPOUND"
             if obj.get_rigidbody().type == "ACTIVE" and not has_compound_parent:
                 # compute relative object rotation before and after simulation
                 R_obj_before_sim = mathutils.Euler(obj_poses_before_sim[obj.get_name()]['rotation']).to_matrix()
