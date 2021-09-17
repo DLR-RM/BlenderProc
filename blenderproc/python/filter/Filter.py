@@ -1,10 +1,11 @@
-from typing import Any, Type
+from typing import Any, Type, List
 import numpy as np
 import re
 
 from blenderproc.python.types.StructUtility import Struct
 
-def all_with_type(elements: [Struct], filtered_data_type: Type[Struct] = None) -> [Struct]:
+
+def all_with_type(elements: List[Struct], filtered_data_type: Type[Struct] = None) -> List[Struct]:
     """ Returns all elements from the given list having a given type.
 
     :param elements: A list of elements.
@@ -16,7 +17,9 @@ def all_with_type(elements: [Struct], filtered_data_type: Type[Struct] = None) -
     else:
         return elements
 
-def by_attr(elements: [Struct], attr_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> [Struct]:
+
+def by_attr(elements: List[Struct], attr_name: str, value: Any, filtered_data_type: Type[Struct] = None,
+            regex: bool = False) -> List[Struct]:
     """ Returns all elements from the given list whose specified attribute has the given value.
 
     :param elements: A list of elements.
@@ -29,7 +32,9 @@ def by_attr(elements: [Struct], attr_name: str, value: Any, filtered_data_type: 
     elements = all_with_type(elements, filtered_data_type)
     return list(filter(lambda struct: Filter._check_equality(struct.get_attr(attr_name), value, regex), elements))
 
-def one_by_attr(elements: [Struct], attr_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> Struct:
+
+def one_by_attr(elements: List[Struct], attr_name: str, value: Any, filtered_data_type: Type[Struct] = None,
+                regex: bool = False) -> Struct:
     """ Returns the one element from the given list whose specified attribute has the given value.
 
     An error is thrown is more than one or no element has been found.
@@ -44,7 +49,9 @@ def one_by_attr(elements: [Struct], attr_name: str, value: Any, filtered_data_ty
     elements = by_attr(elements, attr_name, value, filtered_data_type, regex)
     return Filter._check_list_has_length_one(elements)
 
-def by_cp(elements: [Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> [Struct]:
+
+def by_cp(elements: List[Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None,
+          regex: bool = False) -> List[Struct]:
     """  Returns all elements from the given list whose specified custom property has the given value.
 
     :param elements: A list of elements.
@@ -55,9 +62,13 @@ def by_cp(elements: [Struct], cp_name: str, value: Any, filtered_data_type: Type
     :return: The elements from the given list that match the given value at the specified custom property.
     """
     elements = all_with_type(elements, filtered_data_type)
-    return list(filter(lambda struct: struct.has_cp(cp_name) and Filter._check_equality(struct.get_cp(cp_name), value, regex), elements))
+    return list(
+        filter(lambda struct: struct.has_cp(cp_name) and Filter._check_equality(struct.get_cp(cp_name), value, regex),
+               elements))
 
-def one_by_cp(elements: [Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None, regex: bool = False) -> Struct:
+
+def one_by_cp(elements: List[Struct], cp_name: str, value: Any, filtered_data_type: Type[Struct] = None,
+              regex: bool = False) -> Struct:
     """ Returns the one element from the given list whose specified custom property has the given value.
 
     An error is thrown is more than one or no element has been found.
@@ -72,7 +83,9 @@ def one_by_cp(elements: [Struct], cp_name: str, value: Any, filtered_data_type: 
     elements = by_cp(elements, cp_name, value, filtered_data_type, regex)
     return Filter._check_list_has_length_one(elements)
 
-def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None, filtered_data_type: Type[Struct] = None) -> [Struct]:
+
+def by_attr_in_interval(elements: List[Struct], attr_name: str, min_value: Any = None, max_value: Any = None,
+                        filtered_data_type: Type[Struct] = None) -> List[Struct]:
     """ Returns all elements from the given list whose specified attribute has a value in the given interval (including the boundaries).
 
     :param elements: A list of elements.
@@ -83,9 +96,12 @@ def by_attr_in_interval(elements: [Struct], attr_name: str, min_value: Any = Non
     :return: The elements from the given list that match the given value at the specified attribute.
     """
     elements = all_with_type(elements, filtered_data_type)
-    return list(filter(lambda struct: (min_value is None or min_value <= struct.get_attr(attr_name)) and (max_value is None or max_value >= struct.get_attr(attr_name)), elements))
+    return list(filter(lambda struct: (min_value is None or min_value <= struct.get_attr(attr_name)) and (
+                max_value is None or max_value >= struct.get_attr(attr_name)), elements))
 
-def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any = None, max_value: Any = None, filtered_data_type: Type[Struct] = None) -> [Struct]:
+
+def by_attr_outside_interval(elements: List[Struct], attr_name: str, min_value: Any = None, max_value: Any = None,
+                             filtered_data_type: Type[Struct] = None) -> List[Struct]:
     """ Returns all elements from the given list whose specified attribute has a value outside the given interval.
 
     :param elements: A list of elements.
@@ -103,7 +119,7 @@ def by_attr_outside_interval(elements: [Struct], attr_name: str, min_value: Any 
 class Filter:
 
     @staticmethod
-    def _check_list_has_length_one(elements: [Any]) -> Any:
+    def _check_list_has_length_one(elements: List[Any]) -> Any:
         """ Checks if the given list only contains one element and returns it.
 
         :param elements: The list of elements to check.
