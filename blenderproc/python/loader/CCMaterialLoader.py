@@ -112,9 +112,8 @@ class CCMaterialLoader:
 
     @staticmethod
     def create_material(new_mat: bpy.types.Material, base_image_path: str, ambient_occlusion_image_path: str,
-                        metallic_image_path: str,
-                        roughness_image_path: str, alpha_image_path: str, normal_image_path: str,
-                        displacement_image_path: str):
+                        metallic_image_path: str, roughness_image_path: str, alpha_image_path: str,
+                        normal_image_path: str, displacement_image_path: str):
         """
         Create a material for the cctexture datatset, the combination used here is calibrated to this.
 

@@ -191,7 +191,8 @@ class SuncgLoader:
         return loaded_objects
 
     @staticmethod
-    def _load_ground(node: Dict[str, Any], metadata: Dict[str, Union[str, int]], material_adjustments: List[Dict[str, str]],
+    def _load_ground(node: Dict[str, Any], metadata: Dict[str, Union[str, int]],
+                     material_adjustments: List[Dict[str, str]],
                      transform: Matrix, house_id: str, parent: Entity, label_mapping: LabelIdMapping) -> List[
         MeshObject]:
         """ Load the ground specified in the given node.
@@ -211,7 +212,8 @@ class SuncgLoader:
                                      metadata, material_adjustments, transform, parent)
 
     @staticmethod
-    def _load_object(node: Dict[str, Any], metadata: Dict[str, Union[str, int]], material_adjustments: List[Dict[str, str]],
+    def _load_object(node: Dict[str, Any], metadata: Dict[str, Union[str, int]],
+                     material_adjustments: List[Dict[str, str]],
                      transform: Matrix, parent: Entity) -> List[MeshObject]:
         """ Load the object specified in the given node.
 
@@ -257,13 +259,10 @@ class SuncgLoader:
         box = create_primitive("CUBE")
         box.set_name("Box#" + node["id"])
         # Scale the cube to the required dimensions
-        box.set_local2world_mat(
-            Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) @ Matrix.Scale(node["dimensions"][1] / 2, 4,
-                                                                                       (0.0, 1.0, 0.0)) @ Matrix.Scale(
-                node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0)))
-
-        # Create UV mapping (beforehand we apply the scaling from the previous step, such that the resulting uv mapping has the correct aspect)
-        bpy.ops.object.transform_apply(scale=True)
+        local2world_mat = Matrix.Scale(node["dimensions"][0] / 2, 4, (1.0, 0.0, 0.0)) \
+                          @ Matrix.Scale(node["dimensions"][1] / 2, 4, (0.0, 1.0, 0.0)) \
+                          @ Matrix.Scale(node["dimensions"][2] / 2, 4, (0.0, 0.0, 1.0))
+        box.set_local2world_mat(local2world_mat)
         bpy.ops.object.editmode_toggle()
         bpy.ops.uv.cube_project()
         bpy.ops.object.editmode_toggle()

@@ -165,7 +165,7 @@ def set_samples(samples: int):
     bpy.context.scene.cycles.samples = samples
 
 
-def enable_distance_output(output_dir: Union[str, None] = None, file_prefix: str = "distance_",
+def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = "distance_",
                            output_key: str = "distance", distance_start: float = 0.1, distance_range: float = 25.0,
                            distance_falloff: str = "LINEAR"):
     """ Enables writing distance images.

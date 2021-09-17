@@ -174,7 +174,7 @@ def convert_to_entities(blender_objects: list) -> List["Entity"]:
     return [Entity(obj) for obj in blender_objects]
 
 
-def delete_multiple(entities: List[Union["Entity", "MeshObject"]]):
+def delete_multiple(entities: List[Union["Entity"]]):
     """ Deletes multiple entities at once
 
     :param entities: A list of entities that should be deleted
