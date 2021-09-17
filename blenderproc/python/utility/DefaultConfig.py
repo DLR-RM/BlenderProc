@@ -17,6 +17,10 @@ class DefaultConfig:
     stereo_interocular_distance = 0.065
 
     # Renderer
+    file_format = "PNG"
+    color_depth = 8
+    enable_transparency = False
+    jpg_quality = 95
     samples = 100
     cpu_threads = 1
     denoiser = "INTEL"
