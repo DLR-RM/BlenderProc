@@ -1,7 +1,9 @@
+from typing import List
+
 from blenderproc.python.types.EntityUtility import Entity, create_empty
 
 
-def merge_objects(objects: [Entity], merged_object_name: str = 'merged_object'):
+def merge_objects(objects: List[Entity], merged_object_name: str = 'merged_object') -> Entity:
     """ Generates an empty object and sets this as parent object for all objects in the list which do not already have a parent set.
 
     :param objects: A list of objects to be merged.
