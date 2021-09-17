@@ -2,7 +2,7 @@ import os
 import random
 
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
-from blenderproc.python.utility.Utility import resolve_path
+from blenderproc.python.utility.Utility import resolve_path, Utility, resolve_resource
 from blenderproc.python.loader.AMASSLoader import load_AMASS
 
 
@@ -87,7 +87,7 @@ class AMASSLoaderModule(LoaderInterface):
 
     def __init__(self, config):
         LoaderInterface.__init__(self, config)
-        self._data_path = resolve_path(self.config.get_string("data_path", os.path.join("resources", "AMASS")))
+        self._data_path = resolve_path(self.config.get_string("data_path", resolve_resource("AMASS")))
         # Body Model Specs
         self._used_body_model_gender = self.config.get_string("body_model_gender", random.choice(["male", "female", "neutral"]))
         # These numbers are based on a recommendation from the authors. refer to visualization tutorial from the

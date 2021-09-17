@@ -8,18 +8,16 @@ from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 
 class Pipeline:
 
-    def __init__(self, config_path, args, working_dir, temp_dir, avoid_output=False):
+    def __init__(self, config_path, args, temp_dir, avoid_output=False):
         """
         Inits the pipeline, by calling the constructors of all modules mentioned in the config.
 
         :param config_path: path to the config
         :param args: arguments which were provided to the run.py and are specified in the config file
-        :param working_dir: the current working dir usually the place where the run.py sits
-        :param working_dir: the directory where to put temporary files during the execution
+        :param temp_dir: the directory where to put temporary files during the execution
         :param avoid_output: if this is true, all modules (renderers and writers) skip producing output. With this it is possible to debug \
                                properly.
         """
-        Utility.working_dir = working_dir
 
         config_parser = ConfigParser(silent=True)
         config = config_parser.parse(resolve_path(config_path), args)

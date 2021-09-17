@@ -3,7 +3,7 @@ import os
 from blenderproc.python.modules.loader.LoaderInterface import LoaderInterface
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
-from blenderproc.python.utility.Utility import resolve_path
+from blenderproc.python.utility.Utility import resolve_path, Utility, resolve_resource
 from blenderproc.python.loader.SceneNetLoader import load_scenenet
 
 
@@ -60,7 +60,7 @@ class SceneNetLoaderModule(LoaderInterface):
         """
         Run the module, loads all the objects and set the properties correctly (including the category_id)
         """
-        label_mapping = LabelIdMapping.from_csv(resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+        label_mapping = LabelIdMapping.from_csv(resolve_resource(os.path.join('id_mappings', 'nyu_idset.csv')))
         # Add label mapping to global storage, s.t. it could be used for naming semantic segmentations.
         GlobalStorage.set("label_mapping", label_mapping)
         # load the objects (Use use_image_search=False as some image names have a "/" prefix which will lead to blender search the whole root directory recursively!

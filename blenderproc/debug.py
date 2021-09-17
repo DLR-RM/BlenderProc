@@ -20,11 +20,6 @@ else:
     raise Exception("This system is not supported yet: {}".format(sys.platform))
 sys.path.append(packages_path)
 
-# Delete all loaded models inside src/, as they are cached inside blender
-for module in list(sys.modules.keys()):
-    if module.startswith("blenderproc") or module.startswith("external"):
-        del sys.modules[module]
-
 from blenderproc.python.modules.main.Pipeline import Pipeline
 
 # Replace placeholders manually or use --debug command line argument
@@ -47,7 +42,7 @@ temp_dir = "examples/debugging/temp"
 try:
     # In this debug case the rendering is avoided, everything is executed except the final render step
     # For the RgbRenderer the undo is avoided to have a direct way of rendering in debug
-    pipeline = Pipeline(config_path, args, working_dir, temp_dir, avoid_output=True)
+    pipeline = Pipeline(config_path, args, temp_dir, avoid_output=True)
     pipeline.run()
 finally:
     # Revert back to previous view
