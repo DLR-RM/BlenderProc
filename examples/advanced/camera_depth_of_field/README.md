@@ -2,7 +2,7 @@
 
 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=500>
+<img src="../../../images/camera_depth_of_field_rendering.jpg" alt="Front readme image" width=500>
 </p>
 
 In this example we are demonstrating the sampling features in relation to camera objects.

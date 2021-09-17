@@ -1,6 +1,6 @@
 # SUNCG scene with object switching
 
-![](result.png)
+![](../../../images/suncg_with_object_replacer_result.png)
 
 The ObjectReplacer tries to replace objects with other objects.
 First, you can specify the group of objects, which should be replaced: `objects_to_be_replaced` 

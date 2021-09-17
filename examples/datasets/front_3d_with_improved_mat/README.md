@@ -1,8 +1,8 @@
 # 3D Front Dataset with improved mat 
 
 <p align="center">
-<img src="rendering_0.png" alt="Front readme image" width=375>
-<img src="rendering_1.png" alt="Front readme image" width=375>
+<img src="../../../images/front_3d_with_improved_mat_rendering_0.png" alt="Front readme image" width=375>
+<img src="../../../images/front_3d_with_improved_mat_rendering_1.png" alt="Front readme image" width=375>
 </p>
 
 In this example we explain to you how to use the 3D-Front Dataset with the BlenderProc pipeline in combination with the CCMaterialLoader.

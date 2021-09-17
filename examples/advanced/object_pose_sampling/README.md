@@ -1,6 +1,6 @@
 # Object pose sampling
 
-![](rendering.png)
+![](../../../images/object_pose_sampling_rendering.png)
 
 The focus of this example is introducing the `object.ObjectPoseSampler` which allows one to sample object poses inside a sampling volume with collision checks.
 
