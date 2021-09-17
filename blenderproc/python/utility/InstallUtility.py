@@ -18,11 +18,8 @@ import uuid
 from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
+
 class InstallUtility:
-    # Determine configured version
-    # right new only support blender-2.93
-    major_version = "2.93"
-    minor_version = "0"
 
     @staticmethod
     def determine_blender_install_path(is_config, args):
@@ -48,15 +45,17 @@ class InstallUtility:
             if blender_install_path is None:
                 blender_install_path = os.path.join("/home_local", os.getenv("USERNAME") if platform == "win32" else os.getenv("USER"), "blender")
         return custom_blender_path, blender_install_path
-    
+
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender=False):
+    def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender):
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
         :param blender_install_path: The path to where blender should be installed.
         :param reinstall_blender: If True, blender will be forced to reinstall.
-        :return: The path to the blender binary.
+        :return:
+               - The path to the blender binary.
+               - The major version of the blender installation.
         """
         # If blender should be downloaded automatically
         if custom_blender_path is None:
@@ -75,7 +74,11 @@ class InstallUtility:
             else:
                 blender_install_path = "blender"
 
-            blender_version = "blender-{}.{}".format(InstallUtility.major_version, InstallUtility.minor_version)
+            # Determine configured version
+            # right new only support blender-2.93
+            major_version = "2.93"
+            minor_version = "0"
+            blender_version = "blender-{}.{}".format(major_version, minor_version)
             if platform == "linux" or platform == "linux2":
                 blender_version += "-linux-x64"
                 blender_path = os.path.join(blender_install_path, blender_version)
@@ -188,4 +191,4 @@ class InstallUtility:
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
 
-        return blender_run_path
+        return blender_run_path, major_version

@@ -49,7 +49,7 @@ def cli():
 
         # Install blender, if not already done
         custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(is_config, args)
-        blender_run_path = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
+        blender_run_path, _ = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
 
         # Setup script path that should be executed
         if is_config:
@@ -101,13 +101,13 @@ def cli():
     elif args.mode == "pip":
         # Install blender, if not already done
         custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(False, args)
-        blender_bin = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path)
+        blender_bin, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path)
         blender_path = os.path.dirname(blender_bin)
 
         if args.pip_mode == "install":
-            SetupUtility.setup_pip(user_required_packages=args.pip_packages, blender_path=blender_path, major_version=InstallUtility.major_version)
+            SetupUtility.setup_pip(user_required_packages=args.pip_packages, blender_path=blender_path, major_version=major_version)
         elif args.pip_mode == "uninstall":
-            SetupUtility.uninstall_pip_packages(args.pip_packages, blender_path=blender_path, major_version=InstallUtility.major_version)
+            SetupUtility.uninstall_pip_packages(args.pip_packages, blender_path=blender_path, major_version=major_version)
     else:
         # If no command is given, print help
         print(parser.format_help())

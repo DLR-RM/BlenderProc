@@ -1,6 +1,3 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
-
 from blenderproc.python.postprocessing.StereoGlobalMatching import stereo_global_matching
 
 import os

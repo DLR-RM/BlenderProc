@@ -28,3 +28,7 @@ class DefaultConfig:
     transmission_bounces = 0
     transparency_bounces = 8
     volume_bounces = 0
+
+    # Setup
+    default_pip_packages = ["wheel", "pyyaml==5.1.2", "imageio", "gitpython", "scikit-image", "pypng==0.0.20", "scipy",
+                            "matplotlib", "pytz", "h5py", "Pillow", "opencv-contrib-python", "Pillow", "scikit-learn"]
