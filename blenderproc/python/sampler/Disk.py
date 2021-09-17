@@ -1,9 +1,12 @@
+from typing import Union, List
+
 import mathutils
 import numpy as np
 from mathutils import Vector
-from typing import Union
 
-def disk(center: Union[Vector, np.ndarray, list], radius: float, rotation: Union[Vector, np.ndarray, list] = None, sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> np.ndarray:
+
+def disk(center: Union[Vector, np.ndarray, List[float]], radius: float, rotation: Union[Vector, np.ndarray, List[float]] = None,
+         sample_from: str = "disk", start_angle: float = 0, end_angle: float = 180) -> np.ndarray:
     """ Samples a point on a 1-sphere (circle), or on a 2-ball (disk, i.e. circle + interior space), or on an arc/sector
         with an inner angle less or equal than 180 degrees. Returns a 3d mathutils.Vector sampled point.
 
@@ -59,10 +62,12 @@ def disk(center: Union[Vector, np.ndarray, list], radius: float, rotation: Union
         end_vec = [np.cos(np.deg2rad(end_angle)), np.sin(np.deg2rad(end_angle))]
 
     # if sampling from the circle or arc set magnitude to radius, if not - to the scaled radius
-    if sample_from in ["circle", "arc"]:
+    if sample_from.lower() in ["circle", "arc"]:
         magnitude = radius
-    elif sample_from in ["disk", "sector"]:
+    elif sample_from.lower() in ["disk", "sector"]:
         magnitude = radius * np.sqrt(np.random.uniform())
+    else:
+        raise Exception("Unknown mode of operation: " + sample_from)
 
     sampled_point = Disk._sample_point(magnitude)
 
@@ -82,13 +87,13 @@ def disk(center: Union[Vector, np.ndarray, list], radius: float, rotation: Union
 class Disk:
 
     @staticmethod
-    def _sample_point(magnitude: float) -> np.array:
+    def _sample_point(magnitude: float) -> np.ndarray:
         """ Samples a 3d point from a two-dimensional normal distribution with the third dim equal to 0.
 
         :param magnitude: Scaling factor of a radius.
         :return: Sampled 3d point. Type: numpy.array.
         """
-        direction = np.random.normal(size=2)
+        direction = np.random.normal(loc=0.0, scale=1.0, size=2)
         if np.count_nonzero(direction) == 0:
             direction[0] = 1e-5
         norm = np.sqrt(direction.dot(direction))
@@ -97,7 +102,8 @@ class Disk:
         return sampled_point
 
     @staticmethod
-    def _is_clockwise(rel_point: list, sampled_point: list) -> bool:
+    def _is_clockwise(rel_point: Union[Vector, np.ndarray, List[float]],
+                      sampled_point: Union[Vector, np.ndarray, List[float]]) -> bool:
         """ Checks if the sampled_point is in the clockwise direction in relation to the rel_point.
 
         :param rel_point: Point relative to which the test is performed.

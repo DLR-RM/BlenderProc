@@ -1,4 +1,5 @@
 import random
+from typing import List
 
 import numpy as np
 
@@ -7,7 +8,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 class Front3DPointInRoomSampler:
 
-    def __init__(self, front3d_objects: [MeshObject], amount_of_objects_needed_per_room: int = 2):
+    def __init__(self, front3d_objects: List[MeshObject], amount_of_objects_needed_per_room: int = 2):
         """ Collects the floors of all rooms with at least N objects.
 
         :param front3d_objects: The list of front3d objects that should be considered.

@@ -1,5 +1,5 @@
 import random
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 import numpy as np
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -49,7 +49,7 @@ class SuncgPointInRoomSampler:
 
         raise Exception("Cannot sample any point inside the loaded suncg rooms.")
 
-    def _find_floor(self, suncg_objects: List[MeshObject], room_obj: MeshObject) -> MeshObject:
+    def _find_floor(self, suncg_objects: List[MeshObject], room_obj: MeshObject) -> Optional[MeshObject]:
         """ Returns the floor object of the given room object.
 
         Goes through all children and returns the first one with type "Floor".
