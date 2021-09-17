@@ -1,8 +1,6 @@
-import os
-from typing import Union, Callable, Any, List, Dict, Tuple
+from typing import Union
 
 import numpy as np
-import csv
 
 import bpy
 
@@ -41,6 +39,7 @@ def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     depth = dist * f / np.sqrt(x_opt ** 2 + y_opt ** 2 + f ** 2)
 
     return depth
+
 
 def remove_segmap_noise(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     """
@@ -85,6 +84,7 @@ def remove_segmap_noise(image: Union[list, np.ndarray]) -> Union[list, np.ndarra
         image[index[0]][index[1]] = np.array([new_val, new_val, new_val])
 
     return image
+
 
 def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges_only: bool = True,
                      rgb: bool = False) -> Union[list, np.ndarray]:
@@ -153,6 +153,7 @@ def oil_paint_filter(image: Union[list, np.ndarray], filter_size: int = 5, edges
 
     return filtered_img
 
+
 def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
     """
     Remove redundant channels, this is useful to remove the two of the three channels created for a
@@ -172,9 +173,7 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
     return image
 
 
-
 class PostProcessingUtility:
-
 
     @staticmethod
     def _get_pixel_neighbors(data: np.ndarray, i: int, j: int) -> np.ndarray:
