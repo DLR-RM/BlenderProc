@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 import numpy as np
 
 import bpy
@@ -113,12 +113,12 @@ class Entity(Struct):
         """
         self.blender_obj.parent = parent.blender_obj
 
-    def get_parent(self) -> "Entity":
+    def get_parent(self) -> Optional["Entity"]:
         """ Returns the parent of the entity.
 
         :return: The parent.
         """
-        return Entity(self.blender_obj.parent)
+        return Entity(self.blender_obj.parent) if self.blender_obj.parent is not None else None
 
     def delete(self):
         """ Deletes the entity """
@@ -174,7 +174,7 @@ def convert_to_entities(blender_objects: list) -> List["Entity"]:
     return [Entity(obj) for obj in blender_objects]
 
 
-def delete_multiple(entities: ["Entity"]):
+def delete_multiple(entities: List[Union["Entity", "MeshObject"]]):
     """ Deletes multiple entities at once
 
     :param entities: A list of entities that should be deleted

@@ -19,14 +19,14 @@ class MeshObject(Entity):
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object)
 
-    def get_materials(self) -> List[Material]:
+    def get_materials(self) -> List[Optional[Material]]:
         """ Returns the materials used by the mesh.
 
         :return: A list of materials.
         """
         return MaterialLoaderUtility.convert_to_materials(self.blender_obj.data.materials)
 
-    def has_materials(self):
+    def has_materials(self) -> bool:
         return len(self.blender_obj.data.materials) > 0
 
     def set_material(self, index: int, material: Material):
@@ -44,7 +44,7 @@ class MeshObject(Entity):
         """
         self.blender_obj.data.materials.append(material.blender_obj)
 
-    def new_material(self, name: str):
+    def new_material(self, name: str) -> Material:
         """ Creates a new material and adds it to the object.
 
         :param name: The name of the new material.
@@ -67,7 +67,7 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self):
+    def duplicate(self) -> "MeshObject":
         """ Duplicates the object.
 
         :return: A new mesh object, which is a duplicate of this object.
@@ -238,7 +238,7 @@ class MeshObject(Entity):
         """
         self.blender_obj.hide_render = hide_object
 
-    def set_parent(self, new_parent: "MeshObject"):
+    def set_parent(self, new_parent: Entity):
         """ Sets the parent of this object.
 
         :param new_parent: The new parent object.
@@ -246,7 +246,7 @@ class MeshObject(Entity):
         self.blender_obj.parent = new_parent.blender_obj
         self.blender_obj.matrix_parent_inverse = new_parent.blender_obj.matrix_world.inverted()
 
-    def get_parent(self) -> "MeshObject":
+    def get_parent(self) -> Optional[Entity]:
         """ Returns the parent object.
 
         :return: The parent object, None if it has no parent.
