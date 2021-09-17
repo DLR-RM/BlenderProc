@@ -1,7 +1,7 @@
 import os
 import csv
 import threading
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 
 import bpy
 import time
@@ -15,7 +15,6 @@ import json
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
-
 
 
 def resolve_path(path):
@@ -32,6 +31,7 @@ def resolve_path(path):
         return path.replace("~", os.getenv("HOME"))
     else:
         return os.path.join(os.path.dirname(Utility.working_dir), path)
+
 
 def num_frames() -> int:
     """ Returns the currently total number of registered frames.
@@ -105,7 +105,8 @@ class Utility:
                     for suffix in ["Module", ""]:
                         try:
                             # Try to load the module using the current suffix
-                            module = importlib.import_module("blenderproc.python.modules." + module_config["module"] + suffix)
+                            module = importlib.import_module(
+                                "blenderproc.python.modules." + module_config["module"] + suffix)
                         except ModuleNotFoundError:
                             # Try next suffix
                             continue
@@ -119,7 +120,8 @@ class Utility:
 
                     # Throw an error if no module/class with the specified name + any suffix has been found
                     if module_class is None:
-                        raise Exception("The module blenderproc.python.modules." + module_config["module"] + " was not found!")
+                        raise Exception(
+                            "The module blenderproc.python.modules." + module_config["module"] + " was not found!")
 
                     # Create module
                     modules.append(module_class(Config(config)))
@@ -127,7 +129,7 @@ class Utility:
         return modules
 
     @staticmethod
-    def get_current_version():
+    def get_current_version() -> Optional[str]:
         """ Gets the git commit hash.
 
         :return: a string, the BlenderProc version, or None if unavailable
@@ -138,7 +140,6 @@ class Utility:
             warnings.warn("Invalid git repository")
             return None
         return repo.head.object.hexsha
-
 
     @staticmethod
     def get_temporary_directory():
@@ -166,16 +167,16 @@ class Utility:
         return destination
 
     @staticmethod
-    def hex_to_rgba(hex):
+    def hex_to_rgba(hex_value: str) -> List[float, float, float]:
         """ Converts the given hex string to rgba color values.
 
-        :param hex: The hex string, describing rgb.
+        :param hex_value: The hex string, describing rgb.
         :return: The rgba color, in form of a list. Values between 0 and 1.
         """
-        return [x / 255 for x in bytes.fromhex(hex[-6:])] + [1.0]
+        return [x / 255 for x in bytes.fromhex(hex_value[-6:])] + [1.0]
 
     @staticmethod
-    def rgb_to_hex(rgb):
+    def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
         """ Converts the given rgb to hex values.
 
         :param rgb: tuple of three with rgb integers.
@@ -204,12 +205,13 @@ class Utility:
         links.new(new_node_src_socket, dest_socket)
 
     @staticmethod
-    def get_node_connected_to_the_output_and_unlink_it(material):
+    def get_node_connected_to_the_output_and_unlink_it(material: bpy.types.Material) \
+            -> Tuple[Optional[bpy.types.Node], bpy.types.Node]:
         """
         Searches for the OutputMaterial in the given material and finds the connected node to it,
         removes the connection between this node and the output and returns this node and the material_output
 
-        :param material_slot: material slot
+        :param material: Material on which this operation should be performed
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
@@ -225,9 +227,8 @@ class Utility:
                 break
         return node_connected_to_the_output, material_output
 
-
     @staticmethod
-    def get_nodes_with_type(nodes, node_type):
+    def get_nodes_with_type(nodes: List[bpy.types.Node], node_type: str) -> List[bpy.types.Node]:
         """
         Returns all nodes which are of the given node_type
 
@@ -238,7 +239,7 @@ class Utility:
         return [node for node in nodes if node_type in node.bl_idname]
 
     @staticmethod
-    def get_the_one_node_with_type(nodes, node_type):
+    def get_the_one_node_with_type(nodes: List[bpy.types.Node], node_type: str) -> bpy.types.Node:
         """
         Returns the one nodes which is of the given node_type
 
@@ -255,20 +256,20 @@ class Utility:
             raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
 
     @staticmethod
-    def read_suncg_lights_windows_materials():
+    def read_suncg_lights_windows_materials() -> Tuple[Dict[str, Tuple[List[str], List[str]]], List[str]]:
         """
         Returns the lights dictionary and windows list which contains their respective materials
 
         :return: dictionary of lights' and list of windows' materials
         """
         # Read in lights
-        lights = {}
+        lights: Dict[str, Tuple[List[str], List[str]]] = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
         with open(resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
-                lights[row[0]] = [[], []]
+                lights[row[0]] = ([], [])
 
                 index = 1
 
@@ -288,7 +289,7 @@ class Utility:
 
         # Read in windows
         windows = []
-        with open(resolve_path(os.path.join('resources','suncg','ModelCategoryMapping.csv')), 'r') as csvfile:
+        with open(resolve_path(os.path.join('resources', 'suncg', 'ModelCategoryMapping.csv')), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":
@@ -301,6 +302,7 @@ class Utility:
 
         Usage: with BlockStopWatch('text'):
         """
+
         def __init__(self, block_name):
             self.block_name = block_name
 
@@ -309,13 +311,15 @@ class Utility:
             self.start = time.time()
 
         def __exit__(self, type, value, traceback):
-            print("#### Finished - " + self.block_name + " (took " + ("%.3f" % (time.time() - self.start)) + " seconds) ####")
+            print("#### Finished - " + self.block_name + " (took " + (
+                        "%.3f" % (time.time() - self.start)) + " seconds) ####")
 
     class UndoAfterExecution:
         """ Reverts all changes done to the blender project inside this block.
 
         Usage: with UndoAfterExecution():
         """
+
         def __init__(self, check_point_name=None, perform_undo_op=True):
             if check_point_name is None:
                 check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
@@ -353,7 +357,8 @@ class Utility:
         for suffix in ["Module", ""]:
             try:
                 # Import class from blenderproc.python.modules
-                module_class = getattr(importlib.import_module("blenderproc.python.modules.provider." + name + suffix), name.split(".")[-1] + suffix)
+                module_class = getattr(importlib.import_module("blenderproc.python.modules.provider." + name + suffix),
+                                       name.split(".")[-1] + suffix)
                 break
             except ModuleNotFoundError:
                 # Try next suffix
@@ -395,7 +400,8 @@ class Utility:
                 parameters[key] = config.data[key]
 
         if not config.has_param('provider'):
-            raise Exception("Each provider needs a provider label, this one does not contain one: {}".format(config.data))
+            raise Exception(
+                "Each provider needs a provider label, this one does not contain one: {}".format(config.data))
 
         return Utility.build_provider(config.get_string("provider"), parameters)
 
@@ -455,7 +461,11 @@ class Utility:
         # Calculate the block indices per dimension
         values /= block_length
         # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())
-        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
+        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :,
+                                                                                         1] * num_splits_per_dimension + values[
+                                                                                                                         :,
+                                                                                                                         :,
+                                                                                                                         2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
 
@@ -466,7 +476,8 @@ class Utility:
         :param output: A dict containing key and path of the new output type.
         """
         if GlobalStorage.is_in_storage("output"):
-            if not Utility.output_already_registered(output, GlobalStorage.get("output")): # E.g. multiple camera samplers
+            if not Utility.output_already_registered(output,
+                                                     GlobalStorage.get("output")):  # E.g. multiple camera samplers
                 GlobalStorage.get("output").append(output)
         else:
             GlobalStorage.set("output", [output])
@@ -511,7 +522,7 @@ class Utility:
         outputs = []
         if GlobalStorage.is_in_storage("output"):
             outputs = GlobalStorage.get("output")
-        
+
         return outputs
 
     @staticmethod
@@ -535,7 +546,6 @@ class Utility:
 
         return False
 
-
     @staticmethod
     def insert_keyframe(obj, data_path, frame=None):
         """ Inserts a keyframe for the given object and data path at the specified frame number:
@@ -550,6 +560,7 @@ class Utility:
         # If no frame is given and no KeyFrame context manager surrounds us => do nothing
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
+
 
 # KeyFrameState should be thread-specific
 class KeyFrameState(threading.local):

@@ -1,7 +1,7 @@
 import mathutils
 import numpy as np
 from mathutils import Vector, Euler, Matrix
-from typing import Union
+from typing import Union, Optional, Dict, Tuple, List
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
@@ -10,7 +10,9 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject
 class CollisionUtility:
 
     @staticmethod
-    def check_intersections(obj: MeshObject, bvh_cache: dict, objects_to_check_against: list, list_of_objects_with_no_inside_check: list, skip_view_layer_update: bool = False):
+    def check_intersections(obj: MeshObject, bvh_cache: Dict[str, mathutils.bvhtree.BVHTree],
+                            objects_to_check_against: List[MeshObject],
+                            list_of_objects_with_no_inside_check: List[MeshObject], skip_view_layer_update: bool = False):
         """ Checks if a object intersects with any object given in the list.
 
         The bvh_cache adds all current objects to the bvh tree, which increases the speed.
@@ -108,7 +110,9 @@ class CollisionUtility:
         return collide
 
     @staticmethod
-    def check_mesh_intersection(obj1: MeshObject, obj2: MeshObject, skip_inside_check: bool = False, bvh_cache: dict = None):
+    def check_mesh_intersection(obj1: MeshObject, obj2: MeshObject, skip_inside_check: bool = False,
+                                bvh_cache: Optional[Dict[str, mathutils.bvhtree.BVHTree]] = None) \
+            -> Tuple[bool, Dict[str, mathutils.bvhtree.BVHTree]]:
         """
         Checks if the two objects are intersecting.
 
@@ -121,6 +125,7 @@ class CollisionUtility:
         :param obj1: object 1 to check for intersection, must be a mesh
         :param obj2: object 2 to check for intersection, must be a mesh
         :param skip_inside_check: Disables checking whether one object is completely inside the other.
+        :param bvh_cache: Dict of all the bvh trees, removes the `obj` from the cache before adding it again.
         :return: True, if they are intersecting
         """
 
