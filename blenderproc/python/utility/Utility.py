@@ -1,7 +1,7 @@
 import os
 import csv
 import threading
-from typing import List, Dict, Any, Tuple, Optional
+from typing import List, Dict, Any, Tuple, Optional, Union
 
 import bpy
 import time
@@ -17,7 +17,7 @@ from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
 
 
-def resolve_path(path):
+def resolve_path(path: str) -> str:
     """ Returns an absolute path. If given path is relative, current working directory is put in front.
 
     :param path: The path to resolve.
@@ -47,7 +47,7 @@ class Utility:
     used_temp_id = None
 
     @staticmethod
-    def initialize_modules(module_configs):
+    def initialize_modules(module_configs: List[Union[Dict[str, Any], str]]) -> List["Module"]:
         """ Initializes the modules described in the given configuration.
 
         Example for module_configs:
@@ -142,14 +142,14 @@ class Utility:
         return repo.head.object.hexsha
 
     @staticmethod
-    def get_temporary_directory():
+    def get_temporary_directory() -> str:
         """
         :return: default temporary directory, shared memory if it exists
         """
         return Utility.temp_dir
 
     @staticmethod
-    def merge_dicts(source, destination):
+    def merge_dicts(source: Dict[Any, Any], destination: Dict[Any, Any]) -> Dict[Any, Any]:
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
 
         :param source: The source dict.
@@ -185,7 +185,9 @@ class Utility:
         return '#%02x%02x%02x' % tuple(rgb)
 
     @staticmethod
-    def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
+    def insert_node_instead_existing_link(links: bpy.types.NodeLinks, source_socket: bpy.types.NodeSocket,
+                                          new_node_dest_socket: bpy.types.NodeSocket,
+                                          new_node_src_socket: bpy.types.NodeSocket, dest_socket: bpy.types.NodeSocket):
         """ Replaces the node between source_socket and dest_socket with a new node.
 
         Before: source_socket -> dest_socket
@@ -320,7 +322,7 @@ class Utility:
         Usage: with UndoAfterExecution():
         """
 
-        def __init__(self, check_point_name=None, perform_undo_op=True):
+        def __init__(self, check_point_name: Optional[str] = None, perform_undo_op: bool = True):
             if check_point_name is None:
                 check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
             self.check_point_name = check_point_name
@@ -344,7 +346,7 @@ class Utility:
                     struct.update_blender_ref(name)
 
     @staticmethod
-    def build_provider(name, parameters):
+    def build_provider(name: str, parameters: Dict[str, Any]) -> "Provider":
         """ Builds up providers like sampler or getter.
 
         It first builds the config and then constructs the required provider.
@@ -374,7 +376,7 @@ class Utility:
         return module_class(config)
 
     @staticmethod
-    def build_provider_based_on_config(config):
+    def build_provider_based_on_config(config: Config) -> "Provider":
         """ Builds up the provider using the parameters described in the given config.
 
         The given config should follow the following scheme:
@@ -443,7 +445,8 @@ class Utility:
         return values[:num], num_splits_per_dimension
 
     @staticmethod
-    def map_back_from_equally_spaced_equidistant_values(values, num_splits_per_dimension, space_size_per_dimension):
+    def map_back_from_equally_spaced_equidistant_values(values: np.ndarray, num_splits_per_dimension: int,
+                                                        space_size_per_dimension: int) -> np.ndarray:
         """ Maps the given values back to their original indices.
 
         This function calculates for each given value the corresponding index in the list of values created by the generate_equidistant_values() method.
@@ -470,20 +473,21 @@ class Utility:
         return np.round(values)
 
     @staticmethod
-    def add_output_entry(output):
+    def add_output_entry(output: Dict[str, str]):
         """ Registers the given output in the scene's custom properties
 
         :param output: A dict containing key and path of the new output type.
         """
         if GlobalStorage.is_in_storage("output"):
-            if not Utility.output_already_registered(output,
-                                                     GlobalStorage.get("output")):  # E.g. multiple camera samplers
+            # E.g. multiple camera samplers
+            if not Utility.output_already_registered(output, GlobalStorage.get("output")):
                 GlobalStorage.get("output").append(output)
         else:
             GlobalStorage.set("output", [output])
 
     @staticmethod
-    def register_output(output_dir, prefix, key, suffix, version, unique_for_camposes=True):
+    def register_output(output_dir: str, prefix: str, key: str, suffix: str, version: str,
+                        unique_for_camposes: bool = True):
         """ Registers new output type using configured key and file prefix.
 
         :param output_dir: The output directory containing the generated files.
@@ -501,7 +505,7 @@ class Utility:
         })
 
     @staticmethod
-    def find_registered_output_by_key(key):
+    def find_registered_output_by_key(key: str) -> Optional[Any]:
         """ Returns the output which was registered with the given key.
 
         :param key: The output key to look for.
@@ -526,7 +530,7 @@ class Utility:
         return outputs
 
     @staticmethod
-    def output_already_registered(output, output_list):
+    def output_already_registered(output: Dict[str, Any], output_list: List[Dict[str, Any]]) -> bool:
         """ Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
         Also throws an error if it detects an entry having the same key but not the same path and vice versa since this
         is ambiguous.
@@ -547,7 +551,7 @@ class Utility:
         return False
 
     @staticmethod
-    def insert_keyframe(obj, data_path, frame=None):
+    def insert_keyframe(obj: bpy.types.Object, data_path: str, frame: Optional[int] = None):
         """ Inserts a keyframe for the given object and data path at the specified frame number:
 
         :param obj: The blender object to use.
@@ -573,7 +577,7 @@ class KeyFrame:
     # Remember how many KeyFrame context manager have been applied around the current execution point
     state = KeyFrameState()
 
-    def __init__(self, frame):
+    def __init__(self, frame: int):
         """ Sets the frame number for its complete block.
 
         :param frame: The frame number to set. If None is given, nothing is changed.
