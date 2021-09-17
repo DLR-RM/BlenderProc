@@ -19,6 +19,10 @@ from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
 class InstallUtility:
+    # Determine configured version
+    # right new only support blender-2.93
+    major_version = "2.93"
+    minor_version = "0"
 
     @staticmethod
     def determine_blender_install_path(is_config, args):
@@ -46,7 +50,7 @@ class InstallUtility:
         return custom_blender_path, blender_install_path
     
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender):
+    def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender=False):
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
@@ -71,11 +75,7 @@ class InstallUtility:
             else:
                 blender_install_path = "blender"
 
-            # Determine configured version
-            # right new only support blender-2.93
-            major_version = "2.93"
-            minor_version = "0"
-            blender_version = "blender-{}.{}".format(major_version, minor_version)
+            blender_version = "blender-{}.{}".format(InstallUtility.major_version, InstallUtility.minor_version)
             if platform == "linux" or platform == "linux2":
                 blender_version += "-linux-x64"
                 blender_path = os.path.join(blender_install_path, blender_version)

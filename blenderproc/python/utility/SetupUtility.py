@@ -58,33 +58,24 @@ class SetupUtility:
 
         Utility.temp_dir = resolve_path(temp_dir)
         os.makedirs(Utility.temp_dir, exist_ok=True)
-    
+
     @staticmethod
-    def setup_pip(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
-        """ Makes sure the given user required and the general required python packages are installed in the blender proc env
+    def determine_python_paths(blender_path, major_version):
+        """ Determines python binary, custom pip packages and the blender pip packages path.
 
-        At the first run all installed packages are collected via pip freeze.
-        If a pip packages is already installed, it is skipped.
-
-        :param user_required_packages: A list of pip packages that should be installed. The version number can be specified via the usual == notation.
-        :param blender_path: The path to the blender installation.
-        :param major_version: The version number of the blender installation.
-        :param reinstall_packages: Set to true, if all python packages should be reinstalled.
-        :return: Returns the path to the directory which contains all custom installed pip packages.
+        :param blender_path: The path to the blender main folder.
+        :param major_version: The major version string of the blender installation.
+        :return:
+              - The path to the python binary of the blender installation
+              - The path to the directory containing custom pip packages installed by BlenderProc
+              - The path to the directory containing pip packages installed by blender.
         """
         # If no bleneder path is given, determine it based on sys.executable
         if blender_path is None:
             blender_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", ".."))
             major_version = os.path.basename(os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..")))
 
-        required_packages = []
-        # Only install general required packages on first setup_pip call
-        if SetupUtility.installed_packages is None:
-            required_packages += ["wheel", "pyyaml==5.1.2", "imageio", "gitpython"]
-        if user_required_packages is not None:
-            required_packages += user_required_packages
-
-        # Install pip
+        # Based on the OS determined the three paths
         if platform == "linux" or platform == "linux2":
             python_bin_folder = os.path.join(blender_path, major_version, "python", "bin")
             python_bin = os.path.join(python_bin_folder, "python3.9")
@@ -102,6 +93,30 @@ class SetupUtility:
             pre_python_package_path = os.path.join(blender_path, major_version, "python", "lib", "site-packages")
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
+
+        return python_bin, packages_path, pre_python_package_path
+
+    @staticmethod
+    def setup_pip(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
+        """ Makes sure the given user required and the general required python packages are installed in the blender proc env
+
+        At the first run all installed packages are collected via pip freeze.
+        If a pip packages is already installed, it is skipped.
+
+        :param user_required_packages: A list of pip packages that should be installed. The version number can be specified via the usual == notation.
+        :param blender_path: The path to the blender installation.
+        :param major_version: The version number of the blender installation.
+        :param reinstall_packages: Set to true, if all python packages should be reinstalled.
+        :return: Returns the path to the directory which contains all custom installed pip packages.
+        """
+        required_packages = []
+        # Only install general required packages on first setup_pip call
+        if SetupUtility.installed_packages is None:
+            required_packages += ["wheel", "pyyaml==5.1.2", "imageio", "gitpython"]
+        if user_required_packages is not None:
+            required_packages += user_required_packages
+
+        python_bin, packages_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
 
         # Init pip
         SetupUtility._ensure_pip(python_bin, packages_path, pre_python_package_path)
@@ -165,6 +180,20 @@ class SetupUtility:
         if packages_were_installed:
             importlib.invalidate_caches()
         return packages_path
+
+    @staticmethod
+    def uninstall_pip_packages(package_names, blender_path, major_version):
+        """ Uninstalls the given pip packages in blenders python environment.
+
+        :param package_names: A list of pip packages that should be uninstalled.
+        :param blender_path: The path to the blender main folder.
+        :param major_version: The major version string of the blender installation.
+        """
+        # Determine python and packages paths
+        python_bin, packages_path, pre_python_package_path = SetupUtility.determine_python_paths(blender_path, major_version)
+
+        # Run pip uninstall
+        subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
 
     @staticmethod
     def _ensure_pip(python_bin, packages_path, pre_python_package_path):
