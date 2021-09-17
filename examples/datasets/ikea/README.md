@@ -1,6 +1,6 @@
 # IKEA 
 <p align="center">
-<img src="rendered_example.png" alt="normals and color rendering of example table" width=300>
+<img src="../../../images/ikea_rendered_example.png" alt="normals and color rendering of example table" width=300>
 </p>
 
 The focus of this example is the `loader.IKEALoader`, which can be used to load objects from the [IKEA dataset](http://ikea.csail.mit.edu/).

@@ -1,6 +1,6 @@
 # COCO annotations
 
-![](rendering.png)
+![](../../../images/coco_annotations_rendering.png)
 
 The focus of this example is to introduce user to `writer.CocoAnnotationsWriter` module.
 

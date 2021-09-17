@@ -1,7 +1,7 @@
 # ShapeNet with SUNCG
 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=300>
+<img src="../../../images/shapenet_with_suncg_rendering.jpg" alt="Front readme image" width=300>
 </p>
 
 The focus of this example is the `loader.ShapeNetLoader` in combination with the SUNCG loader, this is an advanced example, please make sure that you have read:

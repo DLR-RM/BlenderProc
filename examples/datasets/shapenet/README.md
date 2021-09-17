@@ -1,7 +1,7 @@
 # ShapeNet 
 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=1000>
+<img src="../../../images/shapenet_rendering.jpg" alt="Front readme image" width=1000>
 </p>
 
 The focus of this example is the `loader.ShapeNetLoader`, which can be used to load objects from the ShapeNet dataset.
