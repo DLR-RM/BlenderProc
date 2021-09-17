@@ -1,5 +1,5 @@
 import re
-from typing import List, Union
+from typing import List, Union, Optional
 
 import bpy
 
@@ -9,7 +9,9 @@ from blenderproc.python.types.LightUtility import Light
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 from blenderproc.python.utility.Utility import resolve_path
 
-def load_blend(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_regrex: str = None, data_blocks: Union[list, str] = "objects") -> List[MeshObject]:
+
+def load_blend(path: str, obj_types: Optional[Union[List[str], str]] = None, name_regrex: Optional[str] = None,
+               data_blocks: Union[List[str], str] = "objects") -> List[Entity]:
     """
     Loads entities (everything that can be stored in a .blend file's folders, see Blender's documentation for
     bpy.types.ID for more info) that match a name pattern from a specified .blend file's section/datablock.
@@ -23,10 +25,14 @@ def load_blend(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_
                         Available options are: ['armatures', 'cameras', 'curves', 'hairs', 'images', 'lights', 'materials', 'meshes', 'objects', 'textures']
     :return: The list of loaded mesh objects.
     """
+    if obj_types is None:
+        obj_types = ["mesh", "empty"]
     # get a path to a .blend file
     path = resolve_path(path)
-    data_blocks = BlendLoader._validate_and_standardizes_configured_list(data_blocks, BlendLoader.valid_datablocks, "data block")
-    obj_types = BlendLoader._validate_and_standardizes_configured_list(obj_types, BlendLoader.valid_object_types, "object type")
+    data_blocks = BlendLoader._validate_and_standardizes_configured_list(data_blocks, BlendLoader.valid_datablocks,
+                                                                         "data block")
+    obj_types = BlendLoader._validate_and_standardizes_configured_list(obj_types, BlendLoader.valid_object_types,
+                                                                       "object type")
 
     # Remember which orphans existed beforehand
     orphans_before = collect_all_orphan_datablocks()
@@ -48,7 +54,7 @@ def load_blend(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_
                 raise Exception("No such data block: " + data_block)
 
     # Go over all imported objects again
-    loaded_objects = []
+    loaded_objects: List[Entity] = []
     for data_block in data_blocks:
         # Some adjustments that only affect objects
         if data_block == "objects":
@@ -91,12 +97,16 @@ def load_blend(path: str, obj_types: Union[list, str] = ["mesh", "empty"], name_
     BlendLoader._purge_added_orphans(orphans_before, data_to)
     return loaded_objects
 
+
 class BlendLoader:
-    valid_datablocks = [collection.lower() for collection in dir(bpy.data) if isinstance(getattr(bpy.data, collection), bpy.types.bpy_prop_collection)]
-    valid_object_types = ['mesh', 'curve', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume', 'gpencil', 'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
+    valid_datablocks = [collection.lower() for collection in dir(bpy.data) if
+                        isinstance(getattr(bpy.data, collection), bpy.types.bpy_prop_collection)]
+    valid_object_types = ['mesh', 'curve', 'surface', 'meta', 'font', 'hair', 'pointcloud', 'volume', 'gpencil',
+                          'armature', 'lattice', 'empty', 'light', 'light_probe', 'camera', 'speaker']
 
     @staticmethod
-    def _validate_and_standardizes_configured_list(config_value: Union[list, str], allowed_elements: list, element_name: str) -> list:
+    def _validate_and_standardizes_configured_list(config_value: Union[list, str], allowed_elements: list,
+                                                   element_name: str) -> list:
         """ Makes sure the given config value is a list, is lower case and only consists of valid elements.
 
         :param config_value: The configured value that should be standardized and validated.

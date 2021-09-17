@@ -16,7 +16,9 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.loader.ObjectLoader import load_obj
 
 
-def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None, subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10, num_dmpls: int = 8) -> List[MeshObject]:
+def load_AMASS(data_path: str, sub_dataset_id: str, temp_dir: str = None, body_model_gender: str = None,
+               subject_id: str = "", sequence_id: int = -1, frame_id: int = -1, num_betas: int = 10,
+               num_dmpls: int = 8) -> List[MeshObject]:
     """
     use the pose parameters to generate the mesh and loads it to the scene.
 
@@ -174,7 +176,8 @@ class AMASSLoader:
                 "supported datasets: {}".format([key for key, value in supported_mocap_datasets.items()]))
 
     @staticmethod
-    def _load_parametric_body_model(data_path: str, used_body_model_gender: str, num_betas: int, num_dmpls: int) -> Tuple["BodyModel", np.array]:
+    def _load_parametric_body_model(data_path: str, used_body_model_gender: str, num_betas: int,
+                                    num_dmpls: int) -> Tuple["BodyModel", np.array]:
         """ loads the parametric model that is used to generate the mesh object
 
         :return:  parametric model. Type: tuple.
@@ -241,6 +244,8 @@ class AMASSLoader:
         """
         for obj in objects:
             for material in obj.get_materials():
+                if material is None:
+                    continue
                 # Create a principled node and set the default color
                 principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
                 # Pick random skin color value
