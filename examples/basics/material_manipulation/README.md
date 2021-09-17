@@ -2,7 +2,7 @@
 
 
 <p align="center">
-<img src="rendering.png" alt="Front readme image" width=430>
+<img src="../../../images/material_manipulation_rendering.png" alt="Front readme image" width=430>
 </p>
 
 

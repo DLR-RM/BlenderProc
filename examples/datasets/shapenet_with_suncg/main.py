@@ -11,7 +11,7 @@ args = parser.parse_args()
 bproc.init()
 
 # load suncg house into the scene
-label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_resource(os.path.join('id_mappings', 'nyu_idset.csv')))
 suncg_objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # Find all bed objects, to sample the shapenet objects on

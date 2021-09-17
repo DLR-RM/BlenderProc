@@ -1,6 +1,6 @@
 # BOP object on textured surface sampling
 
-![](rendering.png)
+![](../../../images/bop_object_on_surface_sampling_rendering.png)
 
 Here we explain the on surface sampling config used for the synthetic data generation in the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and placed upright onto a plane inside a cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, camera intrinsics and object poses in BOP format.
 

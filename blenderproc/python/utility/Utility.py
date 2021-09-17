@@ -30,7 +30,15 @@ def resolve_path(path: str) -> str:
     elif path.startswith("~"):
         return path.replace("~", os.getenv("HOME"))
     else:
-        return os.path.join(os.path.dirname(Utility.working_dir), path)
+        return os.path.join(os.getcwd(), path)
+
+def resolve_resource(relative_resource_path: str) -> str:
+    """ Returns an absolute path to the given BlenderProc resource.
+
+    :param relative_resource_path: The relative path inside the BlenderProc resource folder.
+    :return: The absolute path.
+    """
+    return resolve_path(os.path.join(Utility.blenderproc_root, "resources", relative_resource_path))
 
 
 def num_frames() -> int:
@@ -42,7 +50,7 @@ def num_frames() -> int:
 
 
 class Utility:
-    working_dir = ""
+    blenderproc_root = os.path.join(os.path.dirname(__file__), "..", "..", "..")
     temp_dir = ""
     used_temp_id = None
 
@@ -267,7 +275,7 @@ class Utility:
         # Read in lights
         lights: Dict[str, Tuple[List[str], List[str]]] = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
-        with open(resolve_path(os.path.join('resources', "suncg", "light_geometry_compact.txt"))) as f:
+        with open(resolve_resource(os.path.join("suncg", "light_geometry_compact.txt"))) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
@@ -291,7 +299,7 @@ class Utility:
 
         # Read in windows
         windows = []
-        with open(resolve_path(os.path.join('resources', 'suncg', 'ModelCategoryMapping.csv')), 'r') as csvfile:
+        with open(resolve_resource(os.path.join('suncg', 'ModelCategoryMapping.csv')), 'r') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 if row["coarse_grained_class"] == "window":

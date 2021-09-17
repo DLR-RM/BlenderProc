@@ -14,7 +14,7 @@ args = parser.parse_args()
 bproc.init()
 
 # Load the scenenet room and label its objects with category ids based on the nyu mapping
-label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_resource(os.path.join('id_mappings', 'nyu_idset.csv')))
 objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_texture_path, label_mapping)
 
 # Load all recommended cc materials, however don't load their textures yet

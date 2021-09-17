@@ -1,6 +1,6 @@
 ## Benchmark for 6D Object Pose Estimation (BOP) <br/> Scene Replication
 
-<img src=hb.png width="240" height="180"> <img src=icbin.png width="240" height="180"> <img src=tless.png width="240" height="180">
+<img src=../../../images/bop_scene_replication_hb.png width="240" height="180"> <img src=../../../images/bop_scene_replication_icbin.png width="240" height="180"> <img src=../../../images/bop_scene_replication_tless.png width="240" height="180">
 
 This example shows how to synthetically recreate BOP scenes.
 

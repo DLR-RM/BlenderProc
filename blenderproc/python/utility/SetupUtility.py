@@ -6,9 +6,9 @@ import subprocess
 import importlib
 from io import BytesIO
 import zipfile
+import uuid
 
 class SetupUtility:
-
     # Remember already installed packages, so we do not have to call pip freeze multiple times
     installed_packages = None
     main_setup_called = False
@@ -31,13 +31,7 @@ class SetupUtility:
         if not SetupUtility.main_setup_called:
             SetupUtility.main_setup_called = True
             sys.path.append(packages_path)
-
             is_debug_mode = "--background" not in sys.argv
-            if is_debug_mode:
-                # Delete all loaded models inside src/, as they are cached inside blender
-                for module in list(sys.modules.keys()):
-                    if module.startswith("blenderproc") and not module == "blenderproc.python.SetupUtility":
-                        del sys.modules[module]
 
             # Setup temporary directory
             if is_debug_mode:
@@ -61,9 +55,8 @@ class SetupUtility:
         :param temp_dir: Path to temporary directory where Blender saves output. Default is shared memory.
         """
         from blenderproc.python.utility.Utility import Utility, resolve_path
-        
+
         Utility.temp_dir = resolve_path(temp_dir)
-        Utility.working_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
         os.makedirs(Utility.temp_dir, exist_ok=True)
     
     @staticmethod
@@ -182,6 +175,7 @@ class SetupUtility:
         :param pre_python_package_path: Path that contains blender's default pip packages
         """
         if SetupUtility.installed_packages is None:
+            SetupUtility.installed_packages = {}
             subprocess.Popen([python_bin, "-m", "ensurepip"], env=dict(os.environ, PYTHONPATH="")).wait()
             # Make sure pip is up-to-date
             subprocess.Popen([python_bin, "-m", "pip", "install", "--upgrade", "pip"], env=dict(os.environ, PYTHONPATH="")).wait()
@@ -259,3 +253,32 @@ class SetupUtility:
             raise Exception("The given run script does not exist: {}".format(path_to_run_file))
 
 
+    @staticmethod
+    def determine_temp_dir(given_temp_dir):
+        """ Finds and creates a temporary directory.
+
+        On linux the temp dir is per default placed in /dev/shm or /tmp.
+        The name of the created temp dir contains a uuid, so multiple BlenderProc processes
+        can run on one system.
+
+        :param given_temp_dir: A directory inside which the temp dir should be created
+        :return: The path to the created temp dir.
+        """
+        # Determine perfect temp dir
+        if given_temp_dir is None:
+            if sys.platform != "win32":
+                if os.path.exists("/dev/shm"):
+                    temp_dir = "/dev/shm"
+                else:
+                    temp_dir = "/tmp"
+            else:
+                temp_dir = os.getenv("TEMP")
+        else:
+            temp_dir = given_temp_dir
+        # Generate unique directory name in temp dir
+        temp_dir = os.path.join(temp_dir, "blender_proc_" + str(uuid.uuid4().hex))
+        # Create the temp dir
+        print("Using temporary directory: " + temp_dir)
+        if not os.path.exists(temp_dir):
+            os.makedirs(temp_dir)
+        return temp_dir
