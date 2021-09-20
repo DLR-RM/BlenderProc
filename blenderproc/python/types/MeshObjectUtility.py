@@ -5,7 +5,7 @@ import numpy as np
 import bmesh
 import mathutils
 from mathutils import Vector, Matrix
-from external.vhacd.decompose import convex_decomposition
+from blenderproc.external.vhacd.decompose import convex_decomposition
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, resolve_path

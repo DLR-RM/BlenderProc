@@ -58,7 +58,7 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
         raise Exception("Convex decomposition is at the moment only available on linux.")
 
     # Download v-hacd library if necessary
-    vhacd_path = resolve_path("external/vhacd")
+    vhacd_path = os.path.dirname(__file__)
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):
         print("Downloading v-hacd library into " + str(vhacd_path))
         git.Git(vhacd_path).clone("git://github.com/kmammou/v-hacd.git")
