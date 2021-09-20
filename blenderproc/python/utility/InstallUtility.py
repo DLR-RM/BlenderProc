@@ -7,6 +7,7 @@ import shutil
 import signal
 import sys
 from sys import platform, version_info
+from typing import List, Union
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -14,7 +15,6 @@ else:
     from urllib import urlretrieve
     import contextlib
 
-import uuid
 from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
@@ -22,7 +22,7 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 class InstallUtility:
 
     @staticmethod
-    def determine_blender_install_path(is_config, args):
+    def determine_blender_install_path(is_config: bool, args: List[str]) -> Union[str, str]:
         """ Determines the path of the blender installation
 
         :param is_config: Whether a yaml config file was given instead of a python script.
@@ -47,7 +47,7 @@ class InstallUtility:
         return custom_blender_path, blender_install_path
 
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender):
+    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool) -> Union[str, str]:
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.

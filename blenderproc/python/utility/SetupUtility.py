@@ -7,6 +7,8 @@ import importlib
 from io import BytesIO
 import zipfile
 import uuid
+from typing import List, Optional, Union
+import requests
 
 from blenderproc.python.utility.DefaultConfig import DefaultConfig
 
@@ -17,7 +19,7 @@ class SetupUtility:
     main_setup_called = False
 
     @staticmethod
-    def setup(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False, debug_args=None):
+    def setup(user_required_packages: Optional[List[str]] = None, blender_path: Optional[str] = None, major_version: Optional[str] = None, reinstall_packages: bool = False, debug_args: Optional[List[str]] = None):
         """ Sets up the python environment.
 
         - Makes sure all required pip packages are installed
@@ -52,7 +54,7 @@ class SetupUtility:
         return sys.argv
 
     @staticmethod
-    def setup_utility_paths(temp_dir):
+    def setup_utility_paths(temp_dir: str):
         """ Set utility paths: Temp dir and working dir.
 
         :param temp_dir: Path to temporary directory where Blender saves output. Default is shared memory.
@@ -63,7 +65,7 @@ class SetupUtility:
         os.makedirs(Utility.temp_dir, exist_ok=True)
 
     @staticmethod
-    def determine_python_paths(blender_path, major_version):
+    def determine_python_paths(blender_path: str, major_version: str) -> Union[str, str, str]:
         """ Determines python binary, custom pip packages and the blender pip packages path.
 
         :param blender_path: The path to the blender main folder.
@@ -100,7 +102,7 @@ class SetupUtility:
         return python_bin, packages_path, pre_python_package_path
 
     @staticmethod
-    def setup_pip(user_required_packages=None, blender_path=None, major_version=None, reinstall_packages=False):
+    def setup_pip(user_required_packages: Optional[List[str]] = None, blender_path: Optional[str] = None, major_version: Optional[str] = None, reinstall_packages: bool = False) -> str:
         """ Makes sure the given user required and the general required python packages are installed in the blender proc env
 
         At the first run all installed packages are collected via pip freeze.
@@ -185,7 +187,7 @@ class SetupUtility:
         return packages_path
 
     @staticmethod
-    def uninstall_pip_packages(package_names, blender_path, major_version):
+    def uninstall_pip_packages(package_names: List[str], blender_path: str, major_version: str):
         """ Uninstalls the given pip packages in blenders python environment.
 
         :param package_names: A list of pip packages that should be uninstalled.
@@ -199,7 +201,7 @@ class SetupUtility:
         subprocess.Popen([python_bin, "-m", "pip", "uninstall"] + package_names, env=dict(os.environ, PYTHONPATH=packages_path)).wait()
 
     @staticmethod
-    def _ensure_pip(python_bin, packages_path, pre_python_package_path):
+    def _ensure_pip(python_bin: str, packages_path: str, pre_python_package_path: str):
         """ Make sure pip is installed and read in the already installed packages
 
         :param python_bin: Path to python binary.
@@ -227,7 +229,7 @@ class SetupUtility:
             SetupUtility.installed_packages = dict(zip(installed_packages_name, installed_packages_versions))
 
     @staticmethod
-    def extract_file(output_dir, file, mode="ZIP"):
+    def extract_file(output_dir: str, file: str, mode: str = "ZIP"):
         """ Extract all members from the archive into output_dir.
 
         :param output_dir: The output directory that should contain the extracted files.
@@ -249,7 +251,7 @@ class SetupUtility:
             raise e
 
     @staticmethod
-    def extract_from_response(output_dir, response):
+    def extract_from_response(output_dir: str, response: requests.Response):
         """ Extract all members from the archive to output_dir
 
         :param output_dir: the dir to zip file extract to
@@ -259,7 +261,7 @@ class SetupUtility:
         SetupUtility.extract_file(output_dir, file)
 
     @staticmethod
-    def check_if_setup_utilities_are_at_the_top(path_to_run_file):
+    def check_if_setup_utilities_are_at_the_top(path_to_run_file: str):
         """
         Checks if the given python scripts has at the top an import to SetupUtility, if not an
         exception is thrown. With an explanation that each python script has to start with SetupUtility.
@@ -286,7 +288,7 @@ class SetupUtility:
 
 
     @staticmethod
-    def determine_temp_dir(given_temp_dir):
+    def determine_temp_dir(given_temp_dir: str) -> str:
         """ Finds and creates a temporary directory.
 
         On linux the temp dir is per default placed in /dev/shm or /tmp.
