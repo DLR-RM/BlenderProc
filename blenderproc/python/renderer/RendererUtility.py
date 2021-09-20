@@ -467,25 +467,28 @@ def render(output_dir: Union[str, None] = None, file_prefix: str = "rgb_", outpu
     return WriterUtility.load_registered_outputs(load_keys, keys_with_alpha_channel) if return_data else {}
 
 
-def set_output_format(file_format: str, color_depth: int = 8, enable_transparency: bool = False,
-                      jpg_quality: int = 95):
-    """ Sets the output format to use for rendering.
+def set_output_format(file_format: str = None, color_depth: int = None, enable_transparency: bool = None,
+                      jpg_quality: int = None):
+    """ Sets the output format to use for rendering. Default values defined in DefaultConfig.py.
 
     :param file_format: The file format to use, e.q. "PNG", "JPEG" or "OPEN_EXR".
     :param color_depth: The color depth.
     :param enable_transparency: If true, the output will contain a alpha channel and the background will be set transparent.
     :param jpg_quality: The quality to use, if file format is set to "JPEG".
     """
-    # In case a previous renderer changed these settings
-    # Store as RGB by default unless the user specifies store_alpha as true in yaml
-    bpy.context.scene.render.image_settings.color_mode = "RGBA" if enable_transparency else "RGB"
-    # set the background as transparent if transparent_background is true in yaml
-    bpy.context.scene.render.film_transparent = enable_transparency
-    bpy.context.scene.render.image_settings.file_format = file_format
-    bpy.context.scene.render.image_settings.color_depth = str(color_depth)
-
-    # only influences jpg quality
-    bpy.context.scene.render.image_settings.quality = jpg_quality
+    if enable_transparency is not None:
+        # In case a previous renderer changed these settings
+        # Store as RGB by default unless the user specifies store_alpha as true in yaml
+        bpy.context.scene.render.image_settings.color_mode = "RGBA" if enable_transparency else "RGB"
+        # set the background as transparent if transparent_background is true in yaml
+        bpy.context.scene.render.film_transparent = enable_transparency
+    if file_format is not None:
+        bpy.context.scene.render.image_settings.file_format = file_format
+    if color_depth is not None:
+        bpy.context.scene.render.image_settings.color_depth = str(color_depth)
+    if jpg_quality is not None:
+        # only influences jpg quality
+        bpy.context.scene.render.image_settings.quality = jpg_quality
 
 
 def enable_motion_blur(motion_blur_length: float = 0.5, rolling_shutter_type: str = "NONE",
