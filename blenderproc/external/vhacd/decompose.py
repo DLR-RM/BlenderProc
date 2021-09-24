@@ -28,13 +28,14 @@ import bmesh
 from subprocess import Popen
 import shutil
 
-def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull_#", remove_doubles=True, apply_modifiers=True, apply_transforms="NONE", depth=20, concavity=0.0025, plane_downsampling=4, convexhull_downsampling=4, alpha=0.05, beta=0.05, gamma=0.00125, pca=False, mode="VOXEL", max_num_vertices_per_ch=32, min_volume_per_ch=0.0001, cache_dir=None):
+def convex_decomposition(ob, temp_dir, vhacd_path, resolution=1000000, name_template="?_hull_#", remove_doubles=True, apply_modifiers=True, apply_transforms="NONE", depth=20, concavity=0.0025, plane_downsampling=4, convexhull_downsampling=4, alpha=0.05, beta=0.05, gamma=0.00125, pca=False, mode="VOXEL", max_num_vertices_per_ch=32, min_volume_per_ch=0.0001, cache_dir=None):
     """ Uses V-HACD to decompose the given object.
 
     You can turn of the usage of OpenCL by setting the environment variable NO_OPENCL to "1".
 
     :param ob: The blender object to decompose.
     :param temp_dir: The temp directory where to store the convex parts.
+    :param vhacd_path: The directory in which vhacd should be installed or is already installed.
     :param resolution: maximum number of voxels generated during the voxelization stage
     :param name_template: The template how to name the convex parts.
     :param remove_doubles: Remove double vertices before decomposition.
@@ -58,16 +59,16 @@ def convex_decomposition(ob, temp_dir, resolution=1000000, name_template="?_hull
         raise Exception("Convex decomposition is at the moment only available on linux.")
 
     # Download v-hacd library if necessary
-    vhacd_path = os.path.dirname(__file__)
     if not os.path.exists(os.path.join(vhacd_path, "v-hacd")):
+        os.makedirs(vhacd_path, exist_ok=True)
         print("Downloading v-hacd library into " + str(vhacd_path))
         git.Git(vhacd_path).clone("git://github.com/kmammou/v-hacd.git")
 
         print("Building v-hacd")
         if "NO_OPENCL" in os.environ and os.environ["NO_OPENCL"] == "1":
-            os.system(os.path.join(vhacd_path, "build_linux.sh") + " -DNO_OPENCL=ON")
+            os.system(os.path.join(os.path.dirname(__file__), "build_linux.sh") + " " + os.path.join(vhacd_path, "v-hacd") + " -DNO_OPENCL=ON")
         else:
-            os.system(os.path.join(vhacd_path, "build_linux.sh") + " -DNO_OPENCL=OFF")
+            os.system(os.path.join(os.path.dirname(__file__), "build_linux.sh") + " " + os.path.join(vhacd_path, "v-hacd") + " -DNO_OPENCL=OFF")
 
     off_filename = os.path.join(temp_dir, 'vhacd.off')
     outFileName = os.path.join(temp_dir, 'vhacd.wrl')

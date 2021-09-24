@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
-cd v-hacd/bin/
-cmake ../src/ $1
+cd $1
+cd bin/
+cmake ../src/ $2
 make -j 4
