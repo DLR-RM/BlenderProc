@@ -40,7 +40,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = 
     with open(resolve_path(house_path), "r") as f:
         config = json.load(f)
 
-    object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(resolve_resource('suncg', 'Better_labeling_for_NYU.csv'))
+    object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(resolve_resource(os.path.join('suncg', 'Better_labeling_for_NYU.csv')))
 
     house_id = config["id"]
     loaded_objects = []
