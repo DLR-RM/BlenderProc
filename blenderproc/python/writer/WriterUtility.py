@@ -68,19 +68,20 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
             # Go through all the output types
             print(f"Merging data for frame {frame} into {hdf5_path}")
 
+            adjusted_frame = frame - bpy.context.scene.frame_start
             for key, data_block in output_data_dict.items():
-                if frame < len(data_block):
+                if adjusted_frame < len(data_block):
                     # get the current data block for the current frame
-                    used_data_block = data_block[frame]
+                    used_data_block = data_block[adjusted_frame]
                     if stereo_separate_keys and (bpy.context.scene.render.use_multiview or
                                                  used_data_block.shape[0] == 2):
                         # stereo mode was activated
-                        WriterUtility._write_to_hdf_file(file, key + "_0", data_block[frame][0])
-                        WriterUtility._write_to_hdf_file(file, key + "_1", data_block[frame][1])
+                        WriterUtility._write_to_hdf_file(file, key + "_0", data_block[adjusted_frame][0])
+                        WriterUtility._write_to_hdf_file(file, key + "_1", data_block[adjusted_frame][1])
                     else:
-                        WriterUtility._write_to_hdf_file(file, key, data_block[frame])
+                        WriterUtility._write_to_hdf_file(file, key, data_block[adjusted_frame])
                 else:
-                    raise Exception(f"There are more frames {frame} then there are blocks of information "
+                    raise Exception(f"There are more frames {adjusted_frame} then there are blocks of information "
                                     f" {len(data_block)} in the given list for key {key}.")
             blender_proc_version = Utility.get_current_version()
             if blender_proc_version is not None:
