@@ -152,9 +152,7 @@ def render_segmap(output_dir: Union[str, None] = None, temp_dir: Union[str, None
                             if current_attribute in default_values:
                                 default_value = default_values[current_attribute]
                             elif attribute in default_values:
-                                default_value = default_values[attribute]
-                        last_state_save_in_csv = None
-                        
+                                default_value = default_values[attribute]                        
                         # iterate over all object ids
                         for object_id in object_ids:
                             # Convert np.uint8 to int, such that the save_in_csv_attributes dict can later be serialized
@@ -185,22 +183,15 @@ def render_segmap(output_dir: Union[str, None] = None, temp_dir: Union[str, None
                                                 "value.".format(current_obj.name, current_attribute, attribute))
                             
                             # save everything which is not instance also in the .csv
-                            save_in_csv = True if current_attribute != "instance" else False
                             if isinstance(value, (int, float, np.integer, np.floating)):
                                 was_used = True
                                 resulting_map[segmap == object_id] = value
 
-                            if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
-                                raise Exception("During creating the mapping, the saving to an image or a csv file "
-                                                "switched, this might indicated that the used default value, does "
-                                                "not have the same type as the returned value, "
-                                                "for: {}".format(current_attribute))
-                            last_state_save_in_csv = save_in_csv
-                            if save_in_csv:
-                                if object_id in save_in_csv_attributes:
-                                    save_in_csv_attributes[object_id][attribute] = value
-                                else:
-                                    save_in_csv_attributes[object_id] = {attribute: value}
+                            if object_id in save_in_csv_attributes:
+                                save_in_csv_attributes[object_id][attribute] = value
+                            else:
+                                save_in_csv_attributes[object_id] = {attribute: value}
+                                
                     if was_used and num_default_values < len(object_ids):
                         channels.append(org_attribute)
                         combined_result_map.append(resulting_map)
