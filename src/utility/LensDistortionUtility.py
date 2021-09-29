@@ -38,11 +38,11 @@ class LensDistortionUtility:
         This functions stores the "_lens_distortion_is_used" key in the GlobalStorage, which contains the information
         on the mapping and the original image resolution.
 
-        :param k1: First radial distortion parameter as defined by the undistorted-to-distorted plumb bob lens distortion model
-        :param k2: Second radial distortion parameter as defined by the undistorted-to-distorted plumb bob lens distortion model
-        :param k3: Third radial distortion parameter as defined by the undistorted-to-distorted plumb bob lens distortion model (discouraged)
-        :param p1: First decentering distortion parameter as proposed in (Conrady, 2019) (discouraged)
-        :param p2: Second decentering distortion parameter as proposed in (Conrady, 2019) (discouraged)
+        :param k1: First radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
+        :param k2: Second radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
+        :param k3: Third radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
+        :param p1: First decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model(discouraged)
+        :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model(discouraged)
         """
         if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
             raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")
