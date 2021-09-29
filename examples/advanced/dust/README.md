@@ -1,6 +1,6 @@
 # How to apply dust to objects 
 <p align="center">
-<img src="rendered_example.jpg" alt="normals and color rendering of example table" width=300>
+<img src="../../../images/dust_rendered_example.jpg" alt="normals and color rendering of example table" width=300>
 </p>
 
 

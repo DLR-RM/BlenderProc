@@ -2,9 +2,9 @@
 
 
 <p align="center">
-<img src="rendering_0.png" alt="Front readme image" width=375>
-<img src="rendering_1.jpg" alt="Front readme image" width=375>
-<img src="rendering_1.jpg" alt="Front readme image" width=375>
+<img src="../../../images/camera_sampling_rendering_0.png" alt="Front readme image" width=375>
+<img src="../../../images/camera_sampling_rendering_1.jpg" alt="Front readme image" width=375>
+<img src="../../../images/camera_sampling_rendering_1.jpg" alt="Front readme image" width=375>
 </p>
 
 In this example we are demonstrating the sampling features in relation to camera objects.

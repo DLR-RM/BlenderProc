@@ -1,7 +1,7 @@
 # SceneNet with CCTextures
 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=300>
+<img src="../../../images/scenenet_with_cctextures_rendering.jpg" alt="Front readme image" width=300>
 </p>
 
 The focus of this example is to show the correct usage of the MaterialRandomizer in a more complex context.

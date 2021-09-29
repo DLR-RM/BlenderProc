@@ -1,6 +1,6 @@
 # On surface object pose Sampling
 
-![](rendering.png)
+![](../../../images/on_surface_object_sampling_rendering.png)
 
 The focus of this example is the `OnSurfaceSampler` which allows pose sampling for some selected objects on top of a selected surface.
 
