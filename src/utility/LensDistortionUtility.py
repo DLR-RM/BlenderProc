@@ -19,6 +19,7 @@ class LensDistortionUtility:
     called before the rendering takes place and the `apply_lens_distortion` has to be applied to the rendered images.
 
     For more information on lens distortion see: https://en.wikipedia.org/wiki/Distortion_(optics)
+    Note that, unlike in that wikipedia entry as of early 2021, we're here using the undistorted-to-distorted formulation.
     """
 
     @staticmethod
