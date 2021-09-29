@@ -18,6 +18,21 @@ def cli():
     parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
     parser_debug = subparsers.add_parser('debug', help="Runs the BlenderProc pipeline in debug mode. This will open the Blender UI, so the 3D scene created by the pipeline can be visually inspected.")
 
+    parser_scripts = []
+    scripts = {
+        "vis_hdf5": "Visualizes the content of one or multiple .hdf5 files.",
+        "vis_coco": "Visualizes the annotations written in coco format.",
+        "extract_hdf5": "Extracts images out of an hdf5 file into separate image files.",
+        "download_blenderkit": "Downloads materials and models from blenderkit.",
+        "download_cc_textures": "Downloads textures from cc0textures.com.",
+        "download_haven": "Downloads HDRIs, Textures and Models from polyhaven.com.",
+        "download_ikea": "Downloads the IKEA dataset.",
+        "download_pix3d": "Downloads the Pix3D dataset.",
+        "download_scenenet": "Downloads the scenenet dataset.",
+    }
+    for script_command, script_help in scripts.items():
+        parser_scripts.append(subparsers.add_parser(script_command, add_help=False, help=script_help))
+
     # Setup all common arguments of run and debug mode
     for subparser in [parser_run, parser_debug]:
         subparser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
@@ -29,7 +44,10 @@ def cli():
         subparser.add_argument('--blender-install-path', dest='blender_install_path', default=None, help="Set path where blender should be installed. If None is given, /home_local/<env:USER>/blender/ is used per default. This argument is ignored if it is specified in the given YAML config.")
         subparser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None, help="Set, if you want to use a custom blender installation to run BlenderProc. If None is given, blender is installed into the configured blender_install_path. This argument is ignored if it is specified in the given YAML config.")
 
-    args = parser.parse_args()
+    if len(sys.argv) >= 2 and sys.argv[1] in scripts.keys():
+        args, unknown_args = parser.parse_known_args()
+    else:
+        args = parser.parse_args()
 
     if args.mode in ["run", "debug"]:
         # Make sure a file is given
@@ -91,7 +109,32 @@ def cli():
         clean_temp_dir()
 
         exit(p.returncode)
+    elif args.mode in scripts.keys():
+        sys.argv = sys.argv[:1] + unknown_args
+        if args.mode == "vis_hdf5":
+            import blenderproc.scripts.visHdf5Files
+        elif args.mode == "vis_coco":
+            import blenderproc.scripts.vis_coco_annotation
+        elif args.mode == "extract_hdf5":
+            import blenderproc.scripts.saveAsImg
+        elif args.mode == "download_blenderkit":
+            import blenderproc.scripts.download_blenderkit
+        elif args.mode == "download_cc_textures":
+            import blenderproc.scripts.download_cc_textures
+        elif args.mode == "download_haven":
+            import blenderproc.scripts.download_haven
+        elif args.mode == "download_ikea":
+            import blenderproc.scripts.download_ikea
+        elif args.mode == "download_pix3d":
+            import blenderproc.scripts.download_pix3d
+        elif args.mode == "download_scenenet":
+            import blenderproc.scripts.download_scenenet
+        else:
+            raise Exception("There is no linked script for the command: " + args.mode)
     else:
         # If no command is given, print help
         print(parser.format_help())
         exit(0)
+
+if __name__ == "__main__":
+    cli()
