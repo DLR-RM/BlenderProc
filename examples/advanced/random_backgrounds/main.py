@@ -65,7 +65,7 @@ while tries < 10000 and poses < 5:
     tries += 1
 
 # Enable transparency so the background becomes transparent
-bproc.renderer.set_output_format("PNG", enable_transparency=True)
+bproc.renderer.set_output_format(enable_transparency=True)
 
 # Render RGB images
 data = bproc.renderer.render()

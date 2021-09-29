@@ -135,6 +135,10 @@ class Initializer:
                                           DefaultConfig.transparency_bounces,
                                           DefaultConfig.volume_bounces)
 
+        RendererUtility.set_output_format(DefaultConfig.file_format,
+                                          DefaultConfig.color_depth,
+                                          DefaultConfig.enable_transparency,
+                                          DefaultConfig.jpg_quality)
 
 
     @staticmethod
