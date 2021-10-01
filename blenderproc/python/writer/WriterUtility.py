@@ -1,6 +1,3 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["h5py"])
-
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 

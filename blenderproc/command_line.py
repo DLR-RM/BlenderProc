@@ -18,6 +18,10 @@ def cli():
     parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
     parser_debug = subparsers.add_parser('debug', help="Runs the BlenderProc pipeline in debug mode. This will open the Blender UI, so the 3D scene created by the pipeline can be visually inspected.")
 
+    parser_pip = subparsers.add_parser('pip', help="Can be used to install/uninstall pip packages in Blenders python environment.")
+    parser_pip.add_argument('pip_mode', choices=["install", "uninstall"], help="The pip mode to run. Currently only install and uninstall is supported.")
+    parser_pip.add_argument('pip_packages', metavar='pip_packages', nargs='*', help='A list of pip packages that should be installed/uninstalled. Packages versions can be determined via the `==` notation.')
+
     # Setup all common arguments of run and debug mode
     for subparser in [parser_run, parser_debug]:
         subparser.add_argument('file', default=None, nargs='?', help='The path to a configuration file which describes what the pipeline should do or a python file which uses BlenderProc via the API.')
@@ -26,6 +30,9 @@ def cli():
         subparser.add_argument('--reinstall-blender', dest='reinstall_blender', action='store_true', help='If given, the blender installation is deleted and reinstalled. Is ignored, if a "custom_blender_path" is configured in the configuration file.')
         subparser.add_argument('--temp-dir', dest='temp_dir', default=None, help="The path to a directory where all temporary output files should be stored. If it doesn't exist, it is created automatically. Type: string. Default: \"/dev/shm\" or \"/tmp/\" depending on which is available.")
         subparser.add_argument('--keep-temp-dir', dest='keep_temp_dir', action='store_true', help="If set, the temporary directory is not removed in the end.")
+
+    # Setup common arguments of run, debug and pip mode
+    for subparser in [parser_run, parser_debug, parser_pip]:
         subparser.add_argument('--blender-install-path', dest='blender_install_path', default=None, help="Set path where blender should be installed. If None is given, /home_local/<env:USER>/blender/ is used per default. This argument is ignored if it is specified in the given YAML config.")
         subparser.add_argument('--custom-blender-path', dest='custom_blender_path', default=None, help="Set, if you want to use a custom blender installation to run BlenderProc. If None is given, blender is installed into the configured blender_install_path. This argument is ignored if it is specified in the given YAML config.")
 
@@ -42,7 +49,7 @@ def cli():
 
         # Install blender, if not already done
         custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(is_config, args)
-        blender_run_path = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
+        blender_run_path, _ = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path, args.reinstall_blender)
 
         # Setup script path that should be executed
         if is_config:
@@ -91,6 +98,16 @@ def cli():
         clean_temp_dir()
 
         exit(p.returncode)
+    elif args.mode == "pip":
+        # Install blender, if not already done
+        custom_blender_path, blender_install_path = InstallUtility.determine_blender_install_path(False, args)
+        blender_bin, major_version = InstallUtility.make_sure_blender_is_installed(custom_blender_path, blender_install_path)
+        blender_path = os.path.dirname(blender_bin)
+
+        if args.pip_mode == "install":
+            SetupUtility.setup_pip(user_required_packages=args.pip_packages, blender_path=blender_path, major_version=major_version)
+        elif args.pip_mode == "uninstall":
+            SetupUtility.uninstall_pip_packages(args.pip_packages, blender_path=blender_path, major_version=major_version)
     else:
         # If no command is given, print help
         print(parser.format_help())
