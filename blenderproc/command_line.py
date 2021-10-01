@@ -110,27 +110,29 @@ def cli():
 
         exit(p.returncode)
     elif args.mode in scripts.keys():
-        sys.argv = sys.argv[:1] + unknown_args
         if args.mode == "vis_hdf5":
-            import blenderproc.scripts.visHdf5Files
+            from blenderproc.scripts.visHdf5Files import cli
         elif args.mode == "vis_coco":
-            import blenderproc.scripts.vis_coco_annotation
+            from blenderproc.scripts.vis_coco_annotation import cli
         elif args.mode == "extract_hdf5":
-            import blenderproc.scripts.saveAsImg
+            from blenderproc.scripts.saveAsImg import cli
         elif args.mode == "download_blenderkit":
-            import blenderproc.scripts.download_blenderkit
+            from blenderproc.scripts.download_blenderkit import cli
         elif args.mode == "download_cc_textures":
-            import blenderproc.scripts.download_cc_textures
+            from blenderproc.scripts.download_cc_textures import cli
         elif args.mode == "download_haven":
-            import blenderproc.scripts.download_haven
+            from blenderproc.scripts.download_haven import cli
         elif args.mode == "download_ikea":
-            import blenderproc.scripts.download_ikea
+            from blenderproc.scripts.download_ikea import cli
         elif args.mode == "download_pix3d":
-            import blenderproc.scripts.download_pix3d
+            from blenderproc.scripts.download_pix3d import cli
         elif args.mode == "download_scenenet":
-            import blenderproc.scripts.download_scenenet
+            from blenderproc.scripts.download_scenenet import cli
         else:
             raise Exception("There is no linked script for the command: " + args.mode)
+
+        sys.argv = sys.argv[:1] + unknown_args
+        cli()
     else:
         # If no command is given, print help
         print(parser.format_help())

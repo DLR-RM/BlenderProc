@@ -5,19 +5,21 @@ if version_info.major == 2:
 import os
 import csv
 import requests
-path.append(os.path.join(os.path.dirname(__file__), ".."))
+import argparse
+
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
-if __name__ == "__main__":
+def cli():
+    parser = argparse.ArgumentParser("Downloads textures from cc0textures.com")
+    parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
+    args = parser.parse_args()
+
     # setting the default header, else the server does not allow the download
     headers = {
         'User-Agent': 'Mozilla/5.0'
     }
 
-    # set the download directory relative to this one
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    cc_texture_dir = os.path.join(current_dir, "..", "resources", "cctextures")
-
+    cc_texture_dir = args.output_dir
     if not os.path.exists(cc_texture_dir):
         os.makedirs(cc_texture_dir)
     else:
@@ -60,3 +62,6 @@ if __name__ == "__main__":
         SetupUtility.extract_from_response(current_folder, response)
 
     print("Done downloading textures, saved in {}".format(cc_texture_dir))
+
+if __name__ == "__main__":
+    cli()

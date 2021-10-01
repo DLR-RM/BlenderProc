@@ -9,8 +9,8 @@ import glob
 import numpy as np
 import subprocess
 import shutil
+import argparse
 
-path.append(os.path.join(os.path.dirname(__file__), ".."))
 from blenderproc.python.utility.SetupUtility import SetupUtility
 
 def split_object_according_to_groups(file_path, folder):
@@ -60,16 +60,17 @@ def split_object_according_to_groups(file_path, folder):
                 group_counter += 1
 
 
-if __name__ == "__main__":
+def cli():
+    parser = argparse.ArgumentParser("Downloads the IKEA dataset")
+    parser.add_argument('output_dir', help="Determines where the data is going to be saved.")
+    args = parser.parse_args()
+
     # setting the default header, else the server does not allow the download
     opener = build_opener()
     opener.addheaders = [('User-agent', 'Mozilla/5.0')]
     install_opener(opener)
 
-    # set the download directory relative to this one
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    ikea_dir = os.path.join(current_dir, "..", "resources", "IKEA")
-
+    ikea_dir = args.output_dir
     if not os.path.exists(ikea_dir):
         os.makedirs(ikea_dir)
 
@@ -161,4 +162,5 @@ if __name__ == "__main__":
         path = os.path.join(ikea_dir, "IKEA_wardrobe_PAX", ele)
         delete_obj_file(path)
 
-
+if __name__ == "__main__":
+    cli()
