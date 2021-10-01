@@ -1,5 +1,5 @@
 import random
-from typing import Callable
+from typing import Callable, List, Optional
 
 import bpy
 import numpy as np
@@ -7,7 +7,11 @@ import numpy as np
 from blenderproc.python.utility.BlenderUtility import check_intersection, check_bb_intersection
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
 
-def replace_objects(objects_to_be_replaced: [MeshObject], objects_to_replace_with: [MeshObject], ignore_collision_with: [MeshObject] = [], replace_ratio: float = 1, copy_properties: bool = True, max_tries: int = 100, relative_pose_sampler: Callable[[MeshObject], None] = None):
+
+def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace_with: List[MeshObject],
+                    ignore_collision_with: Optional[List[MeshObject]] = None, replace_ratio: float = 1,
+                    copy_properties: bool = True, max_tries: int = 100,
+                    relative_pose_sampler: Callable[[MeshObject], None] = None):
     """ Replaces mesh objects with another mesh objects and scales them accordingly, the replaced objects and the objects to replace with in following steps:
     1. Randomly select a subset of objects_to_be_replaced.
     2. For each of these objects, sample other objects from objects_to_replace_with and try to replace them.
@@ -22,6 +26,9 @@ def replace_objects(objects_to_be_replaced: [MeshObject], objects_to_replace_wit
     :param max_tries: Maximum number of tries to replace one object.
     :param relative_pose_sampler: A function that randomly perturbs the pose of the object to replace with (after it has been aligned to the object to replace).
     """
+    if ignore_collision_with is None:
+        ignore_collision_with = []
+
     # Hide new objects from renderers until they are added
     for obj in objects_to_replace_with:
         obj.hide()
@@ -43,7 +50,8 @@ def replace_objects(objects_to_be_replaced: [MeshObject], objects_to_replace_wit
         tries = 0
         while tries < max_tries:
             current_object_to_replace_with = np.random.choice(objects_to_replace_with)
-            if ObjectReplacer.replace(current_object_to_be_replaced, current_object_to_replace_with, check_collision_with, relative_pose_sampler=relative_pose_sampler):
+            if ObjectReplacer.replace(current_object_to_be_replaced, current_object_to_replace_with,
+                                      check_collision_with, relative_pose_sampler=relative_pose_sampler):
 
                 # Duplicate the added object to be able to add it again
                 duplicate_new_object = current_object_to_replace_with.duplicate()
@@ -82,13 +90,15 @@ class ObjectReplacer:
         :param bb2: bounding box 2. Type: float multi-dimensional array of 8 * 3.
         returns the ratio between each side of the bounding box. Type: a list of floats.
         """
-        ratio_a = (bb1[0,0] - bb1[4,0]) / (bb2[0,0] - bb2[4,0])
-        ratio_b = (bb1[0,1] - bb1[3,1]) / (bb2[0,1] - bb2[3,1])
-        ratio_c = (bb1[0,2] - bb1[1,2]) / (bb2[0,2] - bb2[1,2])
+        ratio_a = (bb1[0, 0] - bb1[4, 0]) / (bb2[0, 0] - bb2[4, 0])
+        ratio_b = (bb1[0, 1] - bb1[3, 1]) / (bb2[0, 1] - bb2[3, 1])
+        ratio_c = (bb1[0, 2] - bb1[1, 2]) / (bb2[0, 2] - bb2[1, 2])
         return [ratio_a, ratio_b, ratio_c]
 
     @staticmethod
-    def replace(obj_to_remove: MeshObject, obj_to_add: MeshObject, check_collision_with: [MeshObject] = [], scale: bool = True, relative_pose_sampler: Callable[[MeshObject], None] = None):
+    def replace(obj_to_remove: MeshObject, obj_to_add: MeshObject,
+                check_collision_with: Optional[List[MeshObject]] = None, scale: bool = True,
+                relative_pose_sampler: Callable[[MeshObject], None] = None):
         """ Scale, translate, rotate obj_to_add to match obj_to_remove and check if there is a bounding box collision
         returns a boolean.
 
@@ -98,17 +108,20 @@ class ObjectReplacer:
         :param scale: Scales obj_to_add to match obj_to_remove dimensions.
         :param relative_pose_sampler: A function that randomly perturbs the pose of the object to replace with (after it has been aligned to the object to replace).
         """
+        if check_collision_with is None:
+            check_collision_with = []
         # New object takes location, rotation and rough scale of original object
         obj_to_add.set_location(obj_to_remove.get_location())
         obj_to_add.set_rotation_euler(obj_to_remove.get_rotation())
         if scale:
-            obj_to_add.set_scale(ObjectReplacer._bb_ratio(obj_to_remove.get_bound_box(True), obj_to_add.get_bound_box(True)))
+            obj_to_add.set_scale(
+                ObjectReplacer._bb_ratio(obj_to_remove.get_bound_box(True), obj_to_add.get_bound_box(True)))
         if relative_pose_sampler is not None:
             relative_pose_sampler(obj_to_add)
         bpy.context.view_layer.update()
 
         # Check for collision between the new object and other objects in the scene
-        for obj in check_collision_with: # for each object
+        for obj in check_collision_with:  # for each object
             if obj != obj_to_add and obj_to_remove != obj:
                 if check_bb_intersection(obj.blender_obj, obj_to_add.blender_obj):
                     if check_intersection(obj.blender_obj, obj_to_add.blender_obj)[0]:

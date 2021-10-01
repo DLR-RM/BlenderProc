@@ -27,7 +27,7 @@ def sphere(center: Union[Vector, np.ndarray, list], radius: float, mode: str) ->
     center = np.array(center)
 
     # Sample
-    direction = np.random.normal(size=3)
+    direction = np.random.normal(loc=0.0, scale=1.0, size=3)
 
     if np.count_nonzero(direction) == 0:  # Check no division by zero
         direction[0] = 1e-5

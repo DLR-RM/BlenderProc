@@ -1,6 +1,6 @@
 import warnings
 import math
-from typing import Tuple
+from typing import Tuple, List, Dict
 
 import bpy
 import bmesh
@@ -16,7 +16,7 @@ from blenderproc.python.types.MeshObjectUtility import MeshObject, create_primit
 from blenderproc.python.object.FloorExtractor import FloorExtractor
 
 
-def construct_random_room(used_floor_area: float, interior_objects: [MeshObject], materials: [Material],
+def construct_random_room(used_floor_area: float, interior_objects: List[MeshObject], materials: List[Material],
                           amount_of_extrusions: int = 0, fac_from_square_room: float = 0.3, corridor_width: float = 0.9,
                           wall_height: float = 2.5, amount_of_floor_cuts: int = 2, only_use_big_edges: bool = True,
                           create_ceiling: bool = True, assign_material_to_ceiling: bool = False,
@@ -25,7 +25,7 @@ def construct_random_room(used_floor_area: float, interior_objects: [MeshObject]
     # internally the first basic rectangular is counted as one
     amount_of_extrusions += 1
 
-    bvh_cache_for_intersection = {}
+    bvh_cache_for_intersection: Dict[str, mathutils.bvhtree.BVHTree] = {}
     placed_objects = []
 
     # construct a random room
@@ -456,7 +456,7 @@ def _construct_random_room(used_floor_area: float, amount_of_extrusions: int, fa
 
 
 def _assign_materials_to_floor_wall_ceiling(floor_obj: MeshObject, wall_obj: MeshObject, ceiling_obj: MeshObject,
-                                            assign_material_to_ceiling: bool, materials: [Material]):
+                                            assign_material_to_ceiling: bool, materials: List[Material]):
     """
     Assigns materials to the floor, wall and ceiling. These are randomly selected from the CCMaterials. This means
     it is required that the CCMaterialLoader has been executed before, this module is run.
@@ -481,7 +481,7 @@ def _assign_materials_to_floor_wall_ceiling(floor_obj: MeshObject, wall_obj: Mes
 
 
 def _sample_new_object_poses_on_face(current_obj: MeshObject, face_bb, bvh_cache_for_intersection: dict,
-                                     placed_objects: [MeshObject], wall_obj: MeshObject):
+                                     placed_objects: List[MeshObject], wall_obj: MeshObject):
     """
     Sample new object poses on the current `floor_obj`.
 

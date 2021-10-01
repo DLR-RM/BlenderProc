@@ -1,5 +1,5 @@
 import os
-from typing import Union, Dict, List, Set
+from typing import Union, Dict, List, Set, Optional
 
 import mathutils
 import math
@@ -12,7 +12,7 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.writer.WriterUtility import WriterUtility
 
 
-def set_denoiser(denoiser: Union[str, None]):
+def set_denoiser(denoiser: Optional[str]):
     """ Enables the specified denoiser.
 
     Automatically disables all previously activated denoiser.
@@ -54,8 +54,10 @@ def set_denoiser(denoiser: Union[str, None]):
         raise Exception("No such denoiser: " + denoiser)
 
 
-def set_light_bounces(diffuse_bounces: int = None, glossy_bounces: int = None, ao_bounces_render: int = None, max_bounces: int = None,
-                      transmission_bounces: int = None, transparent_max_bounces: int = None, volume_bounces: int = None):
+def set_light_bounces(diffuse_bounces: Optional[int] = None, glossy_bounces: Optional[int] = None,
+                      ao_bounces_render: Optional[int] = None, max_bounces: Optional[int] = None,
+                      transmission_bounces: Optional[int] = None, transparent_max_bounces: Optional[int] = None,
+                      volume_bounces: Optional[int] = None):
     """
     Sets the number of light bounces that should be used by the raytracing renderer.
     Default values are defined in DefaultConfig.py
@@ -163,7 +165,7 @@ def set_samples(samples: int):
     bpy.context.scene.cycles.samples = samples
 
 
-def enable_distance_output(output_dir: Union[str, None] = None, file_prefix: str = "distance_",
+def enable_distance_output(output_dir: Optional[str] = None, file_prefix: str = "distance_",
                            output_key: str = "distance", distance_start: float = 0.1, distance_range: float = 25.0,
                            distance_falloff: str = "LINEAR"):
     """ Enables writing distance images.
@@ -221,7 +223,7 @@ def enable_distance_output(output_dir: Union[str, None] = None, file_prefix: str
     })
 
 
-def enable_depth_output(output_dir, file_prefix="depth_", output_key="depth"):
+def enable_depth_output(output_dir: str, file_prefix: str = "depth_", output_key: str = "depth"):
     """ Enables writing depth images.
 
     Depth images will be written in the form of .exr files during the next rendering.
@@ -258,7 +260,7 @@ def enable_depth_output(output_dir, file_prefix="depth_", output_key="depth"):
     })
 
 
-def enable_normals_output(output_dir: Union[str, None] = None, file_prefix: str = "normals_",
+def enable_normals_output(output_dir: Optional[str] = None, file_prefix: str = "normals_",
                           output_key: str = "normals"):
     """ Enables writing normal images.
 
@@ -291,7 +293,7 @@ def enable_normals_output(output_dir: Union[str, None] = None, file_prefix: str 
 
     c_channels = ["R", "G", "B"]
     offset = space_between_nodes_x * 2
-    multiplication_values = [[], [], []]
+    multiplication_values: List[List[bpy.types.Node]] = [[], [], []]
     channel_results = {}
     for row_index, channel in enumerate(c_channels):
         # matrix multiplication
@@ -371,7 +373,8 @@ def enable_normals_output(output_dir: Union[str, None] = None, file_prefix: str 
     })
 
 
-def enable_diffuse_color_output(output_dir: str = None, file_prefix: str = "diffuse_", output_key: str = "diffuse"):
+def enable_diffuse_color_output(output_dir: Optional[str] = None, file_prefix: str = "diffuse_",
+                                output_key: str = "diffuse"):
     """ Enables writing diffuse color (albedo) images.
 
     Diffuse color images will be written in the form of .png files during the next rendering.
@@ -421,8 +424,9 @@ def map_file_format_to_file_ending(file_format: str) -> str:
         raise Exception("Unknown Image Type " + file_format)
 
 
-def render(output_dir: Union[str, None] = None, file_prefix: str = "rgb_", output_key: str = "colors",
-           load_keys: Set = None, return_data: bool = True, keys_with_alpha_channel: Set = None) -> Dict[str, List[np.ndarray]]:
+def render(output_dir: Optional[str] = None, file_prefix: str = "rgb_", output_key: Optional[str] = "colors",
+           load_keys: Optional[Set[str]] = None, return_data: bool = True,
+           keys_with_alpha_channel: Optional[Set[str]] = None) -> Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Render all frames.
 
     This will go through all frames from scene.frame_start to scene.frame_end and render each of them.
@@ -433,6 +437,7 @@ def render(output_dir: Union[str, None] = None, file_prefix: str = "rgb_", outpu
     :param output_key: The key to use for registering the output.
     :param load_keys: Set of output keys to load when available
     :param return_data: Whether to load and return generated data. Backwards compatibility to config-based pipeline.
+    :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
     :return: dict of lists of raw renderer output. Keys can be 'distance', 'colors', 'normals'
     """
     if output_dir is None:

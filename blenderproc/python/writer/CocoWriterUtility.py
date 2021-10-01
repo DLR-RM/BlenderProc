@@ -6,7 +6,7 @@ import os
 import shutil
 import numpy as np
 from skimage import measure
-from typing import List
+from typing import Optional, Dict, Union, Tuple
 import cv2
 import bpy
 from typing import List
@@ -15,9 +15,13 @@ from blenderproc.python.utility.Utility import Utility
 from blenderproc.python.utility.LabelIdMapping import LabelIdMapping
 
 
-def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] = [], instance_attribute_maps: List[dict] = [], colors: List[np.ndarray] = [], color_file_format: str = "PNG",
-          mask_encoding_format: str = "rle", supercategory: str = "coco_annotations", append_to_existing_output: bool = True, segmap_output_key: str = "segmap",
-          segcolormap_output_key: str = "segcolormap", rgb_output_key: str = "colors", jpg_quality: int = 95, label_mapping: LabelIdMapping = None):
+def write_coco_annotations(output_dir: str, instance_segmaps: Optional[List[np.ndarray]] = None,
+                           instance_attribute_maps: Optional[List[dict]] = None,
+                           colors: Optional[List[np.ndarray]] = None, color_file_format: str = "PNG",
+                           mask_encoding_format: str = "rle", supercategory: str = "coco_annotations",
+                           append_to_existing_output: bool = True, segmap_output_key: str = "segmap",
+                           segcolormap_output_key: str = "segcolormap", rgb_output_key: str = "colors",
+                           jpg_quality: int = 95, label_mapping: LabelIdMapping = None):
     """ Writes coco annotations in the following steps:
     1. Locate the seg images
     2. Locate the rgb maps
@@ -42,9 +46,16 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
                                    the same as the colormap_output_key of the SegMapRenderer module. Default: segcolormap.
     :param rgb_output_key: The output key with which the rgb images were registered. Should be the same as the output_key of the
                            RgbRenderer module. Default: colors.
+    :param jpg_quality: The desired quality level of the jpg encoding
     :param label_mapping: The label mapping which should be used to label the categories based on their ids.
                           If None, is given then the `name` field in the csv files is used or - if not existing - the category id itself is used.
     """
+    if instance_segmaps is None:
+        instance_segmaps = []
+    if instance_attribute_maps is None:
+        instance_attribute_maps = []
+    if colors is None:
+        colors = []
 
     # Create output directory
     os.makedirs(os.path.join(output_dir, 'images'), exist_ok=True)
@@ -121,7 +132,7 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
                 target_path = os.path.join(output_dir, target_base_path)
                 cv2.imwrite(target_path, color_bgr, [int(cv2.IMWRITE_JPEG_QUALITY), jpg_quality])
             else:
-                raise ('Unknown color_file_format={}. Try "PNG" or "JPEG"'.format(color_file_format))
+                raise Exception('Unknown color_file_format={}. Try "PNG" or "JPEG"'.format(color_file_format))
 
         else:
             source_path = rgb_output["path"] % frame
@@ -146,14 +157,15 @@ def write_coco_annotations(output_dir: str, instance_segmaps: List[np.ndarray] =
     with open(coco_annotations_path, 'w') as fp:
         json.dump(coco_output, fp)
 
-def binary_mask_to_rle(binary_mask: np.ndarray) -> List:
+
+def binary_mask_to_rle(binary_mask: np.ndarray) -> Dict[str, List[int]]:
     """Converts a binary mask to COCOs run-length encoding (RLE) format. Instead of outputting 
     a mask image, you give a list of start pixels and how many pixels after each of those
     starts are included in the mask.
     :param binary_mask: a 2D binary numpy array where '1's represent the object
     :return: Mask in RLE format
     """
-    rle = {'counts': [], 'size': list(binary_mask.shape)}
+    rle: Dict[str, List[int]] = {'counts': [], 'size': list(binary_mask.shape)}
     counts = rle.get('counts')
     for i, (value, elements) in enumerate(groupby(binary_mask.ravel(order='F'))):
         if i == 0 and value == 1:
@@ -161,29 +173,32 @@ def binary_mask_to_rle(binary_mask: np.ndarray) -> List:
         counts.append(len(list(elements)))
     return rle
 
-def rle_to_binary_mask(rle: List) -> np.ndarray:
+
+def rle_to_binary_mask(rle: Dict[str, List[int]]) -> np.ndarray:
     """Converts a COCOs run-length encoding (RLE) to binary mask.
     :param rle: Mask in RLE format
     :return: a 2D binary numpy array where '1's represent the object
     """
-    binary_array = np.zeros(np.prod(rle.get('size')), dtype=np.bool)
-    counts = rle.get('counts')
-    
+    binary_array = np.zeros(np.prod(rle.get('size')), dtype=bool)
+    counts: List[int] = rle.get('counts')
+
     start = 0
-    for i in range(len(counts)-1):
-        start += counts[i] 
-        end = start + counts[i+1] 
+    for i in range(len(counts) - 1):
+        start += counts[i]
+        end = start + counts[i + 1]
         binary_array[start:end] = (i + 1) % 2
-    
+
     binary_mask = binary_array.reshape(*rle.get('size'), order='F')
 
     return binary_mask
+
 
 class CocoWriterUtility:
 
     @staticmethod
     def generate_coco_annotations(inst_segmaps, inst_attribute_maps, image_paths, supercategory,
-                                  mask_encoding_format, existing_coco_annotations=None, label_mapping: LabelIdMapping = None):
+                                  mask_encoding_format, existing_coco_annotations=None,
+                                  label_mapping: LabelIdMapping = None):
         """Generates coco annotations for images
 
         :param inst_segmaps: List of instance segmentation maps
@@ -215,10 +230,8 @@ class CocoWriterUtility:
 
                     if supercategory == inst_supercategory or supercategory == 'coco_annotations':
                         if int(inst["category_id"]) not in visited_categories:
-                            cat_dict = {}
-                            cat_dict['id'] = int(inst["category_id"])
-                            cat_dict['supercategory'] = inst_supercategory
-
+                            cat_dict: Dict[str, Union[str, int]] = {'id': int(inst["category_id"]),
+                                                                    'supercategory': inst_supercategory}
                             # Determine name of category based on label_mapping, name or category_id
                             if label_mapping is not None:
                                 cat_dict["name"] = label_mapping.label_from_id(cat_dict['id'])
@@ -246,10 +259,11 @@ class CocoWriterUtility:
             "date_created": datetime.datetime.utcnow().isoformat(' ')
         }
 
-        images = []
-        annotations = []
+        images: List[Dict[str, Union[str, int]]] = []
+        annotations: List[Dict[str, Union[str, int]]] = []
 
-        for inst_segmap, image_path, instance_2_category_map in zip(inst_segmaps, image_paths, instance_2_category_maps):
+        for inst_segmap, image_path, instance_2_category_map in zip(inst_segmaps, image_paths,
+                                                                    instance_2_category_maps):
 
             # Add coco info for image
             image_id = len(images)
@@ -265,10 +279,10 @@ class CocoWriterUtility:
                     binary_inst_mask = np.where(inst_segmap == inst, 1, 0)
                     # Add coco info for object in this image
                     annotation = CocoWriterUtility.create_annotation_info(len(annotations) + 1,
-                                                                    image_id,
-                                                                    instance_2_category_map[inst],
-                                                                    binary_inst_mask,
-                                                                    mask_encoding_format)
+                                                                          image_id,
+                                                                          instance_2_category_map[inst],
+                                                                          binary_inst_mask,
+                                                                          mask_encoding_format)
                     if annotation is not None:
                         annotations.append(annotation)
 
@@ -281,7 +295,8 @@ class CocoWriterUtility:
         }
 
         if existing_coco_annotations is not None:
-            new_coco_annotations = CocoWriterUtility.merge_coco_annotations(existing_coco_annotations, new_coco_annotations)
+            new_coco_annotations = CocoWriterUtility.merge_coco_annotations(existing_coco_annotations,
+                                                                            new_coco_annotations)
 
         return new_coco_annotations
 
@@ -310,7 +325,8 @@ class CocoWriterUtility:
 
         # Concatenate annotations sections
         if len(existing_coco_annotations["annotations"]) > 0:
-            annotation_id_offset = max([annotation["id"] for annotation in existing_coco_annotations["annotations"]]) + 1
+            annotation_id_offset = max(
+                [annotation["id"] for annotation in existing_coco_annotations["annotations"]]) + 1
         else:
             annotation_id_offset = 0
         for annotation in new_coco_annotations["annotations"]:
@@ -321,14 +337,14 @@ class CocoWriterUtility:
         return existing_coco_annotations
 
     @staticmethod
-    def create_image_info(image_id, file_name, image_size):
+    def create_image_info(image_id: int, file_name: str, image_size: Tuple[int, int]) -> Dict[str, Union[str, int]]:
         """Creates image info section of coco annotation
 
         :param image_id: integer to uniquly identify image
         :param file_name: filename for image
         :param image_size: The size of the image, given as [W, H]
         """
-        image_info = {
+        image_info: Dict[str, Union[str, int]] = {
             "id": image_id,
             "file_name": file_name,
             "width": image_size[1],
@@ -342,7 +358,8 @@ class CocoWriterUtility:
         return image_info
 
     @staticmethod
-    def create_annotation_info(annotation_id, image_id, category_id, binary_mask, mask_encoding_format, tolerance=2):
+    def create_annotation_info(annotation_id: int, image_id: int, category_id: int, binary_mask: np.ndarray,
+                               mask_encoding_format: str, tolerance: int = 2) -> Optional[Dict[str, Union[str, int]]]:
         """Creates info section of coco annotation
 
         :param annotation_id: integer to uniquly identify the annotation
@@ -368,7 +385,7 @@ class CocoWriterUtility:
         else:
             raise RuntimeError("Unknown encoding format: {}".format(mask_encoding_format))
 
-        annotation_info = {
+        annotation_info: Dict[str, Union[str, int]] = {
             "id": annotation_id,
             "image_id": image_id,
             "category_id": category_id,
@@ -382,7 +399,7 @@ class CocoWriterUtility:
         return annotation_info
 
     @staticmethod
-    def bbox_from_binary_mask(binary_mask):
+    def bbox_from_binary_mask(binary_mask: np.ndarray) -> List[int]:
         """ Returns the smallest bounding box containing all pixels marked "1" in the given image mask.
 
         :param binary_mask: A binary image mask with the shape [H, W].
@@ -400,7 +417,7 @@ class CocoWriterUtility:
         return [int(cmin), int(rmin), int(w), int(h)]
 
     @staticmethod
-    def calc_binary_mask_area(binary_mask):
+    def calc_binary_mask_area(binary_mask: np.ndarray) -> int:
         """ Returns the area of the given binary mask which is defined as the number of 1s in the mask.
 
         :param binary_mask: A binary image mask with the shape [H, W].
@@ -409,7 +426,7 @@ class CocoWriterUtility:
         return binary_mask.sum().tolist()
 
     @staticmethod
-    def close_contour(contour):
+    def close_contour(contour: np.ndarray) -> np.ndarray:
         """ Makes sure the given contour is closed.
 
         :param contour: The contour to close.
@@ -421,7 +438,7 @@ class CocoWriterUtility:
         return contour
 
     @staticmethod
-    def binary_mask_to_polygon(binary_mask, tolerance=0):
+    def binary_mask_to_polygon(binary_mask: np.ndarray, tolerance: int = 0) -> List[np.ndarray]:
         """Converts a binary mask to COCO polygon representation
 
          :param binary_mask: a 2D binary numpy array where '1's represent the object
@@ -451,4 +468,3 @@ class CocoWriterUtility:
             polygons.append(polygon.tolist())
 
         return polygons
-
