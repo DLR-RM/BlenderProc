@@ -6,6 +6,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('bin_object', help="Path to the object file containing the bin, should be examples/advanced/physics_convex_decomposition/bin.obj.")
 parser.add_argument('shapenet_path', help="Path to the downloaded shape net core v2 dataset, get it [here](http://www.shapenet.org/)")
 parser.add_argument('output_dir', nargs='?', default="examples/advanced/physics_convex_decomposition/output", help="Path to where the final files will be saved ")
+parser.add_argument('vhacd_path', nargs='?', default="blenderproc_resources/vhacd", help="The directory in which vhacd should be installed or is already installed.")
 args = parser.parse_args()
 
 bproc.init()
@@ -45,13 +46,13 @@ bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -2.13, 3.22
 bin_obj.enable_rigidbody(active=False, collision_shape="COMPOUND")
 # Let its collision shape be a convex decomposition of its original mesh
 # This will make the simulation more stable, while still having accurate collision detection
-bin_obj.build_convex_decomposition_collision_shape()
+bin_obj.build_convex_decomposition_collision_shape(args.vhacd_path)
 # Go over all ShapeNet objects
 for shapenet_obj in shapenet_objs:
     # Make the bin object actively participate in the physics simulation (they should fall into the bin)
     shapenet_obj.enable_rigidbody(active=True, collision_shape="COMPOUND")
     # Also use convex decomposition as collision shapes
-    shapenet_obj.build_convex_decomposition_collision_shape()
+    shapenet_obj.build_convex_decomposition_collision_shape(args.vhacd_path)
 
 # Run the physics simulation for at most 20 seconds
 bproc.object.simulate_physics_and_fix_final_poses(

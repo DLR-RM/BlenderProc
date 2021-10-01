@@ -8,19 +8,19 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     sys.path.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
     from .python.utility.SetupUtility import SetupUtility
     SetupUtility.setup([])
-    from . import loader
-    from . import utility
-    from . import sampler
-    from . import math
+    from .api import loader
+    from .api import utility
+    from .api import sampler
+    from .api import math
     from .python.utility.Initializer import init
-    from . import postprocessing
-    from . import writer
-    from . import material
-    from . import lighting
-    from . import camera
-    from . import renderer
-    from . import world
-    from . import constructor
-    from . import object
-    from . import types
-    from . import filter
+    from .api import postprocessing
+    from .api import writer
+    from .api import material
+    from .api import lighting
+    from .api import camera
+    from .api import renderer
+    from .api import world
+    from .api import constructor
+    from .api import object
+    from .api import types
+    from .api import filter

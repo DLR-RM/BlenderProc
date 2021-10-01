@@ -12,7 +12,7 @@ from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point
 from blenderproc.python.types.EntityUtility import create_empty
 from blenderproc.python.types.MeshObjectUtility import create_primitive, MeshObject
-from blenderproc.python.utility.Utility import Utility, resolve_path
+from blenderproc.python.utility.Utility import Utility, resolve_path, resolve_resource
 from blenderproc.python.loader.ObjectLoader import load_obj
 from typing import Tuple
 
@@ -40,7 +40,7 @@ def load_suncg(house_path: str, label_mapping: LabelIdMapping, suncg_dir: str = 
     with open(resolve_path(house_path), "r") as f:
         config = json.load(f)
 
-    object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(os.path.join('resources', 'suncg', 'Better_labeling_for_NYU.csv'))
+    object_label_map, object_fine_grained_label_map, object_coarse_grained_label_map = SuncgLoader._read_model_category_mapping(resolve_resource(os.path.join('suncg', 'Better_labeling_for_NYU.csv')))
 
     house_id = config["id"]
     loaded_objects = []

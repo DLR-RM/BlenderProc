@@ -1,6 +1,3 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["opencv-contrib-python", "pypng==0.0.20"])
-
 import json
 import os
 import glob
