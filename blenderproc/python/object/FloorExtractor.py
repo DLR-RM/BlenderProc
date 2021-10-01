@@ -1,6 +1,7 @@
 from math import fabs, acos
 from typing import Union, List
 import numpy as np
+from sklearn.cluster import MeanShift
 
 import bmesh
 import bpy
@@ -78,10 +79,6 @@ def extract_floor(mesh_objects: List[MeshObject], compare_angle_degrees: float =
                 obj.update_from_bmesh(bm)
                 bpy.ops.mesh.separate(type='SELECTED')
         else:
-            from blenderproc.python.utility.SetupUtility import SetupUtility
-            SetupUtility.setup_pip(["scikit-learn"])
-            from sklearn.cluster import MeanShift
-
             # no height list was provided, try to estimate them on its own
 
             # first get a list of all height values of the median points, which are inside of the defined

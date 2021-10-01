@@ -80,10 +80,6 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
             optimal_dtype = dtype
             if np.iinfo(optimal_dtype).max >= len(colors) - 1:
                 break
-        if default_values is None:
-            default_values = {}
-        elif 'class' in default_values:
-            default_values['cp_category_id'] = default_values['class']
 
         if isinstance(attributes, str):
             # only one result is requested
@@ -128,7 +124,8 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                 list_of_attributes = []
                 channels = []
                 for channel_id in range(result_channels):
-                    resulting_map = np.empty((segmap.shape[0], segmap.shape[1]))
+                    num_default_values = 0
+                    resulting_map = np.zeros((segmap.shape[0], segmap.shape[1]), dtype=optimal_dtype)
                     was_used = False
                     current_attribute = attributes[channel_id]
                     org_attribute = current_attribute
@@ -141,8 +138,6 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                         there_was_an_instance_rendering = True
                         resulting_map = segmap
                         was_used = True
-                        # a non default value was also used
-                        non_default_value_was_used = True
                     else:
                         if current_attribute != "cp_category_id":
                             list_of_attributes.append(current_attribute)
@@ -157,13 +152,9 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                             if current_attribute in default_values:
                                 default_value = default_values[current_attribute]
                             elif attribute in default_values:
-                                default_value = default_values[attribute]
-                        last_state_save_in_csv = None
-                        # this avoids that for certain attributes only the default value is written
-                        non_default_value_was_used = False
+                                default_value = default_values[attribute]                        
                         # iterate over all object ids
                         for object_id in object_ids:
-                            is_default_value = False
                             # Convert np.uint8 to int, such that the save_in_csv_attributes dict can later be serialized
                             object_id = int(object_id)
                             # get the corresponding object via the id
@@ -182,7 +173,7 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                             elif default_value_set:
                                 # if none of the above applies use the default value
                                 value = default_value
-                                is_default_value = True
+                                num_default_values += 1
                             else:
                                 # if the requested current_attribute is not a custom property or a attribute
                                 # or there is a default value stored
@@ -190,32 +181,18 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                                 raise Exception("The obj: {} does not have the "
                                                 "attribute: {}, striped: {}. Maybe try a default "
                                                 "value.".format(current_obj.name, current_attribute, attribute))
-
-                            # check if the value should be saved as an image or in the csv file
-                            save_in_csv = False
-                            try:
-                                resulting_map[segmap == object_id] = value
+                            
+                            # save everything which is not instance also in the .csv
+                            if isinstance(value, (int, float, np.integer, np.floating)):
                                 was_used = True
-                                if not is_default_value:
-                                    non_default_value_was_used = True
-                                # save everything which is not instance also in the .csv
-                                if current_attribute != "instance":
-                                    save_in_csv = True
-                            except ValueError:
-                                save_in_csv = True
+                                resulting_map[segmap == object_id] = value
 
-                            if last_state_save_in_csv is not None and last_state_save_in_csv != save_in_csv:
-                                raise Exception("During creating the mapping, the saving to an image or a csv file "
-                                                "switched, this might indicated that the used default value, does "
-                                                "not have the same type as the returned value, "
-                                                "for: {}".format(current_attribute))
-                            last_state_save_in_csv = save_in_csv
-                            if save_in_csv:
-                                if object_id in save_in_csv_attributes:
-                                    save_in_csv_attributes[object_id][attribute] = value
-                                else:
-                                    save_in_csv_attributes[object_id] = {attribute: value}
-                    if was_used and non_default_value_was_used:
+                            if object_id in save_in_csv_attributes:
+                                save_in_csv_attributes[object_id][attribute] = value
+                            else:
+                                save_in_csv_attributes[object_id] = {attribute: value}
+                                
+                    if was_used and num_default_values < len(object_ids):
                         channels.append(org_attribute)
                         combined_result_map.append(resulting_map)
                         return_dict.setdefault("{}_segmaps{}".format(org_attribute, suffix), []).append(resulting_map)
@@ -272,7 +249,6 @@ def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = No
                                 segcolormap_output_key,
                                 ".csv",
                                 "2.0.0")
-
     return return_dict
 
 

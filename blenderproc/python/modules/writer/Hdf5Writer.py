@@ -1,7 +1,4 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
 from blenderproc.python.writer.WriterUtility import WriterUtility
-
-SetupUtility.setup_pip(["h5py"])
 
 import os
 

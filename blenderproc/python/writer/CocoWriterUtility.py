@@ -1,7 +1,3 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-
-SetupUtility.setup_pip(["scikit-image", "opencv-contrib-python"])
-
 import datetime
 from itertools import groupby
 import csv

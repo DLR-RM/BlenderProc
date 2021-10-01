@@ -1,7 +1,4 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["Pillow", "opencv-contrib-python"])
-
-from typing import Tuple, List, Optional
+from typing import Tuple, List
 import bpy
 import cv2
 import numpy as np

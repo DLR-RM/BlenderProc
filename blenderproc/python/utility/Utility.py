@@ -38,7 +38,7 @@ def resolve_resource(relative_resource_path: str) -> str:
     :param relative_resource_path: The relative path inside the BlenderProc resource folder.
     :return: The absolute path.
     """
-    return resolve_path(os.path.join(Utility.blenderproc_root, "resources", relative_resource_path))
+    return resolve_path(os.path.join(Utility.blenderproc_root, "blenderproc", "resources", relative_resource_path))
 
 
 def num_frames() -> int:

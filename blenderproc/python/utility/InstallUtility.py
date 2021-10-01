@@ -7,6 +7,7 @@ import shutil
 import signal
 import sys
 from sys import platform, version_info
+from typing import List, Union
 
 if version_info.major == 3:
     from urllib.request import urlretrieve
@@ -14,14 +15,14 @@ else:
     from urllib import urlretrieve
     import contextlib
 
-import uuid
 from blenderproc.python.modules.utility.ConfigParser import ConfigParser
 from blenderproc.python.utility.SetupUtility import SetupUtility
+
 
 class InstallUtility:
 
     @staticmethod
-    def determine_blender_install_path(is_config, args):
+    def determine_blender_install_path(is_config: bool, args: List[str]) -> Union[str, str]:
         """ Determines the path of the blender installation
 
         :param is_config: Whether a yaml config file was given instead of a python script.
@@ -44,15 +45,17 @@ class InstallUtility:
             if blender_install_path is None:
                 blender_install_path = os.path.join("/home_local", os.getenv("USERNAME") if platform == "win32" else os.getenv("USER"), "blender")
         return custom_blender_path, blender_install_path
-    
+
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path, blender_install_path, reinstall_blender):
+    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool) -> Union[str, str]:
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
         :param blender_install_path: The path to where blender should be installed.
         :param reinstall_blender: If True, blender will be forced to reinstall.
-        :return: The path to the blender binary.
+        :return:
+               - The path to the blender binary.
+               - The major version of the blender installation.
         """
         # If blender should be downloaded automatically
         if custom_blender_path is None:
@@ -188,4 +191,4 @@ class InstallUtility:
         else:
             raise Exception("This system is not supported yet: {}".format(platform))
 
-        return blender_run_path
+        return blender_run_path, major_version
