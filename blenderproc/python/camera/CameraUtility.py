@@ -4,7 +4,9 @@ from mathutils import Matrix, Vector, Euler
 from typing import Union, Tuple, Optional
 
 from blenderproc.python.types.EntityUtility import Entity
-from blenderproc.python.utility.Utility import KeyFrame, DefaultConfig
+from blenderproc.python.utility.Utility import KeyFrame
+from blenderproc.python.utility.DefaultConfig import DefaultConfig
+
 
 
 def add_camera_pose(cam2world_matrix: Union[np.ndarray, Matrix], frame: Union[int, None] = None):
