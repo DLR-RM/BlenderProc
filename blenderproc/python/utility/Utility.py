@@ -472,11 +472,7 @@ class Utility:
         # Calculate the block indices per dimension
         values /= block_length
         # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())
-        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :,
-                                                                                         1] * num_splits_per_dimension + values[
-                                                                                                                         :,
-                                                                                                                         :,
-                                                                                                                         2]
+        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :,1] * num_splits_per_dimension + values[:, :, 2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
 
