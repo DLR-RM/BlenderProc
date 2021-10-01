@@ -18,7 +18,9 @@ def cli():
     parser_run = subparsers.add_parser('run', help="Runs the BlenderProc pipeline in normal mode.")
     parser_debug = subparsers.add_parser('debug', help="Runs the BlenderProc pipeline in debug mode. This will open the Blender UI, so the 3D scene created by the pipeline can be visually inspected.")
 
+    # Adds modes for scripts
     parser_scripts = []
+    # A dict that contains command and help text
     scripts = {
         "vis_hdf5": "Visualizes the content of one or multiple .hdf5 files.",
         "vis_coco": "Visualizes the annotations written in coco format.",
@@ -110,6 +112,7 @@ def cli():
 
         exit(p.returncode)
     elif args.mode in scripts.keys():
+        # Import the required entry point
         if args.mode == "vis_hdf5":
             from blenderproc.scripts.visHdf5Files import cli
         elif args.mode == "vis_coco":
@@ -131,7 +134,9 @@ def cli():
         else:
             raise Exception("There is no linked script for the command: " + args.mode)
 
+        # Remove the first argument (its the script name)
         sys.argv = sys.argv[:1] + unknown_args
+        # Call the script
         cli()
     else:
         # If no command is given, print help
