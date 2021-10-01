@@ -1,6 +1,4 @@
 from collections import defaultdict
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["imageio"])
 
 import bpy
 import bmesh

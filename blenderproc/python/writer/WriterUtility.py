@@ -1,6 +1,3 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["h5py"])
-
 import os
 from typing import List, Dict, Union, Any, Set, Tuple
 
@@ -159,7 +156,7 @@ class WriterUtility:
 
         file_ending = file_path[file_path.rfind(".") + 1:].lower()
 
-        if file_ending in ["exr", "png", "jpg"]:
+        if file_ending in ["exr", "png"]:
             # num_channels is 4 if transparent_background is true in config
             output = load_image(file_path, num_channels=3 + (1 if load_alpha_channel else 0))
         elif file_ending in ["npy", "npz"]:

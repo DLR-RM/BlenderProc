@@ -1,6 +1,3 @@
-from blenderproc.python.utility.SetupUtility import SetupUtility
-SetupUtility.setup_pip(["scikit-image", "pypng==0.0.20", "scipy", "matplotlib", "pytz"])
-
 import os
 import sys
 from random import choice
