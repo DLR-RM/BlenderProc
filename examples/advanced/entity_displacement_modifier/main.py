@@ -20,7 +20,7 @@ light.set_location([5, -5, 5])
 light.set_energy(1000)
 
 # define the camera intrinsics
-bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
+bproc.camera.set_resolution(512, 512)
 
 # Add two camera poses
 bproc.camera.add_camera_pose(bproc.math.build_transformation_mat([0, -13.741, 4.1242], [1.3, 0, 0]))

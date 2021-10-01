@@ -42,8 +42,7 @@ There are set in the main.Initializer
 ```yaml
 "config": {
   "global": {
-    "output_dir": "<args:2>",
-    "pixel_aspect_x": 1.333333333
+    "output_dir": "<args:2>"
   }
 }
 ```
@@ -79,10 +78,6 @@ The `SuncgLoader` also sets the `category_id` of each object, such that semantic
       "rotation": {
         "format": "forward_vec"
       }
-    },
-    "intrinsics": {
-      "fov": 1,
-      "pixel_aspect_x": 1.333333333
     }
   }
 }

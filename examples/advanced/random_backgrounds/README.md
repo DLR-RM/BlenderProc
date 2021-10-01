@@ -209,7 +209,7 @@ using the `cp_is_object` custom property added when loading the object as select
       }
       ],
       "intrinsics": {
-        "fov": 1,
+  
         "resolution_x": 640,
         "resolution_y": 480
       }
