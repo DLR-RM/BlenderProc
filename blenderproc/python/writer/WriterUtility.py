@@ -149,7 +149,7 @@ class WriterUtility:
         return path_l, path_r
 
     @staticmethod
-    def load_output_file(file_path: str, load_alpha_channel: bool = False, remove: bool = True) -> np.ndarray:
+    def load_output_file(file_path: str, load_alpha_channel: bool = False, remove: bool = True) -> Union[np.ndarray, List[Any]]:
         """ Tries to read in the file with the given path into a numpy array.
 
         :param file_path: The file path. Type: string.
@@ -168,7 +168,7 @@ class WriterUtility:
         elif file_ending in ["npy", "npz"]:
             output = np.load(file_path)
         elif file_ending in ["csv"]:
-            output = np.array(WriterUtility._load_csv(file_path))
+            output = WriterUtility._load_csv(file_path)
         else:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
