@@ -66,7 +66,7 @@ def cli():
                 # Visualize channel
                 plt.figure()
                 plt.title("{} / {} in {}".format(key, channel_label, file_label))
-                plt.imshow(data[:, :, i], cmap='jet')
+                plt.imshow(data[:, :, i], cmap='summer')
 
         elif key in args.other_non_rgb_keys:
             # Make sure the data has only one channel, otherwise matplotlib will treat it as an rgb image
