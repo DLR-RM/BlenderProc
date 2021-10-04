@@ -291,6 +291,13 @@ def _set_world_background_color(color: mathutils.Vector):
     :param color: A 3-dim array containing the background color in range [0, 255]
     """
     nodes = bpy.context.scene.world.node_tree.nodes
+    links = bpy.context.scene.world.node_tree.links
+
+    # Unlink any incoming link that would overwrite the default value
+    if len(nodes.get("Background").inputs['Color'].links) > 0:
+        links.remove(nodes.get("Background").inputs['Color'].links[0])
+    # Set strength to 1 as it would act as a multiplier
+    nodes.get("Background").inputs['Strength'].default_value = 1
     nodes.get("Background").inputs['Color'].default_value = color + [1]
 
 
