@@ -42,8 +42,10 @@ class LensDistortionUtility:
         :param k1: First radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
         :param k2: Second radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model
         :param k3: Third radial distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
-        :param p1: First decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model(discouraged)
-        :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model(discouraged)
+        :param p1: First decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
+                   Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
+        :param p2: Second decentering distortion parameter as defined by the undistorted-to-distorted Brown-Conrady lens distortion model (discouraged)
+                   Note: OpenCV/Bouguet/Kalibr permute (p1,p2) w.r.t. (Brown, 1965; Brown, 1971; Weng et al., 1992).
         """
         if all(v == 0.0 for v in [k1, k2, k3, p1, p2]):
             raise Exception("All given lens distortion parameters (k1, k2, k3, p1, p2) are zero.")

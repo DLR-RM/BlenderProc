@@ -171,19 +171,19 @@ class CameraInterface(Module):
           - float
         * - lens_distortion/p1
           - p1 is the first decentering distortion parameter as defined by the undistorted-to-distorted
-            Brown-Conrady lens distortion model and is
-            comform to the current DLR CalLab/OpenCV/Bouguet/Kalibr implementations. This parameter
-            shares one degree of freedom (j1) with p2; as a consequence, either both parameters are
-            given or none. The use of these parameters is discouraged since either current cameras do
-            not need them or their potential accuracy gain is negligible w.r.t. image processing.
+            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+            This parameter shares one degree of freedom (j1) with p2; as a consequence, either both
+            parameters are given or none. The use of these parameters is discouraged since either current
+            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
           - float
         * - lens_distortion/p2
           - p2 is the second decentering distortion parameter as defined by the undistorted-to-distorted
-            Brown-Conrady lens distortion model and is comform to the current DLR CalLab/OpenCV/
-            Bouguet/Kalibr implementations. This parameter shares one degree of freedom (j1) with p1;
-            as a consequence, either both parameters are given or none. The use of these parameters is
-            discouraged since either current cameras do not need them or their potential accuracy gain
-            is negligible w.r.t. image processing.
+            Brown-Conrady lens distortion model in (Brown, 1965; Brown, 1971; Weng et al., 1992) and is
+            comform to the current DLR CalLab implementation. Note that OpenCV/Bouguet/Kalibr permute them.
+            This parameter shares one degree of freedom (j1) with p1; as a consequence, either both
+            parameters are given or none. The use of these parameters is discouraged since either current
+            cameras do not need them or their potential accuracy gain is negligible w.r.t. image processing.
           - float
         * - depth_of_field/focal_object
           - This object will be used as focal point, ideally a empty plane_axes is used here, see BasicEmptyInitializer.
