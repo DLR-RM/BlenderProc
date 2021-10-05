@@ -22,7 +22,7 @@ class ObjectPoseSamplerModule(Module):
             "max_iterations": 1000,
             "objects_to_sample": {
               "provider": "getter.Entity",
-              "condition": {
+              "conditions": {
                 "cp_sample_pose": True
               }
             },
