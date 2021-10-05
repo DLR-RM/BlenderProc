@@ -82,7 +82,7 @@
         "cf_textures": {
           "Base Color": {
             "provider": "sampler.Path",
-            "path": "<args:1>/*.jpg"
+            "path": "<args:1>/material_manipulation_sample_texture*.jpg"
           }
         }
       }
