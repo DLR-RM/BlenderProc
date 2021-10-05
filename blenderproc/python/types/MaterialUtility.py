@@ -47,7 +47,7 @@ class Material(Struct):
         """
         return Utility.get_the_one_node_with_type(self.nodes, node_type)
 
-    def get_nodes_with_type(self, node_type: str) -> [bpy.types.Node]:
+    def get_nodes_with_type(self, node_type: str) -> List[bpy.types.Node]:
         """ Returns all nodes which are of the given node_type
 
         :param node_type: The note type to look for.
@@ -134,7 +134,7 @@ class Material(Struct):
                                 "which has as a 'Base Color' input.".format(self.blender_obj.name))
 
     def make_emissive(self, emission_strength: float, replace: bool = False, keep_using_base_color: bool = True,
-                      emission_color: list = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
+                      emission_color: List[float] = None, non_emissive_color_socket: bpy.types.NodeSocket = None):
         """ Makes the material emit light.
 
         :param emission_strength: The strength of the emitted light.

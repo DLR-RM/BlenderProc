@@ -1,7 +1,10 @@
+from typing import List
+
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
-def light_surface(objects: [MeshObject], emission_strength: float = 10.0, keep_using_base_color: bool = False, emission_color: list = None):
+def light_surface(objects: List[MeshObject], emission_strength: float = 10.0,
+                  keep_using_base_color: bool = False, emission_color: list = None):
     """ Add emission shader to the materials of the given objects.
 
     :param objects: A list of mesh objects whose materials should emit light.
@@ -25,6 +28,8 @@ def light_surface(objects: [MeshObject], emission_strength: float = 10.0, keep_u
                 continue
 
         for i, material in enumerate(obj.get_materials()):
+            if material is None:
+                continue
             # if there is more than one user make a copy and then use the new one
             if material.get_users() > 1:
                 material = material.duplicate()
@@ -34,7 +39,8 @@ def light_surface(objects: [MeshObject], emission_strength: float = 10.0, keep_u
             # add a custom property to later identify these materials
             material.set_cp("is_lamp", True)
 
-            material.make_emissive(emission_strength=emission_strength, emission_color=emission_color, keep_using_base_color=keep_using_base_color)
+            material.make_emissive(emission_strength=emission_strength, emission_color=emission_color,
+                                   keep_using_base_color=keep_using_base_color)
 
 
 

@@ -7,7 +7,7 @@ from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import KeyFrame
 
 
-def add_camera_pose(cam2world_matrix: Union[np.ndarray, Matrix], frame: Union[int, None] = None):
+def add_camera_pose(cam2world_matrix: Union[np.ndarray, Matrix], frame: Optional[int] = None) -> int:
     """ Sets a new camera pose to a new or existing frame
 
     :param cam2world_matrix: The transformation matrix from camera to world coordinate system
@@ -44,7 +44,8 @@ def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
         return np.array(bpy.context.scene.camera.matrix_world)
 
 
-def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: str = 'Y', inplane_rot: float = None) -> np.ndarray:
+def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: str = 'Y',
+                              inplane_rot: Optional[float] = None) -> np.ndarray:
     """ Returns a camera rotation matrix for the given forward vector and up axis
 
     :param forward_vec: The forward vector which specifies the direction the camera should look.
@@ -58,7 +59,9 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
     return np.array(rotation_matrix)
 
 
-def set_intrinsics_from_blender_params(lens, image_width, image_height, clip_start=0.1, clip_end=1000, pixel_aspect_x=1, pixel_aspect_y=1, shift_x=0, shift_y=0, lens_unit="MILLIMETERS"):
+def set_intrinsics_from_blender_params(lens: float, image_width: int, image_height: int, clip_start: float = 0.1,
+                                       clip_end: float = 1000, pixel_aspect_x: float = 1, pixel_aspect_y: float = 1,
+                                       shift_x: float = 0, shift_y: float = 0, lens_unit: str = "MILLIMETERS"):
     """ Sets the camera intrinsics using blenders represenation.
 
     :param lens: Either the focal length in millimeters or the FOV in radians, depending on the given lens_unit.
@@ -104,11 +107,10 @@ def set_intrinsics_from_blender_params(lens, image_width, image_height, clip_sta
     cam.shift_y = shift_y
 
 
-
-def set_stereo_parameters(convergence_mode, convergence_distance, interocular_distance):
+def set_stereo_parameters(convergence_mode: str, convergence_distance: float, interocular_distance: float):
     """ Sets the stereo parameters of the camera.
 
-    :param convergence_mode: How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the convergence plane, or parallel where they do not converge and are parallel)
+    :param convergence_mode: How the two cameras converge (e.g. Off-Axis where both cameras are shifted inwards to converge in the convergence plane, or parallel where they do not converge and are parallel). Available: ["OFFAXIS", "PARALLEL", "TOE"]
     :param convergence_distance: The convergence point for the stereo cameras (i.e. distance from the projector to the projection screen)
     :param interocular_distance: Distance between the camera pair
     """
@@ -120,7 +122,8 @@ def set_stereo_parameters(convergence_mode, convergence_distance, interocular_di
     cam.stereo.interocular_distance = interocular_distance
 
 
-def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int, image_height: int, clip_start: float = 0.1, clip_end: int = 1000):
+def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int, image_height: int,
+                                 clip_start: float = 0.1, clip_end: float = 1000):
     """ Set the camera intrinsics via a K matrix.
 
     The K matrix should have the format:
@@ -168,7 +171,7 @@ def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int,
     set_intrinsics_from_blender_params(f_in_mm, image_width, image_height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, shift_x, shift_y)
 
 
-def get_sensor_size(cam):
+def get_sensor_size(cam: bpy.types.Camera) -> float:
     """ Returns the sensor size in millimeters based on the configured sensor_fit.
 
     :param cam: The camera object.
@@ -181,7 +184,8 @@ def get_sensor_size(cam):
     return sensor_size_in_mm
 
 
-def get_view_fac_in_px(cam, pixel_aspect_x, pixel_aspect_y, resolution_x_in_px, resolution_y_in_px):
+def get_view_fac_in_px(cam: bpy.types.Camera, pixel_aspect_x: float, pixel_aspect_y: float,
+                       resolution_x_in_px: int, resolution_y_in_px: int) -> int:
     """ Returns the camera view in pixels.
 
     :param cam: The camera object.

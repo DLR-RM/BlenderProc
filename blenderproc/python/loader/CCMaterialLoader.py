@@ -7,9 +7,10 @@ from blenderproc.python.material import MaterialLoaderUtility
 from blenderproc.python.types.MaterialUtility import Material
 from blenderproc.python.utility.Utility import Utility, resolve_path
 
+
 def load_ccmaterials(folder_path: str = "resources/cctextures", used_assets: list = None, preload: bool = False,
-         fill_used_empty_materials: bool = False, add_custom_properties: dict = None,
-         use_all_materials: bool = False) -> List[Material]:
+                     fill_used_empty_materials: bool = False, add_custom_properties: dict = None,
+                     use_all_materials: bool = False) -> List[Material]:
     """ This method loads all textures obtained from https://cc0textures.com, use the script
     (scripts/download_cc_textures.py) to download all the textures to your pc.
 
@@ -36,12 +37,13 @@ def load_ccmaterials(folder_path: str = "resources/cctextures", used_assets: lis
                                "asphalt", "painted metal", "painted plaster", "marble", "carpet",
                                "plastic", "roofing tiles", "bark", "metal plates", "wood siding",
                                "terrazzo", "plaster", "paint", "corrugated steel", "painted wood", "lava"
-                                                                                                   "cardboard", "clay", "diamond plate", "ice", "moss", "pipe", "candy",
+                                                                                                   "cardboard", "clay",
+                               "diamond plate", "ice", "moss", "pipe", "candy",
                                "chipboard", "rope", "sponge", "tactile paving", "paper", "cork",
                                "wood chips"]
     if not use_all_materials and used_assets is None:
         used_assets = probably_useful_texture
-    else:
+    elif used_assets is not None:
         used_assets = [asset.lower() for asset in used_assets]
 
     if add_custom_properties is None:
@@ -106,12 +108,12 @@ def load_ccmaterials(folder_path: str = "resources/cctextures", used_assets: lis
         raise Exception("The folder path does not exist: {}".format(folder_path))
 
 
-
 class CCMaterialLoader:
 
     @staticmethod
-    def create_material(new_mat: bpy.types.Material, base_image_path: str, ambient_occlusion_image_path: str, metallic_image_path: str,
-                        roughness_image_path: str, alpha_image_path: str, normal_image_path: str, displacement_image_path: str):
+    def create_material(new_mat: bpy.types.Material, base_image_path: str, ambient_occlusion_image_path: str,
+                        metallic_image_path: str, roughness_image_path: str, alpha_image_path: str,
+                        normal_image_path: str, displacement_image_path: str):
         """
         Create a material for the cctexture datatset, the combination used here is calibrated to this.
 

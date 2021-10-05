@@ -34,7 +34,7 @@ def load_shapenet(data_path: str, used_synset_id: str, used_source_id: str = "",
 
     # In shapenet every .obj file only contains one object, make sure that is the case
     if len(loaded_objects) != 1:
-        raise Exception("The ShapeNetLoader expects every .obj file to contain exactly one object, however the file " + selected_obj + " contained " + str(len(loaded_obj)) + " objects.")
+        raise Exception("The ShapeNetLoader expects every .obj file to contain exactly one object, however the file " + selected_obj + " contained " + str(len(loaded_objects)) + " objects.")
     obj = loaded_objects[0]
 
     obj.set_cp("used_synset_id", used_synset_id)
@@ -118,6 +118,8 @@ class ShapeNetLoader:
         :param obj: object where the material maybe wrong
         """
         for material in obj.get_materials():
+            if material is None:
+                continue
             texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
             if texture_nodes and len(texture_nodes) > 1:
                 principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")

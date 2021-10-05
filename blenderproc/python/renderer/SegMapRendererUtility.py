@@ -1,6 +1,6 @@
 import csv
 import os
-from typing import List, Tuple, Union, Dict
+from typing import List, Tuple, Union, Dict, Optional, Any
 
 import bpy
 import mathutils
@@ -12,13 +12,13 @@ import blenderproc.python.renderer.RendererUtility as RendererUtility
 from blenderproc.python.utility.Utility import Utility
 
 
-def render_segmap(output_dir: Union[str, None] = None, temp_dir: Union[str, None] = None,
+def render_segmap(output_dir: Optional[str] = None, temp_dir: Optional[str] = None,
                   map_by: Union[str, List[str]] = "class",
-                  default_values: Union[Dict[str, str]] = None, file_prefix: str = "segmap_",
+                  default_values: Optional[Dict[str, int]] = None, file_prefix: str = "segmap_",
                   output_key: str = "segmap", segcolormap_output_file_prefix: str = "instance_attribute_map_",
                   segcolormap_output_key: str = "segcolormap", use_alpha_channel: bool = False,
                   render_colorspace_size_per_dimension: int = 2048) -> \
-        Dict[str, List[np.ndarray]]:
+        Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Renders segmentation maps for all frames
 
     :param output_dir: The directory to write images to.
@@ -92,7 +92,7 @@ def render_segmap(output_dir: Union[str, None] = None, temp_dir: Union[str, None
 
         # define them for the avoid rendering case
         there_was_an_instance_rendering = False
-        list_of_attributes = []
+        list_of_attributes: List[str] = []
 
         # Check if stereo is enabled
         if bpy.context.scene.render.use_multiview:
@@ -100,11 +100,11 @@ def render_segmap(output_dir: Union[str, None] = None, temp_dir: Union[str, None
         else:
             suffixes = [""]
 
-        return_dict = {}
+        return_dict: Dict[str, Union[np.ndarray, List[np.ndarray]]] = {}
 
         # After rendering
         for frame in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):  # for each rendered frame
-            save_in_csv_attributes = {}
+            save_in_csv_attributes: Dict[int, Dict[str, Any]] = {}
             for suffix in suffixes:
                 file_path = temporary_segmentation_file_path + ("%04d" % frame) + suffix + ".exr"
                 segmentation = load_image(file_path)
@@ -291,6 +291,13 @@ def _set_world_background_color(color: mathutils.Vector):
     :param color: A 3-dim array containing the background color in range [0, 255]
     """
     nodes = bpy.context.scene.world.node_tree.nodes
+    links = bpy.context.scene.world.node_tree.links
+
+    # Unlink any incoming link that would overwrite the default value
+    if len(nodes.get("Background").inputs['Color'].links) > 0:
+        links.remove(nodes.get("Background").inputs['Color'].links[0])
+    # Set strength to 1 as it would act as a multiplier
+    nodes.get("Background").inputs['Strength'].default_value = 1
     nodes.get("Background").inputs['Color'].default_value = color + [1]
 
 

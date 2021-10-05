@@ -1,6 +1,6 @@
 import os
 import random
-from typing import Union, List
+from typing import Union, List, Optional
 
 import bpy
 
@@ -11,12 +11,14 @@ from blenderproc.python.utility.Utility import Utility
 x_texture_node = -1500
 y_texture_node = 300
 
-def collect_all() -> List["Material"]:
+
+def collect_all() -> List[Optional["Material"]]:
     """ Returns all existing materials.
 
     :return: A list of all materials.
     """
     return convert_to_materials(bpy.data.materials)
+
 
 def create(name: str) -> "Material":
     """ Creates a new empty material.
@@ -28,13 +30,15 @@ def create(name: str) -> "Material":
     new_mat.use_nodes = True
     return Material(new_mat)
 
-def convert_to_materials(blender_materials: list) -> List["Material"]:
+
+def convert_to_materials(blender_materials: List[Optional[bpy.types.Material]]) -> List[Optional["Material"]]:
     """ Converts the given list of blender materials to bproc.Material(s)
 
     :param blender_materials: List of materials.
     :return: The list of materials.
     """
     return [(None if obj is None else Material(obj)) for obj in blender_materials]
+
 
 def find_cc_material_by_name(material_name: str, custom_properties: dict):
     """
@@ -59,6 +63,7 @@ def find_cc_material_by_name(material_name: str, custom_properties: dict):
         # the material was not even loaded
         return None
 
+
 def is_material_used(material: bpy.types.Material):
     """
     Checks if the given material is used on any object.
@@ -68,6 +73,7 @@ def is_material_used(material: bpy.types.Material):
     """
     # check amount of usage of this material
     return material.users != 0
+
 
 def create_new_cc_material(material_name: str, add_custom_properties: dict):
     """
@@ -90,7 +96,9 @@ def create_new_cc_material(material_name: str, add_custom_properties: dict):
         new_mat[cp_key] = value
     return new_mat
 
-def create_image_node(nodes: bpy.types.Nodes, image: Union[str, bpy.types.Image], non_color_mode=False, x_location=0, y_location=0):
+
+def create_image_node(nodes: bpy.types.Nodes, image: Union[str, bpy.types.Image], non_color_mode=False, x_location=0,
+                      y_location=0):
     """
     Creates a texture image node inside of a material.
 
@@ -112,8 +120,9 @@ def create_image_node(nodes: bpy.types.Nodes, image: Union[str, bpy.types.Image]
     image_node.location.y = y_location
     return image_node
 
+
 def add_base_color(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, base_image_path,
-                    principled_bsdf: bpy.types.Node):
+                   principled_bsdf: bpy.types.Node):
     """
     Adds base color to the principled bsdf node.
 
@@ -125,14 +134,15 @@ def add_base_color(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, base_imag
     """
     if os.path.exists(base_image_path):
         base_color = create_image_node(nodes, base_image_path, False,
-                                                                x_texture_node,
-                                                                y_texture_node)
+                                       x_texture_node,
+                                       y_texture_node)
         links.new(base_color.outputs["Color"], principled_bsdf.inputs["Base Color"])
         return base_color
     return None
 
+
 def add_ambient_occlusion(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, ambient_occlusion_image_path,
-                            principled_bsdf: bpy.types.Node, base_color: bpy.types.Node):
+                          principled_bsdf: bpy.types.Node, base_color: bpy.types.Node):
     """
     Adds ambient occlusion to the principled bsdf node.
 
@@ -145,8 +155,8 @@ def add_ambient_occlusion(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, am
     """
     if os.path.exists(ambient_occlusion_image_path):
         ao_color = create_image_node(nodes, ambient_occlusion_image_path, True,
-                                                            x_texture_node,
-                                                            y_texture_node * 2)
+                                     x_texture_node,
+                                     y_texture_node * 2)
         math_node = nodes.new(type='ShaderNodeMixRGB')
         math_node.blend_type = "MULTIPLY"
         math_node.location.x = x_texture_node * 0.5
@@ -160,8 +170,9 @@ def add_ambient_occlusion(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, am
         return ao_color
     return None
 
+
 def add_metal(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, metalness_image_path: str,
-                principled_bsdf: bpy.types.Node):
+              principled_bsdf: bpy.types.Node):
     """
     Adds metal to the principled bsdf node.
 
@@ -173,13 +184,14 @@ def add_metal(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, metalness_imag
     """
     if os.path.exists(metalness_image_path):
         metallic = create_image_node(nodes, metalness_image_path, True,
-                                                            x_texture_node, 0)
+                                     x_texture_node, 0)
         links.new(metallic.outputs["Color"], principled_bsdf.inputs["Metallic"])
         return metallic
     return None
 
+
 def add_roughness(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, roughness_image_path: str,
-                    principled_bsdf: bpy.types.Node):
+                  principled_bsdf: bpy.types.Node):
     """
     Adds roughness to the principled bsdf node.
 
@@ -191,14 +203,15 @@ def add_roughness(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, roughness_
     """
     if os.path.exists(roughness_image_path):
         roughness_texture = create_image_node(nodes, roughness_image_path, True,
-                                                                    x_texture_node,
-                                                                    y_texture_node * -1)
+                                              x_texture_node,
+                                              y_texture_node * -1)
         links.new(roughness_texture.outputs["Color"], principled_bsdf.inputs["Roughness"])
         return roughness_texture
     return None
 
+
 def add_specular(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, specular_image_path: str,
-                    principled_bsdf: bpy.types.Node):
+                 principled_bsdf: bpy.types.Node):
     """
     Adds specular to the principled bsdf node.
 
@@ -210,13 +223,14 @@ def add_specular(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, specular_im
     """
     if os.path.exists(specular_image_path):
         specular_texture = create_image_node(nodes, specular_image_path, True,
-                                                                    x_texture_node, 0)
+                                             x_texture_node, 0)
         links.new(specular_texture.outputs["Color"], principled_bsdf.inputs["Specular"])
         return specular_texture
     return None
 
+
 def add_alpha(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, alpha_image_path: str,
-                principled_bsdf: bpy.types.Node):
+              principled_bsdf: bpy.types.Node):
     """
     Adds alpha to the principled bsdf node.
 
@@ -228,14 +242,15 @@ def add_alpha(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, alpha_image_pa
     """
     if os.path.exists(alpha_image_path):
         alpha_texture = create_image_node(nodes, alpha_image_path, True,
-                                                                x_texture_node,
-                                                                y_texture_node * -2)
+                                          x_texture_node,
+                                          y_texture_node * -2)
         links.new(alpha_texture.outputs["Color"], principled_bsdf.inputs["Alpha"])
         return alpha_texture
     return None
 
+
 def add_normal(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, normal_image_path: str,
-                principled_bsdf: bpy.types.Node, invert_y_channel: bool):
+               principled_bsdf: bpy.types.Node, invert_y_channel: bool):
     """
     Adds normal to the principled bsdf node.
 
@@ -249,8 +264,8 @@ def add_normal(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, normal_image_
     normal_y_value = y_texture_node * -3
     if os.path.exists(normal_image_path):
         normal_texture = create_image_node(nodes, normal_image_path, True,
-                                                                    x_texture_node,
-                                                                    normal_y_value)
+                                           x_texture_node,
+                                           normal_y_value)
         if invert_y_channel:
 
             separate_rgba = nodes.new('ShaderNodeSeparateRGB')
@@ -285,8 +300,9 @@ def add_normal(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, normal_image_
         return normal_texture
     return None
 
+
 def add_bump(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, bump_image_path: str,
-                principled_bsdf: bpy.types.Node):
+             principled_bsdf: bpy.types.Node):
     """
     Adds bump to the principled bsdf node.
 
@@ -299,8 +315,8 @@ def add_bump(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, bump_image_path
     bump_y_value = y_texture_node * -3
     if os.path.exists(bump_image_path):
         bump_texture = create_image_node(nodes, bump_image_path, True,
-                                                                x_texture_node,
-                                                                bump_y_value)
+                                         x_texture_node,
+                                         bump_y_value)
         bump_map = nodes.new("ShaderNodeBumpMap")
         bump_map.inputs["Strength"].default_value = 1.0
         bump_map.location.x = 1.0 / 5.0 * x_texture_node
@@ -310,8 +326,9 @@ def add_bump(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, bump_image_path
         return bump_texture
     return None
 
+
 def add_displacement(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, displacement_image_path: str,
-                        output_node: bpy.types.Node):
+                     output_node: bpy.types.Node):
     """
     Adds bump to the principled bsdf node.
 
@@ -323,8 +340,8 @@ def add_displacement(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, displac
     """
     if os.path.exists(displacement_image_path):
         displacement_texture = create_image_node(nodes, displacement_image_path, True,
-                                                                        x_texture_node,
-                                                                        y_texture_node * -4)
+                                                 x_texture_node,
+                                                 y_texture_node * -4)
         displacement_node = nodes.new("ShaderNodeDisplacement")
         displacement_node.inputs["Midlevel"].default_value = 0.5
         displacement_node.inputs["Scale"].default_value = 0.15
@@ -334,6 +351,7 @@ def add_displacement(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, displac
         links.new(displacement_node.outputs["Displacement"], output_node.inputs["Displacement"])
         return displacement_texture
     return None
+
 
 def connect_uv_maps(nodes: bpy.types.Nodes, links: bpy.types.NodeLinks, collection_of_texture_nodes: list):
     """
@@ -385,7 +403,7 @@ def add_alpha_channel_to_textures(blurry_edges):
             for node in material.node_tree.nodes:
                 # if it is a texture image node
                 if 'TexImage' in node.bl_idname:
-                    if '.png' in node.image.name: # contains an alpha channel
+                    if '.png' in node.image.name:  # contains an alpha channel
                         texture_node = node
             # this material contains an alpha png texture
             if texture_node is not None:
@@ -416,6 +434,8 @@ def add_alpha_channel_to_textures(blurry_edges):
                 else:
                     raise Exception("Could not find shader node, which is connected to the material output "
                                     "for: {}".format(slot.name))
+
+
 def add_alpha_texture_node(used_material, new_material):
     """
     Adds to a predefined new_material a texture node from an existing material (used_material)
@@ -433,11 +453,11 @@ def add_alpha_texture_node(used_material, new_material):
     for node in used_material.node_tree.nodes:
         # if it is a texture image node
         if 'TexImage' in node.bl_idname:
-            if '.png' in node.image.name: # contains an alpha channel
+            if '.png' in node.image.name:  # contains an alpha channel
                 texture_node = node
     # this material contains an alpha png texture
     if texture_node is not None:
-        new_mat_alpha = new_material.copy() # copy the material
+        new_mat_alpha = new_material.copy()  # copy the material
         nodes = new_mat_alpha.node_tree.nodes
         # copy the texture node into the new material to make sure it is used
         new_tex_node = nodes.new(type='ShaderNodeTexImage')
@@ -479,6 +499,7 @@ def change_to_texture_less_render(use_alpha_channel):
                 else:
                     slot.material = new_mat
 
+
 def create_procedural_texture(pattern_name: str = None) -> bpy.types.Texture:
     """ Creates a new procedural texture based on a specified pattern.
 
@@ -487,7 +508,7 @@ def create_procedural_texture(pattern_name: str = None) -> bpy.types.Texture:
     :return: The created texture
     """
     possible_patterns = ["CLOUDS", "DISTORTED_NOISE", "MAGIC", "MARBLE", "MUSGRAVE", "NOISE", "STUCCI",
-                            "VORONOI", "WOOD"]
+                         "VORONOI", "WOOD"]
 
     # If no pattern has been given, use a random one, otherwise check whether the given pattern is valid.
     if pattern_name is None:
@@ -495,6 +516,7 @@ def create_procedural_texture(pattern_name: str = None) -> bpy.types.Texture:
     else:
         pattern_name = pattern_name.upper()
         if pattern_name not in possible_patterns:
-            raise Exception("There is no such pattern: " + str(pattern_name) + ". Allowed patterns are: " + str(possible_patterns))
+            raise Exception(
+                "There is no such pattern: " + str(pattern_name) + ". Allowed patterns are: " + str(possible_patterns))
 
     return bpy.data.textures.new("ct_{}".format(pattern_name), pattern_name)

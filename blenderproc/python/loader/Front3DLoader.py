@@ -16,7 +16,8 @@ from blenderproc.python.loader.ObjectLoader import load_obj
 from blenderproc.python.loader.TextureLoader import load_texture
 
 
-def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping, ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
+def load_front3d(json_path: str, future_model_path: str, front_3D_texture_path: str, label_mapping: LabelIdMapping,
+                 ceiling_light_strength: float = 0.8, lamp_light_strength: float = 7.0) -> List[MeshObject]:
     """ Loads the 3D-Front scene specified by the given json file.
 
     :param json_path: Path to the json file, where the house information is stored.
@@ -340,6 +341,8 @@ class Front3DLoader:
                     obj.set_cp("category_id", label_mapping.id_from_label(used_obj_name.lower()))
                     # walk over all materials
                     for mat in obj.get_materials():
+                        if mat is None:
+                            continue
                         principled_node = mat.get_nodes_with_type("BsdfPrincipled")
                         if "bed" in used_obj_name.lower() or "sofa" in used_obj_name.lower():
                             if len(principled_node) == 1:

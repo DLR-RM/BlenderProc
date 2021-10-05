@@ -1,6 +1,9 @@
+from typing import List, Optional, Union
+
 import mathutils
 import random
 import numpy as np
+
 
 def uniformSO3(around_x: bool = True, around_y: bool = True, around_z: bool = True) -> np.ndarray:
     """ Uniformly samples rotations from SO(3). Allows to limit the rotation around Blender World coordinate axes.
@@ -19,6 +22,7 @@ def uniformSO3(around_x: bool = True, around_y: bool = True, around_z: bool = Tr
     else:
         def random_angle():
             return random.uniform(0, 2 * np.pi)
+
         mat_rand = mathutils.Matrix.Identity(3)
         if around_x:
             mat_rand @= mathutils.Matrix.Rotation(random_angle(), 3, 'X')
@@ -30,9 +34,10 @@ def uniformSO3(around_x: bool = True, around_y: bool = True, around_z: bool = Tr
 
     return np.array(euler_rand)
 
+
 class UniformSO3:
     @staticmethod
-    def _random_quaternion(rand: list = None) -> np.array:
+    def _random_quaternion(rand: Optional[Union[List[float], np.ndarray]] = None) -> np.ndarray:
         """ Return uniform random unit quaternion.
 
         https://github.com/thodan/bop_toolkit/blob/master/bop_toolkit_lib/transform.py

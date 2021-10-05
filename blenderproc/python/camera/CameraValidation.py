@@ -6,12 +6,13 @@ import bpy
 import numpy as np
 from mathutils import Matrix
 from mathutils.bvhtree import BVHTree
-from typing import Union, List
+from typing import Union, List, Set
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
-def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], proximity_checks: dict, bvh_tree: BVHTree, sqrt_number_of_rays: int = 10) -> bool:
+def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], proximity_checks: dict,
+                                   bvh_tree: BVHTree, sqrt_number_of_rays: int = 10) -> bool:
     """ Check if there are obstacles in front of the camera which are too far or too close based on the given proximity_checks.
 
     :param cam2world_matrix: Transformation matrix that transforms from the camera space to the world space.
@@ -116,7 +117,7 @@ def perform_obstacle_in_view_check(cam2world_matrix: Union[Matrix, np.ndarray], 
     return True
 
 
-def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_rays: int = 10) -> [MeshObject]:
+def visible_objects(cam2world_matrix: Union[Matrix, np.ndarray], sqrt_number_of_rays: int = 10) -> Set[MeshObject]:
     """ Returns a set of objects visible from the given camera pose.
 
     Sends a grid of rays through the camera frame and returns all objects hit by at least one ray.
@@ -180,7 +181,7 @@ def scene_coverage_score(cam2world_matrix: Union[Matrix, np.ndarray], special_ob
 
     num_of_rays = sqrt_number_of_rays * sqrt_number_of_rays
     score = 0.0
-    objects_hit = defaultdict(int)
+    objects_hit: defaultdict = defaultdict(int)
 
     # Get position of the corners of the near plane
     frame = cam.view_frame(scene=bpy.context.scene)

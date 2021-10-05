@@ -81,7 +81,7 @@ def init(horizon_color: list = [0.05, 0.05, 0.05], compute_device: str = "GPU", 
 
     Initializer.set_default_parameters()
 
-    random_seed = 15  # os.getenv("BLENDER_PROC_RANDOM_SEED")
+    random_seed = os.getenv("BLENDER_PROC_RANDOM_SEED")
     if random_seed:
         print("Got random seed: {}".format(random_seed))
         try:
