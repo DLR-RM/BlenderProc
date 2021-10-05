@@ -1,9 +1,13 @@
+from typing import Callable, List, Dict
+
+import mathutils
+
 from blenderproc.python.utility.CollisionUtility import CollisionUtility
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
-from typing import Callable, List
 
 
-def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable[[MeshObject], None], objects_to_check_collisions: List[MeshObject] = None, max_tries: int = 1000):
+def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable[[MeshObject], None],
+                 objects_to_check_collisions: List[MeshObject] = None, max_tries: int = 1000):
     """ Samples positions and rotations of selected object inside the sampling volume while performing mesh and bounding box collision checks.
 
     :param objects_to_sample: A list of mesh objects whose poses are sampled based on the given function.
@@ -25,7 +29,7 @@ def sample_poses(objects_to_sample: List[MeshObject], sample_pose_func: Callable
         raise Exception("The list of objects_to_sample can not be empty!")
 
     # cache to fasten collision detection
-    bvh_cache = {}
+    bvh_cache: Dict[str, mathutils.bvhtree.BVHTree] = {}
 
     # for every selected object
     for obj in objects_to_sample:

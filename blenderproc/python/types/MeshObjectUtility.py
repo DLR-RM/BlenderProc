@@ -5,7 +5,7 @@ import numpy as np
 import bmesh
 import mathutils
 from mathutils import Vector, Matrix
-from external.vhacd.decompose import convex_decomposition
+from blenderproc.external.vhacd.decompose import convex_decomposition
 
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.Utility import Utility, resolve_path
@@ -19,14 +19,14 @@ class MeshObject(Entity):
     def __init__(self, bpy_object: bpy.types.Object):
         super().__init__(bpy_object)
 
-    def get_materials(self) -> List[Material]:
+    def get_materials(self) -> List[Optional[Material]]:
         """ Returns the materials used by the mesh.
 
         :return: A list of materials.
         """
         return MaterialLoaderUtility.convert_to_materials(self.blender_obj.data.materials)
 
-    def has_materials(self):
+    def has_materials(self) -> bool:
         return len(self.blender_obj.data.materials) > 0
 
     def set_material(self, index: int, material: Material):
@@ -44,7 +44,7 @@ class MeshObject(Entity):
         """
         self.blender_obj.data.materials.append(material.blender_obj)
 
-    def new_material(self, name: str):
+    def new_material(self, name: str) -> Material:
         """ Creates a new material and adds it to the object.
 
         :param name: The name of the new material.
@@ -67,7 +67,7 @@ class MeshObject(Entity):
         # add the new one
         self.add_material(material)
 
-    def duplicate(self):
+    def duplicate(self) -> "MeshObject":
         """ Duplicates the object.
 
         :return: A new mesh object, which is a duplicate of this object.
@@ -211,10 +211,10 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, temp_dir: str = None,
-                                                   cache_dir: str = "resources/decomposition_cache"):
+    def build_convex_decomposition_collision_shape(self, vhacd_path: str, temp_dir: str = None, cache_dir: str = "blenderproc_resources/decomposition_cache"):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
+        :param vhacd_path: The directory in which vhacd should be installed or is already installed.
         :param temp_dir: The temp dir to use for storing the object files created by v-hacd.
         :param cache_dir: If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
         """
@@ -222,7 +222,7 @@ class MeshObject(Entity):
             temp_dir = Utility.get_temporary_directory()
 
         # Decompose the object
-        parts = convex_decomposition(self.blender_obj, temp_dir, cache_dir=resolve_path(cache_dir))
+        parts = convex_decomposition(self.blender_obj, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir))
         parts = [MeshObject(p) for p in parts]
 
         # Make the convex parts children of this object, enable their rigid body component and hide them
@@ -238,7 +238,7 @@ class MeshObject(Entity):
         """
         self.blender_obj.hide_render = hide_object
 
-    def set_parent(self, new_parent: "MeshObject"):
+    def set_parent(self, new_parent: Entity):
         """ Sets the parent of this object.
 
         :param new_parent: The new parent object.
@@ -246,7 +246,7 @@ class MeshObject(Entity):
         self.blender_obj.parent = new_parent.blender_obj
         self.blender_obj.matrix_parent_inverse = new_parent.blender_obj.matrix_world.inverted()
 
-    def get_parent(self) -> "MeshObject":
+    def get_parent(self) -> Optional[Entity]:
         """ Returns the parent object.
 
         :return: The parent object, None if it has no parent.

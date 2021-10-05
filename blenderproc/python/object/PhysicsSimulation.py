@@ -3,10 +3,15 @@ import mathutils
 import numpy as np
 
 from blenderproc.python.utility.BlenderUtility import get_all_blender_mesh_objects
-from blenderproc.python.types.MeshObjectUtility import disable_all_rigid_bodies, get_all_mesh_objects
+from blenderproc.python.types.MeshObjectUtility import disable_all_rigid_bodies, get_all_mesh_objects, MeshObject
 from blenderproc.python.utility.Utility import Utility
 
-def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0, check_object_interval: float = 2.0, object_stopped_location_threshold: float = 0.01, object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10, solver_iters: int = 10):
+
+def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0,
+                                         check_object_interval: float = 2.0,
+                                         object_stopped_location_threshold: float = 0.01,
+                                         object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10,
+                                         solver_iters: int = 10):
     """ Simulates the current scene and in the end fixes the final poses of all active objects.
 
     The simulation is run for at least `min_simulation_time` seconds and at a maximum `max_simulation_time` seconds.
@@ -30,7 +35,9 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
     with Utility.UndoAfterExecution():
         # Run simulation and remember poses before and after
         obj_poses_before_sim = PhysicsSimulation._get_pose()
-        origin_shifts = simulate_physics(min_simulation_time, max_simulation_time, check_object_interval, object_stopped_location_threshold, object_stopped_rotation_threshold, substeps_per_frame, solver_iters)
+        origin_shifts = simulate_physics(min_simulation_time, max_simulation_time, check_object_interval,
+                                         object_stopped_location_threshold, object_stopped_rotation_threshold,
+                                         substeps_per_frame, solver_iters)
         obj_poses_after_sim = PhysicsSimulation._get_pose()
 
         # Make sure to remove the simulation cache as we are only interested in the final poses
@@ -40,7 +47,9 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
     for obj in get_all_mesh_objects():
         if obj.has_rigidbody_enabled():
             # Skip objects that have parents with compound rigid body component
-            has_compound_parent = obj.get_parent() is not None and obj.get_parent().get_rigidbody() is not None and obj.get_parent().get_rigidbody().collision_shape == "COMPOUND"
+            has_compound_parent = obj.get_parent() is not None and isinstance(obj.get_parent(), MeshObject) \
+                                  and obj.get_parent().get_rigidbody() is not None \
+                                  and obj.get_parent().get_rigidbody().collision_shape == "COMPOUND"
             if obj.get_rigidbody().type == "ACTIVE" and not has_compound_parent:
                 # compute relative object rotation before and after simulation
                 R_obj_before_sim = mathutils.Euler(obj_poses_before_sim[obj.get_name()]['rotation']).to_matrix()
@@ -54,7 +63,11 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
                 obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
     disable_all_rigid_bodies()
 
-def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0, check_object_interval: float = 2.0, object_stopped_location_threshold: float = 0.01, object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10, solver_iters: int = 10) -> dict:
+
+def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0,
+                     check_object_interval: float = 2.0, object_stopped_location_threshold: float = 0.01,
+                     object_stopped_rotation_threshold: float = 0.1, substeps_per_frame: int = 10,
+                     solver_iters: int = 10) -> dict:
     """ Simulates the current scene.
 
     The simulation is run for at least `min_simulation_time` seconds and at a maximum `max_simulation_time` seconds.
@@ -92,10 +105,10 @@ def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: floa
     bpy.context.scene.rigidbody_world.solver_iterations = solver_iters
 
     # Perform simulation
-    PhysicsSimulation._do_simulation(min_simulation_time, max_simulation_time, check_object_interval, object_stopped_location_threshold, object_stopped_rotation_threshold)
+    PhysicsSimulation._do_simulation(min_simulation_time, max_simulation_time, check_object_interval,
+                                     object_stopped_location_threshold, object_stopped_rotation_threshold)
 
     return origin_shift
-
 
 
 class PhysicsSimulation:
@@ -119,7 +132,8 @@ class PhysicsSimulation:
         return float(frames) / bpy.context.scene.render.fps
 
     @staticmethod
-    def _do_simulation(min_simulation_time: float, max_simulation_time: float, check_object_interval: float, object_stopped_location_threshold: float, object_stopped_rotation_threshold: float):
+    def _do_simulation(min_simulation_time: float, max_simulation_time: float, check_object_interval: float,
+                       object_stopped_location_threshold: float, object_stopped_rotation_threshold: float):
         """ Perform the simulation.
 
         This method bakes the simulation for the configured number of iterations and returns all object positions at the last frame.
@@ -157,8 +171,10 @@ class PhysicsSimulation:
             new_poses = PhysicsSimulation._get_pose()
 
             # If objects have stopped moving between the last two frames, then stop here
-            if PhysicsSimulation._have_objects_stopped_moving(old_poses, new_poses, object_stopped_location_threshold, object_stopped_rotation_threshold):
-                print("Objects have stopped moving after " + str(current_time) + "  seconds (" + str(current_frame) + " frames)")
+            if PhysicsSimulation._have_objects_stopped_moving(old_poses, new_poses, object_stopped_location_threshold,
+                                                              object_stopped_rotation_threshold):
+                print("Objects have stopped moving after " + str(current_time) + "  seconds (" + str(
+                    current_frame) + " frames)")
                 break
             elif current_time + check_object_interval >= max_simulation_time:
                 print("Stopping simulation as configured max_simulation_time has been reached")
@@ -174,7 +190,7 @@ class PhysicsSimulation:
         """
         objects_poses = {}
         objects_with_physics = [obj for obj in get_all_blender_mesh_objects() if obj.rigid_body is not None]
-        
+
         for obj in objects_with_physics:
             if obj.rigid_body.type == 'ACTIVE':
                 location = bpy.context.scene.objects[obj.name].matrix_world.translation.copy()
@@ -184,7 +200,8 @@ class PhysicsSimulation:
         return objects_poses
 
     @staticmethod
-    def _have_objects_stopped_moving(last_poses: dict, new_poses: dict, object_stopped_location_threshold: float, object_stopped_rotation_threshold: float) -> bool:
+    def _have_objects_stopped_moving(last_poses: dict, new_poses: dict, object_stopped_location_threshold: float,
+                                     object_stopped_rotation_threshold: float) -> bool:
         """ Check if the difference between the two given poses per object is smaller than the configured threshold.
 
         :param last_poses: Dict of form {obj_name:{'location':[x, y, z], 'rotation':[x_rot, y_rot, z_rot]}}.

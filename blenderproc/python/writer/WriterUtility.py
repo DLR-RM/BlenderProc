@@ -11,11 +11,13 @@ import h5py
 from blenderproc.python.postprocessing.PostProcessingUtility import trim_redundant_channels
 from blenderproc.python.utility.BlenderUtility import load_image
 from blenderproc.python.utility.Utility import resolve_path, Utility, NumpyEncoder
-from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix
+from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, \
+    change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix
 import blenderproc.python.camera.CameraUtility as CameraUtility
 
+
 def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.ndarray, list, dict]]],
-                 append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
+               append_to_existing_output: bool = False, stereo_separate_keys: bool = False):
     """
     Saves the information provided inside of the output_data_dict into a .hdf5 container
 
@@ -79,14 +81,15 @@ def write_hdf5(output_dir_path: str, output_data_dict: Dict[str, List[Union[np.n
                     raise Exception(f"There are more frames {adjusted_frame} then there are blocks of information "
                                     f" {len(data_block)} in the given list for key {key}.")
             blender_proc_version = Utility.get_current_version()
-            if blender_proc_version:
+            if blender_proc_version is not None:
                 WriterUtility._write_to_hdf_file(file, "blender_proc_version", np.string_(blender_proc_version))
 
 
 class WriterUtility:
 
     @staticmethod
-    def load_registered_outputs(keys: Set[str], keys_with_alpha_channel: Set[str] = None) -> Dict[str, List[np.ndarray]]:
+    def load_registered_outputs(keys: Set[str], keys_with_alpha_channel: Set[str] = None) -> \
+            Dict[str, Union[np.ndarray, List[np.ndarray]]]:
         """
         Loads registered outputs with specified keys
 
@@ -94,11 +97,12 @@ class WriterUtility:
         :param keys_with_alpha_channel: A set containing all keys whose alpha channels should be loaded.
         :return: dict of lists of raw loaded outputs. Keys are e.g. 'distance', 'colors', 'normals', 'segmap'
         """
-        output_data_dict = {}
+        output_data_dict: Dict[str, Union[np.ndarray, List[np.ndarray]]] = {}
         reg_outputs = Utility.get_registered_outputs()
         for reg_out in reg_outputs:
             if reg_out['key'] in keys:
-                key_has_alpha_channel = keys_with_alpha_channel is not None and reg_out['key'] in keys_with_alpha_channel
+                key_has_alpha_channel = keys_with_alpha_channel is not None and reg_out[
+                    'key'] in keys_with_alpha_channel
                 if '%' in reg_out['path']:
                     # per frame outputs
                     for frame_id in range(bpy.context.scene.frame_start, bpy.context.scene.frame_end):
@@ -106,14 +110,13 @@ class WriterUtility:
                         if os.path.exists(output_path):
                             output_file = WriterUtility.load_output_file(output_path, key_has_alpha_channel)
                         else:
-                            try:
-                                # check for stereo files
-                                output_paths = WriterUtility._get_stereo_path_pair(output_path)
-                                # convert to a tensor of shape [2, img_x, img_y, channels]
-                                # output_file[0] is the left image and output_file[1] the right image
-                                output_file = np.array([WriterUtility.load_output_file(path, key_has_alpha_channel) for path in output_paths])
-                            except:
-                                raise('Could not find original or stereo paths: {}'.format(output_paths))
+                            # check for stereo files
+                            output_paths = WriterUtility._get_stereo_path_pair(output_path)
+                            # convert to a tensor of shape [2, img_x, img_y, channels]
+                            # output_file[0] is the left image and output_file[1] the right image
+                            output_file = np.array(
+                                [WriterUtility.load_output_file(path, key_has_alpha_channel) for path in
+                                 output_paths])
 
                         # For outputs like distance or depth, we automatically trim the last channel here
                         if "trim_redundant_channels" in reg_out and reg_out["trim_redundant_channels"]:
@@ -127,7 +130,7 @@ class WriterUtility:
                     output_data_dict[reg_out['key']] = output_file
 
         return output_data_dict
-    
+
     @staticmethod
     def _get_stereo_path_pair(file_path: str) -> Tuple[str, str]:
         """
@@ -143,7 +146,7 @@ class WriterUtility:
         return path_l, path_r
 
     @staticmethod
-    def load_output_file(file_path: str, load_alpha_channel: bool = False, remove: bool = True) -> np.ndarray:
+    def load_output_file(file_path: str, load_alpha_channel: bool = False, remove: bool = True) -> Union[np.ndarray, List[Any]]:
         """ Tries to read in the file with the given path into a numpy array.
 
         :param file_path: The file path. Type: string.
@@ -152,7 +155,7 @@ class WriterUtility:
         :return: Loaded data from the file as numpy array if possible.
         """
         if not os.path.exists(file_path):
-            raise Exception("File not found: " + file_path)
+            raise FileNotFoundError("File not found: " + file_path)
 
         file_ending = file_path[file_path.rfind(".") + 1:].lower()
 
@@ -167,11 +170,11 @@ class WriterUtility:
             raise NotImplementedError("File with ending " + file_ending + " cannot be loaded.")
 
         if remove:
-            os.remove(file_path)        
+            os.remove(file_path)
         return output
 
     @staticmethod
-    def _load_csv(file_path: str) -> np.ndarray:
+    def _load_csv(file_path: str) -> List[Any]:
         """ Load the csv file at the given path.
 
         :param file_path: The path. Type: string.
@@ -185,7 +188,9 @@ class WriterUtility:
         return rows
 
     @staticmethod
-    def get_common_attribute(item: bpy.types.Object, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None) -> Any:
+    def get_common_attribute(item: bpy.types.Object, attribute_name: str,
+                             local_frame_change: Union[None, List[str]] = None,
+                             world_frame_change: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given item.
 
         This method covers all general attributes that blender objects have.
@@ -203,8 +208,10 @@ class WriterUtility:
             world_frame_change = ["X", "Y", "Z"]
 
         # Print warning if local_frame_change is used with other attributes than matrix_world
-        if local_frame_change != ["X", "Y", "Z"] and attribute_name in ["location", "rotation_euler", "rotation_forward_vec", "rotation_up_vec"]:
-            print("Warning: The local_frame_change parameter is at the moment only supported by the matrix_world attribute.")
+        if local_frame_change != ["X", "Y", "Z"] and attribute_name in ["location", "rotation_euler",
+                                                                        "rotation_forward_vec", "rotation_up_vec"]:
+            print(
+                "Warning: The local_frame_change parameter is at the moment only supported by the matrix_world attribute.")
 
         if attribute_name == "name":
             return item.name
@@ -224,7 +231,8 @@ class WriterUtility:
             return change_coordinate_frame_of_point(up, world_frame_change)
         elif attribute_name == "matrix_world":
             # Transform matrix_world to given destination frame
-            matrix_world = change_source_coordinate_frame_of_transformation_matrix(item.matrix_world, local_frame_change)
+            matrix_world = change_source_coordinate_frame_of_transformation_matrix(item.matrix_world,
+                                                                                   local_frame_change)
             matrix_world = change_target_coordinate_frame_of_transformation_matrix(matrix_world, world_frame_change)
             return [[x for x in c] for c in matrix_world]
         elif attribute_name.startswith("customprop_"):
@@ -238,7 +246,9 @@ class WriterUtility:
             raise Exception("No such attribute: " + attribute_name)
 
     @staticmethod
-    def get_cam_attribute(cam_ob: bpy.context.scene.camera, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None) -> Any:
+    def get_cam_attribute(cam_ob: bpy.context.scene.camera, attribute_name: str,
+                          local_frame_change: Union[None, List[str]] = None,
+                          world_frame_change: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given object.
 
         :param cam_ob: The camera object.
@@ -264,12 +274,16 @@ class WriterUtility:
             return [[x for x in c] for c in CameraUtility.get_intrinsics_as_K_matrix()]
         else:
             if attribute_name == "cam2world_matrix":
-                return WriterUtility.get_common_attribute(cam_ob, "matrix_world", local_frame_change, world_frame_change)
+                return WriterUtility.get_common_attribute(cam_ob, "matrix_world", local_frame_change,
+                                                          world_frame_change)
             else:
-                return WriterUtility.get_common_attribute(cam_ob, attribute_name, local_frame_change, world_frame_change)
+                return WriterUtility.get_common_attribute(cam_ob, attribute_name, local_frame_change,
+                                                          world_frame_change)
 
     @staticmethod
-    def get_light_attribute(light: bpy.types.Light, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None) -> Any:
+    def get_light_attribute(light: bpy.types.Light, attribute_name: str,
+                            local_frame_change: Union[None, List[str]] = None,
+                            world_frame_change: Union[None, List[str]] = None) -> Any:
         """ Returns the value of the requested attribute for the given light.
 
         :param light: The light. Type: blender scene object of type light.
@@ -284,7 +298,9 @@ class WriterUtility:
             return WriterUtility.get_common_attribute(light, attribute_name, local_frame_change, world_frame_change)
 
     @staticmethod
-    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str, local_frame_change: Union[None, List[str]] = None, world_frame_change: Union[None, List[str]] = None):
+    def _get_shapenet_attribute(shapenet_obj: bpy.types.Object, attribute_name: str,
+                                local_frame_change: Union[None, List[str]] = None,
+                                world_frame_change: Union[None, List[str]] = None):
         """ Returns the value of the requested attribute for the given object.
 
         :param shapenet_obj: The ShapeNet object.
@@ -299,10 +315,11 @@ class WriterUtility:
         elif attribute_name == "used_source_id":
             return shapenet_obj.get("used_source_id", "")
         else:
-            return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, local_frame_change, world_frame_change)
+            return WriterUtility.get_common_attribute(shapenet_obj, attribute_name, local_frame_change,
+                                                      world_frame_change)
 
     @staticmethod
-    def _write_to_hdf_file(file, key: str, data: np.ndarray, compression: str = "gzip"):
+    def _write_to_hdf_file(file, key: str, data: Union[np.ndarray, list, dict], compression: str = "gzip"):
         """ Adds the given data as a new entry to the given hdf5 file.
 
         :param file: The hdf5 file handle. Type: hdf5.File
@@ -317,7 +334,8 @@ class WriterUtility:
                     data = np.string_(json.dumps(data, cls=NumpyEncoder))
                 data = np.array(data)
             else:
-                raise Exception(f"This fct. expects the data for key {key} to be a np.ndarray, list or dict not a {type(data)}!")
+                raise Exception(
+                    f"This fct. expects the data for key {key} to be a np.ndarray, list or dict not a {type(data)}!")
 
         if data.dtype.char == 'S':
             file.create_dataset(key, data=data, dtype=data.dtype)

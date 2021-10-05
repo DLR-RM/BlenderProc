@@ -7,7 +7,7 @@ import bpy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('scene', nargs='?', default="examples/basics/material_manipulation/scene.obj", help="Path to the scene.obj file")
-parser.add_argument('image_dir', nargs='?', default="examples/basics/material_manipulation", help="Path to a folder with .jpg textures to be used in the sampling process")
+parser.add_argument('image_dir', nargs='?', default="images", help="Path to a folder with .jpg textures to be used in the sampling process")
 parser.add_argument('output_dir', nargs='?', default="examples/basics/material_manipulation/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
@@ -38,7 +38,7 @@ ground_material = bproc.filter.one_by_attr(materials, "name", "Material.001")
 ground_material.set_displacement_from_principled_shader_value("Base Color", multiply_factor=1.5)
 
 # Collect all jpg images in the specified directory
-images = list(Path(args.image_dir).rglob("*.jpg"))
+images = list(Path(args.image_dir).rglob("material_manipulation_sample_texture*.jpg"))
 for mat in materials:
     # Load one random image
     image = bpy.data.images.load(filepath=str(random.choice(images)))

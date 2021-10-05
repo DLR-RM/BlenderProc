@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 import bpy
 import cv2
 import numpy as np
@@ -8,7 +8,9 @@ from blenderproc.python.postprocessing.SGMUtility import fill_in_fast
 from blenderproc.python.postprocessing.SGMUtility import resize
 
 
-def stereo_global_matching(color_images: List[np.ndarray], depth_max: float = None, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0, disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[List[np.ndarray], List[np.ndarray]]:
+def stereo_global_matching(color_images: List[np.ndarray], depth_max: Optional[float] = None, window_size: int = 7,
+                           num_disparities: int = 32, min_disparity: int = 0, disparity_filter: bool = True,
+                           depth_completion: bool = True) -> Tuple[List[np.ndarray], List[np.ndarray]]:
     """ Does the stereo global matching in the following steps:
     1. Collect camera object and its state,
     2. For each frame, load left and right images and call the `sgm()` methode.
@@ -53,7 +55,9 @@ def stereo_global_matching(color_images: List[np.ndarray], depth_max: float = No
 class StereoGlobalMatching:
 
     @staticmethod
-    def _sgm(left_color_image: np.ndarray, right_color_image: np.ndarray, baseline: float, depth_max: float, focal_length: float, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0, disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+    def _sgm(left_color_image: np.ndarray, right_color_image: np.ndarray, baseline: float, depth_max: float,
+             focal_length: float, window_size: int = 7, num_disparities: int = 32, min_disparity: int = 0,
+             disparity_filter: bool = True, depth_completion: bool = True) -> Tuple[np.ndarray, np.ndarray]:
         """ Semi global matching funciton, for more details on what this function does check the original paper
         https://elib.dlr.de/73119/1/180Hirschmueller.pdf
 
@@ -113,7 +117,6 @@ class StereoGlobalMatching:
         disparity = np.float64(np.copy(disparity_to_be_written)) / 16.0
 
         # Crop and resize, due to baseline, a part of the image on the left can't be matched with the one on the right
-        print(left_color_image.shape[1], left_color_image.shape[0])
         disparity = resize(disparity[:, num_disparities:], (left_color_image.shape[1], left_color_image.shape[0]))
 
         # Triangulation

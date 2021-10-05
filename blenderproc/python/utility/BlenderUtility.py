@@ -7,22 +7,23 @@ from mathutils import Vector
 
 import numpy as np
 import imageio
-from typing import Union
+from typing import Union, List, Tuple, Callable, Optional, Dict, Any
 
 from blenderproc.python.utility.Utility import Utility
 
 
-def local_to_world(cords, world):
+def local_to_world(coords: Union[List[float], Vector, np.ndarray],
+                   world: Union[np.ndarray, mathutils.Matrix]) -> List[Vector]:
     """
     Returns a cords transformed to the given transformation world matrix
 
-    :param cords: coordinates a tuple of 3 values for x,y,z
+    :param coords: coordinates a tuple of 3 values for x,y,z
     :param world: world matrix <- transformation matrix
     """
-    return [world @ Vector(cord) for cord in cords]
+    return [world @ Vector(cord) for cord in coords]
 
 
-def get_bounds(obj):
+def get_bounds(obj: bpy.types.Object) -> List[Vector]:
     """
     :param obj: a mesh object
     :return: [8x[3xfloat]] the object aligned bounding box coordinates in world coordinates
@@ -30,7 +31,7 @@ def get_bounds(obj):
     return local_to_world(obj.bound_box, obj.matrix_world)
 
 
-def check_bb_intersection(obj1, obj2):
+def check_bb_intersection(obj1: bpy.types.Object, obj2: bpy.types.Object):
     """
     Checks if there is a bounding box collision, these don't have to be axis-aligned, but if they are not:
     The surrounding/including axis-aligned bounding box is calculated and used to check the intersection.
@@ -41,7 +42,7 @@ def check_bb_intersection(obj1, obj2):
     """
     b1w = get_bounds(obj1)
 
-    def min_and_max_point(bb):
+    def min_and_max_point(bb: List[Vector]) -> Tuple[np.ndarray, np.ndarray]:
         """
         Find the minimum and maximum point of the bounding box
         :param bb: bounding box
@@ -58,7 +59,8 @@ def check_bb_intersection(obj1, obj2):
     return check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
 
 
-def check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2, used_check=lambda a, b: a >= b):
+def check_bb_intersection_on_values(min_b1: np.ndarray, max_b1: np.ndarray, min_b2: np.ndarray, max_b2: np.ndarray,
+                                    used_check: Callable[[float, float], bool] = lambda a, b: a >= b) -> bool:
     """
     Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
     namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional
@@ -85,7 +87,9 @@ def check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2, used_check=l
     return collide
 
 
-def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
+def check_intersection(obj1: bpy.types.Object, obj2: bpy.types.Object, skip_inside_check: bool = False,
+                       bvh_cache: Optional[Dict[str, mathutils.bvhtree.BVHTree]] = None) \
+        -> Tuple[bool, Dict[str, mathutils.bvhtree.BVHTree]]:
     """
     Checks if the two objects are intersecting.
 
@@ -98,6 +102,7 @@ def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
     :param obj1: object 1 to check for intersection, must be a mesh
     :param obj2: object 2 to check for intersection, must be a mesh
     :param skip_inside_check: Disables checking whether one object is completely inside the other.
+    :param bvh_cache: Dict of all the bvh trees, removes the `obj` from the cache before adding it again.
     :return: True, if they are intersecting
     """
 
@@ -144,7 +149,7 @@ def check_intersection(obj1, obj2, skip_inside_check=False, bvh_cache=None):
     return inter, bvh_cache
 
 
-def create_bvh_tree_for_object(obj):
+def create_bvh_tree_for_object(obj: bpy.types.Object) -> mathutils.bvhtree.BVHTree:
     """ Creates a fresh BVH tree for the given object
 
     :param obj: The object
@@ -157,7 +162,8 @@ def create_bvh_tree_for_object(obj):
     return obj_BVHtree
 
 
-def is_point_inside_object(obj, obj_BVHtree:mathutils.bvhtree.BVHTree, point: Union[Vector, np.ndarray]) -> bool:
+def is_point_inside_object(obj: bpy.types.Object, obj_BVHtree: mathutils.bvhtree.BVHTree,
+                           point: Union[Vector, np.ndarray]) -> bool:
     """ Checks whether the given point is inside the given object.
 
     This only works if the given object is watertight and has correct normals
@@ -177,7 +183,7 @@ def is_point_inside_object(obj, obj_BVHtree:mathutils.bvhtree.BVHTree, point: Un
     return a >= 0.0
 
 
-def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
+def check_if_uv_coordinates_are_set(obj: bpy.types.Object) -> bool:
     """
     :param obj: should be an object, which has a mesh
     """
@@ -189,7 +195,7 @@ def check_if_uv_coordinates_are_set(obj: bpy.types.Object):
     return False
 
 
-def vector_to_euler(vector, vector_type):
+def vector_to_euler(vector: Vector, vector_type: str) -> mathutils.Euler:
     """
     :param vector: UP (for MESH objs) of FORWARD (for LIGHT/CAMERA objs) vector. Type: mathutils.Vector.
     :param vector_type: Type of an input vector: UP or FORWARD. Type: string.
@@ -208,7 +214,7 @@ def vector_to_euler(vector, vector_type):
     return euler_angles
 
 
-def add_object_only_with_vertices(vertices, name='NewVertexObject'):
+def add_object_only_with_vertices(vertices: List[List[float]], name: str = 'NewVertexObject') -> bpy.types.Object:
     """
     Generates a new object with the given vertices, no edges or faces are generated.
 
@@ -233,11 +239,15 @@ def add_object_only_with_vertices(vertices, name='NewVertexObject'):
     return obj
 
 
-def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='NewDirectionObject'):
+def add_object_only_with_direction_vectors(vertices: List[List[float]], normals: List[List[float]],
+                                           radius: float = 1.0, name: str = 'NewDirectionObject') -> bpy.types.Object:
     """
-    Generates a new object with the given vertices, no edges or faces are generated.
+    Generates a new object with the given vertices and normals, there will be an edge between each point and the
+    point plus the normal times the radius. No faces are generated.
 
     :param vertices: [[float, float, float]] list of vertices
+    :param normals: [[float, float, float]] list of normals
+    :param radius: Determines the size of the edge generated
     :param name: str name of the new object
     :return: the generated obj
     """
@@ -264,7 +274,7 @@ def add_object_only_with_direction_vectors(vertices, normals, radius=1.0, name='
     return obj
 
 
-def add_cube_based_on_bb(bouding_box, name='NewCube'):
+def add_cube_based_on_bb(bouding_box: List[Vector], name: str = 'NewCube') -> bpy.types.Object:
     """
     Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
 
@@ -299,7 +309,7 @@ def add_cube_based_on_bb(bouding_box, name='NewCube'):
     return obj
 
 
-def get_all_blender_mesh_objects() -> list:
+def get_all_blender_mesh_objects() -> List[bpy.types.Object]:
     """
     Returns a list of all mesh objects in the scene
     :return: a list of all mesh objects
@@ -307,7 +317,7 @@ def get_all_blender_mesh_objects() -> list:
     return [obj for obj in bpy.context.scene.objects if obj.type == 'MESH']
 
 
-def get_all_materials():
+def get_all_materials() -> List[bpy.types.Material]:
     """
     Returns a list of all materials used and unused
     :return: a list of all materials
@@ -315,7 +325,7 @@ def get_all_materials():
     return list(bpy.data.materials)
 
 
-def get_all_textures():
+def get_all_textures() -> List[bpy.types.Texture]:
     """
     Returns a list of all textures.
     :return: All textures. Type: list.
@@ -365,7 +375,7 @@ def load_image(file_path: str, num_channels: int = 3) -> np.ndarray:
             raise Exception(error)
 
 
-def get_bound_volume(obj):
+def get_bound_volume(obj: bpy.types.Object) -> float:
     """ Gets the volume of a possible orientated bounding box.
     :param obj: Mesh object.
     :return: volume of a bounding box.
@@ -386,7 +396,7 @@ def get_bound_volume(obj):
     return abs(diag[0]) * abs(diag[1]) * abs(diag[2])
 
 
-def duplicate_objects(objects):
+def duplicate_objects(objects: Union[bpy.types.Object, List[bpy.types.Object]]) -> List[bpy.types.Object]:
     """
     Creates duplicates of objects, first duplicates are given name <orignial_object_name>.001
 
@@ -405,7 +415,7 @@ def duplicate_objects(objects):
     return duplicates
 
 
-def collect_all_orphan_datablocks():
+def collect_all_orphan_datablocks() -> Dict[str, Any]:
     """ Returns all orphan data blocks grouped by their type
 
     :return: A dict of sets
@@ -439,7 +449,7 @@ def copy_attributes(attributes: list, old_prop: str, new_prop: str):
             setattr(new_prop, attr, getattr(old_prop, attr))
 
 
-def get_node_attributes(node: bpy.types.Node) -> list:
+def get_node_attributes(node: bpy.types.Node) -> List[str]:
     """
     Returns a list of all properties identifiers if they should not be ignored
 
@@ -512,7 +522,7 @@ def copy_links(nodes: bpy.types.Nodes, goal_nodes: bpy.types.Nodes, goal_links: 
                 goal_links.new(connected_node.outputs[link.from_socket.name], new_node.inputs[i])
 
 
-def add_group_nodes(group: bpy.types.ShaderNodeTree):
+def add_group_nodes(group: bpy.types.ShaderNodeTree) -> Tuple[bpy.types.Node, bpy.types.Node]:
     """
     Adds the group input and output node and positions them correctly.
 

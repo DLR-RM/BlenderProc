@@ -2,6 +2,7 @@ import bpy
 import sys
 from pathlib import Path
 from bl_ui.space_text import TEXT_MT_editor_menus
+import os
 
 # Extract given arguments
 argv = sys.argv[sys.argv.index("--") + 1:]
@@ -43,6 +44,11 @@ class RunBlenderProcOperator(bpy.types.Operator):
         for module in list(sys.modules.keys()):
             if module.startswith("blenderproc") and module not in ["blenderproc.python.utility.SetupUtility"]:
                 del sys.modules[module]
+
+        # Make sure the parent of the blenderproc folder is in sys.path
+        import_path = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        if import_path not in sys.path:
+            sys.path.append(import_path)
 
         # Run the script
         bpy.ops.text.run_script()

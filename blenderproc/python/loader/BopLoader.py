@@ -233,7 +233,7 @@ class BopLoader:
         obj.set_rotation_euler(obj.get_rotation(), frame_id)
 
     @staticmethod
-    def _get_ref_cam_extrinsics_intrinsics(sc_camera: dict, cam_id: int, insts: dict, scale: float) -> np.array:
+    def _get_ref_cam_extrinsics_intrinsics(sc_camera: dict, cam_id: int, insts: dict, scale: float) -> np.ndarray:
         """ Get camK and transformation from object instance 0 to camera cam_id as reference.
 
         :param sc_camera: BOP scene_camera file.

@@ -86,7 +86,11 @@ class PhysicsPositioningModule(Module):
           - float
         * - convex_decomposition_cache_path
           - If a directory is given, convex decompositions are stored there named after the meshes hash. If the same mesh is decomposed a second time, the result is loaded from the cache and the actual decomposition is skipped.
-            Default: "resources/decomposition_cache"
+            Default: "blenderproc_resources/decomposition_cache"
+          - string
+        * - vhacd_path
+          - The directory in which vhacd should be installed or is already installed.
+            Default: "blenderproc_resources/vhacd"
           - string
     """
 
@@ -102,7 +106,8 @@ class PhysicsPositioningModule(Module):
         self.friction = self.config.get_float("friction", 0.5)
         self.angular_damping = self.config.get_float("angular_damping", 0.1)
         self.linear_damping = self.config.get_float("linear_damping", 0.04)
-        self.convex_decomposition_cache_path = self.config.get_string("convex_decomposition_cache_path", "resources/decomposition_cache")
+        self.convex_decomposition_cache_path = self.config.get_string("convex_decomposition_cache_path", "blenderproc_resources/decomposition_cache")
+        self.vhacd_path = self.config.get_string("vhacd_path", "blenderproc_resources/vhacd")
 
     def run(self):
         """ Performs physics simulation in the scene. """
@@ -159,5 +164,5 @@ class PhysicsPositioningModule(Module):
 
                 # Check if object needs decomposition
                 if collision_shape == "CONVEX_DECOMPOSITION":
-                    mesh_obj.build_convex_decomposition_collision_shape(self._temp_dir, self.convex_decomposition_cache_path)
+                    mesh_obj.build_convex_decomposition_collision_shape(self.vhacd_path, self._temp_dir, self.convex_decomposition_cache_path)
 

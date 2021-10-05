@@ -1,3 +1,4 @@
+from typing import Any, Dict, Optional
 
 
 class GlobalStorage(object):
@@ -36,17 +37,17 @@ class GlobalStorage(object):
     """
 
     # holds variables which are created during the execution to get information over module boundaries
-    _storage_dict = {}
+    _storage_dict: Dict[str, Any] = {}
 
     # defines all variables which are stored globally and are set by the config
-    _global_config = None
+    _global_config: Optional["Config"] = None
 
     # internal variables defined before the global config exists, will be copied into the global config on init
     # and then deleted, should not be used after init of the GlobalStorage
-    _add_to_global_config_at_init = {}
+    _add_to_global_config_at_init: Dict[str, Any] = {}
 
     @staticmethod
-    def init_global(global_config):
+    def init_global(global_config: "Config"):
         """
         Inits the global config with the given config, global_config should be of type blenderproc.python.Config
 
@@ -63,7 +64,7 @@ class GlobalStorage(object):
                                    "please use another key!".format(key))
 
     @staticmethod
-    def add_to_config_before_init(key, value):
+    def add_to_config_before_init(key: str, value: Any):
         """
         Adds values to the global config before the GlobalStorage was inited, these value can only be accessed
         after the GlobalStorage was inited.
@@ -81,7 +82,7 @@ class GlobalStorage(object):
             raise RuntimeError("This fct. should only be called before the GlobalStorage was inited!")
 
     @staticmethod
-    def add(key, value):
+    def add(key: str, value: Any):
         """
         Adds a key to the GlobalStorage this is independent of the global config, this can be used to store values
         over Module boundaries. Adding only works if there is not already a key like this in the GlobalStorage.
@@ -101,7 +102,7 @@ class GlobalStorage(object):
                                                                                                GlobalStorage._storage_dict[key]))
 
     @staticmethod
-    def set(key, value):
+    def set(key: str, value: Any):
         """
         Sets a key in the GlobalStorage this is independent of the global config, this can be used to store values
         over Module boundaries. Setting always works and overwrites existing keys
@@ -117,7 +118,7 @@ class GlobalStorage(object):
         GlobalStorage._storage_dict[key] = value
 
     @staticmethod
-    def get(key):
+    def get(key: str) -> Any:
         """
         Returns a value from the GlobalStorage, please check add() and set() for more information
 
@@ -130,7 +131,7 @@ class GlobalStorage(object):
             raise RuntimeError("The key: {} is not in the global storage!".format(key))
 
     @staticmethod
-    def is_in_storage(key):
+    def is_in_storage(key: str) -> bool:
         """
         Checks if a key is in the GlobalStorage
 
@@ -140,7 +141,7 @@ class GlobalStorage(object):
         return key in GlobalStorage._storage_dict
 
     @staticmethod
-    def has_param(key):
+    def has_param(key: str) -> bool:
         """
         Checks if this key is in the global config not in the GlobalStorage!
 
@@ -153,7 +154,7 @@ class GlobalStorage(object):
             return False
 
     @staticmethod
-    def get_global_config():
+    def get_global_config() -> "Config":
         """
         Returns the global config, this function should be used with care!
 

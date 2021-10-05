@@ -1,11 +1,12 @@
 import os
-from typing import List
+from typing import List, Optional, Dict
 
 import bpy
 
 from blenderproc.python.types.MeshObjectUtility import MeshObject, convert_to_meshes
 
-def load_obj(filepath: str, cached_objects: dict = None, **kwargs) -> List[MeshObject]:
+
+def load_obj(filepath: str, cached_objects: Optional[Dict[str, List[MeshObject]]] = None, **kwargs) -> List[MeshObject]:
     """ Import all objects for the given file and returns the loaded objects
 
     In .obj files a list of objects can be saved in.
@@ -40,10 +41,11 @@ def load_obj(filepath: str, cached_objects: dict = None, **kwargs) -> List[MeshO
                 # add a default material to ply file
                 mat = bpy.data.materials.new(name="ply_material")
                 mat.use_nodes = True
-                loaded_objects = [obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects]
-                for obj in loaded_objects:
+                selected_objects = [obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects]
+                for obj in selected_objects:
                     obj.data.materials.append(mat)
 
-            return convert_to_meshes([obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects])
+            return convert_to_meshes(
+                [obj for obj in bpy.context.selected_objects if obj not in previously_selected_objects])
     else:
         raise Exception("The given filepath does not exist: {}".format(filepath))

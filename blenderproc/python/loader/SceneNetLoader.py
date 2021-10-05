@@ -61,6 +61,8 @@ class SceneNetLoader:
         # for each object add a material
         for obj in loaded_objects:
             for material in obj.get_materials():
+                if material is None:
+                    continue
                 principled_bsdf = material.get_the_one_node_with_type("BsdfPrincipled")
                 texture_nodes = material.get_nodes_with_type("ShaderNodeTexImage")
                 if not texture_nodes or len(texture_nodes) == 1:

@@ -1,7 +1,7 @@
 import os
 import csv
 import threading
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional, Union
 
 import bpy
 import time
@@ -15,7 +15,6 @@ import json
 from blenderproc.python.modules.main.GlobalStorage import GlobalStorage
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.StructUtilityFunctions import get_instances
-
 
 
 def resolve_path(path: str) -> str:
@@ -39,7 +38,8 @@ def resolve_resource(relative_resource_path: str) -> str:
     :param relative_resource_path: The relative path inside the BlenderProc resource folder.
     :return: The absolute path.
     """
-    return resolve_path(os.path.join(Utility.blenderproc_root, "resources", relative_resource_path))
+    return resolve_path(os.path.join(Utility.blenderproc_root, "blenderproc", "resources", relative_resource_path))
+
 
 def num_frames() -> int:
     """ Returns the currently total number of registered frames.
@@ -55,7 +55,7 @@ class Utility:
     used_temp_id = None
 
     @staticmethod
-    def initialize_modules(module_configs):
+    def initialize_modules(module_configs: List[Union[Dict[str, Any], str]]) -> List["Module"]:
         """ Initializes the modules described in the given configuration.
 
         Example for module_configs:
@@ -113,7 +113,8 @@ class Utility:
                     for suffix in ["Module", ""]:
                         try:
                             # Try to load the module using the current suffix
-                            module = importlib.import_module("blenderproc.python.modules." + module_config["module"] + suffix)
+                            module = importlib.import_module(
+                                "blenderproc.python.modules." + module_config["module"] + suffix)
                         except ModuleNotFoundError:
                             # Try next suffix
                             continue
@@ -127,7 +128,8 @@ class Utility:
 
                     # Throw an error if no module/class with the specified name + any suffix has been found
                     if module_class is None:
-                        raise Exception("The module blenderproc.python.modules." + module_config["module"] + " was not found!")
+                        raise Exception(
+                            "The module blenderproc.python.modules." + module_config["module"] + " was not found!")
 
                     # Create module
                     modules.append(module_class(Config(config)))
@@ -135,7 +137,7 @@ class Utility:
         return modules
 
     @staticmethod
-    def get_current_version():
+    def get_current_version() -> Optional[str]:
         """ Gets the git commit hash.
 
         :return: a string, the BlenderProc version, or None if unavailable
@@ -147,16 +149,15 @@ class Utility:
             return None
         return repo.head.object.hexsha
 
-
     @staticmethod
-    def get_temporary_directory():
+    def get_temporary_directory() -> str:
         """
         :return: default temporary directory, shared memory if it exists
         """
         return Utility.temp_dir
 
     @staticmethod
-    def merge_dicts(source, destination):
+    def merge_dicts(source: Dict[Any, Any], destination: Dict[Any, Any]) -> Dict[Any, Any]:
         """ Recursively copies all key value pairs from src to dest (Overwrites existing)
 
         :param source: The source dict.
@@ -174,16 +175,16 @@ class Utility:
         return destination
 
     @staticmethod
-    def hex_to_rgba(hex):
+    def hex_to_rgba(hex_value: str) -> List[float]:
         """ Converts the given hex string to rgba color values.
 
-        :param hex: The hex string, describing rgb.
+        :param hex_value: The hex string, describing rgb.
         :return: The rgba color, in form of a list. Values between 0 and 1.
         """
-        return [x / 255 for x in bytes.fromhex(hex[-6:])] + [1.0]
+        return [x / 255 for x in bytes.fromhex(hex_value[-6:])] + [1.0]
 
     @staticmethod
-    def rgb_to_hex(rgb):
+    def rgb_to_hex(rgb: Tuple[int, int, int]) -> str:
         """ Converts the given rgb to hex values.
 
         :param rgb: tuple of three with rgb integers.
@@ -192,7 +193,9 @@ class Utility:
         return '#%02x%02x%02x' % tuple(rgb)
 
     @staticmethod
-    def insert_node_instead_existing_link(links, source_socket, new_node_dest_socket, new_node_src_socket, dest_socket):
+    def insert_node_instead_existing_link(links: bpy.types.NodeLinks, source_socket: bpy.types.NodeSocket,
+                                          new_node_dest_socket: bpy.types.NodeSocket,
+                                          new_node_src_socket: bpy.types.NodeSocket, dest_socket: bpy.types.NodeSocket):
         """ Replaces the node between source_socket and dest_socket with a new node.
 
         Before: source_socket -> dest_socket
@@ -212,12 +215,13 @@ class Utility:
         links.new(new_node_src_socket, dest_socket)
 
     @staticmethod
-    def get_node_connected_to_the_output_and_unlink_it(material):
+    def get_node_connected_to_the_output_and_unlink_it(material: bpy.types.Material) \
+            -> Tuple[Optional[bpy.types.Node], bpy.types.Node]:
         """
         Searches for the OutputMaterial in the given material and finds the connected node to it,
         removes the connection between this node and the output and returns this node and the material_output
 
-        :param material_slot: material slot
+        :param material: Material on which this operation should be performed
         """
         nodes = material.node_tree.nodes
         links = material.node_tree.links
@@ -233,9 +237,8 @@ class Utility:
                 break
         return node_connected_to_the_output, material_output
 
-
     @staticmethod
-    def get_nodes_with_type(nodes, node_type):
+    def get_nodes_with_type(nodes: List[bpy.types.Node], node_type: str) -> List[bpy.types.Node]:
         """
         Returns all nodes which are of the given node_type
 
@@ -246,7 +249,7 @@ class Utility:
         return [node for node in nodes if node_type in node.bl_idname]
 
     @staticmethod
-    def get_the_one_node_with_type(nodes, node_type):
+    def get_the_one_node_with_type(nodes: List[bpy.types.Node], node_type: str) -> bpy.types.Node:
         """
         Returns the one nodes which is of the given node_type
 
@@ -263,20 +266,20 @@ class Utility:
             raise Exception("There is not only one node of this type: {}, there are: {}".format(node_type, len(node)))
 
     @staticmethod
-    def read_suncg_lights_windows_materials():
+    def read_suncg_lights_windows_materials() -> Tuple[Dict[str, Tuple[List[str], List[str]]], List[str]]:
         """
         Returns the lights dictionary and windows list which contains their respective materials
 
         :return: dictionary of lights' and list of windows' materials
         """
         # Read in lights
-        lights = {}
+        lights: Dict[str, Tuple[List[str], List[str]]] = {}
         # File format: <obj id> <number of lightbulb materials> <lightbulb material names> <number of lampshade materials> <lampshade material names>
         with open(resolve_resource(os.path.join("suncg", "light_geometry_compact.txt"))) as f:
             lines = f.readlines()
             for row in lines:
                 row = row.strip().split()
-                lights[row[0]] = [[], []]
+                lights[row[0]] = ([], [])
 
                 index = 1
 
@@ -309,6 +312,7 @@ class Utility:
 
         Usage: with BlockStopWatch('text'):
         """
+
         def __init__(self, block_name):
             self.block_name = block_name
 
@@ -317,14 +321,16 @@ class Utility:
             self.start = time.time()
 
         def __exit__(self, type, value, traceback):
-            print("#### Finished - " + self.block_name + " (took " + ("%.3f" % (time.time() - self.start)) + " seconds) ####")
+            print("#### Finished - " + self.block_name + " (took " + (
+                        "%.3f" % (time.time() - self.start)) + " seconds) ####")
 
     class UndoAfterExecution:
         """ Reverts all changes done to the blender project inside this block.
 
         Usage: with UndoAfterExecution():
         """
-        def __init__(self, check_point_name=None, perform_undo_op=True):
+
+        def __init__(self, check_point_name: Optional[str] = None, perform_undo_op: bool = True):
             if check_point_name is None:
                 check_point_name = inspect.stack()[1].filename + " - " + inspect.stack()[1].function
             self.check_point_name = check_point_name
@@ -348,7 +354,7 @@ class Utility:
                     struct.update_blender_ref(name)
 
     @staticmethod
-    def build_provider(name, parameters):
+    def build_provider(name: str, parameters: Dict[str, Any]) -> "Provider":
         """ Builds up providers like sampler or getter.
 
         It first builds the config and then constructs the required provider.
@@ -361,7 +367,8 @@ class Utility:
         for suffix in ["Module", ""]:
             try:
                 # Import class from blenderproc.python.modules
-                module_class = getattr(importlib.import_module("blenderproc.python.modules.provider." + name + suffix), name.split(".")[-1] + suffix)
+                module_class = getattr(importlib.import_module("blenderproc.python.modules.provider." + name + suffix),
+                                       name.split(".")[-1] + suffix)
                 break
             except ModuleNotFoundError:
                 # Try next suffix
@@ -377,7 +384,7 @@ class Utility:
         return module_class(config)
 
     @staticmethod
-    def build_provider_based_on_config(config):
+    def build_provider_based_on_config(config: Config) -> "Provider":
         """ Builds up the provider using the parameters described in the given config.
 
         The given config should follow the following scheme:
@@ -403,7 +410,8 @@ class Utility:
                 parameters[key] = config.data[key]
 
         if not config.has_param('provider'):
-            raise Exception("Each provider needs a provider label, this one does not contain one: {}".format(config.data))
+            raise Exception(
+                "Each provider needs a provider label, this one does not contain one: {}".format(config.data))
 
         return Utility.build_provider(config.get_string("provider"), parameters)
 
@@ -445,7 +453,8 @@ class Utility:
         return values[:num], num_splits_per_dimension
 
     @staticmethod
-    def map_back_from_equally_spaced_equidistant_values(values, num_splits_per_dimension, space_size_per_dimension):
+    def map_back_from_equally_spaced_equidistant_values(values: np.ndarray, num_splits_per_dimension: int,
+                                                        space_size_per_dimension: int) -> np.ndarray:
         """ Maps the given values back to their original indices.
 
         This function calculates for each given value the corresponding index in the list of values created by the generate_equidistant_values() method.
@@ -463,24 +472,26 @@ class Utility:
         # Calculate the block indices per dimension
         values /= block_length
         # Compute the global index of the block (corresponds to the three nested for loops inside generate_equidistant_values())
-        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :, 1] * num_splits_per_dimension + values[:, :, 2]
+        values = values[:, :, 0] * num_splits_per_dimension * num_splits_per_dimension + values[:, :,1] * num_splits_per_dimension + values[:, :, 2]
         # Round the values, s.t. derivations are put back to their closest index.
         return np.round(values)
 
     @staticmethod
-    def add_output_entry(output):
+    def add_output_entry(output: Dict[str, str]):
         """ Registers the given output in the scene's custom properties
 
         :param output: A dict containing key and path of the new output type.
         """
         if GlobalStorage.is_in_storage("output"):
-            if not Utility.output_already_registered(output, GlobalStorage.get("output")): # E.g. multiple camera samplers
+            # E.g. multiple camera samplers
+            if not Utility.output_already_registered(output, GlobalStorage.get("output")):
                 GlobalStorage.get("output").append(output)
         else:
             GlobalStorage.set("output", [output])
 
     @staticmethod
-    def register_output(output_dir, prefix, key, suffix, version, unique_for_camposes=True):
+    def register_output(output_dir: str, prefix: str, key: str, suffix: str, version: str,
+                        unique_for_camposes: bool = True):
         """ Registers new output type using configured key and file prefix.
 
         :param output_dir: The output directory containing the generated files.
@@ -498,7 +509,7 @@ class Utility:
         })
 
     @staticmethod
-    def find_registered_output_by_key(key):
+    def find_registered_output_by_key(key: str) -> Optional[Any]:
         """ Returns the output which was registered with the given key.
 
         :param key: The output key to look for.
@@ -519,11 +530,11 @@ class Utility:
         outputs = []
         if GlobalStorage.is_in_storage("output"):
             outputs = GlobalStorage.get("output")
-        
+
         return outputs
 
     @staticmethod
-    def output_already_registered(output, output_list):
+    def output_already_registered(output: Dict[str, Any], output_list: List[Dict[str, Any]]) -> bool:
         """ Checks if the given output entry already exists in the list of outputs, by checking on the key and path.
         Also throws an error if it detects an entry having the same key but not the same path and vice versa since this
         is ambiguous.
@@ -543,9 +554,8 @@ class Utility:
 
         return False
 
-
     @staticmethod
-    def insert_keyframe(obj, data_path, frame=None):
+    def insert_keyframe(obj: bpy.types.Object, data_path: str, frame: Optional[int] = None):
         """ Inserts a keyframe for the given object and data path at the specified frame number:
 
         :param obj: The blender object to use.
@@ -559,6 +569,7 @@ class Utility:
         if frame is not None:
             obj.keyframe_insert(data_path=data_path, frame=frame)
 
+
 # KeyFrameState should be thread-specific
 class KeyFrameState(threading.local):
     def __init__(self):
@@ -570,7 +581,7 @@ class KeyFrame:
     # Remember how many KeyFrame context manager have been applied around the current execution point
     state = KeyFrameState()
 
-    def __init__(self, frame):
+    def __init__(self, frame: int):
         """ Sets the frame number for its complete block.
 
         :param frame: The frame number to set. If None is given, nothing is changed.

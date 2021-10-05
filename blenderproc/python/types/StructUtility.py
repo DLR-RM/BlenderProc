@@ -10,7 +10,7 @@ class Struct:
     # Contains weak refs to all struct instances
     # As it only uses weak references, instances can still be removed by GC when all other references are gone.
     # If that happens, the instances' weak ref is also automatically removed from the set
-    __refs__ = weakref.WeakSet()
+    __refs__: weakref.WeakSet = weakref.WeakSet()
 
     def __init__(self, bpy_object: bpy.types.Object):
         self.blender_obj = bpy_object
@@ -108,7 +108,7 @@ class Struct:
         else:
             raise Exception("This element does not have an attribute " + str(attr_name))
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any):
         if key != "blender_obj":
             raise Exception("The API class does not allow setting any attribute. Use the corresponding method or directly access the blender attribute via entity.blender_obj.attribute_name")
         else:

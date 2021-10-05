@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import bpy
 import numpy as np
@@ -16,7 +16,7 @@ def render_optical_flow(output_dir: str = None, temp_dir: str = None, get_forwar
                         forward_flow_output_key: str = "forward_flow",
                         backward_flow_output_file_prefix: str = "backward_flow_",
                         backward_flow_output_key: str = "backward_flow", return_data: bool = True) -> \
-        Dict[str, List[np.ndarray]]:
+        Dict[str, Union[np.ndarray, List[np.ndarray]]]:
     """ Renders the optical flow (forward and backward) for all frames.
 
     :param output_dir: The directory to write images to.
