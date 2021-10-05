@@ -3,12 +3,6 @@ import os
 import bpy
 import sys
 
-# Make sure the current script directory is in PATH, so we can load other python modules
-working_dir = os.path.dirname(bpy.context.space_data.text.filepath) + "/../"
-
-if not working_dir in sys.path:
-    sys.path.append(working_dir)
-
 # Add path to custom packages inside the blender main directory
 if sys.platform == "linux" or sys.platform == "linux2":
     packages_path = os.path.abspath(os.path.join(os.path.dirname(sys.executable), "..", "..", "..", "custom-python-packages"))
