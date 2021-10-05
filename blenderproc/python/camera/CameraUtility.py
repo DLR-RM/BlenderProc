@@ -89,21 +89,18 @@ def set_intrinsics_from_blender_params(lens: float = None, image_width: int = No
     cam = cam_ob.data
 
     if lens_unit is not None:
-        lens_unit = DefaultConfig.lens_unit
+        cam.lens_unit = lens_unit
+        
     if lens is not None:
-        lens = DefaultConfig.lens
-    
-    # Set focal length
-    if lens_unit == 'MILLIMETERS':
-        cam.lens_unit = lens_unit
-        if lens < 1:
-            raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(lens))
-        cam.lens = lens
-    elif lens_unit == "FOV":
-        cam.lens_unit = lens_unit
-        cam.angle = lens
-    else:
-        raise Exception("No such lens unit: " + lens_unit)
+        # Set focal length
+        if cam.lens_unit == 'MILLIMETERS':
+            if lens < 1:
+                raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(lens))
+            cam.lens = lens
+        elif cam.lens_unit == "FOV":
+            cam.angle = lens
+        else:
+            raise Exception("No such lens unit: " + lens_unit)
 
     # Set resolution
     if image_width is not None:
