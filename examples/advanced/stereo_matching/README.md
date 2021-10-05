@@ -1,6 +1,6 @@
 # Stereo Matching
-![](../../../images/stereo_matching_stereo_pair.png)
-![](../../../images/stereo_matching_stereo_depth.png)
+![](../../../images/stereo_matching_stereo_pair.jpg)
+![](../../../images/stereo_matching_stereo_depth.jpg)
 
 In the first row we can see the rendered stereo RGB images, left and right respectively, and beneath them we can view
 the computed depth image using stereo matching. Note that due to a high discrepancy between the TV and the rest

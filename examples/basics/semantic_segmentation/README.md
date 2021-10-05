@@ -1,8 +1,8 @@
 # Semantic Segmentation 
 
 <p align="center">
-<img src="../../../images/semantic_segmentation_rendering_0.png" alt="Front readme image" width=375>
-<img src="../../../images/semantic_segmentation_rendering_1.png" alt="Front readme image" width=375>
+<img src="../../../images/semantic_segmentation_rendering_0.jpg" alt="Front readme image" width=375>
+<img src="../../../images/semantic_segmentation_rendering_1.jpg" alt="Front readme image" width=375>
 </p>
 
 The focus of this example is to introduce user to `renderer.SegMapRenderer` module, which generates semantic segmentations of scenes.

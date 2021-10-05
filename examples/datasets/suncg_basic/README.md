@@ -1,6 +1,6 @@
 # Basic SUNCG scene
 
-![](../../../images/suncg_basic_output-summary.png)
+![](../../../images/suncg_basic_output-summary.jpg)
 
 Renders a SUNCG scene using precomputed camera poses read from file.
 
