@@ -61,7 +61,9 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
                 # Fix pose of object to the one it had at the end of the simulation
                 obj.set_location(obj_poses_after_sim[obj.get_name()]['location'] - origin_shift)
                 obj.set_rotation_euler(obj_poses_after_sim[obj.get_name()]['rotation'])
-    disable_all_rigid_bodies()
+
+    # Deactivate the simulation so it does not influence object positions
+    bpy.context.scene.rigidbody_world.enabled = False
 
 
 def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0,
@@ -146,6 +148,9 @@ class PhysicsSimulation:
         :param object_stopped_rotation_threshold: The maximum difference per second and per coordinate in the rotation Euler vector that is allowed. such
                                                   that an object is still recognized as 'stopped moving'.
         """
+        # Make sure the RigidBody world is active
+        bpy.context.scene.rigidbody_world.enabled = True
+
         # Run simulation
         point_cache = bpy.context.scene.rigidbody_world.point_cache
         point_cache.frame_start = 1
