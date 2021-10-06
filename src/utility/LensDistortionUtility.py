@@ -52,7 +52,7 @@ class LensDistortionUtility:
 
         # save the original image resolution
         original_image_resolution = (bpy.context.scene.render.resolution_y, bpy.context.scene.render.resolution_x)
-        # first we need to get the current K matrix
+        # get the current K matrix (skew==0 in Blender)
         camera_K_matrix = CameraUtility.get_intrinsics_as_K_matrix()
         fx, fy = camera_K_matrix[0][0], camera_K_matrix[1][1]
         cx, cy = camera_K_matrix[0][2], camera_K_matrix[1][2]
@@ -96,7 +96,7 @@ class LensDistortionUtility:
         res = [1e3]
         it = 0
         factor = 1.0
-        while res[-1] > 0.2:
+        while res[-1] > 0.15:
             r2 = np.square(x) + np.square(y)
             radial_part = (1 + k1 * r2 + k2 * r2 * r2 + k3 * r2 * r2 * r2)
             x_ = x * radial_part + 2 * p2 * x * y + p1 * (r2 + 2 * np.square(x))
@@ -108,17 +108,20 @@ class LensDistortionUtility:
 
             # Take action if the optimization stalls or gets unstable
             # (distortion models are tricky if badly parameterized, especially in outer regions)
-            if (it > 1) and (res[-1] > res[-2] * .999):
-                factor *= .5
+            if (it > 1) and (res[-1] > res[-2] * .99999):
+                print("The residual for the worst distorted pixel got unstable/stalled.")
+                print("You might as well double-check your distortion model!")
+                #factor *= .5
+                print("Alternatively, use the Matlab code in robotic.de/callab, which robustifies against these unstable pixels.")
                 if it > 1e3:
                     raise Exception(
-                        "The iterative distortion algorithm is unstable/stalled after 1000 iterations. STOP.")
+                        "The iterative distortion algorithm is unstable/stalled after 1000 iterations.")
                 if error > 1e9:
-                    raise Exception("The iterative distortion algorithm is unstable. STOP.")
+                    raise Exception("The iterative distortion algorithm is unstable.")
 
             # update undistorted projection
-            x = x - (x_ - P_und[0, :]) * factor
-            y = y - (y_ - P_und[1, :]) * factor
+            x = x - (x_ - P_und[0, :]) #* factor
+            y = y - (y_ - P_und[1, :]) #* factor
 
         # u and v are now the pixel coordinates on the undistorted image that
         # will distort into the row,column coordinates of the distorted image
