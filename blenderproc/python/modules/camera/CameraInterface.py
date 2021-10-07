@@ -7,7 +7,7 @@ from blenderproc.python.modules.main.Module import Module
 from blenderproc.python.modules.utility.Config import Config
 from blenderproc.python.types.EntityUtility import Entity
 from blenderproc.python.utility.MathUtility import change_coordinate_frame_of_point, change_source_coordinate_frame_of_transformation_matrix, change_target_coordinate_frame_of_transformation_matrix, build_transformation_mat
-from src.utility.LensDistortionUtility import LensDistortionUtility
+from blenderproc.python.camera.LensDistortionUtility import set_lens_distortion
 
 class CameraInterface(Module):
     """
@@ -296,7 +296,7 @@ class CameraInterface(Module):
             k1, k2, k3 = config.get_float("lens_distortion/k1", 0.0), config.get_float("lens_distortion/k2", 0.0), \
                          config.get_float("lens_distortion/k3", 0.0)
             p1, p2 = config.get_float("lens_distortion/p1", 0.0), config.get_float("lens_distortion/p2", 0.0)
-            LensDistortionUtility.set_lens_distortion(k1, k2, k3, p1, p2)
+            set_lens_distortion(k1, k2, k3, p1, p2)
 
     def _set_cam_extrinsics(self, config, frame=None):
         """ Sets camera extrinsics according to the config.

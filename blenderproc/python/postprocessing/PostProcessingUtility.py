@@ -1,8 +1,8 @@
-from typing import Union
-
+from typing import Union, List
 import numpy as np
-
 import bpy
+
+import blenderproc.python.camera.LensDistortionUtility as LensDistortionUtility
 
 
 def dist2depth(dist: Union[list, np.ndarray]) -> Union[list, np.ndarray]:
@@ -171,6 +171,9 @@ def trim_redundant_channels(image: Union[list, np.ndarray]) -> Union[list, np.nd
         image = image[:, :, 0]  # All channles have the same value, so just extract any single channel
 
     return image
+
+def apply_lens_distortion(image: Union[List[np.ndarray], np.ndarray]) -> Union[List[np.ndarray], np.ndarray]:
+    return LensDistortionUtility.apply_lens_distortion(image)
 
 
 class PostProcessingUtility:

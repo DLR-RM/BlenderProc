@@ -1,5 +1,5 @@
-from src.main.Module import Module
-from src.utility.PostProcessingUtility import PostProcessingUtility
+from blenderproc.python.modules.main.Module import Module
+from blenderproc.python.postprocessing.PostProcessingUtility import apply_lens_distortion
 
 
 class LensDistortion(Module):
@@ -36,4 +36,4 @@ class LensDistortion(Module):
         :param image: The image data.
         :return: The lens distorted image data.
         """
-        return PostProcessingUtility.apply_lens_distortion(image), key, version
+        return apply_lens_distortion(image), key, version
