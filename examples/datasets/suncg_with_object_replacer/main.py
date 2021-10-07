@@ -1,26 +1,4 @@
-from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
-from src.utility.CameraUtility import CameraUtility
-from src.utility.MathUtility import MathUtility
-from src.utility.sampler.SuncgPointInRoomSampler import SuncgPointInRoomSampler
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.MaterialLoaderUtility import MaterialLoaderUtility
-from src.utility.SegMapRendererUtility import SegMapRendererUtility
-
-from src.utility.object.ObjectReplacer import ObjectReplacer
-from src.utility.Utility import Utility
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.loader.SuncgLoader import SuncgLoader
-from src.utility.loader.ObjectLoader import ObjectLoader
-from src.utility.filter.Filter import Filter
-from src.utility.lighting.SuncgLighting import SuncgLighting
-
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-
-from src.utility.RendererUtility import RendererUtility
+import blenderproc as bproc
 import numpy as np
 from mathutils import Euler
 import argparse
@@ -33,15 +11,15 @@ parser.add_argument('output_dir', nargs='?', default="examples/datasets/suncg_wi
                     help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
-label_mapping = LabelIdMapping.from_csv(Utility.resolve_path(os.path.join('resources', 'id_mappings', 'nyu_idset.csv')))
-objs = SuncgLoader.load(args.house, label_mapping)
+label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_resource(os.path.join('id_mappings', 'nyu_idset.csv')))
+objs = bproc.loader.load_suncg(args.house, label_mapping)
 
 # replace some objects with others
 
-chair_obj = ObjectLoader.load(args.object_path)
+chair_obj = bproc.loader.load_obj(args.object_path)
 if len(chair_obj) != 1:
     raise Exception(f"There should only be one chair object not: {len(chair_obj)}")
 chair_obj = chair_obj[0]
@@ -53,10 +31,10 @@ def relative_pose_sampler(obj):
 
 
 replace_ratio = 1.0
-ObjectReplacer.replace_multiple(
-    objects_to_be_replaced=Filter.by_cp(objs, "coarse_grained_class", "chair"),
+bproc.object.replace_objects(
+    objects_to_be_replaced=bproc.filter.by_cp(objs, "coarse_grained_class", "chair"),
     objects_to_replace_with=[chair_obj],
-    ignore_collision_with=Filter.by_cp(objs, "type", "Floor"),
+    ignore_collision_with=bproc.filter.by_cp(objs, "type", "Floor"),
     replace_ratio=replace_ratio,
     copy_properties=True,
     relative_pose_sampler=relative_pose_sampler
@@ -66,12 +44,12 @@ ObjectReplacer.replace_multiple(
 objs = [obj for obj in objs if obj.is_valid()]
 
 # makes Suncg objects emit light
-SuncgLighting.light()
+bproc.lighting.light_suncg_scene()
 
 # Init sampler for sampling locations inside the loaded suncg house
-point_sampler = SuncgPointInRoomSampler(objs)
+point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0
@@ -81,26 +59,25 @@ while tries < 10000 and poses < 5:
     location, _ = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
     euler_rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, euler_rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, euler_rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
-    if CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0},
-                                                       bvh_tree) and CameraValidation.scene_coverage_score(
+    if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0},
+                                                       bvh_tree) and bproc.camera.scene_coverage_score(
             cam2world_matrix) > 0.4:
-        CameraUtility.add_camera_pose(cam2world_matrix)
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
-MaterialLoaderUtility.add_alpha_channel_to_textures(blurry_edges=True)
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
+bproc.material.add_alpha_channel_to_textures(blurry_edges=True)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
-data.update(SegMapRendererUtility.render(Utility.get_temporary_directory(), Utility.get_temporary_directory(), "class",
-                                         use_alpha_channel=True))
+data.update(bproc.renderer.render_segmap(map_by="class", use_alpha_channel=True))
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

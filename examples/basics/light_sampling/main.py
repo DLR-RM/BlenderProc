@@ -1,17 +1,5 @@
-from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
+import blenderproc as bproc
 import argparse
-
-from src.utility.Utility import Utility
-from src.utility.sampler.Shell import Shell
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.loader.ObjectLoader import ObjectLoader
-from src.utility.CameraUtility import CameraUtility
-from src.utility.LightUtility import Light
-from src.utility.MathUtility import MathUtility
-from src.utility.RendererUtility import RendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument('camera', nargs='?', default="examples/resources/scene.obj", help="Path to the camera file")
@@ -19,16 +7,16 @@ parser.add_argument('scene', nargs='?', default="examples/resources/scene.obj", 
 parser.add_argument('output_dir', nargs='?', default="examples/basics/light_sampling/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
-objs = ObjectLoader.load(args.scene)
+objs = bproc.loader.load_obj(args.scene)
 
 # Define a light
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 # Sample its location in a shell around the point [1, 2, 3]
-light.set_location(Shell.sample(
+light.set_location(bproc.sampler.shell(
     center=[1, 2, 3],
     radius_min=4,
     radius_max=7,
@@ -38,18 +26,18 @@ light.set_location(Shell.sample(
 light.set_energy(500)
 
 # define the camera intrinsics
-CameraUtility.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
+bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
     for line in f.readlines():
         line = [float(x) for x in line.split()]
         position, euler_rotation = line[:3], line[3:6]
-        matrix_world = MathUtility.build_transformation_mat(position, euler_rotation)
-        CameraUtility.add_camera_pose(matrix_world)
+        matrix_world = bproc.math.build_transformation_mat(position, euler_rotation)
+        bproc.camera.add_camera_pose(matrix_world)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # Collect states of all objects
 object_states = []
@@ -59,7 +47,7 @@ for obj in objs:
         "local2world": obj.get_local2world_mat()
     })
 # Add states (they are the same for all frames here)
-data["object_states"] = [object_states] * Utility.num_frames()
+data["object_states"] = [object_states] * bproc.utility.num_frames()
 
 # Collect state of the one light
 light_state = {
@@ -68,17 +56,17 @@ light_state = {
     "energy": light.get_energy()
 }
 # Add states (its the same for all frames here)
-data["light_states"] = [light_state] * Utility.num_frames()
+data["light_states"] = [light_state] * bproc.utility.num_frames()
 
 # Collect state of the camera at all frames
 cam_states = []
-for frame in range(Utility.num_frames()):
+for frame in range(bproc.utility.num_frames()):
     cam_states.append({
-        "cam2world": CameraUtility.get_camera_pose(frame),
-        "cam_K": CameraUtility.get_intrinsics_as_K_matrix()
+        "cam2world": bproc.camera.get_camera_pose(frame),
+        "cam_K": bproc.camera.get_intrinsics_as_K_matrix()
     })
 # Adds states to the data dict
 data["cam_states"] = cam_states
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

@@ -1,25 +1,9 @@
-from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
+import blenderproc as bproc
 import argparse
 import os
 import numpy as np
 import random
 
-from src.utility.filter.Filter import Filter
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-from src.utility.Initializer import Initializer
-from src.utility.LabelIdMapping import LabelIdMapping
-from src.utility.loader.Front3DLoader import Front3DLoader
-from src.utility.sampler.Front3DPointInRoomSampler import Front3DPointInRoomSampler
-from src.utility.MeshObjectUtility import MeshObject
-from src.utility.MathUtility import MathUtility
-from src.utility.camera.CameraValidation import CameraValidation
-from src.utility.CameraUtility import CameraUtility
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Utility import Utility
-from src.utility.RendererUtility import RendererUtility
-from src.utility.SegMapRendererUtility import SegMapRendererUtility
 
 parser = argparse.ArgumentParser()
 parser.add_argument("front", help="Path to the 3D front file")
@@ -32,25 +16,25 @@ args = parser.parse_args()
 if not os.path.exists(args.front) or not os.path.exists(args.future_folder):
     raise Exception("One of the two folders does not exist!")
 
-Initializer.init()
-mapping_file = Utility.resolve_path(os.path.join("resources", "front_3D", "3D_front_mapping.csv"))
-mapping = LabelIdMapping.from_csv(mapping_file)
+bproc.init()
+mapping_file = bproc.utility.resolve_resource(os.path.join("front_3D", "3D_front_mapping.csv"))
+mapping = bproc.utility.LabelIdMapping.from_csv(mapping_file)
 
 # set the light bounces
-RendererUtility.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,
+bproc.renderer.set_light_bounces(diffuse_bounces=200, glossy_bounces=200, max_bounces=200,
                                   transmission_bounces=200, transparent_max_bounces=200)
 
 # load the front 3D objects
-loaded_objects = Front3DLoader.load(
+loaded_objects = bproc.loader.load_front3d(
     json_path=args.front,
     future_model_path=args.future_folder,
     front_3D_texture_path=args.front_3D_texture_path,
     label_mapping=mapping
 )
 
-cc_materials = CCMaterialLoader.load(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
+cc_materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
 
-floors = Filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
+floors = bproc.filter.by_attr(loaded_objects, "name", "Floor.*", regex=True)
 for floor in floors:
     # For each material of the object
     for i in range(len(floor.get_materials())):
@@ -60,8 +44,8 @@ for floor in floors:
             floor.set_material(i, random.choice(cc_materials))
 
 
-baseboards_and_doors = Filter.by_attr(loaded_objects, "name", "Baseboard.*|Door.*", regex=True)
-wood_floor_materials = Filter.by_cp(cc_materials, "asset_name", "WoodFloor.*", regex=True)
+baseboards_and_doors = bproc.filter.by_attr(loaded_objects, "name", "Baseboard.*|Door.*", regex=True)
+wood_floor_materials = bproc.filter.by_cp(cc_materials, "asset_name", "WoodFloor.*", regex=True)
 for obj in baseboards_and_doors:
     # For each material of the object
     for i in range(len(obj.get_materials())):
@@ -69,8 +53,8 @@ for obj in baseboards_and_doors:
         obj.set_material(i, random.choice(wood_floor_materials))
 
 
-walls = Filter.by_attr(loaded_objects, "name", "Wall.*", regex=True)
-marble_materials = Filter.by_cp(cc_materials, "asset_name", "Marble.*", regex=True)
+walls = bproc.filter.by_attr(loaded_objects, "name", "Wall.*", regex=True)
+marble_materials = bproc.filter.by_cp(cc_materials, "asset_name", "Marble.*", regex=True)
 for wall in walls:
     # For each material of the object
     for i in range(len(wall.get_materials())):
@@ -80,10 +64,10 @@ for wall in walls:
             wall.set_material(i, random.choice(marble_materials))
 
 # Init sampler for sampling locations inside the loaded front3D house
-point_sampler = Front3DPointInRoomSampler(loaded_objects)
+point_sampler = bproc.sampler.Front3DPointInRoomSampler(loaded_objects)
 
 # Init bvh tree containing all mesh objects
-bvh_tree = MeshObject.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, MeshObject)])
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in loaded_objects if isinstance(o, bproc.types.MeshObject)])
 
 poses = 0
 tries = 0
@@ -104,24 +88,24 @@ while tries < 10000 and poses < 10:
     location = point_sampler.sample(height)
     # Sample rotation (fix around X and Y axis)
     rotation = np.random.uniform([1.2217, 0, 0], [1.338, 0, np.pi * 2])
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
 
     # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2.5 and 3.5
     # meters and make sure that no background is visible, finally make sure the view is interesting enough
-    if CameraValidation.scene_coverage_score(cam2world_matrix, special_objects, special_objects_weight=10.0) > 0.8 \
-            and CameraValidation.perform_obstacle_in_view_check(cam2world_matrix, proximity_checks, bvh_tree):
-        CameraUtility.add_camera_pose(cam2world_matrix)
+    if bproc.camera.scene_coverage_score(cam2world_matrix, special_objects, special_objects_weight=10.0) > 0.8 \
+            and bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, proximity_checks, bvh_tree):
+        bproc.camera.add_camera_pose(cam2world_matrix)
         poses += 1
     tries += 1
 
 # Also render normals
-RendererUtility.enable_normals_output()
+bproc.renderer.enable_normals_output()
 # set the sample amount to 350
-RendererUtility.set_samples(350)
+bproc.renderer.set_samples(350)
 
 # render the whole pipeline
-data = RendererUtility.render()
-data.update(SegMapRendererUtility.render(map_by="class"))
+data = bproc.renderer.render()
+data.update(bproc.renderer.render_segmap(map_by="class"))
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

@@ -1,7 +1,7 @@
 # Diffuse color image
 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=375>
+<img src="../../../images/diffuse_color_image_rendering.jpg" alt="Front readme image" width=375>
 </p>
 
 In this example we demonstrate how to render a diffuse color image

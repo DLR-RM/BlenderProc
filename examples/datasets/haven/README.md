@@ -1,6 +1,6 @@
 # Haven 
 <p align="center">
-<img src="rendered_example.jpg" alt="normals and color rendering of example table" width=300>
+<img src="../../../images/haven_rendered_example.jpg" alt="normals and color rendering of example table" width=300>
 </p>
 
 The focus of this example is the [haven dataset](https://3dmodelhaven.com/) collection.

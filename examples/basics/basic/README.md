@@ -1,8 +1,8 @@
 # Basic scene
 
 <p align="center">
-<img src="rendering_0.jpg" alt="Front readme image" width=375>
-<img src="rendering_1.jpg" alt="Front readme image" width=375>
+<img src="../../../images/basic_rendering_0.jpg" alt="Front readme image" width=375>
+<img src="../../../images/basic_rendering_1.jpg" alt="Front readme image" width=375>
 </p>
 
 In this example we demonstrate the basic functionality of BlenderProc.
