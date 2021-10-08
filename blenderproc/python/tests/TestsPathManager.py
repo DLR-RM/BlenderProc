@@ -1,6 +1,6 @@
 import os
 from os.path import dirname, abspath, join, exists
-from blenderproc.python.utility.Utility import resolve_path
+from blenderproc.python.utility.Utility import resolve_path, Utility
 
 
 class TestsPathManager(object):
@@ -12,7 +12,7 @@ class TestsPathManager(object):
     def __init__(self):
         """
         """
-        self._main_folder = abspath(join(dirname(__file__), "..", "..", ".."))
+        self._main_folder = Utility.blenderproc_root
 
         # for the default resource folder, this one should always be available
         self.example_resources = abspath(join(self._main_folder, "examples/resources"))
