@@ -67,8 +67,7 @@ Config file:
       "config": {
         "global": {
           "output_dir": "/tmp/",
-          "auto_tile_size": False,
-          "pixel_aspect_x": 1.333333333
+          "auto_tile_size": False
         }
       }
     },

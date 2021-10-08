@@ -74,7 +74,7 @@ def cli():
                 # Visualize channel
                 plt.figure()
                 plt.title("{} / {} in {}".format(key, channel_label, file_label))
-                plt.imshow(data[:, :, i], cmap='summer')
+                plt.imshow(data[:, :, i], cmap='jet')
 
         elif key_matches(key, args.other_non_rgb_keys):
             # Make sure the data has only one channel, otherwise matplotlib will treat it as an rgb image
@@ -83,7 +83,7 @@ def cli():
                     print("Warning: The data with key '" + key + "' has more than one channel which would not allow using a jet color map. Therefore only the first channel is visualized.")
                 data = data[:, :, 0]
 
-            plt.imshow(data, cmap='jet')
+            plt.imshow(data, cmap='summer')
         elif key_matches(key, args.rgb_keys):
             plt.imshow(data)
 

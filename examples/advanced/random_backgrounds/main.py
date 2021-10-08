@@ -37,7 +37,7 @@ light.set_location(bproc.sampler.shell(
 light.set_color(np.random.uniform([0.5, 0.5, 0.5], [1, 1, 1]))
 light.set_energy(random.uniform(100, 1000))
 
-bproc.camera.set_intrinsics_from_blender_params(1, 640, 480, lens_unit="FOV")
+bproc.camera.set_resolution(640, 480)
 
 # Sample five camera poses
 poses = 0

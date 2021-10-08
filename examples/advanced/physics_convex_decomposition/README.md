@@ -1,6 +1,6 @@
 # Convex decomposition for generating stable and exact collision shapes
 
-![](../../../images/physics_convex_decomposition_rendering.png)
+![](../../../images/physics_convex_decomposition_rendering.jpg)
 
 When running physical simulations in blender, the choice of the correct collision shapes is crucial to achieve stable results.
 While using the `CONVEX_HULL` collision shape results in very stable simulations, the result might look very implausible for non-convex objects (e.q. objects floating).

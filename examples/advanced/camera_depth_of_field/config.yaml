@@ -50,7 +50,7 @@
       "module": "camera.CameraSampler",
       "config": {
         "intrinsics": {
-          "fov": 1,
+    
           "depth_of_field": {
             "fstop": 0.25,
             "focal_object": {
