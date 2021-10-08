@@ -8,9 +8,10 @@ import urllib.request, json
 from urllib.request import urlretrieve, build_opener, install_opener, urlopen
 from pathlib import Path
 import uuid
+import argparse
 
-
-def download_blendkit_assets(asset_types):
+def download_blendkit_assets(asset_types, output_dir):
+    output_dir = Path(output_dir)
     assets = {}
     for asset_type in asset_types:
         page = 1
@@ -35,8 +36,7 @@ def download_blendkit_assets(asset_types):
         print("Retrieved metadata for {} assets".format(total_assets))
 
         # Create ouput directory
-        current_dir = Path(__file__).parent
-        blenderkit_mat_dir = current_dir / ".." / "resources" / "blenderkit" / ''.join([asset_type, 's']) 
+        blenderkit_mat_dir = output_dir / ''.join([asset_type, 's'])
         blenderkit_mat_dir.mkdir(exist_ok=True, parents=True)
         # Create a random scene uuid which is necessary for downloading files
         scene_uuid = str(uuid.uuid4())
@@ -79,6 +79,13 @@ def download_blendkit_assets(asset_types):
                 temp_path.rename(output_path)
 
 
+def cli():
+    parser = argparse.ArgumentParser("Downloads materials and models from blenderkit")
+    parser.add_argument('output_dir', help="Determines where the data is going to be saved")
+    parser.add_argument('--asset_types', nargs="+", help="Which type of assets to download", default=["material", "model"], choices=["material", "model"])
+    args = parser.parse_args()
+
+    download_blendkit_assets(args.asset_types, args.output_dir)
+
 if __name__ == "__main__":
-    asset_types = ["material", "model"]
-    download_blendkit_assets(asset_types)
+    cli()

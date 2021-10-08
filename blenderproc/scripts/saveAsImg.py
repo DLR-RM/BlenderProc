@@ -88,19 +88,13 @@ def convert_hdf(base_file_path, output_folder=None):
         else:
             print("The path is not a file")
     else:
-        print("The file does not exist: {}".format(args.hdf5))
+        print("The file does not exist: {}".format(base_file_path))
 
 
-if __name__ == "__main__":
+def cli():
     parser = argparse.ArgumentParser("Script to save images out of a hdf5 files")
-
-    parser.add_argument('hdf5', nargs='*', help='Path to hdf5 file/s')
-
+    parser.add_argument('hdf5', nargs='+', help='Path to hdf5 file/s')
     args = parser.parse_args()
-
-    if args.hdf5 is None:
-        print(parser.format_help())
-        exit(0)
 
     if isinstance(args.hdf5, str):
         convert_hdf(args.hdf5)
@@ -109,3 +103,6 @@ if __name__ == "__main__":
             convert_hdf(file)
     else:
         print("Input must be a path")
+
+if __name__ == "__main__":
+    cli()

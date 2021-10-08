@@ -47,7 +47,7 @@ class InstallUtility:
         return custom_blender_path, blender_install_path
 
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool) -> Union[str, str]:
+    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool = False) -> Union[str, str]:
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
