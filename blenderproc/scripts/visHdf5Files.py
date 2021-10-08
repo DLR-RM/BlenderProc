@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import sys
 import json
+import re
 
 def cli():
     parser = argparse.ArgumentParser("Script to visualize hdf5 files")
@@ -13,20 +14,26 @@ def cli():
     parser.add_argument('--keys', nargs='+', help='Keys that should be visualized. If none is given, all keys are visualized.', default=None)
     parser.add_argument('--rgb_keys', nargs='+', help='Keys that should be interpreted as rgb data.', default=["colors", "normals", "diffuse"])
     parser.add_argument('--flow_keys', nargs='+', help='Keys that should be interpreted as optical flow data.', default=["forward_flow", "backward_flow"])
-    parser.add_argument('--segmap_keys', nargs='+', help='Keys that should be interpreted as segmentation data.', default=["segmap"])
+    parser.add_argument('--segmap_keys', nargs='+', help='Keys that should be interpreted as segmentation data.', default=["segmap", ".*_segmaps"])
     parser.add_argument('--segcolormap_keys', nargs='+', help='Keys that point to the segmentation color maps corresponding to the configured segmap_keys.', default=["segcolormap"])
     parser.add_argument('--other_non_rgb_keys', nargs='+', help='Keys that contain additional non-RGB data which should be visualized using a jet color map.', default=["distance", "depth"])
 
     args = parser.parse_args()
 
+    def key_matches(key, patterns, return_index=False):
+        for p, pattern in enumerate(patterns):
+            if re.fullmatch(pattern, key):
+                return (True, p) if return_index else True
+
+        return (False, None) if return_index else False
 
     def vis_data(key, data, full_hdf5_data, file_label):
         # If key is valid and does not contain segmentation data, create figure and add title
-        if key in args.flow_keys + args.rgb_keys + args.other_non_rgb_keys:
+        if key_matches(key, args.flow_keys + args.rgb_keys + args.other_non_rgb_keys):
             plt.figure()
             plt.title("{} in {}".format(key, file_label))
 
-        if key in args.flow_keys:
+        if key_matches(key, args.flow_keys):
             try:
                 # This import here is ugly, but else everytime someone uses this script it demands opencv and the progressbar
                 sys.path.append(os.path.join(os.path.dirname(__file__)))
@@ -37,12 +44,13 @@ def cli():
 
             # Visualize optical flow
             plt.imshow(flow_to_rgb(data), cmap='jet')
-        elif key in args.segmap_keys:
+        elif key_matches(key, args.segmap_keys):
             # Try to find labels for each channel in the segcolormap
             channel_labels = {}
-            if args.segmap_keys.index(key) < len(args.segcolormap_keys):
+            _, key_index = key_matches(key, args.segmap_keys, return_index=True)
+            if key_index < len(args.segcolormap_keys):
                 # Check if segcolormap_key for the current segmap key is configured and exists
-                segcolormap_key = args.segcolormap_keys[args.segmap_keys.index(key)]
+                segcolormap_key = args.segcolormap_keys[key_index]
                 if segcolormap_key in full_hdf5_data:
                     # Extract segcolormap data
                     segcolormap = json.loads(np.array(full_hdf5_data[segcolormap_key]).tostring())
@@ -68,7 +76,7 @@ def cli():
                 plt.title("{} / {} in {}".format(key, channel_label, file_label))
                 plt.imshow(data[:, :, i], cmap='jet')
 
-        elif key in args.other_non_rgb_keys:
+        elif key_matches(key, args.other_non_rgb_keys):
             # Make sure the data has only one channel, otherwise matplotlib will treat it as an rgb image
             if len(data.shape) == 3:
                 if data.shape[2] != 1:
@@ -76,7 +84,7 @@ def cli():
                 data = data[:, :, 0]
 
             plt.imshow(data, cmap='summer')
-        elif key in args.rgb_keys:
+        elif key_matches(key, args.rgb_keys):
             plt.imshow(data)
 
 
