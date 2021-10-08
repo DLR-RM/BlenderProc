@@ -10,6 +10,8 @@ class DefaultConfig:
     pixel_aspect_y = 1
     shift_x = 0
     shift_y = 0
+    lens = "FOV"
+    lens_unit = "MILLIMETERS"
 
     # Stereo
     stereo_convergence_mode = "PARALLEL"

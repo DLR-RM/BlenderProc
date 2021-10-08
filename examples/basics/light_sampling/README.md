@@ -1,6 +1,6 @@
 # Light sampling
 
-![](../../../images/light_sampling_rendering.png)
+![](../../../images/light_sampling_rendering.jpg)
 
 In this example we are demonstrating the sampling features in relation to light objects.
 

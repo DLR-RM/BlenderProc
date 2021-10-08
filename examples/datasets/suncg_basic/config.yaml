@@ -32,10 +32,6 @@
           "rotation": {
             "format": "forward_vec"
           }
-        },
-        "intrinsics": {
-          "fov": 1,
-          "pixel_aspect_x": 1.333333333
         }
       }
     },

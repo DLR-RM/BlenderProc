@@ -15,7 +15,7 @@ label_mapping = bproc.utility.LabelIdMapping.from_csv(bproc.utility.resolve_reso
 objs = bproc.loader.load_suncg(args.house, label_mapping=label_mapping)
 
 # define the camera intrinsics
-bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, pixel_aspect_x=1.333333333, lens_unit="FOV")
+bproc.camera.set_resolution(512, 512)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
