@@ -122,10 +122,7 @@ It also initializes the GlobalStorage, which contains two parts:
   "module": "camera.CameraLoader",
   "config": {
     "path": "<args:0>",
-    "file_format": "location rotation/value",
-    "intrinsics": {
-      "fov": 1
-    }
+    "file_format": "location rotation/value"
   }
 }
 ```

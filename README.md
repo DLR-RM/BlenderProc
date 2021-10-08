@@ -104,7 +104,7 @@ Now the Blender UI opens up, the scripting tab is selected, the correct script i
 To start the BlenderProc pipeline, one now just has to press play (see red circle in image).
  
 <p align="center">
-<img src="images/debug.png" alt="Front readme image" width=500>
+<img src="images/debug.jpg" alt="Front readme image" width=500>
 </p>
 
 The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.

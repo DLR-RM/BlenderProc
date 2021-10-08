@@ -1,6 +1,6 @@
 # AMASS Dataset
 <p align="center">
-<img src="../../../images/amass_human_poses_rendering.png" alt="Front readme image" width=400>
+<img src="../../../images/amass_human_poses_rendering.jpg" alt="Front readme image" width=400>
 </p>
 
 AMASS (Archive of Motion Capture as Surface Shapes) is a large database of human motion unifying different optical marker-based motion capture datasets by representing them within a common framework and parameterization. AMASS is readily useful for generating training data for deep learning.
