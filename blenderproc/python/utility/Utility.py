@@ -47,15 +47,15 @@ def num_frames() -> int:
     """
     return bpy.context.scene.frame_end - bpy.context.scene.frame_start
 
-def clear_frames() -> None:
+def reset_keyframes() -> None:
     """ Removes registered keyframes from all objects and resets frame_start and frame_end """
     bpy.context.scene.frame_start = 0
     bpy.context.scene.frame_end = 0
     for a in bpy.data.actions:
         bpy.data.actions.remove(a)
 
-def set_frame_interval(frame_start: Optional[int] = None, frame_end: Optional[int] = None):
-    """ Sets frame_start and/or frame_end.
+def set_keyframe_render_interval(frame_start: Optional[int] = None, frame_end: Optional[int] = None):
+    """ Sets frame_start and/or frame_end which determine the frames that will be rendered.
 
     :param frame_start: The new frame_start value. If None, it will be ignored.
     :param frame_end: The new frame_end value. If None, it will be ignored.

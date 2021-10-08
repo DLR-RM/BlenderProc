@@ -41,7 +41,7 @@ bproc.camera.set_intrinsics_from_blender_params(1, 512, 512, lens_unit="FOV")
 # Do multiple times: Position the shapenet objects using the physics simulator and render between 2 and 5 images with random camera poses
 for r in range(args.runs):
     # Clear all key frames from the previous run
-    bproc.utility.clear_frames()
+    bproc.utility.reset_keyframes()
 
     # Define a function that samples 6-DoF poses
     def sample_pose(obj: bproc.types.MeshObject):
