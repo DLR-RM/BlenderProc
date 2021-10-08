@@ -1,7 +1,7 @@
 # Random Room Constructor
 
 <p align="center">
-<img src="rendered_example.jpg" alt="Front readme image" width=400>
+<img src="../../../images/random_room_constructor_rendered_example.jpg" alt="Front readme image" width=400>
 </p>
 
 This example explains the `RandomRoomConstructor`. This module can build random rooms and place objects loaded from other modules inside of it.

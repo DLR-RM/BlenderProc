@@ -120,9 +120,6 @@
       }
     },
     {
-      "module": "writer.Hdf5Writer"
-    },
-    {
       "module": "writer.BopWriter",
       "config": {
         "dataset": "<args:1>",

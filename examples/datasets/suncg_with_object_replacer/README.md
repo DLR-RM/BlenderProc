@@ -1,6 +1,6 @@
 # SUNCG scene with object switching
 
-![](result.png)
+![](../../../images/suncg_with_object_replacer_result.jpg)
 
 The ObjectReplacer tries to replace objects with other objects.
 First, you can specify the group of objects, which should be replaced: `objects_to_be_replaced` 
@@ -12,12 +12,12 @@ Both groups of objects can be selected with the `getter.Entity`
 Execute in the Blender-Proc main directory:
 
 ```
-python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to house.json> <path to new objects> examples/datasets/suncg_with_object_replacer/output
+python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to house.json> <path to new object> examples/datasets/suncg_with_object_replacer/output
 ```
 
 * `examples/datasets/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
 * `<path to house.json>`: path to the house.json file of the SUNCG scene you want to render.
-* `<path to new objects>`: path to the `objects_to_replace_with`.
+* `<path to new object>`: path to the `objects_to_replace_with`.
 * `examples/datasets/suncg_with_object_replacer/output`: path to the output directory.
 
 
@@ -32,7 +32,7 @@ python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
 ## Steps
 
 * Loads a SUNCG scene: `loader.SuncgLoader` module
-* Loads new objects: `loader.ObjectLoader` module
+* Loads new object: `loader.ObjectLoader` module
 * Hides the new loaded objects from the renderer: `manipulators.EntityManipulator` module
 * Switch objects in the `objects_to_be_replaced` config with object in `objects_to_replace_with` config: `object.ObjectReplacer` module
 * Sample camera positions inside every room: `camera.SuncgCameraSampler` module.

@@ -74,7 +74,7 @@ The following modules are already implemented and ready to use:
 * Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
 * Writing: .hdf5 containers, COCO & BOP annotations.
 
-..and many more ([docu](https://dlr-rm.github.io/BlenderProc)). For advanced/custom functionalities, you can easily write and integrate your [own modules](src/README.md#writing-your-own-modules).
+..and many more ([docu](https://dlr-rm.github.io/BlenderProc)). For advanced/custom functionalities, you can easily write and integrate your [own modules](blenderproc/README.md#writing-your-own-modules).
 
 ## Examples
 
@@ -104,7 +104,7 @@ Now the Blender UI opens up, the scripting tab is selected, the correct script i
 To start the BlenderProc pipeline, one now just has to press play (see red circle in image).
  
 <p align="center">
-<img src="images/debug.png" alt="Front readme image" width=500>
+<img src="images/debug.jpg" alt="Front readme image" width=500>
 </p>
 
 The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.
@@ -112,7 +112,7 @@ To adjust the config arguments without restarting blender, just change line 32 i
 
 ## Source Code
 
-Now it's a good time to take a look at the [source code](src): All modules are there. Explore and look at the short guide about writing your own modules.
+Now it's a good time to take a look at the [source code](blenderproc): All modules are there. Explore and look at the short guide about writing your own modules.
 
 ## Contributions
 

@@ -1,19 +1,4 @@
-from src.utility.SetupUtility import SetupUtility
-SetupUtility.setup([])
-
-from src.utility.loader.BlendLoader import BlendLoader
-from src.utility.loader.HavenEnvironmentLoader import HavenEnvironmentLoader
-from src.utility.materials.Dust import Dust
-from src.utility.sampler.PartSphere import PartSphere
-
-from src.utility.MathUtility import MathUtility
-from src.utility.CameraUtility import CameraUtility
-from src.utility.WriterUtility import WriterUtility
-from src.utility.Initializer import Initializer
-from src.utility.LightUtility import Light
-
-from src.utility.RendererUtility import RendererUtility
-
+import blenderproc as bproc
 import numpy as np
 import argparse
 
@@ -23,15 +8,16 @@ parser.add_argument('hdri_path', nargs='?', default="resources/haven", help="The
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/haven/output", help="Path to where the final files, will be saved")
 args = parser.parse_args()
 
-Initializer.init()
+bproc.init()
 
 # load the objects into the scene
-obj = BlendLoader.load(args.model)[0]
+obj = bproc.loader.load_blend(args.model)[0]
 
-HavenEnvironmentLoader.set_random_world_background_hdr_img(args.hdri_path)
+haven_hdri_path = bproc.loader.get_random_world_background_hdr_img_path_from_haven(args.hdri_path)
+bproc.world.set_world_background_hdr_img(haven_hdri_path)
 
 # define a light and set its location and energy level
-light = Light()
+light = bproc.types.Light()
 light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
@@ -39,25 +25,25 @@ light.set_energy(1000)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects
-    location = PartSphere.sample(center=np.array([0, 0, 0]), mode="SURFACE", radius=3, part_sphere_dir_vector=np.array([1, 0, 0]), dist_above_center=0.5)
+    location = bproc.sampler.part_sphere(center=np.array([0, 0, 0]), mode="SURFACE", radius=3, part_sphere_dir_vector=np.array([1, 0, 0]), dist_above_center=0.5)
     # Compute rotation based on vector going from location towards poi
-    rotation_matrix = CameraUtility.rotation_from_forward_vec(obj.get_location() - location)
+    rotation_matrix = bproc.camera.rotation_from_forward_vec(obj.get_location() - location)
     # Add homog cam pose based on location an rotation
-    cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
-    CameraUtility.add_camera_pose(cam2world_matrix)
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
+    bproc.camera.add_camera_pose(cam2world_matrix)
 
 # Add dust to all materials of the loaded object
 for material in obj.get_materials():
-    Dust.add_to_material(material, strength=0.8, texture_scale=0.05)
+    bproc.material.add_dust(material, strength=0.8, texture_scale=0.05)
 
 # activate normal and distance rendering
-RendererUtility.enable_normals_output()
-RendererUtility.enable_distance_output()
+bproc.renderer.enable_normals_output()
+bproc.renderer.enable_distance_output()
 # set the amount of samples, which should be used for the color rendering
-RendererUtility.set_samples(350)
+bproc.renderer.set_samples(350)
 
 # render the whole pipeline
-data = RendererUtility.render()
+data = bproc.renderer.render()
 
 # write the data to a .hdf5 container
-WriterUtility.save_to_hdf5(args.output_dir, data)
+bproc.writer.write_hdf5(args.output_dir, data)

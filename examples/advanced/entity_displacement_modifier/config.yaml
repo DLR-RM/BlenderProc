@@ -50,10 +50,7 @@
             "value": [1.84, 0, 0.5]
           }
         }
-        ],
-        "intrinsics": {
-          "fov": 1
-        }
+        ]
       }
     },
     {
@@ -70,7 +67,8 @@
         },
         "cf_add_displace_modifier_with_texture": {
           "texture": {
-            "provider": "sampler.Texture"
+            "provider": "sampler.Texture",
+            "textures": ["CLOUDS"]
           },
           "min_vertices_for_subdiv": 10000,
           "mid_level": 0.5,

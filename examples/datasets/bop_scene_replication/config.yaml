@@ -34,18 +34,11 @@
       }
     },
     {
-      "module": "lighting.LightSampler",
+      "module": "lighting.LightLoader",
       "config": {
         "lights": [
           {
-            "location": {
-              "provider": "sampler.Shell",
-              "center": [0, 0, -0.8],
-              "radius_min": 2,
-              "radius_max": 4,
-              "elevation_min": 40,
-              "elevation_max": 89
-            },
+            "location": [0, 0, -0.8],
             "type": "POINT",
             "energy": 1000
           }
@@ -60,12 +53,6 @@
       }
     },
     {
-      "module": "renderer.SegMapRenderer",
-      "config": {
-        "map_by": "instance"
-      }
-    },
-    {
       "module": "writer.BopWriter",
       "config": {
         "dataset": "<args:1>",
@@ -77,8 +64,5 @@
         }
       }
     },
-    {
-      "module": "writer.Hdf5Writer"
-    }
   ]
 }

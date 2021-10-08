@@ -1,6 +1,6 @@
 # Random Backgrounds
 
-![](rendering.png)
+![](../../../images/random_backgrounds_rendering.jpg)
 
 In this example we generate renderings of an object (Suzanne) and then paste them onto random background images,
 randomizing position, orientation, material properties and lighting of the object. This is a naive way to generate data
@@ -209,7 +209,7 @@ using the `cp_is_object` custom property added when loading the object as select
       }
       ],
       "intrinsics": {
-        "fov": 1,
+  
         "resolution_x": 640,
         "resolution_y": 480
       }

@@ -1,6 +1,6 @@
 # BOP with object pose sampling and physics positioning
 
-![](rendering.png)
+![](../../../images/bop_object_physics_positioning_rendering.jpg)
 
 This example serves as the basis for generating the synthetic data provided at the BOP Challenge 2020. BOP objects from specified datasets are randomly chosen and dropped into an open cube with randomized PBR textures. Object material properties and light sources are also randomized. Samples cameras looking at objects. Outputs RGB, depth, segmentation masks, Coco annotations and object poses in BOP format.
 

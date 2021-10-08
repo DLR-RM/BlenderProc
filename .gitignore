@@ -12,9 +12,10 @@ resources/scenenet/texture*
 resources/blenderkit
 resources/decomposition_cache
 resources/IKEA
+resources/haven
 resources/pix3d
 resources/front_3D/3D_front_mapping_generated.csv
-external/vhacd
+blenderproc/external/vhacd
 *.blend1
 .vscode
 *.pyc
