@@ -64,6 +64,7 @@ def simulate_physics_and_fix_final_poses(min_simulation_time: float = 4.0, max_s
 
     # Deactivate the simulation so it does not influence object positions
     bpy.context.scene.rigidbody_world.enabled = False
+    bpy.context.view_layer.update()
 
 
 def simulate_physics(min_simulation_time: float = 4.0, max_simulation_time: float = 40.0,
