@@ -1,9 +1,6 @@
+import blenderproc as bproc
 import unittest
 import os.path
-
-from src.utility.loader.ObjectLoader import ObjectLoader
-from src.utility.loader.CCMaterialLoader import CCMaterialLoader
-from src.utility.Initializer import Initializer
 
 resource_folder = os.path.join(os.path.dirname(__file__), "..", "examples", "resources")
 
@@ -12,8 +9,8 @@ class UnitTestCheckLoader(unittest.TestCase):
     def test_object_loader(self):
         """ Tests if the object loader is loading all objects from a given .obj file.
         """
-        Initializer.init()
-        objs = ObjectLoader.load(os.path.join(resource_folder, "scene.obj"))
+        bproc.init()
+        objs = bproc.loader.load_obj(os.path.join(resource_folder, "scene.obj"))
 
         # List of objects in the loaded "../examples/resources.obj"
         list_of_objects = ["Cube", "Cube.001", "Icosphere", "Icosphere.001", "Icosphere.002", "Suzanne", "Cylinder",
@@ -28,8 +25,8 @@ class UnitTestCheckLoader(unittest.TestCase):
     def test_cc_material_loader(self):
         """ Tests if the default cc materials are loaded.
         """
-        Initializer.init()
-        materials = CCMaterialLoader.load(used_assets=["metal", "wood", "fabric"])
+        bproc.init()
+        materials = bproc.loader.load_ccmaterials(used_assets=["metal", "wood", "fabric"])
 
         list_of_some_textures = ["Metal001", "Fabric006", "Wood050"]
 

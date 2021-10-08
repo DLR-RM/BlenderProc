@@ -1,13 +1,13 @@
+import blenderproc as bproc
 
 import unittest
 import os.path
 import numpy as np
 
-from blenderproc.python.loader.ObjectLoader import load_obj
-from blenderproc.python.utility.Utility import Utility
-from blenderproc.python.utility.Initializer import Initializer
 from blenderproc.python.tests.SilentMode import SilentMode
 from blenderproc.python.tests.TestsPathManager import test_path_manager
+from blenderproc.python.utility.Utility import Utility
+
 
 class UnitTestCheckUtility(unittest.TestCase):
 
@@ -15,8 +15,8 @@ class UnitTestCheckUtility(unittest.TestCase):
         """ Test if the blender_data objects are still valid after an undo execution is done. 
         """
         with SilentMode():
-            Initializer.init()
-            objs = load_obj(os.path.join(test_path_manager.example_resources, "scene.obj"))
+            bproc.init()
+            objs = bproc.loader.load_obj(os.path.join(test_path_manager.example_resources, "scene.obj"))
 
             for obj in objs:
                 obj.set_cp("test", 0)
@@ -27,7 +27,6 @@ class UnitTestCheckUtility(unittest.TestCase):
 
         for obj in objs:
             self.assertEqual(obj.get_cp("test"), 0)
-
 
     def test_math_util_transformation_mat(self):
         """ Tests if the transformation matrix is calculated correctly
@@ -46,7 +45,7 @@ class UnitTestCheckUtility(unittest.TestCase):
                                         [0.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.00000000e+00]])
 
         # Add homog cam pose based on location an rotation
-        cam2world_matrix = MathUtility.build_transformation_mat(location, rotation_matrix)
+        cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
 
         for x, y in zip(np.reshape(correct_cam2world_matrix, -1).tolist(), np.reshape(cam2world_matrix, -1).tolist()):
             self.assertAlmostEqual(x, y)
