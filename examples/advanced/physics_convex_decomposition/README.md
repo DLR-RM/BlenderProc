@@ -17,10 +17,10 @@ In this example we load a bin and some highly non-convex shapenet objects, apply
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/physics_convex_decomposition/config.yaml examples/advanced/physics_convex_decomposition/bin.obj <PATH_TO_ShapeNetCore.v2> examples/advanced/physics_convex_decomposition/output
+blenderproc run examples/advanced/physics_convex_decomposition/main.py examples/advanced/physics_convex_decomposition/bin.obj <PATH_TO_ShapeNetCore.v2> examples/advanced/physics_convex_decomposition/output
 ```
 
-* `examples/advanced/physics_convex_decomposition/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/physics_convex_decomposition/main.py`: path to the main python file to run.
 * `examples/advanced/physics_convex_decomposition/bin.obj`: path to the object file containing the bin
 * `<PATH_TO_ShapeNetCore.v2>`: path to the downloaded shape net core v2 dataset, get it [here](http://www.shapenet.org/)
 * `examples/advanced/physics_convex_decomposition/output`: path to the output directory.
@@ -30,7 +30,7 @@ python run.py examples/advanced/physics_convex_decomposition/config.yaml example
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/physics_convex_decomposition/output/0.hdf5
+blenderproc vis_hdf5 examples/advanced/physics_convex_decomposition/output/0.hdf5
 ```
 
 ## Steps
@@ -46,7 +46,7 @@ python scripts/visHdf5Files.py examples/advanced/physics_convex_decomposition/ou
 
 ### Run simulation
 
-```yaml
+```python
 {
   "module": "object.PhysicsPositioning",
   "config": {

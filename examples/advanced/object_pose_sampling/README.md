@@ -9,10 +9,10 @@ The focus of this example is introducing the `object.ObjectPoseSampler` which al
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/object_pose_sampling/config.yaml examples/resources/camera_positions examples/resources/scene.obj examples/advanced/object_pose_sampling/output
+blenderproc run examples/advanced/object_pose_sampling/main.py examples/resources/camera_positions examples/resources/scene.obj examples/advanced/object_pose_sampling/output
 ``` 
 
-* `examples/advanced/object_pose_sampling/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/object_pose_sampling/main.py`: path to the main python file to run.
 * `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/advanced/object_pose_sampling/output`: path to the output directory.
@@ -22,7 +22,7 @@ python run.py examples/advanced/object_pose_sampling/config.yaml examples/resour
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/object_pose_sampling/output/0.hdf5
+blenderproc vis_hdf5 examples/advanced/object_pose_sampling/output/0.hdf5
 ```
 
 ## Steps
@@ -38,7 +38,7 @@ python scripts/visHdf5Files.py examples/advanced/object_pose_sampling/output/0.h
 
 ### Object pose Sampling
 
-```yaml
+```python
 {
   "module": "object.ObjectPoseSampler",
   "config":{

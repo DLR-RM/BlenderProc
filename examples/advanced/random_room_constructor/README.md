@@ -16,7 +16,7 @@ Both are needed to use to this example.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/random_room_constructor/config.yaml resources/ikea resources/cctextures examples/advanced/random_room_constructor/output
+blenderproc run examples/advanced/random_room_constructor/main.py resources/ikea resources/cctextures examples/advanced/random_room_constructor/output
 ``` 
 
 * `<PATH_TO_IKEA>`: path to the downloaded IKEA dataset, see the [scripts folder](../../scripts) for the download script. 
@@ -30,7 +30,7 @@ Make sure that you have downloaded the `ikea` dataset and the `cctextures` befor
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/random_room_constructor/output/*.hdf5
+blenderproc vis_hdf5 examples/advanced/random_room_constructor/output/*.hdf5
 ``` 
 
 ## Steps
@@ -45,7 +45,7 @@ python scripts/visHdf5Files.py examples/advanced/random_room_constructor/output/
 
 ### CCMaterialLoader 
 
-```yaml
+```python
 {
   "module": "loader.CCMaterialLoader",
   "config": {
@@ -59,7 +59,7 @@ This makes it more realistic as things like `"Asphalt"` are not commonly found i
 
 ### RandomRoomConstructor 
 
-```yaml
+```python
 {
   "module": "constructor.RandomRoomConstructor",
   "config": {
@@ -89,7 +89,7 @@ These objects are than randomly placed inside the room.
 
 ### SurfaceLighting
 
-```yaml
+```python
 {
     "module": "lighting.SurfaceLighting",
     "config": {
@@ -109,7 +109,7 @@ This can be changed if desired for more information check out the documentation 
 
 ### CameraSampler
 
-```yaml
+```python
 {
     "module": "camera.CameraSampler",
     "config": {

@@ -11,10 +11,10 @@ In this example we demonstrate how to render a diffuse color image
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/diffuse_color_image/config.yaml examples/resources/scene.obj examples/advanced/diffuse_color_image/output
+blenderproc run examples/advanced/diffuse_color_image/main.py examples/resources/scene.obj examples/advanced/diffuse_color_image/output
 ```
 
-* `examples/advanced/diffuse_color_image/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/diffuse_color_image/main.py`: path to the main python file to run.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/advanced/diffuse_color_image/output`: path to the output directory.
 
@@ -23,7 +23,7 @@ python run.py examples/advanced/diffuse_color_image/config.yaml examples/resourc
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/diffuse_color_image/output/0.hdf5
+blenderproc vis_hdf5 examples/advanced/diffuse_color_image/output/0.hdf5
 ```
 
 ## Steps
@@ -38,7 +38,7 @@ python scripts/visHdf5Files.py examples/advanced/diffuse_color_image/output/0.hd
 
 #### ObjectLoader
 
-```yaml
+```python
 {
   "module": "loader.ObjectLoader",
   "config": {
@@ -53,7 +53,7 @@ python scripts/visHdf5Files.py examples/advanced/diffuse_color_image/output/0.hd
 
 #### RgbRenderer
 
-```yaml
+```python
 {
   "module": "renderer.RgbRenderer",
   "config": {
@@ -81,7 +81,7 @@ In this example all of these are temporary and are used in the next module.
 
 #### Hdf5Writer
 
-```yaml
+```python
 {
   "module": "writer.Hdf5Writer",
   "config": {
@@ -103,7 +103,7 @@ In this example all of these are temporary and are used in the next module.
 
 The file `0.h5py` would therefore look like the following:
 
-```yaml
+```python
 {
   "colors": #<numpy array with pixel values read in from rgb_0000.png>,
   "distance": #<numpy array with pixel values read in from distance_0000.exr>,

@@ -13,10 +13,10 @@ areas are consistent and close to the rendered depth images.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/stereo_matching/config.yaml <path to cam_pose file> <path to house.json> examples/advanced/stereo_matching/output
+blenderproc run examples/advanced/stereo_matching/main.py <path to cam_pose file> <path to house.json> examples/advanced/stereo_matching/output
 ```
 
-* `examples/advanced/stereo_matching/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/stereo_matching/main.py`: path to the main python file to run.
 * `<path to cam_pose file>`: Should point to a file which describes one camera pose per line (here the output of `scn2cam` from the `SUNCGToolbox` can be used).
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render. Which should be either located inside the SUNCG directory, or the SUNCG directory path should be added to the config file.
 * `examples/advanced/stereo_matching/output`: path to the output directory.
@@ -24,7 +24,7 @@ python run.py examples/advanced/stereo_matching/config.yaml <path to cam_pose fi
 ## Visualizaton
 Visualize the generated data:
 ```
-python scripts/visHdf5Files.py examples/advanced/stereo_matching/output/1.hdf5
+blenderproc vis_hdf5 examples/advanced/stereo_matching/output/1.hdf5
 ```
 
 ## Steps
@@ -52,7 +52,7 @@ python scripts/visHdf5Files.py examples/advanced/stereo_matching/output/1.hdf5
 
 Make sure these python packages are included.
 
-```yaml
+```python
 {  
   "module": "camera.CameraLoader",
   "config": {
@@ -84,7 +84,7 @@ Here we specify the camera parameters, some notable points are:
 * Adding a camera matrix in `cam_K`.
 * Adding the image resolution once again in `intrinsics`, since this nested parameter is not on the same level as the global parameters, and thus the global parameters won't affect any configuration inside `intrinsics`.
 
-```yaml
+```python
 {
   "module": "renderer.RgbRenderer",
   "config": {
@@ -96,7 +96,7 @@ Here we specify the camera parameters, some notable points are:
 ```
 We enable stereo rendering here. Also notice the order of the modules, where the stereo RGB rendering should be added before stereo matching. Orderings generally reflect dependencies.
 
-```yaml
+```python
 {
   "module": "writer.StereoGlobalMatchingWriter",
   "config": {

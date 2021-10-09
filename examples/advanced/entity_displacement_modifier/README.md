@@ -11,10 +11,10 @@ This is an advanced example, please make sure that you have read:
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/entity_displacement_modifier/config.yaml examples/resources/scene.obj examples/advanced/entity_displacement_modifier/output
+blenderproc run examples/advanced/entity_displacement_modifier/main.py examples/resources/scene.obj examples/advanced/entity_displacement_modifier/output
 ```
 
-* `examples/advanced/entity_displacement_modifier/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/entity_displacement_modifier/main.py`: path to the main python file to run.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/advanced/entity_displacement_modifier/output`: path to the output directory.
 
@@ -23,7 +23,7 @@ python run.py examples/advanced/entity_displacement_modifier/config.yaml example
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/entity_displacement_modifier/output/0.hdf5
+blenderproc vis_hdf5 examples/advanced/entity_displacement_modifier/output/0.hdf5
 ```
 
 ## Steps
@@ -40,7 +40,7 @@ python scripts/visHdf5Files.py examples/advanced/entity_displacement_modifier/ou
 
 ### EntityManipulator
 
-```yaml
+```python
     {
       "module": "manipulators.EntityManipulator",
       "config": {

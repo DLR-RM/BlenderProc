@@ -13,10 +13,10 @@ Make sure that you have downloaded the haven dataset first, see the [haven examp
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/dust/config.yaml resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven/output
+blenderproc run examples/advanced/dust/main.py resources/haven/models/ArmChair_01/ArmChair_01_2k.blend resources/haven examples/datasets/haven/output
 ``` 
 
-* `examples/advanced/dust/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/dust/main.py`: path to the main python file to run.
 * `resources/haven/models/ArmChair_01/ArmChair_01.blend`:  Path to the blend file, from the haven dataset, browse the model folder, for all possible options
 * `resources/haven`: The folder where the `hdri` folder can be found, to load an world environment
 * `examples/datasets/haven/output`: path to the output directory.
@@ -26,7 +26,7 @@ python run.py examples/advanced/dust/config.yaml resources/haven/models/ArmChair
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/haven/output/*.hdf5
+blenderproc vis_hdf5 examples/datasets/haven/output/*.hdf5
 ``` 
 
 ## Steps
@@ -40,7 +40,7 @@ python scripts/visHdf5Files.py examples/datasets/haven/output/*.hdf5
 
 ### MaterialManipulator 
 
-```yaml
+```python
 {
   "module": "manipulators.MaterialManipulator",
   "config":{

@@ -12,10 +12,10 @@ In this example we demonstrate how to switch materials.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/material_randomizer/config.yaml examples/resources/scene.obj examples/advanced/material_randomizer/output
+blenderproc run examples/advanced/material_randomizer/main.py examples/resources/scene.obj examples/advanced/material_randomizer/output
 ```
 
-* `examples/advanced/material_randomizer/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/material_randomizer/main.py`: path to the main python file to run.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/advanced/material_randomizer/output`: path to the output directory.
 
@@ -24,7 +24,7 @@ python run.py examples/advanced/material_randomizer/config.yaml examples/resourc
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/material_randomizer/output/*.hdf5
+blenderproc vis_hdf5 examples/advanced/material_randomizer/output/*.hdf5
 ```
 
 ## Steps
@@ -40,7 +40,7 @@ python scripts/visHdf5Files.py examples/advanced/material_randomizer/output/*.hd
 
 ### Entity Manipulator
 
-```yaml
+```python
     {
       "module": "manipulators.EntityManipulator",
       "config": {

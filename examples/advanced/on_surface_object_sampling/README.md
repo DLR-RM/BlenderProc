@@ -9,10 +9,10 @@ The focus of this example is the `OnSurfaceSampler` which allows pose sampling f
 Execute this in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/on_surface_object_sampling/config.yaml examples/resources/camera_positions examples/advanced/on_surface_object_sampling/scene.blend examples/advanced/on_surface_object_sampling/output
+blenderproc run examples/advanced/on_surface_object_sampling/main.py examples/resources/camera_positions examples/advanced/on_surface_object_sampling/scene.blend examples/advanced/on_surface_object_sampling/output
 ```
 
-* `examples/advanced/on_surface_object_sampling/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/on_surface_object_sampling/main.py`: path to the main python file to run.
 * `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/advanced/on_surface_object_sampling/scene.blend`: path to the object file with the basic scene.
 * `examples/advanced/on_surface_object_sampling/output`: path to the output directory.
@@ -22,7 +22,7 @@ python run.py examples/advanced/on_surface_object_sampling/config.yaml examples/
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/on_surface_object_sampling/output/0.hdf5
+blenderproc vis_hdf5 examples/advanced/on_surface_object_sampling/output/0.hdf5
 ```
 
 ## Steps
@@ -41,7 +41,7 @@ python scripts/visHdf5Files.py examples/advanced/on_surface_object_sampling/outp
 
 ### OnSurfaceSampler
 
-```yaml
+```python
 {
   "module": "object.OnSurfaceSampler",
   "config": {

@@ -9,10 +9,10 @@ The focus of this example is to introduce user to `writer.CocoAnnotationsWriter`
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/coco_annotations/config.yaml examples/resources/camera_positions examples/advanced/coco_annotations/scene.blend examples/advanced/coco_annotations/output
+blenderproc run examples/advanced/coco_annotations/main.py examples/resources/camera_positions examples/advanced/coco_annotations/scene.blend examples/advanced/coco_annotations/output
 ```
 
-* `examples/advanced/coco_annotations/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/coco_annotations/main.py`: path to the main python file to run.
 * `examples/resources/camera_positions`: text file with parameters of camera positions.
 * `examples/advanced/coco_annotations/scene.blend`: path to the blend file with the basic scene.
 * `examples/advanced/coco_annotations/output`: path to the output directory.
@@ -53,7 +53,7 @@ python scripts/vis_coco_annotation.py
 
 ### SegMapRenderer
 
-```yaml
+```python
   {
     "module": "renderer.SegMapRenderer",
     "config": {
@@ -67,7 +67,7 @@ We also add `"name"` to the mapping, s.t. we can later use the object's names fo
 
 ### CocoAnnotationsWriter
 
-```yaml
+```python
   {
     "module": "writer.CocoAnnotationsWriter",
     "config": {

@@ -12,10 +12,10 @@ In this example we are demonstrating the sampling features in relation to camera
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/camera_depth_of_field/config.yaml examples/resources/scene.obj examples/advanced/camera_depth_of_field/output
+blenderproc run examples/advanced/camera_depth_of_field/main.py examples/resources/scene.obj examples/advanced/camera_depth_of_field/output
 ```
 
-* `examples/advanced/camera_depth_of_field/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/camera_depth_of_field/main.py`: path to the main python file to run.
 * `examples/resources/scene.obj`: path to the object file with the basic scene.
 * `examples/advanced/camera_depth_of_field/output`: path to the output directory.
 
@@ -24,7 +24,7 @@ python run.py examples/advanced/camera_depth_of_field/config.yaml examples/resou
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/advanced/camera_depth_of_field/output/0.hdf5
+blenderproc vis_hdf5 examples/advanced/camera_depth_of_field/output/0.hdf5
 ```
 
 ## Steps
@@ -40,7 +40,7 @@ python scripts/visHdf5Files.py examples/advanced/camera_depth_of_field/output/0.
 
 ### BasicEmptyInitializer
 
-```yaml
+```python
 {
   "module": "constructor.BasicEmptyInitializer",
   "config": {
@@ -59,7 +59,7 @@ This module creates an empty object of type plain_axes. It does not have any mes
 
 ### Camera sampling & Depth of field
 
-```yaml
+```python
 {
   "module": "camera.CameraSampler",
   "config": {

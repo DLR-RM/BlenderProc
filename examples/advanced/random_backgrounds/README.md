@@ -12,10 +12,10 @@ leads to inferior results compared to renderings of objects in actual 3D scenes.
 Execute in the Blender-Pipeline main directory:
 
 ```
-python run.py examples/advanced/random_backgrounds/config.yaml examples/advanced/random_backgrounds/object.ply examples/advanced/random_backgrounds/output
+blenderproc run examples/advanced/random_backgrounds/main.py examples/advanced/random_backgrounds/object.ply examples/advanced/random_backgrounds/output
 ``` 
 
-* `examples/advanced/random_backgrounds/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/advanced/random_backgrounds/main.py`: path to the main python file to run.
 * `examples/advanced/random_backgrounds/object.ply`: path to the object file.
 * `examples/advanced/random_backgrounds/output`: path to the output directory.
 
@@ -37,7 +37,7 @@ The rendered data can be found in the output directory.
 
 ### ObjectLoader
 
-```yaml
+```python
   {
     "module": "loader.ObjectLoader",
     "config": {
@@ -55,7 +55,7 @@ to differentiate the object from the background when creating bounding box and s
 
 ### MaterialManipulator
 
-```yaml
+```python
   {
     "module": "manipulators.MaterialManipulator",
     "config": {
@@ -97,7 +97,7 @@ specular, roughness, metallic and color values.
 
 ### LightSampler
 
-```yaml
+```python
   {
     "module": "lighting.LightSampler",
     "config": {
@@ -144,7 +144,7 @@ using the `cp_is_object` custom property added when loading the object as select
 
 ### CameraSampler
 
-```yaml
+```python
   {
     "module": "camera.CameraSampler",
     "config": {
@@ -223,7 +223,7 @@ data is used for object detection.
 
 ### RgbRenderer
 
-```yaml
+```python
   {
     "module": "renderer.RgbRenderer",
     "config": {
