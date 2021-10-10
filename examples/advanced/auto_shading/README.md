@@ -22,7 +22,7 @@ blenderproc run examples/advanced/auto_shading/main.py examples/advanced/auto_sh
 
 The rendered image as shown above can be found in the output directory.
 
-## Background
+## Implementation
 
 ```python
 sphere.set_shading_mode("auto", 45)

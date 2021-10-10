@@ -33,129 +33,33 @@ In the output folder you will find a series of `.hdf5` containers. These can be 
 blenderproc vis_hdf5 examples/advanced/random_room_constructor/output/*.hdf5
 ``` 
 
-## Steps
+## Implementation
 
-* At first the `CCMaterialLoader` is used to load the `cctextures`, these can then be used in the `RandomRoomConstructor`.
-* Then the `RandomRoomConstructor` is called:
-  * It first builds up a floor plan, based on the given parameters, for a detailed explanation of the keys see the documentation.
-  * After that the walls, ceiling and floor are colored with materials from the `CCMaterialLoader`.  
-  * Then the `IkeaLoader` module is called 15 times, to load a variety of different objects, which are then placed collision free in the room.
- 
-## Config file
-
-### CCMaterialLoader 
 
 ```python
-{
-  "module": "loader.CCMaterialLoader",
-  "config": {
-    "used_assets": ["Bricks", "Wood", "Carpet", "Tile", "Marble"]
-  }
-}
+# Load materials and objects that can be placed into the room
+materials = bproc.loader.load_ccmaterials(args.cc_material_path, ["Bricks", "Wood", "Carpet", "Tile", "Marble"])
+interior_objects = []
+for i in range(15):
+    interior_objects.extend(bproc.loader.load_ikea(args.ikea_path, ["bed", "chair", "desk", "bookshelf"]))
 ```
-
-This module loads the `cctextures` downloaded via the script, here only the assets which have one of the names of the list in their name are used.
-This makes it more realistic as things like `"Asphalt"` are not commonly found inside.
-
-### RandomRoomConstructor 
+Loads the `cctextures` downloaded via the script, here only the assets which have one of the names of the list in their name are used. This makes it more realistic as things like `"Asphalt"` are not commonly found inside. Also loads 15 objects from the specified categories of the ikea dataset.
 
 ```python
-{
-  "module": "constructor.RandomRoomConstructor",
-  "config": {
-    "floor_area": 25,
-    "amount_of_extrusions": 5,
-    "used_loader_config": [
-      {
-        "module": "loader.IKEALoader",
-        "config": {
-          "category": ["bed", "chair", "desk", "bookshelf"]
-        },
-        "amount_of_repetitions": 15
-      },
-    ]
-  }
-}
+# Construct random room and fill with interior_objects
+objects = bproc.constructor.construct_random_room(used_floor_area=25,   
+                                                  interior_objects=interior_objects,
+                                                  materials=materials, amount_of_extrusions=5)
 ```
 
-The `RandomRoomConstructor` constructs a random floor plane and builds the corresponding wall and ceiling.
+`construct_random_room` constructs a random floor plane and builds the corresponding wall and ceiling. It places the loaded ikea objects at random positions and sets cc-texture materials.
 The room will have a floor area of 25 square meters, and it will have at most 5 extrusions. 
 An extrusion is a corridor, which stretches away from the basic rectangle in the middle. 
 These can be wider or smaller, but never smaller than the minimum `corridor_width`.
 The module will automatically split the 25 square meter over all extrusions.
 
-After creating the floor plan and the walls, it will repeat the `IKEALoader` for 15 times, these loaded objects must belong to the four defined categories.
-These objects are than randomly placed inside the room. 
-
-### SurfaceLighting
-
 ```python
-{
-    "module": "lighting.SurfaceLighting",
-    "config": {
-      "selector": {
-        "provider": "getter.Entity",
-        "conditions": {
-          "name": "Ceiling"
-        },
-        "emission_strength": 4.0
-      }
-    }
-}
+# Bring light into the room
+bproc.lighting.light_surface([obj for obj in objects if obj.get_name() == "Ceiling"], emission_strength=4.0)
 ```
-
-This module will make the ceiling emit light and remove any materials placed on it. 
-This can be changed if desired for more information check out the documentation of the module.
-
-### CameraSampler
-
-```python
-{
-    "module": "camera.CameraSampler",
-    "config": {
-      "cam_poses": [{
-        "number_of_samples": 5,
-        "proximity_checks": {
-          "min": 1.2
-        },
-        "location": {
-          "provider": "sampler.UpperRegionSampler",
-          "min_height": 1.5,
-          "max_height": 1.8,
-          "to_sample_on": {
-            "provider": "getter.Entity",
-            "index": 0,
-            "conditions": {
-              "name": "Floor",
-              "type": "MESH"
-            }
-          }
-        },
-        "rotation": {
-          "value": {
-            "provider":"sampler.Uniform3d",
-            "max":[1.4217, 0, 6.283185307],
-            "min":[1.0, 0, 0]
-          }
-        },
-        "min_interest_score": 0.4,
-        "check_if_pose_above_object_list": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Floor",
-            "type": "MESH"
-          }
-        }
-      }]
-    }
-}
-```
-
-We sample here five random camera poses, where the location is above the object with the `name: "Floor"`, which was constructed by the `RandomRoomConstructor`.
-So all cameras will be sampled above the floor, with a certain height.
-In the end, we perform a check with `check_if_pose_above_object_list` that the sampled pose is directly above a floor and not an object.
-Furthermore, we use a `min_interest_score` here, which tries to increase the amount of objects in a scene. 
-All of these steps ensure that the cameras are spread through the scene and are focusing on many objects.
-
-Be aware that it might be possible, if the values are too high, that the CameraSampler will try for a very long time new poses to fulfill the given conditions.
-Best is always to check with low values and then increase them until they don't work anymore.
+Let the ceiling emit light and remove any materials placed on it. 

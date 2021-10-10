@@ -36,46 +36,15 @@ Visualize the generated data:
 blenderproc vis_hdf5 examples/advanced/optical_flow/output/1.hdf5
 ```
 
-## Steps
-
-* Loads `scene.obj`: `loader.ObjectLoader` module.
-* Creates a point light : `lighting.LightLoader` module.
-* Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb: `renderer.RgbRenderer` module.
-* Renders forward / backward optical flow: `renderer.FlowRenderer` module.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
-
-## Config file
-
-### FlowRenderer
+## Implementation
 
 ```python
-{
-  "module": "renderer.FlowRenderer",
-  "config": {
-      "forward_flow_output_key": "forward_flow",
-      "backward_flow_output_key": "backward_flow",
-      "forward_flow": True,
-      "backward_flow": True,
-      "blender_image_coordinate_style": False
-  }
-}
+# Render the optical flow (forward and backward) for all frames
+bproc.renderer.render_optical_flow(get_backward_flow=True, 
+                                   get_forward_flow=True, 
+                                   blender_image_coordinate_style=False)
 ```
 
-* This module just goes through all cam poses which were defined in the previous model and renders forward and / or backward flow
+* Go through all cam poses and renders forward and / or backward flow
 * The images are rendered using the `.exr` format which allows linear colorspace and higher precision, and then converted to numpy.float32 arrays
-* The output files are stored in the defined output directory (see [Global](#Global)) and, per default, are named like `{forward_flow, backward_flow}_i.npy` where `i` is the cam pose index
-* The `output_key` config is relevant for the last module, as it defines the key at which the normal rendering should be stored inside the `.hdf5` files.
 * Per default, Blender uses the bottom left corner as coordinate system origin. OpenCV and popular Flow datasets use the upper left corner instead - change the flag `"blender_image_coordinate_style": True` if you want the default Blender behaviour. Note that the colors in the visualization will be different!
-
-=> Creates the files `forward_flow_000{0, 1, 2, 3, 4}.npy` and / or `backward_flow_000{0, 1, 2, 3, 4}.npy`.
-
-The number of samples is set to `samples = 1` in `blenderproc.renderer.FlowRenderer.py` per default. Note that for a sample value > 1 the resulting optical flow map is smoother, especially at border regions. There, the optical flow value might not represent the actual value of the pixel in motion. The below image compares 256 samples (left) with 1 sample (middle) and displays a normalized difference (right):
-
-![](../../../images/optical_flow_num_samples.jpg)
-
-Zoomed version:
-
-![](../../../images/optical_flow_num_samples_zoomed.jpg)
-
-Following this argumentation we suggest using the default setting.

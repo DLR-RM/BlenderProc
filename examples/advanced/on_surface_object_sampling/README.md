@@ -25,65 +25,39 @@ Visualize the generated data:
 blenderproc vis_hdf5 examples/advanced/on_surface_object_sampling/output/0.hdf5
 ```
 
-## Steps
+## Implementation
 
-* Loads all objects from `scene.blend`: `loader.BlendLoader` module.
-* Set selected objects as active: `manipulators.EntityManipulator` module.
-* Set selected objects as passive: `manipulators.EntityManipulator` module.
-* Sample selected object poses on top a selected surface: `object.OnSurfaceSampler` module.
-* Runs the physics simulation: `object.PhysicsPositioning` module.
-* Creates a point light: `lighting.LightLoader` module.
-* Sets two camera positions: `camera.CameraLoader` module.
-* Renders rgb: `renderer.RgbRenderer` module.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
-
-## Config file
-
-### OnSurfaceSampler
-
+We first define a function that samples poses above a list of `objects_to_sample_on` between `min_height` and `max_height`. 
 ```python
-{
-  "module": "object.OnSurfaceSampler",
-  "config": {
-    "objects_to_sample": {                      # mesh objects to sample on the surface
-      "provider": "getter.Entity",
-      "conditions": {
-        "name": ".*phere.*"                     # we select all UV spheres and Icospheres
-      }
-    },
-    "surface": {                                # the object to use as a surface to sample on
-      "provider": "getter.Entity",              
-      "index": 0,                               # make sure the Provider returns only one object
-      "conditions": {
-        "name": "Cube"                          # Cube in the scene is selected
-      }
-    },
-    "pos_sampler": {
-      "provider": "sampler.UpperRegionSampler",
-      "to_sample_on": {                         # select it again, but inside the sampler to define the upper region the space above the Cube
-        "provider": "getter.Entity",
-        "index": 0,                             # returns only the first object to satisfy the conditions
-        "conditions": {
-          "name": "Cube"                        # same Cube is selected
-        }
-      },
-      "min_height": 1,                          # points sampled in this space will have height varying in this min-max range
-      "max_height": 4,                          # this range also helps the module to satisfy the non-intersecting bounding boxes checks for the sampled objects and the surface faster
-      "use_ray_trace_check": False,
-    },
-    "min_distance": 0.1,                        # minimal distance between sampled objects
-    "max_distance": 10,                         # and a maximal distance. The smaller the min-max range, the more tries the module can take to sample the appropriate location
-    "rot_sampler": {                            # uniformly sample rotation
-      "provider": "sampler.Uniform3d",
-      "max": [0,0,0],
-      "min": [6.28,6.28,6.28]
-    }
-  }
-}
+# Define a function that samples the pose of a given object
+def sample_pose(obj: bproc.types.MeshObject):
+    # Sample the spheres location above the surface
+    obj.set_location(bproc.sampler.upper_region(
+        objects_to_sample_on=[surface],
+        min_height=1,
+        max_height=4,
+        use_ray_trace_check=False
+    ))
+    obj.set_rotation_euler(np.random.uniform([0, 0, 0], [np.pi * 2, np.pi * 2, np.pi * 2]))
+
+
 ```
 
-* invoke a `getter.Entity` Provider to select `objects_to_sample` - objects we want to sample poses for.
-* invoke a `getter.Entity` Provider to select an object to use as a `surface` to sample on top (note `"index": 0` which ensures that Provider returns only one object.)
-* sample positions for `objects_to_sample` via `sampler.UpperRegionSampler` (configure `min_height` and `max_height` such that sampled objects don't intersect with the `surface`).
-* `min_distance` and `max_distance` define an acceptable range between sampled objects. The smaller the range, the more `max_iterations` (default is 100) may be required to successfully place an object.
-* sample rotation for `objects_to_sample` using `sampler.Uniform3d` Provider.
+In `sample_poses_on_surface` takes the function handle and samples poses and projects them down on to a given surface. Objects not within `min_distance` and `max_distance` are resampled. 
+
+```python
+# Sample the spheres on the surface
+spheres = bproc.object.sample_poses_on_surface(spheres, surface, sample_pose, min_distance=0.1, max_distance=10)
+```
+
+Then we enable active rigidbody attributes for the spheres and a passive one for the surface in order to run a physics simulation. This optinal step makes sure that the resulting object poses are physically stable. 
+
+```python
+# Enable physics for spheres (active) and the surface (passive)
+for sphere in spheres:
+    sphere.enable_rigidbody(True)
+surface.enable_rigidbody(False)
+
+# Run the physics simulation
+bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=2, max_simulation_time=4, check_object_interval=1)
+```

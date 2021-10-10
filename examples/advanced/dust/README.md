@@ -29,38 +29,13 @@ In the output folder you will find a series of `.hdf5` containers. These can be 
 blenderproc vis_hdf5 examples/datasets/haven/output/*.hdf5
 ``` 
 
-## Steps
-
-* The BlendLoader loads the given blend file and extracts the object
-* Then the `HavenEnvironmentLoader` loads a randomly selected HDR image as world environment
-* After that the `MaterialManipulator` adds to all materials in the scene a layer of dust
-* Then it is rendered and saved in a `hdf5` file.
- 
-## Config file
-
-### MaterialManipulator 
+## Implementation
 
 ```python
-{
-  "module": "manipulators.MaterialManipulator",
-  "config":{
-    "selector": {
-      "provider": "getter.Material",
-      "conditions": {
-        "name": ".*",
-        "use_nodes": True
-      }
-    },
-    "cf_add_dust": {
-      "strength": 0.8,
-      "texture_scale": 0.05
-    }
-  }
-},
+# Add dust to all materials of the loaded object
+for material in obj.get_materials():
+    bproc.material.add_dust(material, strength=0.8, texture_scale=0.05)
 ```
 
-The `MaterialManipulator` selects all materials in the scene and uses the `cf_add_dust` option to add dust to all of them.
-Dust is always displayed on the top of a model, where the top is defined as facing upwards in Z direction. 
-Here `"strength"` defines the amount of dust used on the model, the range is from zero to one. But, values above 1.0 might also work just do they add a lot of dust.
-The `"texture_scale"` is used to reduce the size of the generated noise texture, be aware this only works if the object already has a UV mapping. 
-Else you can generate one with the `EntityManipulator`.
+Here `"strength"` defines the amount of dust used on the model, the range is typically from zero to one. But, values above 1.0 might also work to add a lot of dust.
+The `"texture_scale"` is used to reduce the size of the generated noise texture, be aware this only works if the object already has a UV mapping. If not you can try `obj.add_uv_mapping()` for that.

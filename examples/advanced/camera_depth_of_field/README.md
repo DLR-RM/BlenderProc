@@ -27,80 +27,13 @@ Visualize the generated data:
 blenderproc vis_hdf5 examples/advanced/camera_depth_of_field/output/0.hdf5
 ```
 
-## Steps
-
-* Loads `scene.obj`: `loader.ObjectLoader` module.
-* Creates a point light: `lighting.LightLoader` module.
-* Create an empty plain axes, which is used as the focus point for the scene: `constructor.BasicEmptyInitializer` module
-* Samples camera positions randomly above the plane looking at the point of interest. It also introduces a depth of field focused on the created plain axes: `camera.CameraSampler` module
-* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
-
-## Config file
-
-### BasicEmptyInitializer
+## Implementation
 
 ```python
-{
-  "module": "constructor.BasicEmptyInitializer",
-  "config": {
-    "empties_to_add": [
-      {
-        "type": "plain_axes",
-        "name": "Camera Focus Point",
-        "location": [0.5, -1.5, 3]
-      }
-    ]
-  }
-},
+# Create an empty object which will represent the cameras focus point
+focus_point = bproc.object.create_empty("Camera Focus Point")
+focus_point.set_location([0.5, -1.5, 3])
+
+# Set the empty object as focus point and set fstop to regulate the sharpness of the scene
+bproc.camera.add_depth_of_field(focus_point, fstop_value=0.25)
 ```
-
-This module creates an empty object of type plain_axes. It does not have any mesh data and can not be seen in the final image, but we can use it as a focal point for the scene.
-
-### Camera sampling & Depth of field
-
-```python
-{
-  "module": "camera.CameraSampler",
-  "config": {
-    "intrinsics": {
-
-      "depth_of_field": {
-        "fstop": 0.25,
-        "focal_object": {
-          "provider": "getter.Entity",
-          "conditions": {
-            "name": "Camera Focus Point"
-          }
-        }
-      }
-    },
-    "cam_poses": [
-      {
-        "number_of_samples": 5,
-        "location": {
-          "provider":"sampler.PartSphere",
-          "center": [0, 0, 0],
-          "radius": 7,
-          "mode": "SURFACE",
-          "distance_above_center": 1.0,
-        },
-        "rotation": {
-          "format": "look_at",
-          "value": {
-            "provider": "getter.POI"
-          }
-        }
-      }
-    ]
-  }
-}
-```
-
-The `camera.CameraSampler` module allows sampling camera positions and orientations. 
-In this example, all camera poses are constrained to "look at" a point of interest (POI).
-
-* Sample location uniformly on the surface of a part sphere, which has a radius of 7 and each valid point has to be at least 1.0 above the center of that sphere.
-* Set orientation of the camera such that it will always look at the POI in any pose.
-* Finally, we use the intrinsics to introduce a depth of field effect, by setting the fstop to 0.25 and the focal object to the newly generated `"Camera Focus Point"`
-

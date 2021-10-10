@@ -22,7 +22,7 @@ blenderproc run examples/advanced/coco_annotations/main.py examples/resources/ca
 You can use vis_coco_annotation.py with the following command to visualize the annotations blended over a rendered rgb image:
 
 ```
-python scripts/vis_coco_annotation.py [-i <image index>] [-c <coco annotations json>] [-b <base folder of coco json and image files>]
+blenderproc vis_coco [-i <image index>] [-c <coco annotations json>] [-b <base folder of coco json and image files>]
 ```
 
 ### Working Examples
@@ -30,49 +30,36 @@ python scripts/vis_coco_annotation.py [-i <image index>] [-c <coco annotations j
 With specific values:
 
 ```
-python scripts/vis_coco_annotation.py -i 1 -c coco_annotations.json -b examples/advanced/coco_annotations/output/coco_data
+blenderproc vis_coco -i 1 -c coco_annotations.json -b examples/advanced/coco_annotations/output/coco_data
 ```
 
 Above are also the default values, i.e. for the same result call:
 
 ```
-python scripts/vis_coco_annotation.py
+blenderproc vis_coco
 ```
 
-## Steps
-
-* Loads `scene.blend`: `loader.BlendLoader` module. The `BlendLoader` is used here as we always load the `cp_category_id` for each object, which is stored in the `.blend` file.
-* Creates a point light: `lighting.LightLoader` module.
-* Loads camera positions from `camera_positions`: `camera.CameraLoader` module.
-* Renders rgb: `renderer.RgbRenderer` module.
-* Renders instance segmentation: `renderer.SegMapRenderer` module.
-* Writes coco annotations: `writer.CocoAnnotationsWriter` module.
-<!-- * Writes the output to .hdf5 containers: `writer.Hdf5Writer` module. -->
-
-## Config file
-
-### SegMapRenderer
+## Implementation
 
 ```python
-  {
-    "module": "renderer.SegMapRenderer",
-    "config": {
-      "map_by": ["instance", "class", "name"],
-    }
-  }
+# Set some category ids for loaded objects
+for j, obj in enumerate(objs):
+    obj.set_cp("category_id", j+1)
+
+# Render segmentation data and produce instance attribute maps
+seg_data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
 ```
 
-The `renderer.SegMapRenderer` needs to render both instance and class maps. The class is defined in terms of a custom property `category_id` which must be previously defined for each instance. The `category_id` can be either set in a custom Loader module or in a `.blend` file.
-We also add `"name"` to the mapping, s.t. we can later use the object's names for labeling the categories in the coco annotations writer. 
-
-### CocoAnnotationsWriter
+To create coco annotations we need to render both instance and class maps. The class is defined in terms of a custom property `category_id` which must be previously defined for each instance. The `category_id` can be either set by a custom property as above or in a loader or can be directly defined in a `.blend` file.
+We also add `"name"` to the mapping, s.t. we can later use the object's names for labeling the categories in the coco annotations writer.
 
 ```python
-  {
-    "module": "writer.CocoAnnotationsWriter",
-    "config": {
-    }
-  }
+# Write data to coco file
+bproc.writer.write_coco_annotations(os.path.join(args.output_dir, 'coco_data'),
+                                    instance_segmaps=seg_data["instance_segmaps"],
+                                    instance_attribute_maps=seg_data["instance_attribute_maps"],
+                                    colors=data["colors"],
+                                    color_file_format="JPEG")
 ```
 
-This modules depends on output from `renderer.SegMapRenderer` and stores annotations in `coco_annotations.json`. Optionally, you can set `"supercategory": "<some_supercategory>"` in the `writer.CocoAnnotationsWriter` config to filter objects by a previously assigned custom property `"supercategory"`.
+This function stores annotations in `coco_annotations.json`. Optionally, you can set `"supercategory": "<some_supercategory>"` in the `writer.CocoAnnotationsWriter` config to filter objects by a previously assigned custom property `"supercategory"`.
