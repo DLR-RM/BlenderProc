@@ -11,7 +11,7 @@ Afterwards, they return a dictionary containing the rendered images grouped by t
 }
 ```
 
-Here two rgb frames were rendered with normals and distance output activated.
+Here the scene was rendered from the view of two camera poses with normals and distance output activated.
 
 
 ## RGB renderer
@@ -33,7 +33,7 @@ bproc.renderer.enable_depth_output()
 bproc.renderer.enable_normals_output()
 ```
 
-It important to not the difference between depth and distance here:
+It is important to note the difference between depth and distance here:
 By using `bproc.renderer.enable_distance_output()`, an antialiased distance image is rendered. To render a z-buffer depth image without any smoothing effects use `bproc.renderer.enable_depth_output()` instead. 
 While distance and depth images sound similar, they are not the same: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene. 
 In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
@@ -59,11 +59,35 @@ Per default "INTEL" is used.
 
 ## Segmentation renderer
 
-TODO
+In segmentation images every pixel corresponding to the same object is set to the same object related number.
+The kind of number that is used for a given object is determined by the `map_by` parameter:
+
+* `"instance"`: Each object gets assigned a unique id (consistent across all frames), s.t. the resulting images can be used for instane segmentation.
+* `"class"`: The custom property `category_id` of each object is used, which usually results in semantic segmentation images.
+*  Addionally, any other attribute / custom property can be used. If the attribute is not a number, an instance segmentation image is returned together with a mapping from instance id to the desired non-numerical attribute.
+
+When multiple `map_by` parameters are given, then also multiple segmentation maps are returned.
+For example:
 
 ```python
-data = bproc.renderer.render_segmap()
+data = bproc.renderer.render_segmap(map_by=["instance", "class", "name"])
 ```
+
+The returned data will contain (assuming two registered frames / camera poses):
+
+```json
+{
+  "instace_segmaps": [<np.array, [512, 512]>, <np.array, [512, 512]>],
+  "class_segmaps": [<np.array, [512, 512]>, <np.array, [512, 512]>],
+  "instance_attribute_maps": [
+    [{"idx": 0, "name":  "<object_name_0>"}, {"idx": 1, "name":  "<object_name_1>"}, ...],
+    [{"idx": 0, "name":  "<object_name_0>"}, {"idx": 1, "name":  "<object_name_1>"}, ...]
+  ],
+}
+```
+
+For names the mapping will stay the same across different frames, however, there are attributes that can change from frame to frame. 
+Thats why `instance_attribute_maps` are also given per frame.
 
 ## Optical flow renderer
 
@@ -73,3 +97,7 @@ data = bproc.renderer.render_optical_flow()
 ```
 
 Here each pixel describes the change from the current frame to the next (forward) or the previous (backward) frame.
+
+--- 
+
+Next tutorial: [Writing the results to file](writer.md)

@@ -25,10 +25,10 @@ pip install blenderproc
 
 ### Git clone
 
-If you need to make changes to blenderproc or you want to make use of the most recent changes:
+If you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:
 
 ```bash
-git clone
+git clone https://github.com/DLR-RM/BlenderProc
 ```
 
 To still make use of the blenderproc command and therefore use blenderproc anywhere on your system, make a local pip installation:
@@ -49,7 +49,7 @@ blenderproc run <your_python_script>
 
 In general, one run of your script first loads or constructs a 3D scene, then sets some camera positions inside this scene and renders different types of images (rgb, distance, normals etc.) for each of them.
 In the usual case, to create a big diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.
-It is also possible to render multiple times in one script call, read here how its done. TODO
+With a little more experience, it is also possible to render multiple times in one script call, read [here](docs/tutorials/key_frames.md#render-multiple-times) how its done.
 
 ## Quickstart
 
@@ -114,7 +114,7 @@ The pipeline can be run multiple times, as in the beginning of each run the scen
 
 ## What to do next?
 
-As you now ran your first BlenderProc script, your ready for the basics:
+As you now ran your first BlenderProc script, your ready to learn the basics:
 
 ### Tutorials
 
@@ -129,7 +129,7 @@ Read through the tutorials, to get to know with the basic principles of how Blen
 
 ### Examples
 
-We provide a lot of [examples](examples/README.md) which explain all features in detail and should help you understand how the config files work. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
+We provide a lot of [examples](examples/README.md) which explain all features in detail and should help you understand how BlenderProc works. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
 
 * [Basic scene](examples/basics/basic/README.md): Basic example, this is the ideal place to start for beginners
 * [Camera sampling](examples/basics/camera_sampling/README.md): Sampling of different camera positions inside of a shape with constraints for the rotation.

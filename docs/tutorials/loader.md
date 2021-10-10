@@ -2,7 +2,7 @@
 
 ## Downloading assets
 
-BlenderProc offers download functionality for many datasets and freely available assets via the `blenderproc` CLI:
+If don't have any data yet, BlenderProc offers download functionality for many datasets and freely available assets via the `blenderproc` CLI:
 
 * `blendeproc download_blenderkit`: Downloads materials and models from blenderkit
 * `blendeproc download_haven`: Downloads HDRIs, Textures and Models from polyhaven.com.
@@ -67,6 +67,25 @@ Or applying a 4x4 transformation matrix on the current pose:
 obj.apply_T(tmat)
 ```
 
+## Custom properties
+
+If you have any user-specific attributes that you want to assign to objects, you should use custom properties.
+In a key-value like fashion you can assign any desired value to a given object.
+
+This is how you set a custom property:
+```python
+obj.set_cp("my_prop", 42)
+```
+
+And that is how you retrieve one:
+```python
+obj.get_cp("my_prop")
+```
+
 ### More information
 
-For more information look at the reference manual of `MeshObject`. TODO
+For more information look at the reference manual of `MeshObject`.
+
+--- 
+
+Next tutorial: [Configuring the camera](camera.md)

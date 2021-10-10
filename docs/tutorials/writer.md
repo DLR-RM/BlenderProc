@@ -29,7 +29,7 @@ obj_states = json.loads(text)
 
 ## Coco Writer
 
-Via `bproc_writer.write_coco_annotations`, rendered instance segmentations written in the COCO format.
+Via `bproc_writer.write_coco_annotations`, rendered instance segmentations are written in the COCO format.
 Read more about the specifications of this format [here](https://cocodataset.org/#format-data)
 
 To visualize a frame written in the COCO format, you can use BlenderProcs CLI:
@@ -39,6 +39,9 @@ blenderproc vis_coco <path_to_file>
 
 ## BOP Writer
 
-With `bproc.writer.write_bop`, depth and RGB images, as well as camera intrinsics and extrinsics are stored in BOP dataset.
+With `bproc.writer.write_bop`, depth and RGB images, as well as camera intrinsics and extrinsics are stored in a BOP dataset.
 Read more about the specifications of the BOP format [here](https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md)
 
+--
+
+Next tutorial: [How key frames work](key_frames.md)

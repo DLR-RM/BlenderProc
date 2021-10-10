@@ -6,9 +6,14 @@ There a multiple ways of setting the intrinsics of the camera.
 
 ### K matrix
 
-The simplest way is to just set the instrinsics via a 3x3 K-matrix.
+The simplest way is to just set the intrinsics via a 3x3 K-matrix.
 
 ```python
+K = np.array([
+    [fx, 0, cx],
+    [0, fy, cy],
+    [0, 0, 1]
+])
 bproc.camera.set_intrinsics_from_K_matrix(K, image_width, image_height)
 ```
 
@@ -35,6 +40,10 @@ Adding a new camera pose is done by specifying the 4x4 transformation matrix fro
 bproc.camera.add_camera_pose(tmat)
 ```
 
-Each time this is method is called, a new key frame is added with the given camera pose assigned to it.
-When calling the renderer afterwards the scene rendered from the view of all registered camera poses.
+Each time this method is called, a new key frame is added with the given camera pose assigned to it.
+When calling the renderer afterwards the scene is rendered from the view of all registered camera poses.
 To learn more about how that works in detail, please read the [key frame](key_frames.md) chapter.
+
+--- 
+
+Next Tutorial: [Rendering the scene](renderer.md)
