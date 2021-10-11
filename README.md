@@ -59,9 +59,9 @@ Therefore, instead of running your script with the usual python interpreter, the
 blenderproc run <your_python_script>
 ```
 
-In general, one run of your script first loads or constructs a 3D scene, then sets some camera positions inside this scene and renders different types of images (rgb, distance, normals etc.) for each of them.
-In the usual case, to create a big diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.
-With a little more experience, it is also possible to render multiple times in one script call, read [here](docs/tutorials/key_frames.md#render-multiple-times) how its done.
+In general, one run of your script first loads or constructs a 3D scene, then sets some camera poses inside this scene and renders different types of images (RGB, distance, semantic segmentation, etc.) for each of those camera poses.
+In the usual case, to create a big and diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.
+With a little more experience, it is also possible to render multiple times in one script call, read [here](docs/tutorials/key_frames.md#render-multiple-times) how this is done.
 
 ## Quickstart
 

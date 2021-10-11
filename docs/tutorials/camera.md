@@ -37,7 +37,7 @@ bproc.camera.set_intrinsics_from_blender_params(lens=field_of_view, lens_unit="F
 Adding a new camera pose is done by specifying the 4x4 transformation matrix from camera to world coordinate system.
 
 ```python
-bproc.camera.add_camera_pose(tmat)
+bproc.camera.add_camera_pose(tmat) # tmat is a 4x4 numpy array
 ```
 
 Each time this method is called, a new key frame is added with the given camera pose assigned to it.
