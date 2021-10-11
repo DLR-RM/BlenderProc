@@ -1,7 +1,7 @@
 # Multiple render calls
 
 <p align="center">
-<img src="../../../images/multi_render.jpg" alt="Front readme image" width=400>
+<img src="../../../images/multi_render.jpg" alt="Front readme image" width=800>
 </p>
 
 In this example we demonstrate how to render multiple times in one session.
