@@ -9,7 +9,7 @@ Renders a SUNCG scene using precomputed camera poses read from file.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/datasets/suncg_basic/config.yaml <path to cam_pose file> <path to house.json> examples/datasets/suncg_basic/output
+blenderpoc run examples/datasets/suncg_basic/config.yaml <path to cam_pose file> <path to house.json> examples/datasets/suncg_basic/output
 ```
 
 * `examples/datasets/suncg_basic/config.yaml`: path to the configuration file with pipeline configuration.
@@ -22,7 +22,7 @@ python run.py examples/datasets/suncg_basic/config.yaml <path to cam_pose file> 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/suncg_basic/output/0.hdf5
+blenderproc vis_hdf5 examples/datasets/suncg_basic/output/0.hdf5
 ```
 
 ## Steps

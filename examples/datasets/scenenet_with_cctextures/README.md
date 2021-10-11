@@ -32,7 +32,7 @@ blenderproc run examples/datasets/scenenet_with_cctextures/main.py <PATH_TO_SCEN
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/scenenet_with_cctextures/output/*.hdf5
+blenderproc vis_hdf5 examples/datasets/scenenet_with_cctextures/output/*.hdf5
 ``` 
 
 ## Steps

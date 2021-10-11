@@ -54,7 +54,7 @@ The three arguments afterwards are used to fill placeholders like `<args:0>` ins
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/front_3d/output/0.hdf5
+blenderproc vis_hdf5 examples/datasets/front_3d/output/0.hdf5
 ```
 
 ## Steps

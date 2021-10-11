@@ -24,7 +24,7 @@ blenderproc run examples/datasets/blenderkit/main.py <PATH_TO_.BLEND_FILE> examp
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```shell
-python scripts/visHdf5Files.py examples/datasets/blenderkit/output/*.hdf5
+blenderproc vis_hdf5 examples/datasets/blenderkit/output/*.hdf5
 ``` 
 
 ## Steps

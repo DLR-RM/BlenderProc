@@ -19,7 +19,7 @@ blenderproc run examples/datasets/replica/main.py <path_to_the_replica_data_fold
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py example/replica/0.hdf5
+blenderproc vis_hdf5 example/replica/0.hdf5
 ```
 
 ## Steps

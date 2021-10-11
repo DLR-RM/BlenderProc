@@ -12,7 +12,7 @@ Both groups of objects can be selected with the `getter.Entity`
 Execute in the Blender-Proc main directory:
 
 ```
-python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to house.json> <path to new object> examples/datasets/suncg_with_object_replacer/output
+blenderpoc run examples/datasets/suncg_with_object_replacer/config.yaml <path to house.json> <path to new object> examples/datasets/suncg_with_object_replacer/output
 ```
 
 * `examples/datasets/suncg_with_object_replacer/config.yaml`: path to the configuration file with pipeline configuration.
@@ -26,7 +26,7 @@ python run.py examples/datasets/suncg_with_object_replacer/config.yaml <path to 
 Visualize the generated data:
 
 ```
-python scripts/visHdf5Files.py example/suncg_with_object_replacer/output/0.hdf5
+blenderproc vis_hdf5 example/suncg_with_object_replacer/output/0.hdf5
 ```
 
 ## Steps

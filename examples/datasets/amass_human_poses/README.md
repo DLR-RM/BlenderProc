@@ -65,7 +65,7 @@ blenderproc run examples/datasets/amass_human_poses/main.py resources/AMASS exam
 In the output folder you will find multiple `.hdf5` files. These can be visualized with the script:
 
 ```shell
-python scripts/visHdf5Files.py examples/datasets/amass_human_poses/output/*.hdf5
+blenderproc vis_hdf5 examples/datasets/amass_human_poses/output/*.hdf5
 ```
 
 ## Steps

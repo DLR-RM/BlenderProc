@@ -26,7 +26,7 @@ blenderproc run examples/datasets/bop_scene_replication/main.py <path_to_bop_dat
 Visualize the generated data and labels:
 
 ```
-python scripts/visHdf5Files.py example/bop_scene_replication/0.hdf5
+blenderproc vis_hdf5 example/bop_scene_replication/0.hdf5
 ```
 
 ## Steps

@@ -25,7 +25,7 @@ blenderproc run examples/datasets/pix3d/main.py <PATH_TO_Pix3D> examples/dataset
 In the output folder you will find a series of `.hdf5` containers. These can be visualized with the script:
 
 ```
-python scripts/visHdf5Files.py examples/datasets/pix3d/output/*.hdf5
+blenderproc vis_hdf5 examples/datasets/pix3d/output/*.hdf5
 ``` 
 
 ## Steps

@@ -25,7 +25,7 @@ blenderproc run examples/datasets/bop_object_pose_sampling/main.py <path_to_bop_
 
 Visualize the generated data and labels:
 ```
-python scripts/visHdf5Files.py examples/datasets/bop_object_pose_sampling/output/0.hdf5
+blenderproc vis_hdf5 examples/datasets/bop_object_pose_sampling/output/0.hdf5
 ```
 
 Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:
