@@ -52,7 +52,7 @@ pip install -e .
 
 ## Usage
 
-BlenderProc has to be run inside the blender python environment, as only in that way we can access all blender features.
+BlenderProc has to be run inside the blender python environment, as only there we can access the blender API. 
 Therefore, instead of running your script with the usual python interpreter, the command line interface of BlenderProc has to be used.
 
 ```bash
