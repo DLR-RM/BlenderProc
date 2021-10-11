@@ -29,7 +29,7 @@ blenderproc vis_hdf5 examples/basics/light_sampling/output/0.hdf5
 
 ### Light sampling
 
-```yaml
+```python
 # Define a light
 light = bproc.types.Light()
 light.set_type("POINT")

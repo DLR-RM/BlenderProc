@@ -49,7 +49,7 @@ This process is repeated until all objects are placed without collisions.
 
 ### Run physics simulation
 
-```yaml
+```python
 # Make all spheres actively participate in the simulation
 for obj in spheres:
   obj.enable_rigidbody(active=True)
