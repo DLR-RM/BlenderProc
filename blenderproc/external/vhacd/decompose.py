@@ -21,14 +21,13 @@ from sys import platform
 
 import git
 
-from blenderproc.python.types.MeshObjectUtility import MeshObject
 import bpy
 from mathutils import Matrix
 import bmesh
 from subprocess import Popen
 import shutil
 
-def convex_decomposition(ob: MeshObject, temp_dir: str, vhacd_path: str, resolution: int = 1000000, name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True, apply_transforms: str = "NONE", depth: int = 20, concavity: float = 0.0025, plane_downsampling: int = 4, convexhull_downsampling: int = 4, alpha: float = 0.05, beta: float = 0.05, gamma: float = 0.00125, pca: bool = False, mode: str = "VOXEL", max_num_vertices_per_ch: int = 32, min_volume_per_ch: float = 0.0001, cache_dir: str = None):
+def convex_decomposition(ob: "MeshObject", temp_dir: str, vhacd_path: str, resolution: int = 1000000, name_template: str = "?_hull_#", remove_doubles: bool = True, apply_modifiers: bool = True, apply_transforms: str = "NONE", depth: int = 20, concavity: float = 0.0025, plane_downsampling: int = 4, convexhull_downsampling: int = 4, alpha: float = 0.05, beta: float = 0.05, gamma: float = 0.00125, pca: bool = False, mode: str = "VOXEL", max_num_vertices_per_ch: int = 32, min_volume_per_ch: float = 0.0001, cache_dir: str = None):
     """ Uses V-HACD to decompose the given object.
 
     You can turn of the usage of OpenCL by setting the environment variable NO_OPENCL to "1".
