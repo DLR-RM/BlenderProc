@@ -606,7 +606,7 @@ def scene_ray_cast(origin: Union[Vector, list, np.ndarray], direction: Union[Vec
             If any object has been hit, the MeshObject otherwise None.
             Some 4x4 matrix.
    """
-    hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.view_layer.depsgraph,
+    hit, location, normal, index, hit_object, matrix = bpy.context.scene.ray_cast(bpy.context.evaluated_depsgraph_get(),
                                                                                   Vector(origin), Vector(direction),
                                                                                   distance=max_distance)
     if hit_object is not None:
