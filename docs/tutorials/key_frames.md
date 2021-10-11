@@ -1,12 +1,12 @@
 # How key frames work
 
 Blender as well as BlenderProc uses key frames to render multiple images in one render call.
-This makes rendering the same scene with e.q. only different camera poses faster, as meshes have to be moved to the graphics card only once.
+This makes rendering the same scene with e.g. only different camera poses faster, as meshes have to be moved to the graphics card only once.
 
 ## Concept
 
 When calling `bproc.renderer.render()` blender will go over all keyframes in the interval `[frame_start, frame_end - 1]` and render the scene once for each keyframe.
-Thereby, each key frame can be assigned to different attribute values, e.q. camera or object poses, which will be set set when the respective key frame is rendered.
+Thereby, each key frame can be assigned to different attribute values, e.g. camera or object poses, which will be set set when the respective key frame is rendered.
 
 ### Camera
 
@@ -16,7 +16,7 @@ You can also set the camera pose to a specific key frame `i` via `bproc.camera.a
 
 ### Objects
 
-When setting object poses, e.q. via `obj.set_location(location)` they are by default set for all key frames.
+When setting object poses, e.g. via `obj.set_location(location)` they are by default set for all key frames.
 If you want to assign object poses to a specific frame `i`, you can make use of the `frame` parameter: `obj.set_location(location, frame=i)`.
 
 

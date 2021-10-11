@@ -1,6 +1,6 @@
 # Physics simulation
 
-For e.q. positioning objects randomly on given surface, BlenderProc offers to use blenders rigid body simulator.
+For e.g. positioning objects randomly on given surface, BlenderProc offers to use blenders rigid body simulator.
 In short, using that simulator, objects are dropped on a surface and then fixed to the position where they come to rest.
 
 ## Rigidy body components

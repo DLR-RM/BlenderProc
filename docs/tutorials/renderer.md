@@ -66,7 +66,8 @@ The kind of number that is used for a given object is determined by the `map_by`
 * `"class"`: The custom property `category_id` of each object is used, which usually results in semantic segmentation images.
 *  Addionally, any other attribute / custom property can be used. If the attribute is not a number, an instance segmentation image is returned together with a mapping from instance id to the desired non-numerical attribute.
 
-When multiple `map_by` parameters are given, then also multiple segmentation maps are returned.
+When multiple`map_by` parameters are given, then also multiple segmentation maps are returned or - if the corresponding attribute is non-numeric - addional mappings are returned in `instance_attribute_maps`.
+
 For example:
 
 ```python

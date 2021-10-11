@@ -20,7 +20,7 @@ with h5py.File("myfile.hdf5") as f:
     colors = np.array(f["colors"])
 ```
 
-To read in json strings saved in the hdf5 File (e.q. object poses), you can make use of the following snippet:
+To read in json strings saved in the hdf5 File (e.g. object poses), you can make use of the following snippet:
 
 ```python
 text = np.array(f["object_states"]).tostring()
