@@ -23,7 +23,7 @@ Alternatively, you can set blender camera parameters directly.
 This means either setting the focal length in mm:
 
 ```python
-bproc.camera.set_intrinsics_from_blender_params(lens=focal_length)
+bproc.camera.set_intrinsics_from_blender_params(lens=focal_length, lens_unit="MILLIMETERS")
 ```
 
 Or setting the field of view:
