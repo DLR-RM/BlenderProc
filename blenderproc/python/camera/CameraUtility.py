@@ -41,8 +41,7 @@ def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
     :return: The 4x4 cam2world transformation matrix.
     """
     with KeyFrame(frame):
-        # The camera object is always at the top level in the scene graph, therefore we can use the always up-to-date matrix_basis instead of matrix_world.
-        return np.array(bpy.context.scene.camera.matrix_basis)
+        return np.array(Entity(bpy.context.scene.camera.matrix_basis).get_local2world_mat())
 
 
 def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: str = 'Y',
