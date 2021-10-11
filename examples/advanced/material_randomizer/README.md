@@ -1,8 +1,8 @@
 # Material Randomization
 
 <div style="text-align:center">
-<img src="../../../images/material_randomizer_rendering.png" alt="alt text" width=430>
-<img src="../../../images/material_randomizer_rendering_switched.png" alt="alt text" width=430>
+<img src="../../../images/material_randomizer_rendering.jpg" alt="alt text" width=430>
+<img src="../../../images/material_randomizer_rendering_switched.jpg" alt="alt text" width=430>
 </div>
 
 In this example we demonstrate how to switch materials.

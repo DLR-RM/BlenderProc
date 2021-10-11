@@ -1,6 +1,6 @@
 # Physics positioning
 
-![](../../../images/physics_positioning_rendering.png)
+![](../../../images/physics_positioning_rendering.jpg)
 
 This example places some spheres randomly across a bumpy plane without any intersections between objects.
 This is done via a physics simulation where the spheres are first placed randomly above the plane and then are influenced by gravity such that they fall down upon the plane until they find a new resting positon.

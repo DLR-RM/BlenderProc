@@ -58,10 +58,17 @@ def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: s
         rotation_matrix = rotation_matrix @ Euler((0.0, 0.0, inplane_rot)).to_matrix()
     return np.array(rotation_matrix)
 
+def set_resolution(image_width: int = None, image_height: int = None):
+    """ Sets the camera resolution.
+    
+    :param image_width: The image width in pixels.
+    :param image_height: The image height in pixels.
+    """
+    set_intrinsics_from_blender_params(None, image_width, image_height)
 
-def set_intrinsics_from_blender_params(lens: float, image_width: int, image_height: int, clip_start: float = 0.1,
-                                       clip_end: float = 1000, pixel_aspect_x: float = 1, pixel_aspect_y: float = 1,
-                                       shift_x: float = 0, shift_y: float = 0, lens_unit: str = "MILLIMETERS"):
+
+def set_intrinsics_from_blender_params(lens: float = None, image_width: int = None, image_height: int = None, clip_start: float = None, clip_end: float = None, 
+                                       pixel_aspect_x: float = None, pixel_aspect_y: float = None, shift_x: int = None, shift_y: int = None, lens_unit: str = None):
     """ Sets the camera intrinsics using blenders represenation.
 
     :param lens: Either the focal length in millimeters or the FOV in radians, depending on the given lens_unit.
@@ -75,37 +82,47 @@ def set_intrinsics_from_blender_params(lens: float, image_width: int, image_heig
     :param shift_y: The shift in y direction.
     :param lens_unit: Either FOV or MILLIMETERS depending on whether the lens is defined as focal length in millimeters or as FOV in radians.
     """
+    
     cam_ob = bpy.context.scene.camera
     cam = cam_ob.data
 
-    # Set focal length
-    if lens_unit == 'MILLIMETERS':
+    if lens_unit is not None:
         cam.lens_unit = lens_unit
-        if lens < 1:
-            raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(lens))
-        cam.lens = lens
-    elif lens_unit == "FOV":
-        cam.lens_unit = lens_unit
-        cam.angle = lens
-    else:
-        raise Exception("No such lens unit: " + lens_unit)
+        
+    if lens is not None:
+        # Set focal length
+        if cam.lens_unit == 'MILLIMETERS':
+            if lens < 1:
+                raise Exception("The focal length is smaller than 1mm which is not allowed in blender: " + str(lens))
+            cam.lens = lens
+        elif cam.lens_unit == "FOV":
+            cam.angle = lens
+        else:
+            raise Exception("No such lens unit: " + lens_unit)
 
     # Set resolution
-    bpy.context.scene.render.resolution_x = image_width
-    bpy.context.scene.render.resolution_y = image_height
-
+    if image_width is not None:
+        bpy.context.scene.render.resolution_x = image_width
+    if image_height is not None:
+        bpy.context.scene.render.resolution_y = image_height
+        
     # Set clipping
-    cam.clip_start = clip_start
-    cam.clip_end = clip_end
+    if clip_start is not None:
+        cam.clip_start = clip_start
+    if clip_end is not None:
+        cam.clip_end = clip_end
 
     # Set aspect ratio
-    bpy.context.scene.render.pixel_aspect_x = pixel_aspect_x
-    bpy.context.scene.render.pixel_aspect_y = pixel_aspect_y
+    if pixel_aspect_x is not None:
+        bpy.context.scene.render.pixel_aspect_x = pixel_aspect_x
+    if pixel_aspect_y is not None:
+        bpy.context.scene.render.pixel_aspect_y = pixel_aspect_y
 
     # Set shift
-    cam.shift_x = shift_x
-    cam.shift_y = shift_y
-
+    if shift_x is not None:
+        cam.shift_x = shift_x
+    if shift_y is not None:
+        cam.shift_y = shift_y
 
 def set_stereo_parameters(convergence_mode: str, convergence_distance: float, interocular_distance: float):
     """ Sets the stereo parameters of the camera.
@@ -168,7 +185,7 @@ def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int,
     shift_y = (cy - (image_height - 1) / 2) / view_fac_in_px * pixel_aspect_ratio
 
     # Finally set all intrinsics
-    set_intrinsics_from_blender_params(f_in_mm, image_width, image_height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, shift_x, shift_y)
+    set_intrinsics_from_blender_params(f_in_mm, image_width, image_height, clip_start, clip_end, pixel_aspect_x, pixel_aspect_y, shift_x, shift_y, "MILLIMETERS")
 
 
 def get_sensor_size(cam: bpy.types.Camera) -> float:

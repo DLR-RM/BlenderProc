@@ -22,18 +22,19 @@ from blenderproc.python.utility.SetupUtility import SetupUtility
 class InstallUtility:
 
     @staticmethod
-    def determine_blender_install_path(is_config: bool, args: List[str]) -> Union[str, str]:
+    def determine_blender_install_path(is_config: bool, args: List[str], user_args: List[str]) -> Union[str, str]:
         """ Determines the path of the blender installation
 
         :param is_config: Whether a yaml config file was given instead of a python script.
         :param args: The given command line arguments.
+        :param user_args: The arguments that will be forwarded to the users script.
         :return:
                - The path to an already existing blender installation that should be used, otherwise None
                - The path to where blender should be installed.
         """
         if is_config:
             config_parser = ConfigParser()
-            config = config_parser.parse(args.file, args.args, False)  # Don't parse placeholder args in batch mode.
+            config = config_parser.parse(args.file, user_args, False)  # Don't parse placeholder args in batch mode.
             setup_config = config["setup"]
             custom_blender_path = setup_config["custom_blender_path"] if "custom_blender_path" in setup_config else args.custom_blender_path
             blender_install_path = setup_config["blender_install_path"] if "blender_install_path" in setup_config else args.blender_install_path
@@ -47,7 +48,7 @@ class InstallUtility:
         return custom_blender_path, blender_install_path
 
     @staticmethod
-    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool) -> Union[str, str]:
+    def make_sure_blender_is_installed(custom_blender_path: str, blender_install_path: str, reinstall_blender: bool = False) -> Union[str, str]:
         """ Make sure blender is installed.
 
         :param custom_blender_path: The path to an already existing blender installation that should be used, otherwise None.
