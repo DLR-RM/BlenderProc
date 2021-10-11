@@ -2,7 +2,7 @@
 
 ## Intrinsics
 
-There a multiple ways of setting the intrinsics of the camera.
+There are multiple ways of setting the intrinsics of the camera.
 
 ### K matrix
 
