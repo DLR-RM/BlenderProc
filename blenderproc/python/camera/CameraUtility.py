@@ -41,7 +41,7 @@ def get_camera_pose(frame: Optional[int] = None) -> np.ndarray:
     :return: The 4x4 cam2world transformation matrix.
     """
     with KeyFrame(frame):
-        return np.array(Entity(bpy.context.scene.camera.matrix_basis).get_local2world_mat())
+        return np.array(Entity(bpy.context.scene.camera).get_local2world_mat())
 
 
 def rotation_from_forward_vec(forward_vec: Union[np.ndarray, Vector], up_axis: str = 'Y',
