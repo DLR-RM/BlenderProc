@@ -64,7 +64,7 @@ This module creates an empty object of type plain_axes. It does not have any mes
   "module": "camera.CameraSampler",
   "config": {
     "intrinsics": {
-      "fov": 1,
+
       "depth_of_field": {
         "fstop": 0.25,
         "focal_object": {

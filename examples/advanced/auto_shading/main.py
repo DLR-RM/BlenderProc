@@ -35,7 +35,7 @@ light.set_location([3, -8, 5])
 light.set_energy(1000)
 
 # define the camera intrinsics
-bproc.camera.set_intrinsics_from_blender_params(1, 800, 600, lens_unit="FOV")
+bproc.camera.set_resolution(800, 600)
 
 # read the camera positions file and convert into homogeneous camera-world transformation
 with open(args.camera, "r") as f:
