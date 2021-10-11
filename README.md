@@ -4,7 +4,7 @@
 [![Open In Collab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/DLR-RM/BlenderProc/blob/main/examples/basics/basic/basic_example.ipynb)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-A procedural Blender pipeline for photorealistic training image generation.
+A procedural Blender pipeline for photorealistic image generation.
 
 <p align="center">
 <img src="images/readme.jpg" alt="Front readme image" width=500>

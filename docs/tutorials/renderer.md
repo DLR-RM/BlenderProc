@@ -77,7 +77,7 @@ The returned data will contain (assuming two registered frames / camera poses):
 
 ```json
 {
-  "instace_segmaps": [<np.array, [512, 512]>, <np.array, [512, 512]>],
+  "instance_segmaps": [<np.array, [512, 512]>, <np.array, [512, 512]>],
   "class_segmaps": [<np.array, [512, 512]>, <np.array, [512, 512]>],
   "instance_attribute_maps": [
     [{"idx": 0, "name":  "<object_name_0>"}, {"idx": 1, "name":  "<object_name_1>"}, ...],
