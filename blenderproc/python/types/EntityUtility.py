@@ -81,7 +81,7 @@ class Entity(Struct):
 
         :param transform: A 4x4 matrix representing the transformation.
         """
-        self.blender_obj.matrix_world = self.get_local2world_mat() @ Matrix(transform)
+        self.blender_obj.matrix_world = Matrix(self.get_local2world_mat()) @ Matrix(transform)
 
     def set_local2world_mat(self, matrix_world: Union[np.ndarray, Matrix]):
         """ Sets the pose of the object in the form of a local2world matrix.
