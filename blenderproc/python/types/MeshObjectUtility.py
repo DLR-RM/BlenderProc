@@ -127,7 +127,8 @@ class MeshObject(Entity):
         :return: 8x3 array describing the object aligned bounding box coordinates in world coordinates
         """
         if not local_coords:
-            return np.array([self.get_local2world_mat() @ Vector(cord) for cord in self.blender_obj.bound_box])
+            local2world = Matrix(self.get_local2world_mat())
+            return np.array([local2world @ Vector(cord) for cord in self.blender_obj.bound_box])
         else:
             return np.array([Vector(cord) for cord in self.blender_obj.bound_box])
 
