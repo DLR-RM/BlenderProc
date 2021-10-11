@@ -42,12 +42,16 @@ blenderproc vis_hdf5 examples/advanced/motion_blur_rolling_shutter/output/0.hdf5
 
 ## Implementation
 
+### Motion Blur
+
 ```python
 # Enable motion blur
 bproc.renderer.enable_motion_blur(motion_blur_length=0.5)
 ```
 
 * `motion_blur_length` sets the time the shutter is open as fraction of the time between two frames. A value of `1` thus leaves the shutter open for the full time. The shutter opens half the `motion_blur_length` before the keyframe pose and closes half the time after.
+
+### Rolling Shutter
 
 ```python
 # Enable motion blur and rolling shutter
