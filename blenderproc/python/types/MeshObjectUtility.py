@@ -221,7 +221,7 @@ class MeshObject(Entity):
             temp_dir = Utility.get_temporary_directory()
 
         # Decompose the object
-        parts = convex_decomposition(self.blender_obj, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir))
+        parts = convex_decomposition(self, temp_dir, resolve_path(vhacd_path), cache_dir=resolve_path(cache_dir))
         parts = [MeshObject(p) for p in parts]
 
         # Make the convex parts children of this object, enable their rigid body component and hide them
