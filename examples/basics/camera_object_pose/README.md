@@ -86,7 +86,7 @@ depth = bproc.postprocessing.dist2depth(data["distance"])
 bproc.writer.write_bop(args.output_dir, depth, data["colors"], m2mm=True, append_to_existing_output=True)
 ```
 
-* After rendering the distance images are postprocessed to depth images. There is a difference between the two: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
+* After rendering, the distance images are postprocessed to depth images. There is a difference between the two: In [distance images](https://en.wikipedia.org/wiki/Range_imaging), each pixel contains the actual distance from the camera position to the corresponding point in the scene.  In [depth images](https://en.wikipedia.org/wiki/Depth_map), each pixel contains the distance between the camera and the plane parallel to the camera which the corresponding point lies on.
 * Saves all pose and camera information that is provided in BOP datasets.
 * `"m2mm"` converts the pose to mm as in the original bop annotations. Set to False if you want it in meters.
 * `"append_to_existing_output"` means that if the same output folder is chosen, data will be accumulated and not overwritten

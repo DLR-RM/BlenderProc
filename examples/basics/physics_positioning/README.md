@@ -61,7 +61,7 @@ ground.enable_rigidbody(active=False, collision_shape="MESH")
 bproc.object.simulate_physics_and_fix_final_poses(min_simulation_time=4, max_simulation_time=20, check_object_interval=1)
 ```
 
-We now set all sphere objects to be active by enabling the rigidbody attribute on them. For the ground the active attribute is set to False, meaning that is will be passive in the scene.
+We now set all sphere objects to be active by enabling the rigidbody attribute on them. For the ground the active attribute is set to False, meaning that it will be passive in the scene.
 But active objects are able to interact with it. The collision shape for the ground is `MESH`, instead of the default `CONVEX_HULL`.
 Keep in mind that using the mesh collision shape in more complex use-cases can cause performance and glitch issues. 
 If you experience those it is better to checkout the [physics_convex_decomposition](../../advanced/physics_convex_decomposition/README.md).

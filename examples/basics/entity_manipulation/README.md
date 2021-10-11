@@ -49,4 +49,4 @@ If we want more than just one element we could have used the `bproc.filter.by_at
 NOTE: any given attribute_value of the type string can be treated as a *REGULAR EXPRESSION*, by setting `regex=True` in the `one_by_attr` fct. call. 
 So `"name": 'Cylinder.*'` condition will select us all three cylinders in the scene.
 
-For possible all possible `attribute_name`'s check the official blender documentation: https://docs.blender.org/api/current/bpy.types.Object.html.
+For all possible `attribute_name`'s check the official blender documentation: https://docs.blender.org/api/current/bpy.types.Object.html.

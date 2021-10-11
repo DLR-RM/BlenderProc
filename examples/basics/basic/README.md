@@ -9,7 +9,7 @@ In this example we demonstrate the basic functionality of BlenderProc.
 
 ## Usage
 
-Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically download blender, see the python run file if you want to change the installation path:
+Execute in the BlenderProc main directory, if this is the first time BlenderProc is executed. It will automatically download blender, see the CLI arguments if you want to change the installation path:
 
 ```
 blenderproc run examples/basics/basic/main.py examples/resources/camera_positions examples/resources/scene.obj examples/basics/basic/output
@@ -50,7 +50,7 @@ This sets up the `blenderproc` environment. `blenderproc` has to be the first im
 bproc.init()
 ```
 
-This inits does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates a camera).
+This init does some basic initialization of the blender project (e.q. sets background color, configures computing device, creates a camera).
 
 #### Object loading
 
@@ -101,7 +101,6 @@ The file format here is:
 location_x location_y location_z  rotation_euler_x rotation_euler_y rotation_euler_z
 ```
 
-This will also write the cam poses into extra `.npy` files, while rendering, which are located inside the `temp_dir` (default: /dev/shm/blender_proc_$pid). This is just some meta information, so we can later clearly say which image had been taken using which cam pose.
 
 => Creates the files `campose_0000.npy` and `campose_0001.npy` 
 
@@ -135,7 +134,7 @@ In this example all of these are temporary and are read in directly after render
 These are then packed into a dictionary and returned and saved in the `data` variable.
 
 FAQ: Why are they stored on disc if we read them directly in again? 
-- Blender offers no option than to first save them to disc and afterwards reading them in again.
+- Blender offers no other option than to first save them to disc and afterwards reading them in again.
 
 #### Hdf5 Writing 
 
