@@ -2,17 +2,17 @@
 
 ![](../../../images/suncg_with_cam_sampling_output-summary.jpg)
 
-In contrast to the SUNCG basic example, we do here not load precomputed camera poses, but sample them using the `SuncgCameraSampler` module.
+In contrast to the SUNCG basic example, we do not load precomputed camera poses here, but sample them.
 
 ## Usage
 
 Execute in the BlenderProc main directory:
 
 ```
-blenderpoc run examples/datasets/suncg_with_cam_sampling/config.yaml <path to house.json> examples/datasets/suncg_with_cam_sampling/output
+blenderpoc run examples/datasets/suncg_with_cam_sampling/main.py <path to house.json> examples/datasets/suncg_with_cam_sampling/output
 ```
 
-* `examples/datasets/suncg_with_cam_sampling/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/suncg_with_cam_sampling/main.py`: path to the python file with pipeline configuration.
 * `<path to house.json>`: Path to the house.json file of the SUNCG scene you want to render.
 * `examples/datasets/suncg_with_cam_sampling/output`: path to the output directory.
 
@@ -26,46 +26,41 @@ blenderproc vis_hdf5 examples/datasets/suncg_with_cam_sampling/output/0.hdf5
 
 ## Steps
 
-* Loads a SUNCG scene: `loader.SuncgLoader` module.
-* Sample camera positions inside every room: `camera.SuncgCameraSampler` module.
-* Automatically adds light sources inside each room: `lighting.SuncgLighting` module.
-* Writes sampled camera poses to file: `writer.CameraStateWriter` module.
-* Renders semantic segmentation map: `renderer.SegMapRenderer` module.
-* Renders rgb, distance and normals: `renderer.RgbRenderer` module.
-* Merges all into an `.hdf5` file: `writer.Hdf5Writer` module.
+* Loads a SUNCG scene.
+* Sample camera positions inside every room.
+* Automatically adds light sources inside each room.
+* Writes sampled camera poses to file.
+* Renders semantic segmentation map.
+* Renders rgb, distance and normals.
+* Merges all into an `.hdf5` file.
 
-## Config file
+## Python file (main.py)
 
 ### SuncgCameraSampler
 
-```yaml
-{
-  "module": "camera.SuncgCameraSampler",
-  "config": {
-    "cam_poses": [{
-      "number_of_samples": 10,
-      "proximity_checks": {
-        "min": 1.0
-      },
-      "min_interest_score": 0.4,
-      "location": {
-        "provider":"sampler.Uniform3d",
-        "max":[0, 0, 2],
-        "min":[0, 0, 0.5]
-      },
-      "rotation": {
-        "value": {
-          "provider":"sampler.Uniform3d",
-          "max":[1.2217, 0, 6.283185307],
-          "min":[1.2217, 0, 0]
-        }
-      },
-    }]
-  }
-}
+```python
+# Init sampler for sampling locations inside the loaded suncg house
+point_sampler = bproc.sampler.SuncgPointInRoomSampler(objs)
+# Init bvh tree containing all mesh objects
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([o for o in objs if isinstance(o, bproc.types.MeshObject)])
+poses = 0
+tries = 0
+while tries < 10000 and poses < 5:
+    # Sample point inside house
+    height = np.random.uniform(0.5, 2)
+    location, _ = point_sampler.sample(height)
+    # Sample rotation (fix around X and Y axis)
+    euler_rotation = np.random.uniform([1.2217, 0, 0], [1.2217, 0, 6.283185307])
+    cam2world_matrix = bproc.math.build_transformation_mat(location, euler_rotation)
+
+    # Check that obstacles are at least 1 meter away from the camera and make sure the view interesting enough
+    if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0}, bvh_tree) and bproc.camera.scene_coverage_score(cam2world_matrix) > 0.4:
+        bproc.camera.add_camera_pose(cam2world_matrix)
+        poses += 1
+    tries += 
 ```
 
-With this module we want to sample `10` valid camera poses inside the loaded SUNCG rooms. 
+With this we want to sample `5` valid camera poses inside the loaded SUNCG rooms. 
 The x and y coordinate are hereby automatically sampled uniformly across a random room, while we configure the z coordinate to lie between `0.5m` and `2m` above the ground.
 Regarding the camera rotation we fix the pitch angle to `70°`, the roll angle to `0°` and sample the yaw angle uniformly between `0°` and `360°`. 
 
