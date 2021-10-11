@@ -121,14 +121,13 @@ class MeshObject(Entity):
         bpy.ops.transform.translate(value=[-bb_center[0], -bb_center[1], -bb_min_z_value])
         bpy.ops.object.mode_set(mode='OBJECT')
         self.deselect()
-        bpy.context.view_layer.update()
 
     def get_bound_box(self, local_coords: bool = False) -> np.ndarray:
         """
         :return: 8x3 array describing the object aligned bounding box coordinates in world coordinates
         """
         if not local_coords:
-            return np.array([self.blender_obj.matrix_world @ Vector(cord) for cord in self.blender_obj.bound_box])
+            return np.array([self.get_local2world_mat() @ Vector(cord) for cord in self.blender_obj.bound_box])
         else:
             return np.array([Vector(cord) for cord in self.blender_obj.bound_box])
 
@@ -244,7 +243,7 @@ class MeshObject(Entity):
         :param new_parent: The new parent object.
         """
         self.blender_obj.parent = new_parent.blender_obj
-        self.blender_obj.matrix_parent_inverse = new_parent.blender_obj.matrix_world.inverted()
+        self.blender_obj.matrix_parent_inverse = Matrix(new_parent.get_local2world_mat()).inverted()
 
     def get_parent(self) -> Optional[Entity]:
         """ Returns the parent object.

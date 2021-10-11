@@ -12,7 +12,7 @@ class CollisionUtility:
     @staticmethod
     def check_intersections(obj: MeshObject, bvh_cache: Dict[str, mathutils.bvhtree.BVHTree],
                             objects_to_check_against: List[MeshObject],
-                            list_of_objects_with_no_inside_check: List[MeshObject], skip_view_layer_update: bool = False):
+                            list_of_objects_with_no_inside_check: List[MeshObject]):
         """ Checks if a object intersects with any object given in the list.
 
         The bvh_cache adds all current objects to the bvh tree, which increases the speed.
@@ -27,13 +27,8 @@ class CollisionUtility:
         :param list_of_objects_with_no_inside_check: List of objects on which no inside check is performed. \
                                                      This check is only done for the objects in \
                                                      `objects_to_check_against`. Type: :class:`list`
-        :param skip_view_layer_update: The view layer needs to be updated to make the collision check work.
-                                       Set this to True, to skip this step, if it has already been done before.
         :return: Type: :class:`bool`, True if no collision was found, false if at least one collision was found
         """
-        if not skip_view_layer_update:
-            # Update the view layer, otherwise the object poses might not be up-to-date and collisions fail
-            bpy.context.view_layer.update()
 
         no_collision = True
         # Now check for collisions

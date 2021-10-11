@@ -347,8 +347,6 @@ class EntityManipulator(Module):
                 # but if the name is new then new custom property will be created
                 elif requested_cp:
                     entity[key_copy] = value
-                    
-        bpy.context.view_layer.update()
 
     def _get_the_set_params(self, params_conf: Config):
         """ Extracts actual values to set from a Config object.

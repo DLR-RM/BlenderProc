@@ -81,7 +81,7 @@ class Entity(Struct):
 
         :param transform: A 4x4 matrix representing the transformation.
         """
-        self.blender_obj.matrix_world @= Matrix(transform)
+        self.blender_obj.matrix_world = self.get_local2world_mat() @ Matrix(transform)
 
     def set_local2world_mat(self, matrix_world: Union[np.ndarray, Matrix]):
         """ Sets the pose of the object in the form of a local2world matrix.
@@ -96,7 +96,17 @@ class Entity(Struct):
 
         :return: The 4x4 local2world matrix.
         """
-        return np.array(self.blender_obj.matrix_world)
+        obj = self.blender_obj
+        # Start with local2parent matrix (if obj has no parent, that equals local2world)
+        matrix_world = obj.matrix_basis
+
+        # Go up the scene graph along all parents
+        while obj.parent is not None:
+            # Add transformation to parent frame
+            matrix_world = obj.parent.matrix_basis @ obj.matrix_parent_inverse @ matrix_world
+            obj = obj.parent
+
+        return np.array(matrix_world)
 
     def select(self):
         """ Selects the entity. """
