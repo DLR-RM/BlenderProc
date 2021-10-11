@@ -14,18 +14,15 @@ A procedural Blender pipeline for photorealistic training image generation.
 [Documentation](https://dlr-rm.github.io/BlenderProc) | [Tutorials](#tutorials) | [Examples](#examples) | [ArXiv paper](https://arxiv.org/abs/1911.01911) | [Workshop paper](https://sim2real.github.io/assets/papers/2020/denninger.pdf)
 ## Features
 
-* Loading: `*.obj`, `*.ply`, SunCG, Replica scenes, BOP datasets, etc.
+* Loading: `*.obj`, `*.ply`, BOP datasets, ShapeNet, Haven, 3D-FRONT, etc.
 * Objects: Sample object poses, apply physics and collision checking.
-import blenderproc as bproc
 * Materials: Set or sample physically-based materials and textures
-import numpy as np
-* Lighting: Set or sample lights, automatic lighting of SunCG scenes.
-* Cameras: set, sample or load camera poses from file.
+* Lighting: Set or sample lights, automatic lighting of 3D-FRONT scenes.
+* Cameras: Set, sample or load camera poses from file.
 * Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
 * Writing: .hdf5 containers, COCO & BOP annotations.
 
 ..and many more ([docu](https://dlr-rm.github.io/BlenderProc)). For advanced/custom functionalities, you can easily write and integrate your [own modules](blenderproc/README.md#writing-your-own-modules).
-bproc.init()
 
 
 ## Installation
