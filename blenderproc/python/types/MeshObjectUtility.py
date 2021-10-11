@@ -211,7 +211,7 @@ class MeshObject(Entity):
         else:
             rigid_body.mass = mass
 
-    def build_convex_decomposition_collision_shape(self, vhacd_path: str, temp_dir: str = None, cache_dir: str = "resources/decomposition_cache"):
+    def build_convex_decomposition_collision_shape(self, vhacd_path: str, temp_dir: str = None, cache_dir: str = "blenderproc_resources/decomposition_cache"):
         """ Builds a collision shape of the object by decomposing it into near convex parts using V-HACD
 
         :param vhacd_path: The directory in which vhacd should be installed or is already installed.
