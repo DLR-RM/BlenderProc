@@ -30,7 +30,7 @@ python scripts/visHdf5Files.py examples/datasets/bop_object_pose_sampling/output
 
 Alternatively, since we generated COCO annotations, you can also visualize the generated coco_annotations.json file:
 ```
-python scripts/vis_coco_annotation.py /path/to/output_dir
+blenderproc vis_coco /path/to/output_dir
 ``` 
 
 ## Steps
