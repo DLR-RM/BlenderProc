@@ -75,10 +75,10 @@ class CollisionUtility:
         b2w = obj2.get_bound_box()
         # get min and max point of the axis-aligned bounding box
         min_b2, max_b2 = min_and_max_point(b2w)
-        return CollisionUtility._check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
+        return CollisionUtility.check_bb_intersection_on_values(min_b1, max_b1, min_b2, max_b2)
 
     @staticmethod
-    def _check_bb_intersection_on_values(min_b1: list, max_b1: list, min_b2: list, max_b2: list, used_check=lambda a, b: a >= b):
+    def check_bb_intersection_on_values(min_b1: list, max_b1: list, min_b2: list, max_b2: list, used_check=lambda a, b: a >= b):
         """
         Checks if there is an intersection of the given bounding box values. Here we use two different bounding boxes,
         namely b1 and b2. Each of them has a corresponding set of min and max values, this works for 2 and 3 dimensional

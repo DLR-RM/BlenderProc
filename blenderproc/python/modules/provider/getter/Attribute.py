@@ -2,7 +2,7 @@ import mathutils
 import numpy as np
 
 from blenderproc.python.modules.main.Provider import Provider
-from blenderproc.python.utility.BlenderUtility import get_bounds
+from blenderproc.python.types.MeshObjectUtility import MeshObject
 
 
 class Attribute(Provider):
@@ -149,7 +149,7 @@ class Attribute(Provider):
             elif look_for in obj and cp_search:
                 raw_result.append(obj[look_for])
             elif look_for == "bounding_box_means" and cf_search:
-                bb_mean = np.mean(get_bounds(obj), axis=0)
+                bb_mean = np.mean(MeshObject(obj).get_bound_box(), axis=0)
                 raw_result.append(mathutils.Vector(bb_mean))
             else:
                 raise RuntimeError("Unknown parameter name: " + look_for)

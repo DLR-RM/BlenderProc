@@ -4,8 +4,8 @@ from typing import Callable, List, Optional
 import bpy
 import numpy as np
 
-from blenderproc.python.utility.BlenderUtility import check_intersection, check_bb_intersection
 from blenderproc.python.types.MeshObjectUtility import MeshObject, get_all_mesh_objects
+from blenderproc.python.utility.CollisionUtility import CollisionUtility
 
 
 def replace_objects(objects_to_be_replaced: List[MeshObject], objects_to_replace_with: List[MeshObject],
@@ -118,9 +118,4 @@ class ObjectReplacer:
             relative_pose_sampler(obj_to_add)
 
         # Check for collision between the new object and other objects in the scene
-        for obj in check_collision_with:  # for each object
-            if obj != obj_to_add and obj_to_remove != obj:
-                if check_bb_intersection(obj.blender_obj, obj_to_add.blender_obj):
-                    if check_intersection(obj.blender_obj, obj_to_add.blender_obj)[0]:
-                        return False
-        return True
+        return CollisionUtility.check_intersections(obj_to_add, None, check_collision_with, [])
