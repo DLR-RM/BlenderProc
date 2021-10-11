@@ -118,4 +118,4 @@ class ObjectReplacer:
             relative_pose_sampler(obj_to_add)
 
         # Check for collision between the new object and other objects in the scene
-        return CollisionUtility.check_intersections(obj_to_add, None, check_collision_with, [])
+        return CollisionUtility.check_intersections(obj_to_add, None, [obj for obj in check_collision_with if obj != obj_to_add and obj != obj_to_remove], [])

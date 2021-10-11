@@ -71,6 +71,39 @@ def add_object_only_with_direction_vectors(vertices: List[List[float]], normals:
     bm.free()
     return obj
 
+def add_cube_based_on_bb(bouding_box: List[Vector], name: str = 'NewCube') -> bpy.types.Object:
+    """
+    Generates a cube based on the given bounding box, the bounding_box can be generated with our get_bounds(obj) fct.
+
+    :param bounding_box: bound_box [8x[3xfloat]], with 8 vertices for each corner
+    :param name: name of the new cube
+    :return: the generated object
+    """
+    if len(bouding_box) != 8:
+        raise Exception("The amount of vertices is wrong for this bounding box!")
+    mesh = bpy.data.meshes.new('mesh')
+    # create new object
+    obj = bpy.data.objects.new(name, mesh)
+    # TODO check if this always works?
+    col = bpy.data.collections.get('Collection')
+    # link object in collection
+    col.objects.link(obj)
+
+    # convert vertices to mesh
+    new_vertices = []
+    bm = bmesh.new()
+    for v in bouding_box:
+        new_vertices.append(bm.verts.new(v))
+    # create all 6 surfaces, the ordering is depending on the ordering of the vertices in the bounding box
+    bm.faces.new([new_vertices[0], new_vertices[1], new_vertices[2], new_vertices[3]])
+    bm.faces.new([new_vertices[0], new_vertices[4], new_vertices[5], new_vertices[1]])
+    bm.faces.new([new_vertices[1], new_vertices[5], new_vertices[6], new_vertices[2]])
+    bm.faces.new([new_vertices[2], new_vertices[3], new_vertices[7], new_vertices[6]])
+    bm.faces.new([new_vertices[0], new_vertices[4], new_vertices[7], new_vertices[3]])
+    bm.faces.new([new_vertices[4], new_vertices[5], new_vertices[6], new_vertices[7]])
+    bm.to_mesh(mesh)
+    bm.free()
+    return obj
 
 def get_all_blender_mesh_objects() -> List[bpy.types.Object]:
     """
