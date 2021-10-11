@@ -7,10 +7,10 @@ This example introduces new tools for using replica dataset with BlenderProc.
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/datasets/replica/config.yaml <path_to_the_replica_data_folder>  examples/datasets/replica/output
+blenderproc run examples/datasets/replica/main.py <path_to_the_replica_data_folder>  examples/datasets/replica/output
 ``` 
 
-* `examples/datasets/replica/config.yaml`: path to the configuration file with pipeline configuration.
+* `examples/datasets/replica/main.py`: path to the python file with pipeline configuration.
 * `<path_to_the_replica_data_folder>`: Path to the replica dataset directory.
 * `examples/datasets/replica/output`: path to the output directory.
 
@@ -24,111 +24,79 @@ python scripts/visHdf5Files.py example/replica/0.hdf5
 
 ## Steps
 
-* Load replica room: `loader.ReplicaLoader` module.
-* Extracts a floor in the room: `object.FloorExtractor` module.
-* Samples multiples cameras in the room: `camera.ReplicaCameraSampler` module.
-* Renders rgb and normals: `renderer.RgbRenderer` module.
-* Writes output to .hdf5 container: `writer.Hdf5Writer` module.
+* Load the replica dataset : `bproc.loader.load_replica()`.
+* Extract the floor from the room: `bproc.object.extract_floor()`.
+* Find point of interest, all cam poses should look towards it: `bproc.object.compute_poi()`.
+* Sample random camera location around the objects: `bproc.sampler.sphere()`.
+* Adds camera pose to the scene: `bproc.camera.add_camera_pose()`.
+* Enables normals and distance (rgb is enabled by default): `bproc.renderer.enable_normals_output()` `bproc.renderer.enable_distance_output()`.
+* Renders all set camera poses: `bproc.renderer.render()`.
+* Writes the output to .hdf5 containers: `bproc.writer.write_hdf5()`
 
-## Config file
+## Python file (main.py)
 
 ### Global
 
-```yaml
-{
-    "module": "main.Initializer",
-    "config": {
-      "global": {
-        "output_dir": "<args:1>",
-        "data_set_name": "office_1",
-        "data_path": "<args:0>"
-      }
-    }
-}
+```python
+# Load the replica dataset
+objs = bproc.loader.load_replica(args.replica_data_folder, data_set_name="office_1", use_smooth_shading=True)
 ```
 
 Note that `"data_set_name": "office_1"` is a replica room you want to render. This line can be replace with:
 `"data_set_name": "<args:X>>"`, i.e. with an appropriate placeholder where `X` is a number of a placeholder.
 
-As before all these values are stored in the GlobalStorage and are only used if no value is defined in the module itself.
+As before all these values are stored in the GlobalStorage and are only used if no value are defined.
 
-### Replica loader
-
-```yaml
-{
-  "module": "loader.ReplicaLoader",
-  "config": {
-    "use_smooth_shading": "True"
-  }
-}
-```
-
-`loader.ReplicaLoader` handles importing objects from a given path. Here we are using smooth shading on all surfaces, instead of flat shading.
+`bproc.loader.load_replica` handles importing objects from a given path. Here we are using smooth shading on all surfaces, instead of flat shading.
 
 ### Floor extractor
 
-```yaml
-{
-  "module": "object.FloorExtractor",
-  "config": {
-    "is_replica_object": "True",
-    "obj_name": "mesh",
-    "compare_angle_degrees" : 7.5, # max angle difference to up facing polygons
-    "compare_height": 0.15  # height, which is allowed for polygons to be away from the height level in up and down dir.
-  }
-}
+```python
+# Extract the floor from the loaded room
+floor = bproc.object.extract_floor(objs, new_name_for_object="floor")[0]
+room = bproc.filter.one_by_attr(objs, "name", "mesh")
 ```
 
-`object.FloorExtractor` searches for the specified object and splits the surfaces which point upwards at a specified level away.
+`bproc.object.extract_floor()` searches for the specified object and splits the surfaces which point upwards at a specified level away.
 
 ### Replica camera sampler
 
-```yaml
-{
-  "module": "camera.ReplicaCameraSampler",
-  "config": {
-    "is_replica_object": True,
-    "cam_poses": [{
-      "number_of_samples": 15,
-      "clip_start": 0.01,
-      "proximity_checks": {
-        "min": 1.0,
-        "avg": {
-          "min": 2.0,
-          "max": 4.0
-        }
-      },
-      "location": [0, 0, 1.55],
-      "rotation": {
-        "value": {
-          "provider":"sampler.Uniform3d",
-          "max":[1.373401334, 0, 6.283185307],
-          "min":[1.373401334, 0, 0]
-        }
-      },
-    }]
-  }
-}
+```python
+# Init sampler for sampling locations inside the loaded replica room
+point_sampler = bproc.sampler.ReplicaPointInRoomSampler(room, floor, height_list_values)
+
+# define the camera intrinsics
+bproc.camera.set_resolution(512, 512)
+
+# Init bvh tree containing all mesh objects
+bvh_tree = bproc.object.create_bvh_tree_multi_objects([room, floor])
+
+poses = 0
+tries = 0
+while tries < 10000 and poses < 15:
+    # Sample point inside room at 1.55m height
+    location = point_sampler.sample(height=1.55)
+    # Sample rotation (fix around X and Y axis)
+    rotation = np.random.uniform([1.373401334, 0, 0], [1.373401334, 0, 2 * np.pi])
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation)
+
+    # Check that obstacles are at least 1 meter away from the camera and have an average distance between 2 and 4 meters
+    if bproc.camera.perform_obstacle_in_view_check(cam2world_matrix, {"min": 1.0, "avg": {"min": 2.0, "max": 4.0}}, bvh_tree):
+        bproc.camera.add_camera_pose(cam2world_matrix)
+        poses += 1
+    tries += 1
 ```
 
-`camera.ReplicaCameraSampler` samples multiple camera poses per every imported room with camera-object collision check and obstacle check.
+This samples multiple camera poses per every imported room with camera-object collision check and obstacle check.
 ## Material Manipulator 
 
-```yaml
-{
-  "module": "manipulators.MaterialManipulator",
-  "config": {
-    "selector": {
-      "provider": "getter.Material",
-      "conditions": {
-        "name": "ply_material"
-      }
-    },
-    "cf_change_to_vertex_color": "Col"
-  }
-}
-``` 
-The `materials.Manipulator` changes the material of the Replica objects so that the vertex color is renderer, this makes it possible to render colors on Replica scenes.
+```python
+# Use vertex color of mesh as texture for all materials
+for mat in room.get_materials():
+    mat.map_vertex_color("Col", active_shading=False)
+```
+
+The `mat.map_vertex_color()` changes the material of the Replica objects so that the vertex color is renderer, this makes it possible to render colors on Replica scenes.
 **Important: This does not mean that we load the complex texture files, we only use the low res vertex color for color rendering.**
 
 If you are in need of high-res color images, do we propose that you, yourself can try to implement the texture importer for the replica dataset.
