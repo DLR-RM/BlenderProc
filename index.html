@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BlenderProc &mdash; BlenderProc 1.0.0 documentation</title>
+  <title>BlenderProc &mdash; BlenderProc 2.0.0 documentation</title>
   
 
   
@@ -454,10 +454,12 @@
 <a class="reference external image-reference" href="https://www.gnu.org/licenses/gpl-3.0"><img alt="License: GPL v3" src="https://img.shields.io/badge/License-GPLv3-blue.svg" /></a>
 <p>A procedural Blender pipeline for photorealistic image generation.</p>
 <p align="center">
+
 <img src="images/readme.jpg" alt="Front readme image" width=500>
-</p><p><a class="reference external" href="https://dlr-rm.github.io/BlenderProc">Documentation</a> | <span class="xref std std-ref">Tutorials</span> | <span class="xref std std-ref">Examples</span> | <a class="reference external" href="https://arxiv.org/abs/1911.01911">ArXiv paper</a> | <a class="reference external" href="https://sim2real.github.io/assets/papers/2020/denninger.pdf">Workshop paper</a></p>
+
+</p><p><a class="reference external" href="https://dlr-rm.github.io/BlenderProc">Documentation</a> | <a class="reference internal" href="#tutorials"><span class="std std-ref">Tutorials</span></a> | <a class="reference internal" href="#examples"><span class="std std-ref">Examples</span></a> | <a class="reference external" href="https://arxiv.org/abs/1911.01911">ArXiv paper</a> | <a class="reference external" href="https://sim2real.github.io/assets/papers/2020/denninger.pdf">Workshop paper</a></p>
 <div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<span id="id1"></span><h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Loading: <code class="docutils literal notranslate"><span class="pre">*.obj</span></code>, <code class="docutils literal notranslate"><span class="pre">*.ply</span></code>, BOP datasets, ShapeNet, Haven, 3D-FRONT, etc.</li>
 <li>Objects: Sample object poses, apply physics and collision checking.</li>
@@ -467,65 +469,86 @@
 <li>Rendering: RGB, stereo, depth, normal and segmentation images/sequences.</li>
 <li>Writing: .hdf5 containers, COCO &amp; BOP annotations.</li>
 </ul>
-<p>..and many more ([docu](<a class="reference external" href="https://dlr-rm.github.io/BlenderProc">https://dlr-rm.github.io/BlenderProc</a>)). For advanced/custom functionalities, you can easily write and integrate your [own modules](blenderproc/README.md#writing-your-own-modules).</p>
 </div>
 <div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<span id="id2"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="via-pip">
-<h3>Via pip<a class="headerlink" href="#via-pip" title="Permalink to this headline">¶</a></h3>
+<span id="id3"></span><h3>Via pip<a class="headerlink" href="#via-pip" title="Permalink to this headline">¶</a></h3>
 <p>The simplest way to install blenderproc is via pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install blenderproc
 </pre></div>
 </div>
 </div>
 <div class="section" id="git-clone">
-<h3>Git clone<a class="headerlink" href="#git-clone" title="Permalink to this headline">¶</a></h3>
+<span id="id4"></span><h3>Git clone<a class="headerlink" href="#git-clone" title="Permalink to this headline">¶</a></h3>
 <p>If you need to make changes to blenderproc or you want to make use of the most recent version on the main-branch, clone the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/DLR-RM/BlenderProc
 </pre></div>
 </div>
 <p>To still make use of the blenderproc command and therefore use blenderproc anywhere on your system, make a local pip installation:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> BlenderProc
+
 pip install -e .
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>BlenderProc has to be run inside the blender python environment, as only there we can access the blender API.
-Therefore, instead of running your script with the usual python interpreter, the command line interface of BlenderProc has to be used.</p>
+<span id="id5"></span><h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>BlenderProc has to be run inside the blender python environment, as only there we can access the blender API.</p>
+<p>Therefore, instead of running your script with the usual python interpreter, the command line interface of BlenderProc has to be used.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc run &lt;your_python_script&gt;
 </pre></div>
 </div>
-<p>In general, one run of your script first loads or constructs a 3D scene, then sets some camera poses inside this scene and renders different types of images (RGB, distance, semantic segmentation, etc.) for each of those camera poses.
-In the usual case, to create a big and diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.
-With a little more experience, it is also possible to render multiple times in one script call, read <span class="xref std std-doc">here</span> how this is done.</p>
+<p>In general, one run of your script first loads or constructs a 3D scene, then sets some camera poses inside this scene and renders different types of images (RGB, distance, semantic segmentation, etc.) for each of those camera poses.</p>
+<p>In the usual case, to create a big and diverse dataset, you therefore run your script multiple times, each time producing 5-20 images.</p>
+<p>With a little more experience, it is also possible to render multiple times in one script call, read <a class="reference internal" href="docs/tutorials/key_frames.html"><span class="doc">here</span></a> how this is done.</p>
 </div>
 <div class="section" id="quickstart">
-<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
+<span id="id6"></span><h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
 <p>Create a python script <code class="docutils literal notranslate"><span class="pre">quickstart.py</span></code> with the following content:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">blenderproc</span> <span class="k">as</span> <span class="nn">bproc</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
 
 <span class="n">bproc</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
+
+
 <span class="c1"># Create a simple object:</span>
+
 <span class="n">obj</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">create_primitive</span><span class="p">(</span><span class="s2">&quot;MONKEY&quot;</span><span class="p">)</span>
 
+
+
 <span class="c1"># Create a point light next to it</span>
+
 <span class="n">light</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Light</span><span class="p">()</span>
+
 <span class="n">light</span><span class="o">.</span><span class="n">set_location</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
 <span class="n">light</span><span class="o">.</span><span class="n">set_energy</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
 
+
+
 <span class="c1"># Set the camera to be in front of the object</span>
+
 <span class="n">cam_pose</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">math</span><span class="o">.</span><span class="n">build_transformation_mat</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
 <span class="n">bproc</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">add_camera_pose</span><span class="p">(</span><span class="n">cam_pose</span><span class="p">)</span>
 
+
+
 <span class="c1"># Render the scene</span>
+
 <span class="n">data</span> <span class="o">=</span> <span class="n">bproc</span><span class="o">.</span><span class="n">renderer</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
+
+
 <span class="c1"># Write the rendering into an hdf5 file</span>
+
 <span class="n">bproc</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write_hdf5</span><span class="p">(</span><span class="s2">&quot;output/&quot;</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -533,80 +556,89 @@ With a little more experience, it is also possible to render multiple times in o
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc run quickstart.py
 </pre></div>
 </div>
-<p>BlenderProc now creates the specified scene and renders the image into <code class="docutils literal notranslate"><span class="pre">output/0.hdf5</span></code>.
-To visualize that image, simply call:</p>
+<p>BlenderProc now creates the specified scene and renders the image into <code class="docutils literal notranslate"><span class="pre">output/0.hdf5</span></code>.</p>
+<p>To visualize that image, simply call:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc vis_hdf5 output/0.hdf5
 </pre></div>
 </div>
 <p>Thats it! You rendered your first image with BlenderProc!</p>
 <div class="section" id="debugging">
-<h3>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h3>
-<p>To understand what is actually going on, BlenderProc has the great feature of visualizing everything inside the blender UI.
-To do so, simply call your script with the <code class="docutils literal notranslate"><span class="pre">debug</span></code> instead of <code class="docutils literal notranslate"><span class="pre">run</span></code> subcommand:</p>
+<span id="id7"></span><h3>Debugging<a class="headerlink" href="#debugging" title="Permalink to this headline">¶</a></h3>
+<p>To understand what is actually going on, BlenderProc has the great feature of visualizing everything inside the blender UI.</p>
+<p>To do so, simply call your script with the <code class="docutils literal notranslate"><span class="pre">debug</span></code> instead of <code class="docutils literal notranslate"><span class="pre">run</span></code> subcommand:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>blenderproc debug quickstart.py
 </pre></div>
 </div>
-<p>Now the Blender UI opens up, the scripting tab is selected and the correct script is loaded.
-To start the BlenderProc pipeline, one now just has to press <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">BlenderProc</span></code> (see red circle in image).
-As in the normal mode, print statements are still printed to the terminal.</p>
+<p>Now the Blender UI opens up, the scripting tab is selected and the correct script is loaded.</p>
+<p>To start the BlenderProc pipeline, one now just has to press <code class="docutils literal notranslate"><span class="pre">Run</span> <span class="pre">BlenderProc</span></code> (see red circle in image).</p>
+<p>As in the normal mode, print statements are still printed to the terminal.</p>
 <p align="center">
+
 <img src="images/debug.jpg" alt="Front readme image" width=500>
+
 </p><p>The pipeline can be run multiple times, as in the beginning of each run the scene is cleared.</p>
 </div>
 </div>
 <div class="section" id="what-to-do-next">
-<h2>What to do next?<a class="headerlink" href="#what-to-do-next" title="Permalink to this headline">¶</a></h2>
+<span id="id8"></span><h2>What to do next?<a class="headerlink" href="#what-to-do-next" title="Permalink to this headline">¶</a></h2>
 <p>As you now ran your first BlenderProc script, your ready to learn the basics:</p>
-<div class="section" id="tutorials">
-<h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
+<!---.. _tutorials: ---><div class="section" id="tutorials">
+<span id="id9"></span><h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
 <p>Read through the tutorials, to get to know with the basic principles of how BlenderProc is used:</p>
 <ol class="arabic simple">
-<li><span class="xref std std-doc">Loading and manipulating objects</span></li>
-<li><span class="xref std std-doc">Configuring the camera</span></li>
-<li><span class="xref std std-doc">Rendering the scene</span></li>
-<li><span class="xref std std-doc">Writing the results to file</span></li>
-<li><span class="xref std std-doc">How key frames work</span></li>
-<li><span class="xref std std-doc">Positioning objects via the physics simulator</span></li>
+<li><a class="reference internal" href="docs/tutorials/loader.html"><span class="doc">Loading and manipulating objects</span></a></li>
+<li><a class="reference internal" href="docs/tutorials/camera.html"><span class="doc">Configuring the camera</span></a></li>
+<li><a class="reference internal" href="docs/tutorials/renderer.html"><span class="doc">Rendering the scene</span></a></li>
+<li><a class="reference internal" href="docs/tutorials/writer.html"><span class="doc">Writing the results to file</span></a></li>
+<li><a class="reference internal" href="docs/tutorials/key_frames.html"><span class="doc">How key frames work</span></a></li>
+<li><a class="reference internal" href="docs/tutorials/physics.html"><span class="doc">Positioning objects via the physics simulator</span></a></li>
 </ol>
 </div>
 <div class="section" id="examples">
-<h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
+<span id="id10"></span><h3>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>We provide a lot of <a class="reference internal" href="examples/README.html"><span class="doc">examples</span></a> which explain all features in detail and should help you understand how BlenderProc works. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide support for some datasets.</p>
 <ul class="simple">
 <li><a class="reference internal" href="examples/basics/basic/README.html"><span class="doc">Basic scene</span></a>: Basic example, this is the ideal place to start for beginners</li>
 <li><a class="reference internal" href="examples/basics/camera_sampling/README.html"><span class="doc">Camera sampling</span></a>: Sampling of different camera positions inside of a shape with constraints for the rotation.</li>
-<li><a class="reference internal" href="examples/basics/entity_manipulation/README.html"><span class="doc">Object manipluation</span></a>: Changing various parameters of objects.</li>
+<li><a class="reference internal" href="examples/basics/entity_manipulation/README.html"><span class="doc">Object manipulation</span></a>: Changing various parameters of objects.</li>
 <li><a class="reference internal" href="examples/basics/material_manipulation/README.html"><span class="doc">Material manipulation</span></a>: Material selecting and manipulation.</li>
 <li><a class="reference internal" href="examples/basics/physics_positioning/README.html"><span class="doc">Physics positioning</span></a>: Enabling simple simulated physical interactions between objects in the scene.</li>
 <li><a class="reference internal" href="examples/basics/semantic_segmentation/README.html"><span class="doc">Semantic segmentation</span></a>: Generating semantic segmentation labels for a given scene.</li>
-<li><span class="xref std std-doc">BOP Challenge</span>: Generate the pose-annotated data used at the BOP Challenge 2020</li>
+<li><a class="reference internal" href="README_BlenderProc4BOP.html"><span class="doc">BOP Challenge</span></a>: Generate the pose-annotated data used at the BOP Challenge 2020</li>
 <li><a class="reference internal" href="examples/advanced/coco_annotations/README.html"><span class="doc">COCO annotations</span></a>: Write COCO annotations to a .json file for selected objects in the scene.</li>
 </ul>
-<p>… And much more, see our [examples](examples/README.md) for more details.</p>
+<p>and much more, see our <a class="reference internal" href="examples/README.html"><span class="doc">examples</span></a> for more details.</p>
 </div>
 </div>
 <div class="section" id="contributions">
-<h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
+<span id="id11"></span><h2>Contributions<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
 <p>Found a bug? help us by reporting it. Want a new feature in the next BlenderProc release? Create an issue. Made something useful or fixed a bug? Start a PR. Check the <a class="reference internal" href="CONTRIBUTING.html"><span class="doc">contributions guidelines</span></a>.</p>
 </div>
 <div class="section" id="change-log">
-<h2>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h2>
+<span id="id12"></span><h2>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h2>
 <p>See our <a class="reference internal" href="change_log.html"><span class="doc">change log</span></a>.</p>
 </div>
 <div class="section" id="citation">
-<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<span id="id13"></span><h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
 <p>If you use BlenderProc in a research project, please cite as follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@article</span><span class="p">{</span><span class="n">denninger2019blenderproc</span><span class="p">,</span>
+
   <span class="n">title</span><span class="o">=</span><span class="p">{</span><span class="n">BlenderProc</span><span class="p">},</span>
+
   <span class="n">author</span><span class="o">=</span><span class="p">{</span><span class="n">Denninger</span><span class="p">,</span> <span class="n">Maximilian</span> <span class="ow">and</span> <span class="n">Sundermeyer</span><span class="p">,</span> <span class="n">Martin</span> <span class="ow">and</span> <span class="n">Winkelbauer</span><span class="p">,</span> <span class="n">Dominik</span> <span class="ow">and</span> <span class="n">Zidan</span><span class="p">,</span> <span class="n">Youssef</span> <span class="ow">and</span> <span class="n">Olefir</span><span class="p">,</span> <span class="n">Dmitry</span> <span class="ow">and</span> <span class="n">Elbadrawy</span><span class="p">,</span> <span class="n">Mohamad</span> <span class="ow">and</span> <span class="n">Lodhi</span><span class="p">,</span> <span class="n">Ahsan</span> <span class="ow">and</span> <span class="n">Katam</span><span class="p">,</span> <span class="n">Harinandan</span><span class="p">},</span>
+
   <span class="n">journal</span><span class="o">=</span><span class="p">{</span><span class="n">arXiv</span> <span class="n">preprint</span> <span class="n">arXiv</span><span class="p">:</span><span class="mf">1911.01911</span><span class="p">},</span>
+
   <span class="n">year</span><span class="o">=</span><span class="p">{</span><span class="mi">2019</span><span class="p">}</span>
+
 <span class="p">}</span>
 </pre></div>
 </div>
 <hr class="docutils" />
 <div align="center">
+
   <a href="https://www.dlr.de/EN/Home/home_node.html"><img src="images/logo.svg" hspace="3%" vspace="60px"></a>
+
 </div></div>
 </div>
 
