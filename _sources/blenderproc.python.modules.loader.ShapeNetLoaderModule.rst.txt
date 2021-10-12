@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.ShapeNetLoaderModule module
+=================================================================
+
+.. automodule:: blenderproc.python.modules.loader.ShapeNetLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,908 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>blenderproc.python.loader.Front3DLoader &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/camera_object_pose/README.html">camera_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/semantic_segmentation/README.html">semantic_segmentation</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/advanced/README.html">Advanced</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/datasets/README.html">Datasets</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Api</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.camera.html#module-blenderproc.camera">bproc.camera</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.constructor.html#module-blenderproc.constructor">bproc.constructor</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.filter.html#module-blenderproc.filter">bproc.filter</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.lighting.html#module-blenderproc.lighting">bproc.lighting</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.loader.html#module-blenderproc.loader">bproc.loader</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.material.html#module-blenderproc.material">bproc.material</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.math.html#module-blenderproc.math">bproc.math</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.object.html#module-blenderproc.object">bproc.object</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.postprocessing.html#module-blenderproc.postprocessing">bproc.postprocessing</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.renderer.html#module-blenderproc.renderer">bproc.renderer</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.sampler.html#module-blenderproc.sampler">bproc.sampler</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.types.html#module-blenderproc.types">bproc.types</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.utility.html#module-blenderproc.utility">bproc.utility</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.world.html#module-blenderproc.world">bproc.world</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.writer.html#module-blenderproc.writer">bproc.writer</a></li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Internal</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter.Filter">Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li class="toctree-l2 current"><a class="reference external" href="#blenderproc.python.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching">StereoGlobalMatching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Front3DPointInRoomSampler.html#blenderproc.python.sampler.Front3DPointInRoomSampler.Front3DPointInRoomSampler">Front3DPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.ReplicaPointInRoomSampler.html#blenderproc.python.sampler.ReplicaPointInRoomSampler.ReplicaPointInRoomSampler">ReplicaPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.SuncgPointInRoomSampler.html#blenderproc.python.sampler.SuncgPointInRoomSampler.SuncgPointInRoomSampler">SuncgPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Modules (deprecated)</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.CCMaterialLoaderModule.html#blenderproc.python.modules.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Front3DLoaderModule.html#blenderproc.python.modules.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.html#blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenMaterialLoaderModule.html#blenderproc.python.modules.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.IKEALoaderModule.html#blenderproc.python.modules.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ObjectLoaderModule.html#blenderproc.python.modules.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Pix3DLoaderModule.html#blenderproc.python.modules.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ReplicaLoaderModule.html#blenderproc.python.modules.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.html#blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SceneNetLoaderModule.html#blenderproc.python.modules.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ShapeNetLoaderModule.html#blenderproc.python.modules.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectPoseSamplerModule.html#blenderproc.python.modules.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.provider.html">Provider</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Material.html#blenderproc.python.modules.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.POI.html#blenderproc.python.modules.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Texture.html#blenderproc.python.modules.provider.getter.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.DiskModule.html#blenderproc.python.modules.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.PartSphereModule.html#blenderproc.python.modules.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Path.html#blenderproc.python.modules.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.ShellModule.html#blenderproc.python.modules.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.SphereModule.html#blenderproc.python.modules.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Texture.html#blenderproc.python.modules.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Uniform3d.html#blenderproc.python.modules.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.Hdf5Writer.html#blenderproc.python.modules.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.LightStateWriter.html#blenderproc.python.modules.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ObjectStateWriter.html#blenderproc.python.modules.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ShapeNetWriter.html#blenderproc.python.modules.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.html#blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.StereoGlobalMatchingWriterModule">StereoGlobalMatchingWriterModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>blenderproc.python.loader.Front3DLoader</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for blenderproc.python.loader.Front3DLoader</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">radians</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">import</span> <span class="nn">mathutils</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+
+<span class="kn">from</span> <span class="nn">blenderproc.python.material</span> <span class="kn">import</span> <span class="n">MaterialLoaderUtility</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.LabelIdMapping</span> <span class="kn">import</span> <span class="n">LabelIdMapping</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.types.MeshObjectUtility</span> <span class="kn">import</span> <span class="n">MeshObject</span><span class="p">,</span> <span class="n">create_with_empty_mesh</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">resolve_path</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.loader.ObjectLoader</span> <span class="kn">import</span> <span class="n">load_obj</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.loader.TextureLoader</span> <span class="kn">import</span> <span class="n">load_texture</span>
+
+
+<div class="viewcode-block" id="load_front3d"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.load_front3d">[docs]</a><span class="k">def</span> <span class="nf">load_front3d</span><span class="p">(</span><span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">future_model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">front_3D_texture_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label_mapping</span><span class="p">:</span> <span class="n">LabelIdMapping</span><span class="p">,</span>
+                 <span class="n">ceiling_light_strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span> <span class="n">lamp_light_strength</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">7.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot; Loads the 3D-Front scene specified by the given json file.</span>
+
+<span class="sd">    :param json_path: Path to the json file, where the house information is stored.</span>
+<span class="sd">    :param future_model_path: Path to the models used in the 3D-Front dataset.</span>
+<span class="sd">    :param front_3D_texture_path: Path to the 3D-FRONT-texture folder.</span>
+<span class="sd">    :param label_mapping: A dict which maps the names of the objects to ids.</span>
+<span class="sd">    :param ceiling_light_strength: Strength of the emission shader used in the ceiling.</span>
+<span class="sd">    :param lamp_light_strength: Strength of the emission shader used in each lamp.</span>
+<span class="sd">    :return: The list of loaded mesh objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_path</span> <span class="o">=</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">json_path</span><span class="p">)</span>
+    <span class="n">future_model_path</span> <span class="o">=</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">future_model_path</span><span class="p">)</span>
+    <span class="n">front_3D_texture_path</span> <span class="o">=</span> <span class="n">resolve_path</span><span class="p">(</span><span class="n">front_3D_texture_path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">json_path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The given path does not exists: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">json_path</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">json_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.json&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The given path does not point to a .json file: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">json_path</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">future_model_path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The 3D future model path does not exist: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">future_model_path</span><span class="p">))</span>
+
+    <span class="c1"># load data from json file</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;scene&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There is no scene data in this json file: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">json_path</span><span class="p">))</span>
+
+    <span class="n">created_objects</span> <span class="o">=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_create_mesh_objects_from_file</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">front_3D_texture_path</span><span class="p">,</span>
+                                                                   <span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">label_mapping</span><span class="p">,</span> <span class="n">json_path</span><span class="p">)</span>
+
+    <span class="n">all_loaded_furniture</span> <span class="o">=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_load_furniture_objs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">future_model_path</span><span class="p">,</span> <span class="n">lamp_light_strength</span><span class="p">,</span> <span class="n">label_mapping</span><span class="p">)</span>
+
+    <span class="n">created_objects</span> <span class="o">+=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_move_and_duplicate_furniture</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">all_loaded_furniture</span><span class="p">)</span>
+
+    <span class="c1"># add an identifier to the obj</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">created_objects</span><span class="p">:</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;is_3d_front&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">created_objects</span></div>
+
+<div class="viewcode-block" id="Front3DLoader"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader">[docs]</a><span class="k">class</span> <span class="nc">Front3DLoader</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Loads the 3D-Front dataset.</span>
+
+<span class="sd">    https://tianchi.aliyun.com/specials/promotion/alibaba-3d-scene-dataset</span>
+
+<span class="sd">    Each object gets the name based on the category/type, on top of that you can use a mapping specified in the</span>
+<span class="sd">    resources/front_3D folder.</span>
+
+<span class="sd">    The dataset already supports semantic segmentation with either the 3D-Front classes or the nyu classes.</span>
+<span class="sd">    As we have created this mapping ourselves it might be faulty.</span>
+
+<span class="sd">    The Front3DLoader creates automatically lights in the scene, by adding emission shaders to the ceiling and lamps.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Front3DLoader._extract_hash_nr_for_texture"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader._extract_hash_nr_for_texture">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_extract_hash_nr_for_texture</span><span class="p">(</span><span class="n">given_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">front_3D_texture_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructs the path of the hash folder and checks if the texture is available if not it is downloaded</span>
+
+<span class="sd">        :param given_url: The url of the texture</span>
+<span class="sd">        :param front_3D_texture_path: The path to where the texture are saved</span>
+<span class="sd">        :return: The hash id, which is used in the url</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># extract the hash nr from the given url</span>
+        <span class="n">hash_nr</span> <span class="o">=</span> <span class="n">given_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">hash_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">front_3D_texture_path</span><span class="p">,</span> <span class="n">hash_nr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hash_folder</span><span class="p">):</span>
+            <span class="c1"># download the file</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">hash_folder</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This texture: </span><span class="si">{</span><span class="n">hash_nr</span><span class="si">}</span><span class="s2"> could not be found it will be downloaded.&quot;</span><span class="p">)</span>
+            <span class="c1"># replace https with http as ssl connection out of blender are difficult</span>
+            <span class="n">urlretrieve</span><span class="p">(</span><span class="n">given_url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;https://&quot;</span><span class="p">,</span> <span class="s2">&quot;http://&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hash_folder</span><span class="p">,</span> <span class="s2">&quot;texture.png&quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">hash_folder</span><span class="p">,</span> <span class="s2">&quot;texture.png&quot;</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The texture could not be found, the following url was used: &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">front_3D_texture_path</span><span class="si">}</span><span class="s2">, this is the extracted hash: </span><span class="si">{</span><span class="n">hash_nr</span><span class="si">}</span><span class="s2">, &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;given url: </span><span class="si">{</span><span class="n">given_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hash_folder</span></div>
+
+<div class="viewcode-block" id="Front3DLoader._get_used_image"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader._get_used_image">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_used_image</span><span class="p">(</span><span class="n">hash_folder_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">saved_image_dict</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Texture</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Texture</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a texture object for the given hash_folder_path, the textures are stored in the saved_image_dict,</span>
+<span class="sd">        to avoid that texture are loaded multiple times</span>
+
+<span class="sd">        :param hash_folder_path: Path to the hash folder</span>
+<span class="sd">        :param saved_image_dict: Dict which maps the hash_folder_paths to bpy.types.Texture</span>
+<span class="sd">        :return: The loaded texture bpy.types.Texture</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">hash_folder_path</span> <span class="ow">in</span> <span class="n">saved_image_dict</span><span class="p">:</span>
+            <span class="n">ret_used_image</span> <span class="o">=</span> <span class="n">saved_image_dict</span><span class="p">[</span><span class="n">hash_folder_path</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">textures</span> <span class="o">=</span> <span class="n">load_texture</span><span class="p">(</span><span class="n">hash_folder_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">textures</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;There is not just one texture: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">textures</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">ret_used_image</span> <span class="o">=</span> <span class="n">textures</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">image</span>
+            <span class="n">saved_image_dict</span><span class="p">[</span><span class="n">hash_folder_path</span><span class="p">]</span> <span class="o">=</span> <span class="n">ret_used_image</span>
+        <span class="k">return</span> <span class="n">ret_used_image</span></div>
+
+<div class="viewcode-block" id="Front3DLoader._create_mesh_objects_from_file"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader._create_mesh_objects_from_file">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_create_mesh_objects_from_file</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">front_3D_texture_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ceiling_light_strength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                                       <span class="n">label_mapping</span><span class="p">:</span> <span class="n">LabelIdMapping</span><span class="p">,</span> <span class="n">json_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This creates for a given data json block all defined meshes and assigns the correct materials.</span>
+<span class="sd">        This means that the json file contains some mesh, like walls and floors, which have to built up manually.</span>
+
+<span class="sd">        It also already adds the lighting for the ceiling</span>
+
+<span class="sd">        :param data: json data dir. Must contain &quot;material&quot; and &quot;mesh&quot;</span>
+<span class="sd">        :param front_3D_texture_path: Path to the 3D-FRONT-texture folder.</span>
+<span class="sd">        :param ceiling_light_strength: Strength of the emission shader used in the ceiling.</span>
+<span class="sd">        :param label_mapping: A dict which maps the names of the objects to ids.</span>
+<span class="sd">        :param json_path: Path to the json file, where the house information is stored.</span>
+<span class="sd">        :return: The list of loaded mesh objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># extract all used materials -&gt; there are more materials defined than used</span>
+        <span class="n">used_materials</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;material&quot;</span><span class="p">]:</span>
+            <span class="n">used_materials</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s2">&quot;uid&quot;</span><span class="p">:</span> <span class="n">mat</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">],</span> <span class="s2">&quot;texture&quot;</span><span class="p">:</span> <span class="n">mat</span><span class="p">[</span><span class="s2">&quot;texture&quot;</span><span class="p">],</span>
+                                   <span class="s2">&quot;normaltexture&quot;</span><span class="p">:</span> <span class="n">mat</span><span class="p">[</span><span class="s2">&quot;normaltexture&quot;</span><span class="p">],</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]})</span>
+
+        <span class="n">created_objects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># maps loaded images from image file path to bpy.type.image</span>
+        <span class="n">saved_images</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">saved_normal_images</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># materials based on colors to avoid recreating the same material over and over</span>
+        <span class="n">used_materials_based_on_color</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c1"># materials based on texture to avoid recreating the same material over and over</span>
+        <span class="n">used_materials_based_on_texture</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">mesh_data</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;mesh&quot;</span><span class="p">]:</span>
+            <span class="c1"># extract the obj name, which also is used as the category_id name</span>
+            <span class="n">used_obj_name</span> <span class="o">=</span> <span class="n">mesh_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">used_obj_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="n">used_obj_name</span> <span class="o">=</span> <span class="s2">&quot;void&quot;</span>
+            <span class="k">if</span> <span class="s2">&quot;material&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mesh_data</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Material is not defined for </span><span class="si">{</span><span class="n">used_obj_name</span><span class="si">}</span><span class="s2"> in this file: </span><span class="si">{</span><span class="n">json_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="c1"># create a new mesh</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">create_with_empty_mesh</span><span class="p">(</span><span class="n">used_obj_name</span><span class="p">,</span> <span class="n">used_obj_name</span> <span class="o">+</span> <span class="s2">&quot;_mesh&quot;</span><span class="p">)</span>
+            <span class="n">created_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+            <span class="c1"># set two custom properties, first that it is a 3D_future object and second the category_id</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;is_3D_future&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="n">label_mapping</span><span class="o">.</span><span class="n">id_from_label</span><span class="p">(</span><span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+
+            <span class="c1"># get the material uid of the current mesh data</span>
+            <span class="n">current_mat</span> <span class="o">=</span> <span class="n">mesh_data</span><span class="p">[</span><span class="s2">&quot;material&quot;</span><span class="p">]</span>
+            <span class="n">used_mat</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># search in the used materials after this uid</span>
+            <span class="k">for</span> <span class="n">u_mat</span> <span class="ow">in</span> <span class="n">used_materials</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">u_mat</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">current_mat</span><span class="p">:</span>
+                    <span class="n">used_mat</span> <span class="o">=</span> <span class="n">u_mat</span>
+                    <span class="k">break</span>
+            <span class="c1"># If there should be a material used</span>
+            <span class="k">if</span> <span class="n">used_mat</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;texture&quot;</span><span class="p">]:</span>
+                    <span class="c1"># extract the has folder is from the url and download it if necessary</span>
+                    <span class="n">hash_folder</span> <span class="o">=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_extract_hash_nr_for_texture</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;texture&quot;</span><span class="p">],</span> <span class="n">front_3D_texture_path</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">hash_folder</span> <span class="ow">in</span> <span class="n">used_materials_based_on_texture</span> <span class="ow">and</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                        <span class="n">mat</span> <span class="o">=</span> <span class="n">used_materials_based_on_texture</span><span class="p">[</span><span class="n">hash_folder</span><span class="p">]</span>
+                        <span class="n">obj</span><span class="o">.</span><span class="n">add_material</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Create a new material</span>
+                        <span class="n">mat</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">used_obj_name</span> <span class="o">+</span> <span class="s2">&quot;_material&quot;</span><span class="p">)</span>
+                        <span class="n">principled_node</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]:</span>
+                            <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span>
+
+                        <span class="n">used_image</span> <span class="o">=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_get_used_image</span><span class="p">(</span><span class="n">hash_folder</span><span class="p">,</span> <span class="n">saved_images</span><span class="p">)</span>
+                        <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Base Color&quot;</span><span class="p">,</span> <span class="n">used_image</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">emission_color</span><span class="o">=</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;normaltexture&quot;</span><span class="p">]:</span>
+                            <span class="c1"># get the used image based on the normal texture path</span>
+                            <span class="c1"># extract the has folder is from the url and download it if necessary</span>
+                            <span class="n">hash_folder</span> <span class="o">=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_extract_hash_nr_for_texture</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;normaltexture&quot;</span><span class="p">],</span>
+                                                                                     <span class="n">front_3D_texture_path</span><span class="p">)</span>
+                            <span class="n">used_image</span> <span class="o">=</span> <span class="n">Front3DLoader</span><span class="o">.</span><span class="n">_get_used_image</span><span class="p">(</span><span class="n">hash_folder</span><span class="p">,</span> <span class="n">saved_normal_images</span><span class="p">)</span>
+
+                            <span class="c1"># create normal texture</span>
+                            <span class="n">normal_texture</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">create_image_node</span><span class="p">(</span><span class="n">mat</span><span class="o">.</span><span class="n">nodes</span><span class="p">,</span> <span class="n">used_image</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                            <span class="n">normal_map</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">nodes</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;ShaderNodeNormalMap&quot;</span><span class="p">)</span>
+                            <span class="n">normal_map</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Strength&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">1.0</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">links</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">normal_texture</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">],</span> <span class="n">normal_map</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Color&quot;</span><span class="p">])</span>
+                            <span class="c1"># connect normal texture to principled shader</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">set_principled_shader_value</span><span class="p">(</span><span class="s2">&quot;Normal&quot;</span><span class="p">,</span> <span class="n">normal_map</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s2">&quot;Normal&quot;</span><span class="p">])</span>
+
+                        <span class="n">obj</span><span class="o">.</span><span class="n">add_material</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+                        <span class="n">used_materials_based_on_texture</span><span class="p">[</span><span class="n">hash_folder</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat</span>
+                <span class="c1"># if there is a normal color used</span>
+                <span class="k">elif</span> <span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]:</span>
+                    <span class="n">used_hash</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">used_hash</span> <span class="ow">in</span> <span class="n">used_materials_based_on_color</span> <span class="ow">and</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                        <span class="n">mat</span> <span class="o">=</span> <span class="n">used_materials_based_on_color</span><span class="p">[</span><span class="n">used_hash</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Create a new material</span>
+                        <span class="n">mat</span> <span class="o">=</span> <span class="n">MaterialLoaderUtility</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">used_obj_name</span> <span class="o">+</span> <span class="s2">&quot;_material&quot;</span><span class="p">)</span>
+                        <span class="c1"># create a principled node and set the default color</span>
+                        <span class="n">principled_node</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">get_the_one_node_with_type</span><span class="p">(</span><span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                        <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Base Color&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span>
+                        <span class="c1"># if the object is a ceiling add some light output</span>
+                        <span class="k">if</span> <span class="s2">&quot;ceiling&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">ceiling_light_strength</span><span class="p">,</span> <span class="n">keep_using_base_color</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">emission_color</span><span class="o">=</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">used_mat</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">used_materials_based_on_color</span><span class="p">[</span><span class="n">used_hash</span><span class="p">]</span> <span class="o">=</span> <span class="n">mat</span>
+
+                    <span class="c1"># as this material was just created the material is just append it to the empty list</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">add_material</span><span class="p">(</span><span class="n">mat</span><span class="p">)</span>
+
+            <span class="c1"># extract the vertices from the mesh_data</span>
+            <span class="n">vert</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">mesh_data</span><span class="p">[</span><span class="s2">&quot;xyz&quot;</span><span class="p">]]</span>
+            <span class="c1"># extract the faces from the mesh_data</span>
+            <span class="n">faces</span> <span class="o">=</span> <span class="n">mesh_data</span><span class="p">[</span><span class="s2">&quot;faces&quot;</span><span class="p">]</span>
+            <span class="c1"># extract the normals from the mesh_data</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">mesh_data</span><span class="p">[</span><span class="s2">&quot;normal&quot;</span><span class="p">]]</span>
+
+            <span class="c1"># map those to the blender coordinate system</span>
+            <span class="n">num_vertices</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">vert</span><span class="p">)</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vert</span><span class="p">),</span> <span class="p">[</span><span class="n">num_vertices</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">normal</span><span class="p">),</span> <span class="p">[</span><span class="n">num_vertices</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="c1"># flip the first and second value</span>
+            <span class="n">vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">vertices</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">normal</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">normal</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">normal</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">normal</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="c1"># reshape back to a long list</span>
+            <span class="n">vertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">vertices</span><span class="p">,</span> <span class="p">[</span><span class="n">num_vertices</span> <span class="o">*</span> <span class="mi">3</span><span class="p">])</span>
+            <span class="n">normal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">normal</span><span class="p">,</span> <span class="p">[</span><span class="n">num_vertices</span> <span class="o">*</span> <span class="mi">3</span><span class="p">])</span>
+
+            <span class="c1"># add this new data to the mesh object</span>
+            <span class="n">mesh</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_mesh</span><span class="p">()</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">num_vertices</span><span class="p">)</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="n">normal</span><span class="p">)</span>
+
+            <span class="c1"># link the faces as vertex indices</span>
+            <span class="n">num_vertex_indicies</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">faces</span><span class="p">)</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">loops</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">num_vertex_indicies</span><span class="p">)</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">loops</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;vertex_index&quot;</span><span class="p">,</span> <span class="n">faces</span><span class="p">)</span>
+
+            <span class="c1"># the loops are set based on how the faces are a ranged</span>
+            <span class="n">num_loops</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_vertex_indicies</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">num_loops</span><span class="p">)</span>
+            <span class="c1"># always 3 vertices form one triangle</span>
+            <span class="n">loop_start</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_vertex_indicies</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="c1"># the total size of each triangle is therefore 3</span>
+            <span class="n">loop_total</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_loops</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;loop_start&quot;</span><span class="p">,</span> <span class="n">loop_start</span><span class="p">)</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">polygons</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;loop_total&quot;</span><span class="p">,</span> <span class="n">loop_total</span><span class="p">)</span>
+
+            <span class="c1"># the uv coordinates are reshaped then the face coords are extracted</span>
+            <span class="n">uv_mesh_data</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">ele</span><span class="p">)</span> <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">mesh_data</span><span class="p">[</span><span class="s2">&quot;uv&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">ele</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="c1"># bb1737bf-dae6-4215-bccf-fab6f584046b.json includes one mesh which only has no UV mapping</span>
+            <span class="k">if</span> <span class="n">uv_mesh_data</span><span class="p">:</span>
+                <span class="n">uv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">uv_mesh_data</span><span class="p">),</span> <span class="p">[</span><span class="n">num_vertices</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+                <span class="n">used_uvs</span> <span class="o">=</span> <span class="n">uv</span><span class="p">[</span><span class="n">faces</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="c1"># and again reshaped back to the long list</span>
+                <span class="n">used_uvs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">used_uvs</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">num_vertex_indicies</span><span class="p">])</span>
+
+                <span class="n">mesh</span><span class="o">.</span><span class="n">uv_layers</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;new_uv_layer&quot;</span><span class="p">)</span>
+                <span class="n">mesh</span><span class="o">.</span><span class="n">uv_layers</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">foreach_set</span><span class="p">(</span><span class="s2">&quot;uv&quot;</span><span class="p">,</span> <span class="n">used_uvs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This mesh </span><span class="si">{</span><span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> does not have a specified uv map!&quot;</span><span class="p">)</span>
+
+            <span class="c1"># this update converts the upper data into a mesh</span>
+            <span class="n">mesh</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+            <span class="c1"># the generation might fail if the data does not line up</span>
+            <span class="c1"># this is not used as even if the data does not line up it is still able to render the objects</span>
+            <span class="c1"># We assume that not all meshes in the dataset do conform with the mesh standards set in blender</span>
+            <span class="c1">#result = mesh.validate(verbose=False)</span>
+            <span class="c1">#if result:</span>
+            <span class="c1">#    raise Exception(&quot;The generation of the mesh: {} failed!&quot;.format(used_obj_name))</span>
+
+        <span class="k">return</span> <span class="n">created_objects</span></div>
+
+<div class="viewcode-block" id="Front3DLoader._load_furniture_objs"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader._load_furniture_objs">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_load_furniture_objs</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">future_model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lamp_light_strength</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">label_mapping</span><span class="p">:</span> <span class="n">LabelIdMapping</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Load all furniture objects specified in the json file, these objects are stored as &quot;raw_model.obj&quot; in the</span>
+<span class="sd">        3D_future_model_path. For lamp the lamp_light_strength value can be changed via the config.</span>
+
+<span class="sd">        :param data: json data dir. Should contain &quot;furniture&quot;</span>
+<span class="sd">        :param future_model_path: Path to the models used in the 3D-Front dataset.</span>
+<span class="sd">        :param lamp_light_strength: Strength of the emission shader used in each lamp.</span>
+<span class="sd">        :param label_mapping: A dict which maps the names of the objects to ids.</span>
+<span class="sd">        :return: The list of loaded mesh objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># collect all loaded furniture objects</span>
+        <span class="n">all_objs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># for each furniture element</span>
+        <span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;furniture&quot;</span><span class="p">]:</span>
+            <span class="c1"># create the paths based on the &quot;jid&quot;</span>
+            <span class="n">folder_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">future_model_path</span><span class="p">,</span> <span class="n">ele</span><span class="p">[</span><span class="s2">&quot;jid&quot;</span><span class="p">])</span>
+            <span class="n">obj_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="s2">&quot;raw_model.obj&quot;</span><span class="p">)</span>
+            <span class="c1"># if the object exists load it -&gt; a lot of object do not exist</span>
+            <span class="c1"># we are unsure why this is -&gt; we assume that not all objects have been made public</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">obj_file</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s2">&quot;7e101ef3-7722-4af8-90d5-7c562834fabd&quot;</span> <span class="ow">in</span> <span class="n">obj_file</span><span class="p">:</span>
+                <span class="c1"># load all objects from this .obj file</span>
+                <span class="n">objs</span> <span class="o">=</span> <span class="n">load_obj</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">obj_file</span><span class="p">)</span>
+                <span class="c1"># extract the name, which serves as category id</span>
+                <span class="n">used_obj_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;category&quot;</span> <span class="ow">in</span> <span class="n">ele</span><span class="p">:</span>
+                    <span class="n">used_obj_name</span> <span class="o">=</span> <span class="n">ele</span><span class="p">[</span><span class="s2">&quot;category&quot;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="n">ele</span><span class="p">:</span>
+                    <span class="n">used_obj_name</span> <span class="o">=</span> <span class="n">ele</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s2">&quot;/&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="p">:</span>
+                        <span class="n">used_obj_name</span> <span class="o">=</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">used_obj_name</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                    <span class="n">used_obj_name</span> <span class="o">=</span> <span class="s2">&quot;others&quot;</span>
+                <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">objs</span><span class="p">:</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">set_name</span><span class="p">(</span><span class="n">used_obj_name</span><span class="p">)</span>
+                    <span class="c1"># add some custom properties</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;uid&quot;</span><span class="p">,</span> <span class="n">ele</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">])</span>
+                    <span class="c1"># this custom property determines if the object was used before</span>
+                    <span class="c1"># is needed to only clone the second appearance of this object</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;is_used&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;is_3D_future&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;Non-Object&quot;</span><span class="p">)</span>  <span class="c1"># is an non object used for the interesting score</span>
+                    <span class="c1"># set the category id based on the used obj name</span>
+                    <span class="n">obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;category_id&quot;</span><span class="p">,</span> <span class="n">label_mapping</span><span class="o">.</span><span class="n">id_from_label</span><span class="p">(</span><span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+                    <span class="c1"># walk over all materials</span>
+                    <span class="k">for</span> <span class="n">mat</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_materials</span><span class="p">():</span>
+                        <span class="k">if</span> <span class="n">mat</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="k">continue</span>
+                        <span class="n">principled_node</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">get_nodes_with_type</span><span class="p">(</span><span class="s2">&quot;BsdfPrincipled&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="s2">&quot;bed&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">or</span> <span class="s2">&quot;sofa&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled_node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="n">principled_node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Roughness&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span> <span class="o">=</span> <span class="mf">0.5</span>
+                        <span class="n">is_lamp</span> <span class="o">=</span> <span class="s2">&quot;lamp&quot;</span> <span class="ow">in</span> <span class="n">used_obj_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled_node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">is_lamp</span><span class="p">:</span>
+                            <span class="c1"># this material has already been transformed</span>
+                            <span class="k">continue</span>
+                        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">principled_node</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">principled_node</span> <span class="o">=</span> <span class="n">principled_node</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The amount of principle nodes can not be more than 1, &quot;</span>
+                                            <span class="s2">&quot;for obj: </span><span class="si">{}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">get_name</span><span class="p">()))</span>
+
+                        <span class="c1"># Front3d .mtl files contain emission color which make the object mistakenly emissive</span>
+                        <span class="c1"># =&gt; Reset the emission color</span>
+                        <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Emission&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">default_value</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+                        <span class="c1"># For each a texture node</span>
+                        <span class="n">image_node</span> <span class="o">=</span> <span class="n">mat</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="s1">&#39;ShaderNodeTexImage&#39;</span><span class="p">)</span>
+                        <span class="c1"># and load the texture.png</span>
+                        <span class="n">base_image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder_path</span><span class="p">,</span> <span class="s2">&quot;texture.png&quot;</span><span class="p">)</span>
+                        <span class="n">image_node</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">base_image_path</span><span class="p">,</span> <span class="n">check_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">mat</span><span class="o">.</span><span class="n">link</span><span class="p">(</span><span class="n">image_node</span><span class="o">.</span><span class="n">outputs</span><span class="p">[</span><span class="s1">&#39;Color&#39;</span><span class="p">],</span> <span class="n">principled_node</span><span class="o">.</span><span class="n">inputs</span><span class="p">[</span><span class="s1">&#39;Base Color&#39;</span><span class="p">])</span>
+                        <span class="c1"># if the object is a lamp, do the same as for the ceiling and add an emission shader</span>
+                        <span class="k">if</span> <span class="n">is_lamp</span><span class="p">:</span>
+                            <span class="n">mat</span><span class="o">.</span><span class="n">make_emissive</span><span class="p">(</span><span class="n">lamp_light_strength</span><span class="p">)</span>
+
+                <span class="n">all_objs</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">objs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="s2">&quot;7e101ef3-7722-4af8-90d5-7c562834fabd&quot;</span> <span class="ow">in</span> <span class="n">obj_file</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;This file </span><span class="si">{</span><span class="n">obj_file</span><span class="si">}</span><span class="s2"> was skipped as it can not be read by blender.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">all_objs</span></div>
+
+<div class="viewcode-block" id="Front3DLoader._move_and_duplicate_furniture"><a class="viewcode-back" href="../../../../blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader._move_and_duplicate_furniture">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_move_and_duplicate_furniture</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">all_loaded_furniture</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeshObject</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Move and duplicate the furniture depending on the data in the data json dir.</span>
+<span class="sd">        After loading each object gets a location based on the data in the json file. Some objects are used more than</span>
+<span class="sd">        once these are duplicated and then placed.</span>
+
+<span class="sd">        :param data: json data dir. Should contain &quot;scene&quot;, which should contain &quot;room&quot;</span>
+<span class="sd">        :param all_loaded_furniture: all objects which have been loaded in _load_furniture_objs</span>
+<span class="sd">        :return: The list of loaded mesh objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># this rotation matrix rotates the given quaternion into the blender coordinate system</span>
+        <span class="n">blender_rot_mat</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">Rotation</span><span class="p">(</span><span class="n">radians</span><span class="p">(</span><span class="o">-</span><span class="mi">90</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;X&#39;</span><span class="p">)</span>
+        <span class="n">created_objects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># for each room</span>
+        <span class="k">for</span> <span class="n">room_id</span><span class="p">,</span> <span class="n">room</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;scene&quot;</span><span class="p">][</span><span class="s2">&quot;room&quot;</span><span class="p">]):</span>
+            <span class="c1"># for each object in that room</span>
+            <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">room</span><span class="p">[</span><span class="s2">&quot;children&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="s2">&quot;furniture&quot;</span> <span class="ow">in</span> <span class="n">child</span><span class="p">[</span><span class="s2">&quot;instanceid&quot;</span><span class="p">]:</span>
+                    <span class="c1"># find the object where the uid matches the child ref id</span>
+                    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">all_loaded_furniture</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_cp</span><span class="p">(</span><span class="s2">&quot;uid&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">child</span><span class="p">[</span><span class="s2">&quot;ref&quot;</span><span class="p">]:</span>
+                            <span class="c1"># if the object was used before, duplicate the object and move that duplicated obj</span>
+                            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">get_cp</span><span class="p">(</span><span class="s2">&quot;is_used&quot;</span><span class="p">):</span>
+                                <span class="n">new_obj</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">duplicate</span><span class="p">()</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="c1"># if it is the first time use the object directly</span>
+                                <span class="n">new_obj</span> <span class="o">=</span> <span class="n">obj</span>
+                            <span class="n">created_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_obj</span><span class="p">)</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;is_used&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;room_id&quot;</span><span class="p">,</span> <span class="n">room_id</span><span class="p">)</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;Object&quot;</span><span class="p">)</span>  <span class="c1"># is an object used for the interesting score</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_cp</span><span class="p">(</span><span class="s2">&quot;coarse_grained_class&quot;</span><span class="p">,</span> <span class="n">new_obj</span><span class="o">.</span><span class="n">get_cp</span><span class="p">(</span><span class="s2">&quot;category_id&quot;</span><span class="p">))</span>
+                            <span class="c1"># this flips the y and z coordinate to bring it to the blender coordinate system</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_location</span><span class="p">(</span><span class="n">mathutils</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s2">&quot;pos&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">xzy</span><span class="p">)</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_scale</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">])</span>
+                            <span class="c1"># extract the quaternion and convert it to a rotation matrix</span>
+                            <span class="n">rotation_mat</span> <span class="o">=</span> <span class="n">mathutils</span><span class="o">.</span><span class="n">Quaternion</span><span class="p">(</span><span class="n">child</span><span class="p">[</span><span class="s2">&quot;rot&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">to_euler</span><span class="p">()</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">to_4x4</span><span class="p">()</span>
+                            <span class="c1"># transform it into the blender coordinate system and then to an euler</span>
+                            <span class="n">new_obj</span><span class="o">.</span><span class="n">set_rotation_euler</span><span class="p">((</span><span class="n">blender_rot_mat</span> <span class="o">@</span> <span class="n">rotation_mat</span><span class="p">)</span><span class="o">.</span><span class="n">to_euler</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">created_objects</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

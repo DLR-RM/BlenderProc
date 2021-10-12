@@ -1,0 +1,23 @@
+blenderproc\.python\.modules\.object package
+============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.object.CalibrationboardSampler
+   blenderproc.python.modules.object.FloorExtractorModule
+   blenderproc.python.modules.object.HideModule
+   blenderproc.python.modules.object.ObjectPoseSamplerModule
+   blenderproc.python.modules.object.ObjectReplacerModule
+   blenderproc.python.modules.object.OnSurfaceSamplerModule
+   blenderproc.python.modules.object.PhysicsPositioningModule
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.object
+    :members:
+    :undoc-members:
+    :show-inheritance:

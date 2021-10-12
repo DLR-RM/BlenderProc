@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.BopWriter module
+======================================================
+
+.. automodule:: blenderproc.python.modules.writer.BopWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,11 @@
+blenderproc\.object package
+================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.object
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

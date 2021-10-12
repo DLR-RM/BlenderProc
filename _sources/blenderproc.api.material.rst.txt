@@ -1,0 +1,11 @@
+blenderproc\.material package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.material
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

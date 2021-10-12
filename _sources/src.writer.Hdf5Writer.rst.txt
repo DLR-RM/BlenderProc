@@ -1,7 +1,0 @@
-src\.writer\.Hdf5Writer module
-==============================
-
-.. automodule:: src.writer.Hdf5Writer
-    :members:
-    :undoc-members:
-    :show-inheritance:

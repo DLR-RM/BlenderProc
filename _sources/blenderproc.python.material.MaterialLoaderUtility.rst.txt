@@ -1,0 +1,7 @@
+blenderproc\.python\.material\.MaterialLoaderUtility module
+===========================================================
+
+.. automodule:: blenderproc.python.material.MaterialLoaderUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

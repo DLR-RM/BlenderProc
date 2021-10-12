@@ -1,0 +1,21 @@
+blenderproc\.python\.modules\.main package
+==========================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.main.GlobalStorage
+   blenderproc.python.modules.main.InitializerModule
+   blenderproc.python.modules.main.Module
+   blenderproc.python.modules.main.Pipeline
+   blenderproc.python.modules.main.Provider
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.main
+    :members:
+    :undoc-members:
+    :show-inheritance:

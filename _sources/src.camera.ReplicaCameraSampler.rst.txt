@@ -1,7 +1,0 @@
-src\.camera\.ReplicaCameraSampler module
-========================================
-
-.. automodule:: src.camera.ReplicaCameraSampler
-    :members:
-    :undoc-members:
-    :show-inheritance:

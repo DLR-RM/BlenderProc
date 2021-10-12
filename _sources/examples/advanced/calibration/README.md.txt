@@ -1,6 +1,6 @@
 # Camera instrinsics verification
 
-![](rendering.png)
+![](../../../images/calibration_rendering.jpg)
 
 Generate calibration images to verify that the way we set the camera intrinsics is correct.
 

@@ -1,0 +1,7 @@
+blenderproc\.python\.loader\.TextureLoader module
+=================================================
+
+.. automodule:: blenderproc.python.loader.TextureLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

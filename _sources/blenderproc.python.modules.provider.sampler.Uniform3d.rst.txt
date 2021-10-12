@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.sampler\.Uniform3d module
+=================================================================
+
+.. automodule:: blenderproc.python.modules.provider.sampler.Uniform3d
+    :members:
+    :undoc-members:
+    :show-inheritance:

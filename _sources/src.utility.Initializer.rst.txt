@@ -1,7 +1,0 @@
-src\.utility\.Initializer module
-================================
-
-.. automodule:: src.utility.Initializer
-    :members:
-    :undoc-members:
-    :show-inheritance:

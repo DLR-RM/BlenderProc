@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.StereoGlobalMatchingWriterModule module
+=============================================================================
+
+.. automodule:: blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

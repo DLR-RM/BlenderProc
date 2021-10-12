@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.manipulators\.MaterialManipulator module
+======================================================================
+
+.. automodule:: blenderproc.python.modules.manipulators.MaterialManipulator
+    :members:
+    :undoc-members:
+    :show-inheritance:

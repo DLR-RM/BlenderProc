@@ -1,0 +1,20 @@
+blenderproc\.python\.modules\.postprocessing package
+====================================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.postprocessing.Dist2Depth
+   blenderproc.python.modules.postprocessing.NoiseRemoval
+   blenderproc.python.modules.postprocessing.OilPaintFilter
+   blenderproc.python.modules.postprocessing.TrimRedundantChannels
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.postprocessing
+    :members:
+    :undoc-members:
+    :show-inheritance:

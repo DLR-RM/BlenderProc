@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.CameraStateWriter module
+==============================================================
+
+.. automodule:: blenderproc.python.modules.writer.CameraStateWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

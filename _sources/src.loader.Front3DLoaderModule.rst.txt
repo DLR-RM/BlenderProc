@@ -1,7 +1,0 @@
-src\.loader\.Front3DLoaderModule module
-=======================================
-
-.. automodule:: src.loader.Front3DLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

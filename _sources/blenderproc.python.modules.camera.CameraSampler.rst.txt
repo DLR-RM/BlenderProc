@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.camera\.CameraSampler module
+==========================================================
+
+.. automodule:: blenderproc.python.modules.camera.CameraSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

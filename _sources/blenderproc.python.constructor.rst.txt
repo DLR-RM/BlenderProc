@@ -1,0 +1,17 @@
+blenderproc\.python\.constructor package
+========================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.constructor.RandomRoomConstructor
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.constructor
+    :members:
+    :undoc-members:
+    :show-inheritance:

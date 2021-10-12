@@ -1,6 +1,6 @@
 # Basic SUNCG scene
 
-![](output-summary.png)
+![](../../../images/suncg_basic_output-summary.jpg)
 
 Renders a SUNCG scene using precomputed camera poses read from file.
 
@@ -42,8 +42,7 @@ There are set in the main.Initializer
 ```yaml
 "config": {
   "global": {
-    "output_dir": "<args:2>",
-    "pixel_aspect_x": 1.333333333
+    "output_dir": "<args:2>"
   }
 }
 ```
@@ -74,15 +73,11 @@ The `SuncgLoader` also sets the `category_id` of each object, such that semantic
   "config": {
     "path": "<args:0>",
     "file_format": "location rotation/value _ _ _ _ _ _",
-    "source_frame": ["X", "-Z", "Y"],
+    "world_frame_change": ["X", "-Z", "Y"],
     "default_cam_param": {
       "rotation": {
         "format": "forward_vec"
       }
-    },
-    "intrinsics": {
-      "fov": 1,
-      "pixel_aspect_x": 1.333333333
     }
   }
 }
@@ -92,7 +87,7 @@ Here the cam poses from the given file are loaded.
 This text based file describes one camera pose per line.
 The `file_format` describes how each line should be parsed (Here we use the format used by files created by `scn2cam`; `_` denotes values which should be skipped).
 
-It's also necessary here to specify a different `source_frame`, as `scn2cam` does not use the same coordinate frame as Blender.
+It's also necessary here to specify a different `world_frame_change`, as `scn2cam` does not use the same coordinate frame as Blender.
 
 In `default_cam_param` we set parameters which are the same across all cam poses: 
 We change the `rotation/format`. This is necessary as rotations are specified via a forward vector in the camera file. 

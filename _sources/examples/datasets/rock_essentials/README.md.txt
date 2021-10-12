@@ -1,6 +1,6 @@
 # Rock Essentials Dataset
 
-![](rendering.png)
+![](../../../images/rock_essentials_rendering.jpg)
 
 The focus of this example is the `loader.RockEssentialsRockLoader`, `constructor.RockEssentialsGroundConstructor`, and `materials.RockEssentialsTextureSampler` modules that allow us to load models and textures from the [Rock Essentials](https://blendermarket.com/products/the-rock-essentials) (RE) dataset.
 

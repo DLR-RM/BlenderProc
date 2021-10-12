@@ -1,6 +1,6 @@
 # BlenderKit 
 <p align="center">
-<img src="rendered_example.png" alt="normals, depth and color rendering of an example table" width=900>
+<img src="../../../images/blenderkit_rendered_example.jpg" alt="normals, depth and color rendering of an example table" width=900>
 </p>
 
 The example demonstrates using `loader.BlendLoader` to load the .blend files downloaded from [BlenderKit](https://www.blenderkit.com/).

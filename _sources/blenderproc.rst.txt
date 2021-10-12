@@ -1,0 +1,17 @@
+blenderproc package
+===================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.command_line
+
+Module contents
+---------------
+
+.. automodule:: blenderproc
+    :members:
+    :undoc-members:
+    :show-inheritance:

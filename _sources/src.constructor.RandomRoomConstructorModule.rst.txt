@@ -1,7 +1,0 @@
-src\.constructor\.RandomRoomConstructorModule module
-====================================================
-
-.. automodule:: src.constructor.RandomRoomConstructorModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

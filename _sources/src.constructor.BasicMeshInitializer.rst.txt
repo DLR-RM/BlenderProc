@@ -1,7 +1,0 @@
-src\.constructor\.BasicMeshInitializer module
-=============================================
-
-.. automodule:: src.constructor.BasicMeshInitializer
-    :members:
-    :undoc-members:
-    :show-inheritance:

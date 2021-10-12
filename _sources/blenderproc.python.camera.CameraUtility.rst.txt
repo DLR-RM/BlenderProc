@@ -1,0 +1,7 @@
+blenderproc\.python\.camera\.CameraUtility module
+=================================================
+
+.. automodule:: blenderproc.python.camera.CameraUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

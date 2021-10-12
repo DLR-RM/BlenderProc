@@ -1,0 +1,7 @@
+blenderproc\.command\_line module
+=================================
+
+.. automodule:: blenderproc.command_line
+    :members:
+    :undoc-members:
+    :show-inheritance:

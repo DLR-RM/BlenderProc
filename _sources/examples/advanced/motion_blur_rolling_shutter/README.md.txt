@@ -1,8 +1,8 @@
 # Motion Blur and Rolling Shutter
 
 <p align="center">
-<img src="motion_blur.png" alt="Motion blur readme image" width=750>
-<img src="rolling_shutter.png" alt="Rolling Shutter readme image" width=750>
+<img src="../../../images/motion_blur_rolling_shutter_motion_blur.jpg" alt="Motion blur readme image" width=750>
+<img src="../../../images/motion_blur_rolling_shutter_rolling_shutter.jpg" alt="Rolling Shutter readme image" width=750>
 </p>
 
 In this example we demonstrate how motion blur and a rolling shutter effect can be generated.

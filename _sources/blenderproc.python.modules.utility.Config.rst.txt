@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.utility\.Config module
+====================================================
+
+.. automodule:: blenderproc.python.modules.utility.Config
+    :members:
+    :undoc-members:
+    :show-inheritance:

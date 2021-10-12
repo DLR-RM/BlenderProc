@@ -1,0 +1,7 @@
+blenderproc\.python\.loader\.AMASSLoader module
+===============================================
+
+.. automodule:: blenderproc.python.loader.AMASSLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

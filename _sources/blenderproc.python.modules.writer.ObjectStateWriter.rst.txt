@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.ObjectStateWriter module
+==============================================================
+
+.. automodule:: blenderproc.python.modules.writer.ObjectStateWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

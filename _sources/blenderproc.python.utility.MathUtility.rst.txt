@@ -1,0 +1,7 @@
+blenderproc\.python\.utility\.MathUtility module
+================================================
+
+.. automodule:: blenderproc.python.utility.MathUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

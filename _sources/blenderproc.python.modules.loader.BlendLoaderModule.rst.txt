@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.BlendLoaderModule module
+==============================================================
+
+.. automodule:: blenderproc.python.modules.loader.BlendLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

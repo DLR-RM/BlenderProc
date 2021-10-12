@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.materials\.RockEssentialsTextureSampler module
+============================================================================
+
+.. automodule:: blenderproc.python.modules.materials.RockEssentialsTextureSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

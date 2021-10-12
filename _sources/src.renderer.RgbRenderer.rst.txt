@@ -1,7 +1,0 @@
-src\.renderer\.RgbRenderer module
-=================================
-
-.. automodule:: src.renderer.RgbRenderer
-    :members:
-    :undoc-members:
-    :show-inheritance:

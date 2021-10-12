@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.sampler\.UpperRegionSamplerModule module
+================================================================================
+
+.. automodule:: blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

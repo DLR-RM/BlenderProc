@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.LoaderInterface module
+============================================================
+
+.. automodule:: blenderproc.python.modules.loader.LoaderInterface
+    :members:
+    :undoc-members:
+    :show-inheritance:

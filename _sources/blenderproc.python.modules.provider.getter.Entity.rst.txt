@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.getter\.Entity module
+=============================================================
+
+.. automodule:: blenderproc.python.modules.provider.getter.Entity
+    :members:
+    :undoc-members:
+    :show-inheritance:

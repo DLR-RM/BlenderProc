@@ -1,0 +1,7 @@
+blenderproc\.python\.types\.LightUtility module
+===============================================
+
+.. automodule:: blenderproc.python.types.LightUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

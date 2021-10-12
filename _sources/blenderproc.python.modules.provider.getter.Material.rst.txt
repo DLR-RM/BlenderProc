@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.getter\.Material module
+===============================================================
+
+.. automodule:: blenderproc.python.modules.provider.getter.Material
+    :members:
+    :undoc-members:
+    :show-inheritance:

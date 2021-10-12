@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.postprocessing\.Dist2Depth module
+===============================================================
+
+.. automodule:: blenderproc.python.modules.postprocessing.Dist2Depth
+    :members:
+    :undoc-members:
+    :show-inheritance:

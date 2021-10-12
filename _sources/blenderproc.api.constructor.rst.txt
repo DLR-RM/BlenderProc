@@ -1,0 +1,11 @@
+blenderproc\.constructor package
+=====================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.constructor
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

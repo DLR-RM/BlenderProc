@@ -1,0 +1,22 @@
+blenderproc\.python\.modules\.camera package
+============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.camera.CameraInterface
+   blenderproc.python.modules.camera.CameraLoader
+   blenderproc.python.modules.camera.CameraSampler
+   blenderproc.python.modules.camera.Front3DCameraSampler
+   blenderproc.python.modules.camera.ReplicaCameraSampler
+   blenderproc.python.modules.camera.SuncgCameraSampler
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.camera
+    :members:
+    :undoc-members:
+    :show-inheritance:

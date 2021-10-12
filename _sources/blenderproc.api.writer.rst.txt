@@ -1,0 +1,11 @@
+blenderproc\.writer package
+================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.writer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

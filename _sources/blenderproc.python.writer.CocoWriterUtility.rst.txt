@@ -1,0 +1,7 @@
+blenderproc\.python\.writer\.CocoWriterUtility module
+=====================================================
+
+.. automodule:: blenderproc.python.writer.CocoWriterUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

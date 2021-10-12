@@ -1,0 +1,7 @@
+blenderproc\.python\.sampler\.Front3DPointInRoomSampler module
+==============================================================
+
+.. automodule:: blenderproc.python.sampler.Front3DPointInRoomSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

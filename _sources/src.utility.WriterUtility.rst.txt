@@ -1,7 +1,0 @@
-src\.utility\.WriterUtility module
-==================================
-
-.. automodule:: src.utility.WriterUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:

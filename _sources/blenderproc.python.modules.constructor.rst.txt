@@ -1,0 +1,20 @@
+blenderproc\.python\.modules\.constructor package
+=================================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.constructor.BasicEmptyInitializer
+   blenderproc.python.modules.constructor.BasicMeshInitializer
+   blenderproc.python.modules.constructor.RandomRoomConstructorModule
+   blenderproc.python.modules.constructor.RockEssentialsGroundConstructor
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.constructor
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,25 @@
+blenderproc\.python\.sampler package
+====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.sampler.Disk
+   blenderproc.python.sampler.Front3DPointInRoomSampler
+   blenderproc.python.sampler.PartSphere
+   blenderproc.python.sampler.ReplicaPointInRoomSampler
+   blenderproc.python.sampler.Shell
+   blenderproc.python.sampler.Sphere
+   blenderproc.python.sampler.SuncgPointInRoomSampler
+   blenderproc.python.sampler.UniformSO3
+   blenderproc.python.sampler.UpperRegionSampler
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.sampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

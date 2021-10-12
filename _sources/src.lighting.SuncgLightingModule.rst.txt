@@ -1,7 +1,0 @@
-src\.lighting\.SuncgLightingModule module
-=========================================
-
-.. automodule:: src.lighting.SuncgLightingModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

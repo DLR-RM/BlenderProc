@@ -1,7 +1,0 @@
-src\.utility\.ItemWriter module
-===============================
-
-.. automodule:: src.utility.ItemWriter
-    :members:
-    :undoc-members:
-    :show-inheritance:

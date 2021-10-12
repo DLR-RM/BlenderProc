@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.object\.ObjectPoseSamplerModule module
+====================================================================
+
+.. automodule:: blenderproc.python.modules.object.ObjectPoseSamplerModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

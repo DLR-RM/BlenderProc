@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.BopLoaderModule module
+============================================================
+
+.. automodule:: blenderproc.python.modules.loader.BopLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

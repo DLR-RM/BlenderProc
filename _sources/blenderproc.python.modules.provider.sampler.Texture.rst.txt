@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.sampler\.Texture module
+===============================================================
+
+.. automodule:: blenderproc.python.modules.provider.sampler.Texture
+    :members:
+    :undoc-members:
+    :show-inheritance:

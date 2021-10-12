@@ -1,0 +1,7 @@
+blenderproc\.python\.types\.StructUtility module
+================================================
+
+.. automodule:: blenderproc.python.types.StructUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

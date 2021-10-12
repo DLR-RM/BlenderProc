@@ -1,7 +1,0 @@
-src\.loader\.BopLoaderModule module
-===================================
-
-.. automodule:: src.loader.BopLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

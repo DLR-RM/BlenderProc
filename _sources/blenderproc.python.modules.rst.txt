@@ -1,0 +1,10 @@
+blenderproc\.python\.modules package
+====================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules
+    :members:
+    :undoc-members:
+    :show-inheritance:

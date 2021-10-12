@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.utility\.ItemCollection module
+============================================================
+
+.. automodule:: blenderproc.python.modules.utility.ItemCollection
+    :members:
+    :undoc-members:
+    :show-inheritance:

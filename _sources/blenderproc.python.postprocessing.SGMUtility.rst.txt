@@ -1,0 +1,7 @@
+blenderproc\.python\.postprocessing\.SGMUtility module
+======================================================
+
+.. automodule:: blenderproc.python.postprocessing.SGMUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

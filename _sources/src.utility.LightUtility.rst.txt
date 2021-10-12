@@ -1,7 +1,0 @@
-src\.utility\.LightUtility module
-=================================
-
-.. automodule:: src.utility.LightUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:

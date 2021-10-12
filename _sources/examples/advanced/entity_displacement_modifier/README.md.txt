@@ -1,6 +1,6 @@
 # Object selection and manipulation using displacement modifier
 
-![](rendering.png)
+![](../../../images/entity_displacement_modifier_rendering.jpg)
 
 In this example we demonstrate how to manipulate a entity by adding different displacement modifiers with different textures as part of the `EntityManipulator` module.
 This is an advanced example, please make sure that you have read:

@@ -1,7 +1,0 @@
-src\.composite\.CameraObjectSampler module
-==========================================
-
-.. automodule:: src.composite.CameraObjectSampler
-    :members:
-    :undoc-members:
-    :show-inheritance:

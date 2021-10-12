@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.WriterInterface module
+============================================================
+
+.. automodule:: blenderproc.python.modules.writer.WriterInterface
+    :members:
+    :undoc-members:
+    :show-inheritance:

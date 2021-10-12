@@ -1,0 +1,18 @@
+blenderproc\.python\.tests package
+==================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.tests.SilentMode
+   blenderproc.python.tests.TestsPathManager
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.tests
+    :members:
+    :undoc-members:
+    :show-inheritance:

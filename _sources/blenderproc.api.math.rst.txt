@@ -1,0 +1,11 @@
+blenderproc\.math package
+==============================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.math
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

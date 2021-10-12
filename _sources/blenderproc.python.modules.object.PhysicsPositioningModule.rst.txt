@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.object\.PhysicsPositioningModule module
+=====================================================================
+
+.. automodule:: blenderproc.python.modules.object.PhysicsPositioningModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

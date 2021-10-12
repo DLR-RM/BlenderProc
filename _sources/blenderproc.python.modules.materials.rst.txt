@@ -1,0 +1,17 @@
+blenderproc\.python\.modules\.materials package
+===============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.materials.RockEssentialsTextureSampler
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.materials
+    :members:
+    :undoc-members:
+    :show-inheritance:

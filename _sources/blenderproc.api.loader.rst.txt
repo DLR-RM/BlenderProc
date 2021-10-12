@@ -1,0 +1,11 @@
+blenderproc\.loader package
+================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

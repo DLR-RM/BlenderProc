@@ -1,0 +1,7 @@
+blenderproc\.python\.constructor\.RandomRoomConstructor module
+==============================================================
+
+.. automodule:: blenderproc.python.constructor.RandomRoomConstructor
+    :members:
+    :undoc-members:
+    :show-inheritance:

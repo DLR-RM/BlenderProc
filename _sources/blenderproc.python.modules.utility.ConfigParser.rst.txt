@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.utility\.ConfigParser module
+==========================================================
+
+.. automodule:: blenderproc.python.modules.utility.ConfigParser
+    :members:
+    :undoc-members:
+    :show-inheritance:

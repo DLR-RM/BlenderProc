@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.lighting\.LightInterface module
+=============================================================
+
+.. automodule:: blenderproc.python.modules.lighting.LightInterface
+    :members:
+    :undoc-members:
+    :show-inheritance:

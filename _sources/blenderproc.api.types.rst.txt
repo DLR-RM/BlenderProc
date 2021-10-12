@@ -1,0 +1,11 @@
+blenderproc\.types package
+===============================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.types
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

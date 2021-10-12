@@ -1,0 +1,7 @@
+blenderproc\.python\.postprocessing\.PostProcessingUtility module
+=================================================================
+
+.. automodule:: blenderproc.python.postprocessing.PostProcessingUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

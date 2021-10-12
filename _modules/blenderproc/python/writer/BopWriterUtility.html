@@ -1,0 +1,884 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>blenderproc.python.writer.BopWriterUtility &mdash; BlenderProc 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> BlenderProc
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <div class="toctree-wrapper compound">
+<p class="compound-first caption"><span class="compound-first caption-text">Examples</span></p>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/basics/README.html">Basics</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/basic/README.html">basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/camera_object_pose/README.html">camera_object_pose</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/camera_sampling/README.html">camera_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/entity_manipulation/README.html">entity_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/light_sampling/README.html">light_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/material_manipulation/README.html">material_manipulation</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/physics_positioning/README.html">physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/basics/semantic_segmentation/README.html">semantic_segmentation</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/advanced/README.html">Advanced</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/auto_shading/README.html">auto_shading</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/calibration/README.html">calibration</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/camera_depth_of_field/README.html">camera_depth_of_field</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/coco_annotations/README.html">coco_annotations</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/diffuse_color_image/README.html">diffuse_color_image</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/dust/README.html">dust</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/entity_displacement_modifier/README.html">entity_displacement_modifier</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/material_randomizer/README.html">material_randomizer</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/motion_blur_rolling_shutter/README.html">motion_blur_rolling_shutter</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/object_pose_sampling/README.html">object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/on_surface_object_sampling/README.html">on_surface_object_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/optical_flow/README.html">optical_flow</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/physics_convex_decomposition/README.html">physics_convex_decomposition</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/random_backgrounds/README.html">random_backgrounds</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/random_room_constructor/README.html">random_room_constructor</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/advanced/stereo_matching/README.html">stereo_matching</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<li class="toctree-l1"><a class="reference external" href="examples/datasets/README.html">Datasets</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/amass_human_poses/README.html">amass_human_poses</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/blenderkit/README.html">blenderkit</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_challenge/README.html">bop_challenge</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_on_surface_sampling/README.html">bop_object_on_surface_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_physics_positioning/README.html">bop_object_physics_positioning</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_object_pose_sampling/README.html">bop_object_pose_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/bop_scene_replication/README.html">bop_scene_replication</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d/README.html">front_3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/front_3d_with_improved_mat/README.html">front_3d_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/haven/README.html">haven</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/ikea/README.html">ikea</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/pix3d/README.html">pix3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/replica/README.html">replica</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/rock_essentials/README.html">rock_essentials</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet/README.html">scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/scenenet_with_cctextures/README.html">scenenet_with_cctextures</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet/README.html">shapenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet_with_scenenet/README.html">shapenet_with_scenenet</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/shapenet_with_suncg/README.html">shapenet_with_suncg</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_basic/README.html">suncg_basic</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_cam_sampling/README.html">suncg_with_cam_sampling</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_improved_mat/README.html">suncg_with_improved_mat</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/datasets/suncg_with_object_replacer/README.html">suncg_with_object_replacer</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Api</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.camera.html#module-blenderproc.camera">bproc.camera</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.constructor.html#module-blenderproc.constructor">bproc.constructor</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.filter.html#module-blenderproc.filter">bproc.filter</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.lighting.html#module-blenderproc.lighting">bproc.lighting</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.loader.html#module-blenderproc.loader">bproc.loader</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.material.html#module-blenderproc.material">bproc.material</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.math.html#module-blenderproc.math">bproc.math</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.object.html#module-blenderproc.object">bproc.object</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.postprocessing.html#module-blenderproc.postprocessing">bproc.postprocessing</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.renderer.html#module-blenderproc.renderer">bproc.renderer</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.sampler.html#module-blenderproc.sampler">bproc.sampler</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.types.html#module-blenderproc.types">bproc.types</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.utility.html#module-blenderproc.utility">bproc.utility</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.world.html#module-blenderproc.world">bproc.world</a></li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.api.writer.html#module-blenderproc.writer">bproc.writer</a></li>
+</ul>
+<ul class="compound-middle">
+<p class="caption"><span class="caption-text">Internal</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.filter.html">bproc.python.filter</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.filter.Filter.html#blenderproc.python.filter.Filter.Filter">Filter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.lighting.html">bproc.python.lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.lighting.SuncgLighting.html#blenderproc.python.lighting.SuncgLighting.SuncgLighting">SuncgLighting</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.loader.html">bproc.python.loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.AMASSLoader.html#blenderproc.python.loader.AMASSLoader.AMASSLoader">AMASSLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BlendLoader.html#blenderproc.python.loader.BlendLoader.BlendLoader">BlendLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.BopLoader.html#blenderproc.python.loader.BopLoader.BopLoader">BopLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.CCMaterialLoader.html#blenderproc.python.loader.CCMaterialLoader.CCMaterialLoader">CCMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Front3DLoader.html#blenderproc.python.loader.Front3DLoader.Front3DLoader">Front3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.HavenMaterialLoader.html#blenderproc.python.loader.HavenMaterialLoader.HavenMaterialLoader">HavenMaterialLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.IKEALoader.html#blenderproc.python.loader.IKEALoader.IKEALoader">IKEALoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.Pix3DLoader.html#blenderproc.python.loader.Pix3DLoader.Pix3DLoader">Pix3DLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.RockEssentialsRockLoader.html#blenderproc.python.loader.RockEssentialsRockLoader.RockEssentialsRockLoader">RockEssentialsRockLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SceneNetLoader.html#blenderproc.python.loader.SceneNetLoader.SceneNetLoader">SceneNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.ShapeNetLoader.html#blenderproc.python.loader.ShapeNetLoader.ShapeNetLoader">ShapeNetLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.SuncgLoader.html#blenderproc.python.loader.SuncgLoader.SuncgLoader">SuncgLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.loader.TextureLoader.html#blenderproc.python.loader.TextureLoader.TextureLoader">TextureLoader</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.object.html">bproc.python.object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.FloorExtractor.html#blenderproc.python.object.FloorExtractor.FloorExtractor">FloorExtractor</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.ObjectReplacer.html#blenderproc.python.object.ObjectReplacer.ObjectReplacer">ObjectReplacer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.OnSurfaceSampler.html#blenderproc.python.object.OnSurfaceSampler.OnSurfaceSampler">OnSurfaceSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.object.PhysicsSimulation.html#blenderproc.python.object.PhysicsSimulation.PhysicsSimulation">PhysicsSimulation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.postprocessing.html">bproc.python.postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.PostProcessingUtility.html#blenderproc.python.postprocessing.PostProcessingUtility.PostProcessingUtility">PostProcessingUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.postprocessing.StereoGlobalMatching.html#blenderproc.python.postprocessing.StereoGlobalMatching.StereoGlobalMatching">StereoGlobalMatching</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.renderer.html">bproc.python.renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.renderer.FlowRendererUtility.html#blenderproc.python.renderer.FlowRendererUtility.FlowRendererUtility">FlowRendererUtility</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.sampler.html">bproc.python.sampler</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Disk.html#blenderproc.python.sampler.Disk.Disk">Disk</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.Front3DPointInRoomSampler.html#blenderproc.python.sampler.Front3DPointInRoomSampler.Front3DPointInRoomSampler">Front3DPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.ReplicaPointInRoomSampler.html#blenderproc.python.sampler.ReplicaPointInRoomSampler.ReplicaPointInRoomSampler">ReplicaPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.SuncgPointInRoomSampler.html#blenderproc.python.sampler.SuncgPointInRoomSampler.SuncgPointInRoomSampler">SuncgPointInRoomSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UniformSO3.html#blenderproc.python.sampler.UniformSO3.UniformSO3">UniformSO3</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.sampler.UpperRegionSampler.html#blenderproc.python.sampler.UpperRegionSampler.Region2D">Region2D</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.tests.html">bproc.python.tests</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.SilentMode.html#blenderproc.python.tests.SilentMode.SilentMode">SilentMode</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.tests.TestsPathManager.html#blenderproc.python.tests.TestsPathManager.TestsPathManager">TestsPathManager</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.types.html">bproc.python.types</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.EntityUtility.html#blenderproc.python.types.EntityUtility.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.LightUtility.html#blenderproc.python.types.LightUtility.Light">Light</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MaterialUtility.html#blenderproc.python.types.MaterialUtility.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.MeshObjectUtility.html#blenderproc.python.types.MeshObjectUtility.MeshObject">MeshObject</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.types.StructUtility.html#blenderproc.python.types.StructUtility.Struct">Struct</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.utility.html">bproc.python.utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.CollisionUtility.html#blenderproc.python.utility.CollisionUtility.CollisionUtility">CollisionUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.DefaultConfig.html#blenderproc.python.utility.DefaultConfig.DefaultConfig">DefaultConfig</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Initializer.html#blenderproc.python.utility.Initializer.Initializer">Initializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.InstallUtility.html#blenderproc.python.utility.InstallUtility.InstallUtility">InstallUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.LabelIdMapping.html#blenderproc.python.utility.LabelIdMapping.LabelIdMapping">LabelIdMapping</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.MathUtility.html#blenderproc.python.utility.MathUtility.MathUtility">MathUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.SetupUtility.html#blenderproc.python.utility.SetupUtility.SetupUtility">SetupUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrame">KeyFrame</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.KeyFrameState">KeyFrameState</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.NumpyEncoder">NumpyEncoder</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility">Utility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.BlockStopWatch">BlockStopWatch</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.utility.Utility.html#blenderproc.python.utility.Utility.Utility.UndoAfterExecution">UndoAfterExecution</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference external" href="blenderproc.python.writer.html">bproc.python.writer</a><ul>
+<li class="toctree-l2 current"><a class="reference external" href="#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">BopWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.CocoWriterUtility.html#blenderproc.python.writer.CocoWriterUtility.CocoWriterUtility">CocoWriterUtility</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.writer.WriterUtility.html#blenderproc.python.writer.WriterUtility.WriterUtility">WriterUtility</a></li>
+</ul>
+</li>
+</ul>
+<ul class="compound-last">
+<p class="caption"><span class="caption-text">Modules (deprecated)</span></p>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.camera.html">Camera</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraInterface.html#blenderproc.python.modules.camera.CameraInterface.CameraInterface">CameraInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraLoader.html#blenderproc.python.modules.camera.CameraLoader.CameraLoader">CameraLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.CameraSampler.html#blenderproc.python.modules.camera.CameraSampler.CameraSampler">CameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.Front3DCameraSampler.html#blenderproc.python.modules.camera.Front3DCameraSampler.Front3DCameraSampler">Front3DCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.ReplicaCameraSampler.html#blenderproc.python.modules.camera.ReplicaCameraSampler.ReplicaCameraSampler">ReplicaCameraSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.camera.SuncgCameraSampler.html#blenderproc.python.modules.camera.SuncgCameraSampler.SuncgCameraSampler">SuncgCameraSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.composite.html">Composite</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.composite.CameraObjectSampler.html#blenderproc.python.modules.composite.CameraObjectSampler.CameraObjectSampler">CameraObjectSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.constructor.html">Constructor</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicEmptyInitializer.html#blenderproc.python.modules.constructor.BasicEmptyInitializer.BasicEmptyInitializer">BasicEmptyInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.BasicMeshInitializer.html#blenderproc.python.modules.constructor.BasicMeshInitializer.BasicMeshInitializer">BasicMeshInitializer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RandomRoomConstructorModule.html#blenderproc.python.modules.constructor.RandomRoomConstructorModule.RandomRoomConstructorModule">RandomRoomConstructorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.html#blenderproc.python.modules.constructor.RockEssentialsGroundConstructor.RockEssentialsGroundConstructor">RockEssentialsGroundConstructor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.lighting.html">Lighting</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightInterface.html#blenderproc.python.modules.lighting.LightInterface.LightInterface">LightInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightLoader.html#blenderproc.python.modules.lighting.LightLoader.LightLoader">LightLoader</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.LightSampler.html#blenderproc.python.modules.lighting.LightSampler.LightSampler">LightSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SuncgLightingModule.html#blenderproc.python.modules.lighting.SuncgLightingModule.SuncgLightingModule">SuncgLightingModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.lighting.SurfaceLightingModule.html#blenderproc.python.modules.lighting.SurfaceLightingModule.SurfaceLightingModule">SurfaceLightingModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.loader.html">Loader</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.AMASSLoaderModule.html#blenderproc.python.modules.loader.AMASSLoaderModule.AMASSLoaderModule">AMASSLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BlendLoaderModule.html#blenderproc.python.modules.loader.BlendLoaderModule.BlendLoaderModule">BlendLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.BopLoaderModule.html#blenderproc.python.modules.loader.BopLoaderModule.BopLoaderModule">BopLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.CCMaterialLoaderModule.html#blenderproc.python.modules.loader.CCMaterialLoaderModule.CCMaterialLoaderModule">CCMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Front3DLoaderModule.html#blenderproc.python.modules.loader.Front3DLoaderModule.Front3DLoaderModule">Front3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.html#blenderproc.python.modules.loader.HavenEnvironmentLoaderModule.HavenEnvironmentLoaderModule">HavenEnvironmentLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.HavenMaterialLoaderModule.html#blenderproc.python.modules.loader.HavenMaterialLoaderModule.HavenMaterialLoaderModule">HavenMaterialLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.IKEALoaderModule.html#blenderproc.python.modules.loader.IKEALoaderModule.IKEALoaderModule">IKEALoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.LoaderInterface.html#blenderproc.python.modules.loader.LoaderInterface.LoaderInterface">LoaderInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ObjectLoaderModule.html#blenderproc.python.modules.loader.ObjectLoaderModule.ObjectLoaderModule">ObjectLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.Pix3DLoaderModule.html#blenderproc.python.modules.loader.Pix3DLoaderModule.Pix3DLoaderModule">Pix3DLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ReplicaLoaderModule.html#blenderproc.python.modules.loader.ReplicaLoaderModule.ReplicaLoaderModule">ReplicaLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.html#blenderproc.python.modules.loader.RockEssentialsRockLoaderModule.RockEssentialsRockLoaderModule">RockEssentialsRockLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SceneNetLoaderModule.html#blenderproc.python.modules.loader.SceneNetLoaderModule.SceneNetLoaderModule">SceneNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.ShapeNetLoaderModule.html#blenderproc.python.modules.loader.ShapeNetLoaderModule.ShapeNetLoaderModule">ShapeNetLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.SuncgLoaderModule.html#blenderproc.python.modules.loader.SuncgLoaderModule.SuncgLoaderModule">SuncgLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.TextureLoaderModule.html#blenderproc.python.modules.loader.TextureLoaderModule.TextureLoaderModule">TextureLoaderModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.loader.VisNormalImage.html#blenderproc.python.modules.loader.VisNormalImage.VisNormalImage">VisNormalImage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.main.html">Main</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.GlobalStorage.html#blenderproc.python.modules.main.GlobalStorage.GlobalStorage">GlobalStorage</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.InitializerModule.html#blenderproc.python.modules.main.InitializerModule.InitializerModule">InitializerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Module.html#blenderproc.python.modules.main.Module.Module">Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Pipeline.html#blenderproc.python.modules.main.Pipeline.Pipeline">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.main.Provider.html#blenderproc.python.modules.main.Provider.Provider">Provider</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.manipulators.html">Manipulators</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.EntityManipulator.html#blenderproc.python.modules.manipulators.EntityManipulator.EntityManipulator">EntityManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.MaterialManipulator.html#blenderproc.python.modules.manipulators.MaterialManipulator.MaterialManipulator">MaterialManipulator</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.manipulators.WorldManipulator.html#blenderproc.python.modules.manipulators.WorldManipulator.WorldManipulator">WorldManipulator</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.materials.html">Materials</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.materials.RockEssentialsTextureSampler.html#blenderproc.python.modules.materials.RockEssentialsTextureSampler.RockEssentialsTextureSampler">RockEssentialsTextureSampler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.object.html">Object</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.CalibrationboardSampler.html#blenderproc.python.modules.object.CalibrationboardSampler.CalibrationboardSampler">CalibrationboardSampler</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.FloorExtractorModule.html#blenderproc.python.modules.object.FloorExtractorModule.FloorExtractorModule">FloorExtractorModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.HideModule.html#blenderproc.python.modules.object.HideModule.HideModule">HideModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectPoseSamplerModule.html#blenderproc.python.modules.object.ObjectPoseSamplerModule.ObjectPoseSamplerModule">ObjectPoseSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.ObjectReplacerModule.html#blenderproc.python.modules.object.ObjectReplacerModule.ObjectReplacerModule">ObjectReplacerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.OnSurfaceSamplerModule.html#blenderproc.python.modules.object.OnSurfaceSamplerModule.OnSurfaceSamplerModule">OnSurfaceSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.object.PhysicsPositioningModule.html#blenderproc.python.modules.object.PhysicsPositioningModule.PhysicsPositioningModule">PhysicsPositioningModule</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.postprocessing.html">Postprocessing</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.Dist2Depth.html#blenderproc.python.modules.postprocessing.Dist2Depth.Dist2Depth">Dist2Depth</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.NoiseRemoval.html#blenderproc.python.modules.postprocessing.NoiseRemoval.NoiseRemoval">NoiseRemoval</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.OilPaintFilter.html#blenderproc.python.modules.postprocessing.OilPaintFilter.OilPaintFilter">OilPaintFilter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.postprocessing.TrimRedundantChannels.html#blenderproc.python.modules.postprocessing.TrimRedundantChannels.TrimRedundantChannels">TrimRedundantChannels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.provider.html">Provider</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Attribute.html#blenderproc.python.modules.provider.getter.Attribute.Attribute">Attribute</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.AttributeMerger.html#blenderproc.python.modules.provider.getter.AttributeMerger.AttributeMerger">AttributeMerger</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Entity.html#blenderproc.python.modules.provider.getter.Entity.Entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Material.html#blenderproc.python.modules.provider.getter.Material.Material">Material</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.POI.html#blenderproc.python.modules.provider.getter.POI.POI">POI</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.getter.Texture.html#blenderproc.python.modules.provider.getter.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Color.html#blenderproc.python.modules.provider.sampler.Color.Color">Color</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.DiskModule.html#blenderproc.python.modules.provider.sampler.DiskModule.DiskModule">DiskModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.PartSphereModule.html#blenderproc.python.modules.provider.sampler.PartSphereModule.PartSphereModule">PartSphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Path.html#blenderproc.python.modules.provider.sampler.Path.Path">Path</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.ShellModule.html#blenderproc.python.modules.provider.sampler.ShellModule.ShellModule">ShellModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.SphereModule.html#blenderproc.python.modules.provider.sampler.SphereModule.SphereModule">SphereModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Texture.html#blenderproc.python.modules.provider.sampler.Texture.Texture">Texture</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Uniform3d.html#blenderproc.python.modules.provider.sampler.Uniform3d.Uniform3d">Uniform3d</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UniformSO3Module.html#blenderproc.python.modules.provider.sampler.UniformSO3Module.UniformSO3Module">UniformSO3Module</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.html#blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule.UpperRegionSamplerModule">UpperRegionSamplerModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.provider.sampler.Value.html#blenderproc.python.modules.provider.sampler.Value.Value">Value</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.renderer.html">Renderer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.FlowRenderer.html#blenderproc.python.modules.renderer.FlowRenderer.FlowRenderer">FlowRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RendererInterface.html#blenderproc.python.modules.renderer.RendererInterface.RendererInterface">RendererInterface</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.RgbRenderer.html#blenderproc.python.modules.renderer.RgbRenderer.RgbRenderer">RgbRenderer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.renderer.SegMapRenderer.html#blenderproc.python.modules.renderer.SegMapRenderer.SegMapRenderer">SegMapRenderer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.utility.html">Utility</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.Config.html#blenderproc.python.modules.utility.Config.Config">Config</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.ConfigParser">ConfigParser</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ConfigParser.html#blenderproc.python.modules.utility.ConfigParser.PlaceholderTypes">PlaceholderTypes</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemCollection.html#blenderproc.python.modules.utility.ItemCollection.ItemCollection">ItemCollection</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.utility.ItemWriter.html#blenderproc.python.modules.utility.ItemWriter.ItemWriter">ItemWriter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="blenderproc.python.modules.writer.html">Writer</a><ul>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.BopWriter.html#blenderproc.python.modules.writer.BopWriter.BopWriter">BopWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CameraStateWriter.html#blenderproc.python.modules.writer.CameraStateWriter.CameraStateWriter">CameraStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.CocoAnnotationsWriter.html#blenderproc.python.modules.writer.CocoAnnotationsWriter.CocoAnnotationsWriter">CocoAnnotationsWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.Hdf5Writer.html#blenderproc.python.modules.writer.Hdf5Writer.Hdf5Writer">Hdf5Writer</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.LightStateWriter.html#blenderproc.python.modules.writer.LightStateWriter.LightStateWriter">LightStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ObjectStateWriter.html#blenderproc.python.modules.writer.ObjectStateWriter.ObjectStateWriter">ObjectStateWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.ShapeNetWriter.html#blenderproc.python.modules.writer.ShapeNetWriter.ShapeNetWriter">ShapeNetWriter</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.html#blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule.StereoGlobalMatchingWriterModule">StereoGlobalMatchingWriterModule</a></li>
+<li class="toctree-l2"><a class="reference external" href="blenderproc.python.modules.writer.WriterInterface.html#blenderproc.python.modules.writer.WriterInterface.WriterInterface">WriterInterface</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">BlenderProc</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>blenderproc.python.writer.BopWriterUtility</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for blenderproc.python.writer.BopWriterUtility</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">import</span> <span class="nn">png</span>
+<span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">bpy</span>
+<span class="kn">from</span> <span class="nn">mathutils</span> <span class="kn">import</span> <span class="n">Matrix</span>
+
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.BlenderUtility</span> <span class="kn">import</span> <span class="n">get_all_blender_mesh_objects</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.utility.Utility</span> <span class="kn">import</span> <span class="n">Utility</span><span class="p">,</span> <span class="n">resolve_path</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.postprocessing.PostProcessingUtility</span> <span class="kn">import</span> <span class="n">dist2depth</span>
+<span class="kn">from</span> <span class="nn">blenderproc.python.writer.WriterUtility</span> <span class="kn">import</span> <span class="n">WriterUtility</span>
+
+
+<div class="viewcode-block" id="write_bop"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.write_bop">[docs]</a><span class="k">def</span> <span class="nf">write_bop</span><span class="p">(</span><span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">depths</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+              <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">append_to_existing_output</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+              <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">95</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+              <span class="n">ignore_dist_thres</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.</span><span class="p">,</span> <span class="n">m2mm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">frames_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write the BOP data</span>
+
+<span class="sd">    :param output_dir: Path to the output directory.</span>
+<span class="sd">    :param depths: List of depth images in m to save</span>
+<span class="sd">    :param colors: List of color images to save</span>
+<span class="sd">    :param color_file_format: File type to save color images. Available: &quot;PNG&quot;, &quot;JPEG&quot;</span>
+<span class="sd">    :param jpg_quality: If color_file_format is &quot;JPEG&quot;, save with the given quality.</span>
+<span class="sd">    :param dataset: Only save annotations for objects of the specified bop dataset. Saves all object poses if undefined.</span>
+<span class="sd">    :param append_to_existing_output: If true, the new frames will be appended to the existing ones.</span>
+<span class="sd">    :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy</span>
+<span class="sd">        and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.</span>
+<span class="sd">    :param save_world2cam: If true, camera to world transformations &quot;cam_R_w2c&quot;, &quot;cam_t_w2c&quot; are saved in scene_camera.json</span>
+<span class="sd">    :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.</span>
+<span class="sd">    :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This</span>
+<span class="sd">        is needed if BopLoader option mm2m is used.</span>
+<span class="sd">    :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">depths</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">depths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Output paths.</span>
+    <span class="n">dataset_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+    <span class="n">chunks_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;train_pbr&#39;</span><span class="p">)</span>
+    <span class="n">camera_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">,</span> <span class="s1">&#39;camera.json&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Create the output directory structure.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">)</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="n">append_to_existing_output</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The output folder already exists: </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset_dir</span><span class="p">))</span>
+
+    <span class="n">all_mesh_objects</span> <span class="o">=</span> <span class="n">get_all_blender_mesh_objects</span><span class="p">()</span>
+
+    <span class="c1"># Select objects from the specified dataset.</span>
+    <span class="k">if</span> <span class="n">dataset</span><span class="p">:</span>
+        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">all_mesh_objects</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;bop_dataset_name&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;bop_dataset_name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">dataset</span><span class="p">:</span>
+                    <span class="n">dataset_objects</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">dataset_objects</span> <span class="o">=</span> <span class="n">all_mesh_objects</span>
+
+    <span class="c1"># Check if there is any object from the specified dataset.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset_objects</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The scene does not contain any object from the &quot;</span>
+                        <span class="s2">&quot;specified dataset: </span><span class="si">{}</span><span class="s2">. Either remove the dataset parameter &quot;</span>
+                        <span class="s2">&quot;or assign custom property &#39;bop_dataset_name&#39; to selected objects&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>
+
+    <span class="c1"># Save the data.</span>
+    <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_write_camera</span><span class="p">(</span><span class="n">camera_path</span><span class="p">,</span> <span class="n">depth_scale</span><span class="o">=</span><span class="n">depth_scale</span><span class="p">)</span>
+    <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_write_frames</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">,</span> <span class="n">dataset_objects</span><span class="o">=</span><span class="n">dataset_objects</span><span class="p">,</span> <span class="n">depths</span><span class="o">=</span><span class="n">depths</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span>
+                                   <span class="n">color_file_format</span><span class="o">=</span><span class="n">color_file_format</span><span class="p">,</span> <span class="n">frames_per_chunk</span><span class="o">=</span><span class="n">frames_per_chunk</span><span class="p">,</span>
+                                   <span class="n">m2mm</span><span class="o">=</span><span class="n">m2mm</span><span class="p">,</span> <span class="n">ignore_dist_thres</span><span class="o">=</span><span class="n">ignore_dist_thres</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="o">=</span><span class="n">save_world2cam</span><span class="p">,</span>
+                                   <span class="n">depth_scale</span><span class="o">=</span><span class="n">depth_scale</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="o">=</span><span class="n">jpg_quality</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BopWriterUtility"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility">[docs]</a><span class="k">class</span> <span class="nc">BopWriterUtility</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Saves the synthesized dataset in the BOP format. The dataset is split</span>
+<span class="sd">        into chunks which are saved as individual &quot;scenes&quot;. For more details</span>
+<span class="sd">        about the BOP format, visit the BOP toolkit docs:</span>
+<span class="sd">        https://github.com/thodan/bop_toolkit/blob/master/docs/bop_datasets_format.md</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BopWriterUtility._load_json"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._load_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_load_json</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">keys_to_int</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads content of a JSON file.</span>
+<span class="sd">        From the BOP toolkit (https://github.com/thodan/bop_toolkit).</span>
+
+<span class="sd">        :param path: Path to the JSON file.</span>
+<span class="sd">        :param keys_to_int: Convert digit dict keys to integers. Default: False</span>
+<span class="sd">        :return: Content of the loaded JSON file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Keys to integers.</span>
+        <span class="k">def</span> <span class="nf">convert_keys_to_int</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span><span class="nb">int</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">keys_to_int</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">object_hook</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">convert_keys_to_int</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">content</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">content</span></div>
+
+<div class="viewcode-block" id="BopWriterUtility._save_json"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._save_json">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_save_json</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Saves the content to a JSON file in a human-friendly format.</span>
+<span class="sd">        From the BOP toolkit (https://github.com/thodan/bop_toolkit).</span>
+
+<span class="sd">        :param path: Path to the output JSON file.</span>
+<span class="sd">        :param content: Dictionary/list to save.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;{</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">content_sorted</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">content</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">elem_id</span><span class="p">,</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">content_sorted</span><span class="p">):</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span>
+                        <span class="s1">&#39;  </span><span class="se">\&quot;</span><span class="si">{}</span><span class="se">\&quot;</span><span class="s1">: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+                    <span class="k">if</span> <span class="n">elem_id</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;}&#39;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;[</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">elem_id</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">content</span><span class="p">):</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;  </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">elem</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
+                    <span class="k">if</span> <span class="n">elem_id</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BopWriterUtility._save_depth"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._save_depth">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_save_depth</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">im</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves a depth image (16-bit) to a PNG file.</span>
+<span class="sd">        From the BOP toolkit (https://github.com/thodan/bop_toolkit).</span>
+
+<span class="sd">        :param path: Path to the output depth image file.</span>
+<span class="sd">        :param im: ndarray with the depth image to save.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.png&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Only PNG format is currently supported.&#39;</span><span class="p">)</span>
+
+        <span class="n">im</span><span class="p">[</span><span class="n">im</span> <span class="o">&gt;</span> <span class="mi">65535</span><span class="p">]</span> <span class="o">=</span> <span class="mi">65535</span>
+        <span class="n">im_uint16</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">im</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+
+        <span class="c1"># PyPNG library can save 16-bit PNG and is faster than imageio.imwrite().</span>
+        <span class="n">w_depth</span> <span class="o">=</span> <span class="n">png</span><span class="o">.</span><span class="n">Writer</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">greyscale</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bitdepth</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">w_depth</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">im_uint16</span><span class="p">,</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">im</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])))</span></div>
+
+<div class="viewcode-block" id="BopWriterUtility._write_camera"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._write_camera">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_write_camera</span><span class="p">(</span><span class="n">camera_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Writes camera.json into dataset_dir.</span>
+<span class="sd">        :param camera_path: Path to camera.json</span>
+<span class="sd">        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cam_K</span> <span class="o">=</span> <span class="n">WriterUtility</span><span class="o">.</span><span class="n">get_cam_attribute</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="s1">&#39;cam_K&#39;</span><span class="p">)</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cx&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                  <span class="s1">&#39;cy&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+                  <span class="s1">&#39;depth_scale&#39;</span><span class="p">:</span> <span class="n">depth_scale</span><span class="p">,</span>
+                  <span class="s1">&#39;fx&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                  <span class="s1">&#39;fy&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                  <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_y</span><span class="p">,</span>
+                  <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">render</span><span class="o">.</span><span class="n">resolution_x</span><span class="p">}</span>
+
+        <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_save_json</span><span class="p">(</span><span class="n">camera_path</span><span class="p">,</span> <span class="n">camera</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BopWriterUtility._get_frame_gt"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._get_frame_gt">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_frame_gt</span><span class="p">(</span><span class="n">dataset_objects</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">bpy</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">Mesh</span><span class="p">],</span> <span class="n">unit_scaling</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">ignore_dist_thres</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+                      <span class="n">destination_frame</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot; Returns GT pose annotations between active camera and objects.</span>
+<span class="sd">        :param dataset_objects: Save annotations for these objects.</span>
+<span class="sd">        :param unit_scaling: 1000. for outputting poses in mm</span>
+<span class="sd">        :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.</span>
+<span class="sd">        :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates</span>
+<span class="sd">        :return: A list of GT camera-object pose annotations for scene_gt.json</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">H_c2w_opencv</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">WriterUtility</span><span class="o">.</span><span class="n">get_cam_attribute</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="s1">&#39;cam2world_matrix&#39;</span><span class="p">,</span>
+                                                              <span class="n">local_frame_change</span><span class="o">=</span><span class="n">destination_frame</span><span class="p">))</span>
+
+        <span class="n">frame_gt</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">dataset_objects</span><span class="p">:</span>
+
+            <span class="n">H_m2w</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">WriterUtility</span><span class="o">.</span><span class="n">get_common_attribute</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;matrix_world&#39;</span><span class="p">))</span>
+
+            <span class="n">cam_H_m2c</span> <span class="o">=</span> <span class="n">H_c2w_opencv</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span> <span class="o">@</span> <span class="n">H_m2w</span>
+            <span class="n">cam_R_m2c</span> <span class="o">=</span> <span class="n">cam_H_m2c</span><span class="o">.</span><span class="n">to_quaternion</span><span class="p">()</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+            <span class="n">cam_t_m2c</span> <span class="o">=</span> <span class="n">cam_H_m2c</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span>
+
+            <span class="c1"># ignore examples that fell through the plane</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cam_t_m2c</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">ignore_dist_thres</span><span class="p">:</span>
+                <span class="n">cam_t_m2c</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_t_m2c</span> <span class="o">*</span> <span class="n">unit_scaling</span><span class="p">)</span>
+                <span class="n">frame_gt</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s1">&#39;cam_R_m2c&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cam_R_m2c</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                    <span class="s1">&#39;cam_t_m2c&#39;</span><span class="p">:</span> <span class="n">cam_t_m2c</span><span class="p">,</span>
+                    <span class="s1">&#39;obj_id&#39;</span><span class="p">:</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">]</span>
+                <span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ignored obj, &#39;</span><span class="p">,</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;category_id&quot;</span><span class="p">],</span> <span class="s1">&#39;because either &#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(1) it is further away than parameter &quot;ignore_dist_thres: &quot;,&#39;</span><span class="p">,</span> <span class="n">ignore_dist_thres</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(e.g. because it fell through a plane during physics sim)&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;or&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;(2) the object pose has not been given in meters&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">frame_gt</span></div>
+
+<div class="viewcode-block" id="BopWriterUtility._get_frame_camera"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._get_frame_camera">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_get_frame_camera</span><span class="p">(</span><span class="n">save_world2cam</span><span class="p">,</span> <span class="n">depth_scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">unit_scaling</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">destination_frame</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;-Y&quot;</span><span class="p">,</span> <span class="s2">&quot;-Z&quot;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot; Returns camera parameters for the active camera.</span>
+<span class="sd">        :param save_world2cam: If true, camera to world transformations &quot;cam_R_w2c&quot;, &quot;cam_t_w2c&quot; are saved in scene_camera.json</span>
+<span class="sd">        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm.</span>
+<span class="sd">        :param unit_scaling: 1000. for outputting poses in mm</span>
+<span class="sd">        :param destination_frame: Transform poses from Blender internal coordinates to OpenCV coordinates</span>
+<span class="sd">        :return: dict containing info for scene_camera.json </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">cam_K</span> <span class="o">=</span> <span class="n">WriterUtility</span><span class="o">.</span><span class="n">get_cam_attribute</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="s1">&#39;cam_K&#39;</span><span class="p">)</span>
+
+        <span class="n">frame_camera_dict</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;cam_K&#39;</span><span class="p">:</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">cam_K</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="s1">&#39;depth_scale&#39;</span><span class="p">:</span> <span class="n">depth_scale</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="n">save_world2cam</span><span class="p">:</span>
+            <span class="n">H_c2w_opencv</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">WriterUtility</span><span class="o">.</span><span class="n">get_cam_attribute</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="s1">&#39;cam2world_matrix&#39;</span><span class="p">,</span>
+                                                                  <span class="n">local_frame_change</span><span class="o">=</span><span class="n">destination_frame</span><span class="p">))</span>
+
+            <span class="n">H_w2c_opencv</span> <span class="o">=</span> <span class="n">H_c2w_opencv</span><span class="o">.</span><span class="n">inverted</span><span class="p">()</span>
+            <span class="n">R_w2c_opencv</span> <span class="o">=</span> <span class="n">H_w2c_opencv</span><span class="o">.</span><span class="n">to_quaternion</span><span class="p">()</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+            <span class="n">t_w2c_opencv</span> <span class="o">=</span> <span class="n">H_w2c_opencv</span><span class="o">.</span><span class="n">to_translation</span><span class="p">()</span> <span class="o">*</span> <span class="n">unit_scaling</span>
+
+            <span class="n">frame_camera_dict</span><span class="p">[</span><span class="s1">&#39;cam_R_w2c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">R_w2c_opencv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">R_w2c_opencv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">R_w2c_opencv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">frame_camera_dict</span><span class="p">[</span><span class="s1">&#39;cam_t_w2c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">t_w2c_opencv</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">frame_camera_dict</span></div>
+
+<div class="viewcode-block" id="BopWriterUtility._write_frames"><a class="viewcode-back" href="../../../../blenderproc.python.writer.BopWriterUtility.html#blenderproc.python.writer.BopWriterUtility.BopWriterUtility._write_frames">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_write_frames</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_objects</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">depths</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+                      <span class="n">colors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="p">[],</span>
+                      <span class="n">color_file_format</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PNG&quot;</span><span class="p">,</span> <span class="n">depth_scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">frames_per_chunk</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+                      <span class="n">m2mm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                      <span class="n">ignore_dist_thres</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">100.</span><span class="p">,</span> <span class="n">save_world2cam</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">jpg_quality</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">95</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write each frame&#39;s ground truth into chunk directory in BOP format</span>
+
+<span class="sd">        :param chunks_dir: Path to the output directory of the current chunk.</span>
+<span class="sd">        :param dataset_objects: Save annotations for these objects.</span>
+<span class="sd">        :param depths: List of depth images in m to save</span>
+<span class="sd">        :param colors: List of color images to save</span>
+<span class="sd">        :param color_file_format: File type to save color images. Available: &quot;PNG&quot;, &quot;JPEG&quot;</span>
+<span class="sd">        :param jpg_quality: If color_file_format is &quot;JPEG&quot;, save with the given quality.</span>
+<span class="sd">        :param depth_scale: Multiply the uint16 output depth image with this factor to get depth in mm. Used to trade-off between depth accuracy </span>
+<span class="sd">            and maximum depth value. Default corresponds to 65.54m maximum depth and 1mm accuracy.</span>
+<span class="sd">        :param ignore_dist_thres: Distance between camera and object after which object is ignored. Mostly due to failed physics.</span>
+<span class="sd">        :param m2mm: Original bop annotations and models are in mm. If true, we convert the gt annotations to mm here. This</span>
+<span class="sd">            is needed if BopLoader option mm2m is used.</span>
+<span class="sd">        :param frames_per_chunk: Number of frames saved in each chunk (called scene in BOP) </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Format of the depth images.</span>
+        <span class="n">depth_ext</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span>
+
+        <span class="n">rgb_tpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{chunk_id:06d}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;rgb&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{im_id:06d}</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">{im_type}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">depth_tpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{chunk_id:06d}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;depth&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{im_id:06d}</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">depth_ext</span><span class="p">)</span>
+        <span class="n">chunk_camera_tpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{chunk_id:06d}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;scene_camera.json&#39;</span><span class="p">)</span>
+        <span class="n">chunk_gt_tpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{chunk_id:06d}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;scene_gt.json&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Paths to the already existing chunk folders (such folders may exist</span>
+        <span class="c1"># when appending to an existing dataset).</span>
+        <span class="n">chunk_dirs</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chunks_dir</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">)))</span>
+        <span class="n">chunk_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">chunk_dirs</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">d</span><span class="p">)]</span>
+
+        <span class="c1"># Get ID&#39;s of the last already existing chunk and frame.</span>
+        <span class="n">curr_chunk_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">curr_frame_id</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="p">):</span>
+            <span class="n">last_chunk_dir</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">chunk_dirs</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">last_chunk_gt_fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">last_chunk_dir</span><span class="p">,</span> <span class="s1">&#39;scene_gt.json&#39;</span><span class="p">)</span>
+            <span class="n">chunk_gt</span> <span class="o">=</span> <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_load_json</span><span class="p">(</span><span class="n">last_chunk_gt_fpath</span><span class="p">,</span> <span class="n">keys_to_int</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Last chunk and frame ID&#39;s.</span>
+            <span class="n">last_chunk_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">last_chunk_dir</span><span class="p">))</span>
+            <span class="n">last_frame_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">chunk_gt</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="c1"># Current chunk and frame ID&#39;s.</span>
+            <span class="n">curr_chunk_id</span> <span class="o">=</span> <span class="n">last_chunk_id</span>
+            <span class="n">curr_frame_id</span> <span class="o">=</span> <span class="n">last_frame_id</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">curr_frame_id</span> <span class="o">%</span> <span class="n">frames_per_chunk</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">curr_chunk_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">curr_frame_id</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Initialize structures for the GT annotations and camera info.</span>
+        <span class="n">chunk_gt</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">chunk_camera</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">curr_frame_id</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Load GT and camera info of the chunk we are appending to.</span>
+            <span class="n">chunk_gt</span> <span class="o">=</span> <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_load_json</span><span class="p">(</span>
+                <span class="n">chunk_gt_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">),</span> <span class="n">keys_to_int</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">chunk_camera</span> <span class="o">=</span> <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_load_json</span><span class="p">(</span>
+                <span class="n">chunk_camera_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">),</span> <span class="n">keys_to_int</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Go through all frames.</span>
+        <span class="n">num_new_frames</span> <span class="o">=</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span> <span class="o">-</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">depths</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span> <span class="o">!=</span> <span class="n">num_new_frames</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The amount of images stored in the depths/colors does not correspond to the amount&quot;</span>
+                            <span class="s2">&quot;of images specified by frame_start to frame_end.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">frame_id</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_start</span><span class="p">,</span> <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_end</span><span class="p">):</span>
+            <span class="c1"># Activate frame.</span>
+            <span class="n">bpy</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">frame_set</span><span class="p">(</span><span class="n">frame_id</span><span class="p">)</span>
+
+            <span class="c1"># Reset data structures and prepare folders for a new chunk.</span>
+            <span class="k">if</span> <span class="n">curr_frame_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">chunk_gt</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">chunk_camera</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+                    <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)))</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span>
+                    <span class="n">depth_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="mi">0</span><span class="p">)))</span>
+
+            <span class="c1"># Get GT annotations and camera info for the current frame.</span>
+
+            <span class="c1"># Output translation gt in m or mm</span>
+            <span class="n">unit_scaling</span> <span class="o">=</span> <span class="mf">1000.</span> <span class="k">if</span> <span class="n">m2mm</span> <span class="k">else</span> <span class="mf">1.</span>
+
+            <span class="n">chunk_gt</span><span class="p">[</span><span class="n">curr_frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_get_frame_gt</span><span class="p">(</span><span class="n">dataset_objects</span><span class="p">,</span> <span class="n">unit_scaling</span><span class="p">,</span> <span class="n">ignore_dist_thres</span><span class="p">)</span>
+            <span class="n">chunk_camera</span><span class="p">[</span><span class="n">curr_frame_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_get_frame_camera</span><span class="p">(</span><span class="n">save_world2cam</span><span class="p">,</span> <span class="n">depth_scale</span><span class="p">,</span> <span class="n">unit_scaling</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">colors</span><span class="p">:</span>
+                <span class="n">color_rgb</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+                <span class="n">color_bgr</span> <span class="o">=</span> <span class="n">color_rgb</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">color_file_format</span> <span class="o">==</span> <span class="s1">&#39;PNG&#39;</span><span class="p">:</span>
+                    <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">rgb_fpath</span><span class="p">,</span> <span class="n">color_bgr</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">color_file_format</span> <span class="o">==</span> <span class="s1">&#39;JPEG&#39;</span><span class="p">:</span>
+                    <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="s1">&#39;.jpg&#39;</span><span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">imwrite</span><span class="p">(</span><span class="n">rgb_fpath</span><span class="p">,</span> <span class="n">color_bgr</span><span class="p">,</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">IMWRITE_JPEG_QUALITY</span><span class="p">),</span> <span class="n">jpg_quality</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rgb_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">rgb_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;RGB image has not been rendered.&quot;</span><span class="p">)</span>
+                <span class="n">color_ext</span> <span class="o">=</span> <span class="s1">&#39;.png&#39;</span> <span class="k">if</span> <span class="n">rgb_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;png&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;.jpg&#39;</span>
+                <span class="c1"># Copy the resulting RGB image.</span>
+                <span class="n">rgb_fpath</span> <span class="o">=</span> <span class="n">rgb_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">,</span> <span class="n">im_type</span><span class="o">=</span><span class="n">color_ext</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">rgb_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="n">frame_id</span><span class="p">,</span> <span class="n">rgb_fpath</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">depths</span><span class="p">:</span>
+                <span class="n">depth</span> <span class="o">=</span> <span class="n">depths</span><span class="p">[</span><span class="n">frame_id</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Load the resulting dist image.</span>
+                <span class="n">dist_output</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">.</span><span class="n">find_registered_output_by_key</span><span class="p">(</span><span class="s2">&quot;distance&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">dist_output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Distance image has not been rendered.&quot;</span><span class="p">)</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">WriterUtility</span><span class="o">.</span><span class="n">load_output_file</span><span class="p">(</span><span class="n">resolve_path</span><span class="p">(</span><span class="n">dist_output</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">%</span> <span class="n">frame_id</span><span class="p">),</span> <span class="n">remove</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">depth</span> <span class="o">=</span> <span class="n">dist2depth</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+
+            <span class="c1"># Scale the depth to retain a higher precision (the depth is saved</span>
+            <span class="c1"># as a 16-bit PNG image with range 0-65535).</span>
+            <span class="n">depth_mm</span> <span class="o">=</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">depth</span>  <span class="c1"># [m] -&gt; [mm]</span>
+            <span class="n">depth_mm_scaled</span> <span class="o">=</span> <span class="n">depth_mm</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">depth_scale</span><span class="p">)</span>
+
+            <span class="c1"># Save the scaled depth image.</span>
+            <span class="n">depth_fpath</span> <span class="o">=</span> <span class="n">depth_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">,</span> <span class="n">im_id</span><span class="o">=</span><span class="n">curr_frame_id</span><span class="p">)</span>
+            <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_save_depth</span><span class="p">(</span><span class="n">depth_fpath</span><span class="p">,</span> <span class="n">depth_mm_scaled</span><span class="p">)</span>
+
+            <span class="c1"># Save the chunk info if we are at the end of a chunk or at the last new frame.</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">curr_frame_id</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">frames_per_chunk</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> \
+                    <span class="p">(</span><span class="n">frame_id</span> <span class="o">==</span> <span class="n">num_new_frames</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+
+                <span class="c1"># Save GT annotations.</span>
+                <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_save_json</span><span class="p">(</span><span class="n">chunk_gt_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">),</span> <span class="n">chunk_gt</span><span class="p">)</span>
+
+                <span class="c1"># Save camera info.</span>
+                <span class="n">BopWriterUtility</span><span class="o">.</span><span class="n">_save_json</span><span class="p">(</span><span class="n">chunk_camera_tpath</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk_id</span><span class="o">=</span><span class="n">curr_chunk_id</span><span class="p">),</span> <span class="n">chunk_camera</span><span class="p">)</span>
+
+                <span class="c1"># Update ID&#39;s.</span>
+                <span class="n">curr_chunk_id</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">curr_frame_id</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">curr_frame_id</span> <span class="o">+=</span> <span class="mi">1</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, DLR RMC
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

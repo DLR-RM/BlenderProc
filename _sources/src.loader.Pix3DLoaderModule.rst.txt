@@ -1,7 +1,0 @@
-src\.loader\.Pix3DLoaderModule module
-=====================================
-
-.. automodule:: src.loader.Pix3DLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

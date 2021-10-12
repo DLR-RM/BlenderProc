@@ -1,0 +1,7 @@
+blenderproc\.python\.writer\.WriterUtility module
+=================================================
+
+.. automodule:: blenderproc.python.writer.WriterUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

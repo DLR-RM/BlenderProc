@@ -1,0 +1,34 @@
+blenderproc\.python\.modules\.loader package
+============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.loader.AMASSLoaderModule
+   blenderproc.python.modules.loader.BlendLoaderModule
+   blenderproc.python.modules.loader.BopLoaderModule
+   blenderproc.python.modules.loader.CCMaterialLoaderModule
+   blenderproc.python.modules.loader.Front3DLoaderModule
+   blenderproc.python.modules.loader.HavenEnvironmentLoaderModule
+   blenderproc.python.modules.loader.HavenMaterialLoaderModule
+   blenderproc.python.modules.loader.IKEALoaderModule
+   blenderproc.python.modules.loader.LoaderInterface
+   blenderproc.python.modules.loader.ObjectLoaderModule
+   blenderproc.python.modules.loader.Pix3DLoaderModule
+   blenderproc.python.modules.loader.ReplicaLoaderModule
+   blenderproc.python.modules.loader.RockEssentialsRockLoaderModule
+   blenderproc.python.modules.loader.SceneNetLoaderModule
+   blenderproc.python.modules.loader.ShapeNetLoaderModule
+   blenderproc.python.modules.loader.SuncgLoaderModule
+   blenderproc.python.modules.loader.TextureLoaderModule
+   blenderproc.python.modules.loader.VisNormalImage
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:

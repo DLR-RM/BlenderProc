@@ -1,0 +1,11 @@
+blenderproc\.world package
+===============================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.world
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

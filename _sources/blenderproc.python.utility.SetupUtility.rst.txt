@@ -1,0 +1,7 @@
+blenderproc\.python\.utility\.SetupUtility module
+=================================================
+
+.. automodule:: blenderproc.python.utility.SetupUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

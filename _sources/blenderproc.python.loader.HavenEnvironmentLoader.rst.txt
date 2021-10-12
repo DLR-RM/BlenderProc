@@ -1,0 +1,7 @@
+blenderproc\.python\.loader\.HavenEnvironmentLoader module
+==========================================================
+
+.. automodule:: blenderproc.python.loader.HavenEnvironmentLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

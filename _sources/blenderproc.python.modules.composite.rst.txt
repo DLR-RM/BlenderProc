@@ -1,0 +1,17 @@
+blenderproc\.python\.modules\.composite package
+===============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.composite.CameraObjectSampler
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.composite
+    :members:
+    :undoc-members:
+    :show-inheritance:

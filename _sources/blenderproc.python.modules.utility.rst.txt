@@ -1,0 +1,20 @@
+blenderproc\.python\.modules\.utility package
+=============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.utility.Config
+   blenderproc.python.modules.utility.ConfigParser
+   blenderproc.python.modules.utility.ItemCollection
+   blenderproc.python.modules.utility.ItemWriter
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.utility
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,6 +1,6 @@
 # SUNCG scene with custom camera sampling
 
-![](output-summary.png)
+![](../../../images/suncg_with_cam_sampling_output-summary.jpg)
 
 In contrast to the SUNCG basic example, we do here not load precomputed camera poses, but sample them using the `SuncgCameraSampler` module.
 

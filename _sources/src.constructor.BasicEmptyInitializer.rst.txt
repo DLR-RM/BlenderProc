@@ -1,7 +1,0 @@
-src\.constructor\.BasicEmptyInitializer module
-==============================================
-
-.. automodule:: src.constructor.BasicEmptyInitializer
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,0 +1,17 @@
+blenderproc\.python\.filter package
+===================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.filter.Filter
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.filter
+    :members:
+    :undoc-members:
+    :show-inheritance:

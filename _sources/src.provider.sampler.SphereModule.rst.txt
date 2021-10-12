@@ -1,7 +1,0 @@
-src\.provider\.sampler\.SphereModule module
-===========================================
-
-.. automodule:: src.provider.sampler.SphereModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

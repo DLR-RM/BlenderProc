@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.IKEALoaderModule module
+=============================================================
+
+.. automodule:: blenderproc.python.modules.loader.IKEALoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

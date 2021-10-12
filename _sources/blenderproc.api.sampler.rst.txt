@@ -1,0 +1,11 @@
+blenderproc\.sampler package
+=================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.sampler
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

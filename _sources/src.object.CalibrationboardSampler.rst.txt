@@ -1,7 +1,0 @@
-src\.object\.CalibrationboardSampler module
-===========================================
-
-.. automodule:: src.object.CalibrationboardSampler
-    :members:
-    :undoc-members:
-    :show-inheritance:

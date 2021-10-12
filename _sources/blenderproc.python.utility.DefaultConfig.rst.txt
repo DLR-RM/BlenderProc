@@ -1,0 +1,7 @@
+blenderproc\.python\.utility\.DefaultConfig module
+==================================================
+
+.. automodule:: blenderproc.python.utility.DefaultConfig
+    :members:
+    :undoc-members:
+    :show-inheritance:

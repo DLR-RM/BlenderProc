@@ -1,0 +1,7 @@
+blenderproc\.python\.loader\.RockEssentialsRockLoader module
+============================================================
+
+.. automodule:: blenderproc.python.loader.RockEssentialsRockLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

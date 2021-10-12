@@ -1,7 +1,0 @@
-src\.object\.HideModule module
-==============================
-
-.. automodule:: src.object.HideModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

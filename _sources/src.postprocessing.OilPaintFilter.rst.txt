@@ -1,7 +1,0 @@
-src\.postprocessing\.OilPaintFilter module
-==========================================
-
-.. automodule:: src.postprocessing.OilPaintFilter
-    :members:
-    :undoc-members:
-    :show-inheritance:

@@ -1,0 +1,11 @@
+blenderproc\.lighting package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.lighting
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

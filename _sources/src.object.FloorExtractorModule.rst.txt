@@ -1,7 +1,0 @@
-src\.object\.FloorExtractorModule module
-========================================
-
-.. automodule:: src.object.FloorExtractorModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

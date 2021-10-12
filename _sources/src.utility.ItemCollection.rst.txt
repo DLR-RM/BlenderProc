@@ -1,7 +1,0 @@
-src\.utility\.ItemCollection module
-===================================
-
-.. automodule:: src.utility.ItemCollection
-    :members:
-    :undoc-members:
-    :show-inheritance:

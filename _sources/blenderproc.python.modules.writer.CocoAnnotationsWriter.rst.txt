@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.CocoAnnotationsWriter module
+==================================================================
+
+.. automodule:: blenderproc.python.modules.writer.CocoAnnotationsWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

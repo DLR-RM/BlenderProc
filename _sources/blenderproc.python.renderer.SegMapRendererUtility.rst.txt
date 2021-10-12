@@ -1,0 +1,7 @@
+blenderproc\.python\.renderer\.SegMapRendererUtility module
+===========================================================
+
+.. automodule:: blenderproc.python.renderer.SegMapRendererUtility
+    :members:
+    :undoc-members:
+    :show-inheritance:

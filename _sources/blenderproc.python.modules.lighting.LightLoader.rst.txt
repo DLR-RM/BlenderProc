@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.lighting\.LightLoader module
+==========================================================
+
+.. automodule:: blenderproc.python.modules.lighting.LightLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.ObjectLoaderModule module
+===============================================================
+
+.. automodule:: blenderproc.python.modules.loader.ObjectLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

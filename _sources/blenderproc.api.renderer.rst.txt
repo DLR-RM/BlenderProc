@@ -1,0 +1,11 @@
+blenderproc\.renderer package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.renderer
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

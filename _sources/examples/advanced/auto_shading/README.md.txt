@@ -1,6 +1,6 @@
 # Auto shading
 
-![](rendering.png)
+![](../../../images/auto_shading_rendering.jpg)
 
 This example demonstrates the different shading modes of Blender and how to apply them to objects. Available options are,
 from left to right, FLAT, AUTO and SMOOTH shading.

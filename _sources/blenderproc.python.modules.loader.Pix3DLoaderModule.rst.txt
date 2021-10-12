@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.Pix3DLoaderModule module
+==============================================================
+
+.. automodule:: blenderproc.python.modules.loader.Pix3DLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

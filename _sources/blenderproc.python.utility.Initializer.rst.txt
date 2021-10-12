@@ -1,0 +1,7 @@
+blenderproc\.python\.utility\.Initializer module
+================================================
+
+.. automodule:: blenderproc.python.utility.Initializer
+    :members:
+    :undoc-members:
+    :show-inheritance:

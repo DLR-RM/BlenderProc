@@ -1,0 +1,7 @@
+blenderproc\.python\.sampler\.SuncgPointInRoomSampler module
+============================================================
+
+.. automodule:: blenderproc.python.sampler.SuncgPointInRoomSampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

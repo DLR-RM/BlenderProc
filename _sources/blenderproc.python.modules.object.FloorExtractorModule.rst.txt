@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.object\.FloorExtractorModule module
+=================================================================
+
+.. automodule:: blenderproc.python.modules.object.FloorExtractorModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

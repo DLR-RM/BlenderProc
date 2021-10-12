@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.VisNormalImage module
+===========================================================
+
+.. automodule:: blenderproc.python.modules.loader.VisNormalImage
+    :members:
+    :undoc-members:
+    :show-inheritance:

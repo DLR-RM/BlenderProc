@@ -1,0 +1,19 @@
+blenderproc\.python\.writer package
+===================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.writer.BopWriterUtility
+   blenderproc.python.writer.CocoWriterUtility
+   blenderproc.python.writer.WriterUtility
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

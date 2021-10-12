@@ -1,0 +1,20 @@
+blenderproc\.python\.modules\.renderer package
+==============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.renderer.FlowRenderer
+   blenderproc.python.modules.renderer.RendererInterface
+   blenderproc.python.modules.renderer.RgbRenderer
+   blenderproc.python.modules.renderer.SegMapRenderer
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.renderer
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,11 @@
+blenderproc\.camera package
+================================
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.camera
+    :members:
+    :undoc-members:
+    :show-inheritance:
+    :imported-members:

@@ -1,6 +1,6 @@
 ## Benchmark for 6D Object Pose Estimation (BOP) <br/> Sampling objects, cameras and lights
 
-<img src=tless_sample.png width="240" height="180"> <img src=hb_sample.png width="240" height="180"> <img src=hb_sample_inst.png width="240" height="180">
+<img src=../../../images/bop_object_pose_sampling_tless_sample.jpg width="240" height="180"> <img src=../../../images/bop_object_pose_sampling_hb_sample.jpg width="240" height="180"> <img src=../../../images/bop_object_pose_sampling_hb_sample_inst.jpg width="240" height="180">
 
 This example shows how to load BOP objects and alternatingly sample light poses, camera poses (looking towards the objects) and object poses (including collision checks).
 

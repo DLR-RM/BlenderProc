@@ -1,0 +1,18 @@
+blenderproc\.python\.material package
+=====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.material.Dust
+   blenderproc.python.material.MaterialLoaderUtility
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.material
+    :members:
+    :undoc-members:
+    :show-inheritance:

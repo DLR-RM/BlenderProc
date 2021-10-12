@@ -1,7 +1,7 @@
 # ShapeNet with Scenenet
 
 <p align="center">
-<img src="rendering.jpg" alt="Front readme image" width=550>
+<img src="../../../images/shapenet_with_scenenet_rendering.jpg" alt="Front readme image" width=550>
 </p>
 
 The focus of this example is the `loader.ShapeNetLoader` in combination with the SceneNet loader, this is an advanced example, please make sure that you have read:

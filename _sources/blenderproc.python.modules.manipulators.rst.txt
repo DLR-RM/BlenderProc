@@ -1,0 +1,19 @@
+blenderproc\.python\.modules\.manipulators package
+==================================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.manipulators.EntityManipulator
+   blenderproc.python.modules.manipulators.MaterialManipulator
+   blenderproc.python.modules.manipulators.WorldManipulator
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.manipulators
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+blenderproc\.python\.lighting\.SuncgLighting module
+===================================================
+
+.. automodule:: blenderproc.python.lighting.SuncgLighting
+    :members:
+    :undoc-members:
+    :show-inheritance:

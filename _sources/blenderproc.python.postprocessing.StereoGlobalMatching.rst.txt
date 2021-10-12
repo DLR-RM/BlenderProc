@@ -1,0 +1,7 @@
+blenderproc\.python\.postprocessing\.StereoGlobalMatching module
+================================================================
+
+.. automodule:: blenderproc.python.postprocessing.StereoGlobalMatching
+    :members:
+    :undoc-members:
+    :show-inheritance:

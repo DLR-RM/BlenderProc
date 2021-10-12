@@ -1,7 +1,0 @@
-src\.loader\.SuncgLoaderModule module
-=====================================
-
-.. automodule:: src.loader.SuncgLoaderModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

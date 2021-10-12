@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.sampler\.DiskModule module
+==================================================================
+
+.. automodule:: blenderproc.python.modules.provider.sampler.DiskModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

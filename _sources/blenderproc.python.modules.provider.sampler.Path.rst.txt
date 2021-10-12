@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.provider\.sampler\.Path module
+============================================================
+
+.. automodule:: blenderproc.python.modules.provider.sampler.Path
+    :members:
+    :undoc-members:
+    :show-inheritance:

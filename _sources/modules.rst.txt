@@ -1,7 +1,7 @@
-src
-===
+blenderproc
+===========
 
 .. toctree::
    :maxdepth: 4
 
-   src
+   blenderproc

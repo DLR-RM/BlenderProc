@@ -1,7 +1,0 @@
-src\.object\.PhysicsPositioningModule module
-============================================
-
-.. automodule:: src.object.PhysicsPositioningModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

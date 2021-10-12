@@ -1,7 +1,0 @@
-src\.writer\.StereoGlobalMatchingWriter module
-==============================================
-
-.. automodule:: src.writer.StereoGlobalMatchingWriter
-    :members:
-    :undoc-members:
-    :show-inheritance:

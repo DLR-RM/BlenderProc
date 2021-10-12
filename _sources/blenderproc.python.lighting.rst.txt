@@ -1,0 +1,18 @@
+blenderproc\.python\.lighting package
+=====================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.lighting.SuncgLighting
+   blenderproc.python.lighting.SurfaceLighting
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.lighting
+    :members:
+    :undoc-members:
+    :show-inheritance:

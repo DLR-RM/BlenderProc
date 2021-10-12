@@ -1,0 +1,7 @@
+blenderproc\.python\.sampler\.Sphere module
+===========================================
+
+.. automodule:: blenderproc.python.sampler.Sphere
+    :members:
+    :undoc-members:
+    :show-inheritance:

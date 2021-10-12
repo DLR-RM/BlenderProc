@@ -1,0 +1,7 @@
+blenderproc\.python\.loader\.CCMaterialLoader module
+====================================================
+
+.. automodule:: blenderproc.python.loader.CCMaterialLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

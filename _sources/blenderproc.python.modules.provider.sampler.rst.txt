@@ -1,0 +1,27 @@
+blenderproc\.python\.modules\.provider\.sampler package
+=======================================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.provider.sampler.Color
+   blenderproc.python.modules.provider.sampler.DiskModule
+   blenderproc.python.modules.provider.sampler.PartSphereModule
+   blenderproc.python.modules.provider.sampler.Path
+   blenderproc.python.modules.provider.sampler.ShellModule
+   blenderproc.python.modules.provider.sampler.SphereModule
+   blenderproc.python.modules.provider.sampler.Texture
+   blenderproc.python.modules.provider.sampler.Uniform3d
+   blenderproc.python.modules.provider.sampler.UniformSO3Module
+   blenderproc.python.modules.provider.sampler.UpperRegionSamplerModule
+   blenderproc.python.modules.provider.sampler.Value
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.provider.sampler
+    :members:
+    :undoc-members:
+    :show-inheritance:

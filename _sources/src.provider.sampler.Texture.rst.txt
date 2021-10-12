@@ -1,7 +1,0 @@
-src\.provider\.sampler\.Texture module
-======================================
-
-.. automodule:: src.provider.sampler.Texture
-    :members:
-    :undoc-members:
-    :show-inheritance:

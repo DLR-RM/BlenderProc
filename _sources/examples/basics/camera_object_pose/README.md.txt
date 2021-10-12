@@ -1,8 +1,8 @@
 # Camera Object Pose Setting
 
 <p align="center">
-<img src="rendering_0.jpg" alt="Front readme image" width=375>
-<img src="hb_val_3_0.png" alt="Front readme image" width=375>
+<img src="../../../images/camera_object_pose_rendering_0.jpg" alt="Front readme image" width=375>
+<img src="../../../images/camera_object_pose_hb_val_3_0.jpg" alt="Front readme image" width=375>
 </p>
 
 In this example we show how to load and render a 3D model in specified extrinsics and intrinsics with BlenderProc.
@@ -82,7 +82,7 @@ The arguments afterwards are used to fill placeholders like `<args:0>` inside th
     {
       "module": "camera.CameraLoader",
       "config": {
-        "source_frame": ["X", "-Y", "-Z"],
+        "local_frame_change": ["X", "-Y", "-Z"],
         "cam_poses": [
             "cam2world_matrix": [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
         ], 

@@ -1,7 +1,0 @@
-src\.utility\.SetupUtility module
-=================================
-
-.. automodule:: src.utility.SetupUtility
-    :members:
-    :undoc-members:
-    :show-inheritance:

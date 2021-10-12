@@ -1,0 +1,25 @@
+blenderproc\.python\.modules\.writer package
+============================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.writer.BopWriter
+   blenderproc.python.modules.writer.CameraStateWriter
+   blenderproc.python.modules.writer.CocoAnnotationsWriter
+   blenderproc.python.modules.writer.Hdf5Writer
+   blenderproc.python.modules.writer.LightStateWriter
+   blenderproc.python.modules.writer.ObjectStateWriter
+   blenderproc.python.modules.writer.ShapeNetWriter
+   blenderproc.python.modules.writer.StereoGlobalMatchingWriterModule
+   blenderproc.python.modules.writer.WriterInterface
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.writer
+    :members:
+    :undoc-members:
+    :show-inheritance:

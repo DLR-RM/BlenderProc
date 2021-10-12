@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.writer\.LightStateWriter module
+=============================================================
+
+.. automodule:: blenderproc.python.modules.writer.LightStateWriter
+    :members:
+    :undoc-members:
+    :show-inheritance:

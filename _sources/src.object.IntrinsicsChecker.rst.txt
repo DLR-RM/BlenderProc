@@ -1,7 +1,0 @@
-src\.object\.IntrinsicsChecker module
-=====================================
-
-.. automodule:: src.object.IntrinsicsChecker
-    :members:
-    :undoc-members:
-    :show-inheritance:

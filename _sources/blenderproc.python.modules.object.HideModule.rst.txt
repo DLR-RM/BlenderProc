@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.object\.HideModule module
+=======================================================
+
+.. automodule:: blenderproc.python.modules.object.HideModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

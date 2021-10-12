@@ -1,0 +1,22 @@
+blenderproc\.python\.modules\.provider\.getter package
+======================================================
+
+Submodules
+----------
+
+.. toctree::
+
+   blenderproc.python.modules.provider.getter.Attribute
+   blenderproc.python.modules.provider.getter.AttributeMerger
+   blenderproc.python.modules.provider.getter.Entity
+   blenderproc.python.modules.provider.getter.Material
+   blenderproc.python.modules.provider.getter.POI
+   blenderproc.python.modules.provider.getter.Texture
+
+Module contents
+---------------
+
+.. automodule:: blenderproc.python.modules.provider.getter
+    :members:
+    :undoc-members:
+    :show-inheritance:

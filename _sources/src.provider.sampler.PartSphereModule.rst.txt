@@ -1,7 +1,0 @@
-src\.provider\.sampler\.PartSphereModule module
-===============================================
-
-.. automodule:: src.provider.sampler.PartSphereModule
-    :members:
-    :undoc-members:
-    :show-inheritance:

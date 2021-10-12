@@ -1,0 +1,7 @@
+blenderproc\.python\.modules\.loader\.SuncgLoaderModule module
+==============================================================
+
+.. automodule:: blenderproc.python.modules.loader.SuncgLoaderModule
+    :members:
+    :undoc-members:
+    :show-inheritance:

@@ -1,0 +1,7 @@
+blenderproc\.python\.loader\.SceneNetLoader module
+==================================================
+
+.. automodule:: blenderproc.python.loader.SceneNetLoader
+    :members:
+    :undoc-members:
+    :show-inheritance:

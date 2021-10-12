@@ -1,6 +1,6 @@
 # AMASS Dataset
 <p align="center">
-<img src="rendering.png" alt="Front readme image" width=400>
+<img src="../../../images/amass_human_poses_rendering.jpg" alt="Front readme image" width=400>
 </p>
 
 AMASS (Archive of Motion Capture as Surface Shapes) is a large database of human motion unifying different optical marker-based motion capture datasets by representing them within a common framework and parameterization. AMASS is readily useful for generating training data for deep learning.
@@ -57,7 +57,7 @@ python run.py examples/datasets/amass_human_poses/config.yaml resources/AMASS ex
 ```
 
 * `examples/datasets/amass_human_poses/config.yaml`: path to the configuration file with pipeline configuration.
-* `esources/AMASS`: path to the AMASS Dataset folder in resources folder
+* `resources/AMASS`: path to the AMASS Dataset folder in resources folder
 * `examples/datasets/amass_human_poses/output`: path to the output directory
 
 ## Visualization
