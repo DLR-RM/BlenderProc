@@ -23,7 +23,7 @@ python scripts/download_cc_textures.py
 ```
 
 ```
-python run.py examples/datasets/bop_challenge/<config_dataset.yaml> 
+blenderpoc run examples/datasets/bop_challenge/<config_dataset.yaml> 
               <path_to_bop_data> 
               <bop_dataset_name> 
               <path_to_bop_toolkit> 

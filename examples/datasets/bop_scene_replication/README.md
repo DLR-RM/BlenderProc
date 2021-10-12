@@ -8,14 +8,14 @@ This example shows how to synthetically recreate BOP scenes.
 
 First make sure that you have downloaded a [BOP dataset](https://bop.felk.cvut.cz/datasets/) in the original folder structure. Also please clone the [BOP toolkit](https://github.com/thodan/bop_toolkit).
 
-In [examples/datasets/bop_scene_replication/config.yaml](config.yaml) set the `blender_install_path` where Blender is or should be installed.
+In [examples/datasets/bop_scene_replication/main.py](main.py) set the `blender_install_path` where Blender is or should be installed.
 
 Execute in the BlenderProc main directory: 
 
 ```
-python run.py examples/datasets/bop_scene_replication/config.yaml <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/datasets/bop_scene_replication/output
+blenderproc run examples/datasets/bop_scene_replication/main.py <path_to_bop_data> <bop_dataset_name> <path_to_bop_toolkit> examples/datasets/bop_scene_replication/output
 ```
-* `examples/datasets/bop_scene_replication/config.yaml`: path to the pipeline configuration file.
+* `examples/datasets/bop_scene_replication/main.py`: path to the python file with pipeline configuration.
 * `<path_to_bop_data>`: path to a folder containing BOP datasets.
 * `<bop_dataset_name>`: name of BOP dataset, e.g. tless
 * `<path_to_bop_toolkit> `: path to the BOP toolkit containing dataset parameters, etc.
@@ -26,34 +26,28 @@ python run.py examples/datasets/bop_scene_replication/config.yaml <path_to_bop_d
 Visualize the generated data and labels:
 
 ```
-python scripts/visHdf5Files.py example/bop_scene_replication/0.hdf5
+blenderproc vis_hdf5 example/bop_scene_replication/0.hdf5
 ```
 
 ## Steps
 
-* Loads BOP scene with object models, object poses, camera poses and camera intrinsics: `loader.BopLoader` module.
-* Creates a point light sampled inside a shell: `lighting.LightSampler` module.
-* Renders rgb: `renderer.RgbRenderer` module.
-* Renders instance segmentation masks: `renderer.SegMapRenderer` module.
-* Writes labels and images to compressed hdf5 files in output_dir: `writer.Hdf5Writer` module.
-* Writes pose labels in BOP format to output_dir: `writer.BopWriter` module.
+* Loads BOP scene with object models, object poses, camera poses and camera intrinsics: `bproc.loader.load_bop()`.
+* Creates a point light sampled inside a shell.
+* Renders rgb: `bproc.renderer()`.
+* Renders instance segmentation masks: `bproc.renderer()`.
+* Writes pose labels in BOP format to output_dir: `bproc.writer.write_bop()`.
 
-## Config file
+## Python file (main.py)
 
 ### BopLoader
 
-```yaml
-    {
-      "module": "loader.BopLoader",
-      "config": {
-        "source_frame": ["X", "-Y", "-Z"],
-        "bop_dataset_path": "<args:0>/<args:1>",
-        "mm2m": True,
-        "split": "test", # careful, some BOP datasets only have test sets
-        "scene_id": 1,
-        "model_type": ""
-      }
-    }
+```python
+bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bop_parent_path, args.bop_dataset_name),
+                          sys_paths = args.bop_toolkit_path,
+                          mm2m = True,
+                          scene_id = 1,
+                          split = 'test') # careful, some BOP datasets only have labeled 'val' sets
+
 ```
 
 If `scene_id` is specified, BopLoader recreates the specified scene of the BOP dataset specified by `bop_dataset_path`. All camera poses and intrinsics from the specified scene are also loaded.  

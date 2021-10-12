@@ -24,7 +24,7 @@ However, we will give you a step by step explanation on how to get access.
 5. On the AMASS download page `https://amass.is.tue.mpg.de/dataset` many different motion capture dataset are listed, choose the one you are interested in to generate a pose from and download the body data. For example, we choose here the CMU motion capture dataset to download.
 	<img src="instructions_screenshots/mocap_dataset_download.png"> 
 	Download the dataset and extract it under the `resources/AMASS` folder.
-6. In the end the structure of the `resource/AMASS` folder should be, this might mean you need to create some folders or move some data: 
+6. In the end the structure of the `resource/AMASS` folder should be as following. This might mean you need to create some folders or move some data: 
 
 ```shell
 - resources
@@ -53,50 +53,51 @@ However, we will give you a step by step explanation on how to get access.
 Execute in the BlenderProc main directory:
 
 ```shell
-python run.py examples/datasets/amass_human_poses/config.yaml resources/AMASS examples/datasets/amass_human_poses/output
+blenderproc run examples/datasets/amass_human_poses/main.py resources/AMASS examples/datasets/amass_human_poses/output
 ```
 
-* `examples/datasets/amass_human_poses/config.yaml`: path to the configuration file with pipeline configuration.
-* `resources/AMASS`: path to the AMASS Dataset folder in resources folder
-* `examples/datasets/amass_human_poses/output`: path to the output directory
+* `examples/datasets/amass_human_poses/main.py`: path to the python file with pipeline configuration.
+* `resources/AMASS`: path to the AMASS Dataset folder in resources folder.
+* `examples/datasets/amass_human_poses/output`: path to the output directory.
 
 ## Visualization
 
 In the output folder you will find multiple `.hdf5` files. These can be visualized with the script:
 
 ```shell
-python scripts/visHdf5Files.py examples/datasets/amass_human_poses/output/*.hdf5
+blenderproc vis_hdf5 examples/datasets/amass_human_poses/output/*.hdf5
 ```
 
 ## Steps
 
-* AMASSLoader first checks the taxonomy.json file for the currently supported datasets
-* Loads the body parameters for the selected pose from dataset
-* Loads the parametric body model from the downloaded body models
-* Feed the the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose
-* Adds cameras to the scene: `camera.CameraSampler`
-* Renders rgb, normals and distance: `renderer.RgbRenderer` module.
-* Writes the output to .hdf5 containers: `writer.Hdf5Writer` module.
+* AMASSLoader first checks the taxonomy.json file for the currently supported datasets.
+* Loads the body parameters for the selected pose from the dataset.
+* Loads the parametric body model from the downloaded body models.
+* Feed the pose parameters inside the parametric model and generate a mesh equivalent to the selected pose.
+* Define a light and set its location and energy level.
+* Find point of interest, all cam poses should look towards it: `bproc.object.compute_poi()`.
+* Sample random camera location around the objects: `bproc.sampler.sphere()`.
+* Adds camera pose to the scene: `bproc.camera.add_camera_pose()`.
+* Enables normals and distance (rgb is enabled by default): `bproc.renderer.enable_normals_output()` `bproc.renderer.enable_distance_output()`.
+* Renders all set camera poses: `bproc.renderer.render()`.
+* Writes the output to .hdf5 containers: `bproc.writer.write_hdf5()`.
 
-## Config file
+## Python file (main.py)
 
 ### AMASSLoader
 
-```yaml
-{
-  "module": "loader.AMASSLoader",
-  "config": {
-    "data_path": "<args:0>",
-    "sub_dataset_id": "CMU",
-    "body_model_gender": "male",
-    "subject_id": "10",
-    "sequence_id": "1",
-    "frame_id": "600",
-  }      
-}
+```python
+objs = bproc.loader.load_AMASS(
+    args.amass_dir,
+    sub_dataset_id="CMU",
+    body_model_gender="male",
+    subject_id="10",
+    sequence_id=1,
+    frame_id=600
+)
 ```
 
-* `sub_dataset_id` : one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset https://amass.is.tue.mpg.de/dataset **Note: only the CMU motion capture dataset is currently supported by the AMASSLoader module**
+* `sub_dataset_id` : one of the motion capture datasets included inside the AMASS dataset, the name is exactly equivalent to the names mentioned in the download page of the AMASS dataset https://amass.is.tue.mpg.de/dataset **Note: only the CMU motion capture dataset is currently supported by the AMASSLoader**
 * `body_model_gender` : select gender of the model that will represent the selected pose. Available options are: `[male, female, neutral]`
 * `subject_id` : represents the category of the motion, which type of motion the pose will be extracted from. This refers to every motion capture dataset included in AMASS dataset to see the set of supported motion categories. For the CMU dataset, you can have a look on the different supported motion categories on their website [http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%](http://mocap.cs.cmu.edu/search.php?subjectnumber=%&motion=%) and configure the number equivalent to the category id. *For this example, we are interested in the "kick soccer ball" category, so we chose the subject_id to be `10`.*
 * `sequence_id` : every category has more than one sequence of people performing the same motion using different scenarios. Hint: You can watch the videos on the original dataset website to select a a specific sequence or you can just leave the default value which is `1`.
@@ -104,29 +105,17 @@ python scripts/visHdf5Files.py examples/datasets/amass_human_poses/output/*.hdf5
 
 ### CameraSampler
 
-```yaml
-{
-    "module": "camera.CameraSampler",
-    "config": {
-      "cam_poses": [
-        {
-          "number_of_samples": 5,
-          "location": {
-            "provider":"sampler.Sphere",
-            "center": [0, 0, 0],
-            "radius": 3,
-            "mode": "SURFACE"
-          },
-          "rotation": {
-            "format": "look_at",
-            "value": {
-              "provider": "getter.POI"
-            }
-          }
-        }
-      ]
-    }
-}
+```python
+# Find point of interest, all cam poses should look towards it
+poi = bproc.object.compute_poi(objs
+for i in range(5):
+    # Sample random camera location around the objects
+    location = bproc.sampler.sphere([0, 0, 0], radius=3, mode="SURFACE")
+    # Compute rotation based on vector going from location towards poi
+    rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location)
+    # Add homog cam pose based on location an rotation
+    cam2world_matrix = bproc.math.build_transformation_mat(location, rotation_matrix)
+    bproc.camera.add_camera_pose(cam2world_matrix
 ```
 
 We sample here five random camera poses, where the location is on a sphere with a radius of 3 around the object. 
