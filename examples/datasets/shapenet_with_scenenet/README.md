@@ -59,9 +59,8 @@ room_objs = bproc.loader.load_scenenet(args.scene_net_obj_path, args.scene_textu
 
 This loader automatically loads a SceneNet scene/house given the corresponding `.obj` file. 
 The textures are randomly sampled from the texture folder, for more information see the [scenenet](../scenenet/README.md) example.
-The `bproc.loader.load_scnenet()` also sets the `category_id` of each object, such that semantic segmentation maps can be rendered in a following step.
+The `bproc.loader.load_scenenet()` also sets the `category_id` of each object, such that semantic segmentation maps can be rendered in a following step.
 
-To each loaded object we add the custom property `cp_physics: False`, which means that all of the objects behave passively in a physics simulation.
 
 ### ShapeNetLoader 
 

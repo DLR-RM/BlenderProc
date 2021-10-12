@@ -55,7 +55,6 @@ This loads empty materials, corresponding to the materials ,which are available 
 It assumes the textures have been downloaded via the [script](../../scripts/download_cc_textures.py). 
 
 As the loading of all the images is quite time consuming, we preload here only the structure, but not the actual images.
-Each material will have a custom property `"is_cc_texture": True`.
 
 This only sets up the materials which can then be used by other functions.
 
@@ -77,7 +76,6 @@ This builds up on the [material_randomizer](../material_randomizer/README.md) ex
 The randomization level is set to `0.4`.
 
 Furthermore, we select all the materials, we want to use for the replacing, as there are only SceneNet objects loaded, we do not specify, which objects materials we want to replace.
-Each material loaded by CCMaterialLoader set the `cp_is_cc_texture` custom property to true.
 
 ### CCMaterialLoader
 

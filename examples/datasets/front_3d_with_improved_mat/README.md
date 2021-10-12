@@ -73,7 +73,6 @@ for floor in floors:
 
 This is one of the manipulators which swaps the materials of the selected objects, with the materials which are used to replace them.
 It will replace 95% of all materials of object, which are selected via the `bproc.filter.by_attr()`. 
-The materials which are used to replace the existing ones all have to be from the CCMaterialLoader, which adds to each loaded material the custom property of `"cp_is_cc_texture"`.
 
 A further example is: 
 
@@ -89,5 +88,5 @@ for wall in walls:
             wall.set_material(i, random.choice(marble_materials))
 ```
 
-Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, which names start with `"Marble"`.
+Here the materials of all walls are replaced, but instead of using all loaded materials only the cc materials, whose names start with `"Marble"`.
 Also pay attention that only 10% of all materials are replaced, to not over load the rooms with marble.

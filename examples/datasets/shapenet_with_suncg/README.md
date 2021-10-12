@@ -58,7 +58,6 @@ This loader automatically loads a SUNCG scene/house given the corresponding `hou
 Therefore, all objects specified in the given `house.json` file are imported and textured.
 The `SuncgLoader` also sets the `category_id` of each object, such that semantic segmentation maps can be rendered in a following step.
 
-To each loaded object we add the custom property `cp_physics: False`, which means that all of the objects behave passively in a physics simulation.
 
 ### ShapeNetLoader 
 
@@ -93,7 +92,7 @@ for obj in bproc.filter.all_with_type(suncg_objs, bproc.types.MeshObject):
     obj.enable_rigidbody(active=False, mass_factor=2000, collision_margin=0.0001)
 ```
 
-With this we change the location and the custom properties of the ShapeNet Object.
+With this we change the location of the ShapeNet Object.
 For that we first select the object, via the `"filter"`, based on these conditions it returns the ShapeNetObject, which we will manipulate next.
 
 We first set the location to be sampled above an entity, which has the category "bed".

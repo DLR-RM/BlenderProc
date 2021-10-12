@@ -43,7 +43,6 @@ blenderproc run examples/datasets/front_3d/main.py {PATH_TO_3D-Front-Json-File} 
 
 * `examples/datasets/front_3d/main.py`: path to the python file with pipeline configuration.
 
-The three arguments afterwards are used to fill placeholders like `<args:0>` inside this python file.
 * `PATH_TO_3D-Front-Json-File`: path to the 3D-Front json file 
 * `PATH_TO_3D-Future`: path to the folder where all 3D-Future objects are stored 
 * `PATH_TO_3D-Front-texture`: path to the folder where all 3D-Front textures are stored 

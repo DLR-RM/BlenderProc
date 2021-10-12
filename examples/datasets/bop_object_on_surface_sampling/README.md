@@ -81,8 +81,8 @@ sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bo
 ```
 
 * Here we are sampling BOP objects from 3 different datasets.
-* We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `"<args:1>"` (e.g. ycbv in this case).
-* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` overwrites these intrinsics. In this example, `"<args:1>"`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
+* We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `args.bop_dataset_name` (e.g. ycbv in this case).
+* Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `bproc.loader.load_bop` overwrites these intrinsics. In this example, `args.bop_dataset_name`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
 
 ### Material Manipulator
 
@@ -99,8 +99,8 @@ for j, obj in enumerate(sampled_bop_objs + distractor_bop_objs):
     mat.set_principled_shader_value("Specular", np.random.uniform(0, 1.0))
 ```
 
-* Sample grey colors for T-LESS object's materials using `mat.set_principled_shader_value()` function.
-* Sample `specular` and `roughness` values for object's materials from all datasets using `mat.set_principled_shader_value()` function.
+* Sample grey colors for T-LESS object's materials using `np.random.uniform(0.3, 0.9)` function.
+* Sample `specular` and `roughness` values for object's materials from all datasets using `np.random.uniform(0, 1.0)` function.
 * `"obj.set_shading_mode('auto')"` sets the shading for these corresponding objects to smooth. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects.
 
 ### Basic Mesh Initializer
@@ -234,7 +234,7 @@ bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
 ```
 
 * Saves all pose and camera information that is provided in BOP datasets.
-* Only considers objects from the given `"dataset": "<args:1>"`
+* Only considers objects from the given `dataset = args.bop_dataset_name`
 * We use a `postprocessing.dist2depth` to convert the distance images from Blender to actual depth images.
 * Saves the images as jpg
 

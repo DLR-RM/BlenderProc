@@ -65,6 +65,6 @@ for i in range(5):
     bproc.camera.add_camera_pose(cam2world_matrix
 ```
 
-For sampling camera poses we used the ``sampler.PartSphere`` which uses only the upper half of the sphere cut along the x-axis (defined by `part_sphere_vector`). 
+For sampling camera poses we used the ``bproc.sampler.part_sphere`` which uses only the upper half of the sphere cut along the x-axis (defined by `part_sphere_vector`). 
 The center of the sphere is moved in z-direction and camera positions are sampled from the upper hemisphere to ensure that their view is not "below" the object, which is specifically important for tables.   
 Each camera rotation is computed to look directly at a sampled point of interest ``POI`` of the object, and the camera faces upwards in Z direction.
