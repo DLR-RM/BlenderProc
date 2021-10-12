@@ -22,8 +22,6 @@ A procedural Blender pipeline for photorealistic image generation.
 * Rendering: RGB, stereo, depth, normal and segmentation images/sequences.
 * Writing: .hdf5 containers, COCO & BOP annotations.
 
-..and many more ([docu](https://dlr-rm.github.io/BlenderProc)). For advanced/custom functionalities, you can easily write and integrate your [own modules](blenderproc/README.md#writing-your-own-modules).
-
 
 ## Installation
 
@@ -129,6 +127,8 @@ The pipeline can be run multiple times, as in the beginning of each run the scen
 
 As you now ran your first BlenderProc script, your ready to learn the basics:
 
+<!---.. _tutorials: ---> 
+
 ### Tutorials
 
 Read through the tutorials, to get to know with the basic principles of how BlenderProc is used:
@@ -146,14 +146,14 @@ We provide a lot of [examples](examples/README.md) which explain all features in
 
 * [Basic scene](examples/basics/basic/README.md): Basic example, this is the ideal place to start for beginners
 * [Camera sampling](examples/basics/camera_sampling/README.md): Sampling of different camera positions inside of a shape with constraints for the rotation.
-* [Object manipluation](examples/basics/entity_manipulation/README.md): Changing various parameters of objects.
+* [Object manipulation](examples/basics/entity_manipulation/README.md): Changing various parameters of objects.
 * [Material manipulation](examples/basics/material_manipulation/README.md): Material selecting and manipulation.
 * [Physics positioning](examples/basics/physics_positioning/README.md): Enabling simple simulated physical interactions between objects in the scene.
 * [Semantic segmentation](examples/basics/semantic_segmentation/README.md): Generating semantic segmentation labels for a given scene.
 * [BOP Challenge](README_BlenderProc4BOP.md): Generate the pose-annotated data used at the BOP Challenge 2020
 * [COCO annotations](examples/advanced/coco_annotations/README.md): Write COCO annotations to a .json file for selected objects in the scene.
 
-... And much more, see our [examples](examples/README.md) for more details.
+and much more, see our [examples](examples/README.md) for more details.
 
 
 ## Contributions

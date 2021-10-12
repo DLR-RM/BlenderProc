@@ -6,7 +6,7 @@ if sys.version_info.major < 3:
     raise Exception("BlenderProc requires at least python 3.X to run.")
 
 # Only import if we are in the blender environment, this environment variable is set by the run.py script
-if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
+if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ or True:
     # Remove the parent of the blender proc folder, as it might contain other packages
     # that we do not want to import inside the blenderproc env
     sys.path.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -28,3 +28,5 @@ if "INSIDE_OF_THE_INTERNAL_BLENDER_PYTHON_ENVIRONMENT" in os.environ:
     from .api import object
     from .api import types
     from .api import filter
+
+__all__ = ['camera']
