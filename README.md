@@ -141,11 +141,11 @@ Read through the tutorials, to get to know with the basic principles of how Blen
 
 ### Examples
 
-We provide a lot of [examples](examples/README.md) which explain all features in detail and should help you understand how BlenderProc works. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide limited support for some datasets.
+We provide a lot of [examples](examples/README.md) which explain all features in detail and should help you understand how BlenderProc works. Exploring our examples is the best way to learn about what you can do with BlenderProc. We also provide support for some datasets.
 
 * [Basic scene](examples/basics/basic/README.md): Basic example, this is the ideal place to start for beginners
 * [Camera sampling](examples/basics/camera_sampling/README.md): Sampling of different camera positions inside of a shape with constraints for the rotation.
-* [Object manipluation](examples/basics/entity_manipulation/README.md): Changing various parameters of objects via selecting them in the config file.
+* [Object manipluation](examples/basics/entity_manipulation/README.md): Changing various parameters of objects.
 * [Material manipulation](examples/basics/material_manipulation/README.md): Material selecting and manipulation.
 * [Physics positioning](examples/basics/physics_positioning/README.md): Enabling simple simulated physical interactions between objects in the scene.
 * [Semantic segmentation](examples/basics/semantic_segmentation/README.md): Generating semantic segmentation labels for a given scene.
