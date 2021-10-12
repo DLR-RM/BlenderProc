@@ -18,7 +18,7 @@ light.set_type("POINT")
 light.set_location([5, -5, 5])
 light.set_energy(1000)
 
-# define the camera intrinsics
+# define the camera resolution
 bproc.camera.set_resolution(512, 512)
 
 # read the camera positions file and convert into homogeneous camera-world transformation

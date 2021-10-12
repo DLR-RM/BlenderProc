@@ -2,14 +2,14 @@ import blenderproc as bproc
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('scene', help="Path to the downloaded .blend file")
+parser.add_argument('path', help="Path to the downloaded .blend file")
 parser.add_argument('output_dir', nargs='?', default="examples/datasets/blenderkit/output", help="Path to where the final files will be saved")
 args = parser.parse_args()
 
 bproc.init()
 
 # load the objects into the scene
-objs = bproc.loader.load_blend(args.scene)
+objs = bproc.loader.load_blend(args.path)
 
 # define a light and set its location and energy level
 light = bproc.types.Light()

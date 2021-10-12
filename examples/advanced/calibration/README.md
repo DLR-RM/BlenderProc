@@ -9,7 +9,7 @@ Generate calibration images to verify that the way we set the camera intrinsics 
 Execute in the BlenderProc main directory:
 
 ```
-python run.py examples/advanced/calibration/config.yaml
+blenderproc run examples/advanced/calibration/config.yaml
 ``` 
 
 ## Calibration

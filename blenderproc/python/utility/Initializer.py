@@ -111,7 +111,9 @@ class Initializer:
     def set_default_parameters():
         """ Loads and sets default parameters defined in DefaultConfig.py """
         # Set default intrinsics
-        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, "FOV")
+        CameraUtility.set_intrinsics_from_blender_params(DefaultConfig.fov, DefaultConfig.resolution_x, DefaultConfig.resolution_y, 
+                                                         DefaultConfig.clip_start, DefaultConfig.clip_end, DefaultConfig.pixel_aspect_x, 
+                                                         DefaultConfig.pixel_aspect_y, DefaultConfig.shift_x, DefaultConfig.shift_y, DefaultConfig.lens_unit)
         CameraUtility.set_stereo_parameters(DefaultConfig.stereo_convergence_mode, DefaultConfig.stereo_convergence_distance, DefaultConfig.stereo_interocular_distance)
 
         # Init renderer
