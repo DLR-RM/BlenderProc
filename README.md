@@ -117,6 +117,7 @@ blenderproc debug quickstart.py
 
 Now the Blender UI opens up, the scripting tab is selected and the correct script is loaded.
 To start the BlenderProc pipeline, one now just has to press `Run BlenderProc` (see red circle in image).
+As in the normal mode, print statements are still printed to the terminal.
 
 <p align="center">
 <img src="images/debug.jpg" alt="Front readme image" width=500>
