@@ -41,7 +41,6 @@ blenderproc vis_coco /path/to/output_dir
     * Sample Object Poses inside a cube with collision checks
     * Sample Camera Poses inside a shell looking at objects
 * Renders rgb: `bproc.renderer`.
-* Renders instance segmentation masks.
 * Renders instance segmentation masks: `bproc.renderer()`.
 * Writes pose labels in BOP format to output_dir: `bproc.writer.write_bop()`.
 
