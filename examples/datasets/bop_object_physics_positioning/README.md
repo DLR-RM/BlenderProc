@@ -84,7 +84,7 @@ sampled_bop_objs = bproc.loader.load_bop(bop_dataset_path = os.path.join(args.bo
 
 * Here we are sampling BOP objects from 3 different datasets.
 * We load 3 random objects from LM and T-LESS datasets, and 10 objects from the dataset given by `"<args:1>"` (e.g. ycbv in this case).
-* `"obj.set_shading_mode('auto')"` sets the shading for these corresponding objects to auto. This looks more realistic for coarser + curved meshes like in LineMOD. For T-LESS and ITODD it should be ommited in favor of flat shading which appears more realistic on edgy objects. 
+* `"obj.set_shading_mode('auto')"` sets the shading for these corresponding objects to auto smoothing. This looks more realistic for meshes that have both sharp edges and curved surfaces like in YCB-V.
 * Note that each loader loads the camera intrinsics and resolutions of each dataset, thus each subsequent `BopLoader` overwrites these intrinsics. In this example, `"<args:1>"`(ycbv) dataset intrinsics are used when rendering. If required, they can be overwritten by setting `resolution_x, resolution_y, cam_K` in the camera sampler or global config.
 
 
@@ -169,7 +169,7 @@ bproc.object.sample_poses(objects_to_sample = sampled_bop_objs + distractor_bop_
 ```
 
 * Samples initial object poses before applying physics
-* For all `"objects_to_sample"`, i.e. with `"cp_physics": True`, uniformly sample a position in the specified range and a uniform SO3 rotation
+* For all `"objects_to_sample"`, i.e. with `"cp_physics": True`, uniformly sample a position in the specified range and a uniform SO3 rotation. Resamples if collisions occur.
 
 ### Physics Positioning
 
