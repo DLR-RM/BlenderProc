@@ -140,7 +140,7 @@ def set_stereo_parameters(convergence_mode: str, convergence_distance: float, in
 
 
 def set_intrinsics_from_K_matrix(K: Union[np.ndarray, Matrix], image_width: int, image_height: int,
-                                 clip_start: float = 0.1, clip_end: float = 1000):
+                                 clip_start: float = None, clip_end: float = None):
     """ Set the camera intrinsics via a K matrix.
 
     The K matrix should have the format:
