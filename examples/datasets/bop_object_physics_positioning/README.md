@@ -134,7 +134,7 @@ light_plane_material.make_emissive(emission_strength=np.random.uniform(3,6),
 light_plane.replace_materials(light_plane_material)
 ```
 
-* For the top light plane, switch to an Emission shader and sample `emmision_color` and `emmission_strength` values of the emitted light.
+* For the top light plane, switch to an Emission shader and sample `emision_color` and `emission_strength` values of the emitted light.
 
 ### CCMaterial Loader 
 
@@ -252,7 +252,7 @@ bproc.writer.write_bop(os.path.join(args.output_dir, 'bop_data'),
 
 * Saves all pose and camera information that is provided in BOP datasets.
 * Only considers objects from the given `"dataset": "<args:1>"`
-* We use a `postprocessing.dist2depth` to convert the distance images from Blender to actual depth images.
+* We use `bproc.postprocessing.dist2depth` to convert the distance images from Blender to actual depth images.
 * Saves the images as jpg
 
 ## More examples
