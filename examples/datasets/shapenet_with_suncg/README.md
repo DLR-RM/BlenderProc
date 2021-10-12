@@ -35,11 +35,12 @@ blenderproc vis_hdf5 examples/datasets/shapenet_with_suncg/output/*.hdf5
 
 ## Steps
 
-* At first the SUNCG scene is loaded. The sampled ShapeNet objects are saved from bounding of the SUNCG scene.
+* At first the SUNCG scene is loaded.
 * The ShapeNetLoader loads all the object paths with the `used_synset_id` = `02801938`, this id stands for the category `basket`.
 * One of them is now randomly selected and loaded.
 * Then we select that one object and change its location to be above an object with the catgory "bed".
 * We also add a solidify modifier as a few of the objects in the ShapeNet dataset have only a really thin outer shell, this might lead to bad results in the physics simulation.
+* We enable the rigid body component of the objects which makes them participate in physics simulations.
 * The physics simulation is run to let the ShapeNet object fall down on the bed.
 * We finally sample some cameras around this ShapeNet object, which are located in a HalfSphere above the ShapeNet object.
 * Now we only have to render it and store it in a `.hdf5` container
