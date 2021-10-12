@@ -23,7 +23,7 @@ poi = bproc.object.compute_poi(objs)
 # Sample five camera poses
 for i in range(5):
     # Sample random camera location above objects
-    location = np.random.uniform([-10, -10, 12], [10, 10, 8])
+    location = np.random.uniform([-10, -10, 8], [10, 10, 12])
     # Compute rotation based on vector going from location towards poi
     rotation_matrix = bproc.camera.rotation_from_forward_vec(poi - location, inplane_rot=np.random.uniform(-0.7854, 0.7854))
     # Add homog cam pose based on location an rotation
